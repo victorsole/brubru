@@ -78,12 +78,12 @@ class LawItem(BaseModel):
     acronym: Optional[str] = Field(None, description="The acronym of the alias, e.g. `GDPR`, from the same curated list.")
     # The Publications Office's metadata for the law (migrations 301 and 302).
     authors: list[str] = Field(default_factory=list, description="The bodies that created the act, as Publications Office corporate-body codes: `COM` Commission, `CONSIL` Council, `EP` European Parliament, or a Commission department such as `SANTE`.")
-    in_force: Optional[bool] = Field(None, description="The act's in-force flag in the Publications Office metadata: as of the LEG_2026-10 export (11 Oct 2026) for the laws it holds, as of 16 Oct 2026 from Cellar for the others. Null when the metadata carries none: unknown, not false.")
+    in_force: Optional[bool] = Field(None, description="The Publications Office's in-force flag, refreshed daily from Cellar. `false` means not in force on the last check: either not yet (see `entry_into_force`) or no longer. Null when the Publications Office carries no flag (corrigenda among others): unknown, not false.")
     eli: Optional[str] = Field(None, description="The act's European Legislation Identifier (ELI) URI as the metadata states it on the work, e.g. `http://data.europa.eu/eli/reg/2024/1689/oj`. Null when it states none.")
     entry_into_force: list[date] = Field(default_factory=list, description="The dates the metadata types as entry into force (or leaves untyped), e.g. the AI Act: 2024-08-01.")
     application_dates: list[date] = Field(default_factory=list, description="The dates from which the act, or part of it, applies, e.g. the AI Act: 2025-02-02, 2025-08-02, 2026-08-02, 2027-08-02. Served as the Publications Office states them, its own errors included (the DSA's 2022-02-17 should read 2024-02-17).")
     effect_dates: list[date] = Field(default_factory=list, description="The dates of effect the metadata states (often a retroactive date).")
-    procedures: list[str] = Field(default_factory=list, description="The interinstitutional procedure numbers the act came from, as `YYYY/NNNN` (the Legislative Observatory reference without its type, e.g. `2021/0106`): the export's links, completed from Cellar.")
+    procedures: list[str] = Field(default_factory=list, description="The interinstitutional procedure numbers the act came from, as `YYYY/NNNN` (the Legislative Observatory reference without its type, e.g. `2021/0106`, or `2011/0901A`): the export's links, Cellar's and Brubru's Legislative Observatory data together.")
     policy_area: Optional[str] = Field(
         None,
         description=(
@@ -154,10 +154,10 @@ def metadata_filters(sector=None, year=None, number=None, document_type=None, al
     if in_force is not None:
         fs.append(EULaw.in_force.is_(in_force))
     if procedure:
-        m = re.fullmatch(r"\s*(\d{4})\s*/\s*0*(\d{1,4})\s*(?:\([A-Z]{3}\))?\s*", procedure)
+        m = re.fullmatch(r"\s*(\d{4})\s*/\s*0*(\d{1,4})([A-Za-z]?)\s*(?:\([A-Za-z]{3}\))?\s*", procedure)
         if not m:
-            raise _bad_filter("procedure", procedure, "YYYY/NNNN, e.g. 2021/0106 or 2021/0106(COD)")
-        fs.append(literal(f"{m[1]}/{int(m[2]):04d}") == any_(EULaw.procedures))
+            raise _bad_filter("procedure", procedure, "YYYY/NNNN, e.g. 2021/0106, 2021/0106(COD) or 2011/0901A")
+        fs.append(literal(f"{m[1]}/{int(m[2]):04d}{m[3].upper()}") == any_(EULaw.procedures))
     if corrects:
         c = corrects.strip().upper()
         if not re.fullmatch(r"[0-9CE][0-9]{4}[A-Z]{1,3}[0-9]{4,6}(\([0-9]{2}\))?", c):  # also keeps LIKE wildcards out
@@ -235,9 +235,9 @@ The single highest-traffic Brubru endpoint — used to find specific acts (e.g. 
 - `published_from`, `published_to` — date filter on `published_date`.
 - `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
 - `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
-- `sector`, `year`, `number`, `document_type`: the parts of the CELEX. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `PC`) or its EUR-Lex label (`regulation`); a descriptor used by several sectors matches in all of them unless `sector` narrows it.
+- `sector`, `year`, `number`, `document_type`: the parts of the CELEX. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `H`...) or its EUR-Lex label (`regulation`); a descriptor used by several sectors matches in all of them unless `sector` narrows it. A corrigendum carries its act's descriptor, so `document_type=R` lists the corrections of regulations too (`corrected_act` names their act).
 - `alias`: a name or acronym from Brubru's curated list (`GDPR`, `Digital Services Act`), exact and case-insensitive; the list is short, so search by name with `q`.
-- `author`: creating body (`COM`, `CONSIL`, `EP`, `SANTE`...). `in_force`: `true` or `false`. `procedure`: `2021/0106`. `corrects`: a CELEX, returns its corrigenda.
+- `author`: creating body (`COM`, `CONSIL`, `EP`, `SANTE`...). `in_force`: `true` or `false` (false: not yet or no longer in force). `procedure`: `2021/0106` (a type such as `(COD)` and a trailing letter are accepted). `corrects`: a CELEX, returns its corrigenda.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -254,7 +254,7 @@ A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title
 
 `doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
 
-The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it holds, procedures completed and the other laws' `in_force` read from Cellar on 16 Oct 2026. `in_force` is null where the metadata carries no flag. Dates are split by the type the Publications Office gives them and served as it states them. Acts the daily Official Journal sync adds later carry the CELEX parts at once and the metadata once that sync fills it.
+The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it holds and from Cellar for the others (16 Oct 2026); procedures also from Brubru's Legislative Observatory data. `in_force` is refreshed daily from Cellar and is null where the Publications Office carries no flag. Dates are split by the type the Publications Office gives them and served as it states them; its placeholder dates are left out. Acts the daily Official Journal sync adds later carry the CELEX parts at once, `in_force` from the next daily check, and the rest of the metadata once that sync fills it.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3 (secondary acts). New regulations + directives published in the Official Journal L-series appear in our mirror within the same day they hit EUR-Lex.""",

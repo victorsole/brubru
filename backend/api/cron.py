@@ -781,6 +781,9 @@ async def cron_sync_daily(
     results = {}
 
     results["consultations"] = await _run_script_async("consultations", "scripts/sync_consultations.py", [], timeout=900)
+    # eu_laws.in_force follows Cellar's flag daily (16 Oct 2026: the export's snapshot of 11 Oct went stale in days);
+    # the job is the column's only writer once set, and a change moves updated_at.
+    results["eu_laws_in_force"] = await _run_script_async("eu_laws_in_force", "scripts/refresh_eu_laws_in_force.py", ["--apply"], timeout=1800)
     # Full Have Your Say sweep. The job above had only ever collected 362 of the
     # ~4,100 initiatives on the portal, so a user tracking a file could be told there
     # was no consultation on it when there was one (found 11 Aug 2026 looking for

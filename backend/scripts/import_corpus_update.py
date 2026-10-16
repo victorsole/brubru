@@ -56,7 +56,8 @@ from sqlalchemy import text
 from backend.core.database import SessionLocal
 from backend.models.eu_law import EULaw
 from backend.services.parsers.formex_parser import FormexParser
-from backend.scripts.leg_export_metadata import export_metadata
+from backend.scripts.leg_export_metadata import export_metadata, merged
+METADATA_COLS = ("authors", "in_force", "eli", "entry_into_force", "application_dates", "effect_dates", "procedures")
 from backend.scripts.leg_folder import (  # noqa: F401 (re-exported for the repair scripts)
     RDF_CELEX,
     CELEX_SHAPE,
@@ -414,6 +415,8 @@ def process_corpus(
                                     keep = {a: b for a, b in (law.extra_metadata or {}).items()
                                             if a not in FILE_KEYS + DERIVED_FROM_FILE}
                                     v = {**keep, **v}
+                                elif k in METADATA_COLS:
+                                    v = merged(k, getattr(law, k), v)  # never blank, merge procedures, in_force kept
                                 setattr(law, k, v)
                             law.doc_type_normalized = type_label(law.celex, law.doc_type_normalized)
                             law.corpus_status = law.corpus_status or "active"

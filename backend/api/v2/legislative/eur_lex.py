@@ -557,9 +557,9 @@ To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner
 - `published_from`, `published_to` — adoption-date bounds (YYYY-MM-DD).
 - `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
 - `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
-- `sector`, `year`, `number`, `document_type`: the parts of the CELEX. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `PC`) or its EUR-Lex label (`regulation`); a descriptor used by several sectors matches in all of them unless `sector` narrows it.
+- `sector`, `year`, `number`, `document_type`: the parts of the CELEX. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `H`...) or its EUR-Lex label (`regulation`); a descriptor used by several sectors matches in all of them unless `sector` narrows it. A corrigendum carries its act's descriptor, so `document_type=R` lists the corrections of regulations too (`corrected_act` names their act).
 - `alias`: a name or acronym from Brubru's curated list (`GDPR`, `Digital Services Act`), exact and case-insensitive; the list is short, so search by name with `q`.
-- `author`: creating body (`COM`, `CONSIL`, `EP`, `SANTE`...). `in_force`: `true` or `false`. `procedure`: `2021/0106`. `corrects`: a CELEX, returns its corrigenda.
+- `author`: creating body (`COM`, `CONSIL`, `EP`, `SANTE`...). `in_force`: `true` or `false` (false: not yet or no longer in force). `procedure`: `2021/0106` (a type such as `(COD)` and a trailing letter are accepted). `corrects`: a CELEX, returns its corrigenda.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -576,7 +576,7 @@ A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title
 
 `doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
 
-The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it holds, procedures completed and the other laws' `in_force` read from Cellar on 16 Oct 2026. `in_force` is null where the metadata carries no flag. Dates are split by the type the Publications Office gives them and served as it states them. Acts the daily Official Journal sync adds later carry the CELEX parts at once and the metadata once that sync fills it.
+The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it holds and from Cellar for the others (16 Oct 2026); procedures also from Brubru's Legislative Observatory data. `in_force` is refreshed daily from Cellar and is null where the Publications Office carries no flag. Dates are split by the type the Publications Office gives them and served as it states them; its placeholder dates are left out. Acts the daily Official Journal sync adds later carry the CELEX parts at once, `in_force` from the next daily check, and the rest of the metadata once that sync fills it.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",

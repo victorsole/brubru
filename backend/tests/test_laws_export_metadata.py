@@ -130,3 +130,39 @@ def test_the_metadata_is_read_from_the_work_and_dates_keep_their_type():
     assert ai["entry_into_force"] == ["2024-08-01"] and len(ai["application_dates"]) == 4 and ai["procedures"] == ["2021/0106"]
     assert dec["eli"] == "http://data.europa.eu/eli/dec/2014/26(1)/oj" and dec["effect_dates"] == ["2014-01-20"]
     assert gdpr["authors"] == ["CONSIL", "EP"] and gdpr["in_force"] is True
+
+
+def test_dates_keep_their_type_and_placeholders_are_dropped():
+    # audit of the backfill, 16 Oct 2026: 1001-01-01 and 1002-02-02 are the Publications Office's placeholders
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts.leg_export_metadata import place_dates
+    got = place_dates([("2024-08-01", "EV"), ("2025-02-02", "MA"), ("2025-08-02", "MA/PROV"), ("2026-01-01", "APPLICATION"),
+                       ("2014-01-20", "PE"), ("2019-09-16", ""), ("2020-01-01", "DATPUB"), ("1001-01-01", "EV"), ("1002-02-02", "MA")])
+    assert got == {"entry_into_force": ["2019-09-16", "2020-01-01", "2024-08-01"],
+                   "application_dates": ["2025-02-02", "2025-08-02", "2026-01-01"], "effect_dates": ["2014-01-20"]}
+    assert place_dates([("1001-01-01", "EV")]) == {"entry_into_force": None, "application_dates": None, "effect_dates": None}
+
+
+def test_a_lettered_procedure_is_kept():
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts.leg_export_metadata import procedure_number
+    assert procedure_number("http://publications.europa.eu/resource/procedure/2011_901A") == "2011/0901A"
+    assert procedure_number("http://publications.europa.eu/resource/procedure/2012_11") == "2012/0011"
+    assert procedure_number("http://publications.europa.eu/resource/internal_proc/ABC123") is None
+
+
+def test_a_later_export_never_blanks_merges_procedures_and_leaves_in_force():
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts.leg_export_metadata import merged
+    assert merged("procedures", ["2012/0011"], None) == ["2012/0011"]          # Cellar's procedure survives
+    assert merged("procedures", ["2012/0011"], ["2012/0012"]) == ["2012/0011", "2012/0012"]
+    assert merged("eli", "http://data.europa.eu/eli/reg/2016/679/oj", None) == "http://data.europa.eu/eli/reg/2016/679/oj"
+    assert merged("in_force", False, True) is False                             # the daily refresh owns it
+    assert merged("in_force", None, True) is True
+    assert merged("authors", ["COM"], ["COM", "SANTE"]) == ["COM", "SANTE"]
+
+
+def test_the_procedure_filter_takes_a_letter_and_any_case():
+    from api.v1.laws import metadata_filters
+    assert "'2011/0901A' = ANY (eu_laws.procedures)" in _sql(metadata_filters(procedure="2011/0901A(COD)"))
+    assert "'2020/0361' = ANY (eu_laws.procedures)" in _sql(metadata_filters(procedure="2020/0361(cod)"))
