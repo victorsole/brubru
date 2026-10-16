@@ -389,7 +389,7 @@ _TENDERATOR_CHAIN = (
 _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc", "tbt",
-    "carriage_status_notifications",
+    "carriage_status_notifications", "tris_titles",
 )
 
 
@@ -810,6 +810,12 @@ async def cron_sync_daily(
     results["tris"] = await _run_script_async(
         "tris", "scripts/sync_dg_grow.py",
         ["--source", "tris", "--days", "7", "--max-seconds", "480"], timeout=600)
+    # TRIS titles (16 Oct 2026): a notification is shown in its own language until TRIS
+    # publishes the English title, and the sync never read it again (129 titles), and 43
+    # carried a section heading. Re-read a few a day; TRIS throttles.
+    results["tris_titles"] = await _run_script_async(
+        "tris_titles", "scripts/refresh_tris_titles.py",
+        ["--apply", "--limit", "30", "--max-seconds", "240"], timeout=360)
     # WTO TBT notifications (23 Sep 2026): the sync worked but was never
     # scheduled, so the table sat at 14 May for four months. Found by the
     # Terraqui source ledger (backend/data/client_sources/).

@@ -82,6 +82,11 @@ SECTOR_CPV_MAP = {
 }
 
 
+# Headings of the notification page's sections and footer: never a notification's title.
+SECTION_HEADINGS = {"notification detail", "message", "disclosed messages", "stakeholders contributions",
+                    "follow us", "internal market, industry, entrepreneurship and smes", "draft text"}
+
+
 class TrisRateLimited(Exception):
     """TRIS answered 429. Never a missing notification."""
 
@@ -518,12 +523,20 @@ class TRISScraper(BaseScraper):
                 result["comments_by"] = issuers
                 result["has_comments"] = bool(issuers)
 
-        # Fallback: extract title from page heading if not found in grid
+        # The page's own title: the h2 under "Notification Detail" (ecl-u-type-color-primary),
+        # in English once TRIS has translated it. The old fallback took the first h1/h2 it
+        # could, and 43 notifications were titled "Stakeholders Contributions", a section
+        # heading (16 Oct 2026). A section heading is never a title.
+        own = soup.find("h2", class_=re.compile(r"ecl-u-type-color-primary"))
+        own_text = own.get_text(" ", strip=True) if own else ""
+        if own_text and own_text.lower() not in SECTION_HEADINGS:
+            result["title"] = own_text
         if "title" not in result:
-            # Try h1/h2 headings
             for heading in soup.find_all(["h1", "h2"]):
                 text = heading.get_text(strip=True)
-                if text and "notification" not in text.lower() and "tris" not in text.lower() and len(text) > 10:
+                if (text and "notification" not in text.lower() and "tris" not in text.lower()
+                        and len(text) > 10 and text.lower() not in SECTION_HEADINGS
+                        and "footer" not in " ".join(heading.get("class") or [])):
                     result["title"] = text
                     break
 
