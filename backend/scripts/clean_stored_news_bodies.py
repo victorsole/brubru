@@ -38,6 +38,8 @@ def main(argv=None) -> int:
     total = 0
     for table, code in TABLES:
         with engine.connect() as c:
+            # A regex over every body of economy_items outlasts the default statement timeout.
+            c.execute(text("SET statement_timeout = 0"))
             rows = list(c.execute(text(PICK.format(table=table, code=code))))
         plan = []
         for r in rows:
@@ -48,6 +50,7 @@ def main(argv=None) -> int:
         print(f"[INFO] {table}: {len(rows)} candidate(s), {len(plan)} changed: {dict(by.most_common(10))}")
         if args.apply and plan:
             with engine.begin() as c:
+                c.execute(text("SET LOCAL statement_timeout = 0"))
                 for rid, _, t, h, _ in plan:
                     c.execute(text(STORE.format(table=table)), {"id": rid, "t": t, "h": h})
         total += len(plan)

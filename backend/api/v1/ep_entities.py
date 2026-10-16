@@ -104,16 +104,36 @@ def _oeil_procedure_dates(db: Session, refs: List[Optional[str]]) -> Dict[str, d
     return out
 
 
+# The cover of a committee document names it: "DRAFT REPORT on menopause beyond a health
+# issue: turning menopause into an economic, working and social priority (2026/2055(INI))".
+_DOC_HEADING = re.compile(
+    r"\b(DRAFT (?:INTERIM |SECOND |)REPORT|DRAFT OPINION|DRAFT RECOMMENDATION(?: FOR SECOND READING)?|"
+    r"AMENDMENTS?|REPORT|OPINION)\s+((?:on|of|containing|to)\b.{10,600}?|[A-Z][^()]{10,600}?)\s*\((?=[^)]*(?:\d{4}/|COM\(|\d{5}/))")
+
+
+def doc_title_from_text(text_body: Optional[str]) -> Optional[str]:
+    """'Draft report on menopause beyond a health issue: ...' from the document's cover."""
+    head = " ".join((text_body or "")[:3000].split())
+    m = _DOC_HEADING.search(head)
+    if not m:
+        return None
+    kind = m.group(1).capitalize()
+    rest = m.group(2).strip().rstrip(" –-")
+    return f"{kind} {rest}" if len(rest) >= 10 else None
+
+
 def _enrich_doc_title(
     raw_title_template: str,
     procedure_ref: Optional[str],
     lc_lookup: Dict[str, "LegislativeCarriage"],
+    text_body: Optional[str] = None,
 ) -> str:
-    """Use the canonical LC title when we have it, falling back to the
-    auto-generated 'doc_type for ref (committee)' template otherwise."""
+    """Use the canonical LC title when we have it, then the title the document's own cover
+    gives, and the 'doc_type for ref (committee)' template only when neither exists (394 of
+    1,908 ep-documents served that template on 16 Oct 2026, 43 with an empty slot)."""
     if procedure_ref and procedure_ref in lc_lookup and lc_lookup[procedure_ref].title:
         return lc_lookup[procedure_ref].title
-    return raw_title_template
+    return doc_title_from_text(text_body) or re.sub(r"\s{2,}", " ", raw_title_template.replace(" for  (", " ("))
 
 
 amendments_router = APIRouter(prefix="/amendments", tags=["v1-amendments"])
@@ -1087,7 +1107,7 @@ async def list_ep_documents(
             committee_code=r.committee_code,
             procedure_reference=r.procedure_reference,
             pe_reference=r.pe_reference,
-            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup),
+            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup, getattr(r, "text_body", None)),
             rapporteur_name=r.rapporteur_name,
             document_date=r.document_date,
             document_url=r.doceo_url,
@@ -1399,7 +1419,7 @@ async def list_reports(
             committee_code=r.committee_code,
             procedure_reference=r.procedure_reference,
             pe_reference=r.pe_reference,
-            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup),
+            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup, getattr(r, "text_body", None)),
             rapporteur_name=r.rapporteur_name,
             document_date=r.document_date,
             document_url=r.doceo_url,
@@ -1467,7 +1487,7 @@ async def list_opinions(
     data = []
     for r in rows:
         fallback = f"{AD_TYPE_MAP.get(r.document_type, 'opinion')} for {r.procedure_reference} ({r.committee_code})"
-        title = _enrich_doc_title(fallback, r.procedure_reference, lc_lookup)
+        title = _enrich_doc_title(fallback, r.procedure_reference, lc_lookup, getattr(r, "text_body", None))
         # Compose body from the structured row. The full PDF body lives on
         # the amendment_documents/{id} detail surface — partners hitting
         # /opinions get the metadata view with a readable summary.
