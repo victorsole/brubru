@@ -23,7 +23,7 @@ from __future__ import annotations
 import html as _html
 import json
 import re
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from urllib.parse import quote, unquote
 
 import requests
@@ -1209,6 +1209,9 @@ _ECDC_CACHE: dict = {}
 _ECDC_CACHE_TTL = 1800
 _ECDC_PAUSE = 2.0                        # seconds between ECDC requests
 _ECDC_BACKOFF = (15, 45, 90, 180, 300)   # seconds to wait after each successive 429
+# 27 Jul 2017 is the day ECDC migrated its site: article:published_time on 27 procedures
+# that closed in 2016-2017 (30 Sep 2026). Never a publication date (API audit, 16 Oct).
+_ECDC_MIGRATION_STAMP = date(2017, 7, 27)
 _paced_last: dict = {}
 
 
@@ -1293,7 +1296,9 @@ def _ecdc_detail(url: str) -> dict:
     # Description: the paragraphs after the meta list (the meta items are <div>s).
     after_meta = region.split("</ul>", 1)[-1]
     paras = [p for p in (_txt(x) for x in re.findall(r"<p[^>]*>(.*?)</p>", after_meta, re.S)) if p]
-    links = sorted(set(u for u in re.findall(r'href="(https?://[^"]+)"', after_meta)
+    # Unescaped: an href holds "&amp;" where the address has "&", and 3 bodies carried
+    # Funding & Tenders links with "&amp;" in them (API audit, 16 Oct 2026).
+    links = sorted(set(u for u in (_html.unescape(h) for h in re.findall(r'href="(https?://[^"]+)"', after_meta))
                        if "ecdc.europa.eu" not in u))
     return {"description": paras, "links": links,
             "published": _iso(pub.group(1) if pub else None),
@@ -1316,8 +1321,21 @@ def _ecdc_item(row: dict, detail: dict | None, now: datetime) -> Item:
     if detail is None:
         # Not re-read this run: no date and no body, so the stored values stand.
         return item
+    # A notice cannot be published after its own deadline. 27 ECDC pages carry
+    # article:published_time 2017-07-27, the day ECDC's site was migrated, on
+    # procedures that closed in 2016-2017 (dry run 30 Sep 2026). Such a date is the
+    # page's re-creation, not the notice's publication: try the fallback, else NULL.
+    # The body's "Published" line states the same vetted date, never the rejected one
+    # (API audit, 16 Oct 2026: 28 bodies said "Published: 2017-07-27" under a null date).
+    # The migration day itself is never a publication date, even where a deadline
+    # happens to fall after it (1 of the 28 on 16 Oct): the Cedefop rule, 27/11/2009.
+    def _plausible(d: datetime | None) -> datetime | None:
+        if d is None or d.date() == _ECDC_MIGRATION_STAMP:
+            return None
+        return d if deadline is None or d <= deadline else None
+    published = _plausible(detail["published"]) or _plausible(detail["updated"])
     facts = [("Reference", row["reference"]), ("Procurement type", row["kind"]),
-             ("Published", detail["published"].date().isoformat() if detail["published"] else ""),
+             ("Published", published.date().isoformat() if published else ""),
              ("Deadline", deadline.strftime("%Y-%m-%d %H:%M UTC") if deadline else ""),
              ("Page last updated", detail["updated"].date().isoformat() if detail["updated"] else "")]
     facts = [(k, v) for k, v in facts if v]
@@ -1330,13 +1348,7 @@ def _ecdc_item(row: dict, detail: dict | None, now: datetime) -> Item:
         + "</dl>"
         + ("<ul>" + "".join(f'<li><a href="{_html.escape(u)}">{_html.escape(u)}</a></li>' for u in links)
            + "</ul>" if links else ""))
-    # A notice cannot be published after its own deadline. 27 ECDC pages carry
-    # article:published_time 2017-07-27, the day ECDC's site was migrated, on
-    # procedures that closed in 2016-2017 (dry run 30 Sep 2026). Such a date is the
-    # page's re-creation, not the notice's publication: try the fallback, else NULL.
-    def _plausible(d: datetime | None) -> datetime | None:
-        return d if d is not None and (deadline is None or d <= deadline) else None
-    item.document_date = _plausible(detail["published"]) or _plausible(detail["updated"])
+    item.document_date = published
     return item
 
 
