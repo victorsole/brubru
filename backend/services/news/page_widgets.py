@@ -51,12 +51,31 @@ def clean_html(html: str | None) -> str | None:
     return str(soup) if removed else html
 
 
+_MENU_START = re.compile(r"^(?:participating member states|follow us|subscribe to our newsletter|newsletter|"
+                         r"related links|quick links|useful links)\s*:?$", re.I)
+
+
+def _cut_trailing_menu(lines: list[str]) -> list[str]:
+    """Drop a site menu stored after the article: from a "Follow us" / "Subscribe to our
+    newsletter" line, when what follows is a run of short menu entries ("News and Events",
+    "Latest News", "Events", ...; EDA, 16 Oct 2026). Only in the last two thirds of the text,
+    and only when at least 6 of the next 8 lines are short."""
+    start = len(lines) // 3
+    for i in range(start, len(lines)):
+        if _MENU_START.match(lines[i].strip()):
+            nxt = [ln.strip() for ln in lines[i + 1:i + 9] if ln.strip()]
+            if len(nxt) >= 6 and sum(len(x) <= 40 for x in nxt) >= 6:
+                return lines[:i]
+    return lines
+
+
 def clean_text(text: str | None) -> str | None:
     """The same text without the lines a share widget leaves ("Share this page:",
-    "Facebook", "WhatsApp", "Sign up for mail updates", "6 hours ago")."""
+    "Facebook", "WhatsApp", "Sign up for mail updates", "6 hours ago") and without a site
+    menu stored after the article."""
     if not text or not isinstance(text, str):
         return text
-    lines = text.split("\n")
+    lines = _cut_trailing_menu(text.split("\n"))
     kept = [ln for ln in lines if not _CHROME_LINE.match(ln.strip())]
     out = "\n".join(kept)
     return re.sub(r"\n{3,}", "\n\n", out).strip()

@@ -69,3 +69,15 @@ def test_rows_not_yet_cleaned_are_served_clean():
     assert txt == "Gender equality index 2026."
     assert "facebook" not in html.lower() and "<script" not in html and "onclick" not in html
     assert "Gender equality index 2026." in html
+
+
+def test_a_site_menu_after_the_article_goes_and_empty_html_is_rebuilt():
+    article = "EDA accelerates defence innovation\n" + "\n".join(
+        f"Paragraph {i} of the article, with enough words to be a sentence." for i in range(8))
+    menu = "\nPARTICIPATING MEMBER STATES\nFollow us\nSubscribe to our newsletter\nNews and Events\nLatest News\nEvents\nSpotlight\nPodcast\nMultimedia\nPress Office"
+    assert clean_text(article + menu) == article
+    assert clean_text("Follow us\nshort\nlines\nonly\nhere\nat\nthe\ntop\n" + article).endswith("sentence.")
+    r = SimpleNamespace(body_html="<article><p>&lt;body&gt;</p><p>&lt;/body&gt;</p></article>", body_txt=article,
+                        title="EDA", summary=None, document_date=None, public_url="https://eda.europa.eu/x")
+    txt, html = _news_body(r, "EDA")
+    assert "Paragraph 3 of the article" in html and "&lt;body&gt;" not in html

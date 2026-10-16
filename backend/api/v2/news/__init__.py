@@ -481,6 +481,11 @@ def _news_body(r, body_name):
         # publications. Served as the text in paragraphs, as every PDF row is (2 Oct 2026).
         stored_html = body_from_pdf_text(r.body_txt)[0]
     html, txt, _ = body_from_html_or_text(stored_html or getattr(r, "body_txt", None))
+    stored_txt = (getattr(r, "body_txt", None) or "").strip()
+    if stored_txt and len(stored_txt) > 500 and len((txt or "").strip()) < len(stored_txt) // 5:
+        # HTML that holds almost nothing of the text ("<p>&lt;body&gt;</p>" on EDA items,
+        # a link card): marked up from the text instead (16 Oct 2026).
+        html, txt, _ = body_from_html_or_text(stored_txt)
     if txt and txt.strip():
         if not html:
             html = body_from_html_or_text(txt)[0]
