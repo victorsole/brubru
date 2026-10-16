@@ -9,10 +9,13 @@
 
 SET LOCAL lock_timeout = '10s';
 
--- Stop if the function changed after this file was written: never overwrite a newer text.
+-- Stop if the function changed after this file was written: never overwrite a newer text. Two texts are accepted:
+-- the API session's 297 (live when this was applied, 16 Oct 2026) and 302's (what a replay of the migrations in
+-- number order holds here, since 297 sorts before 299-302 although it was applied after them).
 DO $guard$
 BEGIN
-    IF md5(pg_get_functiondef('brubru_touch_if_changed'::regproc)) <> 'eb956a94afc16c4c690cbb54b4bf53c0' THEN
+    IF md5(pg_get_functiondef('brubru_touch_if_changed'::regproc)) NOT IN ('eb956a94afc16c4c690cbb54b4bf53c0',
+                                                                         'cc040401522bc991418a4b932cae8432') THEN
         RAISE EXCEPTION 'brubru_touch_if_changed changed since 301 was written: rebuild 301 from the live text';
     END IF;
 END

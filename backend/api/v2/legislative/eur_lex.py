@@ -546,7 +546,7 @@ async def get_summary(
 Full-text search over Brubru's mirror of adopted EU legislation (the LEG_2026-10 Publications Office bulk export — 27,103 distinct laws across 30,246 Official Journal publications with full text). Each row carries the CELEX legal identifier, document type, title + subject matter, policy area, publication date, and the EUR-Lex canonical URL.
 
 **When to use it**
-To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner integration the live adopted-legislation corpus. Each row carries the act's full text. For procedures still in negotiation, use the Legislative Observatory source at `/api/v2/legislative/oeil/procedures`.
+To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner integration the live adopted-legislation corpus. Each row carries the act's text once Brubru has fetched it from Cellar; an act still in the fetch queue (new acts first, 300 every 6 hours) has null `body_txt` and `body_html` until then. For procedures still in negotiation, use the Legislative Observatory source at `/api/v2/legislative/oeil/procedures`.
 
 **Input**
 - `q` — full-text search on title + subject matter (PostgreSQL TSVECTOR).
@@ -568,7 +568,7 @@ GET /api/v2/legislative/eur-lex/laws?q=AI%20Act&limit=10
 GET /api/v2/legislative/eur-lex/laws?doc_type=regulation&policy_area=environment&published_from=2024-01-01
 GET /api/v2/legislative/eur-lex/laws?sector=3&year=2024&document_type=R&in_force=true&include_body=false
 GET /api/v2/legislative/eur-lex/laws?alias=GDPR
-GET /api/v2/legislative/eur-lex/laws?corrects=32006R1907
+GET /api/v2/legislative/eur-lex/laws?corrects=32016R0679
 ```
 
 **You get back**
@@ -576,7 +576,7 @@ A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title
 
 `doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
 
-The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it holds and from Cellar for the others (16 Oct 2026); procedures also from Brubru's Legislative Observatory data. `in_force` is refreshed daily from Cellar and is null where the Publications Office carries no flag. Dates are split by the type the Publications Office gives them and served as it states them; its placeholder dates are left out. Acts the daily Official Journal sync adds later carry the CELEX parts at once, `in_force` from the first daily check after Cellar states a flag, and the rest of the metadata once that sync fills it.
+The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it holds and from Cellar for the others (16 Oct 2026); procedures also from Brubru's Legislative Observatory data. `in_force` is refreshed daily from Cellar and is null where the Publications Office carries no flag. Dates are split by the type the Publications Office gives them and served as it states them; its placeholder dates are left out. Acts the daily Official Journal sync adds later carry the CELEX parts at once, `in_force` from the first daily check after Cellar states a flag, and, for now, none of the rest of the metadata (planned).
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",
@@ -652,12 +652,12 @@ async def list_laws(
 @router.get(
     "/laws/{celex}",
     response_model=LawItem,
-    summary="Look up one adopted EU law by its legal identifier — metadata only (no body)",
+    summary="Look up one adopted EU law by its legal identifier",
     description="""**What it does**
-Returns the bibliographic metadata for one adopted EU law identified by its CELEX (the EU's stable legal identifier — e.g. `32024R1689` for the AI Act): title, document type, adoption date, OJ reference, policy area, legal-basis array, EUR-Lex URL, and a relative URL to the text endpoint.
+Returns one adopted EU law identified by its CELEX (the EU's stable legal identifier, e.g. `32024R1689` for the AI Act): its metadata and its stored text (`body_txt`, `body_html`), the same item the list returns.
 
 **When to use it**
-When you only need bibliographic fields and not the full body — faster than `/{celex}/text` because it doesn't fetch the body. Pair with `/api/v2/legislative/eur-lex/laws/{celex}/text` for the actual legal text.
+To read one law by its identifier. The item carries the stored text when Brubru has fetched it from Cellar (null while the act waits in the fetch queue); `/api/v2/legislative/eur-lex/laws/{celex}/text` reads the text live from Cellar instead.
 
 **Input**
 - `celex` (path) — the EU legal identifier. Case-insensitive; uppercased internally. Format: 5 digits + 1-2 letters + 4 digits (e.g. `32024R1689`, `52026PC0321`).
@@ -669,7 +669,7 @@ GET /api/v2/legislative/eur-lex/laws/32016R0679
 ```
 
 **You get back**
-A `LawItem` with `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, what the CELEX states (`sector`, `year`, `number`, `document_type`, `corrected_act`...), `alias` and `acronym`, the Publications Office's metadata (`authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`), `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url`, plus the 5 envelope-level datapoints; the list route describes each field. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.
+A `LawItem` with `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, what the CELEX states (`sector`, `year`, `number`, `document_type`, `corrected_act`...), `alias` and `acronym`, the Publications Office's metadata (`authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`), `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html`, plus the 5 envelope-level datapoints; the list route describes each field. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.
 
 **Data freshness**
 Synced every 6 hours (hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",

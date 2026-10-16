@@ -68,7 +68,7 @@ PICK = text(
     """
     SELECT id, celex FROM eu_laws
      WHERE celex IS NOT NULL AND celex <> '' AND body_fetched_at IS NULL
-     ORDER BY celex
+     ORDER BY date DESC NULLS LAST, celex  -- newest acts first: ordered by CELEX, a new act waited ~6 days (16 Oct 2026)
      LIMIT :lim
     """
 )
