@@ -3,7 +3,7 @@
 224 rows were inserted without CELEX because the parser found none in the file, so the check that the
 act was already held never ran; 35 corrigenda took the CELEX their text names.
 """
-from backend.scripts.import_corpus_update import celex_for, folder_celex
+from backend.scripts.leg_folder import celex_for, folder_celex
 
 U = "00000dbc-76cd-11ed-9887-01aa75ed71a1"
 OTHER = "11111111-2222-3333-4444-555555555555"

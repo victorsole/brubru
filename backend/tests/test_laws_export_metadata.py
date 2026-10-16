@@ -107,3 +107,22 @@ def test_v2_passes_the_new_filters_to_v1(monkeypatch):
                 in_force=True, corrects="32024R1689")
     asyncio.run(eur_lex.list_laws(None, **base))
     assert (seen["sector"], seen["year"], seen["alias"], seen["in_force"], seen["corrects"]) == ("3", 2024, "GDPR", True, "32024R1689")
+
+
+_DUMP = _BACKEND.parent / "docs" / "LEG_2026-10"
+
+
+@pytest.mark.skipif(not _DUMP.is_dir(), reason="the LEG_2026-10 export is not on this machine")
+def test_the_importer_reads_the_same_metadata_as_the_backfill():
+    # two writers of the same columns must agree: the importer reads the RDF, the backfill the tables built from it
+    import csv
+    import random
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts.leg_export_metadata import export_metadata, sources, wanted
+    table, folders, aliases = sources()
+    rows = [r for r in csv.DictReader((_BACKEND / "data/leg_2026-10_table/leg_2026-10_folders.csv").open(encoding="utf-8-sig"))
+            if r["has_text"] == "yes"]
+    random.seed(16)
+    for r in random.sample(rows, 150) + [r for r in rows if r["celex"] in ("32024R1689", "32022R2065", "32006R1907R(01)")]:
+        w = {k: v for k, v in wanted(r["celex"], None, table, folders, aliases).items() if k not in ("alias", "acronym")}
+        assert export_metadata(_DUMP, r["folder"], r["celex"]) == w, r["celex"]

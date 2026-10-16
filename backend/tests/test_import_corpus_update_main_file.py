@@ -6,7 +6,7 @@ page: titled "ANNEX" or "Official Journal of the European Union", typed Annex or
 import re
 from types import SimpleNamespace
 
-from backend.scripts.import_corpus_update import main_file, rdf_meta, strip_number_prefix, title_match, type_label
+from backend.scripts.leg_folder import main_file, rdf_meta, strip_number_prefix, title_match, type_label
 
 U = "00000dbc-76cd-11ed-9887-01aa75ed71a1"
 

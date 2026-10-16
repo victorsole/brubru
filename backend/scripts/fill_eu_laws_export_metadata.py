@@ -23,10 +23,8 @@ from __future__ import annotations
 
 import argparse
 import collections
-import csv
 import datetime as dt
 import json
-import re
 import sys
 from pathlib import Path
 
@@ -37,51 +35,13 @@ from sqlalchemy import text  # noqa: E402
 
 from backend.core.database import SessionLocal  # noqa: E402
 from backend.scripts.fix_eu_laws_2025_leftovers import check  # noqa: E402
-
-ROOT = Path(__file__).resolve().parents[2]
-TABLES = ROOT / "backend/data/leg_2026-10_table"
-COLS = ("alias", "acronym", "authors", "in_force", "eli", "entry_into_force", "procedures")
+from backend.scripts.leg_export_metadata import COLS, ROOT, sources, wanted  # noqa: E402,F401
 CHUNK = 500
 UPDATE = ("UPDATE eu_laws e SET alias = v.alias, acronym = v.acronym, authors = v.authors, in_force = v.in_force, "
           "eli = v.eli, entry_into_force = v.entry_into_force, procedures = v.procedures "
           "FROM (VALUES %s) AS v (id, alias, acronym, authors, in_force, eli, entry_into_force, procedures) "
           "WHERE e.id = v.id RETURNING e.id, e.updated_at")
 TEMPLATE = "(%s, %s, %s, %s::text[], %s::boolean, %s, %s::date[], %s::text[])"
-
-
-def procedure_numbers(cell: str) -> list:
-    """'procedure:2019_145|internal_proc:ABC...' -> ['2019/0145'] (the OEIL reference without its type)."""
-    out = []
-    for p in (cell or "").split("|"):
-        m = re.fullmatch(r"procedure:(\d{4})_0*(\d{1,4})", p.strip())
-        if m:
-            out.append(f"{m[1]}/{int(m[2]):04d}")
-    return sorted(set(out))
-
-
-def sources():
-    table = {r["CELEX"]: r for r in csv.DictReader((TABLES / "leg_2026-10_table.csv").open(encoding="utf-8-sig"))}
-    folders = {r["celex"]: r for r in csv.DictReader((TABLES / "leg_2026-10_folders.csv").open(encoding="utf-8-sig")) if r["celex"]}
-    aliases = {r["celex"]: r for r in csv.DictReader((TABLES / "aliases.csv").open(encoding="utf-8-sig"))}
-    return table, folders, aliases
-
-
-def wanted(celex, status, table, folders, aliases) -> dict:
-    """The values the export states for one law; None where it states nothing."""
-    t, f, a = table.get(celex), folders.get(celex), aliases.get(celex)
-    v = dict.fromkeys(COLS)
-    if a:
-        v["alias"], v["acronym"] = (a.get("alias") or "").strip() or None, (a.get("acronym") or "").strip() or None
-    if t:
-        v["authors"] = [x for x in (t.get("author") or "").split("|") if x] or None
-        v["in_force"] = {"true": True, "false": False}.get((t.get("in_force") or "").strip())
-        v["eli"] = (t.get("eli") or "").strip() or None
-    elif status == "repealed":
-        v["in_force"] = False  # marked repealed by the importer only when Cellar's in-force flag is 0
-    if f:
-        v["entry_into_force"] = sorted({d for d in (f.get("entry_into_force") or "").split("|") if d}) or None
-        v["procedures"] = procedure_numbers(f.get("procedures")) or None
-    return v
 
 
 def norm(v):
