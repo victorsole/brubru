@@ -87,6 +87,16 @@ class EULaw(Base):
     eurovoc_domain = Column(Text)
     eurovoc_fetched_at = Column(TIMESTAMP(timezone=True))
 
+    # The Publications Office's own metadata for the law (migration 293), served by /laws. Sector, year, number,
+    # document type and the act a corrigendum corrects are read from the CELEX (services/celex_types.py) instead.
+    alias = Column(Text)  # aliases.csv only, never derived
+    acronym = Column(Text)
+    authors = Column(ARRAY(Text))  # corporate-body codes: COM, CONSIL, EP, a DG...
+    in_force = Column(Boolean)  # NULL = the metadata carries no flag, not false
+    eli = Column(Text)
+    entry_into_force = Column(ARRAY(Date))
+    procedures = Column(ARRAY(Text))  # interinstitutional procedure numbers YYYY/NNNN
+
     # Timestamps
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())

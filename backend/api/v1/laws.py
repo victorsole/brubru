@@ -13,12 +13,13 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, case, func, or_, text
+from sqlalchemy import and_, any_, case, func, literal, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
 from models.eu_law import EULaw
 from models.user import User
+from services.celex_types import SECTORS, celex_info, type_codes_for
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
@@ -64,6 +65,22 @@ class LawItem(BaseModel):
     doc_type: Optional[str] = None
     adopted_on: Optional[date] = Field(None, description="Adoption / publication date")
     oj_reference: Optional[str] = None
+    # What the CELEX itself states, read from the string (the EUR-Lex tables "CELEX numbers" and "Types of documents").
+    sector: Optional[str] = Field(None, description="CELEX sector, the first character: `3` legal acts, `2` international agreements, `5` preparatory documents, `0` consolidated texts...")
+    sector_name: Optional[str] = Field(None, description="The sector's name in EUR-Lex, e.g. `Legal acts`.")
+    year: Optional[int] = Field(None, description="The year in the CELEX (e.g. 2024 for `32024R1689`): the year the act's number belongs to.")
+    number: Optional[int] = Field(None, description="The number in the CELEX (e.g. 1689 for `32024R1689`): the act's own number; for international agreements (type A) a date.")
+    document_type_code: Optional[str] = Field(None, description="The CELEX descriptor letter(s), e.g. `R`, `L`, `D`, `PC`.")
+    document_type: Optional[str] = Field(None, description="What the descriptor means in EUR-Lex's own table, e.g. `Regulation`, `Directive`, `Non-opposition to a notified concentration`. `doc_type` above is Brubru's normalised family; this is the Publications Office's label.")
+    corrected_act: Optional[str] = Field(None, description="For a corrigendum (`R(01)` suffix): the CELEX of the act it corrects. Null for every other document.")
+    # The Publications Office's metadata for the law (migration 293).
+    alias: Optional[str] = Field(None, description="The law's common name, e.g. `General Data Protection Regulation`. Curated, never derived: few laws carry one yet.")
+    acronym: Optional[str] = Field(None, description="The acronym of the alias, e.g. `GDPR`.")
+    authors: list[str] = Field(default_factory=list, description="The bodies that created the act, as Publications Office corporate-body codes: `COM` Commission, `CONSIL` Council, `EP` European Parliament, or a Commission department such as `SANTE`.")
+    in_force: Optional[bool] = Field(None, description="The act's in-force flag in the Publications Office metadata. Null when the metadata carries none: unknown, not false.")
+    eli: Optional[str] = Field(None, description="The act's European Legislation Identifier (ELI) URI, e.g. `http://data.europa.eu/eli/reg/2024/1689/oj`. Null when the metadata has none for this publication.")
+    entry_into_force: list[date] = Field(default_factory=list, description="The dates of entry into force the metadata states. Several dates mean staged entry into force.")
+    procedures: list[str] = Field(default_factory=list, description="The interinstitutional procedure numbers the act came from, as `YYYY/NNNN` (the Legislative Observatory reference without its type, e.g. `2021/0106`).")
     policy_area: Optional[str] = Field(
         None,
         description=(
@@ -102,6 +119,47 @@ def _policy_area_filter(value: str):
     return func.regexp_replace(EULaw.eurovoc_domain, r"^\d+ ", "").ilike(name)
 
 
+def _bad_filter(name: str, value, expected: str):
+    return HTTPException(status_code=422, detail={
+        "error": f"Invalid {name}={value!r}: expected {expected}.", "reason_code": "invalid_filter"})
+
+
+def metadata_filters(sector=None, year=None, number=None, document_type=None, alias=None, author=None,
+                     in_force=None, procedure=None, corrects=None) -> list:
+    """SQL filters for the CELEX parts and the export metadata (16 Oct 2026). One builder for v1 and v2, so the two
+    routes cannot filter differently. CELEX parts are matched on the CELEX string itself, the way they are served."""
+    fs = []
+    if sector:
+        s = sector.strip().upper()
+        if s not in SECTORS:
+            raise _bad_filter("sector", sector, "one of " + ", ".join(SECTORS))
+        fs.append(EULaw.celex.like(f"{s}%"))
+    if year is not None:
+        fs.append(func.substr(EULaw.celex, 2, 4) == f"{year:04d}")
+    if number is not None:
+        fs.append(EULaw.celex.op("~")(rf"^[0-9CE][0-9]{{4}}[A-Z]{{1,3}}0*{number}([^0-9]|$)"))
+    if document_type:
+        pairs = type_codes_for(document_type)
+        if not pairs:
+            raise _bad_filter("document_type", document_type, "a CELEX descriptor (R, L, D, PC...) or its EUR-Lex label (regulation, directive...)")
+        fs.append(or_(*[EULaw.celex.op("~")(rf"^{s}[0-9]{{4}}{t}[0-9]") for s, t in pairs]))
+    if alias:
+        v = alias.strip().lower()
+        fs.append(or_(func.lower(EULaw.alias) == v, func.lower(EULaw.acronym) == v))
+    if author:
+        fs.append(literal(author.strip().upper()) == any_(EULaw.authors))  # the model's generic ARRAY has no .contains()
+    if in_force is not None:
+        fs.append(EULaw.in_force.is_(in_force))
+    if procedure:
+        m = re.fullmatch(r"\s*(\d{4})\s*/\s*0*(\d{1,4})\s*(?:\([A-Z]{3}\))?\s*", procedure)
+        if not m:
+            raise _bad_filter("procedure", procedure, "YYYY/NNNN, e.g. 2021/0106 or 2021/0106(COD)")
+        fs.append(literal(f"{m[1]}/{int(m[2]):04d}") == any_(EULaw.procedures))
+    if corrects:
+        fs.append(EULaw.celex.like(f"{corrects.strip().upper()}R(%"))
+    return fs
+
+
 def _eurlex_url(celex: Optional[str]) -> Optional[str]:
     if not celex:
         return None
@@ -126,6 +184,14 @@ def _law_item(r, include_body: bool = True) -> "LawItem":
         doc_type=r.doc_type_normalized or r.doc_type,
         adopted_on=r.date,
         oj_reference=r.oj_reference,
+        **celex_info(r.celex),
+        alias=getattr(r, "alias", None),
+        acronym=getattr(r, "acronym", None),
+        authors=list(getattr(r, "authors", None) or []),
+        in_force=getattr(r, "in_force", None),
+        eli=getattr(r, "eli", None),
+        entry_into_force=list(getattr(r, "entry_into_force", None) or []),
+        procedures=list(getattr(r, "procedures", None) or []),
         # EuroVoc as the Publications Office indexed it (migration 276), never Brubru's
         # classifier, which put the decision electing the European Ombudsman under "Energy".
         policy_area=getattr(r, "eurovoc_domain", None),
@@ -161,16 +227,24 @@ The single highest-traffic Brubru endpoint — used to find specific acts (e.g. 
 - `published_from`, `published_to` — date filter on `published_date`.
 - `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
 - `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
+- `sector`, `year`, `number`, `document_type` — the parts of the CELEX: `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `PC`) or its EUR-Lex label (`regulation`).
+- `alias` — common name or acronym (`GDPR`, `Digital Services Act`), exact, case-insensitive.
+- `author` — creating body (`COM`, `CONSIL`, `EP`, `SANTE`...); `in_force` — `true` / `false`; `procedure` — `2021/0106`; `corrects` — a CELEX, returns its corrigenda.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
 ```
 GET /api/v1/laws?q=AI%20Act&limit=10
 GET /api/v1/laws?doc_type=regulation&policy_area=environment&published_from=2024-01-01
+GET /api/v1/laws?sector=3&year=2024&document_type=R&in_force=true&include_body=false
+GET /api/v1/laws?alias=GDPR
+GET /api/v1/laws?corrects=32024R1689
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`; what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); the Publications Office's metadata: `alias`, `acronym`, `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+
+The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it describes. `in_force` is null where the metadata has no flag; `alias` is curated and set on few laws so far; `procedures` exists for acts adopted through an interinstitutional procedure. Acts the daily Official Journal sync adds after the export carry the CELEX parts but not yet the metadata.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3 (secondary acts). New regulations + directives published in the Official Journal L-series appear in our mirror within the same day they hit EUR-Lex.""",
@@ -195,6 +269,15 @@ async def list_laws(
         description="Include body_txt and body_html. Pass false to page the corpus "
                     "for metadata without carrying ~41 KB of XHTML per row.",
     ),
+    sector: Optional[str] = Query(None, description="CELEX sector: 3 legal acts, 2 international agreements, 5 preparatory documents..."),
+    year: Optional[int] = Query(None, ge=1900, le=2100, description="The year in the CELEX (e.g. 2024)"),
+    number: Optional[int] = Query(None, ge=1, description="The number in the CELEX (e.g. 1689 for the AI Act)"),
+    document_type: Optional[str] = Query(None, description="CELEX descriptor (R, L, D, PC...) or its EUR-Lex label (regulation, directive, ...)"),
+    alias: Optional[str] = Query(None, description="Common name or acronym, exact and case-insensitive (GDPR, Digital Services Act)"),
+    author: Optional[str] = Query(None, description="Creating body, Publications Office code: COM, CONSIL, EP, or a department such as SANTE"),
+    in_force: Optional[bool] = Query(None, description="true: in force per the metadata; false: not in force. Laws whose metadata carries no flag match neither."),
+    procedure: Optional[str] = Query(None, description="Interinstitutional procedure number, YYYY/NNNN (2021/0106 or 2021/0106(COD))"),
+    corrects: Optional[str] = Query(None, description="A CELEX: returns the corrigenda of that act"),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -271,6 +354,7 @@ async def list_laws(
         filters.append(EULaw.created_at >= created["created_from"])
     if created["created_to"]:
         filters.append(EULaw.created_at <= created["created_to"])
+    filters += metadata_filters(sector, year, number, document_type, alias, author, in_force, procedure, corrects)
 
     ts_query = None
     alias_celexes: list[str] = []

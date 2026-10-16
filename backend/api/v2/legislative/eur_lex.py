@@ -557,16 +557,24 @@ To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner
 - `published_from`, `published_to` — adoption-date bounds (YYYY-MM-DD).
 - `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
 - `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
+- `sector`, `year`, `number`, `document_type` — the parts of the CELEX: `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `PC`) or its EUR-Lex label (`regulation`).
+- `alias` — common name or acronym (`GDPR`, `Digital Services Act`), exact, case-insensitive.
+- `author` — creating body (`COM`, `CONSIL`, `EP`, `SANTE`...); `in_force` — `true` / `false`; `procedure` — `2021/0106`; `corrects` — a CELEX, returns its corrigenda.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
 ```
 GET /api/v2/legislative/eur-lex/laws?q=AI%20Act&limit=10
 GET /api/v2/legislative/eur-lex/laws?doc_type=regulation&policy_area=environment&published_from=2024-01-01
+GET /api/v2/legislative/eur-lex/laws?sector=3&year=2024&document_type=R&in_force=true&include_body=false
+GET /api/v2/legislative/eur-lex/laws?alias=GDPR
+GET /api/v2/legislative/eur-lex/laws?corrects=32024R1689
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`; what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); the Publications Office's metadata: `alias`, `acronym`, `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+
+The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it describes. `in_force` is null where the metadata has no flag; `alias` is curated and set on few laws so far; `procedures` exists for acts adopted through an interinstitutional procedure. Acts the daily Official Journal sync adds after the export carry the CELEX parts but not yet the metadata.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",
@@ -587,6 +595,15 @@ async def list_laws(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First stored by Brubru on or before; a bare date covers the whole day."),
     include_orphans: bool = Query(False, description="Include rows with no CELEX (orphaned annexes). Default false."),
     include_body: bool = Query(True, description="Include each row's body_txt and body_html, stored from Cellar. Pass false to page the corpus for metadata only."),
+    sector: Optional[str] = Query(None, description="CELEX sector: 3 legal acts, 2 international agreements, 5 preparatory documents..."),
+    year: Optional[int] = Query(None, ge=1900, le=2100, description="The year in the CELEX (e.g. 2024)"),
+    number: Optional[int] = Query(None, ge=1, description="The number in the CELEX (e.g. 1689 for the AI Act)"),
+    document_type: Optional[str] = Query(None, description="CELEX descriptor (R, L, D, PC...) or its EUR-Lex label (regulation, directive, ...)"),
+    alias: Optional[str] = Query(None, description="Common name or acronym, exact and case-insensitive (GDPR, Digital Services Act)"),
+    author: Optional[str] = Query(None, description="Creating body, Publications Office code: COM, CONSIL, EP, or a department such as SANTE"),
+    in_force: Optional[bool] = Query(None, description="true: in force per the metadata; false: not in force. Laws whose metadata carries no flag match neither."),
+    procedure: Optional[str] = Query(None, description="Interinstitutional procedure number, YYYY/NNNN (2021/0106 or 2021/0106(COD))"),
+    corrects: Optional[str] = Query(None, description="A CELEX: returns the corrigenda of that act"),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -611,6 +628,15 @@ async def list_laws(
         created_to=created_to,
         include_orphans=include_orphans,
         include_body=include_body,
+        sector=sector,
+        year=year,
+        number=number,
+        document_type=document_type,
+        alias=alias,
+        author=author,
+        in_force=in_force,
+        procedure=procedure,
+        corrects=corrects,
         limit=limit,
         page=page,
         user=user,

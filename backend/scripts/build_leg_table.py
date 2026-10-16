@@ -35,42 +35,19 @@ import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
 
 _REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
+sys.path.insert(0, _REPO_ROOT)
+
+# the labels, the CELEX shape and the corrigendum rule live in one place, read by the laws API too
+from backend.services.celex_types import CELEX_RE, CORR_RE, TYPE_LABELS, base_of  # noqa: E402,F401
 
 RDF = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
 CDM = "{http://publications.europa.eu/ontology/cdm#}"
 WRAPPERS = (".doc.xml", ".toc.xml", ".doc.fmx.xml", ".toc.fmx.xml")
 CELLAR = "https://publications.europa.eu/webapi/rdf/sparql"
 
-# EUR-Lex "Types of documents in EUR-Lex", sector 3 and the one sector-5 descriptor in this dump.
-TYPE_LABELS = {
-    ("3", "A"): "Opinion", ("3", "B"): "Budget", ("3", "C"): "Declaration", ("3", "D"): "Decision",
-    ("3", "E"): "CFSP act (common position, joint action, common strategy)",
-    ("3", "F"): "Police and judicial cooperation in criminal matters act",
-    ("3", "G"): "Resolution", ("3", "H"): "Recommendation",
-    ("3", "J"): "Non-opposition to a notified joint venture", ("3", "K"): "ECSC recommendation",
-    ("3", "L"): "Directive", ("3", "M"): "Non-opposition to a notified concentration",
-    ("3", "O"): "ECB guideline", ("3", "Q"): "Institutional arrangement",
-    ("3", "R"): "Regulation", ("3", "S"): "ECSC decision of general interest",
-    ("3", "X"): "Other document published in OJ L", ("3", "Y"): "Other document published in OJ C",
-    ("5", "XG"): "Other document of the Council or the Member States",
-    ("2", "A"): "Agreement with a non-member State or international organisation",
-    ("2", "D"): "Act of a body created by an international agreement",
-    ("2", "P"): "Act of a parliamentary body created by an international agreement",
-    ("2", "X"): "Other act (international agreements)",
-}
 ELI_PREFIX = {"R": ("reg", "reg_impl", "reg_del"), "L": ("dir", "dir_impl", "dir_del"),
               "D": ("dec", "dec_impl", "dec_del")}
 SUFFIX_RE = re.compile(r"(?:\(\d{2}\))*(?:R\(\d{2}\))*$")  # used by pick_eli only
-CORR_RE = re.compile(r"(?:R\(\d{2}\))+$")
-
-
-def base_of(c):
-    """CELEX without a corrigendum suffix R(NN); a plain (NN) is a different act and stays; a
-    consolidated text (sector 0, -YYYYMMDD) maps to its sector-3 act."""
-    if c.startswith("0"):
-        c = "3" + c[1:]
-    return CORR_RE.sub("", re.sub(r"-\d{8}$", "", c))
-CELEX_RE = re.compile(r"^(?P<s>[0-9CE])(?P<y>\d{4})(?P<t>[A-Z]{1,3})(?P<n>\d{4,6})")
 
 TABLE_HEADERS = ["CELEX", "Sector", "Year", "Type of document", "Number of document", "Title of document",
                  "Alias of document", "Acronym of the alias"]
