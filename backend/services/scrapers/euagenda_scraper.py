@@ -81,7 +81,23 @@ _EUAGENDA_TOPIC_BADGES = {
     "economy", "finance", "research", "innovation", "education", "culture",
     "defence", "migration", "enlargement", "budget", "fisheries", "maritime",
     "consumers", "competition", "taxation", "social", "development",
+    # Still landing as titles on 16 Oct 2026 ("Broadband" for a BEREC workshop on fraud,
+    # "SMEs" for an EBRD launch in Romania, "Institutions" for two different events).
+    "broadband", "institutions", "smes", "ict", "medicine", "food", "banking", "training",
+    "cooperation", "nuclear energy", "manufacturing", "politics", "data protection",
 }
+
+
+_MONTH_SUFFIX = re.compile(r"-20\d\d-\d\d$")
+
+
+def drop_suffixed_twins(events: list) -> list:
+    """euagenda lists some events twice, the second slug ending "-2026-06" (16 Oct 2026:
+    eight June events). The plain slug is kept when both are listed."""
+    ids = {e.external_id for e in events}
+    return [e for e in events
+            if not (_MONTH_SUFFIX.search(e.external_id or "")
+                    and _MONTH_SUFFIX.sub("", e.external_id) in ids)]
 
 
 def _title_from_slug(slug: str) -> str:
@@ -100,6 +116,7 @@ def _title_from_slug(slug: str) -> str:
         "cjeu", "nato", "un", "oecd", "wto", "ilo", "who", "ai", "ict", "sme",
         "smes", "co2", "esg", "gdpr", "dsa", "dma", "cbam", "espr", "ets",
         "mff", "cap", "rrf", "stem", "r&d", "hpc", "5g", "6g",
+        "berec", "ebrd", "eic", "eit", "cerv", "iea", "imf", "euipo", "acer", "ertms",
     }
     def _cap(w: str, first: bool) -> str:
         if w.lower() in acronyms:
@@ -603,6 +620,7 @@ class EuAgendaScraper(BaseScraper):
                     organiser=card.get("organiser_preview") or None,
                     event_type=_infer_event_type(title, card.get("subtitle_preview") or ""),
                 ))
+        events = drop_suffixed_twins(events)
         logger.info("euagenda: scraped %d events (include_details=%s)", len(events), include_details)
         return events
 

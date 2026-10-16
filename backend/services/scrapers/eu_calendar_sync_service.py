@@ -565,8 +565,16 @@ class EUCalendarSyncService:
                 result["commissioners"] += 1
                 dg = self.COMMISSIONER_DG.get(p.slug)
                 seen = set()  # dedupe within this commissioner (HTML + RSS overlap)
+                others = [q.slug for q in load_commissioner_profiles() if q.slug != p.slug]
                 for it in items:
                     if not it.date:
+                        continue
+                    if names_another_commissioner(it.title, p.slug, others):
+                        # On 5-6 Jun 2026 every Commissioner's page served the whole
+                        # College's agenda: 504 events were stored once per Commissioner,
+                        # each with that Commissioner's page and DG ("Commissioner
+                        # Dombrovskis ..." filed under Tzitzikostas, DG MOVE).
+                        result["skipped"] += 1
                         continue
                     # STABLE id (hashlib, not Python hash()) so re-syncs update, not duplicate.
                     tkey = hashlib.md5((it.title or "").encode("utf-8")).hexdigest()[:10]
@@ -999,6 +1007,34 @@ TRIS_COUNTRY_NAMES = {
     "LI": "Liechtenstein", "CH": "Switzerland", "TR": "Türkiye", "UK": "United Kingdom",
     "GB": "United Kingdom", "XI": "United Kingdom (Northern Ireland)",
 }
+
+
+_ROLE_NAME = re.compile(
+    r"^\s*(?:commissioner|executive vice-president|high representative(?:/vice-president)?"
+    r"|hr/vp|president)\s+([a-z][a-z'-]+)")
+
+
+def _fold(s: str) -> str:
+    import unicodedata
+    s = (s or "").replace("ø", "o").replace("Ø", "O")
+    return "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c)).lower()
+
+
+def names_another_commissioner(title: str, own_slug: str, other_slugs: List[str]) -> bool:
+    """True when the agenda item opens with ANOTHER College member's role and name.
+
+    "Commissioner Dombrovskis meets ..." on Tzitzikostas's agenda is not his event. Only
+    the opening "<role> <name>" is read: an event naming a second member later ("together
+    with President von der Leyen") stays with its host."""
+    m = _ROLE_NAME.match(_fold(title))
+    if not m:
+        return False
+    name = m.group(1)
+    if name == "von":  # "President von der Leyen": her profile slug is 'president'
+        return own_slug != "president" and "leyen" not in own_slug
+    if name in own_slug.split("-"):
+        return False
+    return any(name in o.split("-")[1:] for o in other_slugs)
 
 
 def jrc_workshop_event(row, today) -> Dict[str, Any]:

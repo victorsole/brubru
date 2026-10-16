@@ -33,6 +33,15 @@ from api.v1.calendar import CalendarEventItem
 router = APIRouter(prefix="/calendar")
 
 
+def _today() -> date:
+    """Today in Brussels: an event on the 16th is not over at 23:30 UTC on the 15th."""
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.now(ZoneInfo("Europe/Brussels")).date()
+    except Exception:  # no tz database: UTC is at most one day early, never late
+        return datetime.utcnow().date()
+
+
 class CalendarEventV2(CalendarEventItem):
     public_url: Optional[str] = None
     body_txt: Optional[str] = None
@@ -42,7 +51,20 @@ class CalendarEventV2(CalendarEventItem):
     updated_date: Optional[datetime] = None
 
 
+def served_status(status: Optional[str], start, end, today: date) -> Optional[str]:
+    """An event whose last day has passed is 'completed', whatever the source said when it
+    was announced: 5,299 past events read 'scheduled' or 'confirmed' (16 Oct 2026), and a
+    client reads that as still to come. Cancelled stays cancelled."""
+    last = end or start
+    if isinstance(last, datetime):
+        last = last.date()
+    if status in ("scheduled", "confirmed", "tentative") and isinstance(last, date) and last < today:
+        return "completed"
+    return status
+
+
 def _to_v2(it: CalendarEventItem, *, with_body: bool) -> CalendarEventV2:
+    it = it.model_copy(update={"status": served_status(it.status, it.start_date, it.end_date, _today())})
     lines = [it.title]
     if it.institution:
         lines.append(f"Institution: {it.institution}")

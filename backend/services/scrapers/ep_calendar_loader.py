@@ -189,7 +189,7 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                     # uq_calendar_source_external_id index saw an unseen key,
                     # and My EU Calendar showed the plenary twice. 28 rows.
                     # A date is stable; a week label upstream is not.
-                    ext_id = f"ep_{year}_plenary_{day_date.isoformat()}"
+                    ext_id = f"ep_{day_date.year}_plenary_{day_date.isoformat()}"
                     if ext_id in seen_external_ids:
                         continue
                     seen_external_ids.add(ext_id)
@@ -228,7 +228,7 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                     for day_activity in SPLIT_DAY_ACTIVITIES.get(day_value, (day_value,)):
                         # Date-derived, same reason as the plenary branch above:
                         # week_num comes from the source JSON and is not stable.
-                        ext_id = f"ep_{year}_{day_date.isoformat()}_{day_activity}"
+                        ext_id = f"ep_{day_date.year}_{day_date.isoformat()}_{day_activity}"
                         if ext_id in seen_external_ids:
                             continue
                         seen_external_ids.add(ext_id)
@@ -256,7 +256,9 @@ def load_ep_calendar(year: int) -> List[Dict[str, Any]]:
                 # Single multi-day event for the week
                 # Date-derived: a whole-week event is identified by the week's
                 # START DATE, never by the upstream week label.
-                ext_id = f"ep_{year}_{start_date.isoformat()}_{activity}"
+                # The year of the DATE, not of the calendar file: the week of 29 Dec 2025 is in
+                # both the 2025 and the 2026 calendars and was stored twice (16 Oct 2026).
+                ext_id = f"ep_{start_date.year}_{start_date.isoformat()}_{activity}"
                 if ext_id in seen_external_ids:
                     continue
                 seen_external_ids.add(ext_id)
