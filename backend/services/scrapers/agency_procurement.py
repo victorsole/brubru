@@ -1546,6 +1546,56 @@ def _parse_iso_sedia(value: str | None) -> datetime | None:
         return None
 
 
+_TED_NOTICE_NUMBER = re.compile(r"TED:NOTICE:(\d+-\d{4})|ted\.europa\.eu/[^\s\"']*?/(\d+-\d{4})\b")
+_TED_DATE_CACHE: dict[str, datetime | None] = {}
+
+
+def _ted_notice_numbers(links: list[str]) -> list[str]:
+    """The TED publication numbers (NNNNNN-YYYY) the links name, in order, once each."""
+    out: list[str] = []
+    for u in links:
+        for a, b in _TED_NOTICE_NUMBER.findall(u):
+            n = a or b
+            if n not in out:
+                out.append(n)
+    return out
+
+
+def _ted_publication_dates(numbers: list[str]) -> dict[str, datetime]:
+    """Publication date of each TED notice, from TED's search API, 50 numbers a call.
+    TED's index starts in 2017 (no 2016 number answered, 16 Oct 2026); an older number
+    simply gets no date. Cached per run.
+    API audit, 16 Oct 2026 (ECHA): 79 of 97 undated procedures cite a TED notice."""
+    todo = [n for n in dict.fromkeys(numbers) if n not in _TED_DATE_CACHE]
+    for i in range(0, len(todo), 50):
+        batch = todo[i:i + 50]
+        r = requests.post(_TED_API, json={
+            "query": "publication-number IN (" + " ".join(batch) + ")",
+            "fields": ["publication-number", "publication-date"], "limit": len(batch)},
+            headers=_HEADERS, timeout=60)
+        r.raise_for_status()
+        found = {}
+        for n in r.json().get("notices") or []:
+            num, raw = n.get("publication-number"), str(n.get("publication-date") or "")[:10]
+            d = _parse_date(raw)
+            if num and d:
+                found[num] = d
+        for n in batch:
+            _TED_DATE_CACHE[n] = found.get(n)
+    return {n: _TED_DATE_CACHE[n] for n in numbers if _TED_DATE_CACHE.get(n)}
+
+
+def _ted_published(links: list[str], deadline: datetime | None) -> tuple[str | None, datetime | None]:
+    """The earliest TED notice the links cite that was published on or before the
+    deadline (the contract notice; corrigenda and awards come later), with its date."""
+    dates = _ted_publication_dates(_ted_notice_numbers(links))
+    ok = [(d, n) for n, d in dates.items() if deadline is None or d <= deadline]
+    if not ok:
+        return None, None
+    d, n = min(ok)
+    return n, d
+
+
 def _echa_item(row: dict, detail: dict | None, now: datetime) -> Item:
     deadline = row["deadline"]
     status = "open" if row["current"] and (deadline is None or deadline >= now) else "closed"
@@ -1571,10 +1621,21 @@ def _echa_item(row: dict, detail: dict | None, now: datetime) -> Item:
     notice = next((n for n in detail["notices"] if n.endswith("-CN")), None) or \
         next(iter(detail["notices"]), None)
     published = _ft_notice_date(notice) if notice else None
+    # ECHA publishes no date of its own. Without a portal notice, the TED notice the
+    # page links (its OJ S publication) dates the procedure: 79 of 97 undated procedures
+    # cited one, 39 of them from 2017 on, which TED still indexes (API audit, 16 Oct 2026).
+    ted_notice, ted_published = (None, None)
+    if published is None:
+        try:
+            ted_notice, ted_published = _ted_published(detail["links"], deadline)
+        except requests.RequestException as exc:
+            print(f"    [WARN] echa TED lookup {ref}: {exc}", flush=True)
+        published = ted_published
     facts = [("Prepares procedure" if consultation else "Reference", ref),
              ("Procedure type", row["kind"]),
              ("Status on ECHA's site", "current call" if row["current"] else "closed call"),
              ("Funding & Tenders notice", notice or ""),
+             ("TED notice", ted_notice or ""),
              ("Notice published", published.date().isoformat() if published else ""),
              ("Deadline", deadline.date().isoformat() if deadline else "")]
     facts = [(k, v) for k, v in facts if v]
