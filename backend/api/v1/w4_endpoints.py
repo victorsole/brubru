@@ -525,7 +525,7 @@ class RSBOpinionItem(BaseModel):
     # nothing served it, which is the same defect as the EPRS studies.
     public_url: Optional[str] = Field(None, description="Canonical citizen URL: the opinion's page, falling back to its PDF.")
     body_txt: Optional[str] = Field(None, description="The opinion's text when Brubru holds it, falling back to the summary. `full_text` is present for most rows.")
-    body_html: Optional[str] = Field(None, description="Null for this endpoint: the Board publishes PDFs, so Brubru stores extracted text rather than publisher HTML.")
+    body_html: Optional[str] = Field(None, description="The opinion's text as paragraphs: the Board publishes PDFs, so this is the extracted text marked up, no word added.")
     document_date: Optional[date] = Field(None, description="The date the Board states (the opinion date), never the date Brubru captured it.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this opinion.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
@@ -609,22 +609,7 @@ async def list_rsb_opinions(
         .offset((page - 1) * limit).limit(limit).all()
     )
     data = [
-        RSBOpinionItem(
-            id=str(r.id), opinion_reference=r.opinion_reference, title=r.title,
-            target_initiative=r.target_initiative, target_dg=r.target_dg,
-            procedure_ref=r.procedure_ref, opinion_type=r.opinion_type,
-            verdict=r.verdict.value if hasattr(r.verdict, "value") else str(r.verdict),
-            opinion_date=r.opinion_date, summary=r.summary,
-            pdf_url=r.pdf_url, source_url=r.source_url,
-            public_url=r.source_url or r.pdf_url,
-            body_txt=r.full_text or r.summary,
-            body_html=None,
-            document_date=r.opinion_date,
-            creation_date=r.first_seen,
-            updated_date=row_updated(r),
-            policy_areas=list(r.policy_areas or []),
-            last_updated=r.last_updated,
-        )
+        rsb_item(r)
         for r in rows
     ]
     return build_envelope(data, total=total, page=page, limit=limit,
@@ -669,6 +654,12 @@ async def get_rsb_detail(
             "resource": "rsb_opinion",
             "id": opinion_reference,
         })
+    return rsb_item(r)
+
+
+def rsb_item(r) -> "RSBOpinionItem":
+    """One opinion. The Board publishes PDFs: body_html is the text in paragraphs, as every
+    PDF row is served (2 Oct 2026); it was null on all 487 until 16 Oct 2026."""
     return RSBOpinionItem(
         id=str(r.id), opinion_reference=r.opinion_reference, title=r.title,
         target_initiative=r.target_initiative, target_dg=r.target_dg,
@@ -678,7 +669,7 @@ async def get_rsb_detail(
         pdf_url=r.pdf_url, source_url=r.source_url,
         public_url=r.source_url or r.pdf_url,
         body_txt=r.full_text or r.summary,
-        body_html=None,
+        body_html=body_from_pdf_text(r.full_text or r.summary)[0],
         document_date=r.opinion_date,
         creation_date=r.first_seen,
         updated_date=row_updated(r),
