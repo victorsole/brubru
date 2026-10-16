@@ -35,7 +35,7 @@ from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
-from ._row_dates import row_updated
+from ._row_dates import row_created, row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +121,7 @@ def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Parl
         # 5 mandatory datapoints
         public_url=r.source_url,
         document_date=r.submitted_date,
-        creation_date=r.last_updated,
+        creation_date=row_created(r),
         updated_date=row_updated(r),
     )
 
@@ -1294,7 +1294,7 @@ def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNo
         # 5 mandatory datapoints
         public_url=r.source_url or r.pdf_url,
         document_date=r.notification_date,
-        creation_date=r.last_updated,
+        creation_date=row_created(r),
         updated_date=row_updated(r),
     )
 

@@ -37,7 +37,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
-from ._row_dates import row_updated
+from ._row_dates import row_created, row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -564,7 +564,7 @@ def _rollcall_to_item(r) -> "VoteItem":
         document_date=(raw_when if isinstance(raw_when, date)
                        and not isinstance(raw_when, datetime)
                        else (raw_when.date() if raw_when else None)),
-        creation_date=r.updated_at or r.created_at,
+        creation_date=row_created(r),
         updated_date=row_updated(r),
     )
 
@@ -618,7 +618,7 @@ def _vote_row_to_item(r: "EPVote") -> "VoteItem":
         body_txt="\n".join(lines),
         body_html="<article>" + "".join(parts_html) + "</article>",
         document_date=r.timestamp.date() if hasattr(r.timestamp, "date") and r.timestamp else None,
-        creation_date=r.updated_at or r.timestamp,
+        creation_date=row_created(r),
         updated_date=row_updated(r),
     )
 
@@ -876,7 +876,7 @@ async def list_member_votes(
             body_txt="\n".join(lines),
             body_html="<article>" + "".join(parts_html) + "</article>",
             document_date=parent_date,
-            creation_date=vote.updated_at,
+            creation_date=row_created(vote),
             updated_date=row_updated(vote),
         ))
     return build_envelope(data, total=total, page=page, limit=limit)
@@ -1189,7 +1189,7 @@ async def list_ep_documents(
                 ("Procedure", r.procedure_ref), ("Rapporteur", r.rapporteur_name),
                 ("Stage", r.stage), ("Status", r.status_text or r.status),
                 ("Description", r.full_description or r.description)])[1],
-            creation_date=r.last_updated,
+            creation_date=row_created(r),
             updated_date=row_updated(r),
         ))
 

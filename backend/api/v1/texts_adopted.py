@@ -27,7 +27,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
-from ._row_dates import row_updated
+from ._row_dates import row_created, row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -155,7 +155,7 @@ def _row_to_item(
         # A tabled text's own date (migration 294); an adopted text's adoption date.
         document_date=getattr(r, "document_date", None) or (
             r.adoption_date.date() if hasattr(r.adoption_date, "date") and r.adoption_date else None),
-        creation_date=r.last_updated,
+        creation_date=row_created(r),
         updated_date=row_updated(r),
     )
 

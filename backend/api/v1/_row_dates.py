@@ -50,3 +50,33 @@ def row_updated(row: Any) -> Optional[datetime]:
         if v is not None:
             return v
     return None
+
+
+# The row's creation anchor, in the order the tables spell it. `first_seen` and
+# `created_at` are pinned by the brubru_touch_if_changed trigger, so they never move
+# on a re-fetch; `creation_date` is the economy tables' name for the same thing.
+_CREATED_COLUMNS = ("first_seen", "created_at", "creation_date")
+
+
+def row_created(row: Any) -> Optional[datetime]:
+    """The row's own creation timestamp, or None when it keeps none.
+
+    Never falls back to `last_updated`, `updated_at` or `scraped_at`. Six routes did
+    exactly that (16 Oct 2026: questions, adopted and tabled texts, TRIS, votes), so a
+    client saw `creation_date` move every night on 4,696 questions, 141 tabled texts,
+    112 votes, 100 adopted texts and 75 TRIS notifications that had merely been
+    re-fetched, and could not tell a new row from an old one.
+    """
+    if row is None:
+        return None
+    if isinstance(row, dict):
+        for name in _CREATED_COLUMNS:
+            v = row.get(name)
+            if v is not None:
+                return v
+        return None
+    for name in _CREATED_COLUMNS:
+        v = getattr(row, name, None)
+        if v is not None:
+            return v
+    return None
