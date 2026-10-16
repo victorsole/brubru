@@ -214,6 +214,21 @@ _ON_BEHALF = (
 )
 
 
+# \s* before "on behalf": the extracted text often loses the line break ("Séjournéon behalf").
+_ANSWER_GIVEN_BY = re.compile(r"answer given by\s+(.{3,120}?)\s*on behalf of", re.I | re.S)
+
+
+def answering_member_from_text(text: str | None) -> str | None:
+    """'Answer given by Executive Vice-President Séjourné on behalf of the European
+    Commission' -> 'Executive Vice-President Séjourné'. None when the answer names no one
+    (a Council reply, a joint answer without a name)."""
+    m = _ANSWER_GIVEN_BY.search((text or "")[:1500])
+    if not m:
+        return None
+    name = re.sub(r"^the\s+|\s+on$", "", " ".join(m.group(1).split()), flags=re.I)
+    return name or None
+
+
 def answering_institution_from_text(text: str | None) -> str | None:
     """'Answer given by Mr Brunner on behalf of the European Commission' -> 'COMMISSION'.
 
@@ -338,17 +353,20 @@ def main():
                 print(f"  [{i:5d}/{len(rows)}] {qref}: extracted text too short ({len(text or '')} chars)", flush=True)
             continue
         # Map answering commissioner from creator (e.g. ['org/EU_COMMISSION'])
-        commissioner = None
         institution = None
         creators = ans.get("creator") or []
         if creators:
             c = creators[0] if isinstance(creators, list) else creators
             if "EU_COMMISSION" in str(c):
-                commissioner, institution = "European Commission", "COMMISSION"
+                institution = "COMMISSION"
             elif "EU_COUNCIL" in str(c):
-                commissioner, institution = "Council of the EU", "COUNCIL"
+                institution = "COUNCIL"
             elif "ECB" in str(c):
-                commissioner, institution = "European Central Bank", "ECB"
+                institution = "ECB"
+        # The Member who answered, as the answer names them. The institution went here until
+        # 16 Oct 2026: 5,833 answers read "European Commission" though the text says
+        # "Answer given by Executive Vice-President Séjourné on behalf of the European Commission".
+        commissioner = answering_member_from_text(text)
         # The institution that answered also goes where the API reads it: until 15 Oct 2026
         # it was written only into answering_commissioner, and answering_institution stayed
         # empty on 2,520 questions (1,713 of them answered).

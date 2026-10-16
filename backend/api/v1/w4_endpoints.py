@@ -64,7 +64,7 @@ class ParliamentaryQuestionItem(BaseModel):
     asking_mep_ids: list = Field(default_factory=list)
     asking_mep_names: list = Field(default_factory=list)
     answering_institution: Optional[str] = None
-    answering_commissioner: Optional[str] = None
+    answering_commissioner: Optional[str] = Field(None, description="The Member who answered, as the answer names them (\"Executive Vice-President Séjourné\"). Null when the answer names no one, as a Council reply does; the institution is in `answering_institution`.")
     committees: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
     procedure_ref: Optional[str] = None
     related_celex: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")
