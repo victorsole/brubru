@@ -2,6 +2,191 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "facilitation_directive_smuggling",
+      "title": "Facilitation Directive",
+      "summary": "Adds C-521/25 Commission v Hungary",
+      "refs": [
+        "32002L0090"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act",
+      "summary": "Adds AG Biondi's Opinion in C-627/24 P",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "eu_list_of_non_cooperative_jurisdictions_for_tax_purposes",
+      "title": "EU tax list",
+      "summary": "OJ publication C/2026/5413 of 16 Oct 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "eu_payment_fraud_consumer_redress",
+      "title": "Payment fraud consumer redress",
+      "summary": "Adds the C-70/25 judgment of 15 Oct 2026",
+      "refs": [
+        "32015L2366"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "pharma_sector_regulatory_landscape",
+      "title": "Pharma sector regulatory landscape",
+      "summary": "Pharma package plenary date corrected to 23 Nov (indicative)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "eu_pharmaceutical_framework",
+      "title": "EU pharmaceutical framework",
+      "summary": "Pharma package status: OJ publication of Council positions; plenary 23 Nov indicative",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "eu_pharmaceutical_legislation_reform",
+      "title": "EU pharmaceutical legislation reform",
+      "summary": "Council positions in OJ 16 Oct; SANT draft recommendations 12 Oct; plenary now indicative 23 Nov",
+      "refs": [
+        "2023/0131(COD)",
+        "2023/0132(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "updated",
+      "guide": "european_council_15_16_october_2026",
+      "title": "European Council 15-16 October 2026 (preview)",
+      "summary": "Points to the adopted conclusions; preview kept as the planned agenda",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "eca_special_report_24_2026_horizon_2020_industrial_leadership",
+      "title": "ECA special report 24/2026 on Horizon 2020",
+      "summary": "Too little support for close-to-market innovation under industrial leadership",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "national_escape_clause_energy_security_greece_2026",
+      "title": "National escape clause for energy security: Greece",
+      "summary": "Council Recommendation of 9 Oct 2026; caps 0.3% of GDP a year, 0.6% to end-2028",
+      "refs": [
+        "32024R1263"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "eu_gcc_second_summit_postponed_2026",
+      "title": "Second EU-GCC summit postponed",
+      "summary": "Riyadh summit of 24 Oct 2026 postponed, no new date",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "russia_sanctions_circumvention_listings_15_october_2026",
+      "title": "Sanctions circumvention listings, 15 October 2026",
+      "summary": "3 individuals and 9 entities listed under the Ukraine territorial-integrity regime",
+      "refs": [
+        "32026D2332",
+        "32026R2333"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "horizon_europe_2027_extra_500_million_nature_bridging",
+      "title": "Horizon Europe: extra EUR 500 million to 2027",
+      "summary": "Nature and Bridging calls; REA topics and budgets, info day 16 Oct",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "european_business_wallets_regulation_2025_0358",
+      "title": "European Business Wallets Regulation",
+      "summary": "Trilogues opened 14 Oct 2026; ITRE rapporteur Heinaluoma; mandate confirmed 7 Oct",
+      "refs": [
+        "52025PC0838",
+        "2025/0358(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "raise_ai_in_science_pledging_initiative_2026",
+      "title": "RAISE pledging initiative for AI in science",
+      "summary": "Commission launched RAISE on 15 Oct; seven initial private and philanthropic pledgers",
+      "refs": []
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "cjeu_c_857_24_dublin_airport_passenger_cap_slots",
+      "title": "C-857/24: Dublin airport passenger cap and slots",
+      "summary": "A planning-consent passenger cap must be reflected in slot coordination parameters",
+      "refs": [
+        "31993R0095"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "cjeu_c_521_25_commission_v_hungary_smuggling_penalties",
+      "title": "Commission v Hungary C-521/25: penalties for people smuggling",
+      "summary": "Converting smuggling sentences into a duty to leave Hungary breaches Directive 2002/90/EC",
+      "refs": [
+        "32002L0090"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "cjeu_c_627_24_p_bytedance_dma_advocate_general_opinion",
+      "title": "ByteDance (TikTok) DMA appeal: AG Biondi's Opinion",
+      "summary": "AG proposes dismissing ByteDance's appeal against TikTok's gatekeeper designation",
+      "refs": [
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "cjeu_c_70_25_unauthorised_payment_refund_judgment",
+      "title": "CJEU C-70/25: immediate refund despite gross negligence",
+      "summary": "Bank must refund an unauthorised payment by the next business day; may claim losses later",
+      "refs": [
+        "32015L2366"
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "action": "added",
+      "guide": "european_council_15_16_october_2026_conclusions",
+      "title": "European Council 15-16 October 2026: conclusions",
+      "summary": "Conclusions adopted 15 Oct on competitiveness and energy prices, the MFF and enlargement",
+      "refs": []
+    },
+    {
       "date": "2026-10-15",
       "action": "added",
       "guide": "cam_network_code_gas_revision_call_for_feedback_2026",

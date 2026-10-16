@@ -1,6 +1,7 @@
 # Facilitation Directive Reform (Anti-Smuggling Package)
 
 ## QUICK FACTS
+- **CJEU, 15 October 2026, C-521/25 Commission v Hungary:** Hungary breached Directive 2002/90/EC and Framework Decision 2002/946/JHA by converting prison sentences for people smuggling into release with a duty to leave the country. See `cjeu_c_521_25_commission_v_hungary_smuggling_penalties`.
 - Current law: Council Directive 2002/90/EC (Facilitation Directive) + Council Framework Decision 2002/946/JHA
 - Reform proposal: COM(2023)755, 28 November 2023
 - Procedure: 2023/0340(COD)

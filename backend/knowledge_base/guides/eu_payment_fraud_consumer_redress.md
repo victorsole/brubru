@@ -1,6 +1,7 @@
 # Payment Fraud: what a defrauded bank customer can claim, and how
 
 ## QUICK FACTS
+- **CJEU JUDGMENT C-70/25 (15 October 2026):** the Court confirmed that a payment service provider must refund an unauthorised transaction **immediately (by the end of the next business day) even if it alleges the customer's gross negligence**; the only exception is reasonable suspicion of fraud by the customer reported to the national authority. The bank may later claim losses from the customer, and must prove the gross negligence. See `cjeu_c_70_25_unauthorised_payment_refund_judgment`.
 - **Verification of Payee is a NAME-to-IBAN MATCH CHECK.** The bank compares the payee name the customer typed against the name that actually holds the destination account, and reports whether they match, before the payment is authorised. The duty begins and ends with that comparison: no document is examined, no person is identified, and nothing in it belongs to the customer due diligence regime. State the obligation as a match check on a name against an account number.
 - **The bank bears the burden of proof.** If the customer denies authorising a transaction, it is the payment service provider that must prove the transaction was authenticated, correctly recorded, and unaffected by a technical failure. The mere record of the payment instrument being used is NOT enough to prove authorisation, nor fraud or gross negligence by the customer. PSD2 Article 72; Spain, Real Decreto-ley 19/2018 Article 44.
 - **Unauthorised transactions must be refunded by the end of the next business day (D+1).** The ONLY exception is reasonable suspicion of fraud by the customer, communicated in writing to the competent national authority. PSD2 Article 73(1); Spain, RDL 19/2018 Article 45.1.
@@ -20,7 +21,7 @@ Sort every disputed euro into one of three buckets before arguing anything.
 
 **C. Money that never left the customer's own holdings.** Funds moved to the customer's own card or another of their own products. Not a loss to a third party. Recover administratively by asking for the credit balance back, not by litigating. Always check for this: fraudsters often have the victim load their own card so they can spend it later.
 
-## CJEU: C-70/25, Advocate General Rantos, 5 March 2026
+## CJEU: C-70/25, Advocate General Rantos, 5 March 2026 (judgment of 15 October 2026 followed the same answer)
 
 Reference from the District Court of Koszalin, Poland. A customer was phished, the fraudster made an unauthorised payment, and the bank refused to refund alleging gross negligence.
 

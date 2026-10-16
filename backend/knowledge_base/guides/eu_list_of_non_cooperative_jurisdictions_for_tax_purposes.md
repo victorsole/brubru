@@ -6,6 +6,7 @@
   - **Panama** had been in Annex I since **February 2020**; it has reformed its harmful foreign-source income exemption regime and been granted a new Global Forum review of its exchange of tax information on request.
   - **Viet Nam** had entered Annex I in **February 2026** after a Global Forum review found it did not meet the standard for exchange of information on request; after reforms it, too, has been granted a new review.
   - **Belize** was **removed from Annex II** after a positive Global Forum rating on exchange of information on request: it has fulfilled its commitments.
+- **Official Journal:** the Council conclusions with both annexes were published on **16 October 2026, C/2026/5413** (ELI http://data.europa.eu/eli/C/2026/5413/oj); the eight names in Annex I match the list above. Türkiye is again asked to begin automatic exchange of information with one Member State (Annex II).
 - **Two annexes, two meanings:** Annex I is the list of non-cooperative jurisdictions; Annex II is the state of play of cooperation, covering jurisdictions that committed to reform. Being in Annex II is not being on the blacklist.
 - **How it works:** the list was established in **December 2017**; the Council updates it **twice a year**; the next revision is scheduled for **February 2027**. The updates are prepared by the Council's **Code of Conduct Group (Business Taxation)**. Jurisdictions are assessed against Council criteria on tax transparency, fair taxation and implementation of international standards against base erosion and profit shifting.
 

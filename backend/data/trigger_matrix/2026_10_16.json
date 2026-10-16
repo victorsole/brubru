@@ -1,0 +1,122 @@
+{
+  "_about": "16 Oct 2026 news implementation: 6 languages per topic, natural phrasing; negatives must not reach the new guides.",
+  "languages": [
+    "en",
+    "fr",
+    "nl",
+    "es",
+    "ca",
+    "it"
+  ],
+  "topics": {
+    "european_council_15_16_october_2026_conclusions#what": [
+      "What did the European Council decide at the October summit?",
+      "Qu'a décidé le Conseil européen lors du sommet d'octobre ?",
+      "Wat heeft de Europese Raad besloten op de top van oktober?",
+      "¿Qué decidió el Consejo Europeo en la cumbre de octubre?",
+      "Què va decidir el Consell Europeu a la cimera d'octubre?",
+      "Che cosa ha deciso il Consiglio europeo al vertice di ottobre?"
+    ],
+    "cjeu_c_70_25_unauthorised_payment_refund_judgment#refund": [
+      "Can my bank refuse to refund an unauthorised payment because of gross negligence?",
+      "Ma banque peut-elle refuser de rembourser un paiement non autorisé pour négligence grave ?",
+      "Mag mijn bank weigeren een niet-toegestane betaling terug te betalen wegens grove nalatigheid?",
+      "¿Puede mi banco negarse a devolver un pago no autorizado por negligencia grave?",
+      "El meu banc es pot negar a retornar un pagament no autoritzat per negligència greu?",
+      "La mia banca può rifiutare il rimborso di un pagamento non autorizzato per colpa grave?"
+    ],
+    "cjeu_c_627_24_p_bytedance_dma_advocate_general_opinion#ag": [
+      "What did the Advocate General say about TikTok's gatekeeper appeal?",
+      "Qu'a dit l'avocat général sur le pourvoi de TikTok contre sa désignation comme contrôleur d'accès ?",
+      "Wat zei de advocaat-generaal over het hoger beroep van TikTok als poortwachter?",
+      "¿Qué dijo el abogado general sobre el recurso de TikTok como guardián de acceso?",
+      "Què va dir l'advocat general sobre el recurs de TikTok com a guardià d'accés?",
+      "Cosa ha detto l'avvocato generale sul ricorso di TikTok come gatekeeper?"
+    ],
+    "cjeu_c_521_25_commission_v_hungary_smuggling_penalties#ruling": [
+      "Did the EU Court rule against Hungary for releasing people smugglers?",
+      "La Cour de justice a-t-elle condamné la Hongrie pour avoir libéré des passeurs ?",
+      "Heeft het Hof Hongarije veroordeeld omdat het mensensmokkelaars vrijliet?",
+      "¿Condenó el Tribunal de Justicia a Hungría por liberar a traficantes de migrantes?",
+      "El Tribunal de Justícia ha condemnat Hongria per alliberar traficants de persones?",
+      "La Corte di giustizia ha condannato l'Ungheria per aver liberato i trafficanti?"
+    ],
+    "cjeu_c_857_24_dublin_airport_passenger_cap_slots#cap": [
+      "Can Dublin airport's passenger cap reduce airline slots?",
+      "Le plafond de passagers de l'aéroport de Dublin peut-il réduire les créneaux des compagnies ?",
+      "Mag het passagiersplafond van de luchthaven Dublin slots van luchtvaartmaatschappijen beperken?",
+      "¿Puede el límite de pasajeros del aeropuerto de Dublín reducir las franjas horarias?",
+      "El límit de passatgers de l'aeroport de Dublín pot reduir les franges horàries?",
+      "Il tetto di passeggeri dell'aeroporto di Dublino può ridurre le bande orarie?"
+    ],
+    "raise_ai_in_science_pledging_initiative_2026#what": [
+      "What is the RAISE initiative for AI in science?",
+      "Qu'est-ce que l'initiative RAISE pour l'IA dans la science ?",
+      "Wat is het RAISE-initiatief voor AI in de wetenschap?",
+      "¿Qué es la iniciativa RAISE para la IA en la ciencia?",
+      "Què és la iniciativa RAISE per a la IA a la ciència?",
+      "Che cos'è l'iniziativa RAISE per l'IA nella scienza?"
+    ],
+    "european_business_wallets_regulation_2025_0358#status": [
+      "Where do the European Business Wallets negotiations stand?",
+      "Où en sont les négociations sur le portefeuille européen pour les entreprises ?",
+      "Hoe staat het met de onderhandelingen over de Europese bedrijfsportemonnee?",
+      "¿En qué punto están las negociaciones sobre la cartera empresarial europea?",
+      "En quin punt són les negociacions sobre la cartera europea per a empreses?",
+      "A che punto sono i negoziati sul portafoglio europeo per le imprese?"
+    ],
+    "horizon_europe_2027_extra_500_million_nature_bridging#calls": [
+      "What are the new calls from the extra 500 million for Horizon Europe?",
+      "Quels sont les nouveaux appels financés par les 500 millions supplémentaires d'Horizon Europe ?",
+      "Welke nieuwe oproepen komen er met de extra 500 miljoen voor Horizon Europe?",
+      "¿Qué convocatorias financian los 500 millones adicionales de Horizonte Europa?",
+      "Quines convocatòries financen els 500 milions addicionals d'Horitzó Europa?",
+      "Quali bandi finanziano i 500 milioni aggiuntivi di Orizzonte Europa?"
+    ],
+    "russia_sanctions_circumvention_listings_15_october_2026#who": [
+      "Who did the EU sanction for circumventing sanctions on 15 October?",
+      "Qui l'UE a-t-elle sanctionné pour contournement des sanctions le 15 octobre ?",
+      "Wie heeft de EU op 15 oktober gesanctioneerd voor het omzeilen van sancties?",
+      "¿A quién sancionó la UE por elusión de sanciones el 15 de octubre?",
+      "A qui va sancionar la UE per elusió de sancions el 15 d'octubre?",
+      "Chi ha sanzionato l'UE per elusione delle sanzioni il 15 ottobre?"
+    ],
+    "eu_gcc_second_summit_postponed_2026#postponed": [
+      "Is the EU-GCC summit in Riyadh still happening?",
+      "Le sommet UE-CCG de Riyad a-t-il toujours lieu ?",
+      "Gaat de top EU-GCC in Riyad nog door?",
+      "¿Se celebra todavía la cumbre UE-CCG de Riad?",
+      "Encara se celebra la cimera UE-CCG de Riad?",
+      "Si terrà ancora il vertice UE-CCG di Riad?"
+    ],
+    "national_escape_clause_energy_security_greece_2026#greece": [
+      "Can Greece use the national escape clause for energy security spending?",
+      "La Grèce peut-elle utiliser la clause dérogatoire nationale pour la sécurité énergétique ?",
+      "Mag Griekenland de nationale ontsnappingsclausule gebruiken voor energiezekerheid?",
+      "¿Puede Grecia usar la cláusula de escape nacional para la seguridad energética?",
+      "Pot Grècia fer servir la clàusula d'escapament nacional per a la seguretat energètica?",
+      "La Grecia può usare la clausola di salvaguardia nazionale per la sicurezza energetica?"
+    ],
+    "eca_special_report_24_2026_horizon_2020_industrial_leadership#findings": [
+      "What did the Court of Auditors find in special report 24/2026 on Horizon 2020?",
+      "Qu'a constaté la Cour des comptes dans le rapport spécial 24/2026 sur Horizon 2020 ?",
+      "Wat stelde de Rekenkamer vast in speciaal verslag 24/2026 over Horizon 2020?",
+      "¿Qué concluyó el Tribunal de Cuentas en el informe especial 24/2026 sobre Horizonte 2020?",
+      "Què va concloure el Tribunal de Comptes a l'informe especial 24/2026 sobre Horitzó 2020?",
+      "Cosa ha rilevato la Corte dei conti nella relazione speciale 24/2026 su Orizzonte 2020?"
+    ]
+  },
+  "negatives": [
+    "What is the European Parliament's role in the budget?",
+    "Who is the President of the European Council?",
+    "What is the Payment Services Regulation?",
+    "What is the AI Act?",
+    "How do I apply for a Horizon Europe grant?",
+    "What is the 19th sanctions package against Russia?",
+    "What are the EU fiscal rules?",
+    "What are my rights if my flight is cancelled?",
+    "What is the Digital Markets Act?",
+    "¿Qué es el Consejo Europeo?",
+    "Quels sont mes droits si mon vol est annulé ?"
+  ]
+}
