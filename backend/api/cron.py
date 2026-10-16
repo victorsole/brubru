@@ -389,7 +389,7 @@ _TENDERATOR_CHAIN = (
 _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc", "tbt",
-    "carriage_status_notifications", "tris_titles",
+    "carriage_status_notifications", "tris_titles", "eu_laws_in_force",
 )
 
 
