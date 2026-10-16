@@ -612,6 +612,44 @@ def adoption_to_store(held, register_day, title):
     return held
 
 
+# A title carries the act's OWN number when the number follows the act type at the head:
+# "Commission Implementing Decision (EU) 2024/2638 of ...", "Commission Regulation (EU) No
+# 234/2024 ...", and, before 2015, "2012/67/EU: Commission Implementing Decision of 3
+# February 2012 ..." (the number first). Drafts read "(EU) …/...", "(EU)  / amending" or "COMMISSION IMPLEMENTING
+# DECISION on ..." (no number at all). An amending title cites OTHER acts' numbers further
+# on; only the head counts. Used in the upsert's SQL (PostgreSQL ~*) and by
+# title_outranks() (Python re.I): one regex, two engines, so the test proves the decision
+# the database makes.
+NUMBERED_TITLE = (r"^\s*(\d{4}/\d+/(eu|ec|eec|euratom):|"
+                  r"(commission|council|european parliament and (of the )?council)?\s*"
+                  r"(delegated\s+|implementing\s+)?(regulation|decision|directive)\s*"
+                  r"\((eu|ec|eec|euratom|eu, euratom)\)\s*(no\s*)?\d{2,4}/\d+)")
+_NUMBERED = re.compile(NUMBERED_TITLE, re.I)
+_DRAFT_ELLIPSIS = re.compile(r"(…|\.{2,})\s*/\s*(…|\.{2,})")
+
+
+def _same_title(a: str, b: str) -> bool:
+    norm = lambda t: re.sub(r"\s+", " ", (t or "").replace(" ", " ")).strip()
+    return norm(a) == norm(b)
+
+
+def title_outranks(held: Optional[str], incoming: Optional[str]) -> Optional[str]:
+    """The title the row keeps after an export row arrives: the Python twin of the SQL
+    CASE in main()'s SET_CLAUSE, decision for decision.
+
+    A held title with the act's own number is never replaced by one without it; an
+    ellipsis draft never replaces a non-draft; a title that differs only in spacing is
+    the same title; otherwise the export's title wins when it has one.
+    """
+    if held and _NUMBERED.search(held) and not (incoming and _NUMBERED.search(incoming)):
+        return held
+    if incoming and _DRAFT_ELLIPSIS.search(incoming) and not (held and _DRAFT_ELLIPSIS.search(held)):
+        return held
+    if held is not None and incoming is not None and _same_title(held, incoming):
+        return held
+    return incoming if incoming is not None else held
+
+
 def read_scrutiny(conn, register: "Register", max_seconds: float,
                   urgent_by_status: set = frozenset()) -> Dict[str, Any]:
     """Read the events of each delegated act the register changed since we last read it.
@@ -788,14 +826,22 @@ def main() -> int:
     # Every updated column is wrapped in COALESCE(EXCLUDED.x, secondary_acts.x): a later
     # export with an empty cell must not blank a value we already hold. The old statement
     # assigned EXCLUDED.celex directly, so one empty cell would have erased a good CELEX.
-    SET_CLAUSE = r"""
-                  -- The export serves one record's title as the draft ("(EU) …/...") on
-                  -- one day and the final one the next. A draft never replaces a final
-                  -- title: the swap moved 185-973 rows' change date per run (14 Oct 2026).
-                  -- "…/.." is a draft too (C(2025)7055 would have gone back to one). A
-                  -- title that differs only in spacing, the register's no-break spaces
-                  -- included, is the same title and not a change.
-                  title        = CASE WHEN EXCLUDED.title ~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
+    SET_CLAUSE = (r"""
+                  -- The export serves one record's title as the draft on one day and the
+                  -- final one the next. A title that names the act's own number ("(EU)
+                  -- 2024/2638 of 9 October 2024") outranks one that does not, whichever
+                  -- the export sends today: the 14 Oct guard only knew drafts spelt
+                  -- "(EU) …/...", and drafts spelt "COMMISSION IMPLEMENTING DECISION on
+                  -- ..." or "(EU)  / amending" still overwrote 17 published titles in one
+                  -- night, in both directions (16 Oct 2026). The number must follow the
+                  -- act type at the head of the title: an amending title cites other
+                  -- acts' numbers further on, and those do not count. Same regex as
+                  -- NUMBERED_TITLE, tested in Python. A title that differs only in
+                  -- spacing, the register's no-break spaces included, is the same title.
+                  title        = CASE WHEN secondary_acts.title ~* '%(numbered)s'
+                                       AND EXCLUDED.title !~* '%(numbered)s'
+                                      THEN secondary_acts.title
+                                      WHEN EXCLUDED.title ~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
                                        AND secondary_acts.title !~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
                                       THEN secondary_acts.title
                                       WHEN btrim(regexp_replace(translate(EXCLUDED.title, chr(160), ' '), '\s+', ' ', 'g'))
@@ -823,7 +869,7 @@ def main() -> int:
                   scrutiny_period = COALESCE(EXCLUDED.scrutiny_period, secondary_acts.scrutiny_period),
                   regdel_updated_at = COALESCE(EXCLUDED.regdel_updated_at, secondary_acts.regdel_updated_at),
                   last_updated = NOW()
-    """
+    """).replace("%(numbered)s", NUMBERED_TITLE)   # not %-formatting: the clause keeps %(parent_from_register)s for psycopg2
 
     INSERT_HEAD = """
                 INSERT INTO secondary_acts
