@@ -1555,7 +1555,7 @@ GET /api/v2/legislative/eur-lex/oj/daily?date=2026-10-07&series=L
 ```
 
 **You get back**
-A `PaginatedResponse[OJDailyItem]`. `language` says which language the title and body are in: English when the act has an English version; some corrigenda exist only in the language version they correct, and are served in that language. `public_url` opens the act on EUR-Lex in that language. `updated_date` is when the Publications Office last modified the record.
+A `PaginatedResponse[OJDailyItem]`. `language` says which language the title and body are in: English when the act has an English version; some corrigenda exist only in the language version they correct, and are served in that language. `public_url` opens the act on EUR-Lex in that language. `updated_date` is when the Publications Office last modified the record. `celex` can be null in the first hours after publication, until the Publications Office assigns the number in Cellar (measured 16 October 2026: null for every act at 07:25 UTC, filled for all by 08:25 UTC); read the date again later for it.
 
 **Data freshness**
 Live from Cellar; bodies are cached once fetched (published acts do not change).""",

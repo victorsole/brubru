@@ -79,7 +79,8 @@ DG_NEWS_SOURCES = [
     {"url": "https://eismea.ec.europa.eu/news_en", "institution": "COMMISSION", "dg": None, "agency": "EISMEA", "default_type": "news"},
     {"url": "https://erc.europa.eu/news-events/news", "institution": "COMMISSION", "dg": None, "agency": "ERCEA", "default_type": "news"},
     {"url": "https://rea.ec.europa.eu/news_en", "institution": "COMMISSION", "dg": None, "agency": "REA", "default_type": "news"},
-    {"url": "https://eu-careers.europa.eu/en/upcoming-selection-procedures", "institution": "COMMISSION", "dg": None, "agency": "EPSO", "default_type": "news"},
+    # EPSO news moved to its selection site (Oct 2026); a Drupal views list, not ECL cards.
+    {"url": "https://selection.eu-careers.europa.eu/en/news", "institution": "COMMISSION", "dg": None, "agency": "EPSO", "default_type": "news", "kind": "views"},
 
     # --- EU data / open data ---
     {"url": "https://data.europa.eu/en/news-events/news", "institution": "COMMISSION", "dg": None, "agency": "OP", "default_type": "news"},

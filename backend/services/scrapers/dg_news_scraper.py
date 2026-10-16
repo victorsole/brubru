@@ -234,6 +234,53 @@ def parse_ecl_news(html: str, base_url: str, default_type: str) -> List[Dict]:
     return out
 
 
+# Drupal "views" lists (EPSO's selection site since October 2026): each item is a
+# `views-row` holding a <time datetime>, an <h2><a href> title and a body field. The
+# ECL parser above finds none of these, so EPSO reached eu_news_items with 0 items
+# while publishing on 12-14 October (16 Oct 2026). The date read is the row's own
+# "Last updated" <time>, the only date the list prints.
+_VIEWS_ROW = re.compile(r'<div class="[^"]*\bviews-row\b[^"]*">(.*?)(?=<div class="[^"]*\bviews-row\b|</main>|\Z)', re.S)
+_VIEWS_TITLE = re.compile(r'<h2[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', re.S)
+_VIEWS_TIME = re.compile(r'<time[^>]*\sdatetime="(\d{4}-\d{2}-\d{2})')
+_VIEWS_BODY = re.compile(r'views-field-body[^>]*>\s*<div class="field-content">(.*?)</div>', re.S)
+
+
+def parse_views_rows(html: str, base_url: str, default_type: str) -> List[Dict]:
+    """Parse a Drupal views list (title, <time datetime>, body) -> normalised item dicts."""
+    out: List[Dict] = []
+    seen: set = set()
+    for m in _VIEWS_ROW.finditer(html or ""):
+        block = m.group(1)
+        tm = _VIEWS_TITLE.search(block)
+        if not tm:
+            continue
+        href, title = tm.group(1), _clean(re.sub(r"<[^>]+>", " ", tm.group(2)))
+        ext = _slug_id(href)
+        if not title or ext in seen:
+            continue
+        seen.add(ext)
+        nd = None
+        dm = _VIEWS_TIME.search(block)
+        if dm:
+            try:
+                nd = datetime.strptime(dm.group(1), "%Y-%m-%d").date()
+            except ValueError:
+                nd = None
+        body = _VIEWS_BODY.search(block)
+        summary = _clean(re.sub(r"<[^>]+>", " ", body.group(1)))[:600] if body else None
+        out.append({
+            "title": title[:480],
+            "summary": summary or None,
+            "news_date": nd,
+            "image_url": None,
+            "source_url": urljoin(base_url, href),
+            "external_id": ext,
+            "item_type": default_type,
+            "item_type_certain": False,
+        })
+    return out
+
+
 # ESMA's feed has no <pubDate> at all: each item is title, link and a description
 # that embeds the Drupal node's rendered fields, including
 # `<span class="field--name-created"><time datetime="2026-09-10T10:25:31+02:00">`.
@@ -383,7 +430,10 @@ def scrape_source(src: Dict) -> List[Dict]:
     if not html:
         logger.warning(f"[DG-NEWS] no HTML for {src['url']}")
         return []
-    items = parse_ecl_news(html, src["url"], src.get("default_type", "news"))
+    if kind == "views":
+        items = parse_views_rows(html, src["url"], src.get("default_type", "news"))
+    else:
+        items = parse_ecl_news(html, src["url"], src.get("default_type", "news"))
     reg_dg = src.get("dg")
     agency = src.get("agency")
     for it in items:
