@@ -504,6 +504,8 @@ class TRISScraper(BaseScraper):
                     result["standstill_end_date"] = max(dates).isoformat()
                     result["standstill_original_end_date"] = dates[0].isoformat()
                     result["standstill_extended"] = len(dates) > 1 and max(dates) > dates[0]
+            elif "confidential" in label:
+                result["confidential"] = value.strip().lower().startswith("yes")
             elif "title" in label or "subject" in label:
                 result["title"] = value
             elif "sector" in label or "product" in label:
@@ -540,9 +542,12 @@ class TRISScraper(BaseScraper):
                     result["title"] = text
                     break
 
-        # If still no title, use the reference as a fallback
+        # If still no title, use the reference as a fallback. A confidential notification
+        # (emergency procedure) is published with an empty title: say so rather than
+        # leave a heading or a bare reference that reads like a parsing gap.
         if "title" not in result and "reference" in result:
-            result["title"] = f"TRIS Notification {result['reference']}"
+            result["title"] = (f"TRIS notification {result['reference']}: confidential, no title published"
+                               if result.get("confidential") else f"TRIS Notification {result['reference']}")
 
         # The notification message's numbered fields: 6 products, 8 main
         # content, 9 grounds. The DPP watch matches on these, not on the title.

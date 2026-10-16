@@ -42,3 +42,15 @@ def test_which_stored_titles_are_re_read():
     assert needs_title("TRIS Notification 2026/0552/AT")
     assert not needs_title("Airworthiness Notice No. 40B – Inspection of On-Board Equipment")
     assert not needs_title("Draft Order prohibiting the export of certain medicinal products")
+    assert not needs_title("Barcavelox Type-Approval Certificate")
+    assert needs_title("Besluit van (datum) tot wijziging van het Besluit Diergeneeskundigen")
+    assert not needs_title("TRIS notification 2026/0311/BE: confidential, no title published")
+
+
+def test_a_confidential_notification_says_it_has_no_published_title():
+    page = PAGE.format(title="").replace(
+        '<div class="ecl-row"><div class="ecl-col-3">Date received:</div>',
+        '<div class="ecl-row"><div class="ecl-col-3">Confidentiality:</div><div class="ecl-col-9">Yes</div></div>'
+        '<div class="ecl-row"><div class="ecl-col-3">Date received:</div>')
+    got = TRISScraper()._parse_notification_detail(BeautifulSoup(page, "html.parser"), 28044)
+    assert got["title"] == "TRIS notification 2026/0552/AT: confidential, no title published"

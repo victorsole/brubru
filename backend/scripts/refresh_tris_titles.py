@@ -33,6 +33,11 @@ from services.scrapers.dg_grow.tris_scraper import SECTION_HEADINGS  # noqa: E40
 
 _ENGLISH = set("the of and for on to in amending amendment regulation regulations draft decree law "
                "act order rules concerning on requirements technical with by ordinance bill".split())
+# Words that mark another language: a title with one of them and no English word is the
+# notifying country's own ("Besluit van (datum) tot wijziging van het Besluit ...").
+_FOREIGN = set("van het tot een voor der die das und zur des von mit les la le du et relatif portant "
+               "el los las por que del di della per il sprawie na do da para privind si och om af til fra "
+               "zakon zakona nariadenie vyhlaska asetus maarus rozporzadzenie".split())
 ROWS = text("""SELECT notification_number, title, source_url FROM tris_notifications
                WHERE source_url ~ '/notification/[0-9]+' ORDER BY notification_date DESC NULLS LAST""")
 
@@ -42,8 +47,13 @@ def needs_title(title: str | None) -> bool:
     t = (title or "").strip()
     if not t or t.lower() in SECTION_HEADINGS or t.startswith("TRIS Notification"):
         return True
-    words = re.findall(r"[a-z]+", t.lower())
-    return len(t) > 25 and not any(w in _ENGLISH for w in words)
+    if "confidential, no title published" in t:
+        return False
+    words = re.findall(r"[^\W\d_]+", t.lower())
+    if any(w in _ENGLISH for w in words):
+        return False
+    non_ascii = any(ord(ch) > 127 for ch in t)
+    return len(t) > 25 and (non_ascii or any(w in _FOREIGN for w in words))
 
 
 def _db_url() -> str:
