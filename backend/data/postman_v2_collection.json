@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Brubru API v2",
-    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1041 requests across 49 domains.",
+    "description": "Brubru's institution-/source-based public API, **v2**. One collection, one folder per domain, each domain holding its source sub-folders.\n\n- **Legislative data** \u2014 mirrored EU institutional sources: EUR-Lex / Legislative Observatory (OEIL) / Legislative Train / EuroVoc / Legislative Documents.\n- **European Parliament** \u2014 the EP surface: MEPs, amendments, votes, committee output, reports, opinions, committees, texts adopted/submitted, resolutions, EPRS, webstreams and parliamentary questions.\n- **European Commission** \u2014 the EC surface: College of Commissioners, Commission Register documents, Transparency Initiative meetings, Regulatory Scrutiny Board opinions, infringements, Have Your Say consultations and TRIS notifications.\n- **Council of the EU** \u2014 Council documents: press releases, conclusions, meeting agendas and summits.\n- **Proprietary Databases** \u2014 Brubru's own data products: Knowledge Guides / Catalan Translations / Canon & Deep-Dives.\n\nDomain-rooted `/api/v2/{domain}/{source}/...` URLs. Same auth, envelope, error shapes and documentation contract as v1. Each source folder leads with a 'show everything' list request; detail requests are pre-filled with a working example.\n\nSet the `api_key` collection variable to a `brubru_live_...` key (mint one at brubru.beresol.eu/api). Scopes used: `read:laws`, `read:procedures`, `read:publications`, `read:knowledge`, `read:commission`, `read:ep`, `read:calendar`. `baseUrl` defaults to production.\n\n1043 requests across 49 domains.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -17689,6 +17689,104 @@
                   ]
                 },
                 "description": "**What it does**\nReturns one the European Centre for Disease Prevention and Control ECDC calls for tender in full, including `body_txt` and `body_html`.\n\n**When to use it**\nAfter finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).\n\n**Input**\n`item_id` \u2014 the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /ecdc-tenders/{item_id}\n```\n\n**You get back**\nA single item with the full 5-datapoint contract populated.\n\n**Data freshness**\nRefreshed from every page of the ECDC procurement-and-grants listing and each procedure's own page.."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Centre for Disease Prevention and Control \u2014 one file of a procedure (full text)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ecdc-tenders/:item_id/documents/:document_id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ecdc-tenders",
+                    ":item_id",
+                    "documents",
+                    ":document_id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    },
+                    {
+                      "key": "document_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ]
+                },
+                "description": "**What it does**\nReturns one file of a procedure listed at `/ecdc-tenders`, with its full extracted text.\n\n**When to use it**\nAfter listing a procedure's documents, fetch one file's complete text.\n\n**Input**\n`item_id` (the procedure) and `document_id` (from the documents list).\n\n**Try it**\n```\nGET /ecdc-tenders/{item_id}/documents/{document_id}\n```\n\n**You get back**\nOne document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."
+              },
+              "response": []
+            },
+            {
+              "name": "the European Centre for Disease Prevention and Control \u2014 the files of one procedure, with their text",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-Key",
+                    "value": "{{api_key}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/v2/funding/ecdc-tenders/:item_id/documents",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v2",
+                    "funding",
+                    "ecdc-tenders",
+                    ":item_id",
+                    "documents"
+                  ],
+                  "variable": [
+                    {
+                      "key": "item_id",
+                      "value": "",
+                      "description": "(path variable)"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50",
+                      "disabled": true,
+                      "description": ""
+                    },
+                    {
+                      "key": "include_body",
+                      "value": "False",
+                      "disabled": true,
+                      "description": "Return each file's extracted text."
+                    }
+                  ]
+                },
+                "description": "**What it does**\nLists the files the European Centre for Disease Prevention and Control attached to one procedure from `/ecdc-tenders` (terms of reference, forms, questions and answers, corrigenda, award notices), with the text extracted from each file.\n\n**When to use it**\nRead what a procedure actually asks for without downloading and opening every file. Pass `include_body=true` for the text of every file, or call the single-document endpoint.\n\n**Input**\n`item_id` from the list endpoint; `include_body` (default false), `page`, `limit` (max 100).\n\n**Try it**\n```\nGET /ecdc-tenders/{item_id}/documents\n```\n\n**You get back**\nA paginated envelope of files in the order the body lists them. A file inside a ZIP archive is its own entry (`parent_file_url` names the archive). `body_source` says how the text was obtained; a scanned PDF says `no-text:no-text-layer` rather than guessing.\n\n**Data freshness**\nFiles are read daily, for live and recent procedures, from the body's procedure pages or its Funding & Tenders portal notices."
               },
               "response": []
             },
