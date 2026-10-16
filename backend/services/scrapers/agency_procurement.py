@@ -316,6 +316,38 @@ def _cedefop_status(raw: str, deadline: datetime | None, now: datetime) -> str:
     return "closed"
 
 
+# "This call has been published in the Supplement to the Official Journal of the European
+# Union 2014/S 156-279480 of 16/08/2014." (also "Communities", "dated", "28.04.2009")
+_CEDEFOP_OJ_DATE = re.compile(
+    r"Official Journal[^.\n]{0,120}?\b\d{4}/S\s?\d+-\d+\b[^.\n]{0,40}?\b(?:of|dated|on)\s+"
+    r"(\d{1,2}[/.]\d{1,2}[/.]\d{4})")
+
+
+def _cedefop_published(detail: dict, deadline: datetime | None) -> datetime | None:
+    """The procedure's publication date, or None when the page's date cannot be one.
+
+    API audit, 16 Oct 2026: 88 of 451 tenders carried an "Official Publication Date"
+    AFTER their own closing date (92 with the calls). 77 were the site-migration stamp
+    (27/11/2009, rejected for file dates since 30 Sep but not for the procedure); the
+    other 15 had day and month swapped (page 08/12/2008 where the page's own Official
+    Journal sentence says 12/08/2008; proven on 5, the rest have no such sentence). A
+    date later than the deadline is not when bidders could read the call. The OJ
+    sentence's day is used when the page has one (9 of 92); otherwise the date is left
+    empty rather than inferred (Victor, 16 Oct: the 6 unproven swaps stay empty)."""
+    page_date = _parse_date(detail.get("Official Publication Date", ""))
+    if page_date == _CEDEFOP_MIGRATION_STAMP:
+        page_date = None
+    if page_date is not None and (deadline is None or page_date <= deadline):
+        return page_date
+    for para in detail.get("description") or []:
+        m = _CEDEFOP_OJ_DATE.search(para)
+        if m:
+            oj = _parse_date(m.group(1).replace(".", "/"))
+            if oj is not None and (deadline is None or oj <= deadline):
+                return oj
+    return None
+
+
 def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
     ptype = (detail or {}).get("Procurement type", "")
     is_call = ("expression of interest" in ptype.lower()) if ptype else (
@@ -324,7 +356,7 @@ def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
     extended = _parse_date((detail or {}).get("Extended closing date", ""))
     closing = _parse_date((detail or {}).get("Closing date", "")) or row["closing"]
     deadline = extended or closing
-    published = _parse_date((detail or {}).get("Official Publication Date", ""))
+    published = _cedefop_published(detail, deadline) if detail is not None else None
     status = _cedefop_status(row["status_raw"], deadline, now)
     item = Item(
         body_code="cedefop", item_type="eoi_call" if is_call else "tender",
