@@ -127,7 +127,9 @@ def _parse(r, *, with_body: bool) -> IntlCoopItem:
 
 
 _BASE = ("FROM economy_items WHERE body_code='commission' AND item_type='funding_recipient'")
-_COLS = "id, public_url, body_txt, body_html, document_date, creation_date"
+# updated_at: the change signal row_updated() reads (migrations 271, 296); absent, every
+# item served updated_date = null (API audit, 16 Oct 2026).
+_COLS = "id, public_url, body_txt, body_html, document_date, creation_date, updated_at"
 
 _DESC = """**What it does**
 The award (recipient) side of **EU international cooperation** — who received EU money under the three external-action instruments, parsed into structured fields:

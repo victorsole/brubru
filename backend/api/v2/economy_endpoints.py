@@ -104,7 +104,7 @@ class ProcurementDocument(_DataPoints):
 
 _DOC_COLS = ("id::text AS id, economy_item_id, tender_reference, title, file_url, parent_file_url, "
              "file_name, file_format, file_size, language, document_date, public_url, body_source, "
-             "first_seen")
+             "first_seen, last_updated")
 
 
 def _row_to_document(r, *, with_body: bool, self_url: str) -> ProcurementDocument:
@@ -138,8 +138,12 @@ def _row_to_item(r, *, with_body: bool, procurement: bool = False) -> EconomyIte
     )
 
 
-_LIST_COLS = "id, body_code, item_type, title, summary, public_url, document_date, creation_date, source_kind"
-_DETAIL_COLS = "id, body_code, item_type, title, summary, public_url, body_txt, body_html, document_date, creation_date, source_kind"
+# updated_at is the row's change signal (brubru_touch_if_changed, migrations 271 and 296):
+# without it in the SELECT, row_updated() found nothing and every item served
+# updated_date = null (API audit, 16 Oct 2026: 451 of 451 Cedefop tenders, 3,299 of 3,299
+# of their files). Modules that reuse these lists over another table must project it too.
+_LIST_COLS = "id, body_code, item_type, title, summary, public_url, document_date, creation_date, source_kind, updated_at"
+_DETAIL_COLS = "id, body_code, item_type, title, summary, public_url, body_txt, body_html, document_date, creation_date, source_kind, updated_at"
 _PROCUREMENT_COLS = ", tender_reference, status, deadline"
 
 

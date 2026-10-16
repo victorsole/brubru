@@ -33,10 +33,13 @@ _ALL_TYPES = _FUNDING_TYPES + ("cohesion_allocation", "solidarity_case", "cap_pa
 # allocations, (c) EU Solidarity Fund disaster cases, and (d) the CAP fund
 # payments (EAGF/EAFRD), all mapped to the same EconomyItem shape. The agency
 # side is pre-filtered to funding item_types; the rest are mapped on the fly.
+# updated_date: the agency side carries economy_items.updated_at (its change signal);
+# the other three tables' updated_at is a write time not yet checked as one, so they
+# serve NULL, as their own routes do (API audit, 16 Oct 2026).
 _UNION_CTE_TMPL = """
 WITH all_funding AS (
     SELECT id, body_code, item_type, title, summary, public_url,
-           {b}document_date, creation_date, source_kind
+           {b}document_date, creation_date, source_kind, updated_at
     FROM economy_items
     WHERE item_type = ANY(:ftypes)
     UNION ALL
@@ -45,7 +48,8 @@ WITH all_funding AS (
            (upper(fund) || ' · ' || coalesce(ms, '') || ' · '
              || coalesce(financial_allocation_category, '')
              || ' · total EUR ' || coalesce(round(total)::text, '0')) AS summary,
-           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind
+           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
+           NULL::timestamptz AS updated_at
     FROM eu_cohesion_finances
     UNION ALL
     SELECT id, 'eusf' AS body_code, 'solidarity_case' AS item_type,
@@ -53,13 +57,15 @@ WITH all_funding AS (
            (coalesce(applicant_country, '') || ' · ' || coalesce(year_of_occurrence::text, '')
              || ' · ' || coalesce(disaster_type, '')
              || ' · EUSF paid EUR ' || coalesce(round(eusf_grant_paid_meur)::text, '0') || 'm') AS summary,
-           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind
+           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
+           NULL::timestamptz AS updated_at
     FROM eu_solidarity_fund
     UNION ALL
     SELECT id, lower(fund) AS body_code, 'cap_payment' AS item_type,
            (upper(fund) || ' — ' || coalesce(ms, '')) AS title,
            (coalesce(ms, '') || ' · total EUR ' || coalesce(round(total_eur)::text, '0')) AS summary,
-           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind
+           public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
+           NULL::timestamptz AS updated_at
     FROM eu_cap_payments
 )
 """
