@@ -96,7 +96,7 @@ class FtaDetail(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML manifestation when Cellar served XHTML; null when only a PDF was available.")
     body_txt: Optional[str] = Field(None, description="Plain-text body. Always populated when has_body=True.")
     body_source: Optional[str] = Field(None, description="'xhtml' or 'pdf' depending on which Cellar manifestation produced the body.")
-    body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
+    body: Optional[str] = Field(None, description="DEPRECATED: always null since 16 Oct 2026 (it repeated body_txt). Read body_txt / body_html.")
     fetched_at: Optional[str] = None
     # 5 mandatory Brubru v1 datapoints. eurlex_url is the citizen URL;
     # document_date carries through; creation_date = fetched_at.

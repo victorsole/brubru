@@ -95,7 +95,7 @@ class SanctionDetail(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
-    body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text or body_html.")
+    body: Optional[str] = Field(None, description="DEPRECATED: always null since 16 Oct 2026 (it repeated body_txt). Read body_txt / body_html.")
     # 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Citizen URL — the legal basis URL (EUR-Lex page for the listing regulation).")
     document_date: Optional[date] = Field(None, description="Publication date of the legal basis act.")

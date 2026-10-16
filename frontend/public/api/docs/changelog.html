@@ -175,6 +175,11 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>16 October 2026: deprecated text aliases are now empty; creation_date is the first sighting</h3>
+<p>Every item serves its text once. The old alias fields that repeated <code>body_txt</code> stay in the JSON for compatibility but are now always empty: <code>body</code> (register documents, delegated and implementing acts, EP documents, institutional publications, the specialised feeds), <code>text</code> (consultation feedback), <code>full_text</code> and <code>has_full_text</code> (adopted and tabled texts). Read <code>body_txt</code>, <code>body_html</code> and <code>has_body</code>. Pages shrink by a third on the heaviest endpoints; one implementing act went from 124 MB to 83 MB. The keys are removed in the next major version.</p>
+<p><strong>Fixed:</strong> <code>creation_date</code> on parliamentary questions, adopted and tabled texts, TRIS notifications, votes and committee work items is now when Brubru first saw the row. It used to repeat the last update time, so a re-fetched row looked new.</p>
+<p><strong>Fixed:</strong> <code>/parliament/votes</code> and <code>/legislative/eur-lex/laws</code> no longer move <code>updated_date</code> when a sync re-reads a row and finds it unchanged.</p>
+
 <h3>16 September 2026: Infringement register (1,002 total)</h3>
 <p><code>/api/v2/commission/infringements</code> now serves the European Commission's register of infringement decisions: every decision adopted against Member States since 1987 (62,610 decisions in 25,658 cases on 16 September 2026), synced daily, plus the statistics of the Commission's 'Implementing EU law' dashboards.</p>
 <ul>

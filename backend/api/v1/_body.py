@@ -209,12 +209,16 @@ def compose_html_from_sections(
 
 
 def deprecated_body(body_txt: Optional[str], body_html: Optional[str]) -> Optional[str]:
-    """One-release back-compat alias. Returns body_txt if present, else body_html.
+    """The `body` field stays in the JSON, empty. It used to repeat body_txt (or body_html).
 
-    Clients must migrate to the explicit body_txt / body_html pair before
-    we drop this in the next minor release.
+    Kept as a name only: the public changelog promises that a field is never removed
+    without a major version, so the key remains and its value is always None. Serving
+    the text twice cost a third of every page (16 Oct 2026: register documents 100 MB
+    of text sent twice in one morning window; implementing act 32018R0688 carried
+    41 MB three times and its page took 96 s). No client collection read the alias.
+    The arguments are kept so the 13 call sites need no change.
     """
-    return body_txt or body_html
+    return None
 
 
 # ---------------------------------------------------------------------------

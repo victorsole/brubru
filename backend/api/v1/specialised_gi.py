@@ -119,7 +119,7 @@ class GiDetail(BaseModel):
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
     body_source: Optional[str] = None
-    body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
+    body: Optional[str] = Field(None, description="DEPRECATED: always null since 16 Oct 2026 (it repeated body_txt). Read body_txt / body_html.")
     fetched_at: Optional[datetime] = None
     # 5 mandatory Brubru v1 datapoints (public_url already present above).
     document_date: Optional[date] = Field(None, description="EU protection date (alias of eu_protection_date).")

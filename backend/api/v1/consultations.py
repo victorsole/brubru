@@ -110,7 +110,8 @@ class FeedbackItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
-    # Deprecated alias kept one release. Equivalent to body_text.
+    # Deprecated: always null since 16 Oct 2026 (it repeated body_txt); the key stays
+    # until the next major version.
     text: Optional[str] = None
     attachments: list = Field(default_factory=list)
     public_url: Optional[str] = None
@@ -223,7 +224,7 @@ async def get_feedback_by_initiative(
             has_body=has_body,
             body_html=None,  # Stage 2 (deferred): per-feedback HTML fetch
             body_txt=body_text,
-            text=body_text,  # Deprecated alias — same value as body_text
+            text=None,  # deprecated alias, kept as a key only
             attachments=it.attachments,
             public_url=it.public_url,
         ))

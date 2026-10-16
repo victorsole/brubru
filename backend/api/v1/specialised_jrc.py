@@ -63,7 +63,7 @@ class JrcDatasetDetail(BaseModel):
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
     body_source: Optional[str] = None
-    body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias.")
+    body: Optional[str] = Field(None, description="DEPRECATED: always null since 16 Oct 2026 (it repeated body_txt). Read body_txt / body_html.")
     fetched_at: Optional[datetime] = None
 
 

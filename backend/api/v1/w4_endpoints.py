@@ -795,7 +795,7 @@ class SecondaryActItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
-    # Deprecated alias kept one release.
+    # Deprecated: always null since 16 Oct 2026 (it repeated body_txt).
     body: Optional[str] = None
 
 

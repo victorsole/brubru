@@ -1232,7 +1232,7 @@ class PressReleaseItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
-    # Deprecated alias kept one release; equals body_text or body_html.
+    # Deprecated: always null since 16 Oct 2026 (it repeated body_txt or body_html).
     body: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints.
     public_url: Optional[str] = Field(None, description="Canonical citizen URL — alias of url (the press-release page on the institutional site).")

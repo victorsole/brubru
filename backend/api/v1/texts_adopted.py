@@ -60,14 +60,15 @@ class TextItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
-    # Deprecated alias kept one release; equals body_text. Same for
-    # has_full_text → has_body.
+    # Deprecated: `full_text` repeated body_txt (up to 900 KB per tabled report) and
+    # has_full_text repeated has_body. Since 16 Oct 2026 the keys stay, empty, until
+    # the next major version; read body_txt / has_body.
     has_full_text: bool = False
     full_text: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints.
     public_url: Optional[str] = Field(None, description="Citizen URL — full_text_url / pdf_url / source_url fallback chain.")
     document_date: Optional[date] = Field(None, description="For an adopted text its adoption date; for a tabled report or motion the date it was tabled (EP Open Data).")
-    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (first_seen).")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
@@ -147,9 +148,9 @@ def _row_to_item(
         has_body=has_body,
         body_html=body_html,
         body_txt=body_text,
-        # Deprecated aliases kept one release.
-        has_full_text=has_body,
-        full_text=body_text,
+        # Deprecated aliases: keys kept, values empty (16 Oct 2026).
+        has_full_text=False,
+        full_text=None,
         # 5 mandatory datapoints
         public_url=public_url,
         # A tabled text's own date (migration 294); an adopted text's adoption date.

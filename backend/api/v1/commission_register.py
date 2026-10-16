@@ -89,7 +89,7 @@ class CommissionRegisterItem(BaseModel):
     publication_date: Optional[datetime] = None  # Deprecated alias of document_date — kept one release
     last_updated: Optional[datetime] = None
     has_body: bool = False
-    body: Optional[str] = None  # Deprecated alias kept one release
+    body: Optional[str] = None  # Deprecated: always null since 16 Oct 2026 (repeated body_txt)
 
 
 _EURLEX_PUBLIC_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"

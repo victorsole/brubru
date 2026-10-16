@@ -97,7 +97,7 @@ class TradeDefenceDetail(BaseModel):
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
     body_source: Optional[str] = None
-    body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
+    body: Optional[str] = Field(None, description="DEPRECATED: always null since 16 Oct 2026 (it repeated body_txt). Read body_txt / body_html.")
     fetched_at: Optional[str] = None
     # 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Citizen URL — alias of eurlex_url.")
