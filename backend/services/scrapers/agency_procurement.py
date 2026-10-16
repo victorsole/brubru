@@ -351,18 +351,35 @@ def _cedefop_published(detail: dict, deadline: datetime | None) -> datetime | No
     return None
 
 
+def _cedefop_type(ptype: str, reference: str, title: str) -> str:
+    """tender | grant | eoi_call from the page's "Procurement type"; a listing-only row
+    (no page read) is guessed from the reference and the writer keeps the stored type.
+
+    API audit, 16 Oct 2026: Cedefop's listing mixes three kinds and 89 "Call for
+    proposals" (grants: ReferNet, DG EAC calls) were served under /cedefop-tenders."""
+    p = ptype.lower()
+    if p:
+        if "expression of interest" in p:
+            return "eoi_call"
+        return "grant" if "proposal" in p else "tender"
+    ref, t = reference.upper(), title.lower()
+    if "/CEI" in ref or "EOI" in ref or "expression of interest" in t:
+        return "eoi_call"
+    if ref.startswith(("GP/", "CEDEFOP NO GP/")) or "call for proposals" in t:
+        return "grant"
+    return "tender"
+
+
 def _cedefop_item(row: dict, detail: dict | None, now: datetime) -> Item:
     ptype = (detail or {}).get("Procurement type", "")
-    is_call = ("expression of interest" in ptype.lower()) if ptype else (
-        "/CEI" in row["reference"].upper() or "EOI" in row["reference"].upper()
-        or "expression of interest" in row["title"].lower())
+    item_type = _cedefop_type(ptype, row["reference"], row["title"])
     extended = _parse_date((detail or {}).get("Extended closing date", ""))
     closing = _parse_date((detail or {}).get("Closing date", "")) or row["closing"]
     deadline = extended or closing
     published = _cedefop_published(detail, deadline) if detail is not None else None
     status = _cedefop_status(row["status_raw"], deadline, now)
     item = Item(
-        body_code="cedefop", item_type="eoi_call" if is_call else "tender",
+        body_code="cedefop", item_type=item_type,
         title=clean(row["title"])[:120], public_url=row["url"],
         summary=clean(" · ".join(b for b in [row["reference"], row["status_raw"],
                                                deadline.date().isoformat() if deadline else ""] if b)),
@@ -441,6 +458,10 @@ def ingest_cedefop_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
 
 def ingest_cedefop_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return [it for it in _cedefop_all(fetch_bodies=fetch_bodies) if it.item_type == "eoi_call"]
+
+
+def ingest_cedefop_grants(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    return [it for it in _cedefop_all(fetch_bodies=fetch_bodies) if it.item_type == "grant"]
 
 
 # --------------------------------------------------------------------------- #

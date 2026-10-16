@@ -44,8 +44,8 @@ register_resource(
     router, body_code="cedefop", item_type="tender", slug="cedefop-tenders",
     noun="Cedefop calls for tender", body_name="Cedefop", acronym="Cedefop", tag="v2-funding",
     source="every page of the Cedefop public-procurement listing and each procedure's own page.",
-    extra="Cedefop's own public procurement, the whole archive (published from 2006; calls for tenders and "
-          "calls for proposals). Each item carries `tender_reference`, `status` "
+    extra="Cedefop's own public procurement, the whole archive of calls for tenders (published from 2006; "
+          "calls for proposals are at /cedefop-grants). Each item carries `tender_reference`, `status` "
           "(open | closed; open only while the deadline is ahead) and `deadline` (the extended "
           "closing date when Cedefop extended it); `document_date` is the Official Publication "
           "Date. The detail body holds the description, the key dates, the TED and Funding & "
@@ -62,6 +62,20 @@ register_resource(
           "archive. Each item carries `tender_reference`, `status` and `deadline`; "
           "`document_date` is the Official Publication Date. The detail body lists the call's "
           "files; `/{item_id}/documents` serves them with their extracted text. Filter with q.",
+    procurement=True, documents=True,
+)
+register_resource(
+    router, body_code="cedefop", item_type="grant", slug="cedefop-grants",
+    noun="Cedefop calls for proposals", body_name="Cedefop", acronym="Cedefop", tag="v2-funding",
+    source="every page of the Cedefop public-procurement listing (the procedures whose Procurement "
+           "type is Call for proposals) and each call's own page.",
+    extra="Cedefop's calls for proposals (grants: the ReferNet framework partnerships and the DG "
+          "Education and Culture calls Cedefop published for the Commission), the whole archive "
+          "from 2005. Each item carries `tender_reference`, `status` (open | closed; open only while "
+          "the deadline is ahead) and `deadline`; `document_date` is the Official Publication Date "
+          "or, for pages that state none, the Official Journal day the page names. The detail "
+          "body holds the description, the key dates and the list of the call's files; "
+          "`/{item_id}/documents` serves those files with their extracted text. Filter with q.",
     procurement=True, documents=True,
 )
 

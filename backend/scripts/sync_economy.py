@@ -226,6 +226,7 @@ INGESTORS = {
     ("efca", "eoi_call"): agency_procurement.ingest_efca_calls,
     ("cedefop", "tender"): agency_procurement.ingest_cedefop_tenders,
     ("cedefop", "eoi_call"): agency_procurement.ingest_cedefop_calls,
+    ("cedefop", "grant"): agency_procurement.ingest_cedefop_grants,
     ("ema", "tender"): agency_procurement.ingest_ema_tenders,
     ("ema", "eoi_call"): agency_procurement.ingest_ema_calls,
     ("efsa", "tender"): agency_procurement.ingest_efsa_tenders,
