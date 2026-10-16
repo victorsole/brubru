@@ -85,15 +85,23 @@ def plan(db):
     changes, kept, why = [], [], collections.Counter()
     for r in rows:
         c = r["celex"]
-        w = {**blank, **(facts.get(folders.get(c)) or {k: v for k, v in remote_full.get(c, {}).items() if k in COLS})}
+        stored = {k: [str(x) for x in r[k]] if isinstance(r[k], list) else r[k] for k in COLS}
+        if c in folders:
+            w = {**blank, **facts[folders[c]]}
+        elif c in remote_full:
+            w = {**blank, **{k: v for k, v in remote_full[c].items() if k in COLS}}
+        else:
+            w = dict(stored)  # Cellar did not answer for this law in this run: what is stored stays, never blanked
         w["alias"], w["acronym"] = names.get(c, (None, None))
         procs = set(w["procedures"] or []) | set((remote.get(c) or {}).get("procedures") or []) | oeil.get(c, set())
+        if c not in remote:
+            procs |= set(stored["procedures"] or [])  # Cellar's procedures unknown in this run: keep the stored ones
         w["procedures"] = sorted(procs) or None
         if w["in_force"] is None and c in remote:
             w["in_force"] = remote[c]["in_force"]
         new = {}
         for k, v in w.items():
-            have = [str(x) for x in r[k]] if isinstance(r[k], list) else r[k]
+            have = stored[k]
             if have == v or v is None and r[k] is None:
                 continue
             if k == "in_force" and r[k] is not None:

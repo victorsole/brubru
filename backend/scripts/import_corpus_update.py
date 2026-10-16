@@ -56,8 +56,7 @@ from sqlalchemy import text
 from backend.core.database import SessionLocal
 from backend.models.eu_law import EULaw
 from backend.services.parsers.formex_parser import FormexParser
-from backend.scripts.leg_export_metadata import export_metadata, merged
-METADATA_COLS = ("authors", "in_force", "eli", "entry_into_force", "application_dates", "effect_dates", "procedures")
+from backend.scripts.leg_export_metadata import COLS as _META_COLS, export_metadata, merged
 from backend.scripts.leg_folder import (  # noqa: F401 (re-exported for the repair scripts)
     RDF_CELEX,
     CELEX_SHAPE,
@@ -101,6 +100,7 @@ logger = logging.getLogger(__name__)
 logging.getLogger('sqlalchemy.engine').setLevel(logging.WARNING)
 
 BATCH_SIZE = 500
+METADATA_COLS = tuple(c for c in _META_COLS if c not in ("alias", "acronym"))  # aliases.csv is the only source of those
 PROGRESS_INTERVAL = 1000
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SPARQL_URL = "https://publications.europa.eu/webapi/rdf/sparql"

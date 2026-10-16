@@ -166,3 +166,31 @@ def test_the_procedure_filter_takes_a_letter_and_any_case():
     from api.v1.laws import metadata_filters
     assert "'2011/0901A' = ANY (eu_laws.procedures)" in _sql(metadata_filters(procedure="2011/0901A(COD)"))
     assert "'2020/0361' = ANY (eu_laws.procedures)" in _sql(metadata_filters(procedure="2020/0361(cod)"))
+
+
+def test_cellar_down_stops_the_run_instead_of_splitting(monkeypatch):
+    # audit of 16 Oct 2026: with Cellar refusing, batches of 80 split into 159 calls each and the daily job hit its
+    # 30-minute timeout blind; now four failed calls in a row stop it with a reason
+    import urllib.request
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts import leg_export_metadata as lem
+    calls = []
+
+    def refuse(*a, **k):
+        calls.append(1)
+        raise OSError("connection refused")
+
+    monkeypatch.setattr(urllib.request, "urlopen", refuse)
+    monkeypatch.setattr(lem.time, "sleep", lambda s: None)
+    with pytest.raises(lem.CellarDown):
+        lem.cellar_facts([f"3202{i % 10}R{i:04d}" for i in range(400)], groups=("dossier",))
+    assert len(calls) == lem.Budget.FAILS_IN_A_ROW
+
+
+def test_a_spent_time_budget_stops_the_run(monkeypatch):
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts import leg_export_metadata as lem
+    b = lem.Budget(seconds=1)
+    b.deadline -= 5
+    with pytest.raises(lem.CellarDown):
+        lem.cellar_facts(["32016R0679"], groups=("dossier",), budget=b)

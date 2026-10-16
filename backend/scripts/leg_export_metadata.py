@@ -7,9 +7,9 @@ One reading for every writer of the columns: fill_eu_laws_export_metadata.py (th
   - eli: resource_legal_eli, the one the metadata states on the work (one per folder or none). The table builder's
     regex stopped at "(" and cut 701 ELIs short (32014D0026 is .../26(1)/oj);
   - entry_into_force / application_dates / effect_dates: resource_legal_date_entry-into-force, split by the type each
-    date carries (fd_335: EV, MA, MA/PART, MA/PROV, APPLICATION, PE); an untyped date or another code (V, DATPUB,
-    DATNOT, ECHLET, P, AU+TARD: 17 dates in the export) stays an entry-into-force date. The placeholders 1001-01-01 and
-    1002-02-02 (200 date entries on 199 laws) are not dates and are dropped;
+    date carries (fd_335: EV, MA, MA/PART, MA/PROV, APPLICATION, PE, PE/PART); an untyped date or another code (V,
+    DATPUB, DATNOT, ECHLET, P, AU+TARD: 19 dates in the export, 11 in eu_laws) stays an entry-into-force date. The
+    placeholders 1001-01-01 and 1002-02-02 (260 entries on 235 export folders) are not dates and are dropped;
   - procedures: links to resource/procedure/YYYY_N[A-Z], as YYYY/NNNN[A-Z] (the OEIL reference without its type).
 alias and acronym come from Brubru's curated aliases.csv only.
 """
@@ -36,7 +36,8 @@ OWL = "{http://www.w3.org/2002/07/owl#}"
 ANN = "{http://publications.europa.eu/ontology/annotation#}"
 EIF = "http://publications.europa.eu/ontology/cdm#resource_legal_date_entry-into-force"
 DATE_COLUMN = {"EV": "entry_into_force", "MA": "application_dates", "MA/PART": "application_dates",
-               "MA/PROV": "application_dates", "APPLICATION": "application_dates", "PE": "effect_dates"}
+               "MA/PROV": "application_dates", "APPLICATION": "application_dates", "PE": "effect_dates",
+               "PE/PART": "effect_dates"}
 PROCEDURE = re.compile(r"/resource/procedure/(\d{4})_0*(\d{1,4})([A-Z]?)$")
 SPARQL = "https://publications.europa.eu/webapi/rdf/sparql"
 
@@ -138,6 +139,29 @@ GROUPS = {
 }
 
 
+class CellarDown(RuntimeError):
+    """Cellar failed the control on several calls in a row, or the time budget ran out: stop, do not split further."""
+
+
+class Budget:
+    """Stops a run cleanly: after FAILS_IN_A_ROW failed calls (the endpoint is down or walled, so splitting batches
+    would only multiply the calls) or once `seconds` are spent (the caller's timeout must never cut the run blind)."""
+    FAILS_IN_A_ROW = 4
+
+    def __init__(self, seconds: Optional[float] = None):
+        self.deadline = time.monotonic() + seconds if seconds else None
+        self.failed = 0
+
+    def check(self):
+        if self.deadline and time.monotonic() > self.deadline:
+            raise CellarDown("time budget spent")
+
+    def result(self, ok: bool):
+        self.failed = 0 if ok else self.failed + 1
+        if self.failed >= self.FAILS_IN_A_ROW:
+            raise CellarDown(f"{self.failed} calls in a row failed the control law")
+
+
 def _parse(group: str, rows: list) -> dict:
     got = {}
     for b in rows:
@@ -168,7 +192,8 @@ def _control_ok(group: str, g: Optional[dict]) -> bool:
     return ("2016-05-24", "EV") in g["pairs"]
 
 
-def _ask(group: str, batch: list) -> dict:
+def _ask(group: str, batch: list, budget: Budget) -> dict:
+    budget.check()
     sel, pattern = GROUPS[group]
     values = " ".join(f'"{c}"^^<http://www.w3.org/2001/XMLSchema#string>' for c in batch + [CONTROL])
     q = ("PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> PREFIX owl: <http://www.w3.org/2002/07/owl#> "
@@ -177,41 +202,47 @@ def _ask(group: str, batch: list) -> dict:
     try:
         req = urllib.request.Request(SPARQL + "?" + urllib.parse.urlencode({"query": q, "format": "application/sparql-results+json"}),
                                      headers={"Accept": "application/sparql-results+json"})
-        got = _parse(group, json.load(urllib.request.urlopen(req, timeout=120))["results"]["bindings"])
+        got = _parse(group, json.load(urllib.request.urlopen(req, timeout=60))["results"]["bindings"])
     except Exception:
+        got = {}
+    ok = _control_ok(group, got.get(CONTROL))
+    budget.result(ok)
+    if not ok:
         return {}
-    if not _control_ok(group, got.get(CONTROL)):
-        return {}
-    empty = {"procedures": set(), "flags": set(), "authors": set(), "elis": set(), "pairs": set()}
-    return {c: got.get(c, empty) for c in batch}
+    # "seen": Cellar returned the law at all (an unknown CELEX gives no row); its facts may still be empty
+    return {c: {**got[c], "seen": True} if c in got else {"procedures": set(), "flags": set(), "authors": set(),
+                                                          "elis": set(), "pairs": set(), "seen": False} for c in batch}
 
 
-def _ask_or_split(group: str, batch: list) -> dict:
-    """Retry twice, then split in halves: Cellar times out on some batches of 80 that answer at once in tens
-    (16 Oct 2026). A law that fails alone is left out: unknown, never "none"."""
+def _ask_or_split(group: str, batch: list, budget: Budget) -> dict:
+    """Retry once, then split in halves: Cellar times out on some batches of 80 that answer at once in tens
+    (16 Oct 2026). A law that fails alone is left out: unknown, never "none". Raises CellarDown via the budget."""
     for attempt in range(2):
-        got = _ask(group, batch)
+        got = _ask(group, batch, budget)
         if got:
             return got
-        time.sleep(5 * (attempt + 1))
+        time.sleep(3 * (attempt + 1))
     if len(batch) == 1:
         return {}
     mid = len(batch) // 2
-    return {**_ask_or_split(group, batch[:mid]), **_ask_or_split(group, batch[mid:])}
+    return {**_ask_or_split(group, batch[:mid], budget), **_ask_or_split(group, batch[mid:], budget)}
 
 
-def cellar_facts(celexes: list, groups=("dossier",), cache: Optional[Path] = None, batch: int = 80, log=print) -> dict:
+def cellar_facts(celexes: list, groups=("dossier",), cache: Optional[Path] = None, batch: int = 80, log=print,
+                 budget: Optional[Budget] = None) -> dict:
     """{CELEX: {column: value}} from Cellar for the asked groups ('dossier': procedures, in_force; 'work': authors,
     eli; 'dates': the three date columns). With a cache file, only laws missing from it are asked; a law Cellar does
     not answer for is absent (unknown)."""
     store = json.loads(cache.read_text()) if cache and cache.exists() else {}
+    budget = budget or Budget()
     for group in groups:
         todo = [c for c in celexes if group not in store.get(c, {})]
         for i in range(0, len(todo), batch):
-            for c, g in _ask_or_split(group, todo[i:i + batch]).items():
+            for c, g in _ask_or_split(group, todo[i:i + batch], budget).items():
                 if group == "dossier":
                     flag = next(iter(g["flags"])) if len(g["flags"]) == 1 else None
-                    part = {"procedures": sorted(g["procedures"]) or None, "in_force": {"1": True, "0": False}.get(flag)}
+                    part = {"procedures": sorted(g["procedures"]) or None, "in_force": {"1": True, "0": False}.get(flag),
+                            "seen": g["seen"]}
                 elif group == "work":
                     part = {"authors": sorted(g["authors"]) or None, "eli": next(iter(g["elis"])) if len(g["elis"]) == 1 else None}
                 else:
