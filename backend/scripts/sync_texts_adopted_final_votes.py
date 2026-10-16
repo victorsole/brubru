@@ -177,7 +177,11 @@ def _record(d: dict) -> dict:
     method = _METHOD.get(str(d.get("decision_method", "")).rsplit("/", 1)[-1], "other")
     counted = method != "show of hands"
     f, a, b = _counts(d) if counted else (None, None, None)
+    label = ((d.get("referenceText") or {}).get("en") or "").strip()
     return {
+        # The decision's own label ("Motion for a resolution (as a whole)"): the votes
+        # endpoint names the vote with it when no roll-call exists (16 Oct 2026).
+        "label": label.splitlines()[0].strip() if label else None,
         "for": f,
         "against": a,
         "abstention": b,

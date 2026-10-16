@@ -126,9 +126,11 @@ class TestTheContractDidNotBreak:
 
     @pytest.mark.live
     def test_the_tallies_are_integers_not_null(self, client):
+        # Null only for a show of hands, where no count is taken (16 Oct 2026).
         item = (client.get(f"{VOTES}?limit=1").json().get("data") or [{}])[0]
+        hands = "Vote type: show of hands" in (item.get("body_txt") or "")
         for f in ("count_for", "count_against", "count_abstention"):
-            assert isinstance(item.get(f), int), f"{f} is {item.get(f)!r}"
+            assert (item.get(f) is None) if hands else isinstance(item.get(f), int), f"{f} is {item.get(f)!r}"
 
     @pytest.mark.live
     def test_public_url_points_at_the_real_source(self, client):

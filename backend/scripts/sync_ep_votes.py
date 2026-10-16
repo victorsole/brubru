@@ -36,8 +36,8 @@ from sqlalchemy import text as sqla_text
 from core.database import SessionLocal
 from models.ep_vote import EpVote, EpVoteRecord
 from services.scrapers.ep_votes_scraper import (
-    parse_committee_report, parse_plenary_rcv, parse_plenary_rcv_xml, pick_final_subitem,
-    committee_report_url, rcv_url, rcv_xml_url,
+    ParsedVote, parse_committee_report, parse_plenary_rcv, parse_plenary_rcv_xml,
+    pick_final_subitem, subitem_with_counts, committee_report_url, rcv_url, rcv_xml_url,
 )
 from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
 
@@ -108,10 +108,52 @@ def _oeil_committee_vote_date(db, procedure_ref, report_ref):
         return None
 
 
+# ---- the final vote EP Open Data names --------------------------------------
+
+def open_data_final(vote_results) -> dict | None:
+    """texts_adopted.vote_results when it is EP Open Data's final vote, else None.
+
+    sync_texts_adopted_final_votes.py reads it from the sitting's decisions: the one
+    ADOPTED decision whose label is a final-vote label. It is the authority for which
+    vote decided the text; the roll-call minutes only add each MEP's choice."""
+    v = vote_results if isinstance(vote_results, dict) else None
+    if not v or v.get("source") != "ep_open_data" or str(v.get("result") or "").lower() != "adopted":
+        return None
+    return v
+
+
+def open_data_vote(od: dict) -> ParsedVote:
+    """A plenary vote built from EP Open Data alone: no roll-call exists for a show of hands
+    or an electronic vote, so there are no per-MEP records and a show of hands has no
+    counts (null, never 0)."""
+    hands = od.get("method") == "show of hands"
+    return ParsedVote(votes_for=None if hands else od.get("for"),
+                      votes_against=None if hands else od.get("against"),
+                      votes_abstention=None if hands else od.get("abstention"),
+                      result="adopted", vote_type=od.get("method") or "other")
+
+
+def choose_final_subitem(items: dict, match: dict | None, od: dict | None) -> dict | None:
+    """The roll-call sub-item that is the text's final vote, or None.
+
+    With EP Open Data's final vote, the sub-item with its exact counts (None when the vote
+    was by show of hands or electronic: the row is then EP Open Data's own). Without it,
+    the title-matched item's final sub-item, never an amendment vote."""
+    if od:
+        return subitem_with_counts(items, od.get("for"), od.get("against"), od.get("abstention"))
+    return pick_final_subitem(match["subitems"]) if match else None
+
+
+def open_data_subject(od: dict) -> str:
+    if od.get("label"):
+        return od["label"]
+    return "Final vote (show of hands)" if od.get("method") == "show of hands" else "Final vote"
+
+
 # ---- target selection -----------------------------------------------------
 
 def _select_targets(db, committees, since, ta, limit):
-    sql = ["SELECT ta_reference, title, procedure_ref, adoption_date, committees",
+    sql = ["SELECT ta_reference, title, procedure_ref, adoption_date, committees, vote_results",
            "FROM texts_adopted WHERE adoption_date IS NOT NULL"]
     params = {}
     if ta:
@@ -271,43 +313,62 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
                         sitting_used = cand
                         break
                 if not items:
-                    counts["no_rcv"] += len(by_sitting[sitting])
-                    print(f"  [{sitting}] no RCV page / no items")
-                    continue
+                    sitting_used = sitting
+                    if not any(open_data_final(t.get("vote_results")) for t in by_sitting[sitting]):
+                        counts["no_rcv"] += len(by_sitting[sitting])
+                        print(f"  [{sitting}] no RCV page / no items")
+                        continue
+                    items = {}
 
                 for t in by_sitting[sitting]:
-                    # Match this adopted text to a roll-call item by title.
+                    # Match this adopted text to a roll-call item by title (for its report).
                     match = None
                     for itno, it in items.items():
                         if _title_matches(t["title"], it["title"]):
                             match = it
                             break
-                    if not match:
-                        counts["no_match"] += 1
-                        continue
-                    fin = pick_final_subitem(match["subitems"])
-                    if not fin:
+                    od = open_data_final(t.get("vote_results"))
+                    fin = choose_final_subitem(items, match, od)
+                    if not fin and not od:
+                        # No final vote found: an earlier pick of an amendment vote must not
+                        # stay behind as the text's vote.
+                        if apply:
+                            gone = [v for v in db.query(EpVote).filter(
+                                        EpVote.level == "plenary",
+                                        EpVote.ta_reference == t["ta_reference"]).all()
+                                    if not pick_final_subitem([{"subject": v.subject, "vote": v}])]
+                            for v in gone:
+                                db.delete(v)
+                            counts["amendment_pick_removed"] = counts.get("amendment_pick_removed", 0) + len(gone)
                         counts["no_match"] += 1
                         continue
 
                     cid = _carriage_id(db, t["procedure_ref"])
                     lead = (t["committees"] or [None])[0]
-                    pv = fin["vote"]
+                    report_ref = (fin or {}).get("report_ref") or next(
+                        (s.get("report_ref") for s in (match or {}).get("subitems") or [] if s.get("report_ref")), None)
+                    if fin:
+                        pv, subject, item_no = fin["vote"], fin["subject"], fin["subitem_number"]
+                        key = f"plenary|{sitting_used.isoformat()}|{item_no}"
+                    else:
+                        pv, subject, item_no = open_data_vote(od), open_data_subject(od), None
+                        key = f"plenary|{sitting_used.isoformat()}|od|{od.get('decision') or t['ta_reference']}"
+                        counts["plenary_from_open_data"] = counts.get("plenary_from_open_data", 0) + 1
 
                     # ---- plenary row
                     st = _upsert_vote(
-                        db, vote_key=f"plenary|{sitting_used.isoformat()}|{fin['subitem_number']}",
+                        db, vote_key=key,
                         level="plenary", pv=pv, apply=apply,
                         procedure_ref=t["procedure_ref"], carriage_id=cid,
-                        report_ref=fin["report_ref"], ta_reference=t["ta_reference"],
-                        title=t["title"], subject=fin["subject"], committee_code=lead,
+                        report_ref=report_ref, ta_reference=t["ta_reference"],
+                        title=t["title"], subject=subject, committee_code=lead,
                         vote_date=sitting_used, sitting_date=sitting_used,
-                        item_number=fin["subitem_number"], source_url=rcv_url(sitting_used),
+                        item_number=item_no, source_url=rcv_url(sitting_used),
                     )
                     counts[f"plenary_{st}"] = counts.get(f"plenary_{st}", 0) + 1
 
                     # ---- committee row (from the A-report code on the sub-item)
-                    rep = fin.get("report_ref")
+                    rep = report_ref
                     if not rep:
                         counts["no_committee"] += 1
                     else:

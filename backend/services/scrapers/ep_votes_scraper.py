@@ -58,6 +58,12 @@ EP_GROUPS = frozenset({
 })
 
 # Subjects that mark the decisive (final) vote on a dossier, in priority order.
+# Subjects of votes on part of a text or on procedure: "Am 2", "Am 14= 15= 16=", "§ 3/2",
+# "Recital C", "Proposal to vote on amendments", "Motion for adjournment of the vote".
+_NOT_A_FINAL_VOTE = re.compile(
+    r"(?i)^\s*(am\b|amendment|§|recital|citation|after\b|before\b|proposal to vote on amendments"
+    r"|motion for adjournment|proposal for rejection|request\b|split\b|separate\b|unamended\))")
+
 _FINAL_SUBJECT_HINTS = (
     "draft council decision", "commission proposal", "provisional agreement",
     "legislative resolution", "text as a whole", "single vote",
@@ -433,8 +439,29 @@ def pick_final_subitem(subitems: List[dict]) -> Optional[dict]:
     """
     if not subitems:
         return None
+    # A vote on an amendment, a paragraph or a procedural motion is never the text's
+    # vote. The old fallback took the sub-item with the most MEPs recorded, so when the
+    # final vote was by show of hands (no roll-call) it chose "Am 2": 40 texts Parliament
+    # adopted were served REJECTED, the Kosovo report 252-305 for an adopted 412-174
+    # (16 Oct 2026). None is better than a wrong vote.
+    candidates = [s for s in subitems if not _NOT_A_FINAL_VOTE.match(s.get("subject") or "")]
     for hint in _FINAL_SUBJECT_HINTS:
-        for s in subitems:
+        for s in candidates:
             if hint in (s.get("subject") or "").lower():
                 return s
-    return max(subitems, key=lambda s: s["vote"].total_records)
+    return max(candidates, key=lambda s: s["vote"].total_records) if candidates else None
+
+
+def subitem_with_counts(items: Dict[str, dict], votes_for, votes_against, votes_abstention) -> Optional[dict]:
+    """The sitting's roll-call sub-item with exactly these counts, when one alone has them.
+
+    EP Open Data names the final vote of each adopted text and its counts; the roll-call
+    minutes hold that same vote with each MEP's choice. Matching on the three counts finds
+    it whatever its title or position (a title match took a competing motion: the Albania
+    report read 381-107 for the 483-103 Parliament adopted)."""
+    if votes_for is None or votes_against is None or votes_abstention is None:
+        return None
+    hits = [s for it in (items or {}).values() for s in it.get("subitems") or []
+            if (s["vote"].votes_for, s["vote"].votes_against, s["vote"].votes_abstention)
+            == (votes_for, votes_against, votes_abstention)]
+    return hits[0] if len(hits) == 1 else None

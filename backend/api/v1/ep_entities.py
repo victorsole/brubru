@@ -413,9 +413,9 @@ class VoteItem(BaseModel):
     procedure_stage: Optional[str] = None
     amendment_number: Optional[str] = None
     is_main: bool = False
-    count_for: int = 0
-    count_against: int = 0
-    count_abstention: int = 0
+    count_for: Optional[int] = Field(0, description="Votes for. Null when Parliament decided by show of hands: no count is taken.")
+    count_against: Optional[int] = Field(0, description="Votes against. Null for a show of hands.")
+    count_abstention: Optional[int] = Field(0, description="Abstentions. Null for a show of hands.")
     count_did_not_vote: int = 0
     result: Optional[str] = None
     texts_adopted_reference: Optional[str] = None
@@ -489,7 +489,8 @@ def _rollcall_to_item(r) -> "VoteItem":
         ("Result", result),
         ("Vote date", r.vote_date),
     ]:
-        if v in (None, "") and k not in ("For", "Against", "Abstention"):
+        # A count of 0 is a fact and is shown; a missing count (show of hands) is not.
+        if v in (None, ""):
             continue
         lines.append(f"{k}: {v}")
         parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
@@ -529,9 +530,10 @@ def _rollcall_to_item(r) -> "VoteItem":
         procedure_stage=r.level,
         amendment_number=None,
         is_main=(r.level == "plenary"),
-        count_for=int(r.votes_for or 0),
-        count_against=int(r.votes_against or 0),
-        count_abstention=int(r.votes_abstention or 0),
+        # A show of hands has no count: null, never 0 (a 0/0/0 vote reads as nobody voting).
+        count_for=None if r.votes_for is None else int(r.votes_for),
+        count_against=None if r.votes_against is None else int(r.votes_against),
+        count_abstention=None if r.votes_abstention is None else int(r.votes_abstention),
         count_did_not_vote=0,
         result=result,
         texts_adopted_reference=r.ta_reference,
