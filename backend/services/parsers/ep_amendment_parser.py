@@ -63,6 +63,21 @@ RE_RAPPORTEURS = re.compile(
     r'(?:Co-)?Rapporteurs?(?: for the opinion)?\s*:\s*(.+?)(?:\s+TITLE\s|\s+PR_[A-Z]|\n|$)', re.I)
 
 
+# The column headings of an amendment table, which arrive as the first line of each column
+# when heading and text share a row: 63,730 proposed texts began "Amendment" and 59,798
+# original texts "Text proposed by the Commission" (16 Oct 2026). A new provision's
+# original column holds the heading alone, so it read as a 'modification', not an addition.
+_COLUMN_HEADER = re.compile(
+    r"^\s*(?:Text proposed by the (?:Commission|Council)|Present text|Draft (?:motion for a )?resolution"
+    r"|Motion for a resolution|Draft legislative resolution|Draft report|Draft opinion|Council position"
+    r"|Draft by the Court of Justice|Draft recommendation|Amendment|Modification)\s*(?:\n|$)", re.I)
+
+
+def strip_column_header(text: str) -> str:
+    """The column's text without its heading line ('' when the heading was all it held)."""
+    return _COLUMN_HEADER.sub("", text or "", count=1).strip()
+
+
 def rapporteurs_from_text(text: str) -> List[str]:
     """The rapporteur(s) a draft report's cover names, in order; [] when it names none.
 
@@ -209,7 +224,7 @@ class EPAmendmentParser:
                 if group_match:
                     group_code = group_match.group(1).strip()
                     current.political_group = self._normalise_group(group_code)
-                    current.on_behalf_of_group = True
+                    current.on_behalf_of_group = current.political_group is not None
                     continue
 
                 # Check for element reference (Article tag)
@@ -372,8 +387,8 @@ class EPAmendmentParser:
             all_added.extend(prop_added)
             all_deleted.extend(prop_deleted)
 
-        amendment.original_text = '\n'.join(original_parts)
-        amendment.proposed_text = '\n'.join(proposed_parts)
+        amendment.original_text = strip_column_header('\n'.join(original_parts))
+        amendment.proposed_text = strip_column_header('\n'.join(proposed_parts))
         amendment.added_text_fragments = all_added
         amendment.deleted_text_fragments = all_deleted
 
@@ -401,11 +416,13 @@ class EPAmendmentParser:
             return GROUP_ALIASES[clean]
 
         for alias, canonical in GROUP_ALIASES.items():
-            if alias in clean or clean in alias:
+            if re.search(r'(?<![a-z])' + re.escape(alias) + r'(?![a-z])', clean):
                 return canonical
 
-        # Return original if no match (capitalised)
-        return text.strip() if text.strip() else None
+        # Not a political group: an amendment tabled on behalf of a COMMITTEE carries its
+        # code here ("LIBE" on ten Renew members' amendments, 16 Oct 2026). Unknown is
+        # None, never the raw text.
+        return None
 
     def _classify_amendment_type(self, original: str, proposed: str) -> str:
         """Classify amendment type from the two-column content."""
