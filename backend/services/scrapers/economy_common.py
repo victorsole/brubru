@@ -402,6 +402,9 @@ def parse_listing_date(text: str) -> datetime | None:
 # prose, so they are decisive at any body length.
 _ERROR_BODY_STRONG = (
     ("404_not_found", re.compile(r"\b404\s+not\s+found\b", re.I)),
+    # The Commission's outage page, in 24 languages ("Server inaccessibility ... Försök
+    # igen senare."): stored as the body of 12 EU GovTech items (16 Oct 2026).
+    ("ec_server_inaccessible", re.compile(r"Server inaccessibility\s+bg\s+български", re.I)),
     ("page_not_found", re.compile(r"requested page not found", re.I)),
     ("error_occurred", re.compile(r"an error has occ?ur+ed", re.I)),
     ("unrendered_template", re.compile(r"!\[template[_.]")),
