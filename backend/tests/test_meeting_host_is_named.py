@@ -1,0 +1,16 @@
+"""A Commissioner's meeting names its host, not the register's link text (16 Oct 2026)."""
+from scripts.ingest_transparency_meetings import department_name, member_name
+
+
+def test_the_member_is_named_without_the_boilerplate_or_the_role():
+    assert member_name("Information on meetings held by Commissioner Jessika Roswall") == "Jessika Roswall"
+    assert member_name("Information on meetings held by Executive Vice-President Teresa Ribera Rodríguez") \
+        == "Teresa Ribera Rodríguez"
+    assert member_name("Information on meetings held by President Ursula von der Leyen") == "Ursula von der Leyen"
+    assert member_name("Information on meetings held by High Representative of the Union for Foreign Affairs "
+                       "and Security Policy and Vice-President Kaja Kallas") == "Kaja Kallas"
+
+
+def test_a_department_keeps_its_name():
+    assert department_name("Information on meetings held by Directorate-General for Trade") == \
+        "Directorate-General for Trade"

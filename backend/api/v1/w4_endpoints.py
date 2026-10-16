@@ -278,8 +278,8 @@ class TransparencyMeetingItem(BaseModel):
     location: Optional[str] = None
     subject: str
     organisation_met: str
-    transparency_register_id: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
-    organisation_type: Optional[str] = Field(None, description="Not filled: always empty here (15 Oct 2026).")
+    transparency_register_id: Optional[str] = Field(None, description="Always empty: the Commission's meetings register names the organisation but does not publish its Transparency Register number (checked 16 Oct 2026).")
+    organisation_type: Optional[str] = Field(None, description="Always empty: the meetings register does not publish the organisation's type.")
     representatives: Optional[str] = None
     source_url: str
     policy_areas: list = Field(default_factory=list, description="Not filled: always empty here (15 Oct 2026).")

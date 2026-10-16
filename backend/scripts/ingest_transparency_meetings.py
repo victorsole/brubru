@@ -70,6 +70,18 @@ def department_name(raw_host_name: str) -> Optional[str]:
     return core[:255] or None
 
 
+_ROLE_PREFIX_RE = re.compile(
+    r"^\s*(?:the\s+)?(?:president|executive vice-president|vice-president|high representative"
+    r"(?: of the union for foreign affairs and security policy)?(?:\s*(?:/|and)\s*vice-president)?"
+    r"|commissioner)\s+", re.I)
+
+
+def member_name(raw_host_name: str) -> Optional[str]:
+    """'Information on meetings held by Commissioner Jessika Roswall' -> 'Jessika Roswall'."""
+    core = department_name(raw_host_name) or ""
+    return _ROLE_PREFIX_RE.sub("", core).strip() or core or None
+
+
 def dg_acronym(raw_host_name: str) -> Optional[str]:
     """The DG acronym when the curated map carries this exact name, else None.
 
@@ -225,7 +237,11 @@ def parse_meetings_page(host: Dict[str, str], page: int) -> List[Dict[str, objec
             continue
 
         rep_lines = [l.strip() for l in rep.splitlines() if l.strip()]
-        host_name = rep_lines[0] if rep_lines else host["name"]
+        # A Commissioner's page has no "Commission representative" column: the host is the
+        # Commissioner, named in the page's link text. That text went in whole, so 612
+        # meetings were hosted by "Information on meetings held by Commissioner Jessika
+        # Roswall" (16 Oct 2026).
+        host_name = rep_lines[0] if rep_lines else member_name(host["name"])
         representatives = "; ".join(rep_lines[1:]) if len(rep_lines) > 1 else None
 
         rows.append({
