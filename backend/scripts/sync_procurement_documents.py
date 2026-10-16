@@ -188,6 +188,24 @@ class _Ecdc(_Source):
             docs += [dict(d) for d in self._docs.get(notice, [])]
         return docs
 
+    def download(self, url):
+        """ECDC's own files answer 429 to the writer's 0.5 s pace (21 of 220 on the first
+        full run, 16 Oct 2026): they share the page reader's 2 s pace and its back-off.
+        Portal files keep the plain download."""
+        if "ecdc.europa.eu" not in url:
+            return _download(url)
+        for wait in (*ap._ECDC_BACKOFF, None):
+            gap = ap._ECDC_PAUSE - (time.monotonic() - ap._paced_last.get("ecdc", 0.0))
+            if gap > 0:
+                time.sleep(gap)
+            ap._paced_last["ecdc"] = time.monotonic()
+            data, reason = _download(url)
+            if not (reason or "").endswith(":429") or wait is None:
+                return data, reason
+            print(f"    [INFO] ecdc 429 on a file, waiting {wait}s: {url[-60:]}", flush=True)
+            time.sleep(wait)
+        return None, "no-text:download-failed:429"
+
 
 class _Enisa(_Source):
     """ENISA procedure pages: their downloads (not the generic privacy statement) and the

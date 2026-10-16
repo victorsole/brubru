@@ -46,6 +46,27 @@ def test_two_files_are_two_entries_and_a_repeated_link_one():
     assert docs[1]["file_format"] == "docx" and docs[1]["file_size"] == 20 * 1024
 
 
+def test_ecdc_files_are_paced_and_a_429_is_retried(monkeypatch):
+    """21 of 220 files failed with 429 on the first full run (16 Oct 2026)."""
+    import os
+    os.environ.setdefault("TESTING", "1")
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    import sync_procurement_documents as spd
+    answers = iter([(None, "no-text:download-failed:429"), (None, "no-text:download-failed:429"), (b"%PDF", None)])
+    calls, sleeps = [], []
+    monkeypatch.setattr(spd, "_download", lambda url: (calls.append(url), next(answers))[1])
+    monkeypatch.setattr(spd.time, "sleep", lambda s: sleeps.append(s))
+    monkeypatch.setattr(ap, "_ECDC_BACKOFF", (1, 2, 3))
+    src = spd._Ecdc()
+    assert src.download("https://www.ecdc.europa.eu/sites/default/files/x.pdf") == (b"%PDF", None)
+    assert len(calls) == 3 and 1 in sleeps and 2 in sleeps          # two back-offs, then the file
+    calls.clear()
+    answers = iter([(None, "no-text:download-failed:404")])          # a portal file: one plain call
+    assert src.download("https://ec.europa.eu/info/funding-tenders/docs/y.pdf")[0] is None and len(calls) == 1
+    answers = iter([(None, "no-text:download-failed:429")] * 4)
+    assert src.download("https://www.ecdc.europa.eu/z.pdf") == (None, "no-text:download-failed:429")
+
+
 def test_ecdc_has_a_documents_lister_and_route():
     import os
     os.environ.setdefault("TESTING", "1")

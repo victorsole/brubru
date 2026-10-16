@@ -44,7 +44,8 @@ def _clean(text: str | None) -> str | None:
         return None
     # A non-breaking space is a space; pypdf also surfaces the Latin-1 one as "Â\xa0"
     # (10 ECHA award notices read "NUTS code Â  FI181", API audit 16 Oct 2026).
-    text = text.replace("Â\xa0", " ").replace("\xa0", " ")
+    # Stored texts already held the pair as "Â " (the ECHA rows, 16 Oct), so both forms go.
+    text = text.replace("Â\xa0", " ").replace("Â ", " ").replace("\xa0", " ")
     text = _CTRL.sub(" ", text.replace("\r\n", "\n").replace("\r", "\n"))
     text = re.sub(r"[ \t]+\n", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text).strip()

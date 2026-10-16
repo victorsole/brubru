@@ -17,6 +17,7 @@ def test_non_breaking_spaces_become_spaces():
     # Runs of spaces are kept as they come (tables rely on spacing); only the characters change.
     assert te._clean("NUTS code Â\xa0 FI181\nII.1.3) The notice") == "NUTS code   FI181\nII.1.3) The notice"
     assert te._clean("a\xa0b") == "a b"
+    assert te._clean("NUTS code Â  FI181") == "NUTS code   FI181"       # the form the rows held
     assert "Â" not in te._clean("x Â\xa0y") and "\xa0" not in te._clean("x\xa0y")
 
 
