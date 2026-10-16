@@ -1212,6 +1212,7 @@ _ECDC_BACKOFF = (15, 45, 90, 180, 300)   # seconds to wait after each successive
 # 27 Jul 2017 is the day ECDC migrated its site: article:published_time on 27 procedures
 # that closed in 2016-2017 (30 Sep 2026). Never a publication date (API audit, 16 Oct).
 _ECDC_MIGRATION_STAMP = date(2017, 7, 27)
+_ECDC_FT_BUYER_ID = "47352438"   # ECDC on the Funding & Tenders portal (read 16 Oct 2026)
 _paced_last: dict = {}
 
 
@@ -1303,6 +1304,43 @@ def _ecdc_detail(url: str) -> dict:
     return {"description": paras, "links": links,
             "published": _iso(pub.group(1) if pub else None),
             "updated": _iso(upd.group(1) if upd else None)}
+
+
+def _ecdc_documents(page: str) -> list[dict]:
+    """The files an ECDC procedure page offers for download (API audit, 16 Oct 2026:
+    141 of 174 procedures are ex-ante publicity notices whose text is a PDF). Markup:
+        <p class="fw-medium mb-0">Ex_ante_Publicity_NP_7913_final.pdf</p>
+        <small class="text-muted">English (253.54 KB - PDF)</small> ...
+        <a ... href="/sites/default/files/...pdf">Download</a>
+    One entry per Download link; the size and language come from the <small> line."""
+    m = re.search(r"<h1.*?</h1>(.*?)</article>", page, re.S)
+    region = m.group(1) if m else page
+    docs, seen = [], set()
+    for am in re.finditer(r'<a[^>]+href="([^"]+)"[^>]*>(?:(?!</a>).)*?Download\s*</a>', region, re.S):
+        url = _html.unescape(am.group(1))
+        if url.startswith("/"):
+            url = _ECDC + url
+        if url in seen:
+            continue
+        seen.add(url)
+        before = region[max(0, am.start() - 1500):am.start()]
+        tm = re.findall(r'<p class="fw-medium[^"]*">(.*?)</p>', before, re.S)
+        sm = re.findall(r'<small[^>]*>\s*([^<]+?)\s*</small>', before, re.S)
+        name = unquote(url.rsplit("/", 1)[-1])
+        title = _txt(tm[-1]) if tm else name
+        meta = sm[-1] if sm else ""
+        size = None
+        km = re.search(r"([\d.]+)\s*(KB|MB|B)\b", meta)
+        if km:
+            size = int(float(km.group(1)) * {"B": 1, "KB": 1024, "MB": 1024 * 1024}[km.group(2)])
+        lm = re.match(r"\s*([A-Za-z]+)\s*\(", meta)
+        lang = {"english": "en", "french": "fr", "german": "de", "spanish": "es", "italian": "it",
+                "swedish": "sv"}.get(lm.group(1).lower()) if lm else None
+        fm = re.search(r"\.([A-Za-z0-9]{2,5})$", name)
+        docs.append({"title": title or name, "file_url": url, "file_name": name,
+                     "file_format": fm.group(1).lower() if fm else None, "file_size": size,
+                     "language": lang, "document_date": None})
+    return docs
 
 
 def _ecdc_item(row: dict, detail: dict | None, now: datetime) -> Item:

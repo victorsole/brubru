@@ -164,6 +164,31 @@ class _Eige(_Source):
         return docs
 
 
+class _Ecdc(_Source):
+    """ECDC procedure pages (paced: 2 s between requests, backoff on 429): the files the
+    page offers for download (ex-ante publicity notices are a PDF) and the documents of the
+    Funding & Tenders notices it links (ECDC's buyer id 47352438). API audit, 16 Oct 2026:
+    141 of 174 procedures were served as 300-character stubs around a Download link."""
+    source_kinds = ("ecdc_procurement",)
+
+    def __enter__(self):
+        self._docs: dict[str, list[dict]] = {}
+        for res in ap._ft_buyer_results("ecdc", ap._ECDC_FT_BUYER_ID):
+            ident = ((res.get("metadata") or {}).get("identifier") or [None])[0]
+            if ident and ident not in self._docs:
+                self._docs[ident] = ap._ft_notice_documents(res)
+        return self
+
+    def list(self, page_url, ref):
+        page = ap._ecdc_get(page_url.split("#")[0])
+        if "<h1" not in page:
+            raise RuntimeError("no procedure page (wall or error page)")
+        docs = ap._ecdc_documents(page)
+        for notice in sorted(set(ap._FT_NOTICE.findall(page))):
+            docs += [dict(d) for d in self._docs.get(notice, [])]
+        return docs
+
+
 class _Enisa(_Source):
     """ENISA procedure pages: their downloads (not the generic privacy statement) and the
     documents of the Funding & Tenders notice they link (ENISA's buyer id 47352382)."""
@@ -196,6 +221,7 @@ class _Enisa(_Source):
 SOURCES = {
     "cedefop": lambda: _Cedefop(),
     "echa": lambda: _Echa(),
+    "ecdc": lambda: _Ecdc(),
     "eea": lambda: _Portal("eea", ap._EEA_FT_BUYER_ID, "eea_ft_notice"),
     "efsa": lambda: _Portal("efsa", ap._EFSA_FT_BUYER_ID, "efsa_ft_notice"),
     "eige": lambda: _Eige(),

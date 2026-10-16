@@ -220,7 +220,7 @@ register_resource(
           "(open while the deadline is ahead, else closed; ECDC publishes no status) and "
           "`deadline`; `document_date` is the page's publication date. The detail body holds "
           "the description and, for calls for tender, the Funding & Tenders link. Filter with q.",
-    procurement=True,
+    procurement=True, documents=True,
 )
 
 # --- ECHA — European Chemicals Agency ------------------------------------- #
