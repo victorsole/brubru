@@ -22251,6 +22251,15 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'alliberar traficants': ['cjeu_c_521_25_commission_v_hungary_smuggling_penalties'],
     'liberato i trafficanti': ['cjeu_c_521_25_commission_v_hungary_smuggling_penalties'],
     'liberare i trafficanti': ['cjeu_c_521_25_commission_v_hungary_smuggling_penalties'],
+    # 16 Oct 2026 news implementation
+    'paquete farmacéutico': ['eu_pharmaceutical_legislation_reform'],
+    'paquet farmacèutic': ['eu_pharmaceutical_legislation_reform'],
+    'paquet farmaceutic': ['eu_pharmaceutical_legislation_reform'],
+    'pacchetto farmaceutico': ['eu_pharmaceutical_legislation_reform'],
+    'farmaceutisch pakket': ['eu_pharmaceutical_legislation_reform'],
+    'geneesmiddelenpakket': ['eu_pharmaceutical_legislation_reform'],
+    'pharmapakket': ['eu_pharmaceutical_legislation_reform'],
+    'farmapakket': ['eu_pharmaceutical_legislation_reform'],
 }
 
 
