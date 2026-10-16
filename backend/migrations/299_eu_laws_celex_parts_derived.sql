@@ -1,4 +1,4 @@
--- 297: eu_laws.celex_year, celex_type and celex_number are derived from celex, in one place.
+-- 299: eu_laws.celex_year, celex_type and celex_number are derived from celex, in one place.
 --
 -- The three columns were a copy of the identifier that no writer kept in step. Measured 14 Oct 2026:
 -- 2,381 rows blank (fill_celex_from_mtd.py split with a pattern that rejects every suffixed CELEX;
@@ -47,6 +47,6 @@ CREATE TRIGGER update_eu_laws_updated_at
     BEFORE UPDATE ON eu_laws
     FOR EACH ROW EXECUTE FUNCTION brubru_touch_if_changed('updated_at', 'celex_year,celex_type,celex_number', 'created_at');
 
-COMMENT ON COLUMN eu_laws.celex_number IS 'The CELEX string''s number part, derived by trigger eu_laws_celex_parts (migration 297); for type A agreements a date (MMDD); not always the act''s natural number; not unique.';
-COMMENT ON COLUMN eu_laws.celex_year IS 'The CELEX string''s year part, derived by trigger eu_laws_celex_parts (migration 297).';
-COMMENT ON COLUMN eu_laws.celex_type IS 'The CELEX string''s one-letter type, derived by trigger eu_laws_celex_parts (migration 297); NULL when the type has two letters.';
+COMMENT ON COLUMN eu_laws.celex_number IS 'The CELEX string''s number part, derived by trigger eu_laws_celex_parts (migration 299); for type A agreements a date (MMDD); not always the act''s natural number; not unique.';
+COMMENT ON COLUMN eu_laws.celex_year IS 'The CELEX string''s year part, derived by trigger eu_laws_celex_parts (migration 299).';
+COMMENT ON COLUMN eu_laws.celex_type IS 'The CELEX string''s one-letter type, derived by trigger eu_laws_celex_parts (migration 299); NULL when the type has two letters.';

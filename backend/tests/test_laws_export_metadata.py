@@ -54,7 +54,7 @@ def test_a_law_item_carries_the_new_fields():
     assert it.entry_into_force == [] and it.corrected_act is None
     old = SimpleNamespace(**{k: v for k, v in vars(row).items() if k not in ("alias", "acronym", "authors", "in_force",
                                                                              "eli", "entry_into_force", "procedures")})
-    assert _law_item(old).authors == [] and _law_item(old).in_force is None  # a row read before migration 299
+    assert _law_item(old).authors == [] and _law_item(old).in_force is None  # a row read before migration 301
 
 
 def test_each_filter_compiles_to_what_it_says():

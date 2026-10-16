@@ -1,4 +1,4 @@
--- 299: eu_laws carries the Publications Office's own metadata for each law; a backfill can add it without moving updated_at.
+-- 301: eu_laws carries the Publications Office's own metadata for each law; a backfill can add it without moving updated_at.
 --
 -- Victor, 16 Oct 2026: "05 eur-lex/laws" serves the LEG_2026-10 export's datapoints. Stored here: alias and acronym
 -- (aliases.csv, the only source; 17 and 16 laws today), the creating bodies, the in-force flag, the ELI, the dates of
@@ -24,13 +24,13 @@ ALTER TABLE eu_laws
     ADD COLUMN IF NOT EXISTS entry_into_force date[],
     ADD COLUMN IF NOT EXISTS procedures text[];
 
-COMMENT ON COLUMN eu_laws.alias IS 'Common name of the law (e.g. General Data Protection Regulation), from backend/data/leg_2026-10_table/aliases.csv only; never derived (299).';
-COMMENT ON COLUMN eu_laws.acronym IS 'Acronym of the alias (e.g. GDPR), from aliases.csv only (299).';
-COMMENT ON COLUMN eu_laws.authors IS 'Publications Office corporate-body codes of the bodies that created the act (work_created_by_agent: COM, CONSIL, EP, a DG...) (299).';
-COMMENT ON COLUMN eu_laws.in_force IS 'The act''s in-force flag in the Publications Office metadata (resource_legal_in-force); NULL when the metadata carries none, which is not false (299).';
-COMMENT ON COLUMN eu_laws.eli IS 'The ELI URI of this publication from its metadata; NULL when none or several match the act (299).';
-COMMENT ON COLUMN eu_laws.entry_into_force IS 'Dates of entry into force stated in the metadata (resource_legal_date_entry-into-force); several mean staged entry into force (299).';
-COMMENT ON COLUMN eu_laws.procedures IS 'Interinstitutional procedure numbers YYYY/NNNN the metadata links the act to (the OEIL reference without its type); internal ids left out (299).';
+COMMENT ON COLUMN eu_laws.alias IS 'Common name of the law (e.g. General Data Protection Regulation), from backend/data/leg_2026-10_table/aliases.csv only; never derived (301).';
+COMMENT ON COLUMN eu_laws.acronym IS 'Acronym of the alias (e.g. GDPR), from aliases.csv only (301).';
+COMMENT ON COLUMN eu_laws.authors IS 'Publications Office corporate-body codes of the bodies that created the act (work_created_by_agent: COM, CONSIL, EP, a DG...) (301).';
+COMMENT ON COLUMN eu_laws.in_force IS 'The act''s in-force flag in the Publications Office metadata (resource_legal_in-force); NULL when the metadata carries none, which is not false (301).';
+COMMENT ON COLUMN eu_laws.eli IS 'The ELI URI of this publication from its metadata; NULL when none or several match the act (301).';
+COMMENT ON COLUMN eu_laws.entry_into_force IS 'Dates of entry into force stated in the metadata (resource_legal_date_entry-into-force); several mean staged entry into force (301).';
+COMMENT ON COLUMN eu_laws.procedures IS 'Interinstitutional procedure numbers YYYY/NNNN the metadata links the act to (the OEIL reference without its type); internal ids left out (301).';
 
 CREATE OR REPLACE FUNCTION public.brubru_touch_if_changed()
  RETURNS trigger
@@ -63,7 +63,7 @@ BEGIN
     END IF;
 
     -- A backfill that adds facts a row always had, not a change of the record, runs with
-    -- SET LOCAL brubru.keep_change_signal = 'on': the signal columns keep OLD's value (299).
+    -- SET LOCAL brubru.keep_change_signal = 'on': the signal columns keep OLD's value (301).
     -- Nothing else sets it, so every other writer still moves the signal.
     IF current_setting('brubru.keep_change_signal', true) = 'on' THEN
         NEW := jsonb_populate_record(NEW, (

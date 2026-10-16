@@ -27,7 +27,7 @@ Rules learned on the LEG_2026-10 update (13 Oct 2026):
   against its folder, changed or not. A new folder whose metadata states none is reported, not
   inserted; a row whose CELEX differs from its folder is reported, not re-keyed (text, EuroVoc and
   links are keyed on it: a person decides); each such row goes to celex_report_<version>.csv.
-  Migration 298 makes eu_laws.celex unique; the held map keeps a batch from failing on it.
+  Migration 300 makes eu_laws.celex unique; the held map keeps a batch from failing on it.
 
 Usage (repo root; the models import `core.database`, so backend/ must be on the path):
     PYTHONPATH=.:backend python3.12 -m backend.scripts.import_corpus_update \
@@ -471,7 +471,7 @@ def process_corpus(
                 )
                 db.commit()
         # Rows left without CELEX take their folder's; counted as persisted. The NOT EXISTS skips a CELEX another
-        # writer (the daily Cellar sync) stored during the run, which the unique index (migration 298) would refuse.
+        # writer (the daily Cellar sync) stored during the run, which the unique index (migration 300) would refuse.
         if dry_run:
             stats["celex_filled"] = len(celex_fill)
         else:

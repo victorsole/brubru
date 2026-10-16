@@ -1,4 +1,4 @@
--- 298: one eu_laws row per CELEX, enforced by the database.
+-- 300: one eu_laws row per CELEX, enforced by the database.
 --
 -- Until now idx_eu_laws_celex was a plain btree: nothing stopped a second row with the same CELEX. Writers
 -- guarded it themselves, unevenly: sync_eu_laws_from_cellar.py inserts WHERE NOT EXISTS, import_corpus_update.py
@@ -19,4 +19,4 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_eu_laws_celex
     ON eu_laws (celex)
     WHERE celex IS NOT NULL AND celex <> '';
 
-COMMENT ON INDEX uq_eu_laws_celex IS 'One eu_laws row per CELEX (migration 298, 15 Oct 2026); NULL and empty CELEX are not compared.';
+COMMENT ON INDEX uq_eu_laws_celex IS 'One eu_laws row per CELEX (migration 300, 15 Oct 2026); NULL and empty CELEX are not compared.';

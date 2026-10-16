@@ -73,10 +73,10 @@ class LawItem(BaseModel):
     document_type_code: Optional[str] = Field(None, description="The CELEX descriptor letter(s), e.g. `R`, `L`, `D`, `PC`.")
     document_type: Optional[str] = Field(None, description="What the descriptor means in EUR-Lex's own table, e.g. `Regulation`, `Directive`, `Non-opposition to a notified concentration`. `doc_type` above is Brubru's normalised family; this is the Publications Office's label.")
     corrected_act: Optional[str] = Field(None, description="For a corrigendum (`R(01)` suffix): the CELEX of the act it corrects. Null for every other document.")
-    # Brubru's curated names (migration 299).
+    # Brubru's curated names (migration 301).
     alias: Optional[str] = Field(None, description="The law's common name, e.g. `General Data Protection Regulation`, from Brubru's curated list (17 laws on 16 Oct 2026), never derived. To find a law by name, `q` also matches these names and titles.")
     acronym: Optional[str] = Field(None, description="The acronym of the alias, e.g. `GDPR`, from the same curated list.")
-    # The Publications Office's metadata for the law (migrations 299 and 300).
+    # The Publications Office's metadata for the law (migrations 301 and 302).
     authors: list[str] = Field(default_factory=list, description="The bodies that created the act, as Publications Office corporate-body codes: `COM` Commission, `CONSIL` Council, `EP` European Parliament, or a Commission department such as `SANTE`.")
     in_force: Optional[bool] = Field(None, description="The act's in-force flag in the Publications Office metadata: as of the LEG_2026-10 export (11 Oct 2026) for the laws it holds, as of 16 Oct 2026 from Cellar for the others. Null when the metadata carries none: unknown, not false.")
     eli: Optional[str] = Field(None, description="The act's European Legislation Identifier (ELI) URI as the metadata states it on the work, e.g. `http://data.europa.eu/eli/reg/2024/1689/oj`. Null when it states none.")

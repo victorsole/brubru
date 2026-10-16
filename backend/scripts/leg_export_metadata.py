@@ -1,4 +1,4 @@
-"""The Publications Office's metadata for one law, as eu_laws stores it (migrations 299, 300). No database imports.
+"""The Publications Office's metadata for one law, as eu_laws stores it (migrations 301, 302). No database imports.
 
 One reading for both writers of the columns: fill_eu_laws_export_metadata.py (the backfill) and import_corpus_update.py
 (later exports) call rdf_facts on a folder's tree_non_inferred.rdf. Fields:

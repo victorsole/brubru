@@ -1,4 +1,4 @@
--- 300: eu_laws keeps each kind of date apart, and the change-signal switch is scoped to one transaction.
+-- 302: eu_laws keeps each kind of date apart, and the change-signal switch is scoped to one transaction.
 --
 -- Audit of 299 (16 Oct 2026, before the backfill ran): the Publications Office types every
 -- resource_legal_date_entry-into-force date (authority table fd_335: EV entry into force, MA application,
@@ -10,8 +10,8 @@
 --
 -- The switch of 299 compared the setting with 'on'; a plain SET (not SET LOCAL) on a pooled connection would then
 -- stop updated_at moving on all 29 tables until the connection closed. It now compares with the transaction id.
--- The migration numbers 291-293 of this work were renumbered 297-299 (origin/main holds other 291-296); the
--- comments below restate them.
+-- The migration numbers 291-293 of this work were renumbered 299-301 (origin/main holds other 291-297, and 298 is
+-- reserved by the API session); the comments below restate them.
 
 SET LOCAL lock_timeout = '10s';
 
@@ -19,17 +19,17 @@ ALTER TABLE eu_laws
     ADD COLUMN IF NOT EXISTS application_dates date[],
     ADD COLUMN IF NOT EXISTS effect_dates date[];
 
-COMMENT ON COLUMN eu_laws.entry_into_force IS 'Dates of entry into force in the metadata: resource_legal_date_entry-into-force typed EV (fd_335), or untyped (300).';
-COMMENT ON COLUMN eu_laws.application_dates IS 'Dates from which the act applies: typed MA or MA/PART (fd_335) (300).';
-COMMENT ON COLUMN eu_laws.effect_dates IS 'Dates of effect: typed PE (fd_335) (300).';
-COMMENT ON COLUMN eu_laws.eli IS 'The ELI the metadata states on the work (resource_legal_eli; one per publication or none) (300).';
-COMMENT ON COLUMN eu_laws.procedures IS 'Interinstitutional procedure numbers YYYY/NNNN (the OEIL reference without its type): the export''s work_part_of_dossier, else Cellar''s dossier_contains_work (300).';
-COMMENT ON COLUMN eu_laws.alias IS 'Common name of the law (e.g. General Data Protection Regulation): Brubru''s curated list backend/data/leg_2026-10_table/aliases.csv, never derived (299).';
-COMMENT ON COLUMN eu_laws.acronym IS 'Acronym of the alias (e.g. GDPR), from the same curated list (299).';
-COMMENT ON COLUMN eu_laws.celex_number IS 'The CELEX string''s number part, derived by trigger eu_laws_celex_parts (migration 297); for type A agreements a date (MMDD); not always the act''s natural number; not unique.';
-COMMENT ON COLUMN eu_laws.celex_year IS 'The CELEX string''s year part, derived by trigger eu_laws_celex_parts (migration 297).';
-COMMENT ON COLUMN eu_laws.celex_type IS 'The CELEX string''s one-letter type, derived by trigger eu_laws_celex_parts (migration 297); NULL when the type has two letters.';
-COMMENT ON INDEX uq_eu_laws_celex IS 'One eu_laws row per CELEX (migration 298, 15 Oct 2026); NULL and empty CELEX are not compared.';
+COMMENT ON COLUMN eu_laws.entry_into_force IS 'Dates of entry into force in the metadata: resource_legal_date_entry-into-force typed EV (fd_335), or untyped (302).';
+COMMENT ON COLUMN eu_laws.application_dates IS 'Dates from which the act applies: typed MA or MA/PART (fd_335) (302).';
+COMMENT ON COLUMN eu_laws.effect_dates IS 'Dates of effect: typed PE (fd_335) (302).';
+COMMENT ON COLUMN eu_laws.eli IS 'The ELI the metadata states on the work (resource_legal_eli; one per publication or none) (302).';
+COMMENT ON COLUMN eu_laws.procedures IS 'Interinstitutional procedure numbers YYYY/NNNN (the OEIL reference without its type): the export''s work_part_of_dossier, else Cellar''s dossier_contains_work (302).';
+COMMENT ON COLUMN eu_laws.alias IS 'Common name of the law (e.g. General Data Protection Regulation): Brubru''s curated list backend/data/leg_2026-10_table/aliases.csv, never derived (301).';
+COMMENT ON COLUMN eu_laws.acronym IS 'Acronym of the alias (e.g. GDPR), from the same curated list (301).';
+COMMENT ON COLUMN eu_laws.celex_number IS 'The CELEX string''s number part, derived by trigger eu_laws_celex_parts (migration 299); for type A agreements a date (MMDD); not always the act''s natural number; not unique.';
+COMMENT ON COLUMN eu_laws.celex_year IS 'The CELEX string''s year part, derived by trigger eu_laws_celex_parts (migration 299).';
+COMMENT ON COLUMN eu_laws.celex_type IS 'The CELEX string''s one-letter type, derived by trigger eu_laws_celex_parts (migration 299); NULL when the type has two letters.';
+COMMENT ON INDEX uq_eu_laws_celex IS 'One eu_laws row per CELEX (migration 300, 15 Oct 2026); NULL and empty CELEX are not compared.';
 
 CREATE OR REPLACE FUNCTION public.brubru_touch_if_changed()
  RETURNS trigger
@@ -63,7 +63,7 @@ BEGIN
 
     -- A backfill that adds facts a row always had, not a change of the record, sets
     -- brubru.keep_change_signal to its own transaction id (set_config(..., txid_current()::text, true)):
-    -- the signal columns then keep OLD's value. Scoped to that transaction id (300), so a value left
+    -- the signal columns then keep OLD's value. Scoped to that transaction id (302), so a value left
     -- on a pooled connection by a plain SET can never silence the signal of a later transaction.
     -- An OLD without a signal is seeded from NEW, as below (272).
     IF current_setting('brubru.keep_change_signal', true) = txid_current()::text THEN
