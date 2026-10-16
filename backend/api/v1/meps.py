@@ -14,7 +14,7 @@ import unicodedata
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -40,7 +40,8 @@ class MEPItem(BaseModel):
     id: Optional[str] = None
     full_name: Optional[str] = None
     country: Optional[str] = None
-    group: Optional[str] = None
+    group: Optional[str] = Field(None, description="The MEP's political group: EPP, S&D, PfE, ECR, Renew, Greens/EFA, The Left, ESN or NI.")
+    group_id: Optional[str] = Field(None, description="The group's EP Open Data id (org/7150).")
     role: Optional[str] = None
     profile_url: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints. MEPs are person records — public_url
@@ -56,8 +57,76 @@ class MEPItem(BaseModel):
     updated_date: Optional[datetime] = Field(None, description="When this MEP's record last changed: group, role, country, membership history, leaving Parliament. A day with no change does not move it.")
     in_office: Optional[bool] = Field(None, description="True while the MEP sits in Parliament; false for a member of the current term who has left. Null for older terms.")
 
+    @model_validator(mode="after")
+    def _group_by_name(self):
+        # The live profile and the daily snapshot both hold the EP's id ("org/7150").
+        if self.group and (str(self.group).startswith(("org/", "http")) or str(self.group).isdigit()):
+            self.group_id = self.group_id or _org_id(self.group)
+            self.group = group_acronym(self.group)
+        return self
+
 
 SNAPSHOT_DATASET = "meps_term_10"
+
+# EP Open Data names every body an MEP belongs to by id ("org/7150"). The labels come from
+# its corporate-bodies list (knowledge_base/ep_corporate_bodies.json, refreshed by
+# scripts/refresh_ep_corporate_bodies.py). Until 16 Oct 2026 `group` and the membership
+# history served the ids themselves.
+_BODIES: Optional[Dict[str, list]] = None
+# The EP labels two groups by their French acronym; Brubru names them as the amendments
+# endpoint does. Full names from each group's EP Open Data record (read 16 Oct 2026).
+_GROUP_EN = {"PPE": "EPP", "Verts/ALE": "Greens/EFA"}
+_GROUP_NAMES = {
+    "EPP": "Group of the European People's Party (Christian Democrats)",
+    "S&D": "Group of the Progressive Alliance of Socialists and Democrats in the European Parliament",
+    "PfE": "Patriots", "ECR": "European Conservatives and Reformists",
+    "Renew": "Renew Europe", "Greens/EFA": "The Greens/European Free Alliance",
+    "The Left": "The Left - GUE/NGL", "NI": "Non-attached Members", "ESN": "Sovereignists",
+}
+_KIND = {
+    "EU_POLITICAL_GROUP": "political group", "NATIONAL_POLITICAL_GROUP": "national party",
+    "COMMITTEE_PARLIAMENTARY_STANDING": "committee", "COMMITTEE_PARLIAMENTARY_SUB": "subcommittee",
+    "COMMITTEE_PARLIAMENTARY_SPECIAL": "special committee", "COMMITTEE_PARLIAMENTARY_TEMPORARY": "temporary committee",
+    "COMMITTEE_PARLIAMENTARY_JOINT": "joint committee", "DELEGATION_PARLIAMENTARY": "delegation",
+    "DELEGATION_PARLIAMENTARY_ASSEMBLY": "delegation to a parliamentary assembly",
+    "DELEGATION_JOINT_COMMITTEE": "delegation to a joint committee", "WORKING_GROUP": "working group",
+    "GOVERNING_BODY": "governing body", "EU_INSTITUTION": "European Parliament", "NATIONAL_CHAMBER": "national chamber",
+}
+
+
+def _org_id(org: Optional[str]) -> Optional[str]:
+    """'http://data.europarl.europa.eu/org/7150' or '7150' -> 'org/7150'."""
+    if not org:
+        return None
+    tail = str(org).rstrip("/").rsplit("/", 1)[-1]
+    return f"org/{tail}" if tail else None
+
+
+def org_label(org: Optional[str]) -> Optional[str]:
+    """The body's EP label ('LIBE', 'PfE', 'Fidesz-KDNP'), None when unknown."""
+    global _BODIES
+    if _BODIES is None:
+        try:
+            import json as _json
+            from pathlib import Path as _Path
+            _BODIES = _json.loads((_Path(__file__).resolve().parents[2] / "knowledge_base"
+                                   / "ep_corporate_bodies.json").read_text())
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[meps] corporate-body labels unavailable: %s", exc)
+            _BODIES = {}
+    row = _BODIES.get(_org_id(org) or "")
+    label = (row or [None])[0]
+    return None if label in (None, "", "-") else label
+
+
+def group_acronym(org: Optional[str]) -> Optional[str]:
+    """'org/7150' -> 'PfE'; an acronym is returned as it is; None when the id is unknown."""
+    if not org:
+        return None
+    if not str(org).startswith(("org/", "http")) and not str(org).isdigit():
+        return str(org)
+    label = org_label(org)
+    return _GROUP_EN.get(label, label) if label else None
 CURRENT_TERM = 10
 
 
@@ -470,7 +539,7 @@ async def _enrich_country_group(items: List["MEPItem"], patient: bool = False, c
         if not item.group:
             group = _extract_active_political_group(profile)
             if group:
-                item.group = group
+                item.group, item.group_id = group_acronym(group), _org_id(group)
         if not item.role:
             role = _extract_role(profile)
             if role:
@@ -520,7 +589,9 @@ def _compose_mep_body(raw: Dict[str, Any], full_name: Optional[str],
     if role:
         kv.append(("Role", role))
     if group:
-        kv.append(("Active political group", group))
+        acr = group_acronym(group)
+        name = _GROUP_NAMES.get(acr or "")
+        kv.append(("Active political group", f"{acr} ({name})" if acr and name else (acr or str(group))))
     if raw.get("placeOfBirth"):
         kv.append(("Place of birth", str(raw["placeOfBirth"])))
     if raw.get("hasEmail"):
@@ -546,9 +617,18 @@ def _compose_mep_body(raw: Dict[str, Any], full_name: Optional[str],
             during = m.get("memberDuring") or {}
             start = during.get("startDate") or ""
             end = during.get("endDate") or "current"
-            org = str(m.get("organization") or "").rsplit("/", 1)[-1] or "?"
-            role_uri = str(m.get("role") or "").rsplit("/", 1)[-1] or "?"
-            cls = str(m.get("membershipClassification") or "").rsplit("/", 1)[-1] or ""
+            raw_org = m.get("organization")
+            cls_code = str(m.get("membershipClassification") or "").rsplit("/", 1)[-1] or ""
+            label = org_label(raw_org)
+            if cls_code == "EU_POLITICAL_GROUP" and label:
+                label = _GROUP_EN.get(label, label)
+            tail = str(raw_org or "").rsplit("/", 1)[-1]
+            if tail.startswith("ep-"):
+                label = f"European Parliament, term {tail[3:]}"
+            org = label or tail or "?"
+            # A group membership carries no role: the member belongs to it.
+            role_uri = str(m.get("role") or "").rsplit("/", 1)[-1] or ("MEMBER" if cls_code else "?")
+            cls = _KIND.get(cls_code, cls_code.replace("_", " ").lower())
             line = f"- {start} → {end} | {role_uri} @ {org}"
             if cls:
                 line += f" ({cls})"
