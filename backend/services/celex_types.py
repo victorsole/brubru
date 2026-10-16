@@ -70,4 +70,9 @@ def type_codes_for(value: str) -> list:
     if not v:
         return []
     by_label = [k for k, label in TYPE_LABELS.items() if label.lower() == v.lower()]
-    return by_label or [k for k in TYPE_LABELS if k[1] == v.upper()]
+    if by_label:
+        return by_label
+    code = v.upper()
+    known = [k for k in TYPE_LABELS if k[1] == code]
+    # a descriptor with no label here (PC, DC, SC...) matches in any sector: (None, code)
+    return known or ([(None, code)] if re.fullmatch(r"[A-Z]{1,3}", code) else [])

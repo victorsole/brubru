@@ -557,9 +557,9 @@ To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner
 - `published_from`, `published_to` — adoption-date bounds (YYYY-MM-DD).
 - `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
 - `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
-- `sector`, `year`, `number`, `document_type` — the parts of the CELEX: `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `PC`) or its EUR-Lex label (`regulation`).
-- `alias` — common name or acronym (`GDPR`, `Digital Services Act`), exact, case-insensitive.
-- `author` — creating body (`COM`, `CONSIL`, `EP`, `SANTE`...); `in_force` — `true` / `false`; `procedure` — `2021/0106`; `corrects` — a CELEX, returns its corrigenda.
+- `sector`, `year`, `number`, `document_type`: the parts of the CELEX. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `PC`) or its EUR-Lex label (`regulation`); a descriptor used by several sectors matches in all of them unless `sector` narrows it.
+- `alias`: a name or acronym from Brubru's curated list (`GDPR`, `Digital Services Act`), exact and case-insensitive; the list is short, so search by name with `q`.
+- `author`: creating body (`COM`, `CONSIL`, `EP`, `SANTE`...). `in_force`: `true` or `false`. `procedure`: `2021/0106`. `corrects`: a CELEX, returns its corrigenda.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
 **Try it**
@@ -568,13 +568,15 @@ GET /api/v2/legislative/eur-lex/laws?q=AI%20Act&limit=10
 GET /api/v2/legislative/eur-lex/laws?doc_type=regulation&policy_area=environment&published_from=2024-01-01
 GET /api/v2/legislative/eur-lex/laws?sector=3&year=2024&document_type=R&in_force=true&include_body=false
 GET /api/v2/legislative/eur-lex/laws?alias=GDPR
-GET /api/v2/legislative/eur-lex/laws?corrects=32024R1689
+GET /api/v2/legislative/eur-lex/laws?corrects=32006R1907
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`; what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); the Publications Office's metadata: `alias`, `acronym`, `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`; what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
 
-The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it describes. `in_force` is null where the metadata has no flag; `alias` is curated and set on few laws so far; `procedures` exists for acts adopted through an interinstitutional procedure. Acts the daily Official Journal sync adds after the export carry the CELEX parts but not yet the metadata.
+`doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
+
+The metadata comes from the LEG_2026-10 export (11 Oct 2026) for the laws it holds, procedures completed and the other laws' `in_force` read from Cellar on 16 Oct 2026. `in_force` is null where the metadata carries no flag. Dates are split by the type the Publications Office gives them and served as it states them. Acts the daily Official Journal sync adds later carry the CELEX parts at once and the metadata once that sync fills it.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",
@@ -667,7 +669,7 @@ GET /api/v2/legislative/eur-lex/laws/32016R0679
 ```
 
 **You get back**
-A `LawItem` with `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url`, plus the 5 envelope-level datapoints. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.
+A `LawItem` with `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`, what the CELEX states (`sector`, `year`, `number`, `document_type`, `corrected_act`...), `alias` and `acronym`, the Publications Office's metadata (`authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`), `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url`, plus the 5 envelope-level datapoints; the list route describes each field. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.
 
 **Data freshness**
 Synced every 6 hours (hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",

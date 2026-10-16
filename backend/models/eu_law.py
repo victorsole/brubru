@@ -34,7 +34,7 @@ class EULaw(Base):
     # Identifiers
     uuid = Column(String(36), unique=True, nullable=False, index=True)
     celex = Column(String(30), index=True)  # Nullable because not all docs have CELEX (increased from 20)
-    # One row per CELEX: partial unique index uq_eu_laws_celex (migration 292); NULL and '' are not compared.
+    # One row per CELEX: partial unique index uq_eu_laws_celex (migration 298); NULL and '' are not compared.
 
     # Basic metadata
     doc_type = Column(Text)  # "Commission Implementing Decision", etc. (TEXT - no length limit)
@@ -59,7 +59,7 @@ class EULaw(Base):
     extra_metadata = Column(JSON)  # Extra fields (language, pages, EEA relevance, etc.)
 
     # CELEX-derived fields (parsed from celex string for fast filtering)
-    # The next three are DERIVED from celex by the database trigger eu_laws_celex_parts (migration 291):
+    # The next three are DERIVED from celex by the database trigger eu_laws_celex_parts (migration 297):
     # any value a writer sets is replaced. celex_number is the CELEX string's number part (a date for
     # type A agreements), not always the act's natural number, and the three together are not a key.
     celex_year = Column(Integer, index=True)  # e.g., 2024
@@ -87,14 +87,16 @@ class EULaw(Base):
     eurovoc_domain = Column(Text)
     eurovoc_fetched_at = Column(TIMESTAMP(timezone=True))
 
-    # The Publications Office's own metadata for the law (migration 293), served by /laws. Sector, year, number,
+    # The Publications Office's own metadata for the law (migration 299), served by /laws. Sector, year, number,
     # document type and the act a corrigendum corrects are read from the CELEX (services/celex_types.py) instead.
     alias = Column(Text)  # aliases.csv only, never derived
     acronym = Column(Text)
     authors = Column(ARRAY(Text))  # corporate-body codes: COM, CONSIL, EP, a DG...
     in_force = Column(Boolean)  # NULL = the metadata carries no flag, not false
     eli = Column(Text)
-    entry_into_force = Column(ARRAY(Date))
+    entry_into_force = Column(ARRAY(Date))  # typed EV (or untyped) in the metadata (migration 300)
+    application_dates = Column(ARRAY(Date))  # typed MA or MA/PART
+    effect_dates = Column(ARRAY(Date))  # typed PE
     procedures = Column(ARRAY(Text))  # interinstitutional procedure numbers YYYY/NNNN
 
     # Timestamps

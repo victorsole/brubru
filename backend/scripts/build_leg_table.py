@@ -110,6 +110,9 @@ def parse_folder(args):
         "author": "|".join(u.rsplit("/", 1)[-1] for u in res("work_created_by_agent")),
         "eurovoc": [u.rsplit("/", 1)[-1] for u in res("work_is_about_concept_eurovoc")],
         "eli_all": sorted(set(re.findall(r"http://data\.europa\.eu/eli/[A-Za-z0-9_/\-.]+", raw))),
+        # the ELI the metadata states on the work: one per folder or none, and that publication's own (20 of 20
+        # suffixed CELEX checked at Cellar, 16 Oct 2026); the regex above stops at "(" and cut 701 short
+        "eli_work": sorted(set(lit("resource_legal_eli"))),
         "title": title or "", "title_source": source, "title_formex": title_formex, "has_text": has_text, "title_other": title_other,
     }
 
@@ -621,7 +624,7 @@ def main():
         alias, acro = aliases.get(r["celex"], ("", ""))
         domains = sorted({d for i in r["eurovoc"] for d in (mt_domain(i)[1].split(" | ") if mt_domain(i)[1] else [])})
         table.append([r["celex"], int(m["s"]) if m["s"].isdigit() else m["s"], int(m["y"]), type_cell, int(m["n"]), r["title"], alias, acro,
-                      base_of(r["celex"]), r["date"], r["in_force"] or "unknown", pick_eli(r, r["celex"]), r["author"],
+                      base_of(r["celex"]), r["date"], r["in_force"] or "unknown", (r["eli_work"][0] if len(r["eli_work"]) == 1 else ""), r["author"],
                       len(r["eurovoc"]), " | ".join(domains), r["title_source"] or "none", kind_of(m["t"], r["title"], r["celex"]),
                       " | ".join(sorted({x for i in r["eurovoc"] for x in meta["mts"].get(i, [])})),
                       " | ".join(sorted(meta["concept"][i] for i in r["eurovoc"] if i in meta["concept"])),

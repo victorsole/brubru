@@ -1,67 +1,88 @@
-"""The LEG_2026-10 export's metadata for one law, as eu_laws stores it (migration 293). No database imports.
+"""The Publications Office's metadata for one law, as eu_laws stores it (migrations 299, 300). No database imports.
 
-One shaping for both writers of the columns: fill_eu_laws_export_metadata.py reads the tables built from the export
-(backend/data/leg_2026-10_table/), import_corpus_update.py reads a folder's RDF through the very functions that built
-those tables. A test compares the two.
+One reading for both writers of the columns: fill_eu_laws_export_metadata.py (the backfill) and import_corpus_update.py
+(later exports) call rdf_facts on a folder's tree_non_inferred.rdf. Fields:
+  - authors: work_created_by_agent, the corporate-body codes (COM, CONSIL, EP, a DG...);
+  - in_force: resource_legal_in-force; None when the metadata carries no flag (not false);
+  - eli: resource_legal_eli, the one the metadata states on the work (one per folder or none, 29,275 of 30,246 folders
+    with text). The table builder's regex stopped at "(" and cut 701 ELIs short (32014D0026 is .../26(1)/oj);
+  - entry_into_force / application_dates / effect_dates: resource_legal_date_entry-into-force, split by the type each
+    date carries in the metadata (fd_335: EV, MA or MA/PART, PE); an untyped date stays an entry-into-force date;
+  - procedures: work_part_of_dossier links to resource/procedure/YYYY_N, as YYYY/NNNN (the OEIL reference without its
+    type). The export lacks most (GDPR has none there); fill_eu_laws_export_metadata adds Cellar's dossier_contains_work.
+alias and acronym come from Brubru's curated aliases.csv only.
 """
 from __future__ import annotations
 
 import csv
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Optional
 
 ROOT = Path(__file__).resolve().parents[2]
 TABLES = ROOT / "backend/data/leg_2026-10_table"
-COLS = ("alias", "acronym", "authors", "in_force", "eli", "entry_into_force", "procedures")
+COLS = ("alias", "acronym", "authors", "in_force", "eli", "entry_into_force", "application_dates", "effect_dates",
+        "procedures")
+RDF = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
+CDM = "{http://publications.europa.eu/ontology/cdm#}"
+OWL = "{http://www.w3.org/2002/07/owl#}"
+ANN = "{http://publications.europa.eu/ontology/annotation#}"
+EIF = "http://publications.europa.eu/ontology/cdm#resource_legal_date_entry-into-force"
+DATE_COLUMN = {"EV": "entry_into_force", "MA": "application_dates", "MA/PART": "application_dates", "PE": "effect_dates"}
+PROCEDURE = re.compile(r"/resource/procedure/(\d{4})_0*(\d{1,4})$")
 
 
-def procedure_numbers(cell: str) -> list:
-    """'procedure:2019_145|internal_proc:ABC...' -> ['2019/0145'] (the OEIL reference without its type)."""
-    out = []
-    for p in (cell or "").split("|"):
-        m = re.fullmatch(r"procedure:(\d{4})_0*(\d{1,4})", p.strip())
-        if m:
-            out.append(f"{m[1]}/{int(m[2]):04d}")
-    return sorted(set(out))
+def procedure_number(uri: str) -> Optional[str]:
+    """http://publications.europa.eu/resource/procedure/2012_11 -> 2012/0011; anything else (internal_proc, pegase) None."""
+    m = PROCEDURE.search(uri or "")
+    return f"{m[1]}/{int(m[2]):04d}" if m else None
 
 
-def sources():
-    table = {r["CELEX"]: r for r in csv.DictReader((TABLES / "leg_2026-10_table.csv").open(encoding="utf-8-sig"))}
-    folders = {r["celex"]: r for r in csv.DictReader((TABLES / "leg_2026-10_folders.csv").open(encoding="utf-8-sig")) if r["celex"]}
-    aliases = {r["celex"]: r for r in csv.DictReader((TABLES / "aliases.csv").open(encoding="utf-8-sig"))}
-    return table, folders, aliases
+def rdf_facts(corpus_path: Path, folder: str) -> dict:
+    """Every metadata column but alias and acronym, as one folder's RDF states it; None where it states nothing."""
+    root = ET.parse(Path(corpus_path) / folder / "tree_non_inferred.rdf").getroot()
+
+    def lit(tag):
+        return [e.text.strip() for e in root.iter(CDM + tag) if (e.text or "").strip()]
+
+    def res(tag):
+        return sorted({e.get(RDF + "resource") for e in root.iter(CDM + tag) if e.get(RDF + "resource")})
+
+    kinds = {}  # date -> the columns its types send it to
+    for d in root.findall(RDF + "Description"):
+        p, t = d.find(OWL + "annotatedProperty"), d.find(OWL + "annotatedTarget")
+        if p is None or p.get(RDF + "resource") != EIF or t is None or not (t.text or "").strip():
+            continue
+        k = d.find(ANN + "type_of_date")
+        code = (k.text or "").strip().strip("{}").split("|")[0] if k is not None else ""
+        kinds.setdefault(t.text.strip(), set()).add(DATE_COLUMN.get(code, "entry_into_force"))
+    out = {c: None for c in COLS if c not in ("alias", "acronym")}
+    for day in sorted(set(lit("resource_legal_date_entry-into-force"))):
+        for col in sorted(kinds.get(day) or {"entry_into_force"}):  # untyped: the property names it entry into force
+            out[col] = (out[col] or []) + [day]
+    flag = (lit("resource_legal_in-force") or [""])[0].lower()
+    elis = sorted(set(lit("resource_legal_eli")))
+    out.update(authors=[u.rsplit("/", 1)[-1] for u in res("work_created_by_agent")] or None,
+               in_force={"true": True, "false": False}.get(flag),
+               eli=elis[0] if len(elis) == 1 else None,
+               procedures=sorted({p for p in map(procedure_number, res("work_part_of_dossier")) if p}) or None)
+    return out
 
 
-def wanted(celex, status, table, folders, aliases) -> dict:
-    """The values the export states for one law; None where it states nothing."""
-    t, f, a = table.get(celex), folders.get(celex), aliases.get(celex)
-    v = dict.fromkeys(COLS)
-    if a:
-        v["alias"], v["acronym"] = (a.get("alias") or "").strip() or None, (a.get("acronym") or "").strip() or None
-    if t:
-        v["authors"] = [x for x in (t.get("author") or "").split("|") if x] or None
-        v["in_force"] = {"true": True, "false": False}.get((t.get("in_force") or "").strip())
-        v["eli"] = (t.get("eli") or "").strip() or None
-    elif status == "repealed":
-        v["in_force"] = False  # marked repealed by the importer only when Cellar's in-force flag is 0
-    if f:
-        v["entry_into_force"] = sorted({d for d in (f.get("entry_into_force") or "").split("|") if d}) or None
-        v["procedures"] = procedure_numbers(f.get("procedures")) or None
-    return v
+def export_metadata(corpus_path: Path, uuid: str, celex: Optional[str] = None) -> dict:
+    """The importer's call: rdf_facts for the folder (celex kept for the signature callers use)."""
+    return rdf_facts(corpus_path, uuid)
 
 
-def export_metadata(corpus_path: Path, uuid: str, celex: Optional[str]) -> dict:
-    """authors, in_force, eli, entry_into_force and procedures as one folder's metadata states them, read by
-    build_leg_table.parse_folder and pick_eli and build_leg_folder_index.one. alias and acronym are not here:
-    aliases.csv is their only source."""
-    from backend.scripts.build_leg_folder_index import one
-    from backend.scripts.build_leg_table import parse_folder, pick_eli
-    rec, idx = parse_folder((str(corpus_path), uuid)), one((str(corpus_path), uuid))
-    try:
-        eli = pick_eli(rec, celex or rec["celex"] or "")
-    except (TypeError, ValueError):  # no year or number in the metadata
-        eli = ""
-    t = {"author": rec["author"], "in_force": rec["in_force"] or "unknown", "eli": eli}
-    w = wanted(celex, None, {celex: t}, {celex: idx}, {})
-    return {k: v for k, v in w.items() if k not in ("alias", "acronym")}
+def folder_of_celex() -> dict:
+    """{CELEX: folder} for the export folders with text (leg_2026-10_folders.csv, one CELEX per folder)."""
+    with (TABLES / "leg_2026-10_folders.csv").open(encoding="utf-8-sig") as fh:
+        return {r["celex"]: r["folder"] for r in csv.DictReader(fh) if r["celex"] and r["has_text"] == "yes"}
+
+
+def aliases() -> dict:
+    """{CELEX: (alias, acronym)} from Brubru's curated aliases.csv."""
+    with (TABLES / "aliases.csv").open(encoding="utf-8-sig") as fh:
+        return {r["celex"]: ((r.get("alias") or "").strip() or None, (r.get("acronym") or "").strip() or None)
+                for r in csv.DictReader(fh)}

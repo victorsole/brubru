@@ -54,7 +54,7 @@ def test_a_law_item_carries_the_new_fields():
     assert it.entry_into_force == [] and it.corrected_act is None
     old = SimpleNamespace(**{k: v for k, v in vars(row).items() if k not in ("alias", "acronym", "authors", "in_force",
                                                                              "eli", "entry_into_force", "procedures")})
-    assert _law_item(old).authors == [] and _law_item(old).in_force is None  # a row read before migration 293
+    assert _law_item(old).authors == [] and _law_item(old).in_force is None  # a row read before migration 299
 
 
 def test_each_filter_compiles_to_what_it_says():
@@ -73,7 +73,13 @@ def test_each_filter_compiles_to_what_it_says():
     assert metadata_filters() == []
 
 
-@pytest.mark.parametrize("kw", [{"sector": "Z"}, {"document_type": "treaty of nowhere"}, {"procedure": "COD 106"}])
+def test_a_descriptor_without_a_label_still_filters():
+    from api.v1.laws import metadata_filters
+    assert "^[0-9CE][0-9]{4}PC[0-9]" in _sql(metadata_filters(document_type="PC"))
+
+
+@pytest.mark.parametrize("kw", [{"sector": "Z"}, {"document_type": "treaty of nowhere"}, {"procedure": "COD 106"},
+                                {"corrects": "3%"}, {"corrects": "32024R1689R(01)"}])
 def test_a_wrong_filter_value_is_a_422(kw):
     from api.v1.laws import metadata_filters
     with pytest.raises(HTTPException) as e:
@@ -113,16 +119,14 @@ _DUMP = _BACKEND.parent / "docs" / "LEG_2026-10"
 
 
 @pytest.mark.skipif(not _DUMP.is_dir(), reason="the LEG_2026-10 export is not on this machine")
-def test_the_importer_reads_the_same_metadata_as_the_backfill():
-    # two writers of the same columns must agree: the importer reads the RDF, the backfill the tables built from it
-    import csv
-    import random
+def test_the_metadata_is_read_from_the_work_and_dates_keep_their_type():
+    # the audit of 16 Oct: one list mixed entry into force (EV), application (MA) and effect (PE) dates, and the
+    # table's ELI regex stopped at "(" (32014D0026 is .../26(1)/oj)
     sys.path.insert(0, str(_BACKEND.parent))
-    from backend.scripts.leg_export_metadata import export_metadata, sources, wanted
-    table, folders, aliases = sources()
-    rows = [r for r in csv.DictReader((_BACKEND / "data/leg_2026-10_table/leg_2026-10_folders.csv").open(encoding="utf-8-sig"))
-            if r["has_text"] == "yes"]
-    random.seed(16)
-    for r in random.sample(rows, 150) + [r for r in rows if r["celex"] in ("32024R1689", "32022R2065", "32006R1907R(01)")]:
-        w = {k: v for k, v in wanted(r["celex"], None, table, folders, aliases).items() if k not in ("alias", "acronym")}
-        assert export_metadata(_DUMP, r["folder"], r["celex"]) == w, r["celex"]
+    from backend.scripts.leg_export_metadata import folder_of_celex, rdf_facts
+    f = folder_of_celex()
+    gdpr, ai, dec = (rdf_facts(_DUMP, f[c]) for c in ("32016R0679", "32024R1689", "32014D0026"))
+    assert gdpr["entry_into_force"] == ["2016-05-24"] and gdpr["application_dates"] == ["2018-05-25"]
+    assert ai["entry_into_force"] == ["2024-08-01"] and len(ai["application_dates"]) == 4 and ai["procedures"] == ["2021/0106"]
+    assert dec["eli"] == "http://data.europa.eu/eli/dec/2014/26(1)/oj" and dec["effect_dates"] == ["2014-01-20"]
+    assert gdpr["authors"] == ["CONSIL", "EP"] and gdpr["in_force"] is True
