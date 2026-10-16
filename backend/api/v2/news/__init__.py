@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 
 from api.v1._row_dates import row_updated
-from api.v1._body import body_from_html_or_text, compose_html_from_sections, looks_like_html, _strip_html_to_text
+from api.v1._body import body_from_html_or_text, body_from_pdf_text, compose_html_from_sections, looks_like_html, _strip_html_to_text
 
 from datetime import date, datetime, timedelta
 from typing import List, Optional, Union
@@ -461,6 +461,7 @@ def _news_source_sql(codes, kinds, since, until, q, updated_from=None, updated_t
 # ("<@rel_link@>", 154 stored rows on 5 Oct 2026). Stripped on the way out so a
 # re-scrape cannot bring it back.
 _TEMPLATE_MARKER = re.compile(r"(?:<|&lt;)@[a-z_]+@(?:>|&gt;)")
+_FILE_LINK_STUB = re.compile(r'^\s*<p>(?:PDF document|Document): <a href="[^"]*">[^<]*</a></p>\s*$')
 
 
 def _news_body(r, body_name):
@@ -470,7 +471,13 @@ def _news_body(r, body_name):
     text at all (324 agency news and ~1,000 publications on 5 Oct) is composed from
     its own title, summary, publisher, date and source link, inventing nothing.
     """
-    html, txt, _ = body_from_html_or_text(getattr(r, "body_html", None) or getattr(r, "body_txt", None))
+    stored_html = getattr(r, "body_html", None)
+    if stored_html and _FILE_LINK_STUB.match(stored_html) and (getattr(r, "body_txt", None) or "").strip():
+        # A PDF item stores a link as its HTML ("<p>PDF document: <a ...>") and the PDF's
+        # text in body_txt: 169 Court of Justice press releases and ~1,400 agency
+        # publications. Served as the text in paragraphs, as every PDF row is (2 Oct 2026).
+        stored_html = body_from_pdf_text(r.body_txt)[0]
+    html, txt, _ = body_from_html_or_text(stored_html or getattr(r, "body_txt", None))
     if txt and txt.strip():
         if not html:
             html = body_from_html_or_text(txt)[0]

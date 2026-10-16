@@ -47,6 +47,7 @@ from sqlalchemy import text  # noqa: E402
 from core.database import SessionLocal  # noqa: E402
 from services.scrapers.economy_common import error_body_reason, extract_html  # noqa: E402
 from api.v1._body import body_from_html_or_text  # noqa: E402
+from services.news.page_widgets import clean_html, clean_text  # noqa: E402
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
@@ -1110,7 +1111,7 @@ def main() -> int:
                     v = v.replace("\x00", "").encode("utf-8", "ignore").decode("utf-8", "ignore")
                     return v or None
 
-                body_txt = _clean(_cut_site_footer(_cut_cookie_banner(body_txt)))
+                body_txt = _clean(clean_text(_cut_site_footer(_cut_cookie_banner(body_txt))))
                 # A page links other documents, and following the wrong one stored another
                 # text under this title (a KIDS Act release under a Portugal aid item, a
                 # Dushanbe speech under a Termez one; 21 rows, 5 Oct 2026). Text taken from a
@@ -1138,7 +1139,7 @@ def main() -> int:
                     failed += 1
                     reasons["the page says it does not exist"] = reasons.get("the page says it does not exist", 0) + 1
                     continue
-                body_html = _clean(body_html)
+                body_html = _clean(clean_html(body_html))
                 # The text path (browser, PDF) returns no HTML. Keeping the row's old HTML
                 # then paired a full text with the old title+summary card (5 Oct 2026), so
                 # the HTML is marked up from the text we are storing instead.

@@ -226,12 +226,23 @@ def extract_html(html: str) -> tuple[str | None, str | None]:
     from services.news.rendered_article import (looks_like_challenge, looks_like_listing,
                                                 strip_page_furniture)
 
-    soup = BeautifulSoup(html, "html.parser")
+    from services.news.page_widgets import clean_html as _no_widgets, clean_text as _no_widget_lines
+
+    soup = BeautifulSoup(_no_widgets(html), "html.parser")
+    # The page's own title sits in the ECL page header, which goes with the furniture below:
+    # the article then never names itself, and the news text job refused 36 Commission
+    # articles as "text does not name the item" (16 Oct 2026). Kept and put back on top.
+    h1 = soup.find("h1")
+    h1_text = " ".join(h1.get_text(" ", strip=True).split()) if h1 else ""
     for tag in soup(["script", "style", "noscript", "nav", "header", "footer", "aside", "form"]):
         tag.decompose()
     node = soup.find("main") or soup.find("article") or soup.body or soup
     body_html = clean(str(node)[:_BODY_CAP])
-    body_txt = clean(node.get_text("\n", strip=True)[:_BODY_CAP])
+    body_txt = clean(_no_widget_lines(node.get_text("\n", strip=True))[:_BODY_CAP])
+    if body_txt and len(h1_text) >= 15 and h1_text.lower() not in body_txt[:1500].lower():
+        import html as _html_mod
+        body_txt = f"{h1_text}\n{body_txt}"
+        body_html = f"<h1>{_html_mod.escape(h1_text)}</h1>{body_html or ''}"
 
     if body_txt:
         if looks_like_challenge(body_txt) or looks_like_listing(body_txt):
