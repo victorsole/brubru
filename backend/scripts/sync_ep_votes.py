@@ -349,6 +349,11 @@ def run(committees, since, ta, limit, apply, max_sittings, deadline_seconds=None
                         (s.get("report_ref") for s in (match or {}).get("subitems") or [] if s.get("report_ref")), None)
                     if fin:
                         pv, subject, item_no = fin["vote"], fin["subject"], fin["subitem_number"]
+                        if od and not pick_final_subitem([fin]):
+                            # The text's final vote taken on one amendment (a provisional
+                            # agreement voted as "Am 46"): EP Open Data says so; the minutes'
+                            # subject alone reads as an amendment vote.
+                            subject = f"Final vote ({subject})"
                         key = f"plenary|{sitting_used.isoformat()}|{item_no}"
                     else:
                         pv, subject, item_no = open_data_vote(od), open_data_subject(od), None

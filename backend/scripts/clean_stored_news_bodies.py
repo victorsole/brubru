@@ -22,10 +22,11 @@ from sqlalchemy import create_engine, text  # noqa: E402
 
 from services.news.page_widgets import clean_html, clean_text  # noqa: E402
 
-PICK = """SELECT id::text AS id, {code} AS code, body_txt, body_html FROM {table}
+PICK = """SELECT id, {code} AS code, body_txt, body_html FROM {table}
           WHERE body_txt ~* '(^|\\n)(share this page|sign up for mail updates|pdf version|whatsapp|\\d+ (hours|minutes|days) ago)\\s*:?\\s*(\\n|$)'
              OR body_html ~* '(<script|\\sonclick=|share\\.php\\?u=|x\\.com/intent|class="[^"]*share)'"""
-STORE = "UPDATE {table} SET body_txt = :t, body_html = :h, updated_at = now() WHERE id::text = :id"
+# The id in its own type: "id::text = :id" cannot use the key and timed out on economy_items.
+STORE = "UPDATE {table} SET body_txt = :t, body_html = :h, updated_at = now() WHERE id = :id"
 TABLES = (("eu_news_items", "institution"), ("economy_items", "body_code"))
 
 

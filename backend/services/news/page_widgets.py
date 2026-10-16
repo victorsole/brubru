@@ -22,7 +22,9 @@ _ON_ATTR = re.compile(r"^on[a-z]+$", re.I)
 # wrong the moment it is stored.
 _CHROME_LINE = re.compile(
     r"^(?:share this (?:page|article)\s*:?|share on (?:facebook|x|linkedin|whatsapp)|facebook|x|twitter|linkedin|"
-    r"whatsapp|e-?mail|bluesky|sign up for mail updates|pdf version|print|copy link|"
+    r"whatsapp|e-?mail|bluesky|mastodon|youtube|instagram|threads|pinterest|reddit|tumblr|other networks|share|"
+    r"gmail|typepad|blogger|pocket|yahoomail|weibo|viadeo|qzone|netvibes|yammer|digg|messenger|"
+    r"follow us on(?: [a-z]+)?|sign up for mail updates|pdf version|print|copy link|"
     r"\d+\s+(?:seconds?|minutes?|hours?|days?)\s+ago)$", re.I)
 
 
