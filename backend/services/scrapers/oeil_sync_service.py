@@ -62,17 +62,34 @@ COMMITTEE_NAME_TO_CODE = {
 }
 
 # Procedure type to text type mapping
+# OEIL's procedure types. NLE is "Non-legislative enactments" (international agreements,
+# appointments): it read 'legislative' on 63 procedures, and COD 'unknown' on 331 whose row
+# another writer created (16 Oct 2026). APP, the consent procedure, stays legislative.
 PROCEDURE_TYPE_TO_TEXT_TYPE = {
     "COD": TextTypeEnum.LEGISLATIVE,
     "CNS": TextTypeEnum.LEGISLATIVE,
     "APP": TextTypeEnum.LEGISLATIVE,
-    "NLE": TextTypeEnum.LEGISLATIVE,
+    "NLE": TextTypeEnum.NON_LEGISLATIVE,
     "BUD": TextTypeEnum.NON_LEGISLATIVE,
     "INI": TextTypeEnum.NON_LEGISLATIVE,
+    "INL": TextTypeEnum.NON_LEGISLATIVE,
     "RSP": TextTypeEnum.NON_LEGISLATIVE,
     "DEA": TextTypeEnum.NON_LEGISLATIVE,
+    "DEC": TextTypeEnum.NON_LEGISLATIVE,
+    "RPS": TextTypeEnum.NON_LEGISLATIVE,
     "IMM": TextTypeEnum.NON_LEGISLATIVE,
+    "REG": TextTypeEnum.NON_LEGISLATIVE,
+    "RSO": TextTypeEnum.NON_LEGISLATIVE,
+    "ACI": TextTypeEnum.NON_LEGISLATIVE,
+    "BUI": TextTypeEnum.NON_LEGISLATIVE,
+    "INS": TextTypeEnum.NON_LEGISLATIVE,
 }
+
+
+def text_type_for(procedure_ref: str | None):
+    """'2025/0058(COD)' -> LEGISLATIVE; None for a document reference or an unknown type."""
+    m = re.search(r"\(([A-Z]{3})\)\s*$", procedure_ref or "")
+    return PROCEDURE_TYPE_TO_TEXT_TYPE.get(m.group(1)) if m else None
 
 
 class OEILSyncService:
