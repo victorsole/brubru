@@ -113,6 +113,23 @@ def test_the_catch_up_fills_empty_columns_only_and_never_in_force():
     assert all(f"{c} = coalesce(e.{c}, v.{c})" in mod.FILL_SQL for c in mod.FILL_COLS)
 
 
+def test_the_catch_up_rereads_any_empty_field_for_a_week_and_authors_or_eli_for_a_month():
+    """The docs promise that a field published later is filled (audit of 17 Oct 2026: only authors/ELI were re-read)."""
+    sql = str(mod.CATCH_UP_SQL)
+    month, week = sql.split(" OR (created_at")
+    assert ":days" in month and "authors IS NULL OR eli IS NULL" in month
+    assert ":any_days" in week and all(f"{c} IS NULL" in week for c in mod.FILL_COLS)
+    assert mod.CATCH_UP_ANY_DAYS < mod.CATCH_UP_DAYS
+
+
+def test_an_act_cellar_did_not_answer_for_makes_the_run_degraded():
+    todo = [{"celex": "32026R0001"}, {"celex": "32026H0002"}]
+    assert mod.unread_gap(todo, {"32026R0001": FACTS, "32026H0002": FACTS}) is None
+    gap = mod.unread_gap(todo, {"32026R0001": FACTS})
+    assert gap.startswith("Cellar gave no metadata for 1 of 2 acts inserted (32026H0002)")
+    assert mod.unread_gap([], {}) is None
+
+
 class _FakeDB:
     def __init__(self, areas):
         self.areas = areas

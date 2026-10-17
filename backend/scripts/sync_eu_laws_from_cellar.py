@@ -27,7 +27,9 @@ What it does
 4. Skips acts that have no English title. Publications Office metadata lags up
    to two working days, and most corrigenda (930 of 937 since 1 Nov 2025)
    correct other language versions only, so they never get one. They are NOT
-   written with a placeholder: the rolling window picks them up if they do.
+   written with a placeholder: the hot tier's rolling window (--days 14) picks
+   one up if its English title appears within 14 days of publication; after
+   that only a --since backfill does.
 5. Inserts a row with xml_path = cellar://..., the same convention as the
    one-shot ingests, with the Publications Office's metadata in its own
    columns (authors, in_force, eli, the three date columns, procedures), read
@@ -39,12 +41,17 @@ What it does
    the column). The hot tier then runs fetch_eu_law_bodies.py, which stores the
    text (body_txt, body_html) of every row still without one.
 6. Catch-up: the metadata of a new act can follow days later, so every run
-   re-reads the laws it inserted in the last 30 days whose metadata is still
-   missing and fills the empty columns only, keeping the change signal (a
-   fill is not a change of the record, Victor's rule of 16 Oct 2026). in_force,
-   once set, belongs to refresh_eu_laws_in_force.py.
-7. Records a sync_runs row (source_key eu_laws_cellar) and exits non-zero on
-   failure, so a broken run is visible rather than silent.
+   re-reads the laws it inserted in the last 7 days with any metadata column
+   empty, and those of the last 30 days still without authors or ELI (dates and
+   procedures may simply not exist: most recommendations and budget acts carry
+   none, so re-asking for them for a month would be noise). It fills the empty
+   columns only, keeping the change signal (a fill is not a change of the
+   record, Victor's rule of 16 Oct 2026). in_force, once set, belongs to
+   refresh_eu_laws_in_force.py.
+7. Records a sync_runs row (source_key eu_laws_cellar): degraded when an act
+   was inserted without its metadata (Cellar down, out of time, or silent on
+   that act), failed and a non-zero exit on failure, so a broken run is visible
+   rather than silent.
 
 Idempotent: a re-run inserts nothing it has already inserted.
 
@@ -102,7 +109,8 @@ _KIND_RE = re.compile(r"\b(Regulation|Directive|Decision|Recommendation|Agreemen
 META_COLS = ("authors", "in_force", "eli", "entry_into_force", "application_dates", "effect_dates", "procedures")
 # the catch-up fills these; in_force is filled daily by refresh_eu_laws_in_force.py, its one writer after the insert
 FILL_COLS = tuple(c for c in META_COLS if c != "in_force")
-CATCH_UP_DAYS = 30
+CATCH_UP_DAYS = 30      # re-read a recent law still without authors or ELI
+CATCH_UP_ANY_DAYS = 7   # re-read a recent law with any metadata column empty
 CELLAR_BUDGET_SECONDS = 600
 # "Commission Implementing Regulation (EU) 2026/123 of ..." -> "Commission Implementing Regulation"
 # "Council Decision (CFSP) 2026/45 of ..."                -> "Council Decision (CFSP)"
@@ -381,15 +389,27 @@ INSERT_SQL = text(
 CATCH_UP_SQL = text(
     f"SELECT id, celex, {', '.join(FILL_COLS)} FROM eu_laws "
     "WHERE extra_metadata->>'ingested_by' = 'sync_eu_laws_from_cellar' "
-    "AND created_at > now() - make_interval(days => :days) "
-    # a law whose notice is not yet published lacks its authors and ELI; dates alone may simply not exist (most
-    # recommendations and budget acts carry none), and asking for them again every run would be noise
-    "AND (authors IS NULL OR eli IS NULL)"
+    # a law whose notice is not yet published lacks its authors and ELI; dates and procedures may simply not exist
+    # (most recommendations and budget acts carry none), so they are re-asked for a week, not a month
+    "AND ((created_at > now() - make_interval(days => :days) AND (authors IS NULL OR eli IS NULL)) "
+    "OR (created_at > now() - make_interval(days => :any_days) AND ("
+    + " OR ".join(f"{c} IS NULL" for c in FILL_COLS) + ")))"
 )
 FILL_SQL = ("UPDATE eu_laws e SET " + ", ".join(f"{c} = coalesce(e.{c}, v.{c})" for c in FILL_COLS)
             + f" FROM (VALUES %s) AS v (id, {', '.join(FILL_COLS)}) WHERE e.id = v.id AND ("
             + " OR ".join(f"(e.{c} IS NULL AND v.{c} IS NOT NULL)" for c in FILL_COLS) + ") RETURNING e.id")
 FILL_TEMPLATE = "(%s, %s::text[], %s, %s::date[], %s::date[], %s::date[], %s::text[])"
+
+
+def unread_gap(todo, facts: Dict):
+    """The run's debt when Cellar gave no metadata for some acts it inserts, else None. cellar_facts leaves out a
+    law Cellar did not answer for (unknown, never "none"); the row is inserted without it and the catch-up re-reads
+    it, so the run is degraded, not a success (audit of 17 Oct 2026)."""
+    unread = [r["celex"] for r in todo if r["celex"] not in facts]
+    if not unread:
+        return None
+    return (f"Cellar gave no metadata for {len(unread)} of {len(todo)} acts inserted "
+            f"({', '.join(unread[:5])}{', ...' if len(unread) > 5 else ''}); a later run's catch-up fills it")
 
 
 def catch_up_fills(rows, facts: Dict, oeil: Dict) -> list:
@@ -405,7 +425,7 @@ def catch_up_fills(rows, facts: Dict, oeil: Dict) -> list:
 
 def catch_up(db, oeil: Dict, apply: bool, budget: Budget) -> int:
     """Fill the metadata the Publications Office published after the insert, keeping the change signal."""
-    rows = db.execute(CATCH_UP_SQL, {"days": CATCH_UP_DAYS}).mappings().all()
+    rows = db.execute(CATCH_UP_SQL, {"days": CATCH_UP_DAYS, "any_days": CATCH_UP_ANY_DAYS}).mappings().all()
     db.rollback()  # no transaction open while Cellar is read
     if not rows:
         log.info("catch-up: no recent law lacks its metadata")
@@ -476,6 +496,9 @@ def main() -> int:
                 log.warning(f"[WARN] {metadata_gap}; a later run's catch-up fills it")
         rows = [build_row(r, rel.get(r["work"], {}), classify, facts.get(r["celex"]), oeil.get(r["celex"]))
                 for r in todo]
+        if not metadata_gap and unread_gap(todo, facts):
+            metadata_gap = unread_gap(todo, facts)
+            log.warning(f"[WARN] {metadata_gap}")
         with_meta = sum(1 for row in rows if row["authors"] or row["eli"])
         log.info(f"metadata read for {with_meta} of {len(rows)} acts")
 

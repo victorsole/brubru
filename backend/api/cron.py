@@ -9,6 +9,7 @@ Railway cron service calls these endpoints on a schedule.
 
 import logging
 import time as _time
+from html import escape as html_escape
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Header, Query, Request
@@ -386,12 +387,14 @@ _TENDERATOR_CHAIN = (
 # a failure was visible only in a log line. Recorded by the tier, like the chain
 # above. A script that starts recording itself must be removed from this list,
 # or it gets two rows per run. Retiring a daily job: add it to
-# api/sync_status._RETIRED_JOBS too, or /sync/health reports it stale for 30 days.
+# api/sync_status._RETIRED_JOBS too, or /sync/health reports it stale until it is.
 _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
-    "transparency_register", "cor", "eesc", "jrc", "tbt",
+    "transparency_register", "cor", "eesc", "jrc",
     "carriage_status_notifications", "tris_titles", "eu_laws_in_force",
 )
+# "tbt" left this list on 17 Oct 2026: sync_dg_grow.py records its own run as wto_tbt, so every
+# night wrote two rows for one run (tests/test_sync_health_jobs.py checks no script here records).
 
 
 def _failure_detail(stderr: str | None, stdout: str | None, returncode=None) -> str:
@@ -1043,6 +1046,19 @@ async def cron_sync_daily(
     except Exception as e:  # noqa: BLE001 -- recording must not fail the tier
         logger.error(f"[CRON] daily: could not record the Tenderator chain: {e}")
 
+    # The nightly jobs' verdict, mailed when it is not healthy (17 Oct 2026). /sync/health showed a
+    # job that stopped or stayed degraded, but nobody reads a page at night, and the dispatcher only
+    # turns red on two failed runs in a row: a job that stops writes no run to judge.
+    try:
+        from api.sync_status import daily_jobs_verdict
+        _db = SessionLocal()
+        try:
+            _send_jobs_alert(daily_jobs_verdict(_db))
+        finally:
+            _db.close()
+    except Exception as e:  # noqa: BLE001 -- the alert must not fail the tier
+        logger.error(f"[CRON] daily: nightly jobs verdict not sent: {e}")
+
     return {"status": "success", "tier": "daily", "results": results}
 
 
@@ -1656,6 +1672,43 @@ def _send_staleness_email(stale: list[dict]) -> None:
         logger.info("[CRON] Staleness email sent to %s (%d feeds)", recipient, len(stale))
     except Exception as exc:  # pragma: no cover - defensive
         logger.warning("[CRON] Staleness email failed: %s", exc)
+
+
+def _jobs_alert(verdict: dict) -> tuple[str, str] | None:
+    """(subject, html) for the nightly jobs that need a look, or None when there is nothing to say."""
+    by_job = {d["job"]: d for d in verdict.get("detail", [])}
+    lines = {}  # one line per job, its first reason (a failed job can also be stale)
+    for job in verdict.get("failing", []):
+        lines.setdefault(job, f"<li><strong>{job}</strong>: last run {by_job[job]['last_status']}"
+                              f" ({html_escape((by_job[job].get('error') or '')[:200])})</li>")
+    for job in verdict.get("stale", []):
+        lines.setdefault(job, f"<li><strong>{job}</strong>: no run since {by_job[job]['last_run']}"
+                              f" (limit {by_job[job]['stale_after_hours']} h)</li>")
+    for job in verdict.get("degraded_too_long", []):
+        lines.setdefault(job, f"<li><strong>{job}</strong>: degraded, {by_job[job]['degraded_too_long']}"
+                              f" (last success {by_job[job]['last_success'] or 'never'})</li>")
+    if verdict.get("healthy") is not False or not lines:
+        return None
+    html = ("<p>These nightly jobs need a look (from /api/sync/health, jobs.daily):</p>"
+            f"<ul>{''.join(lines.values())}</ul>"
+            "<p>Retired and accepted jobs are not listed; see the page for every job.</p>")
+    return f"[Brubru] {len(lines)} nightly job(s) need a look", html
+
+
+def _send_jobs_alert(verdict: dict) -> None:
+    """Mail the operator the nightly jobs' verdict when it is not healthy, as the fast tier does for feeds."""
+    alert = _jobs_alert(verdict)
+    if not alert:
+        return
+    recipient = settings.ALERT_EMAIL or settings.SMTP_USER
+    if not recipient:
+        logger.warning("[CRON] Nightly jobs need a look but no ALERT_EMAIL/SMTP_USER configured")
+        return
+    from services.email_service import EmailService
+    if EmailService().send(to=recipient, subject=alert[0], html_body=alert[1]):
+        logger.info("[CRON] Nightly jobs alert sent to %s", recipient)
+    else:
+        logger.error("[CRON] Nightly jobs alert could not be sent to %s", recipient)
 
 
 # A run that is a problem for the cron verdict: it failed, or it stopped itself at its

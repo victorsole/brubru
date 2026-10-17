@@ -10,9 +10,10 @@ from pathlib import Path
 BACKEND = Path(__file__).resolve().parents[1]
 SRC = (BACKEND / "api" / "cron.py").read_text()
 
-# sync_dg_grow.py records its own row for tris, not for tbt; the shared file
-# mentions record_run, so tbt must be recorded by the tier regardless.
-SHARED_SCRIPT_NOT_SELF_RECORDING = {"tbt"}
+# Scripts that mention record_run but do not record the job the tier runs them for. Empty since
+# 17 Oct 2026: sync_dg_grow.py records tbt itself (as wto_tbt), so the tier's own "tbt" row was a
+# second row for the same run (30 days: wto_tbt 24 runs with 3 failures, tbt 22 with none).
+SHARED_SCRIPT_NOT_SELF_RECORDING: set = set()
 
 
 def _tuple(name):

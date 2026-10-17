@@ -49,46 +49,89 @@ def get_sync_freshness(db: Session = Depends(get_db)) -> dict:
 # the schedule writes no row at all, so nothing there could ever turn red for it. Hours a job
 # may go without running before it is stale; a tier added here gets the same list.
 _JOB_STALE_AFTER_HOURS = {"daily": 36}
-_JOB_WINDOW_DAYS = 30
+# Jobs that record under the tier but run more often (audit of 17 Oct 2026): eu_laws_cellar runs in
+# the 6-hourly hot tier, tris in the 12-hourly warm tier as well as the nightly one. At 36 hours a
+# stopped eu_laws_cellar went unseen for five missed runs.
+_JOB_STALE_AFTER_HOURS_BY_JOB = {"eu_laws_cellar": 13, "tris": 25}
+# Days a job may stay degraded after its last success (its first run, if it never had one) before it
+# counts as broken: on 17 Oct 2026 three jobs had not succeeded in 30 days and the page stayed green.
+# comitology walks its whole register (~1,160 pages) a range a night and succeeds when the walk ends,
+# about every 15 nights (last on 9 Oct 2026).
+_JOB_DEGRADED_DAYS = 7
+_JOB_DEGRADED_DAYS_BY_JOB = {"comitology": 21}
 _OK = ("success", "ok")
 # Jobs taken off the schedule on purpose: not running is then expected, so they are listed as
-# retired instead of stale. Retiring a job = one line here, or the page stays red for 30 days.
+# retired instead of stale. Retiring a job = one line here, or the page stays red for it.
 _RETIRED_JOBS = {
     "client_source_ledger": "13 Oct 2026, 2dad35a9 (Terraqui engagement ended)",
     "dpp_watch": "13 Oct 2026, 2dad35a9 (Terraqui engagement ended)",
+    "tbt": "17 Oct 2026: each run was recorded twice; the TBT script's own row is wto_tbt",
+}
+# A degraded state accepted on purpose: (text the job's own reason must contain, why). Matched on the
+# reason, so the same job degraded for another reason is judged as any other. Listed, never red.
+_NO_ENGINE = ("no translation engine on this runner",
+              "25 Sep 2026: OpenAI and Hugging Face credits spent, no top-up; translation paused")
+_ACCEPTED_DEGRADED = {
+    "tenderator_translations_ted": _NO_ENGINE,
+    "tenderator_translations_ft_tenders": _NO_ENGINE,
+    "tenderator_translations_ft_proposals": _NO_ENGINE,
+    "tenderator_translations_ft_projects": _NO_ENGINE,
+    # degraded by design while the Commission's consolidated list lags the OJ; with no fetch failure
+    # the job has read every act of the gap from the OJ itself
+    "sanctions_oj_delta": (", 0 fetch failures,",
+                           "the Commission's consolidated list lags the OJ; the job reads the gap from the OJ"),
 }
 
 
-def judge_jobs(rows, now: datetime, stale_after_hours: int, retired: dict | None = None) -> dict:
+def _utc(t):
+    if t is None:
+        return None
+    return t if t.tzinfo else t.replace(tzinfo=timezone.utc)
+
+
+def judge_jobs(rows, now: datetime, stale_after_hours: int, retired: dict | None = None, *,
+               stale_by_job: dict | None = None, degraded_days: int = _JOB_DEGRADED_DAYS,
+               degraded_days_by_job: dict | None = None, accepted: dict | None = None) -> dict:
     """One tier's jobs, each judged on its own runs.
 
     `failing`: the last run's status is not success/ok/degraded (failed, skipped, a status
-    nobody has thought about). `stale`: no run within `stale_after_hours`. `degraded`: the job
-    finished but owes work (an engine missing, credits spent): listed, never counted as broken.
-    `retired`: a job in `retired` that no longer runs; one that runs again is judged as any other.
+    nobody has thought about). `stale`: no run within the job's hours (`stale_by_job`, else
+    `stale_after_hours`). `degraded`: the job finished but owes work (an engine missing, a walk
+    not finished): listed; `degraded_too_long` when its last success (its first run, if none) is
+    older than its days, which is broken unless `accepted` names the reason. `retired`: a job in
+    `retired` that no longer runs; one that runs again is judged as any other.
     """
-    retired = retired or {}
+    retired, stale_by_job = retired or {}, stale_by_job or {}
+    degraded_days_by_job, accepted = degraded_days_by_job or {}, accepted or {}
+
     def iso(t):
-        if t is None:
-            return None
-        return (t if t.tzinfo else t.replace(tzinfo=timezone.utc)).isoformat()
+        return _utc(t).isoformat() if t is not None else None
 
     detail = []
     for r in rows:
-        last_run = r["last_run"]
-        if last_run is not None and last_run.tzinfo is None:
-            last_run = last_run.replace(tzinfo=timezone.utc)
-        status = r["last_status"]
-        detail.append({
-            "job": r["source_key"],
+        job, status = r["source_key"], r["last_status"]
+        last_run, last_success = _utc(r["last_run"]), _utc(r["last_success"])
+        hours = stale_by_job.get(job, stale_after_hours)
+        d = {
+            "job": job,
             "last_run": iso(last_run),
             "last_status": status,
-            "last_success": iso(r["last_success"]),
+            "last_success": iso(last_success),
             "runs_7d": int(r["runs_7d"] or 0),
             "failures_7d": int(r["failures_7d"] or 0),
-            "stale": last_run is None or last_run < now - timedelta(hours=stale_after_hours),
+            "stale_after_hours": hours,
+            "stale": last_run is None or last_run < now - timedelta(hours=hours),
             "error": ((r["last_error"] or "")[:300] or None) if status not in _OK else None,
-        })
+        }
+        if status == "degraded":
+            marker, why = accepted.get(job, (None, None))
+            since = last_success or _utc(r.get("first_run")) or last_run
+            days = degraded_days_by_job.get(job, degraded_days)
+            if marker and marker in (r["last_error"] or ""):
+                d["accepted"] = why
+            elif since is None or since < now - timedelta(days=days):
+                d["degraded_too_long"] = f"no success in {days} days"
+        detail.append(d)
     gone = {j["job"] for j in detail if j["stale"] and j["job"] in retired}
     for j in detail:
         if j["job"] in gone:
@@ -96,38 +139,56 @@ def judge_jobs(rows, now: datetime, stale_after_hours: int, retired: dict | None
     live = [j for j in detail if j["job"] not in gone]
     failing = [j["job"] for j in live if j["last_status"] not in _OK + ("degraded",)]
     stale = [j["job"] for j in live if j["stale"]]
+    too_long = [j["job"] for j in live if "degraded_too_long" in j]
     degraded = [j["job"] for j in live if j["last_status"] == "degraded"]
-    rank = {k: i for i, k in enumerate(failing + stale + degraded)}
+    rank = {k: i for i, k in enumerate(dict.fromkeys(failing + stale + too_long + degraded))}
     detail.sort(key=lambda j: (rank.get(j["job"], len(rank)), j["job"]))
     return {
         "stale_after_hours": stale_after_hours,
+        "degraded_days": degraded_days,
         "count": len(detail),
-        "healthy": (not failing and not stale) if live else None,
+        "healthy": (not failing and not stale and not too_long) if live else None,
         "failing": failing,
         "stale": stale,
+        "degraded_too_long": too_long,
         "degraded": degraded,
+        "accepted": [j["job"] for j in live if "accepted" in j],
         "retired": sorted(gone),
         "detail": detail,
     }
 
 
+# Every run the tier ever recorded, not a recent window: with a 30-day window a job that stopped
+# dropped off the list after a month and the page went green for it (audit of 17 Oct 2026). The
+# table is small (16,899 rows since June 2026). A failure is any status but success/ok/degraded,
+# as in `failing`; counting 'failed' only missed a skipped or timed-out run.
+_JOBS_SQL = text("""
+    SELECT source_key,
+           (array_agg(status ORDER BY started_at DESC))[1]                 AS last_status,
+           (array_agg(error ORDER BY started_at DESC))[1]                  AS last_error,
+           max(coalesce(finished_at, started_at))                          AS last_run,
+           min(started_at)                                                 AS first_run,
+           max(finished_at) FILTER (WHERE status IN ('success', 'ok'))     AS last_success,
+           count(*) FILTER (WHERE started_at > now() - interval '7 days') AS runs_7d,
+           count(*) FILTER (WHERE coalesce(status, '') NOT IN ('success', 'ok', 'degraded')
+                             AND started_at > now() - interval '7 days') AS failures_7d
+    FROM sync_runs
+    WHERE tier = :tier
+      AND runner IS DISTINCT FROM 'local'
+    GROUP BY source_key
+""")
+
+
 def _jobs(db: Session, tier: str, stale_after_hours: int) -> dict:
-    rows = db.execute(text("""
-        SELECT source_key,
-               (array_agg(status ORDER BY started_at DESC))[1]                 AS last_status,
-               (array_agg(error ORDER BY started_at DESC))[1]                  AS last_error,
-               max(coalesce(finished_at, started_at))                          AS last_run,
-               max(finished_at) FILTER (WHERE status IN ('success', 'ok'))     AS last_success,
-               count(*) FILTER (WHERE started_at > now() - interval '7 days') AS runs_7d,
-               count(*) FILTER (WHERE status = 'failed'
-                                 AND started_at > now() - interval '7 days') AS failures_7d
-        FROM sync_runs
-        WHERE tier = :tier
-          AND runner IS DISTINCT FROM 'local'
-          AND started_at > now() - make_interval(days => :days)
-        GROUP BY source_key
-    """), {"tier": tier, "days": _JOB_WINDOW_DAYS}).mappings().all()
-    return judge_jobs(rows, datetime.now(timezone.utc), stale_after_hours, _RETIRED_JOBS)
+    rows = db.execute(_JOBS_SQL, {"tier": tier}).mappings().all()
+    return judge_jobs(rows, datetime.now(timezone.utc), stale_after_hours, _RETIRED_JOBS,
+                      stale_by_job=_JOB_STALE_AFTER_HOURS_BY_JOB, degraded_days_by_job=_JOB_DEGRADED_DAYS_BY_JOB,
+                      accepted=_ACCEPTED_DEGRADED)
+
+
+def daily_jobs_verdict(db: Session) -> dict:
+    """The nightly jobs' verdict, as /sync/health shows it (for the daily tier's alert email)."""
+    return _jobs(db, "daily", _JOB_STALE_AFTER_HOURS["daily"])
 
 
 @router.get(
@@ -153,11 +214,13 @@ def _jobs(db: Session, tier: str, stale_after_hours: int) -> dict:
         "**You get back**\n"
         "`dispatcher` (last_seen, minutes_ago, alive); `tiers`, one entry per "
         "tier with `last_success`, `last_run`, `failures_24h`, `runs_24h` and a "
-        "`healthy` flag; `jobs.daily`, every nightly job seen in the last 30 days, "
+        "`healthy` flag; `jobs.daily`, every nightly job that has ever run, "
         "with the lists `failing` (its last run failed), `stale` (no run in 36 "
-        "hours) and `degraded` (it finished but still owes work: listed, never "
-        "counted as broken), `retired` (taken off the schedule on purpose), a "
-        "`healthy` flag, and per job `last_run`, "
+        "hours, or its own `stale_after_hours` for a job that runs more often), "
+        "`degraded` (it finished but still owes work), `degraded_too_long` (degraded "
+        "with no success in 7 days, or its own limit: counted as broken), `accepted` "
+        "(degraded for a reason accepted on purpose, named on the job), `retired` "
+        "(taken off the schedule on purpose), a `healthy` flag, and per job `last_run`, "
         "`last_status`, `last_success`, `runs_7d`, `failures_7d` and the last "
         "`error`; and `scrapers` with the last detector run, the number "
         "checked, and any confirmed breaks by body and item type."

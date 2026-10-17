@@ -4,7 +4,7 @@
     "description": "Comprehensive acronym-to-CELEX mapping from automated extraction + manual curation",
     "source": "docs/LEG_2025-11/ + manual curation",
     "extraction_date": "2025-11-19",
-    "total_entries": 517,
+    "total_entries": 511,
     "auto_extracted": 658,
     "manually_curated": 20,
     "extraction_stats": {
@@ -96,6 +96,131 @@
           "STCW",
           "TPMS"
         ]
+      },
+      {
+        "date": "2026-10-17",
+        "removed": [
+          "PACT Act",
+          "TDI",
+          "ESMIG",
+          "ECB/2020/33",
+          "ECB/2014/13",
+          "ECB/2014/19"
+        ],
+        "repointed": [
+          "ECB/1999/4",
+          "ECB/2007/7",
+          "ECB/2012/24",
+          "ECB/2013/43",
+          "ECB/2014/18",
+          "ECB/2014/30",
+          "ECB/2014/35",
+          "ECB/2014/45",
+          "ECB/2014/49",
+          "ECB/2014/57",
+          "ECB/2014/59",
+          "ECB/2014/61",
+          "ECB/2014/62",
+          "ECB/2015/1",
+          "ECB/2015/13",
+          "ECB/2015/16",
+          "ECB/2015/17",
+          "ECB/2015/21",
+          "ECB/2015/25",
+          "ECB/2015/29",
+          "ECB/2015/31",
+          "ECB/2015/38",
+          "ECB/2015/4",
+          "ECB/2015/41",
+          "ECB/2015/42",
+          "ECB/2015/43",
+          "ECB/2015/46",
+          "ECB/2015/47",
+          "ECB/2015/5",
+          "ECB/2015/51",
+          "ECB/2015/8",
+          "ECB/2016/10",
+          "ECB/2016/11",
+          "ECB/2016/14",
+          "ECB/2016/16",
+          "ECB/2016/17",
+          "ECB/2016/19",
+          "ECB/2016/2",
+          "ECB/2016/27",
+          "ECB/2016/3",
+          "ECB/2016/30",
+          "ECB/2016/36",
+          "ECB/2016/37",
+          "ECB/2016/38",
+          "ECB/2016/4",
+          "ECB/2016/40",
+          "ECB/2016/41",
+          "ECB/2016/42",
+          "ECB/2016/43",
+          "ECB/2016/5",
+          "ECB/2016/7",
+          "ECB/2017/11",
+          "ECB/2017/13",
+          "ECB/2017/15",
+          "ECB/2017/22",
+          "ECB/2017/3",
+          "ECB/2017/33",
+          "ECB/2017/35",
+          "ECB/2017/39",
+          "ECB/2017/4",
+          "ECB/2017/40",
+          "ECB/2017/41",
+          "ECB/2018/10",
+          "ECB/2018/12",
+          "ECB/2018/21",
+          "ECB/2018/31",
+          "ECB/2018/35",
+          "ECB/2019/10",
+          "ECB/2019/14",
+          "ECB/2019/15",
+          "ECB/2019/2",
+          "ECB/2019/20",
+          "ECB/2019/21",
+          "ECB/2019/22",
+          "ECB/2019/23",
+          "ECB/2019/25",
+          "ECB/2019/27",
+          "ECB/2019/28",
+          "ECB/2019/3",
+          "ECB/2019/31",
+          "ECB/2019/33",
+          "ECB/2019/36",
+          "ECB/2019/38",
+          "ECB/2019/39",
+          "ECB/2019/4",
+          "ECB/2019/40",
+          "ECB/2019/8",
+          "ECB/2019/9",
+          "ECB/2020/17",
+          "ECB/2020/2",
+          "ECB/2020/3",
+          "ECB/2020/32",
+          "ECB/2020/4",
+          "ECB/2020/5",
+          "ECB/2020/6",
+          "ECB/2020/8",
+          "ECB/2021/1",
+          "ECB/2021/27",
+          "ECB/2021/42",
+          "ECB/2021/54",
+          "ECB/2022/2",
+          "ECB/2022/22",
+          "ECB/2022/30",
+          "ECB/2022/34",
+          "ECB/2022/42",
+          "ECB/2023/18",
+          "ECB/2023/28",
+          "ECB/2024/11",
+          "ECB/2024/2",
+          "ECB/2025/2"
+        ],
+        "reason": "Cellar check of every CELEX in this file (17 Oct 2026, after the Auditor named two): 68 CELEX do not exist. 'PACT Act' (32024R1828) and 'TDI' (32024L0900) name no EU act, and their full names made the chat rewrite correct links to the Packaging and Packaging Waste Regulation (32025R0040) and the Tax Dispute Resolution Directive (32017L1852) to those 404s; 'ESMIG' is a system, not a law. 112 ECB act numbers pointed at a CELEX derived from the OJ number (older ECB decisions are filed under their own number, e.g. ECB/2014/49 = 32014D0049(01)) or at the act they amend; 110 now point at the act whose own title carries that ECB number at Cellar. ECB/2020/33 could not be found, and ECB/2014/13 and ECB/2014/19 (ECB recommendations) only as the subject of Commission opinions; all three were removed. The 125 other ECB entries already pointed at the right act; their titles, cut short by the extraction, were replaced by Cellar's.",
+        "titles_refreshed": 125
       }
     ]
   },
@@ -116,7 +241,7 @@
     },
     "ECB/2021/2": {
       "celex": "32021R0379",
-      "full_title": "Regulation (EU) 2021/379 of the European Central Bank of 22 January 2021 on the balance sheet items of credit institutions and of the monetary financial institutions sector (recast) (ECB/2021/2)",
+      "full_title": "Regulation (EU) 2021/379 of the European Central Bank of 22 January 2021 on the balance sheet items of credit institutions and of the monetary financial institutions sector (recast) (ECB/2021/2)",
       "type": "Regulation",
       "year": 2021,
       "source_file": "L_2021073EN.01001601.xml"
@@ -129,11 +254,12 @@
       "source_file": "L_2020431EN.01003201.xml"
     },
     "ECB/2019/4": {
-      "celex": "32019D0322",
+      "celex": "32019D0004",
       "full_title": "Decision (EU) 2019/322 of the European Central Bank of 31 January 2019 on delegation of the power to adopt decisions regarding supervisory powers granted under national law (ECB/2019/4)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019055EN.01000701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D0322"
     },
     "ETIAS": {
       "celex": "32018R1240",
@@ -235,24 +361,26 @@
     },
     "ECB/2024/10": {
       "celex": "32024D0902",
-      "full_title": "Decision (EU) 2024/902 of the European Central Bank of 12 March 2024 amending Decision (EU) 2021/1486 adopting internal rules concerning restrictions of rights of data subjects in connection with the ",
+      "full_title": "Decision (EU) 2024/902 of the European Central Bank of 12 March 2024 amending Decision (EU) 2021/1486 adopting internal rules concerning restrictions of rights of data subjects in connection with the European Central Bank’s tasks relating to the prudential supervision of credit institutions (ECB/2021/42) (ECB/2024/10)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202400902EN.000101.fmx.xml"
     },
     "ECB/2021/42": {
-      "celex": "32024D0902",
-      "full_title": "Decision (EU) 2024/902 of the European Central Bank of 12 March 2024 amending Decision (EU) 2021/1486 adopting internal rules concerning restrictions of rights of data subjects in connection with the ",
+      "celex": "32021D1486",
+      "full_title": "Decision (EU) 2021/1486 of the European Central Bank of 7 September 2021 adopting internal rules concerning restrictions of rights of data subjects in connection with the European Central Bank’s tasks relating to the prudential supervision of credit institutions (ECB/2021/42)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202400902EN.000101.fmx.xml"
+      "year": 2021,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D0902"
     },
     "ECB/2019/27": {
-      "celex": "32019D1378",
-      "full_title": "Decision (EU) 2019/1378 of the European Central Bank of 9 August 2019 amending Decision ECB/2014/16 concerning the establishment of an Administrative Board of Review and its Operating Rules (ECB/2019/",
+      "celex": "32019D0027",
+      "full_title": "Decision (EU) 2019/1378 of the European Central Bank of 9 August 2019 amending Decision ECB/2014/16 concerning the establishment of an Administrative Board of Review and its Operating Rules (ECB/2019/27)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019224EN.01000901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D1378"
     },
     "ECB/2020/56": {
       "celex": "32020D1736",
@@ -284,21 +412,22 @@
     },
     "ECB/2024/8": {
       "celex": "32024D0871",
-      "full_title": "Decision (EU) 2024/871 of the European Central Bank of 8 March 2024 on the total amount of annual supervisory fees for 2023 (ECB/2024/8)",
+      "full_title": "Decision (EU) 2024/871 of the European Central Bank of 8 March 2024 on the total amount of annual supervisory fees for 2023 (ECB/2024/8)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202400871EN.000101.fmx.xml"
     },
     "ECB/2024/2": {
-      "celex": "32025D0451",
-      "full_title": "Decision (EU) 2025/451 of the European Central Bank of 21 February 2025 amending Decision (EU) 2024/461 on the reporting by national competent authorities to the European Central Bank of information o",
+      "celex": "32024D0461",
+      "full_title": "Decision (EU) 2024/461 of the European Central Bank of 29 January 2024 on the reporting by national competent authorities to the European Central Bank of information on remuneration, gender pay gap, approved higher ratios and high earners for the purposes of benchmarking (ECB/2024/2)",
       "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202500451EN.000101.fmx.xml"
+      "year": 2024,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025D0451"
     },
     "ECB/2025/7": {
       "celex": "32025D0451",
-      "full_title": "Decision (EU) 2025/451 of the European Central Bank of 21 February 2025 amending Decision (EU) 2024/461 on the reporting by national competent authorities to the European Central Bank of information o",
+      "full_title": "Decision (EU) 2025/451 of the European Central Bank of 21 February 2025 amending Decision (EU) 2024/461 on the reporting by national competent authorities to the European Central Bank of information on remuneration, gender pay gap, approved higher ratios and high earners for the purposes of benchmarking (ECB/2024/2) (ECB/2025/7)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202500451EN.000101.fmx.xml"
@@ -354,11 +483,12 @@
       "source_file": "L_202401246EN.000101.fmx.xml"
     },
     "ECB/2019/33": {
-      "celex": "32019D2194",
+      "celex": "32019D0033",
       "full_title": "Decision (EU) 2019/2194 of the European Central Bank of 29 November 2019 on the granting of signing powers (ECB/2019/33)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019330EN.01008601.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D2194"
     },
     "RED II": {
       "celex": "32018L2001",
@@ -425,32 +555,34 @@
       "source_file": "L_2022265EN.01000101.xml"
     },
     "ECB/2019/3": {
-      "celex": "32023D2870",
-      "full_title": "Decision (EU) 2023/2870 of the European Central Bank of 7 December 2023 amending Decision (EU) 2019/166 on the Market Infrastructure Board (ECB/2019/3) (ECB/2023/37)",
+      "celex": "32019D0003(01)",
+      "full_title": "Decision (EU) 2019/166 of the European Central Bank of 25 January 2019 on the Market Infrastructure Board and repealing Decision ECB/2012/6 on the establishment of the TARGET2-Securities Board (ECB/2019/3)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302870EN.000101.fmx.xml"
+      "year": 2019,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D2870"
     },
     "ECB/2023/37": {
       "celex": "32023D2870",
-      "full_title": "Decision (EU) 2023/2870 of the European Central Bank of 7 December 2023 amending Decision (EU) 2019/166 on the Market Infrastructure Board (ECB/2019/3) (ECB/2023/37)",
+      "full_title": "Decision (EU) 2023/2870 of the European Central Bank of 7 December 2023 amending Decision (EU) 2019/166 on the Market Infrastructure Board (ECB/2019/3) (ECB/2023/37)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302870EN.000101.fmx.xml"
     },
     "ECB/2025/31": {
       "celex": "32025R1958",
-      "full_title": "Regulation (EU) 2025/1958 of the European Central Bank of 9 September 2025 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2015/13) (ECB/2025/31)",
+      "full_title": "Regulation (EU) 2025/1958 of the European Central Bank of 9 September 2025 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2015/13) (ECB/2025/31)",
       "type": "Regulation",
       "year": 2025,
       "source_file": "L_202501958EN.000101.fmx.xml"
     },
     "ECB/2015/13": {
-      "celex": "32025R1958",
-      "full_title": "Regulation (EU) 2025/1958 of the European Central Bank of 9 September 2025 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2015/13) (ECB/2025/31)",
+      "celex": "32015R0534",
+      "full_title": "Regulation (EU) 2015/534 of the European Central Bank of 17 March 2015 on reporting of supervisory financial information (ECB/2015/13)",
       "type": "Regulation",
-      "year": 2025,
-      "source_file": "L_202501958EN.000101.fmx.xml"
+      "year": 2015,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025R1958"
     },
     "STS": {
       "celex": "32018R0990",
@@ -474,15 +606,16 @@
       "source_file": "L_202401331EN.000101.fmx.xml"
     },
     "ECB/2019/31": {
-      "celex": "32024D2016",
-      "full_title": "Decision (EU) 2024/2016 of the European Central Bank of 16 July 2024 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) (ECB/2024",
+      "celex": "32019D0031",
+      "full_title": "Decision (EU) 2019/1743 of the European Central Bank of 15 October 2019 on the remuneration of holdings of excess reserves and of certain deposits (recast) (ECB/2019/31)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202402016EN.000101.fmx.xml"
+      "year": 2019,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D2016"
     },
     "ECB/2024/19": {
       "celex": "32024D2016",
-      "full_title": "Decision (EU) 2024/2016 of the European Central Bank of 16 July 2024 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) (ECB/2024",
+      "full_title": "Decision (EU) 2024/2016 of the European Central Bank of 16 July 2024 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) (ECB/2024/19)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402016EN.000101.fmx.xml"
@@ -503,17 +636,18 @@
     },
     "ECB/2024/7": {
       "celex": "32024D1166",
-      "full_title": "Decision (EU) 2024/1166 of the European Central Bank of 8 February 2024 amending Decision (EU) 2020/440 on a temporary pandemic emergency purchase programme (ECB/2020/17) (ECB/2024/7)",
+      "full_title": "Decision (EU) 2024/1166 of the European Central Bank of 8 February 2024 amending Decision (EU) 2020/440 on a temporary pandemic emergency purchase programme  (ECB/2020/17) (ECB/2024/7)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202401166EN.000101.fmx.xml"
     },
     "ECB/2020/17": {
-      "celex": "32024D1166",
-      "full_title": "Decision (EU) 2024/1166 of the European Central Bank of 8 February 2024 amending Decision (EU) 2020/440 on a temporary pandemic emergency purchase programme (ECB/2020/17) (ECB/2024/7)",
+      "celex": "32020D0440",
+      "full_title": "Decision (EU) 2020/440 of the European Central Bank of 24 March 2020 on a temporary pandemic emergency purchase programme (ECB/2020/17)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202401166EN.000101.fmx.xml"
+      "year": 2020,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D1166"
     },
     "EES": {
       "celex": "32017R2226",
@@ -552,11 +686,12 @@
       "source_file": "L_2018125EN.01001001.xml"
     },
     "ECB/2015/29": {
-      "celex": "32015D1574",
-      "full_title": "Decision (EU) 2015/1574 of the European Central Bank of 4 September 2015 amending Decision ECB/2014/8 on the prohibition of monetary financing and the remuneration of government deposits by national c",
+      "celex": "32015D0029",
+      "full_title": "Decision (EU) 2015/1574 of the European Central Bank of 4 September 2015 amending Decision ECB/2014/8 on the prohibition of monetary financing and the remuneration of government deposits by national central banks (ECB/2015/29)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015245EN.01001201.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D1574"
     },
     "IPA II": {
       "celex": "32014R0231",
@@ -567,7 +702,7 @@
     },
     "ECB/2017/25": {
       "celex": "32017R1538",
-      "full_title": "Corrigendum to Regulation (EU) 2017/1538 of the European Central Bank of 25 August 2017 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2017/25) ( Official Jou",
+      "full_title": "Regulation (EU) 2017/1538 of the European Central Bank of 25 August 2017 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2017/25)",
       "type": "Regulation",
       "year": 2017,
       "source_file": "L_2018065EN.01004801.xml"
@@ -601,15 +736,16 @@
       "source_file": "L_2017173EN.01003501.xml"
     },
     "ECB/2014/45": {
-      "celex": "32015D0005",
+      "celex": "32014D0045(01)",
       "full_title": "Decision (EU) 2015/5 of the European Central Bank of 19 November 2014 on the implementation of the asset-backed securities purchase programme (ECB/2014/45)",
       "type": "Decision",
-      "year": 2015,
-      "source_file": "L_2015001EN.01000401.xml"
+      "year": 2014,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0005"
     },
     "ECB/2021/32": {
       "celex": "32021D1274",
-      "full_title": "Decision (EU) 2021/1274 of the European Central Bank of 27 July 2021 on the sub-delegation of the powers to take certain decisions relating to a manufacturer’s accreditation and of certain powers rega",
+      "full_title": "Decision (EU) 2021/1274 of the European Central Bank of 27 July 2021 on the sub-delegation of the powers to take certain decisions relating to a manufacturer’s accreditation and of certain powers regarding the accreditation procedures for accredited manufacturers and repealing Decision (EU) 2016/1975 (ECB/2021/32)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021278EN.01000101.xml"
@@ -630,7 +766,7 @@
     },
     "ECB/2022/9": {
       "celex": "32022D0435",
-      "full_title": "Decision (EU) 2022/435 of the European Central Bank of 8 March 2022 amending Decision 2010/275/EU concerning the management of pooled bilateral loans for the benefit of the Hellenic Republic (ECB/2022",
+      "full_title": "Decision (EU) 2022/435 of the European Central Bank of 8 March 2022 amending Decision 2010/275/EU concerning the management of pooled bilateral loans for the benefit of the Hellenic Republic (ECB/2022/9)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022088EN.01019601.xml"
@@ -644,7 +780,7 @@
     },
     "ECB/2006/15": {
       "celex": "32006R1637",
-      "full_title": "Regulation (EC) No 1637/2006 of the European Central Bank of 2 November 2006 concerning transitional provisions for the application of minimum reserves by the European Central Bank following the intro",
+      "full_title": "Regulation (EC) No 1637/2006 of the European Central Bank of 2 November 2006 concerning transitional provisions for the application of minimum reserves by the European Central Bank following the introduction of the euro in Slovenia (ECB/2006/15)",
       "type": "Regulation",
       "year": 2006,
       "source_file": "L_2006306EN.01001501.xml"
@@ -657,11 +793,12 @@
       "source_file": "L_2018048EN.01001201.xml"
     },
     "ECB/2017/3": {
-      "celex": "32017D0102",
+      "celex": "32017D0003(01)",
       "full_title": "Decision (EU) 2017/102 of the European Central Bank of 11 January 2017 amending Decision (EU) 2015/5 on the implementation of the asset-backed securities purchase programme (ECB/2017/3)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017016EN.01005501.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D0102"
     },
     "SIS II": {
       "celex": "31987R2006",
@@ -707,14 +844,14 @@
     },
     "ECB/2023/9": {
       "celex": "32023D0817",
-      "full_title": "Decision (EU) 2023/817 of the European Central Bank of 5 April 2023 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) (ECB/2023/",
+      "full_title": "Decision (EU) 2023/817 of the European Central Bank of 5 April 2023 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) (ECB/2023/9)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023102EN.01005601.xml"
     },
     "ECB/2021/38": {
       "celex": "32021D1442",
-      "full_title": "Decision (EU) 2021/1442 of the European Central Bank of 3 August 2021 on delegation of the power to adopt decisions on internal models and on extension of deadlines (ECB/2021/38)",
+      "full_title": "Decision (EU) 2021/1442 of the European Central Bank of 3 August 2021 on delegation of the power to adopt decisions on internal models and on extension of deadlines (ECB/2021/38)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021314EN.01002201.xml"
@@ -727,32 +864,35 @@
       "source_file": "L_2022199EN.01000601.xml"
     },
     "ECB/2014/49": {
-      "celex": "32015D0286",
+      "celex": "32014D0049(01)",
       "full_title": "Decision (EU) 2015/286 of the European Central Bank of 27 November 2014 amending Decision ECB/2010/29 on the issue of euro banknotes (ECB/2014/49)",
       "type": "Decision",
-      "year": 2015,
-      "source_file": "L_2015050EN.01004201.xml"
+      "year": 2014,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0286"
     },
     "ECB/2023/36": {
       "celex": "32023D2816",
-      "full_title": "Decision (EU) 2023/2816 of the European Central Bank of 7 December 2023 on the paying-up of the European Central Bank’s capital by the non-euro area national central banks and repealing Decision (EU) ",
+      "full_title": "Decision (EU) 2023/2816 of the European Central Bank of 7 December 2023 on the paying-up of the European Central Bank’s capital by the non-euro area national central banks and repealing Decision (EU) 2020/136 (ECB/2020/2) (ECB/2023/36)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302816EN.000101.fmx.xml"
     },
     "ECB/2020/2": {
-      "celex": "32023D2816",
-      "full_title": "Decision (EU) 2023/2816 of the European Central Bank of 7 December 2023 on the paying-up of the European Central Bank’s capital by the non-euro area national central banks and repealing Decision (EU) ",
+      "celex": "32020D0136",
+      "full_title": "Decision (EU) 2020/136 of the European Central Bank of 22 January 2020 on the paying-up of the European Central Bank’s capital by the non-euro area national central banks and repealing Decision (EU) 2019/48 (ECB/2020/2)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302816EN.000101.fmx.xml"
+      "year": 2020,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D2816"
     },
     "ECB/2019/10": {
-      "celex": "32019D0685",
+      "celex": "32019D0010",
       "full_title": "Decision (EU) 2019/685 of the European Central Bank of 18 April 2019 on the total amount of annual supervisory fees for 2019 (ECB/2019/10)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019115EN.01001601.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D0685"
     },
     "AH-7921": {
       "celex": "32015D1875",
@@ -769,11 +909,12 @@
       "source_file": "L_2015275EN.01003801.xml"
     },
     "ECB/2015/21": {
-      "celex": "32015D0839",
+      "celex": "32015D0021",
       "full_title": "Decision (EU) 2015/839 of the European Central Bank of 27 April 2015 identifying the credit institutions that are subject to a comprehensive assessment (ECB/2015/21)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015132EN.01008801.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0839"
     },
     "COSS": {
       "celex": "32002R2099",
@@ -798,17 +939,18 @@
     },
     "ECB/2024/18": {
       "celex": "32024D2023",
-      "full_title": "Decision (EU) 2024/2023 of the European Central Bank of 3 July 2024 amending Decision ECB/2004/2 adopting the Rules of Procedure of the European Central Bank (ECB/2024/18)",
+      "full_title": "Decision (EU) 2024/2023 of the European Central Bank of 3 July 2024 amending Decision ECB/2004/2 adopting the Rules of Procedure of the European Central Bank (ECB/2024/18)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402023EN.000101.fmx.xml"
     },
     "ECB/2015/8": {
-      "celex": "32015D0716",
+      "celex": "32015D0008",
       "full_title": "Decision (EU) 2015/716 of the European Central Bank of 12 February 2015 amending Decision ECB/2004/2 adopting the Rules of Procedure of the European Central Bank (ECB/2015/8)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015114EN.01001101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0716"
     },
     "ECB/2014/41": {
       "celex": "32014R1163",
@@ -819,7 +961,7 @@
     },
     "ECB/2020/18": {
       "celex": "32020D0441",
-      "full_title": "Decision (EU) 2020/441 of the European Central Bank of 24 March 2020 amending Decision (EU) 2016/948 of the European Central Bank on the implementation of the corporate sector purchase programme (ECB/",
+      "full_title": "Decision (EU) 2020/441 of the European Central Bank of 24 March 2020 amending Decision (EU) 2016/948 of the European Central Bank on the implementation of the corporate sector purchase programme (ECB/2020/18)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020091EN.01000501.xml"
@@ -832,11 +974,12 @@
       "source_file": "L_202500688EN.000101.fmx.xml"
     },
     "ECB/2015/31": {
-      "celex": "32015D1613",
+      "celex": "32015D0031",
       "full_title": "Decision (EU) 2015/1613 of the European Central Bank of 10 September 2015 amending Decision (EU) 2015/5 on the implementation of the asset-backed securities purchase programme (ECB/2015/31)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015249EN.01002801.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D1613"
     },
     "EEE": {
       "celex": "32017R0699",
@@ -854,7 +997,7 @@
     },
     "ECB/2025/29": {
       "celex": "32025D1734",
-      "full_title": "Decision (EU) 2025/1734 of the European Central Bank of 31 July 2025 on safeguards in relation to access by central counterparties to Eurosystem overnight credit in TARGET (ECB/2025/29)",
+      "full_title": "Decision (EU) 2025/1734 of the European Central Bank of 31 July 2025 on safeguards in relation to access by central counterparties to Eurosystem overnight credit in TARGET (ECB/2025/29)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202501734EN.000101.fmx.xml"
@@ -888,22 +1031,23 @@
       "source_file": "L_2020069EN.01004101.xml"
     },
     "ECB/2023/28": {
-      "celex": "32024D2486",
-      "full_title": "Decision (EU) 2024/2486 of the European Central Bank of 10 September 2024 amending Decision (EU) 2023/2684 on the approval of the volume of coin issuance in 2024 (ECB/2023/28) (ECB/2024/24)",
+      "celex": "32023D2684",
+      "full_title": "Decision (EU) 2023/2684 of the European Central Bank of 21 November 2023 on the approval of the volume of coin issuance in 2024 (ECB/2023/28)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202402486EN.000101.fmx.xml"
+      "year": 2023,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D2486"
     },
     "ECB/2024/24": {
       "celex": "32024D2486",
-      "full_title": "Decision (EU) 2024/2486 of the European Central Bank of 10 September 2024 amending Decision (EU) 2023/2684 on the approval of the volume of coin issuance in 2024 (ECB/2023/28) (ECB/2024/24)",
+      "full_title": "Decision (EU) 2024/2486 of the European Central Bank of 10 September 2024 amending Decision (EU) 2023/2684 on the approval of the volume of coin issuance in 2024 (ECB/2023/28) (ECB/2024/24)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402486EN.000101.fmx.xml"
     },
     "ECB/2020/40": {
       "celex": "32020D1332",
-      "full_title": "Decision (EU) 2020/1332 of the European Central Bank of 15 September 2020 nominating heads of work units to adopt delegated decisions on the significance of supervised entities and repealing Decision ",
+      "full_title": "Decision (EU) 2020/1332 of the European Central Bank of 15 September 2020 nominating heads of work units to adopt delegated decisions on the significance of supervised entities and repealing Decision (EU) 2017/937 (ECB/2020/40)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020312EN.01003601.xml"
@@ -917,14 +1061,14 @@
     },
     "ECB/2020/38": {
       "celex": "32020D1264",
-      "full_title": "Decision (EU) 2020/1264 of the European Central Bank of 8 September 2020 amending Decision (EU) 2019/1743 of the European Central Bank on the remuneration of holdings of excess reserves and of certain",
+      "full_title": "Decision (EU) 2020/1264 of the European Central Bank of 8 September 2020 amending Decision (EU) 2019/1743 of the European Central Bank on the remuneration of holdings of excess reserves and of certain deposits (ECB/2020/38)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020297EN.01000501.xml"
     },
     "ECB/2020/43": {
       "celex": "32020D1335",
-      "full_title": "Decision (EU) 2020/1335 of the European Central Bank of 15 September 2020 nominating heads of work units to adopt delegated decisions on passporting, acquisition of qualifying holdings and withdrawal ",
+      "full_title": "Decision (EU) 2020/1335 of the European Central Bank of 15 September 2020 nominating heads of work units to adopt delegated decisions on passporting, acquisition of qualifying holdings and withdrawal of authorisations of credit institutions and repealing Decision (EU) 2019/1377 (ECB/2020/43)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020312EN.01004201.xml"
@@ -952,31 +1096,34 @@
     },
     "ECB/2024/9": {
       "celex": "32024D0901",
-      "full_title": "Decision (EU) 2024/901 of the European Central Bank of 12 March 2024 amending Decision (EU) 2022/2359 adopting internal rules concerning restrictions of rights of data subjects in connection with the ",
+      "full_title": "Decision (EU) 2024/901 of the European Central Bank of 12 March 2024 amending Decision (EU) 2022/2359 adopting internal rules concerning restrictions of rights of data subjects in connection with the European Central Bank’s internal functioning (ECB/2022/42)(ECB/2024/9)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202400901EN.000101.fmx.xml"
     },
     "ECB/2022/42": {
-      "celex": "32024D0901",
-      "full_title": "Decision (EU) 2024/901 of the European Central Bank of 12 March 2024 amending Decision (EU) 2022/2359 adopting internal rules concerning restrictions of rights of data subjects in connection with the ",
+      "celex": "32022D2359",
+      "full_title": "Decision (EU) 2022/2359 of the European Central Bank of 22 November 2022 adopting internal rules concerning restrictions of rights of data subjects in connection with the European Central Bank’s internal functioning (ECB/2022/42)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202400901EN.000101.fmx.xml"
+      "year": 2022,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D0901"
     },
     "ECB/2020/4": {
-      "celex": "32023D2819",
-      "full_title": "Decision (EU) 2023/2819 of the European Central Bank of 7 December 2023 on the paying-up of the European Central Bank’s capital by the national central banks of Member States whose currency is the eur",
+      "celex": "32020D0138",
+      "full_title": "Decision (EU) 2020/138 of the European Central Bank of 22 January 2020 on the paying-up of the European Central Bank’s capital by the national central banks of Member States whose currency is the euro and repealing Decision (EU) 2019/44 (ECB/2020/4)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302819EN.000101.fmx.xml"
+      "year": 2020,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D2819"
     },
     "ECB/2016/37": {
-      "celex": "32013R0575",
-      "full_title": "Guideline (EU) 2016/1993 of the European Central Bank of 4 November 2016 laying down the principles for the coordination of the assessment pursuant to Regulation (EU) No 575/2013 of the European Parli",
-      "type": "Regulation",
+      "celex": "32016O0037",
+      "full_title": "Guideline (EU) 2016/1993 of the European Central Bank of 4 November 2016 laying down the principles for the coordination of the assessment pursuant to Regulation (EU) No 575/2013 of the European Parliament and of the Council and the monitoring of institutional protection schemes including significant and less significant institutions (ECB/2016/37)",
+      "type": "Guideline",
       "year": 2016,
-      "source_file": "L_2016306EN.01003201.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32013R0575"
     },
     "ECB/2019/37": {
       "celex": "32019R2155",
@@ -1000,11 +1147,12 @@
       "source_file": "L_2023030EN.01001801.xml"
     },
     "ECB/2017/22": {
-      "celex": "32017D1258",
-      "full_title": "Decision (EU) 2017/1258 of the European Central Bank of 5 July 2017 on the delegation of decisions on the transmission of confidential statistical information to the Single Resolution Board (ECB/2017/",
+      "celex": "32017D0022",
+      "full_title": "Decision (EU) 2017/1258 of the European Central Bank of 5 July 2017 on the delegation of decisions on the transmission of confidential statistical information to the Single Resolution Board (ECB/2017/22)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017179EN.01003901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D1258"
     },
     "Cyber Resilience Act": {
       "celex": "32024R2847",
@@ -1014,11 +1162,12 @@
       "source_file": "L_202402847EN.000101.fmx.xml"
     },
     "ECB/2012/24": {
-      "celex": "32015R0730",
-      "full_title": "Regulation (EU) 2015/730 of the European Central Bank of 16 April 2015 amending Regulation (EU) No 1011/2012 concerning statistics on holdings of securities (ECB/2012/24) (ECB/2015/18)",
+      "celex": "32012R1011",
+      "full_title": "Regulation (EU) No 1011/2012 of the European Central Bank of 17 October 2012 concerning statistics on holdings of securities (ECB/2012/24)",
       "type": "Regulation",
-      "year": 2015,
-      "source_file": "L_2015116EN.01000501.xml"
+      "year": 2012,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015R0730"
     },
     "ECB/2015/18": {
       "celex": "32015R0730",
@@ -1063,11 +1212,12 @@
       "source_file": "L_2020418EN.01000101.xml"
     },
     "ECB/2013/43": {
-      "celex": "32020R2011",
-      "full_title": "Regulation (EU) 2020/2011 of the European Central Bank of 1 December 2020 amending Regulation (EU) No 1409/2013 on payments statistics (ECB/2013/43) (ECB/2020/59)",
+      "celex": "32013R1409",
+      "full_title": "Regulation (EU) No 1409/2013 of the European Central Bank of 28 November 2013 on payments statistics (ECB/2013/43)",
       "type": "Regulation",
-      "year": 2020,
-      "source_file": "L_2020418EN.01000101.xml"
+      "year": 2013,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32020R2011"
     },
     "ECB/2020/25": {
       "celex": "32020D0614",
@@ -1099,24 +1249,26 @@
     },
     "ECB/2025/24": {
       "celex": "32025R1520",
-      "full_title": "Regulation (EU) 2025/1520 of the European Central Bank of 15 July 2025 amending Regulation (EU) 2016/445 on the exercise of options and discretions available in Union law (ECB/2016/4) (ECB/2025/24)",
+      "full_title": "Regulation (EU) 2025/1520 of the European Central Bank of 15 July 2025 amending Regulation (EU) 2016/445 on the exercise of options and discretions available in Union law (ECB/2016/4) (ECB/2025/24)",
       "type": "Regulation",
       "year": 2025,
       "source_file": "L_202501520EN.000101.fmx.xml"
     },
     "ECB/2016/4": {
-      "celex": "32025R1520",
-      "full_title": "Regulation (EU) 2025/1520 of the European Central Bank of 15 July 2025 amending Regulation (EU) 2016/445 on the exercise of options and discretions available in Union law (ECB/2016/4) (ECB/2025/24)",
+      "celex": "32016R0445",
+      "full_title": "Regulation (EU) 2016/445 of the European Central Bank of 14 March 2016 on the exercise of options and discretions available in Union law (ECB/2016/4)",
       "type": "Regulation",
-      "year": 2025,
-      "source_file": "L_202501520EN.000101.fmx.xml"
+      "year": 2016,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025R1520"
     },
     "ECB/2017/15": {
-      "celex": "32017D1361",
+      "celex": "32017D0015",
       "full_title": "Decision (EU) 2017/1361 of the European Central Bank of 18 May 2017 amending Decision (EU) 2015/5 on the implementation of the asset-backed securities purchase programme (ECB/2017/15)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017190EN.01002401.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D1361"
     },
     "SF-006": {
       "celex": "32024D2078",
@@ -1126,15 +1278,16 @@
       "source_file": "L_202402078EN.000101.fmx.xml"
     },
     "ECB/2015/5": {
-      "celex": "32015D0299",
+      "celex": "32015D0005",
       "full_title": "Decision (EU) 2015/299 of the European Central Bank of 10 February 2015 amending Decision ECB/2014/34 on measures relating to targeted longer-term refinancing operations (ECB/2015/5)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015053EN.01002701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0299"
     },
     "ECB/2025/1": {
       "celex": "32025D0094",
-      "full_title": "Decision (EU) 2025/94 of the European Central Bank of 10 January 2025 laying down the criteria for notifying supervisory decisions for the purpose of supervisory stress tests (ECB/2025/1)",
+      "full_title": "Decision (EU) 2025/94 of the European Central Bank of 10 January 2025 laying down the criteria for notifying supervisory decisions for the purpose of supervisory stress tests (ECB/2025/1)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202500094EN.000101.fmx.xml"
@@ -1176,7 +1329,7 @@
     },
     "ECB/2020/55": {
       "celex": "32020D1735",
-      "full_title": "Decision (EU) 2020/1735 of the European Central Bank of 12 November 2020 amending Decision (EU) 2016/2248 on the allocation of monetary income of the national central banks of Member States whose curr",
+      "full_title": "Decision (EU) 2020/1735 of the European Central Bank of 12 November 2020 amending Decision (EU) 2016/2248 on the allocation of monetary income of the national central banks of Member States whose currency is the euro (ECB/2020/55)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020390EN.01006001.xml"
@@ -1197,7 +1350,7 @@
     },
     "ECB/2021/37": {
       "celex": "32021D1441",
-      "full_title": "Decision (EU) 2021/1441 of the European Central Bank of 3 August 2021 amending Decision (EU) 2019/322 on delegation of the power to adopt decisions regarding supervisory powers granted under national ",
+      "full_title": "Decision (EU) 2021/1441 of the European Central Bank of 3 August 2021 amending Decision (EU) 2019/322 on delegation of the power to adopt decisions regarding supervisory powers granted under national law (ECB/2021/37)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021314EN.01001701.xml"
@@ -1225,7 +1378,7 @@
     },
     "ECB/2021/34": {
       "celex": "32021D1438",
-      "full_title": "Decision (EU) 2021/1438 of the European Central Bank of 3 August 2021 amending Decision (EU) 2017/935 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper ",
+      "full_title": "Decision (EU) 2021/1438 of the European Central Bank of 3 August 2021 amending Decision (EU) 2017/935 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper requirements (ECB/2021/34)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021314EN.01000301.xml"
@@ -1253,11 +1406,12 @@
       "full_name": "Data Act"
     },
     "ECB/2017/11": {
-      "celex": "32017D0760",
+      "celex": "32017D0011(01)",
       "full_title": "Decision (EU) 2017/760 of the European Central Bank of 24 April 2017 on the total amount of annual supervisory fees for 2017 (ECB/2017/11)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017113EN.01005201.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D0760"
     },
     "DE3": {
       "celex": "32023R0052",
@@ -1275,21 +1429,21 @@
     },
     "ECB/2022/10": {
       "celex": "32022D0447",
-      "full_title": "Decision (EU) 2022/447 of the European Central Bank of 8 March 2022 amending Decision 2011/15/EU concerning the opening of accounts for the processing of payments in connection with EFSF loans to Memb",
+      "full_title": "Decision (EU) 2022/447 of the European Central Bank of 8 March 2022 amending Decision 2011/15/EU concerning the opening of accounts for the processing of payments in connection with EFSF loans to Member States whose currency is the euro (ECB/2022/10)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022090EN.01019701.xml"
     },
     "ECB/2022/46": {
       "celex": "32022D2546",
-      "full_title": "Decision (EU) 2022/2546 of the European Central Bank of 16 December 2022 amending Decision ECB/2010/29 on the issue of euro banknotes (ECB/2022/46)",
+      "full_title": "Decision (EU) 2022/2546 of the European Central Bank of 16 December 2022 amending Decision ECB/2010/29 on the issue of euro banknotes (ECB/2022/46)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022328EN.01013601.xml"
     },
     "ECB/2018/2": {
       "celex": "32018R0231",
-      "full_title": "Corrigendum to Regulation (EU) 2018/231 of the European Central Bank of 26 January 2018 on statistical reporting requirements for pension funds (ECB/2018/2) ( Official Journal of the European Union L ",
+      "full_title": "Regulation (EU) 2018/231 of the European Central Bank of 26 January 2018 on statistical reporting requirements for pension funds (ECB/2018/2)",
       "type": "Regulation",
       "year": 2018,
       "source_file": "L_2019002EN.01002701.xml"
@@ -1303,17 +1457,18 @@
     },
     "ECB/2023/24": {
       "celex": "32023D2530",
-      "full_title": "Decision (EU) 2023/2530 of the European Central Bank of 28 September 2023 on the delegation of the power to adopt decisions not to object to intended macroprudential measures of national competent aut",
+      "full_title": "Decision (EU) 2023/2530 of the European Central Bank of 28 September 2023 on the delegation of the power to adopt decisions not to object to intended macroprudential measures of national competent authorities or national designated authorities (ECB/2023/24)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302530EN.000101.fmx.xml"
     },
     "ECB/2017/40": {
-      "celex": "32017D2443",
+      "celex": "32017D0040",
       "full_title": "Decision (EU) 2017/2443 of the European Central Bank of 8 December 2017 on the approval of the volume of coin issuance in 2018 (ECB/2017/40)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017344EN.01006101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D2443"
     },
     "ISCO": {
       "celex": "32009R1022",
@@ -1344,11 +1499,12 @@
       "source_file": "L_2022315EN.01007101.xml"
     },
     "ECB/2016/7": {
-      "celex": "32016D0661",
+      "celex": "32016D0007",
       "full_title": "Decision (EU) 2016/661 of the European Central Bank of 15 April 2016 on the total amount of annual supervisory fees for 2016 (ECB/2016/7)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016114EN.01001401.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0661"
     },
     "RESTORE": {
       "celex": "32024R3236",
@@ -1379,25 +1535,27 @@
       "source_file": "L_2019151EN.01001501.xml"
     },
     "ECB/2016/41": {
-      "celex": "32017D0934",
+      "celex": "32016D0041(01)",
       "full_title": "Decision (EU) 2017/934 of the European Central Bank of 16 November 2016 on the delegation of decisions on the significance of supervised entities (ECB/2016/41)",
       "type": "Decision",
-      "year": 2017,
-      "source_file": "L_2017141EN.01001801.xml"
+      "year": 2016,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D0934"
     },
     "ECB/2021/33": {
       "celex": "32021D1437",
-      "full_title": "Decision (EU) 2021/1437 of the European Central Bank of 3 August 2021 amending Decision (EU) 2017/934 on the delegation of decisions on the significance of supervised entities (ECB/2021/33)",
+      "full_title": "Decision (EU) 2021/1437 of the European Central Bank of 3 August 2021 amending Decision (EU) 2017/934 on the delegation of decisions on the significance of supervised entities (ECB/2021/33)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021314EN.01000101.xml"
     },
     "ECB/2018/31": {
-      "celex": "32019D0047",
+      "celex": "32018D0031",
       "full_title": "Decision (EU) 2019/47 of the European Central Bank of 29 November 2018 amending Decision ECB/2010/29 on the issue of euro banknotes (ECB/2018/31)",
       "type": "Decision",
-      "year": 2019,
-      "source_file": "L_2019009EN.01019401.xml"
+      "year": 2018,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D0047"
     },
     "PFOS": {
       "celex": "32020R1203",
@@ -1421,64 +1579,61 @@
       "source_file": "L_202501748EN.000101.fmx.xml"
     },
     "ECB/2016/16": {
-      "celex": "32024D0190",
-      "full_title": "Decision (EU) 2024/190 of the European Central Bank of 15 December 2023 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2023/38)",
+      "celex": "32016D0016",
+      "full_title": "Decision (EU) 2016/948 of the European Central Bank of 1 June 2016 on the implementation of the corporate sector purchase programme (ECB/2016/16)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202400190EN.000101.fmx.xml"
+      "year": 2016,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D0190"
     },
     "ECB/2023/38": {
       "celex": "32024D0190",
-      "full_title": "Decision (EU) 2024/190 of the European Central Bank of 15 December 2023 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2023/38)",
+      "full_title": "Decision (EU) 2024/190 of the European Central Bank of 15 December 2023 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2023/38)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202400190EN.000101.fmx.xml"
     },
     "ECB/2019/2": {
-      "celex": "32019D0137",
+      "celex": "32019D0002",
       "full_title": "Decision (EU) 2019/137 of the European Central Bank of 23 January 2019 on the selection of Eurosystem Single Market Infrastructure Gateway (ESMIG) network service providers (ECB/2019/2)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019025EN.01003401.xml"
-    },
-    "ESMIG": {
-      "celex": "32019D0137",
-      "full_title": "Decision (EU) 2019/137 of the European Central Bank of 23 January 2019 on the selection of Eurosystem Single Market Infrastructure Gateway (ESMIG) network service providers (ECB/2019/2)",
-      "type": "Decision",
-      "year": 2019,
-      "source_file": "L_2019025EN.01003401.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D0137"
     },
     "ECB/2024/29": {
       "celex": "32024D2819",
-      "full_title": "Decision (EU) 2024/2819 of the European Central Bank of 24 October 2024 amending Decision (EU) 2020/440 on a temporary pandemic emergency purchase programme (ECB/2020/17) (ECB/2024/29)",
+      "full_title": "Decision (EU) 2024/2819 of the European Central Bank of 24 October 2024 amending Decision (EU) 2020/440 on a temporary pandemic emergency purchase programme (ECB/2020/17) (ECB/2024/29)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402819EN.000101.fmx.xml"
     },
     "ECB/2021/1": {
-      "celex": "31998R2531",
-      "full_title": "ANNEX II Formula and method for calculating a sanction pursuant to Article 7(3) of Regulation (EC) No 2531/98 for a failure to comply with the requirement to notify the relevant national central bank ",
+      "celex": "32021R0378",
+      "full_title": "Regulation (EU) 2021/378 of the European Central Bank of 22 January 2021 on the application of minimum reserve requirements (recast) (ECB/2021/1)",
       "type": "Regulation",
       "year": 2021,
-      "source_file": "L_2021367EN.01000701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "31998R2531"
     },
     "ECB/2021/45": {
       "celex": "32021D1815",
-      "full_title": "Decision (EU) 2021/1815 of the European Central Bank of 7 October 2021 on the methodology applied for the calculation of sanctions for non-compliance with the requirement to hold minimum reserves and ",
+      "full_title": "Decision (EU) 2021/1815 of the European Central Bank of 7 October 2021 on the methodology applied for the calculation of sanctions for non-compliance with the requirement to hold minimum reserves and related minimum reserve requirements (ECB/2021/45)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021367EN.01000401.xml"
     },
     "ECB/2022/34": {
-      "celex": "32023D2795",
-      "full_title": "Decision (EU) 2023/2795 of the European Central Bank of 4 December 2023 amending Decision (EU) 2022/1982 on the use of services of the European System of Central Banks by competent authorities and by ",
+      "celex": "32022D1982",
+      "full_title": "Decision (EU) 2022/1982 of the European Central Bank of 10 October 2022 on the use of services of the European System of Central Banks by competent authorities and by cooperating authorities, and amending Decision ECB/2013/1 (ECB/2022/34)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302795EN.000101.fmx.xml"
+      "year": 2022,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D2795"
     },
     "ECB/2023/29": {
       "celex": "32023D2795",
-      "full_title": "Decision (EU) 2023/2795 of the European Central Bank of 4 December 2023 amending Decision (EU) 2022/1982 on the use of services of the European System of Central Banks by competent authorities and by ",
+      "full_title": "Decision (EU) 2023/2795 of the European Central Bank of 4 December 2023 amending Decision (EU) 2022/1982 on the use of services of the European System of Central Banks by competent authorities and by cooperating authorities (ECB/2022/34) (ECB/2023/29)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302795EN.000101.fmx.xml"
@@ -1498,18 +1653,20 @@
       "source_file": "L_2017056EN.01021001.xml"
     },
     "ECB/2016/14": {
-      "celex": "32016D0868",
-      "full_title": "Decision (EU) 2016/868 of the European Central Bank of 18 May 2016 amending Decision ECB/2014/6 on the organisation of preparatory measures for the collection of granular credit data by the European S",
+      "celex": "32016D0014",
+      "full_title": "Decision (EU) 2016/868 of the European Central Bank of 18 May 2016 amending Decision ECB/2014/6 on the organisation of preparatory measures for the collection of granular credit data by the European System of Central Banks (ECB/2016/14)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016144EN.01009901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0868"
     },
     "ECB/2017/13": {
-      "celex": "32017D1359",
+      "celex": "32017D0013",
       "full_title": "Decision (EU) 2017/1359 of the European Central Bank of 18 May 2017 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2017/13)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017190EN.01002001.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D1359"
     },
     "ATM": {
       "celex": "32019R0123",
@@ -1541,7 +1698,7 @@
     },
     "ECB/2022/33": {
       "celex": "32022D1981",
-      "full_title": "Decision (EU) 2022/1981 of the European Central Bank of 10 October 2022 on the use of services of the European System of Central Banks by competent authorities (ECB/2022/33)",
+      "full_title": "Decision (EU) 2022/1981 of the European Central Bank of 10 October 2022 on the use of services of the European System of Central Banks by competent authorities (ECB/2022/33)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022272EN.01002201.xml"
@@ -1554,18 +1711,20 @@
       "source_file": "L_2023096EN.01000101.xml"
     },
     "ECB/2016/30": {
-      "celex": "32016D1974",
+      "celex": "32016D0030",
       "full_title": "Decision (EU) 2016/1974 of the European Central Bank of 31 October 2016 amending Decision (EU) 2016/810 (ECB/2016/10) on a second series of targeted longer-term refinancing operations (ECB/2016/30)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016304EN.01000701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D1974"
     },
     "ECB/2016/10": {
-      "celex": "32016D1974",
-      "full_title": "Decision (EU) 2016/1974 of the European Central Bank of 31 October 2016 amending Decision (EU) 2016/810 (ECB/2016/10) on a second series of targeted longer-term refinancing operations (ECB/2016/30)",
+      "celex": "32016D0010",
+      "full_title": "Decision (EU) 2016/810 of the European Central Bank of 28 April 2016 on a second series of targeted longer-term refinancing operations (ECB/2016/10)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016304EN.01000701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D1974"
     },
     "EFT": {
       "celex": "32017D0501",
@@ -1575,36 +1734,39 @@
       "source_file": "L_2017083EN.01000101.xml"
     },
     "ECB/2019/39": {
-      "celex": "32019D2195",
+      "celex": "32019D0039",
       "full_title": "Decision (EU) 2019/2195 of the European Central Bank of 5 December 2019 amending Decision ECB/2010/14 on the authenticity and fitness checking and recirculation of euro banknotes (ECB/2019/39)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019330EN.01009101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D2195"
     },
     "ECB/2023/13": {
       "celex": "32023R1092",
-      "full_title": "Regulation (EU) 2023/1092 of the European Central Bank of 25 May 2023 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/1999/4) (ECB/2023/13)",
+      "full_title": "Regulation (EU) 2023/1092 of the European Central Bank of 25 May 2023 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/1999/4) (ECB/2023/13)",
       "type": "Regulation",
       "year": 2023,
       "source_file": "L_2023146EN.01001501.xml"
     },
     "ECB/1999/4": {
-      "celex": "32023R1092",
-      "full_title": "Regulation (EU) 2023/1092 of the European Central Bank of 25 May 2023 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/1999/4) (ECB/2023/13)",
+      "celex": "31999R2157",
+      "full_title": "European Central Bank Regulation (EC) No 2157/1999 of 23 September 1999 on the powers of the European Central Bank to impose sanctions (ECB/1999/4)",
       "type": "Regulation",
-      "year": 2023,
-      "source_file": "L_2023146EN.01001501.xml"
+      "year": 1999,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023R1092"
     },
     "ECB/2022/2": {
-      "celex": "32013R1024",
-      "full_title": "Corrigendum to Decision (EU) [2022/134] of the European Central Bank of 19 January 2022 laying down common rules on the transmission by the European Central Bank of supervisory information to authorit",
-      "type": "Regulation",
+      "celex": "32022D0134",
+      "full_title": "Decision (EU) 2022/134 of the European Central Bank of 19 January 2022 laying down common rules on the transmission by the European Central Bank of supervisory information to authorities and bodies for the purpose of carrying out the tasks conferred on it by Council Regulation (EU) No 1024/2013 (ECB/2022/2)",
+      "type": "Decision",
       "year": 2022,
-      "source_file": "L_2022199EN.01003101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32013R1024"
     },
     "ECB/2025/30": {
       "celex": "32025D2056",
-      "full_title": "Decision (EU) 2025/2056 of the European Central Bank of 1 October 2025 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2025/30)",
+      "full_title": "Decision (EU) 2025/2056 of the European Central Bank of 1 October 2025 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2025/30)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202502056EN.000101.fmx.xml"
@@ -1646,35 +1808,37 @@
     },
     "ECB/2025/23": {
       "celex": "32025D1512",
-      "full_title": "Decision (EU) 2025/1512 of the European Central Bank of 16 July 2025 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) and Decis",
+      "full_title": "Decision (EU) 2025/1512 of the European Central Bank of 16 July 2025 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) and Decision (EU) 2024/1209 on the remuneration of non-monetary policy deposits held with national central banks and the European Central Bank (ECB/2024/11) (ECB/2025/23)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202501512EN.000101.fmx.xml"
     },
     "ECB/2024/11": {
-      "celex": "32025D1512",
-      "full_title": "Decision (EU) 2025/1512 of the European Central Bank of 16 July 2025 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) and Decis",
+      "celex": "32024D1209",
+      "full_title": "Decision (EU) 2024/1209 of the European Central Bank of 16 April 2024 on the remuneration of non-monetary policy deposits held with national central banks and the European Central Bank (ECB/2024/11)",
       "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501512EN.000101.fmx.xml"
+      "year": 2024,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025D1512"
     },
     "ECB/2019/29": {
       "celex": "32019R1677",
-      "full_title": "Regulation (EU) 2019/1677 of the European Central Bank of 27 September 2019 amending Regulation (EU) No 1333/2014 concerning statistics on the money markets (ECB/2019/29)",
+      "full_title": "Regulation (EU) 2019/1677 of the European Central Bank of 27 September 2019 amending Regulation (EU) No 1333/2014 concerning statistics on the money markets(ECB/2019/29)",
       "type": "Regulation",
       "year": 2019,
       "source_file": "L_2019257EN.01001801.xml"
     },
     "ECB/2020/5": {
-      "celex": "32023D2817",
-      "full_title": "Decision (EU) 2023/2817 of the European Central Bank of 7 December 2023 laying down the terms and conditions for transfers of the European Central Bank’s capital shares between the national central ba",
+      "celex": "32020D0139",
+      "full_title": "Decision (EU) 2020/139 of the European Central Bank of 22 January 2020 laying down the terms and conditions for transfers of the European Central Bank’s capital shares between the national central banks and for the adjustment of the paid-up capital and repealing Decision (EU) 2019/45 (ECB/2020/5)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302817EN.000101.fmx.xml"
+      "year": 2020,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D2817"
     },
     "ECB/2023/33": {
       "celex": "32023D2817",
-      "full_title": "Decision (EU) 2023/2817 of the European Central Bank of 7 December 2023 laying down the terms and conditions for transfers of the European Central Bank’s capital shares between the national central ba",
+      "full_title": "Decision (EU) 2023/2817 of the European Central Bank of 7 December 2023 laying down the terms and conditions for transfers of the European Central Bank’s capital shares between the national central banks and for the adjustment of the paid-up capital and repealing Decision (EU) 2020/139 (ECB/2020/5) (ECB/2023/33)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302817EN.000101.fmx.xml"
@@ -1694,15 +1858,16 @@
       "source_file": "L_202400950EN.000101.fmx.xml"
     },
     "ECB/2015/16": {
-      "celex": "32015D0811",
+      "celex": "32015D0016(01)",
       "full_title": "Decision (EU) 2015/811 of the European Central Bank of 27 March 2015 on public access to European Central Bank documents in the possession of the national competent authorities (ECB/2015/16)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015128EN.01002701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0811"
     },
     "ECB/2022/7": {
       "celex": "32022D0514",
-      "full_title": "Decision (EU) 2022/514 of the European Central Bank of 1 March 2022 on the total amount of annual supervisory fees for 2021 (ECB/2022/7)",
+      "full_title": "Decision (EU) 2022/514 of the European Central Bank of 1 March 2022 on the total amount of annual supervisory fees for 2021 (ECB/2022/7)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022103EN.01001401.xml"
@@ -1724,7 +1889,7 @@
     },
     "ECB/2023/6": {
       "celex": "32023D0673",
-      "full_title": "Decision (EU) 2023/673 of the European Central Bank of 14 March 2023 nominating heads of work units to adopt delegated decisions relating to on-site inspections and internal model investigations (ECB/",
+      "full_title": "Decision (EU) 2023/673 of the European Central Bank of 14 March 2023 nominating heads of work units to adopt delegated decisions relating to on-site inspections and internal model investigations (ECB/2023/6)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023084EN.01002401.xml"
@@ -1745,52 +1910,56 @@
     },
     "ECB/2025/33": {
       "celex": "32025D2015",
-      "full_title": "Decision (EU) 2025/2015 of the European Central Bank of 23 September 2025 on transitional provisions for the application of minimum reserves by the European Central Bank following the introduction of ",
+      "full_title": "Decision (EU) 2025/2015 of the European Central Bank of 23 September 2025 on transitional provisions for the application of minimum reserves by the European Central Bank following the introduction of the euro in Bulgaria (ECB/2025/33)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202502015EN.000101.fmx.xml"
     },
     "ECB/2022/51": {
       "celex": "32023D0135",
-      "full_title": "Decision (EU) 2023/135 of the European Central Bank of 30 December 2022 on the paying-up of capital, transfer of foreign reserve assets, and contributions by Hrvatska narodna banka to the European Cen",
+      "full_title": "Decision (EU) 2023/135 of the European Central Bank of 30 December 2022 on the paying-up of capital, transfer of foreign reserve assets, and contributions by Hrvatska narodna banka to the European Central Bank’s reserves and provisions (ECB/2022/51)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023017EN.01009401.xml"
     },
     "ECB/2019/20": {
-      "celex": "32016R0867",
-      "full_title": "Decision (EU) 2019/1348 of the European Central Bank of 18 July 2019 on the procedure for recognising non-euro area Member States as reporting Member States under Regulation (EU) 2016/867 on the colle",
-      "type": "Regulation",
+      "celex": "32019D0020(01)",
+      "full_title": "Decision (EU) 2019/1348 of the European Central Bank of 18 July 2019 on the procedure for recognising non-euro area Member States as reporting Member States under Regulation (EU) 2016/867 on the collection of granular credit and credit risk data (ECB/2019/20)",
+      "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019214EN.01000301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016R0867"
     },
     "ECB/2014/18": {
-      "celex": "31999R2157",
-      "full_title": "Corrigendum to Regulation (EU) No 469/2014 of the European Central Bank of 16 April 2014 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/1999/",
+      "celex": "32014R0469",
+      "full_title": "Regulation (EU) No 469/2014 of the European Central Bank of 16 April 2014 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/1999/4) (ECB/2014/18)",
       "type": "Regulation",
       "year": 2014,
-      "source_file": "L_2014267EN.01002701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "31999R2157"
     },
     "ECB/2021/36": {
       "celex": "32021D1440",
-      "full_title": "Decision (EU) 2021/1440 of the European Central Bank of 3 August 2021 amending Decision (EU) 2019/1376 on delegation of the power to adopt decisions on passporting, acquisition of qualifying holdings ",
+      "full_title": "Decision (EU) 2021/1440 of the European Central Bank of 3 August 2021 amending Decision (EU) 2019/1376 on delegation of the power to adopt decisions on passporting, acquisition of qualifying holdings and withdrawal of authorisations of credit institutions (ECB/2021/36)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021314EN.01001401.xml"
     },
     "ECB/2016/2": {
-      "celex": "32016D0956",
-      "full_title": "Decision (EU) 2016/956 of the European Central Bank of 7 June 2016 amending Decision (EU) 2016/245 (ECB/2016/2) laying down the rules on procurement (ECB/2016/17)",
+      "celex": "32016D0002",
+      "full_title": "Decision (EU) 2016/245 of the European Central Bank of 9 February 2016 laying down the rules on procurement (recast) (ECB/2016/2)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016159EN.01002101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0956"
     },
     "ECB/2016/17": {
-      "celex": "32016D0956",
+      "celex": "32016D0017(01)",
       "full_title": "Decision (EU) 2016/956 of the European Central Bank of 7 June 2016 amending Decision (EU) 2016/245 (ECB/2016/2) laying down the rules on procurement (ECB/2016/17)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016159EN.01002101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0956"
     },
     "ECB/2020/39": {
       "celex": "32020D1331",
@@ -1807,11 +1976,12 @@
       "source_file": "L_2019198EN.01000101.xml"
     },
     "ECB/2019/14": {
-      "celex": "32019D0976",
-      "full_title": "Decision (EU) 2019/976 of the European Central Bank of 29 May 2019 laying down the principles for defining objectives and sharing feedback in joint supervisory teams and repealing Decision (EU) 2017/2",
+      "celex": "32019D0014(01)",
+      "full_title": "Decision (EU) 2019/976 of the European Central Bank of 29 May 2019 laying down the principles for defining objectives and sharing feedback in joint supervisory teams and repealing Decision (EU) 2017/274 (ECB/2019/14)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019157EN.01006101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D0976"
     },
     "STEP": {
       "celex": "32024R0795",
@@ -1828,15 +1998,16 @@
       "source_file": "L_202302418EN.000101.fmx.xml"
     },
     "ECB/2018/10": {
-      "celex": "32018D0546",
+      "celex": "32018D0010(01)",
       "full_title": "Decision (EU) 2018/546 of the European Central Bank of 15 March 2018 on delegation of the power to adopt own funds decisions (ECB/2018/10)",
       "type": "Decision",
       "year": 2018,
-      "source_file": "L_2018090EN.01010501.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32018D0546"
     },
     "ECB/2024/28": {
       "celex": "32024D2818",
-      "full_title": "Decision (EU) 2024/2818 of the European Central Bank of 24 October 2024 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2024/28)",
+      "full_title": "Decision (EU) 2024/2818 of the European Central Bank of 24 October 2024 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2024/28)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402818EN.000101.fmx.xml"
@@ -1864,35 +2035,36 @@
     },
     "ECB/2022/32": {
       "celex": "32022D1921",
-      "full_title": "Decision (EU) 2022/1921 of the European Central Bank of 29 September 2022 on the methodology for the calculation of sanctions for alleged infringements of statistical reporting requirements (ECB/2022/",
+      "full_title": "Decision (EU) 2022/1921 of the European Central Bank of 29 September 2022 on the methodology for the calculation of sanctions for alleged infringements of statistical reporting requirements (ECB/2022/32)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022263EN.01005901.xml"
     },
     "ECB/2021/19": {
       "celex": "32021D0730",
-      "full_title": "Decision (EU) 2021/730 of the European Central Bank of 29 April 2021 amending Decision (EU) 2019/1349 on the procedure and conditions for exercise by a competent authority of certain powers in relatio",
+      "full_title": "Decision (EU) 2021/730 of the European Central Bank of 29 April 2021 amending Decision (EU) 2019/1349 on the procedure and conditions for exercise by a competent authority of certain powers in relation to oversight of systemically important payment systems (ECB/2021/19)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021157EN.01000701.xml"
     },
     "ECB/2021/40": {
       "celex": "32021D1443",
-      "full_title": "Decision (EU) 2021/1443 of the European Central Bank of 26 August 2021 nominating heads of work units to adopt delegated internal models and extension of deadlines decisions (ECB/2021/40)",
+      "full_title": "Decision (EU) 2021/1443 of the European Central Bank of 26 August 2021 nominating heads of work units to adopt delegated internal models and extension of deadlines decisions (ECB/2021/40)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021314EN.01003001.xml"
     },
     "ECB/2017/4": {
-      "celex": "32017D0103",
+      "celex": "32017D0004",
       "full_title": "Decision (EU) 2017/103 of the European Central Bank of 11 January 2017 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2017/4)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017016EN.01005701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D0103"
     },
     "ECB/2013/40": {
       "celex": "32013R1075",
-      "full_title": "Regulation (EU) No 1075/2013 of the European Central Bank of 18 October 2013 concerning statistics on the assets and liabilities of financial vehicle corporations engaged in securitisation transaction",
+      "full_title": "Regulation (EU) No 1075/2013 of the European Central Bank of 18 October 2013 concerning statistics on the assets and liabilities of financial vehicle corporations engaged in securitisation transactions (recast) (ECB/2013/40)",
       "type": "Regulation",
       "year": 2013,
       "source_file": "L_2013297EN.01010701.xml"
@@ -1927,35 +2099,38 @@
     },
     "ECB/2022/43": {
       "celex": "32022R2419",
-      "full_title": "Regulation (EU) 2022/2419 of the European Central Bank of 6 December 2022 amending Regulation (EU) 2021/378 on the application of minimum reserve requirements (ECB/2021/1) (ECB/2022/43)",
+      "full_title": "Regulation (EU) 2022/2419 of the European Central Bank of 6 December 2022 amending Regulation (EU) 2021/378 on the application of minimum reserve requirements (ECB/2021/1) (ECB/2022/43)",
       "type": "Regulation",
       "year": 2022,
       "source_file": "L_2022318EN.01000701.xml"
     },
     "ECB/2018/21": {
-      "celex": "32018D1148",
-      "full_title": "Decision (EU) 2018/1148 of the European Central Bank of 10 August 2018 on the eligibility of marketable debt instruments issued or fully guaranteed by the Hellenic Republic and repealing Decision (EU)",
+      "celex": "32018D0021",
+      "full_title": "Decision (EU) 2018/1148 of the European Central Bank of 10 August 2018 on the eligibility of marketable debt instruments issued or fully guaranteed by the Hellenic Republic and repealing Decision (EU) 2016/1041 (ECB/2018/21)",
       "type": "Decision",
       "year": 2018,
-      "source_file": "L_2018208EN.01009101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32018D1148"
     },
     "ECB/2016/19": {
-      "celex": "32016D1162",
+      "celex": "32016D0019",
       "full_title": "Decision (EU) 2016/1162 of the European Central Bank of 30 June 2016 on disclosure of confidential information in the context of criminal investigations (ECB/2016/19)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016192EN.01007301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D1162"
     },
     "ECB/2019/25": {
-      "celex": "32019D1349",
-      "full_title": "Decision (EU) 2019/1349 of the European Central Bank of 26 July 2019 on the procedure and conditions for exercise by a competent authority of certain powers in relation to oversight of systemically im",
+      "celex": "32019D0025(01)",
+      "full_title": "Decision (EU) 2019/1349 of the European Central Bank of 26 July 2019 on the procedure and conditions for exercise by a competent authority of certain powers in relation to oversight of systemically important payment systems (ECB/2019/25)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019214EN.01001601.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D1349"
     },
     "ECB/2021/24": {
       "celex": "32021R0943",
-      "full_title": "Regulation (EU) 2021/943 of the European Central Bank of 14 May 2021 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2021/24)",
+      "full_title": "Regulation (EU) 2021/943 of the European Central Bank of 14 May 2021 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2021/24)",
       "type": "Regulation",
       "year": 2021,
       "source_file": "L_2021210EN.01000101.xml"
@@ -1982,39 +2157,42 @@
       "source_file": "L_2008157EN.01001501.xml"
     },
     "ECB/2015/47": {
-      "celex": "32016D0188",
-      "full_title": "Decision (EU) 2016/188 of the European Central Bank of 11 December 2015 on the access and use of SSM electronic applications, systems, platforms and services by the European Central Bank and the natio",
+      "celex": "32015D0047",
+      "full_title": "Decision (EU) 2016/188 of the European Central Bank of 11 December 2015 on the access and use of SSM electronic applications, systems, platforms and services by the European Central Bank and the national competent authorities of the Single Supervisory Mechanism (ECB/2015/47)",
       "type": "Decision",
-      "year": 2016,
-      "source_file": "L_2016037EN.01010401.xml"
+      "year": 2015,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0188"
     },
     "ECB/2023/3": {
       "celex": "32023D0549",
-      "full_title": "Decision (EU) 2023/549 of the European Central Bank of 6 March 2023 on access to and use of certain TARGET data and repealing Decision ECB/2010/9 (ECB/2023/3)",
+      "full_title": "Decision (EU) 2023/549 of the European Central Bank of 6 March 2023 on access to and use of certain TARGET data and repealing Decision ECB/2010/9 (ECB/2023/3)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023073EN.01001901.xml"
     },
     "ECB/2016/38": {
-      "celex": "32013R0575",
-      "full_title": "Guideline (EU) 2016/1994 of the European Central Bank of 4 November 2016 on the approach for the recognition of institutional protection schemes for prudential purposes by national competent authoriti",
-      "type": "Regulation",
+      "celex": "32016O0038",
+      "full_title": "Guideline (EU) 2016/1994 of the European Central Bank of 4 November 2016 on the approach for the recognition of institutional protection schemes for prudential purposes by national competent authorities pursuant to Regulation (EU) No 575/2013 of the European Parliament and of the Council (ECB/2016/38)",
+      "type": "Guideline",
       "year": 2016,
-      "source_file": "L_2016306EN.01003701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32013R0575"
     },
     "ECB/2021/18": {
       "celex": "32021D0729",
-      "full_title": "Decision (EU) 2021/729 of the European Central Bank of 29 April 2021 amending Decision (EU) 2017/2098 on procedural aspects concerning the imposition of corrective measures for non-compliance with Reg",
+      "full_title": "Decision (EU) 2021/729 of the European Central Bank of 29 April 2021 amending Decision (EU) 2017/2098 on procedural aspects concerning the imposition of corrective measures for non-compliance with Regulation (EU) No 795/2014 (ECB/2021/18)",
       "type": "Regulation",
       "year": 2021,
       "source_file": "L_2021157EN.01000501.xml"
     },
     "ECB/2015/46": {
-      "celex": "32016D0187",
-      "full_title": "Decision (EU) 2016/187 of the European Central Bank of 11 December 2015 amending Decision ECB/2013/1 laying down the framework for a public key infrastructure for the European System of Central Banks ",
+      "celex": "32015D0046",
+      "full_title": "Decision (EU) 2016/187 of the European Central Bank of 11 December 2015 amending Decision ECB/2013/1 laying down the framework for a public key infrastructure for the European System of Central Banks (ECB/2015/46)",
       "type": "Decision",
-      "year": 2016,
-      "source_file": "L_2016037EN.01010001.xml"
+      "year": 2015,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0187"
     },
     "Cyber Solidarity Act": {
       "celex": "32025R0038",
@@ -2025,17 +2203,18 @@
     },
     "ECB/2025/32": {
       "celex": "32025D1970",
-      "full_title": "Decision (EU) 2025/1970 of the European Central Bank of 23 September 2025 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2025/32)",
+      "full_title": "Decision (EU) 2025/1970 of the European Central Bank of 23 September 2025 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2025/32)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202501970EN.000101.fmx.xml"
     },
     "ECB/2022/22": {
-      "celex": "32025D1970",
-      "full_title": "Decision (EU) 2025/1970 of the European Central Bank of 23 September 2025 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2025/32)",
+      "celex": "32022D0911",
+      "full_title": "Decision (EU) 2022/911 of the European Central Bank of 19 April 2022 concerning the terms and conditions of TARGET-ECB and repealing Decision ECB/2007/7 (ECB/2022/22)",
       "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501970EN.000101.fmx.xml"
+      "year": 2022,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025D1970"
     },
     "CIT": {
       "celex": "32025D0357",
@@ -2046,7 +2225,7 @@
     },
     "ECB/2024/25": {
       "celex": "32024D2546",
-      "full_title": "Decision (EU) 2024/2546 of the European Central Bank of 19 September 2024 amending Decision (EU) 2023/2684 on the approval of the volume of coin issuance in 2024 (ECB/2023/28) (ECB/2024/25)",
+      "full_title": "Decision (EU) 2024/2546 of the European Central Bank of 19 September 2024 amending Decision (EU) 2023/2684 on the approval of the volume of coin issuance in 2024 (ECB/2023/28) (ECB/2024/25)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402546EN.000101.fmx.xml"
@@ -2059,15 +2238,16 @@
       "source_file": "L_2023067EN.01005401.xml"
     },
     "ECB/2015/43": {
-      "celex": "32015D2332",
+      "celex": "32015D0043(01)",
       "full_title": "Decision (EU) 2015/2332 of the European Central Bank of 4 December 2015 on the procedural framework for the approval of the volume of euro coin issuance (ECB/2015/43)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015328EN.01012301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D2332"
     },
     "ECB/2023/26": {
       "celex": "32023D2531",
-      "full_title": "Decision (EU) 2023/2531 of the European Central Bank of 24 October 2023 nominating heads of work units to adopt delegated decisions not to object to intended macroprudential measures of national compe",
+      "full_title": "Decision (EU) 2023/2531 of the European Central Bank of 24 October 2023 nominating heads of work units to adopt delegated decisions not to object to intended macroprudential measures of national competent authorities or national designated authorities (ECB/2023/26)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302531EN.000101.fmx.xml"
@@ -2081,17 +2261,18 @@
     },
     "ECB/2013/38": {
       "celex": "32013R1073",
-      "full_title": "Decision (EU) 2015/32 of the European Central Bank of 29 December 2014 concerning derogations that may be granted under Regulation (EU) No 1073/2013 concerning statistics on the assets and liabilities",
+      "full_title": "Regulation (EU) No 1073/2013 of the European Central Bank of 18 October 2013 concerning statistics on the assets and liabilities of investment funds (recast) (ECB/2013/38)",
       "type": "Regulation",
       "year": 2015,
       "source_file": "L_2015005EN.01001701.xml"
     },
     "ECB/2014/62": {
-      "celex": "32013R1073",
-      "full_title": "Decision (EU) 2015/32 of the European Central Bank of 29 December 2014 concerning derogations that may be granted under Regulation (EU) No 1073/2013 concerning statistics on the assets and liabilities",
-      "type": "Regulation",
-      "year": 2015,
-      "source_file": "L_2015005EN.01001701.xml"
+      "celex": "32014D0062(01)",
+      "full_title": "Decision (EU) 2015/32 of the European Central Bank of 29 December 2014 concerning derogations that may be granted under Regulation (EU) No 1073/2013 concerning statistics on the assets and liabilities of investment funds (ECB/2013/38) (recast) (ECB/2014/62)",
+      "type": "Decision",
+      "year": 2014,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32013R1073"
     },
     "DCHP": {
       "celex": "32006R1907",
@@ -2116,21 +2297,21 @@
     },
     "ECB/2025/21": {
       "celex": "32025D1241",
-      "full_title": "Decision (EU) 2025/1241 of the European Central Bank of 11 June 2025 amending Decision (EU) 2020/440 on a temporary pandemic emergency purchase programme (ECB/2020/17) (ECB/2025/21)",
+      "full_title": "Decision (EU) 2025/1241 of the European Central Bank of 11 June 2025 amending Decision (EU) 2020/440 on a temporary pandemic emergency purchase programme (ECB/2020/17) (ECB/2025/21)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202501241EN.000101.fmx.xml"
     },
     "ECB/2024/30": {
       "celex": "32024D2830",
-      "full_title": "Decision (EU) 2024/2830 of the European Central Bank of 29 October 2024 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2024/30)",
+      "full_title": "Decision (EU) 2024/2830 of the European Central Bank of 29 October 2024 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2024/30)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402830EN.000101.fmx.xml"
     },
     "ECB/2023/2": {
       "celex": "32023D0656",
-      "full_title": "Decision (EU) 2023/656 of the European Central Bank of 28 February 2023 on the total amount of annual supervisory fees for 2022 (ECB/2023/2)",
+      "full_title": "Decision (EU) 2023/656 of the European Central Bank of 28 February 2023 on the total amount of annual supervisory fees for 2022 (ECB/2023/2)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023081EN.01004201.xml"
@@ -2144,7 +2325,7 @@
     },
     "ECB/2024/17": {
       "celex": "32024R1988",
-      "full_title": "Regulation (EU) 2024/1988 of the European Central Bank of 27 June 2024 concerning statistics on investment funds and repealing Decision (EU) 2015/32 (ECB/2014/62) (ECB/2024/17) (recast)",
+      "full_title": "Regulation (EU) 2024/1988 of the European Central Bank of 27 June 2024 concerning statistics on investment funds and repealing Decision (EU) 2015/32 (ECB/2014/62) (ECB/2024/17) (recast)",
       "type": "Regulation",
       "year": 2024,
       "source_file": "L_202401988EN.000101.fmx.xml"
@@ -2186,28 +2367,30 @@
     },
     "ECB/2022/35": {
       "celex": "32022D2063",
-      "full_title": "Decision (EU) 2022/2063 of the European Central Bank of 13 October 2022 amending Decision (EU) 2020/637 on accreditation procedures for manufacturers of euro secure items and euro items (ECB/2022/35)",
+      "full_title": "Decision (EU) 2022/2063 of the European Central Bank of 13 October 2022 amending Decision (EU) 2020/637 on accreditation procedures for manufacturers of euro secure items and euro items (ECB/2022/35)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022276EN.01014201.xml"
     },
     "ECB/2019/22": {
-      "celex": "32019D1312",
+      "celex": "32019D0022(01)",
       "full_title": "Decision (EU) 2019/1312 of the European Central Bank of 22 July 2019 amending Decision (EU) 2016/810 (ECB/2016/10) on a second series of targeted longer-term refinancing operations (ECB/2019/22)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019204EN.01012301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D1312"
     },
     "ECB/2020/8": {
-      "celex": "32025D1240",
-      "full_title": "Decision (EU) 2025/1240 of the European Central Bank of 11 June 2025 amending Decision (EU) 2020/187 on the implementation of the third covered bond purchase programme (ECB/2020/8) (ECB/2025/20)",
+      "celex": "32020D0187",
+      "full_title": "Decision (EU) 2020/187 of the European Central Bank of 3 February 2020 on the implementation of the third covered bond purchase programme (ECB/2020/8) (recast)",
       "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202501240EN.000101.fmx.xml"
+      "year": 2020,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025D1240"
     },
     "ECB/2025/20": {
       "celex": "32025D1240",
-      "full_title": "Decision (EU) 2025/1240 of the European Central Bank of 11 June 2025 amending Decision (EU) 2020/187 on the implementation of the third covered bond purchase programme (ECB/2020/8) (ECB/2025/20)",
+      "full_title": "Decision (EU) 2025/1240 of the European Central Bank of 11 June 2025 amending Decision (EU) 2020/187 on the implementation of the third covered bond purchase programme (ECB/2020/8) (ECB/2025/20)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202501240EN.000101.fmx.xml"
@@ -2228,7 +2411,7 @@
     },
     "ECB/2018/26": {
       "celex": "32018R1845",
-      "full_title": "Regulation (EU) 2018/1845 of the European Central Bank of 21 November 2018 on the exercise of the discretion under Article 178(2)(d) of Regulation (EU) No 575/2013 in relation to the threshold for ass",
+      "full_title": "Regulation (EU) 2018/1845 of the European Central Bank of 21 November 2018 on the exercise of the discretion under Article 178(2)(d) of Regulation (EU) No 575/2013 in relation to the threshold for assessing the materiality of credit obligations past due (ECB/2018/26)",
       "type": "Regulation",
       "year": 2018,
       "source_file": "L_2018299EN.01005501.xml"
@@ -2242,7 +2425,7 @@
     },
     "ECB/2025/13": {
       "celex": "32025D0873",
-      "full_title": "Decision (EU) 2025/873 of the European Central Bank of 24 April 2025 amending Decision (EU) 2022/1981 on the use of services of the European System of Central Banks by competent authorities (ECB/2022/",
+      "full_title": "Decision (EU) 2025/873 of the European Central Bank of 24 April 2025 amending Decision (EU) 2022/1981 on the use of services of the European System of Central Banks by competent authorities (ECB/2022/33) (ECB/2025/13)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202500873EN.000101.fmx.xml"
@@ -2263,24 +2446,26 @@
     },
     "ECB/2021/48": {
       "celex": "32021D1944",
-      "full_title": "Decision (EU) 2021/1944 of the European Central Bank of 2 November 2021 amending Decision (EU) 2020/1997 on the approval of the volume of coin issuance in 2021 (ECB/2021/48)",
+      "full_title": "Decision (EU) 2021/1944 of the European Central Bank of 2 November 2021 amending Decision (EU) 2020/1997 on the approval of the volume of coin issuance in 2021 (ECB/2021/48)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021397EN.01002601.xml"
     },
     "ECB/2016/5": {
-      "celex": "32016D0457",
+      "celex": "32016D0005",
       "full_title": "Decision (EU) 2016/457 of the European Central Bank of 16 March 2016 on the eligibility of marketable debt instruments issued or fully guaranteed by the Republic of Cyprus (ECB/2016/5)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016079EN.01004101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0457"
     },
     "ECB/2016/11": {
-      "celex": "32016D0811",
+      "celex": "32016D0011",
       "full_title": "Decision (EU) 2016/811 of the European Central Bank of 28 April 2016 amending Decision ECB/2014/34 on measures relating to targeted longer-term refinancing operations (ECB/2016/11)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016132EN.01012901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0811"
     },
     "CPA": {
       "celex": "32008R0451",
@@ -2297,25 +2482,27 @@
       "source_file": "L_2023166EN.01000601.xml"
     },
     "ECB/2017/41": {
-      "celex": "32017D2444",
+      "celex": "32017D0041",
       "full_title": "Decision (EU) 2017/2444 of the European Central Bank of 8 December 2017 amending Decision (EU) 2015/2332 on the procedural framework for the approval of the volume of euro coin issuance (ECB/2017/41)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017344EN.01006301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D2444"
     },
     "ECB/2024/38": {
       "celex": "32024D3127",
-      "full_title": "Decision (EU) 2024/3127 of the European Central Bank of 26 November 2024 on the approval of the volume of coin issuance in 2025 (ECB/2024/38)",
+      "full_title": "Decision (EU) 2024/3127 of the European Central Bank of 26 November 2024 on the approval of the volume of coin issuance in 2025 (ECB/2024/38)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202403127EN.000101.fmx.xml"
     },
     "ECB/2014/57": {
-      "celex": "32015D0298",
-      "full_title": "Decision (EU) 2015/298 of the European Central Bank of 15 December 2014 on the interim distribution of the income of the European Central Bank (ECB/2014/57) (recast)",
+      "celex": "32014D0057(01)",
+      "full_title": "Decision (EU) 2015/298 of the European Central Bank of 15 December 2014 on the interim distribution of the income of the European Central Bank (recast) (ECB/2014/57)",
       "type": "Decision",
-      "year": 2015,
-      "source_file": "L_2015053EN.01002401.xml"
+      "year": 2014,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0298"
     },
     "ELTIF": {
       "celex": "32024R2759",
@@ -2326,7 +2513,7 @@
     },
     "ECB/2013/34": {
       "celex": "32013R1072",
-      "full_title": "Regulation (EU) No 1072/2013 of the European Central Bank of 24 September 2013 concerning statistics on interest rates applied by monetary financial institutions (recast) (ECB/2013/34)",
+      "full_title": "Regulation (EU) No 1072/2013 of the European Central Bank of 24 September 2013 concerning statistics on interest rates applied by monetary financial institutions (recast) (ECB/2013/34)",
       "type": "Regulation",
       "year": 2013,
       "source_file": "L_2013297EN.01005101.xml"
@@ -2340,7 +2527,7 @@
     },
     "ECB/2021/25": {
       "celex": "32021D0874",
-      "full_title": "Decision (EU) 2021/874 of the European Central Bank of 26 May 2021 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2021/25)",
+      "full_title": "Decision (EU) 2021/874 of the European Central Bank of 26 May 2021 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2021/25)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021191EN.01004301.xml"
@@ -2361,14 +2548,14 @@
     },
     "ECB/2022/29": {
       "celex": "32022D1613",
-      "full_title": "Decision (EU) 2022/1613 of the European Central Bank of 9 September 2022 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2022/29)",
+      "full_title": "Decision (EU) 2022/1613 of the European Central Bank of 9 September 2022 amending Decision (EU) 2016/948 on the implementation of the corporate sector purchase programme (ECB/2016/16) (ECB/2022/29)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022241EN.01001301.xml"
     },
     "ECB/2023/19": {
       "celex": "32023D1680",
-      "full_title": "Decision (EU) 2023/1680 of the European Central Bank of 17 August 2023 on the reporting of funding plans of supervised entities by national competent authorities to the European Central Bank (ECB/2023",
+      "full_title": "Decision (EU) 2023/1680 of the European Central Bank of 17 August 2023 on the reporting of funding plans of supervised entities by national competent authorities to the European Central Bank (ECB/2023/19) (recast)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023216EN.01009801.xml"
@@ -2381,29 +2568,30 @@
       "source_file": "LI2020224EN.01000401.xml"
     },
     "ECB/2022/30": {
-      "celex": "32023D0055",
-      "full_title": "Decision (EU) 2023/55 of the European Central Bank of 16 December 2022 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) and Dec",
+      "celex": "32022D1521",
+      "full_title": "Decision (EU) 2022/1521 of the European Central Bank of 12 September 2022 on temporary adjustments to the remuneration of certain non-monetary policy deposits held with national central banks and the European Central Bank (ECB/2022/30)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_2023003EN.01001601.xml"
+      "year": 2022,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D0055"
     },
     "ECB/2022/47": {
       "celex": "32023D0055",
-      "full_title": "Decision (EU) 2023/55 of the European Central Bank of 16 December 2022 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) and Dec",
+      "full_title": "Decision (EU) 2023/55 of the European Central Bank of 16 December 2022 amending Decision (EU) 2019/1743 on the remuneration of holdings of excess reserves and of certain deposits (ECB/2019/31) and Decision (EU) 2022/1521 on temporary adjustments to the remuneration of certain non-monetary policy deposits held with national central banks and the European Central Bank (ECB/2022/30) (ECB/2022/47)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023003EN.01001601.xml"
     },
     "ECB/2022/14": {
       "celex": "32022R0504",
-      "full_title": "Regulation (EU) 2022/504 of the European Central Bank of 25 March 2022 amending Regulation (EU) 2016/445 on the exercise of options and discretions available in Union law (ECB/2016/4) (ECB/2022/14)",
+      "full_title": "Regulation (EU) 2022/504 of the European Central Bank of 25 March 2022 amending Regulation (EU) 2016/445 on the exercise of options and discretions available in Union law (ECB/2016/4) (ECB/2022/14)",
       "type": "Regulation",
       "year": 2022,
       "source_file": "L_2022102EN.01001101.xml"
     },
     "ECB/2022/6": {
       "celex": "32022D0368",
-      "full_title": "Decision (EU) 2022/368 of the European Central Bank of 18 February 2022 amending Decision (EU) 2015/2218 on the procedure to exclude staff members from the presumption of having a material impact on a",
+      "full_title": "Decision (EU) 2022/368 of the European Central Bank of 18 February 2022 amending Decision (EU) 2015/2218 on the procedure to exclude staff members from the presumption of having a material impact on a supervised credit institution's risk profile (ECB/2022/6)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022069EN.01011701.xml"
@@ -2431,45 +2619,47 @@
     },
     "ECB/2021/8": {
       "celex": "32021D0490",
-      "full_title": "Decision (EU) 2021/490 of the European Central Bank of 12 March 2021 on the total amount of annual supervisory fees for 2020 (ECB/2021/8)",
+      "full_title": "Decision (EU) 2021/490 of the European Central Bank of 12 March 2021 on the total amount of annual supervisory fees for 2020 (ECB/2021/8)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021101EN.01010701.xml"
     },
     "ECB/2025/2": {
-      "celex": "32025D1148",
-      "full_title": "Decision (EU) 2025/1148 of the European Central Bank of 2 June 2025 amending Decision (EU) 2025/222 on access by non-bank payment service providers to Eurosystem central bank operated payment systems ",
+      "celex": "32025D0222",
+      "full_title": "Decision (EU) 2025/222 of the European Central Bank of 27 January 2025 on access by non-bank payment service providers to Eurosystem central bank operated payment systems and central bank accounts (ECB/2025/2)",
       "type": "Decision",
       "year": 2025,
-      "source_file": "L_202501148EN.000101.fmx.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025D1148"
     },
     "ECB/2025/18": {
       "celex": "32025D1148",
-      "full_title": "Decision (EU) 2025/1148 of the European Central Bank of 2 June 2025 amending Decision (EU) 2025/222 on access by non-bank payment service providers to Eurosystem central bank operated payment systems ",
+      "full_title": "Decision (EU) 2025/1148 of the European Central Bank of 2 June 2025 amending Decision (EU) 2025/222 on access by non-bank payment service providers to Eurosystem central bank operated payment systems and central bank accounts (ECB/2025/2) (ECB/2025/18)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202501148EN.000101.fmx.xml"
     },
     "ECB/2021/35": {
       "celex": "32021D1439",
-      "full_title": "Decision (EU) 2021/1439 of the European Central Bank of 3 August 2021 amending Decision (EU) 2018/546 on delegation of the power to adopt own funds decisions (ECB/2021/35)",
+      "full_title": "Decision (EU) 2021/1439 of the European Central Bank of 3 August 2021 amending Decision (EU) 2018/546 on delegation of the power to adopt own funds decisions (ECB/2021/35)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021314EN.01000801.xml"
     },
     "ECB/2024/35": {
       "celex": "32024D2940",
-      "full_title": "Decision (EU) 2024/2940 of the European Central Bank of 14 November 2024 amending Decision (EU) 2023/135 (ECB/2022/51), Decision (EU) 2015/287 (ECB/2014/61), and Decisions ECB/2013/53, ECB/2010/34, EC",
+      "full_title": "Decision (EU) 2024/2940 of the European Central Bank of 14 November 2024 amending Decision (EU) 2023/135 (ECB/2022/51), Decision (EU) 2015/287 (ECB/2014/61), and Decisions ECB/2013/53, ECB/2010/34, ECB/2008/33, ECB/2007/22 and ECB/2006/30 on the paying-up of capital, transfer of foreign reserve assets, and contributions to the European Central Bank’s reserves and provisions by, respectively, Hrvatska narodna banka, Lietuvos bankas, Latvijas Banka, Eesti Pank, Národná banka Slovenska, the Central Bank of Cyprus and the Central Bank of Malta, and Banka Slovenije (ECB/2024/35)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402940EN.000101.fmx.xml"
     },
     "ECB/2014/61": {
-      "celex": "32024D2940",
-      "full_title": "Decision (EU) 2024/2940 of the European Central Bank of 14 November 2024 amending Decision (EU) 2023/135 (ECB/2022/51), Decision (EU) 2015/287 (ECB/2014/61), and Decisions ECB/2013/53, ECB/2010/34, EC",
+      "celex": "32014D0061(01)",
+      "full_title": "Decision (EU) 2015/287 of the European Central Bank of 31 December 2014 on the paying-up of capital, transfer of foreign reserve assets and contributions by Lietuvos bankas to the European Central Bank's reserves and provisions (ECB/2014/61)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202402940EN.000101.fmx.xml"
+      "year": 2014,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D2940"
     },
     "C-3102": {
       "celex": "32016R0897",
@@ -2479,39 +2669,43 @@
       "source_file": "L_2016152EN.01000701.xml"
     },
     "ECB/2014/59": {
-      "celex": "32015D0433",
+      "celex": "32014D0059(01)",
       "full_title": "Decision (EU) 2015/433 of the European Central Bank of 17 December 2014 concerning the establishment of an Ethics Committee and its Rules of Procedure (ECB/2014/59)",
       "type": "Decision",
-      "year": 2015,
-      "source_file": "L_2015070EN.01005801.xml"
+      "year": 2014,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0433"
     },
     "ECB/2013/39": {
       "celex": "32013R1074",
-      "full_title": "Regulation (EU) No 1074/2013 of the European Central Bank of 18 October 2013 on statistical reporting requirements for post office giro institutions that receive deposits from non-monetary financial i",
+      "full_title": "Regulation (EU) No 1074/2013 of the European Central Bank of 18 October 2013 on statistical reporting requirements for post office giro institutions that receive deposits from non-monetary financial institution euro area residents (recast) (ECB/2013/39)",
       "type": "Regulation",
       "year": 2013,
       "source_file": "L_2013297EN.01009401.xml"
     },
     "ECB/2007/7": {
-      "celex": "32022D0911",
-      "full_title": "Corrigendum to Decision (EU) 2022/911 of the European Central Bank of 19 April 2022 concerning the terms and conditions of TARGET-ECB and repealing Decision 2007/610/EC (ECB/2007/7) (ECB/2022/22) ( Of",
+      "celex": "32007D0007",
+      "full_title": "Decision of the European Central Bank of 24 July 2007 concerning the terms and conditions of TARGET2-ECB (ECB/2007/7)",
       "type": "Decision",
-      "year": 2022,
-      "source_file": "L_2023195EN.01005201.xml"
+      "year": 2007,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32022D0911"
     },
     "ECB/2019/23": {
-      "celex": "32019D1376",
-      "full_title": "Decision (EU) 2019/1376 of the European Central Bank of 23 July 2019 on delegation of the power to adopt decisions on passporting, acquisition of qualifying holdings and withdrawal of authorisations o",
+      "celex": "32019D0023",
+      "full_title": "Decision (EU) 2019/1376 of the European Central Bank of 23 July 2019 on delegation of the power to adopt decisions on passporting, acquisition of qualifying holdings and withdrawal of authorisations of credit institutions (ECB/2019/23)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019224EN.01000101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D1376"
     },
     "ECB/2019/9": {
-      "celex": "32019D0669",
-      "full_title": "Decision (EU) 2019/669 of the European Central Bank of 4 April 2019 amending Decision ECB/2013/10 on the denominations, specifications, reproduction, exchange and withdrawal of euro banknotes (ECB/201",
+      "celex": "32019D0009",
+      "full_title": "Decision (EU) 2019/669 of the European Central Bank of 4 April 2019 amending Decision ECB/2013/10 on the denominations, specifications, reproduction, exchange and withdrawal of euro banknotes (ECB/2019/9)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019113EN.01000601.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D0669"
     },
     "UFAS": {
       "celex": "32018L2001",
@@ -2521,11 +2715,12 @@
       "source_file": "L_2022114EN.01020901.xml"
     },
     "ECB/2015/51": {
-      "celex": "32016D0021",
+      "celex": "32015D0051",
       "full_title": "Decision (EU) 2016/21 of the European Central Bank of 23 December 2015 amending Decision ECB/2008/17 laying down the framework for joint Eurosystem procurement (ECB/2015/51)",
       "type": "Decision",
-      "year": 2016,
-      "source_file": "L_2016006EN.01000501.xml"
+      "year": 2015,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0021"
     },
     "AOP": {
       "celex": "32013R1133",
@@ -2536,7 +2731,7 @@
     },
     "ECB/2020/54": {
       "celex": "32020D1575",
-      "full_title": "Decision (EU) 2020/1575 of the European Central Bank of 27 October 2020 as regards the assessment of and follow-up on information on breaches reported through the whistleblowing tool where a person co",
+      "full_title": "Decision (EU) 2020/1575 of the European Central Bank of 27 October 2020 as regards the assessment of and follow-up on information on breaches reported through the whistleblowing tool where a person concerned is a high-level ECB official (ECB/2020/54)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020359EN.01001401.xml"
@@ -2548,19 +2743,13 @@
       "year": 2020,
       "source_file": "L_2020412EN.01003101.xml"
     },
-    "ECB/2020/33": {
-      "celex": "32013R1073",
-      "full_title": "Decision (EU) 2020/1100 of the European Central Bank of 17 July 2020 amending Decision (EU) 2015/32 concerning derogations that may be granted under Regulation (EU) No 1073/2013 (ECB/2020/33)",
-      "type": "Regulation",
-      "year": 2020,
-      "source_file": "L_2020241EN.01003201.xml"
-    },
     "ECB/2020/32": {
-      "celex": "32013R0575",
-      "full_title": "Guideline (EU) 2020/978 of the European Central Bank of 25 June 2020 on the exercise of the discretion under Article 178(2)(d) of Regulation (EU) No 575/2013 of the European Parliament and of the Coun",
-      "type": "Regulation",
+      "celex": "32020O0978",
+      "full_title": "Guideline (EU) 2020/978 of the European Central Bank of 25 June 2020 on the exercise of the discretion under Article 178(2)(d) of Regulation (EU) No 575/2013 of the European Parliament and of the Council by national competent authorities in relation to less significant institutions with regard to the threshold for assessing the materiality of credit obligations past due (ECB/2020/32)",
+      "type": "Guideline",
       "year": 2020,
-      "source_file": "L_2020217EN.01000501.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32013R0575"
     },
     "PAM": {
       "celex": "32023R0173",
@@ -2570,11 +2759,12 @@
       "source_file": "L_2023025EN.01000101.xml"
     },
     "ECB/2019/40": {
-      "celex": "32019D2231",
+      "celex": "32019D0040",
       "full_title": "Decision (EU) 2019/2231 of the European Central Bank of 10 December 2019 on the approval of the volume of coin issuance in 2020 (ECB/2019/40)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019333EN.01014901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D2231"
     },
     "ECB/2020/24": {
       "celex": "32020D0637",
@@ -2592,14 +2782,14 @@
     },
     "ECB/2021/21": {
       "celex": "32021D0752",
-      "full_title": "Decision (EU) 2021/752 of the European Central Bank of 30 April 2021 amending Decision (EU) 2019/1311 on a third series of targeted longer-term refinancing operations (ECB/2021/21)",
+      "full_title": "Decision (EU) 2021/752 of the European Central Bank of 30 April 2021 amending Decision (EU) 2019/1311 on a third series of targeted longer-term refinancing operations (ECB/2021/21)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021161EN.01000101.xml"
     },
     "ECB/2023/21": {
       "celex": "32023R1679",
-      "full_title": "Regulation (EU) 2023/1679 of the European Central Bank of 25 August 2023 amending Regulation (EU) 2021/378 on the application of minimum reserve requirements (ECB/2021/1) (ECB/2023/21)",
+      "full_title": "Regulation (EU) 2023/1679 of the European Central Bank of 25 August 2023 amending Regulation (EU) 2021/378 on the application of minimum reserve requirements (ECB/2021/1) (ECB/2023/21)",
       "type": "Regulation",
       "year": 2023,
       "source_file": "L_2023216EN.01009601.xml"
@@ -2619,15 +2809,16 @@
       "source_file": "L_2023055EN.01000101.xml"
     },
     "ECB/2017/33": {
-      "celex": "32017D2098",
-      "full_title": "Decision (EU) 2017/2098 of the European Central Bank of 3 November 2017 on procedural aspects concerning the imposition of corrective measures for non-compliance with Regulation (EU) No 795/2014 (ECB/",
-      "type": "Regulation",
+      "celex": "32017D0033",
+      "full_title": "Decision (EU) 2017/2098 of the European Central Bank of 3 November 2017 on procedural aspects concerning the imposition of corrective measures for non-compliance with Regulation (EU) No 795/2014 (ECB/2017/33)",
+      "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017299EN.01003401.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D2098"
     },
     "ECB/2023/11": {
       "celex": "32023D0864",
-      "full_title": "Decision (EU) 2023/864 of the European Central Bank of 13 April 2023 amending Decision ECB/2014/16 concerning the establishment of an Administrative Board of Review and its Operating Rules (ECB/2023/1",
+      "full_title": "Decision (EU) 2023/864 of the European Central Bank of 13 April 2023 amending Decision ECB/2014/16 concerning the establishment of an Administrative Board of Review and its Operating Rules (ECB/2023/11)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023112EN.01004601.xml"
@@ -2640,11 +2831,12 @@
       "source_file": "L_202401083EN.000101.fmx.xml"
     },
     "ECB/2023/18": {
-      "celex": "32025D0673",
-      "full_title": "Decision (EU) 2025/673 of the European Central Bank of 24 March 2025 amending Decision (EU) 2023/1681 on the provision to the European Central Bank of supervisory data reported to the national compete",
+      "celex": "32023D1681",
+      "full_title": "Decision (EU) 2023/1681 of the European Central Bank of 17 August 2023 on the provision to the European Central Bank of supervisory data reported to the national competent authorities by the supervised entities (ECB/2023/18) (recast)",
       "type": "Decision",
-      "year": 2025,
-      "source_file": "L_202500673EN.000101.fmx.xml"
+      "year": 2023,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32025D0673"
     },
     "ECB/2015/30": {
       "celex": "32015R1599",
@@ -2655,7 +2847,7 @@
     },
     "ECB/2021/55": {
       "celex": "32021D2321",
-      "full_title": "Decision (EU) 2021/2321 of the European Central Bank of 10 December 2021 on the delegation of decisions on the issuing of Union laissez-passer for applicants falling under the authority of the Europea",
+      "full_title": "Decision (EU) 2021/2321 of the European Central Bank of 10 December 2021 on the delegation of decisions on the issuing of Union laissez-passer for applicants falling under the authority of the European Central Bank (ECB/2021/55)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021467EN.01000101.xml"
@@ -2669,7 +2861,7 @@
     },
     "ECB/2023/17": {
       "celex": "32023D1610",
-      "full_title": "Decision (EU) 2023/1610 of the European Central Bank of 28 July 2023 establishing the historical archives of the European Central Bank and amending Decision ECB/2004/2 (ECB/2023/17)",
+      "full_title": "Decision (EU) 2023/1610 of the European Central Bank of 28 July 2023 establishing the historical archives of the European Central Bank and amending Decision ECB/2004/2 (ECB/2023/17)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023198EN.01003001.xml"
@@ -2711,14 +2903,14 @@
     },
     "ECB/2007/11": {
       "celex": "32007R1348",
-      "full_title": "Regulation (EC) No 1348/2007 of the European Central Bank of 9 November 2007 concerning transitional provisions for the application of minimum reserves by the European Central Bank following the intro",
+      "full_title": "Regulation (EC) No 1348/2007 of the European Central Bank of 9 November 2007 concerning transitional provisions for the application of minimum reserves by the European Central Bank following the introduction of the euro in Cyprus and Malta (ECB/2007/11)",
       "type": "Regulation",
       "year": 2007,
       "source_file": "L_2007300EN.01004401.xml"
     },
     "ECB/2023/30": {
       "celex": "32023D2796",
-      "full_title": "Decision (EU) 2023/2796 of the European Central Bank of 4 December 2023 amending Decision (EU) 2022/1981 on the use of services of the European System of Central Banks by competent authorities (ECB/20",
+      "full_title": "Decision (EU) 2023/2796 of the European Central Bank of 4 December 2023 amending Decision (EU) 2022/1981 on the use of services of the European System of Central Banks by competent authorities (ECB/2022/33) (ECB/2023/30)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302796EN.000101.fmx.xml"
@@ -2732,17 +2924,18 @@
     },
     "ECB/2022/5": {
       "celex": "32022D0310",
-      "full_title": "Decision (EU) 2022/310 of the European Central Bank of 17 February 2022 amending Decision (EU) 2019/1743 of the European Central Bank on the remuneration of holdings of excess reserves and of certain ",
+      "full_title": "Decision (EU) 2022/310 of the European Central Bank of 17 February 2022 amending Decision (EU) 2019/1743 of the European Central Bank on the remuneration of holdings of excess reserves and of certain deposits (ECB/2022/5)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022046EN.01014001.xml"
     },
     "ECB/2021/27": {
-      "celex": "32020D1306",
-      "full_title": "Decision (EU) [2021/1074] of the European Central Bank of 18 June 2021 on the temporary exclusion of certain exposures to central banks from the total exposure measure in view of the COVID-19 pandemic",
+      "celex": "32021D1074",
+      "full_title": "Decision (EU) 2021/1074 of the European Central Bank of 18 June 2021 on the temporary exclusion of certain exposures to central banks from the total exposure measure in view of the COVID-19 pandemic and repealing Decision (EU) 2020/1306 (ECB/2021/27)",
       "type": "Decision",
       "year": 2021,
-      "source_file": "LI2021230EN.01000101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32020D1306"
     },
     "SF-003": {
       "celex": "32024D2073",
@@ -2759,22 +2952,23 @@
       "source_file": "L_2017207EN.01002801.xml"
     },
     "ECB/2019/38": {
-      "celex": "32019D2158",
-      "full_title": "Decision (EU) 2019/2158 of the European Central Bank of 5 December 2019 on the methodology and procedures for the determination and collection of data regarding fee factors used to calculate annual su",
+      "celex": "32019D0038",
+      "full_title": "Decision (EU) 2019/2158 of the European Central Bank of 5 December 2019 on the methodology and procedures for the determination and collection of data regarding fee factors used to calculate annual supervisory fees (recast) (ECB/2019/38)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019327EN.01009901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D2158"
     },
     "ECB/2025/16": {
       "celex": "32025D1114",
-      "full_title": "Decision (EU) 2025/1114 of the European Central Bank of 20 May 2025 on the delegation of the power to take certain decisions on the publication of sanctions for failure to hold minimum reserves (ECB/2",
+      "full_title": "Decision (EU) 2025/1114 of the European Central Bank of 20 May 2025 on the delegation of the power to take certain decisions on the publication of sanctions for failure to hold minimum reserves (ECB/2025/16)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202501114EN.000101.fmx.xml"
     },
     "ECB/2025/22": {
       "celex": "32025R1355",
-      "full_title": "Regulation (EU) 2025/1355 of the European Central Bank of 2 July 2025 on oversight requirements for systemically important payment systems (ECB/2025/22) (recast)",
+      "full_title": "Regulation (EU) 2025/1355 of the European Central Bank of 2 July 2025 on oversight requirements for systemically important payment systems (ECB/2025/22) (recast)",
       "type": "Regulation",
       "year": 2025,
       "source_file": "L_202501355EN.000101.fmx.xml"
@@ -2793,30 +2987,23 @@
       "year": 2021,
       "source_file": "L_2021189EN.01009101.xml"
     },
-    "ECB/2014/13": {
-      "celex": "31998R2533",
-      "full_title": "Commission Opinion of 13 October 2014 on the European Central Bank Recommendation for a Council Regulation amending Regulation (EC) No 2533/98 concerning the collection of statistical information by t",
-      "type": "Regulation",
-      "year": 2014,
-      "source_file": "C_2014362EN.01000101.xml"
-    },
     "ECB/2024/26": {
       "celex": "32024D2683",
-      "full_title": "Decision (EU) 2024/2683 of the European Central Bank of 8 October 2024 amending Decision ECB/2013/1 laying down the framework for a public key infrastructure for the European System of Central Banks (",
+      "full_title": "Decision (EU) 2024/2683 of the European Central Bank of 8 October 2024 amending Decision ECB/2013/1 laying down the framework for a public key infrastructure for the European System of Central Banks (ECB/2024/26)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402683EN.000101.fmx.xml"
     },
     "ECB/2017/26": {
       "celex": "32017R1539",
-      "full_title": "Regulation (EU) 2017/1539 of the European Central Bank of 25 August 2017 laying down the date of application of Regulation (EU) 2017/1538 amending Regulation (EU) 2015/534 on reporting of supervisory ",
+      "full_title": "Regulation (EU) 2017/1539 of the European Central Bank of 25 August 2017 laying down the date of application of Regulation (EU) 2017/1538 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2017/25) to less significant supervised entities which are subject to national accounting frameworks (ECB/2017/26)",
       "type": "Regulation",
       "year": 2017,
       "source_file": "L_2017240EN.01021201.xml"
     },
     "ECB/2025/14": {
       "celex": "32025D0874",
-      "full_title": "Decision (EU) 2025/874 of the European Central Bank of 24 April 2025 amending Decision (EU) 2022/1982 on the use of services of the European System of Central Banks by competent authorities and by coo",
+      "full_title": "Decision (EU) 2025/874 of the European Central Bank of 24 April 2025 amending Decision (EU) 2022/1982 on the use of services of the European System of Central Banks by competent authorities and by cooperating authorities (ECB/2022/34) (ECB/2025/14)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202500874EN.000101.fmx.xml"
@@ -2851,59 +3038,57 @@
     },
     "ECB/2020/53": {
       "celex": "32020D1631",
-      "full_title": "Decision (EU) 2020/1631 of the European Central Bank of 22 October 2020 on the delegation of decision-making powers in relation to the transmission of confidential statistical information on economic ",
+      "full_title": "Decision (EU) 2020/1631 of the European Central Bank of 22 October 2020 on the delegation of decision-making powers in relation to the transmission of confidential statistical information on economic and financial statistics to the Statistical Office of the European Union (Eurostat) (ECB/2020/53)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020366EN.01002101.xml"
     },
-    "ECB/2014/19": {
-      "celex": "31998R2532",
-      "full_title": "Commission Opinion of 18 December 2014 on the European Central Bank’s Recommendation for a Council Regulation amending Regulation (EC) No 2532/98 concerning the powers of the European Central Bank to ",
-      "type": "Regulation",
-      "year": 2014,
-      "source_file": "C_2014461EN.01000101.xml"
-    },
     "ECB/2018/12": {
-      "celex": "32018D0667",
+      "celex": "32018D0012",
       "full_title": "Decision (EU) 2018/667 of the European Central Bank of 19 April 2018 on the total amount of annual supervisory fees for 2018 (ECB/2018/12)",
       "type": "Decision",
       "year": 2018,
-      "source_file": "L_2018111EN.01000301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32018D0667"
     },
     "ECB/2022/11": {
       "celex": "32022D0485",
-      "full_title": "Decision (EU) 2022/485 of the European Central Bank of 17 March 2022 amending Decision 2010/624/EU concerning the administration of the borrowing and lending operations concluded by the Union under th",
+      "full_title": "Decision (EU) 2022/485 of the European Central Bank of 17 March 2022 amending Decision 2010/624/EU concerning the administration of the borrowing and lending operations concluded by the Union under the European financial stabilisation mechanism (ECB/2022/11)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022098EN.01010801.xml"
     },
     "ECB/2015/1": {
-      "celex": "32015D0529",
+      "celex": "32015D0001",
       "full_title": "Decision (EU) 2015/529 of the European Central Bank of 21 January 2015 amending Decision ECB/2004/3 on public access to European Central Bank documents (ECB/2015/1)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015084EN.01006401.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0529"
     },
     "ECB/2015/42": {
-      "celex": "32015D2331",
+      "celex": "32015D0042(01)",
       "full_title": "Decision (EU) 2015/2331 of the European Central Bank of 4 December 2015 on the approval of the volume of coin issuance in 2016 (ECB/2015/42)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015328EN.01012101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D2331"
     },
     "ECB/2014/35": {
-      "celex": "32014R0795",
-      "full_title": "Decision of the European Central Bank of 13 August 2014 on the identification of TARGET2 as a systemically important payment system pursuant to Regulation (EU) No 795/2014 on oversight requirements fo",
-      "type": "Regulation",
+      "celex": "32014D0035(01)",
+      "full_title": "Decision of the European Central Bank of 13 August 2014 on the identification of TARGET2 as a systemically important payment system pursuant to Regulation (EU) No 795/2014 on oversight requirements for systemically important payment systems (ECB/2014/35)",
+      "type": "Decision",
       "year": 2014,
-      "source_file": "L_2014245EN.01000501.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32014R0795"
     },
     "ECB/2015/38": {
-      "celex": "32015D2218",
-      "full_title": "Decision (EU) 2015/2218 of the European Central Bank of 20 November 2015 on the procedure to exclude staff members from the presumption of having a material impact on a supervised credit institution's",
+      "celex": "32015D0038",
+      "full_title": "Decision (EU) 2015/2218 of the European Central Bank of 20 November 2015 on the procedure to exclude staff members from the presumption of having a material impact on a supervised credit institution's risk profile (ECB/2015/38)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015314EN.01006601.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D2218"
     },
     "EHRI-ERIC": {
       "celex": "32025D0194",
@@ -2913,11 +3098,12 @@
       "source_file": "L_202500194EN.000101.fmx.xml"
     },
     "ECB/2016/42": {
-      "celex": "32017D0935",
+      "celex": "32016D0042(01)",
       "full_title": "Decision (EU) 2017/935 of the European Central Bank of 16 November 2016 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper requirements (ECB/2016/42)",
       "type": "Decision",
-      "year": 2017,
-      "source_file": "L_2017141EN.01002101.xml"
+      "year": 2016,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D0935"
     },
     "RSB": {
       "celex": "32018L2001",
@@ -2927,15 +3113,16 @@
       "source_file": "L_2022114EN.01019701.xml"
     },
     "ECB/2019/21": {
-      "celex": "32022D2128",
-      "full_title": "Decision (EU) 2022/2128 of the European Central Bank of 27 October 2022 amending Decision (EU) 2019/1311 on a third series of targeted longer-term refinancing operations (ECB/2019/21) (ECB/2022/37)",
+      "celex": "32019D0021(01)",
+      "full_title": "Decision (EU) 2019/1311 of the European Central Bank of 22 July 2019 on a third series of targeted longer-term refinancing operations (ECB/2019/21)",
       "type": "Decision",
-      "year": 2022,
-      "source_file": "L_2022285EN.01001501.xml"
+      "year": 2019,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32022D2128"
     },
     "ECB/2022/37": {
       "celex": "32022D2128",
-      "full_title": "Decision (EU) 2022/2128 of the European Central Bank of 27 October 2022 amending Decision (EU) 2019/1311 on a third series of targeted longer-term refinancing operations (ECB/2019/21) (ECB/2022/37)",
+      "full_title": "Decision (EU) 2022/2128 of the European Central Bank of 27 October 2022 amending Decision (EU) 2019/1311 on a third series of targeted longer-term refinancing operations (ECB/2019/21) (ECB/2022/37)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022285EN.01001501.xml"
@@ -2949,66 +3136,70 @@
     },
     "ECB/2023/5": {
       "celex": "32023D0672",
-      "full_title": "Decision (EU) 2023/672 of the European Central Bank of 10 March 2023 on delegation of the power to adopt decisions relating to on-site inspections and internal model investigations (ECB/2023/5)",
+      "full_title": "Decision (EU) 2023/672 of the European Central Bank of 10 March 2023 on delegation of the power to adopt decisions relating to on-site inspections and internal model investigations (ECB/2023/5)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023084EN.01001801.xml"
     },
     "ECB/2024/32": {
       "celex": "32024D2938",
-      "full_title": "Decision (EU) 2024/2938 of the European Central Bank of 14 November 2024 on the annual accounts of the European Central Bank (ECB/2024/32) (recast)",
+      "full_title": "Decision (EU) 2024/2938 of the European Central Bank of 14 November 2024 on the annual accounts of the European Central Bank (ECB/2024/32) (recast)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402938EN.000101.fmx.xml"
     },
     "ECB/2016/36": {
-      "celex": "32024D2939",
-      "full_title": "Decision (EU) 2024/2939 of the European Central Bank of 14 November 2024 amending Decision (EU) 2016/2248 on the allocation of monetary income of the national central banks of Member States whose curr",
+      "celex": "32016D0036(01)",
+      "full_title": "Decision (EU) 2016/2248 of the European Central Bank of 3 November 2016 on the allocation of monetary income of the national central banks of Member States whose currency is the euro (recast) (ECB/2016/36)",
       "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202402939EN.000101.fmx.xml"
+      "year": 2016,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32024D2939"
     },
     "ECB/2024/33": {
       "celex": "32024D2939",
-      "full_title": "Decision (EU) 2024/2939 of the European Central Bank of 14 November 2024 amending Decision (EU) 2016/2248 on the allocation of monetary income of the national central banks of Member States whose curr",
+      "full_title": "Decision (EU) 2024/2939 of the European Central Bank of 14 November 2024 amending Decision (EU) 2016/2248 on the allocation of monetary income of the national central banks of Member States whose currency is the euro (ECB/2016/36) (ECB/2024/33)",
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402939EN.000101.fmx.xml"
     },
     "ECB/2016/27": {
-      "celex": "32016D1717",
+      "celex": "32016D0027",
       "full_title": "Decision (EU) 2016/1717 of the European Central Bank of 21 September 2016 amending Decision ECB/2004/2 adopting the Rules of Procedure of the European Central Bank (ECB/2016/27)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016258EN.01001701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D1717"
     },
     "ECB/2022/41": {
       "celex": "32022D2285",
-      "full_title": "Decision (EU) 2022/2285 of the European Central Bank of 8 November 2022 amending Decision (EU) 2021/2255 on the approval of the volume of coin issuance in 2022 (ECB/2021/54) (ECB/2022/41)",
+      "full_title": "Decision (EU) 2022/2285 of the European Central Bank of 8 November 2022 amending Decision (EU) 2021/2255 on the approval of the volume of coin issuance in 2022 (ECB/2021/54) (ECB/2022/41)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022301EN.01021201.xml"
     },
     "ECB/2021/54": {
-      "celex": "32022D2285",
-      "full_title": "Decision (EU) 2022/2285 of the European Central Bank of 8 November 2022 amending Decision (EU) 2021/2255 on the approval of the volume of coin issuance in 2022 (ECB/2021/54) (ECB/2022/41)",
+      "celex": "32021D2255",
+      "full_title": "Decision (EU) 2021/2255 of the European Central Bank of 7 December 2021 on the approval of the volume of coin issuance in 2022 (ECB/2021/54)",
       "type": "Decision",
-      "year": 2022,
-      "source_file": "L_2022301EN.01021201.xml"
+      "year": 2021,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32022D2285"
     },
     "ECB/2021/46": {
       "celex": "32021R1814",
-      "full_title": "Regulation (EU) 2021/1814 of the European Central Bank of 7 October 2021 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/2021/46)",
+      "full_title": "Regulation (EU) 2021/1814 of the European Central Bank of 7 October 2021 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/2021/46)",
       "type": "Regulation",
       "year": 2021,
       "source_file": "L_2021367EN.01000201.xml"
     },
     "ECB/2015/41": {
-      "celex": "32015D2330",
+      "celex": "32015D0041(01)",
       "full_title": "Decision (EU) 2015/2330 of the European Central Bank of 4 December 2015 amending Decision ECB/2014/53 on the approval of the volume of coin issuance in 2015 (ECB/2015/41)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015328EN.01011901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D2330"
     },
     "SF-009": {
       "celex": "32024D2077",
@@ -3026,7 +3217,7 @@
     },
     "ECB/2022/31": {
       "celex": "32022R1917",
-      "full_title": "Regulation (EU) 2022/1917 of the European Central Bank of 29 September 2022 on infringement procedures in cases of non-compliance with statistical reporting requirements and repealing Decision ECB/201",
+      "full_title": "Regulation (EU) 2022/1917 of the European Central Bank of 29 September 2022 on infringement procedures in cases of non-compliance with statistical reporting requirements and repealing Decision ECB/2010/10 (ECB/2022/31)",
       "type": "Regulation",
       "year": 2022,
       "source_file": "L_2022263EN.01000601.xml"
@@ -3047,7 +3238,7 @@
     },
     "ECB/2022/36": {
       "celex": "32022D2071",
-      "full_title": "Decision (EU) 2022/2071 of the European Central Bank of 20 October 2022 on transitional provisions for the application of minimum reserves by the European Central Bank following the introduction of th",
+      "full_title": "Decision (EU) 2022/2071 of the European Central Bank of 20 October 2022 on transitional provisions for the application of minimum reserves by the European Central Bank following the introduction of the euro in Croatia (ECB/2022/36)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022277EN.01021501.xml"
@@ -3090,7 +3281,7 @@
     },
     "ECB/2022/40": {
       "celex": "32022D2278",
-      "full_title": "Decision (EU) 2022/2278 of the European Central Bank of 8 November 2022 on the approval of the volume of coin issuance in 2023 (ECB/2022/40)",
+      "full_title": "Decision (EU) 2022/2278 of the European Central Bank of 8 November 2022 on the approval of the volume of coin issuance in 2023 (ECB/2022/40)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022300EN.01004601.xml"
@@ -3103,11 +3294,12 @@
       "source_file": "L_202500051EN.000101.fmx.xml"
     },
     "ECB/2016/40": {
-      "celex": "32017D0933",
+      "celex": "32016D0040",
       "full_title": "Decision (EU) 2017/933 of the European Central Bank of 16 November 2016 on a general framework for delegating decision-making powers for legal instruments related to supervisory tasks (ECB/2016/40)",
       "type": "Decision",
-      "year": 2017,
-      "source_file": "L_2017141EN.01001401.xml"
+      "year": 2016,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D0933"
     },
     "RIS": {
       "celex": "32007R0414",
@@ -3124,11 +3316,12 @@
       "source_file": "L_2020158EN.01000301.xml"
     },
     "ECB/2017/35": {
-      "celex": "32017D2097",
-      "full_title": "Decision (EU) 2017/2097 of the European Central Bank of 3 November 2017 on the methodology for calculating sanctions for infringements of the oversight requirements for systemically important payment ",
+      "celex": "32017D0035",
+      "full_title": "Decision (EU) 2017/2097 of the European Central Bank of 3 November 2017 on the methodology for calculating sanctions for infringements of the oversight requirements for systemically important payment systems (ECB/2017/35)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017299EN.01003101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D2097"
     },
     "CSEP": {
       "celex": "32021D0674",
@@ -3139,7 +3332,7 @@
     },
     "ECB/2020/30": {
       "celex": "32020D1015",
-      "full_title": "Decision (EU) 2020/1015 of the European Central Bank of 24 June 2020 on the establishment of close cooperation between the European Central Bank and Българска народна банка (Bulgarian National Bank) (",
+      "full_title": "Decision (EU) 2020/1015 of the European Central Bank of 24 June 2020 on the establishment of close cooperation between the European Central Bank and Българска народна банка (Bulgarian National Bank) (ECB/2020/30)",
       "type": "Decision",
       "year": 2020,
       "source_file": "LI2020224EN.01000101.xml"
@@ -3152,11 +3345,12 @@
       "source_file": "L_2016222EN.01002401.xml"
     },
     "ECB/2019/15": {
-      "celex": "32019D1006",
-      "full_title": "Decision (EU) 2019/1006 of the European Central Bank of 7 June 2019 amending Decision ECB/2011/20 establishing detailed rules and procedures for implementing the eligibility criteria for central secur",
+      "celex": "32019D0015(01)",
+      "full_title": "Decision (EU) 2019/1006 of the European Central Bank of 7 June 2019 amending Decision ECB/2011/20 establishing detailed rules and procedures for implementing the eligibility criteria for central securities depositories to access TARGET2-Securities services (ECB/2019/15)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019163EN.01010301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D1006"
     },
     "VZP": {
       "celex": "32015D0248",
@@ -3173,25 +3367,27 @@
       "source_file": "L_2016101EN.01001201.xml"
     },
     "ECB/2015/4": {
-      "celex": "32015D0656",
-      "full_title": "Decision (EU) 2015/656 of the European Central Bank of 4 February 2015 on the conditions under which credit institutions are permitted to include interim or year-end profits in Common Equity Tier 1 ca",
-      "type": "Regulation",
+      "celex": "32015D0004",
+      "full_title": "Decision (EU) 2015/656 of the European Central Bank of 4 February 2015 on the conditions under which credit institutions are permitted to include interim or year-end profits in Common Equity Tier 1 capital in accordance with Article 26(2) of Regulation (EU) No 575/2013 (ECB/2015/4)",
+      "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015107EN.01007601.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0656"
     },
     "ECB/2022/38": {
       "celex": "32022D2249",
-      "full_title": "Decision (EU) 2022/2249 of the European Central Bank of 9 November 2022 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2022/38)",
+      "full_title": "Decision (EU) 2022/2249 of the European Central Bank of 9 November 2022 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2022/38)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022295EN.01004801.xml"
     },
     "ECB/2019/8": {
-      "celex": "32019D0670",
-      "full_title": "Decision (EU) 2019/670 of the European Central Bank of 9 April 2019 amending Decision ECB/2014/8 on the prohibition of monetary financing and the remuneration of government deposits by national centra",
+      "celex": "32019D0008",
+      "full_title": "Decision (EU) 2019/670 of the European Central Bank of 9 April 2019 amending Decision ECB/2014/8 on the prohibition of monetary financing and the remuneration of government deposits by national central banks (ECB/2019/8)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019113EN.01000901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D0670"
     },
     "AML": {
       "celex": "32024R0595",
@@ -3215,11 +3411,12 @@
       "source_file": "L_202400595EN.000101.fmx.xml"
     },
     "ECB/2019/28": {
-      "celex": "32019D1558",
+      "celex": "32019D0028(01)",
       "full_title": "Decision (EU) 2019/1558 of the European Central Bank of 12 September 2019 amending Decision (EU) 2019/1311 on a third series of targeted longer-term refinancing operations (ECB/2019/28)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019238EN.01000201.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D1558"
     },
     "ECB/2020/48": {
       "celex": "32020D1688",
@@ -3229,11 +3426,12 @@
       "source_file": "L_2020379EN.01005801.xml"
     },
     "ECB/2016/3": {
-      "celex": "32016D0456",
-      "full_title": "ANNEX VIII The performance of the ECB’s functions pursuant to Decision (EU) 2016/456 (ECB/2016/3)",
+      "celex": "32016D0003",
+      "full_title": "Decision (EU) 2016/456 of the European Central Bank of 4 March 2016 concerning the terms and conditions for European Anti-Fraud Office investigations of the European Central Bank, in relation to the prevention of fraud, corruption and any other illegal activities affecting the financial interests of the Union (recast) (ECB/2016/3)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2022311EN.01019101.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D0456"
     },
     "Artificial Intelligence Act": {
       "celex": "32024R1689",
@@ -3258,7 +3456,7 @@
     },
     "ECB/2020/20": {
       "celex": "32020D0506",
-      "full_title": "Decision (EU) 2020/506 of the European Central Bank of 7 April 2020 amending Guideline (EU) 2015/510 on the implementation of the Eurosystem monetary policy framework and Guideline (EU) 2016/65 on the",
+      "full_title": "Decision (EU) 2020/506 of the European Central Bank of 7 April 2020 amending Guideline (EU) 2015/510 on the implementation of the Eurosystem monetary policy framework and Guideline (EU) 2016/65 on the valuation haircuts applied in the implementation of the Eurosystem monetary policy framework (ECB/2020/20)",
       "type": "Decision",
       "year": 2020,
       "source_file": "LI2020109EN.01000101.xml"
@@ -3314,14 +3512,14 @@
     },
     "ECB/2020/9": {
       "celex": "32020D0188",
-      "full_title": "Decision (EU) 2020/188 of the European Central Bank of 3 February 2020 on a secondary markets public sector asset purchase programme (ECB/2020/9) (recast)",
+      "full_title": "Decision (EU) 2020/188 of the European Central Bank of 3 February 2020 on a secondary markets public sector asset purchase programme (recast) (ECB/2020/9)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020039EN.01001201.xml"
     },
     "ECB/2021/53": {
       "celex": "32021D2254",
-      "full_title": "Decision (EU) 2021/2254 of the European Central Bank of 7 December 2021 amending Decision (EU) 2020/1997 on the approval of the volume of coin issuance in 2021 (ECB/2021/53)",
+      "full_title": "Decision (EU) 2021/2254 of the European Central Bank of 7 December 2021 amending Decision (EU) 2020/1997 on the approval of the volume of coin issuance in 2021 (ECB/2021/53)",
       "type": "Decision",
       "year": 2021,
       "source_file": "L_2021454EN.01001701.xml"
@@ -3341,11 +3539,12 @@
       "source_file": "L_2022013EN.01000101.xml"
     },
     "ECB/2016/43": {
-      "celex": "32016D2164",
+      "celex": "32016D0043",
       "full_title": "Decision (EU) 2016/2164 of the European Central Bank of 30 November 2016 on the approval of the volume of coin issuance in 2017 (ECB/2016/43)",
       "type": "Decision",
       "year": 2016,
-      "source_file": "L_2016333EN.01007301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32016D2164"
     },
     "EUROPEUM-EDIC": {
       "celex": "32024D1432",
@@ -3362,32 +3561,35 @@
       "source_file": "L_202400482EN.000101.fmx.xml"
     },
     "ECB/2019/36": {
-      "celex": "32019D2216",
+      "celex": "32019D0036",
       "full_title": "Decision (EU) 2019/2216 of the European Central Bank of 28 November 2019 amending Decision (EU) 2015/298 on the interim distribution of the income of the European Central Bank (ECB/2019/36)",
       "type": "Decision",
       "year": 2019,
-      "source_file": "L_2019332EN.01018301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32019D2216"
     },
     "ECB/2015/17": {
-      "celex": "32015D0727",
+      "celex": "32015D0017",
       "full_title": "Decision (EU) 2015/727 of the European Central Bank of 10 April 2015 on the total amount of annual supervisory fees for the first fee period and for 2015 (ECB/2015/17)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015115EN.01003601.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D0727"
     },
     "ECB/2023/20": {
       "celex": "32023R1678",
-      "full_title": "Regulation (EU) 2023/1678 of the European Central Bank of 17 August 2023 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2015/13) (ECB/2023/20)",
+      "full_title": "Regulation (EU) 2023/1678 of the European Central Bank of 17 August 2023 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2015/13) (ECB/2023/20)",
       "type": "Regulation",
       "year": 2023,
       "source_file": "L_2023216EN.01009301.xml"
     },
     "ECB/2015/25": {
-      "celex": "32015D1195",
+      "celex": "32015D0025",
       "full_title": "Decision (EU) 2015/1195 of the European Central Bank of 2 July 2015 amending Decision (EU) 2015/298 on the interim distribution of the income of the European Central Bank (ECB/2015/25)",
       "type": "Decision",
       "year": 2015,
-      "source_file": "L_2015193EN.01013301.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32015D1195"
     },
     "IMA": {
       "celex": "32022R2060",
@@ -3404,15 +3606,16 @@
       "source_file": "L_2022186EN.01001401.xml"
     },
     "ECB/2017/39": {
-      "celex": "32017D2442",
+      "celex": "32017D0039",
       "full_title": "Decision (EU) 2017/2442 of the European Central Bank of 8 December 2017 amending Decision (EU) 2016/2164 on the approval of the volume of coin issuance in 2017 (ECB/2017/39)",
       "type": "Decision",
       "year": 2017,
-      "source_file": "L_2017344EN.01005901.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32017D2442"
     },
     "ECB/2023/7": {
       "celex": "32023D0815",
-      "full_title": "Decision (EU) 2023/815 of the European Central Bank of 28 March 2023 amending Decision ECB/2010/4 concerning the management of pooled bilateral loans for the benefit of the Hellenic Republic (ECB/2023",
+      "full_title": "Decision (EU) 2023/815 of the European Central Bank of 28 March 2023 amending Decision ECB/2010/4 concerning the management of pooled bilateral loans for the benefit of the Hellenic Republic (ECB/2023/7)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023102EN.01002001.xml"
@@ -3433,14 +3636,14 @@
     },
     "ECB/2020/60": {
       "celex": "32020D2090",
-      "full_title": "Decision (EU) 2020/2090 of the European Central Bank of 4 December 2020 amending Decision ECB/2013/10 on the denominations, specifications, reproduction, exchange and withdrawal of euro banknotes (ECB",
+      "full_title": "Decision (EU) 2020/2090 of the European Central Bank of 4 December 2020 amending Decision ECB/2013/10 on the denominations, specifications, reproduction, exchange and withdrawal of euro banknotes (ECB/2020/60)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020423EN.01006201.xml"
     },
     "ECB/2022/45": {
       "celex": "32022D2522",
-      "full_title": "Decision (EU) 2022/2522 of the European Central Bank of 13 December 2022 amending Decision (EU) 2021/2255 on the approval of the volume of coin issuance in 2022 (ECB/2021/54) (ECB/2022/45)",
+      "full_title": "Decision (EU) 2022/2522 of the European Central Bank of 13 December 2022 amending Decision (EU) 2021/2255 on the approval of the volume of coin issuance in 2022 (ECB/2021/54) (ECB/2022/45)",
       "type": "Decision",
       "year": 2022,
       "source_file": "L_2022326EN.01005901.xml"
@@ -3454,7 +3657,7 @@
     },
     "ECB/2023/23": {
       "celex": "32023D2068",
-      "full_title": "Decision (EU) 2023/2068 of the European Central Bank of 12 September 2023 amending Decision (EU) 2022/2278 on the approval of the volume of coin issuance in 2023 (ECB/2022/40) (ECB/2023/23)",
+      "full_title": "Decision (EU) 2023/2068 of the European Central Bank of 12 September 2023 amending Decision (EU) 2022/2278 on the approval of the volume of coin issuance in 2023 (ECB/2022/40) (ECB/2023/23)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_2023238EN.01014701.xml"
@@ -3475,7 +3678,7 @@
     },
     "ECB/2023/35": {
       "celex": "32023D2815",
-      "full_title": "Decision (EU) 2023/2815 of the European Central Bank of 7 December 2023 amending Decision ECB/2010/29 on the issue of euro banknotes (ECB/2023/35)",
+      "full_title": "Decision (EU) 2023/2815 of the European Central Bank of 7 December 2023 amending Decision ECB/2010/29 on the issue of euro banknotes (ECB/2023/35)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302815EN.000101.fmx.xml"
@@ -3488,36 +3691,37 @@
       "source_file": "L_2023136EN.01007801.xml"
     },
     "ECB/2020/3": {
-      "celex": "32023D2811",
-      "full_title": "Decision (EU) 2023/2811 of the European Central Bank of 7 December 2023 on the national central banks’ percentage shares in the key for subscription to the European Central Bank’s capital and repealin",
+      "celex": "32020D0137",
+      "full_title": "Decision (EU) 2020/137 of the European Central Bank of 22 January 2020 on the national central banks’ percentage shares in the key for subscription to the European Central Bank’s capital and repealing Decision (EU) 2019/43 (ECB/2020/3)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302811EN.000101.fmx.xml"
+      "year": 2020,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D2811"
     },
     "ECB/2023/31": {
       "celex": "32023D2811",
-      "full_title": "Decision (EU) 2023/2811 of the European Central Bank of 7 December 2023 on the national central banks’ percentage shares in the key for subscription to the European Central Bank’s capital and repealin",
+      "full_title": "Decision (EU) 2023/2811 of the European Central Bank of 7 December 2023 on the national central banks’ percentage shares in the key for subscription to the European Central Bank’s capital and repealing Decision (EU) 2020/137 (ECB/2020/3) (ECB/2023/31)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302811EN.000101.fmx.xml"
     },
     "ECB/2014/17": {
       "celex": "32014R0468",
-      "full_title": "Regulation (EU) No 468/2014 of the European Central Bank of 16 April 2014 establishing the framework for cooperation within the Single Supervisory Mechanism between the European Central Bank and natio",
+      "full_title": "Regulation (EU) No 468/2014 of the European Central Bank of 16 April 2014 establishing the framework for cooperation within the Single Supervisory Mechanism between the European Central Bank and national competent authorities and with national designated authorities (SSM Framework Regulation) (ECB/2014/17)",
       "type": "Regulation",
       "year": 2014,
       "source_file": "L_2014141EN.01000101.xml"
     },
     "ECB/2023/27": {
       "celex": "32023D2532",
-      "full_title": "Decision (EU) 2023/2532 of the European Central Bank of 9 November 2023 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2023/27)",
+      "full_title": "Decision (EU) 2023/2532 of the European Central Bank of 9 November 2023 amending Decision (EU) 2022/911 concerning the terms and conditions of TARGET-ECB (ECB/2022/22) (ECB/2023/27)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302532EN.000101.fmx.xml"
     },
     "ECB/2025/8": {
       "celex": "32025D0507",
-      "full_title": "Decision (EU) 2025/507 of the European Central Bank of 7 March 2025 on the total amount of annual supervisory fees for 2024 (ECB/2025/8)",
+      "full_title": "Decision (EU) 2025/507 of the European Central Bank of 7 March 2025 on the total amount of annual supervisory fees for 2024 (ECB/2025/8)",
       "type": "Decision",
       "year": 2025,
       "source_file": "L_202500507EN.000101.fmx.xml"
@@ -3552,35 +3756,38 @@
     },
     "ECB/2023/34": {
       "celex": "32023D2818",
-      "full_title": "Decision (EU) 2023/2818 of the European Central Bank of 7 December 2023 laying down the measures necessary for the contribution to the European Central Bank’s accumulated equity value and for adjustin",
+      "full_title": "Decision (EU) 2023/2818 of the European Central Bank of 7 December 2023 laying down the measures necessary for the contribution to the European Central Bank’s accumulated equity value and for adjusting the national central banks’ claims equivalent to the transferred foreign reserve assets and repealing Decision (EU) 2020/140 (ECB/2020/6) (ECB/2023/34)",
       "type": "Decision",
       "year": 2023,
       "source_file": "L_202302818EN.000101.fmx.xml"
     },
     "ECB/2020/6": {
-      "celex": "32023D2818",
-      "full_title": "Decision (EU) 2023/2818 of the European Central Bank of 7 December 2023 laying down the measures necessary for the contribution to the European Central Bank’s accumulated equity value and for adjustin",
+      "celex": "32020D0140",
+      "full_title": "Decision (EU) 2020/140 of the European Central Bank of 22 January 2020 laying down the measures necessary for the contribution to the European Central Bank’s accumulated equity value and for adjusting the national central banks’ claims equivalent to the transferred foreign reserve assets and repealing Decision (EU) 2019/46 (ECB/2020/6)",
       "type": "Decision",
-      "year": 2023,
-      "source_file": "L_202302818EN.000101.fmx.xml"
+      "year": 2020,
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32023D2818"
     },
     "ECB/2014/30": {
-      "celex": "32013R1072",
-      "full_title": "Regulation (EU) No 756/2014 of the European Central Bank of 8 July 2014 amending Regulation (EU) No 1072/2013 (ECB/2013/34) concerning statistics on interest rates applied by monetary financial instit",
+      "celex": "32014R0756",
+      "full_title": "Regulation (EU) No 756/2014 of the European Central Bank of 8 July 2014 amending Regulation (EU) No 1072/2013 (ECB/2013/34) concerning statistics on interest rates applied by monetary financial institutions (ECB/2014/30)",
       "type": "Regulation",
       "year": 2014,
-      "source_file": "L_2014205EN.01001401.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32013R1072"
     },
     "ECB/2018/35": {
-      "celex": "32018D2049",
+      "celex": "32018D0035",
       "full_title": "Decision (EU) 2018/2049 of the European Central Bank of 12 December 2018 on the approval of the volume of coin issuance in 2019 (ECB/2018/35)",
       "type": "Decision",
       "year": 2018,
-      "source_file": "L_2018327EN.01008701.xml"
+      "source_file": "Cellar check 2026-10-17",
+      "repointed_from": "32018D2049"
     },
     "ECB/2020/42": {
       "celex": "32020D1334",
-      "full_title": "Decision (EU) 2020/1334 of the European Central Bank of 15 September 2020 nominating heads of work units to adopt delegated decisions regarding supervisory powers granted under national law and repeal",
+      "full_title": "Decision (EU) 2020/1334 of the European Central Bank of 15 September 2020 nominating heads of work units to adopt delegated decisions regarding supervisory powers granted under national law and repealing Decision (EU) 2019/323 (ECB/2020/42)",
       "type": "Decision",
       "year": 2020,
       "source_file": "L_2020312EN.01004001.xml"
@@ -3710,20 +3917,6 @@
       "type": "Regulation",
       "year": 2008,
       "full_name": "Classification, Labelling and Packaging"
-    },
-    "PACT Act": {
-      "celex": "32024R1828",
-      "full_title": "Regulation (EU) 2024/1828 on the packaging and packaging waste (Packaging and Packaging Waste Regulation)",
-      "type": "Regulation",
-      "year": 2024,
-      "full_name": "Packaging and Packaging Waste Regulation"
-    },
-    "TDI": {
-      "celex": "32024L0900",
-      "full_title": "Directive (EU) 2024/900 amending the Taxpayers' Rights Directive",
-      "type": "Directive",
-      "year": 2024,
-      "full_name": "Tax Dispute Resolution Directive"
     }
   }
 }
