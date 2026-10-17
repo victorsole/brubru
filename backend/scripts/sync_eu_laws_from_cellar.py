@@ -91,6 +91,7 @@ from sqlalchemy import text  # noqa: E402
 from core.database import SessionLocal  # noqa: E402
 from scripts.leg_export_metadata import (OEIL_PAIRS_SQL, Budget, CellarDown, cellar_facts,  # noqa: E402
                                          oeil_procedures)
+from services.oj_citation import act_citation  # noqa: E402
 from services.sync.freshness import record_run  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -241,14 +242,14 @@ def doc_type_from_title(title: str, type_letter: str, celex: Optional[str] = Non
 
 
 def oj_reference(celex: str, pub: str, oj_number: Optional[str] = None, oj_year: Optional[str] = None) -> str:
-    """"OJ L, YYYY/N, d.m.yyyy". The Official Journal's own number when Cellar states it: a corrigendum is
-    published under a number of its own (32026D1106R(01) is OJ L 2026/90858), not its act's."""
+    """"OJ L, YYYY/N, d.m.yyyy" (services/oj_citation.py, the form of every writer of the column). The Official
+    Journal's own number when Cellar states it: a corrigendum is published under a number of its own
+    (32026D1106R(01) is OJ L 2026/90858), not its act's."""
     m = CELEX_RE.match(celex)
     y, n = m.group(1), int(m.group(3))
     if oj_number and str(oj_number).isdigit():
         y, n = (str(oj_year) if oj_year and str(oj_year).isdigit() else pub[:4]), int(oj_number)
-    d = date.fromisoformat(pub[:10])
-    return f"OJ L, {y}/{n}, {d.day}.{d.month}.{d.year}"
+    return act_citation("L", y, n, date.fromisoformat(pub[:10]))
 
 
 _MONTHS = {m: i for i, m in enumerate(

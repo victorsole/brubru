@@ -207,11 +207,11 @@ def write_backup_csv(db, corpus_version: str) -> Path:
 
 
 def parsed_fields(parsed, xml_rel: str, content_hash: str, corpus_version: str) -> dict:
+    # oj_reference is left to fill_eu_laws_oj_reference.py (daily): the Formex file gives no publication date (17 Oct 2026)
     return {
         "doc_type": parsed.doc_type,
         "title": parsed.title,
         "date": parsed.date,
-        "oj_reference": parsed.oj_reference,
         "policy_area": determine_policy_area(parsed),
         "is_primary_legislation": is_primary_legislation(parsed),
         "legal_basis": parsed.legal_basis if parsed.legal_basis else None,

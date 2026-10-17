@@ -572,7 +572,7 @@ GET /api/v2/legislative/eur-lex/laws?corrects=32016R0679
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`; what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference` (the Official Journal citation as the acts cite it: `OJ L 119, 4.5.2016, p. 1`, or `OJ L, 2025/40, 22.1.2025` since 1 October 2023); what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
 
 `doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
 
@@ -1180,8 +1180,13 @@ async def law_xref(
         # Look up created_at BEFORE the raw law_xref SELECT (ORM query after a
         # raw db.execute on the same session can come back empty).
         cd = _law_created_at(db, celex)
+        # the law's own citation, not the cache's copy: the cache keeps what it read when it was computed, and
+        # eu_laws.oj_reference was rewritten into one form on 17 Oct 2026 (GDPR's cache still said "L 119/1")
+        live = db.query(EULaw.oj_reference).filter(EULaw.celex == celex).first()
         cached = _read_law_xref(db, celex)
         if cached:
+            if live is not None:
+                cached["oj_reference"] = live[0]
             return XrefResult(
                 celex=celex,
                 cached=True,
@@ -1646,21 +1651,31 @@ async def oj_daily(
 
 
 def oj_reference_patterns(series: str, year: int, number: str) -> tuple[str, str, str]:
-    """(act by act, issue with its date, yearless issue): regexes valid in Python and PostgreSQL."""
-    n = re.escape(number.lstrip("0") or "0")
-    return (rf"^OJ {series}, {year}/0*{n}(,|$)",
-            rf"^OJ {series} 0*{n}(/[0-9]+)?, ([0-9]{{1,2}}\.[0-9]{{1,2}}\.{year}|{year}-)",
-            rf"^{series} 0*{n}/")
+    """(act by act, issue with its date, yearless issue): regexes valid in Python and PostgreSQL.
+
+    A supplement letter matches with or without its space ("OJ L 445 I", stored "L 322I/614"); series P (before
+    1968) is cited without its letter ("OJ 56, 4.4.1964, p. 850"). The yearless issue is the export's issue/page
+    ("L 119/1") only: "L 2025/40, p. 1" read as issue 2025 made /oj/L/2025/2025 return 1,252 unrelated acts."""
+    m = re.fullmatch(r"0*([0-9]*)([A-Z]?)", number)
+    n = (m.group(1) or "0") + (f" ?{m.group(2)}" if m.group(2) else "")
+    head = "OJ (P )?" if series == "P" else f"OJ {series} "
+    return (rf"^(OJ {series}, |{series} ){year}/0*{n}(,|$)",
+            rf"^{head}0*{n}(/[0-9]+)?, ([0-9]{{1,2}}\.[0-9]{{1,2}}\.{year}|{year}-)",
+            rf"^{series} 0*{n}/[0-9]+$")
 
 
 def oj_reference_match(series: str, year: int, number: str):
     """SQL condition for the acts an OJ reference (series, year, number) designates.
 
     The route matched "L 2024/1689" while every act since October 2023 is stored as
-    "OJ L, 2024/1689, 12.7.2024", so it found none of them (May to 7 Oct 2026). Stored
-    shapes, all handled: "OJ L, 2024/1689, 12.7.2024" (act by act), "L 119/1" and
-    "C 022/8" (issue/page, zero-padded, no year), "L 455I/1" (supplement issue),
-    "OJ L 150, 9.6.2023, p. 40", "OJ L 130/52, 16.5.2023" and "OJ R 272, 2011-10-18".
+    "OJ L, 2024/1689, 12.7.2024", so it found none of them (May to 7 Oct 2026); from the
+    13 Oct 2026 import to 17 Oct it found none of the 3,565 acts the export stored as
+    "L 2025/40, p. 1" (PPWR, the Data Act). Since 17 Oct 2026 every law carries the citation
+    of services/oj_citation.py where Cellar gives one: "OJ L, 2024/1689, 12.7.2024" (act by
+    act), "OJ L 119, 4.5.2016, p. 1", "OJ L 445 I, 13.12.2021, p. 1" (supplement),
+    "OJ 56, 4.4.1964, p. 850" (series P). Still matched for a row Cellar did not resolve:
+    "L 2025/40, p. 1", "L 119/1" and "C 022/8" (issue/page, zero-padded, no year),
+    "L 455I/1", "OJ L 130/52, 16.5.2023" and "OJ R 272, 2011-10-18".
 
     The yearless issue form takes its year from the OJ publication date when stored, else
     from the CELEX: Cellar agrees for 14,664 of 14,687 such acts, and the 23 published the

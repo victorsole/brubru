@@ -64,7 +64,11 @@ class LawItem(BaseModel):
     title: Optional[str] = None
     doc_type: Optional[str] = None
     adopted_on: Optional[date] = Field(None, description="Adoption / publication date")
-    oj_reference: Optional[str] = None
+    oj_reference: Optional[str] = Field(None, description=(
+        "The Official Journal citation, as the acts cite each other (read from the Publications Office's Cellar): "
+        "`OJ L 119, 4.5.2016, p. 1` for an act published in an issue (until 30 September 2023), "
+        "`OJ L, 2025/40, 22.1.2025` for an act published act by act (since 1 October 2023), "
+        "`OJ 56, 4.4.1964, p. 850` before 1968, when the Journal had no L and C series."))
     # What the CELEX itself states, read from the string (the EUR-Lex tables "CELEX numbers" and "Types of documents").
     sector: Optional[str] = Field(None, description="CELEX sector, the first character: `3` legal acts, `2` international agreements, `5` preparatory documents, `0` consolidated texts...")
     sector_name: Optional[str] = Field(None, description="The sector's name in EUR-Lex, e.g. `Legal acts`.")
@@ -250,7 +254,7 @@ GET /api/v1/laws?corrects=32016R0679
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference`; what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference` (the Official Journal citation as the acts cite it: `OJ L 119, 4.5.2016, p. 1`, or `OJ L, 2025/40, 22.1.2025` since 1 October 2023); what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
 
 `doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
 

@@ -64,7 +64,8 @@ ROOT = Path(__file__).resolve().parents[2]
 CORPUS = ROOT / "docs/LEG_2026-10"
 TABLE = ROOT / "backend/data/leg_2026-10_table/leg_2026-10_table.csv"
 VERSION = "LEG_2026-10"
-WRITES = ("xml_path", "content_hash", "title", "doc_type", "doc_type_normalized", "date", "oj_reference",
+# oj_reference is not written: since 17 Oct 2026 fill_eu_laws_oj_reference.py writes the citation from Cellar
+WRITES = ("xml_path", "content_hash", "title", "doc_type", "doc_type_normalized", "date",
           "legal_basis", "citations", "is_primary_legislation", "policy_area", "subject_matter", "extra_metadata")
 
 
@@ -121,7 +122,6 @@ def new_values(f, xp_parser) -> tuple:
          "doc_type": p.doc_type or type_label(f["celex"], f["dn"]),
          "doc_type_normalized": type_label(f["celex"], f["dn"]),
          "date": f["date"] or (p.date.isoformat() if p.date else None),
-         "oj_reference": p.oj_reference or None,
          "legal_basis": fields["legal_basis"], "citations": fields["citations"],
          "is_primary_legislation": fields["is_primary_legislation"], "policy_area": fields["policy_area"],
          "subject_matter": xp_parser._extract_subject_matter(root) or None,
@@ -131,15 +131,15 @@ def new_values(f, xp_parser) -> tuple:
 
 DROP = "ARRAY[" + ", ".join(f"'{k}'" for k in FILE_KEYS + DERIVED_FROM_FILE) + "]::text[]"
 # one statement per 500 rows (psycopg2 execute_values); extra_metadata merged at write time so no other writer's
-# key is lost; oj_reference kept when the file gives none
+# key is lost
 UPDATE = ("UPDATE eu_laws e SET xml_path = v.xml_path, content_hash = v.content_hash, title = v.title, "
           "doc_type = v.doc_type, doc_type_normalized = v.doc_type_normalized, date = v.date, "
-          "oj_reference = coalesce(v.oj_reference, e.oj_reference), legal_basis = v.legal_basis, citations = v.citations, "
+          "legal_basis = v.legal_basis, citations = v.citations, "
           "is_primary_legislation = v.is_primary_legislation, policy_area = v.policy_area, subject_matter = v.subject_matter, "
           f"extra_metadata = (coalesce(e.extra_metadata, '{{}}'::jsonb) - {DROP}) || v.extra_metadata "
           f"FROM (VALUES %s) AS v (id, {', '.join(WRITES)}) WHERE e.id = v.id AND e.corpus_version = 'LEG_2026-10' "
           "RETURNING e.id")
-TEMPLATE = "(%s, %s, %s, %s, %s, %s, %s::date, %s, %s::text[], %s::text[], %s::boolean, %s, %s::text[], %s::jsonb)"
+TEMPLATE = "(%s, %s, %s, %s, %s, %s, %s::date, %s::text[], %s::text[], %s::boolean, %s, %s::text[], %s::jsonb)"
 RETYPE = ("UPDATE eu_laws e SET doc_type_normalized = v.t FROM (VALUES %s) AS v (id, t) "
           "WHERE e.id = v.id AND e.corpus_version = 'LEG_2026-10' RETURNING e.id")
 MEASURE = ("SELECT count(*) FILTER (WHERE doc_type_normalized IN ('Annex', 'Table of Contents')), "
