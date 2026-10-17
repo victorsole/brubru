@@ -50,24 +50,39 @@ _AGGREGATOR_PARENTS = ("/all",)
 
 _PARAM_RE = re.compile(r"^\{([^}]+)\}$")
 
+# v1 is mapped only where its item schema DECLARES `self` (laws, resolutions, advisory
+# opinions): those printed `self: null` on every item until 17 Oct 2026, a documented
+# link that never came. Every other v1 route keeps its response untouched.
+_V1 = "/api/v1/"
+
+
+def is_v1(path: str) -> bool:
+    return path.startswith(_V1)
+
+
+def _declares_self(route) -> bool:
+    fields = getattr(getattr(route, "response_model", None), "model_fields", None) or {}
+    return any(name == "self" or getattr(f, "alias", None) == "self" for name, f in fields.items())
+
 
 def build_route_map(app) -> Dict[str, Tuple[str, str]]:
     """collection path -> (item route template, the field to read off each item).
 
     Built from the live route table so it cannot drift from what is served.
     """
-    get_paths = set()
+    get_routes = {}
     for route in app.routes:
         path = getattr(route, "path", None)
         methods = getattr(route, "methods", None) or set()
         if path and "GET" in methods:
-            get_paths.add(path)
+            get_routes[path] = route
+    get_paths = set(get_routes)
 
     item_routes: Dict[str, Tuple[str, str]] = {}
     for path in get_paths:
         head, _, last = path.rpartition("/")
         m = _PARAM_RE.match(last)
-        if not m or not head.startswith("/api/v2/"):
+        if not m or not (head.startswith("/api/v2/") or (is_v1(head) and _declares_self(get_routes[path]))):
             continue
         if "{" in head:            # a sub-resource, not an item of a collection
             continue
@@ -78,7 +93,7 @@ def build_route_map(app) -> Dict[str, Tuple[str, str]]:
 
     out: Dict[str, Tuple[str, str]] = {}
     for collection in get_paths:
-        if "{" in collection or not collection.startswith("/api/v2/"):
+        if "{" in collection or not collection.startswith(("/api/v2/", _V1)):
             continue
         if collection in item_routes:
             out[collection] = item_routes[collection]
@@ -165,6 +180,8 @@ def attach_self(payload, base_url: str, route_map: Dict[str, Tuple[str, str]],
     changed = False
     for item in items:
         if not isinstance(item, dict) or item.get("self"):
+            continue
+        if is_v1(collection_path) and "self" not in item:   # v1: fill a declared field, never add one
             continue
         value = _identifier_value(item, field)
         url = self_url(base_url, item_route, value)

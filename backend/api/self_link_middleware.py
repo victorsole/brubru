@@ -6,7 +6,9 @@ consistent, and the 76 written by hand use 25 different conventions. A property
 that must hold everywhere belongs in one place.
 
 It only touches 200 JSON responses on `/api/v2/` GET collections that the route
-map recognises, and it is wrapped so that a failure can never break a response --
+map recognises, and on the three `/api/v1/` collections whose item schema declares
+`self` (laws, resolutions, advisory opinions; 17 Oct 2026), filling that field and never
+adding it elsewhere. It is wrapped so that a failure can never break a response --
 a missing `self` is a smaller problem than a 500.
 
 Ordering: added AFTER the tabular-export middleware so it runs INSIDE it, and the
@@ -44,7 +46,7 @@ class SelfLinkMiddleware(BaseHTTPMiddleware):
     def route_map(self):
         if self._route_map is None:
             self._route_map = (self._factory() if self._factory else {}) or {}
-            logger.info("[self-links] %d v2 collections mapped to an item route",
+            logger.info("[self-links] %d collections mapped to an item route (v2, and v1 where `self` is declared)",
                         len(self._route_map))
         return self._route_map
 

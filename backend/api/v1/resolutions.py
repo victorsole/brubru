@@ -61,7 +61,7 @@ class ResolutionItem(BaseModel):
     id: str
     procedure_ref: str
     title: str
-    # Filled by the v2 self-link middleware, on the list AND on the item route (declared
+    # Filled by the self-link middleware (v2, and v1 since 17 Oct 2026), on the list AND on the item route (declared
     # here so the item route carries it too: it answered no `self` at all until 12 Oct 2026).
     self: Optional[str] = Field(None, description="URL of this procedure on the Brubru API.")
     resolution_type: Optional[str] = None

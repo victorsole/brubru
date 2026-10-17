@@ -192,6 +192,9 @@ SELF_COLLECTIONS = [
     "/api/v2/legislative/eur-lex/laws/summaries",
     "/api/v2/transparency-register",
     "/api/v2/open-data/eurostat-series",
+    # v1 where the item schema declares `self` (17 Oct 2026: both printed null)
+    "/api/v1/laws",
+    "/api/v1/resolutions",
 ]
 
 
