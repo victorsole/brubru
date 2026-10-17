@@ -150,6 +150,12 @@ def type_label(celex: Optional[str], current: Optional[str]) -> Optional[str]:
     return "Other" if current in WRONG_FILE_TYPES or not current else current
 
 
+def is_legal_act(celex: Optional[str]) -> bool:
+    """eu_laws holds legal acts, CELEX sector 3; the export also carries a few documents of other sectors (two
+    corrigenda of Council notices, sector 5, removed 17 Oct 2026), which are never imported."""
+    return bool(celex) and celex[0] == "3"
+
+
 def folder_celex(corpus_path: Path, uuid: str) -> Optional[str]:
     """The folder's own CELEX from the dump's metadata; None unless it states exactly one."""
     rdf = corpus_path / uuid / "tree_non_inferred.rdf"

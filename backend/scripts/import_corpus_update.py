@@ -83,6 +83,7 @@ from backend.scripts.leg_folder import (  # noqa: F401 (re-exported for the repa
     type_label,
     folder_celex,
     celex_for,
+    is_legal_act,
 )
 from backend.scripts.import_leg_archive import (
     determine_policy_area,
@@ -250,6 +251,7 @@ def process_corpus(
         "skipped_other_source": 0,
         "skipped_celex_held": 0,
         "skipped_no_celex": 0,
+        "skipped_not_legal_act": 0,
         "duplicates_without_celex": 0,
         "metadata_without_celex": 0,
         "celex_filled": 0,
@@ -358,6 +360,11 @@ def process_corpus(
 
             try:
                 cx = folder_celex(corpus_path, uuid)
+                if row is None and cx and not is_legal_act(cx):
+                    stats["skipped_not_legal_act"] += 1
+                    if verbose:
+                        logger.info(f"[SKIP] {uuid}: {cx} is not a legal act (CELEX sector {cx[0]})")
+                    continue
                 # the act's own file, by content: a row that points at an annex or cover page gets a new hash and is re-read
                 meta = {}
                 picked, _ = main_file(corpus_path, uuid, cx or (row.celex if row else None),
@@ -607,6 +614,7 @@ def main():
     logger.info(f"[WARN] Not written, the file is not confirmed as the act in English (listed for a person): {stats['not_confirmed']}")
     logger.info(f"[INFO] New folders skipped, their CELEX is held by another row: {stats['skipped_celex_held']}")
     logger.info(f"[WARN] New folders not imported, their metadata states no single CELEX: {stats['skipped_no_celex']}")
+    logger.info(f"[INFO] New folders not imported, not a legal act (CELEX sector other than 3): {stats['skipped_not_legal_act']}")
     logger.info(f"[INFO] Rows without CELEX that took their folder's: {stats['celex_filled']}" + (" (would)" if args.dry_run else ""))
     logger.info(f"[WARN] Rows without CELEX whose act another row holds (duplicates, for a person): {stats['duplicates_without_celex']}")
     logger.info(f"[WARN] Rows whose folder's metadata states no single CELEX: {stats['metadata_without_celex']}")

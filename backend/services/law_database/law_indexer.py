@@ -167,6 +167,11 @@ class EULawIndexer:
                     })
                     continue
 
+                # eu_laws holds legal acts (CELEX sector 3) only
+                if metadata.get('celex') and not metadata['celex'].startswith('3'):
+                    stats['skipped'] += 1
+                    continue
+
                 # Classify policy area
                 policy_area = None
                 if self.enable_policy_classification:

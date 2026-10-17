@@ -70,12 +70,12 @@ class LawItem(BaseModel):
         "`OJ L, 2025/40, 22.1.2025` for an act published act by act (since 1 October 2023), "
         "`OJ 56, 4.4.1964, p. 850` before 1968, when the Journal had no L and C series."))
     # What the CELEX itself states, read from the string (the EUR-Lex tables "CELEX numbers" and "Types of documents").
-    sector: Optional[str] = Field(None, description="CELEX sector, the first character: `3` legal acts, `2` international agreements, `5` preparatory documents, `0` consolidated texts...")
+    sector: Optional[str] = Field(None, description="CELEX sector, the first character: `3` (legal acts) for every law here, the only sector this corpus holds.")
     sector_name: Optional[str] = Field(None, description="The sector's name in EUR-Lex, e.g. `Legal acts`.")
     year: Optional[int] = Field(None, description="The year in the CELEX (e.g. 2024 for `32024R1689`): the year the act's number belongs to.")
     number: Optional[int] = Field(None, description="The number in the CELEX (e.g. 1689 for `32024R1689`): for most acts the act's own number; for some types (opinions and agreements filed by date, e.g. `32016A0817(01)`) a date.")
     document_type_code: Optional[str] = Field(None, description="The CELEX descriptor letter(s), e.g. `R`, `L`, `D`, `PC`.")
-    document_type: Optional[str] = Field(None, description="What the descriptor means in EUR-Lex's own table, e.g. `Regulation`, `Directive`, `Non-opposition to a notified concentration`. `doc_type` above is Brubru's normalised family; this is the Publications Office's label.")
+    document_type: Optional[str] = Field(None, description="What the descriptor means in EUR-Lex's own table, e.g. `Regulation`, `Directive`, `CFSP act (common position, joint action, common strategy)`. `doc_type` above is Brubru's normalised family; this is the Publications Office's label.")
     corrected_act: Optional[str] = Field(None, description="For a corrigendum (`R(01)` suffix): the CELEX of the act it corrects. Null for every other document.")
     # Brubru's curated names (migration 301).
     alias: Optional[str] = Field(None, description="The law's common name, e.g. `General Data Protection Regulation`, from Brubru's curated list (17 laws on 16 Oct 2026), never derived. To find a law by name, `q` also matches these names and titles.")
@@ -148,7 +148,7 @@ def metadata_filters(sector=None, year=None, number=None, document_type=None, al
     if document_type:
         pairs = type_codes_for(document_type)
         if not pairs:
-            raise _bad_filter("document_type", document_type, "a CELEX descriptor (R, L, D, PC...) or its EUR-Lex label (regulation, directive...)")
+            raise _bad_filter("document_type", document_type, "a CELEX descriptor (R, L, D, E...) or its EUR-Lex label (regulation, directive...)")
         fs.append(or_(*[EULaw.celex.op("~")(rf"^{s or '[0-9CE]'}[0-9]{{4}}{t}[0-9]") for s, t in pairs]))
     if alias:
         v = alias.strip().lower()
@@ -239,7 +239,7 @@ The single highest-traffic Brubru endpoint — used to find specific acts (e.g. 
 - `published_from`, `published_to` — date filter on `published_date`.
 - `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
 - `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
-- `sector`, `year`, `number`, `document_type`: the parts of the CELEX. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `H`...) or its EUR-Lex label (`regulation`); a descriptor used by several sectors matches in all of them unless `sector` narrows it. A corrigendum carries its act's descriptor, so `document_type=R` lists the corrections of regulations too (`corrected_act` names their act).
+- `sector`, `year`, `number`, `document_type`: the parts of the CELEX. Every law here is a legal act, CELEX sector `3`. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `H`...) or its EUR-Lex label (`regulation`). A corrigendum carries its act's descriptor, so `document_type=R` lists the corrections of regulations too (`corrected_act` names their act).
 - `alias`: a name or acronym from Brubru's curated list (`GDPR`, `Digital Services Act`), exact and case-insensitive; the list is short, so search by name with `q`.
 - `author`: creating body (`COM`, `CONSIL`, `EP`, `SANTE`...). `in_force`: `true` or `false` (false: not yet or no longer in force). `procedure`: `2021/0106` (a type such as `(COD)` and a trailing letter are accepted). `corrects`: a CELEX, returns its corrigenda.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -283,10 +283,10 @@ async def list_laws(
         description="Include body_txt and body_html. Pass false to page the corpus "
                     "for metadata without carrying ~41 KB of XHTML per row.",
     ),
-    sector: Optional[str] = Query(None, description="CELEX sector: 3 legal acts, 2 international agreements, 5 preparatory documents..."),
+    sector: Optional[str] = Query(None, description="CELEX sector: `3`, legal acts, the only sector this corpus holds (another sector returns no law)."),
     year: Optional[int] = Query(None, ge=1900, le=2100, description="The year in the CELEX (e.g. 2024)"),
     number: Optional[int] = Query(None, ge=1, description="The number in the CELEX (e.g. 1689 for the AI Act)"),
-    document_type: Optional[str] = Query(None, description="CELEX descriptor (R, L, D, PC...) or its EUR-Lex label (regulation, directive, ...)"),
+    document_type: Optional[str] = Query(None, description="CELEX descriptor (R, L, D, E...) or its EUR-Lex label (regulation, directive, ...)"),
     alias: Optional[str] = Query(None, description="Common name or acronym, exact and case-insensitive (GDPR, Digital Services Act)"),
     author: Optional[str] = Query(None, description="Creating body, Publications Office code: COM, CONSIL, EP, or a department such as SANTE"),
     in_force: Optional[bool] = Query(None, description="true: in force per the metadata; false: not in force. Laws whose metadata carries no flag match neither."),

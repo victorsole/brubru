@@ -28,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from backend.services.parsers.formex_parser import FormexParser, ParsedLaw
 from backend.core.database import get_db, SessionLocal
 from backend.models.eu_law import EULaw
+from backend.scripts.leg_folder import is_legal_act
 
 # Configure logging
 logging.basicConfig(
@@ -171,6 +172,10 @@ def import_document(
         # Skip if no title (likely not a valid legal document)
         if not parsed.title:
             logger.debug(f"Skipping {uuid}: no title")
+            return None
+
+        if parsed.celex and not is_legal_act(parsed.celex):
+            logger.debug(f"Skipping {uuid}: {parsed.celex} is not a legal act")
             return None
 
         # Check if already exists (skip in dry-run mode)
