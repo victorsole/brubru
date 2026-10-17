@@ -91,6 +91,21 @@ def rdf_facts(corpus_path: Path, folder: str) -> dict:
     return out
 
 
+OEIL_PAIRS_SQL = ("SELECT oeil_procedure_ref, celex_numbers FROM legislative_carriages "
+                  "WHERE oeil_procedure_ref IS NOT NULL AND celex_numbers IS NOT NULL")
+
+
+def oeil_procedures(pairs) -> dict:
+    """{CELEX: {YYYY/NNNN[A]}} from (oeil_procedure_ref, celex_numbers) rows of legislative_carriages (OEIL_PAIRS_SQL),
+    Brubru's Legislative Observatory data: 288 of 288 agree with Cellar (16 Oct 2026)."""
+    out = {}
+    for ref, celexes in pairs:
+        m = re.match(r"\s*(\d{4})/0*(\d{1,4})([A-Z]?)\(", ref or "")
+        for c in (celexes or []) if m else []:
+            out.setdefault(c, set()).add(f"{m[1]}/{int(m[2]):04d}{m[3]}")
+    return out
+
+
 def merged(column: str, stored, read):
     """What a later export's read of one column stores over the stored value (audit of 16 Oct 2026): the export states
     less than the backfill gathered, so a read never blanks a value, procedures are merged, and a set in_force is left

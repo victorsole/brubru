@@ -36,11 +36,81 @@ def test_document_date_guards_cellar_errors():
     assert mod.document_date("2030-01-01", "2026-07-24", "no date in title") == "2026-07-24"
 
 
-def test_celex_shape_excludes_corrigenda_and_proposals():
-    assert mod.CELEX_RE.match("32026R1744")
-    assert not mod.CELEX_RE.match("32026R1744(01)")
-    assert not mod.CELEX_RE.match("52025PC0836")
-    assert not mod.CELEX_RE.match("32026H0001")
+# 17 Oct 2026: every sector-3 legal act the corpus holds, not only 3YYYY[RLD]NNNN; 150 acts with an English text
+# published since 1 Nov 2025 never arrived (budget acts, recommendations, corrigenda). Sector 2 stays out.
+SHAPES = {"32026R1744": True, "32026R1744(01)": True, "32026D1106R(01)": True, "32005Q0520(01)R(01)": True,
+          "32026H0311": True, "32026B0060": True, "32026Q00997": True, "32026C00268": True,
+          "52025PC0836": False, "22026D1980": False, "22012A0727(01)R(01)": False, "C/2025/03118": False, "32026R": False}
+
+
+@pytest.mark.parametrize("celex,ok", SHAPES.items())
+def test_celex_shape_is_every_sector3_legal_act(celex, ok):
+    assert bool(mod.CELEX_RE.match(celex)) is ok
+
+
+@pytest.mark.parametrize("celex,ok", SHAPES.items())
+def test_the_sparql_filter_says_the_same(celex, ok):
+    import re
+    # SPARQL unescapes "\\(" to "\(" inside its string literal before the regex sees it
+    assert bool(re.search(mod.SPARQL_CELEX.replace("\\\\", "\\"), celex)) is ok
+
+
+@pytest.mark.parametrize("celex,title,expected", [
+    ("32026R1753R(01)", "Corrigendum to Commission Delegated Regulation (EU) 2026/1753 of 13 July 2026", "Regulation"),
+    ("32017L2397R(03)", "Corrigendum to Directive (EU) 2017/2397", "Directive"),
+    ("32015O0027R(01)", "Corrigendum to Guideline (EU) 2015/27 of the European Central Bank", "Corrigendum"),
+    ("32026H0311", "Commission Recommendation (EU) 2026/311 of 29 January 2026", "Recommendation"),
+    ("32026B0060", "Decision (EU) 2026/60 of the European Parliament of 22 October 2025 on discharge", "Decision"),
+    ("32025B2238", "Definitive adoption (EU, Euratom) 2025/2238 of Amending budget No 2", "Other"),
+    ("32026C00268", "Statement from the European Commission on future action regarding Russian oil", "Other"),
+])
+def test_normalized_type_spells_each_kind_as_the_corpus_does(celex, title, expected):
+    assert mod.normalized_type(celex, title) == expected
+
+
+def test_a_title_without_a_number_still_gets_a_type():
+    assert mod.doc_type_from_title("Statement from the European Commission", "C", "32026C00268") == "Other"
+    assert mod.doc_type_from_title("Something", "H", "32026H0311") == "Recommendation"
+
+
+def test_a_corrigendum_takes_its_own_official_journal_number():
+    assert mod.oj_reference("32026D1106R(01)", "2026-10-13", "90858", "2026") == "OJ L, 2026/90858, 13.10.2026"
+    assert mod.oj_reference("32026R1744", "2026-07-24", "1744", "2026") == "OJ L, 2026/1744, 24.7.2026"
+
+
+ROW = {"celex": "32026H0311", "work": "w", "pub": "2026-02-10", "ojn": "311", "ojy": "2026", "docdate": "2026-01-29",
+       "title": "Commission Recommendation (EU) 2026/311 of 29 January 2026 on attracting talent for innovation",
+       "eea": "0", "dg": "http://publications.europa.eu/resource/authority/corporate-body/RTD"}
+FACTS = {"authors": ["COM", "RTD"], "in_force": None, "eli": "http://data.europa.eu/eli/reco/2026/311/oj",
+         "entry_into_force": None, "application_dates": None, "effect_dates": None, "procedures": ["2025/0001"], "seen": True}
+
+
+def test_a_new_row_carries_the_metadata_columns_and_no_side_copies():
+    import json
+    row = mod.build_row(ROW, {}, lambda t, l: None, FACTS, {"2025/0002"})
+    assert (row["authors"], row["eli"], row["in_force"]) == (["COM", "RTD"], FACTS["eli"], None)
+    assert row["procedures"] == ["2025/0001", "2025/0002"]  # Cellar and OEIL, together
+    assert row["doc_type_normalized"] == "Recommendation" and row["oj"] == "OJ L, 2026/311, 10.2.2026"
+    assert not {"in_force", "eli", "entry_into_force"} & set(json.loads(row["meta"]))
+    bare = mod.build_row(ROW, {}, lambda t, l: None)  # Cellar's metadata unavailable: unknown, never false
+    assert all(bare[c] is None for c in mod.META_COLS)
+
+
+def test_the_insert_writes_every_metadata_column():
+    sql = str(mod.INSERT_SQL)
+    assert all(f":{c}" in sql for c in mod.META_COLS) and "in_force" in sql.split("SELECT")[0]
+
+
+def test_the_catch_up_fills_empty_columns_only_and_never_in_force():
+    rows = [{"id": 1, "celex": "32026H0311", "authors": None, "eli": "kept", "entry_into_force": None,
+             "application_dates": None, "effect_dates": None, "procedures": None},
+            {"id": 2, "celex": "32026B0060", "authors": ["EP"], "eli": "x", "entry_into_force": None,
+             "application_dates": None, "effect_dates": None, "procedures": None}]
+    fills = mod.catch_up_fills(rows, {"32026H0311": FACTS, "32026B0060": {"authors": ["EP"], "eli": "y"}}, {})
+    assert fills == [(1, {"authors": ["COM", "RTD"], "eli": None, "entry_into_force": None, "application_dates": None,
+                          "effect_dates": None, "procedures": ["2025/0001"]})]
+    assert "in_force" not in mod.FILL_COLS and "in_force" not in mod.FILL_SQL
+    assert all(f"{c} = coalesce(e.{c}, v.{c})" in mod.FILL_SQL for c in mod.FILL_COLS)
 
 
 class _FakeDB:

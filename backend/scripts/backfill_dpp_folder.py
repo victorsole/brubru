@@ -350,7 +350,7 @@ def build_rows(db) -> List[Dict[str, Any]]:
     # ---- laws: full text bodies -------------------------------------------
     for celex, (stem, role, hook) in LAWS.items():
         meta = db.execute(
-            text("SELECT title, date, extra_metadata FROM eu_laws WHERE celex = :c"),
+            text("SELECT title, date, eli FROM eu_laws WHERE celex = :c"),
             {"c": celex},
         ).fetchone()
         if not meta:
@@ -366,7 +366,7 @@ def build_rows(db) -> List[Dict[str, Any]]:
             print(f"  [WARN] {celex}: cleaned text only {len(act)} chars, skipped")
             continue
 
-        eli = (meta.extra_metadata or {}).get("eli")
+        eli = meta.eli  # the column (migration 301); the extra_metadata copy was removed on 17 Oct 2026
         header = [meta.title, ""]
         header.append(f"CELEX: {celex}")
         if eli:

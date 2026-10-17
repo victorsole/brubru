@@ -42,8 +42,8 @@ from sqlalchemy import text  # noqa: E402
 
 from backend.core.database import SessionLocal  # noqa: E402
 from backend.scripts.fix_eu_laws_2025_leftovers import check  # noqa: E402
-from backend.scripts.leg_export_metadata import (COLS, ROOT, TABLES, aliases, cellar_facts,  # noqa: E402
-                                                 folder_of_celex, rdf_facts)
+from backend.scripts.leg_export_metadata import (COLS, OEIL_PAIRS_SQL, ROOT, TABLES, aliases, cellar_facts,  # noqa: E402
+                                                 folder_of_celex, oeil_procedures, rdf_facts)
 
 CORPUS = ROOT / "docs/LEG_2026-10"
 CACHE = TABLES / "cellar_facts.json"
@@ -61,13 +61,7 @@ def _facts(folder):
 
 def carriage_procedures(db) -> dict:
     """{CELEX: {YYYY/NNNN}} from the OEIL references Brubru holds (legislative_carriages): 288 of 288 agree with Cellar."""
-    out = {}
-    for ref, celexes in db.execute(text("SELECT oeil_procedure_ref, celex_numbers FROM legislative_carriages "
-                                        "WHERE oeil_procedure_ref IS NOT NULL AND celex_numbers IS NOT NULL")).fetchall():
-        m = re.match(r"\s*(\d{4})/0*(\d{1,4})([A-Z]?)\(", ref or "")
-        for c in (celexes or []) if m else []:
-            out.setdefault(c, set()).add(f"{m[1]}/{int(m[2]):04d}{m[3]}")
-    return out
+    return oeil_procedures(db.execute(text(OEIL_PAIRS_SQL)).fetchall())
 
 
 def plan(db):
