@@ -385,7 +385,8 @@ _TENDERATOR_CHAIN = (
 # 2026: 11 of the 29, consultations and the Have Your Say sweep among them), so
 # a failure was visible only in a log line. Recorded by the tier, like the chain
 # above. A script that starts recording itself must be removed from this list,
-# or it gets two rows per run.
+# or it gets two rows per run. Retiring a daily job: add it to
+# api/sync_status._RETIRED_JOBS too, or /sync/health reports it stale for 30 days.
 _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc", "tbt",

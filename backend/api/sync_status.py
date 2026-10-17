@@ -7,7 +7,7 @@ cron tier endpoints (see api/cron.py + services/sync/).
 """
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
@@ -44,6 +44,92 @@ def get_sync_freshness(db: Session = Depends(get_db)) -> dict:
     return {"sources": get_freshness(db)}
 
 
+# Jobs judged one by one. The tier line averages its jobs: on 17 Oct 2026 `tris_titles` failed
+# on its first run while `daily` read healthy (1 failure in 51 runs), and a job dropped from
+# the schedule writes no row at all, so nothing there could ever turn red for it. Hours a job
+# may go without running before it is stale; a tier added here gets the same list.
+_JOB_STALE_AFTER_HOURS = {"daily": 36}
+_JOB_WINDOW_DAYS = 30
+_OK = ("success", "ok")
+# Jobs taken off the schedule on purpose: not running is then expected, so they are listed as
+# retired instead of stale. Retiring a job = one line here, or the page stays red for 30 days.
+_RETIRED_JOBS = {
+    "client_source_ledger": "13 Oct 2026, 2dad35a9 (Terraqui engagement ended)",
+    "dpp_watch": "13 Oct 2026, 2dad35a9 (Terraqui engagement ended)",
+}
+
+
+def judge_jobs(rows, now: datetime, stale_after_hours: int, retired: dict | None = None) -> dict:
+    """One tier's jobs, each judged on its own runs.
+
+    `failing`: the last run's status is not success/ok/degraded (failed, skipped, a status
+    nobody has thought about). `stale`: no run within `stale_after_hours`. `degraded`: the job
+    finished but owes work (an engine missing, credits spent): listed, never counted as broken.
+    `retired`: a job in `retired` that no longer runs; one that runs again is judged as any other.
+    """
+    retired = retired or {}
+    def iso(t):
+        if t is None:
+            return None
+        return (t if t.tzinfo else t.replace(tzinfo=timezone.utc)).isoformat()
+
+    detail = []
+    for r in rows:
+        last_run = r["last_run"]
+        if last_run is not None and last_run.tzinfo is None:
+            last_run = last_run.replace(tzinfo=timezone.utc)
+        status = r["last_status"]
+        detail.append({
+            "job": r["source_key"],
+            "last_run": iso(last_run),
+            "last_status": status,
+            "last_success": iso(r["last_success"]),
+            "runs_7d": int(r["runs_7d"] or 0),
+            "failures_7d": int(r["failures_7d"] or 0),
+            "stale": last_run is None or last_run < now - timedelta(hours=stale_after_hours),
+            "error": ((r["last_error"] or "")[:300] or None) if status not in _OK else None,
+        })
+    gone = {j["job"] for j in detail if j["stale"] and j["job"] in retired}
+    for j in detail:
+        if j["job"] in gone:
+            j["retired"] = retired[j["job"]]
+    live = [j for j in detail if j["job"] not in gone]
+    failing = [j["job"] for j in live if j["last_status"] not in _OK + ("degraded",)]
+    stale = [j["job"] for j in live if j["stale"]]
+    degraded = [j["job"] for j in live if j["last_status"] == "degraded"]
+    rank = {k: i for i, k in enumerate(failing + stale + degraded)}
+    detail.sort(key=lambda j: (rank.get(j["job"], len(rank)), j["job"]))
+    return {
+        "stale_after_hours": stale_after_hours,
+        "count": len(detail),
+        "healthy": (not failing and not stale) if live else None,
+        "failing": failing,
+        "stale": stale,
+        "degraded": degraded,
+        "retired": sorted(gone),
+        "detail": detail,
+    }
+
+
+def _jobs(db: Session, tier: str, stale_after_hours: int) -> dict:
+    rows = db.execute(text("""
+        SELECT source_key,
+               (array_agg(status ORDER BY started_at DESC))[1]                 AS last_status,
+               (array_agg(error ORDER BY started_at DESC))[1]                  AS last_error,
+               max(coalesce(finished_at, started_at))                          AS last_run,
+               max(finished_at) FILTER (WHERE status IN ('success', 'ok'))     AS last_success,
+               count(*) FILTER (WHERE started_at > now() - interval '7 days') AS runs_7d,
+               count(*) FILTER (WHERE status = 'failed'
+                                 AND started_at > now() - interval '7 days') AS failures_7d
+        FROM sync_runs
+        WHERE tier = :tier
+          AND runner IS DISTINCT FROM 'local'
+          AND started_at > now() - make_interval(days => :days)
+        GROUP BY source_key
+    """), {"tier": tier, "days": _JOB_WINDOW_DAYS}).mappings().all()
+    return judge_jobs(rows, datetime.now(timezone.utc), stale_after_hours, _RETIRED_JOBS)
+
+
 @router.get(
     "/health",
     summary="Is the hourly sync dispatcher alive?",
@@ -52,7 +138,8 @@ def get_sync_freshness(db: Session = Depends(get_db)) -> dict:
         "Reports when the hourly cron dispatcher (`scripts/cron_dispatch.py`) "
         "last fired its liveness heartbeat, then, for **every** sync tier, when "
         "it last succeeded, when it last ran at all, and how often it has failed "
-        "in the last 24 hours. Also surfaces the nightly scraper-health "
+        "in the last 24 hours, and each nightly job by name: whether its last "
+        "run failed and whether it has stopped running. Also surfaces the nightly scraper-health "
         "detector: how many scrapers it checked, and which ones are confirmed "
         "broken.\n\n"
         "**When to use it**\n"
@@ -66,7 +153,13 @@ def get_sync_freshness(db: Session = Depends(get_db)) -> dict:
         "**You get back**\n"
         "`dispatcher` (last_seen, minutes_ago, alive); `tiers`, one entry per "
         "tier with `last_success`, `last_run`, `failures_24h`, `runs_24h` and a "
-        "`healthy` flag; and `scrapers` with the last detector run, the number "
+        "`healthy` flag; `jobs.daily`, every nightly job seen in the last 30 days, "
+        "with the lists `failing` (its last run failed), `stale` (no run in 36 "
+        "hours) and `degraded` (it finished but still owes work: listed, never "
+        "counted as broken), `retired` (taken off the schedule on purpose), a "
+        "`healthy` flag, and per job `last_run`, "
+        "`last_status`, `last_success`, `runs_7d`, `failures_7d` and the last "
+        "`error`; and `scrapers` with the last detector run, the number "
         "checked, and any confirmed breaks by body and item type."
     ),
 )
@@ -158,6 +251,17 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
         scrapers = {"last_checked": None, "checked": 0, "confirmed_breaks": [],
                     "error": f"{type(exc).__name__}"}
 
+    jobs: dict = {}
+    for tier, hours in _JOB_STALE_AFTER_HOURS.items():
+        try:
+            jobs[tier] = _jobs(db, tier, hours)
+        except Exception as exc:  # noqa: BLE001
+            # An error key, never an empty list: a check that could not run must not
+            # read like a tier with nothing failing.
+            logger.warning("[sync-health] jobs of %s unreadable: %s", tier, exc)
+            db.rollback()
+            jobs[tier] = {"healthy": None, "error": f"{type(exc).__name__}: {exc}"}
+
     # --- corpus completeness -------------------------------------------
     # The tier table says whether jobs RAN. This says whether the corpora they
     # maintain are actually COMPLETE, which is a different question: every
@@ -220,6 +324,7 @@ def get_sync_health(db: Session = Depends(get_db)) -> dict:
         "process_limits": _process_limits(),
         "memory": _memory_usage(),
         "tiers": tiers,
+        "jobs": jobs,
         "scrapers": scrapers,
         "corpora": corpora,
         "bodies": bodies,
