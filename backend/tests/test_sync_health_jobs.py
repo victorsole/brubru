@@ -158,8 +158,8 @@ def test_an_unreadable_job_list_says_so_and_the_page_still_answers(monkeypatch):
     monkeypatch.setattr(sync_status, "_jobs", broken)
     db = _FakeDb()
     h = sync_status.get_sync_health(db)
-    assert h["jobs"]["daily"]["healthy"] is None and "RuntimeError" in h["jobs"]["daily"]["error"]
-    assert db.rolled_back == 1 and "tiers" in h
+    assert all(v["healthy"] is None and "RuntimeError" in v["error"] for v in h["jobs"].values())
+    assert db.rolled_back == len(sync_status._JOB_STALE_AFTER_HOURS) and "tiers" in h
 
 
 def test_the_route_reports_every_judged_tier(monkeypatch):
@@ -219,8 +219,8 @@ def _verdict(**lists):
 def test_a_healthy_verdict_sends_nothing(monkeypatch):
     sent = []
     monkeypatch.setattr("services.email_service.EmailService.send", lambda self, **k: sent.append(k) or True)
-    cron._send_jobs_alert(_verdict())
-    cron._send_jobs_alert({"healthy": None, "detail": []})
+    cron._send_jobs_alert({"daily": _verdict(), "hot_6h": _verdict()})
+    cron._send_jobs_alert({"daily": {"healthy": None, "detail": []}})
     assert sent == []
 
 
@@ -228,23 +228,47 @@ def test_a_job_that_needs_a_look_is_mailed_with_its_reason(monkeypatch):
     sent = []
     monkeypatch.setattr("services.email_service.EmailService.send", lambda self, **k: sent.append(k) or True)
     monkeypatch.setattr(cron.settings, "ALERT_EMAIL", "ops@example.org", raising=False)
-    cron._send_jobs_alert(_verdict(failing=["tris_titles"], stale=["eu_laws_cellar"], degraded_too_long=["jrc"]))
+    cron._send_jobs_alert({"daily": _verdict(failing=["tris_titles"], stale=["eu_laws_cellar"], degraded_too_long=["jrc"]),
+                           "hot_6h": _verdict(failing=["cellar_recent"]), "weekly": _verdict()})
     assert len(sent) == 1 and sent[0]["to"] == "ops@example.org"
-    assert sent[0]["subject"] == "[Brubru] 3 nightly job(s) need a look"
+    assert sent[0]["subject"] == "[Brubru] 4 scheduled job(s) need a look"
     body = sent[0]["html_body"]
-    assert "tris_titles" in body and "eu_laws_cellar" in body and "jrc" in body
+    assert "daily / tris_titles" in body and "daily / eu_laws_cellar" in body and "daily / jrc" in body
+    assert "hot_6h / cellar_recent" in body
     assert "&lt;boom&gt;" in body and "<boom>" not in body
 
 
 def test_a_failed_job_that_is_also_stale_is_listed_once():
-    subject, body = cron._jobs_alert(_verdict(failing=["tris_titles"], stale=["tris_titles"]))
-    assert subject == "[Brubru] 1 nightly job(s) need a look" and body.count("tris_titles") == 1
+    subject, body = cron._jobs_alert({"daily": _verdict(failing=["tris_titles"], stale=["tris_titles"])})
+    assert subject == "[Brubru] 1 scheduled job(s) need a look" and body.count("tris_titles") == 1
+
+
+def test_a_tier_that_could_not_be_judged_is_mailed_not_skipped():
+    subject, body = cron._jobs_alert({"daily": _verdict(), "weekly": {"healthy": None, "error": "OperationalError: x"}})
+    assert subject == "[Brubru] 1 scheduled job(s) need a look" and "weekly" in body and "could not be judged" in body
 
 
 def test_the_daily_tier_mails_after_it_records():
     src = (BACKEND / "api" / "cron.py").read_text()
     fn = src[src.index("async def cron_sync_daily("):src.index("# Economy folders (economy_items)")]
-    assert fn.index("record_run(_db, source_key=_key") < fn.index("_send_jobs_alert(daily_jobs_verdict(_db))")
+    assert fn.index('_record_tier_results("daily"') < fn.index("_send_jobs_alert(jobs_verdicts(_db))")
+
+
+def test_every_judged_tier_has_its_limits():
+    assert set(sync_status._JOB_STALE_AFTER_HOURS) == {"daily", "hot_6h", "warm_12h", "weekly", "monthly"}
+    assert sync_status._JOB_DEGRADED_DAYS_BY_TIER["weekly"] > 7 and sync_status._JOB_DEGRADED_DAYS_BY_TIER["monthly"] > 31
+
+
+def test_the_verdicts_name_every_tier_and_say_when_one_cannot_be_read(monkeypatch):
+    def jobs(db, tier, hours):
+        if tier == "weekly":
+            raise RuntimeError("boom")
+        return judge_jobs([row("cor")], NOW, hours)
+    monkeypatch.setattr(sync_status, "_jobs", jobs)
+    db = _FakeDb()
+    v = sync_status.jobs_verdicts(db)
+    assert set(v) == set(sync_status._JOB_STALE_AFTER_HOURS) and v["weekly"]["healthy"] is None
+    assert "RuntimeError" in v["weekly"]["error"] and db.rolled_back == 1 and v["daily"]["healthy"] is True
 
 
 @pytest.mark.live
@@ -277,3 +301,24 @@ def test_failures_7d_matches_a_count_made_another_way():
     for key, status in rows:
         counted[key] = counted.get(key, 0) + (status not in ("success", "ok", "degraded"))
     assert {d["job"]: d["failures_7d"] for d in j["detail"] if d["runs_7d"]} == counted
+
+
+class _RowsDb(_FakeDb):
+    def __init__(self, rows):
+        self._rows = rows
+
+    def execute(self, *a, **k):
+        rows = self._rows
+
+        class R(_Result):
+            def all(self):
+                return rows
+        return R()
+
+
+def test_a_weekly_job_degraded_once_is_not_too_long_but_a_daily_one_is():
+    now = datetime.now(timezone.utc)  # _jobs judges against the real clock
+    r = row("gi", "degraded", error="50 of 300 left")
+    r["last_success"], r["last_run"] = now - timedelta(days=10), now - timedelta(hours=1)
+    assert sync_status._jobs(_RowsDb([r]), "weekly", 192)["degraded_too_long"] == []
+    assert sync_status._jobs(_RowsDb([r]), "daily", 36)["degraded_too_long"] == ["gi"]

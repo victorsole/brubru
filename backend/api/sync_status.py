@@ -47,8 +47,10 @@ def get_sync_freshness(db: Session = Depends(get_db)) -> dict:
 # Jobs judged one by one. The tier line averages its jobs: on 17 Oct 2026 `tris_titles` failed
 # on its first run while `daily` read healthy (1 failure in 51 runs), and a job dropped from
 # the schedule writes no row at all, so nothing there could ever turn red for it. Hours a job
-# may go without running before it is stale; a tier added here gets the same list.
-_JOB_STALE_AFTER_HOURS = {"daily": 36}
+# may go without running before it is stale; a tier added here gets the same list. The other
+# scheduled tiers record each job since 17 Oct 2026 (api/cron._record_tier_results): the 6- and
+# 12-hourly ones allow one missed run (a push kills the running tier), weekly and monthly none.
+_JOB_STALE_AFTER_HOURS = {"daily": 36, "hot_6h": 13, "warm_12h": 30, "weekly": 8 * 24, "monthly": 32 * 24}
 # Jobs that record under the tier but run more often (audit of 17 Oct 2026): eu_laws_cellar runs in
 # the 6-hourly hot tier, tris in the 12-hourly warm tier as well as the nightly one. At 36 hours a
 # stopped eu_laws_cellar went unseen for five missed runs.
@@ -59,6 +61,8 @@ _JOB_STALE_AFTER_HOURS_BY_JOB = {"eu_laws_cellar": 13, "tris": 25}
 # about every 15 nights (last on 9 Oct 2026).
 _JOB_DEGRADED_DAYS = 7
 _JOB_DEGRADED_DAYS_BY_JOB = {"comitology": 21}
+# a weekly or monthly job has one success a week or a month at best: one degraded run is not "too long"
+_JOB_DEGRADED_DAYS_BY_TIER = {"weekly": 15, "monthly": 62}
 _OK = ("success", "ok")
 # Jobs taken off the schedule on purpose: not running is then expected, so they are listed as
 # retired instead of stale. Retiring a job = one line here, or the page stays red for it.
@@ -182,13 +186,22 @@ _JOBS_SQL = text("""
 def _jobs(db: Session, tier: str, stale_after_hours: int) -> dict:
     rows = db.execute(_JOBS_SQL, {"tier": tier}).mappings().all()
     return judge_jobs(rows, datetime.now(timezone.utc), stale_after_hours, _RETIRED_JOBS,
-                      stale_by_job=_JOB_STALE_AFTER_HOURS_BY_JOB, degraded_days_by_job=_JOB_DEGRADED_DAYS_BY_JOB,
-                      accepted=_ACCEPTED_DEGRADED)
+                      stale_by_job=_JOB_STALE_AFTER_HOURS_BY_JOB,
+                      degraded_days=_JOB_DEGRADED_DAYS_BY_TIER.get(tier, _JOB_DEGRADED_DAYS),
+                      degraded_days_by_job=_JOB_DEGRADED_DAYS_BY_JOB, accepted=_ACCEPTED_DEGRADED)
 
 
-def daily_jobs_verdict(db: Session) -> dict:
-    """The nightly jobs' verdict, as /sync/health shows it (for the daily tier's alert email)."""
-    return _jobs(db, "daily", _JOB_STALE_AFTER_HOURS["daily"])
+def jobs_verdicts(db: Session) -> dict:
+    """{tier: verdict} for every judged tier, as /sync/health shows them (for the daily alert email).
+    A tier that cannot be read says so instead of passing for healthy."""
+    out = {}
+    for tier, hours in _JOB_STALE_AFTER_HOURS.items():
+        try:
+            out[tier] = _jobs(db, tier, hours)
+        except Exception as exc:  # noqa: BLE001
+            db.rollback()
+            out[tier] = {"healthy": None, "error": f"{type(exc).__name__}: {exc}"}
+    return out
 
 
 @router.get(
@@ -199,7 +212,7 @@ def daily_jobs_verdict(db: Session) -> dict:
         "Reports when the hourly cron dispatcher (`scripts/cron_dispatch.py`) "
         "last fired its liveness heartbeat, then, for **every** sync tier, when "
         "it last succeeded, when it last ran at all, and how often it has failed "
-        "in the last 24 hours, and each nightly job by name: whether its last "
+        "in the last 24 hours, and each scheduled job by name: whether its last "
         "run failed and whether it has stopped running. Also surfaces the nightly scraper-health "
         "detector: how many scrapers it checked, and which ones are confirmed "
         "broken.\n\n"
@@ -214,9 +227,10 @@ def daily_jobs_verdict(db: Session) -> dict:
         "**You get back**\n"
         "`dispatcher` (last_seen, minutes_ago, alive); `tiers`, one entry per "
         "tier with `last_success`, `last_run`, `failures_24h`, `runs_24h` and a "
-        "`healthy` flag; `jobs.daily`, every nightly job that has ever run, "
+        "`healthy` flag; `jobs`, one entry per scheduled tier (`daily`, `hot_6h`, "
+        "`warm_12h`, `weekly`, `monthly`) listing every job of that tier that has ever run, "
         "with the lists `failing` (its last run failed), `stale` (no run in 36 "
-        "hours, or its own `stale_after_hours` for a job that runs more often), "
+        "hours for `daily`, the tier's own limit otherwise, or the job's own `stale_after_hours`), "
         "`degraded` (it finished but still owes work), `degraded_too_long` (degraded "
         "with no success in 7 days, or its own limit: counted as broken), `accepted` "
         "(degraded for a reason accepted on purpose, named on the job), `retired` "

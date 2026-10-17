@@ -396,6 +396,51 @@ _DAILY_TIER_RECORDED = (
 # "tbt" left this list on 17 Oct 2026: sync_dg_grow.py records its own run as wto_tbt, so every
 # night wrote two rows for one run (tests/test_sync_health_jobs.py checks no script here records).
 
+# The other scheduled tiers' jobs, recorded the same way (17 Oct 2026). Until then 35 of their 45
+# jobs wrote no sync_runs row: a failure lived in a log line only. cellar_recent had crashed on
+# every run that met a non-sector-3 act since it was scheduled on 14 May 2026 (an enum value
+# that never existed) and had never inserted a row. Each job's script must not record itself
+# (tests/test_every_tier_job_recorded.py); the ones that do are left out of these lists.
+_HOT_TIER_RECORDED = (
+    "oeil", "eurlex", "texts_adopted_rss", "commission_docs", "commission_doc_procedures",
+    "texts_submitted", "college_agendas", "calendar", "cellar_recent", "eu_laws_bodies",
+    "commission_docs_complete", "eu_laws_eurovoc",
+)
+_WARM_TIER_RECORDED = (
+    "committee_work", "eprs_publications", "eprs_records", "eprs_full_text", "eprs_legislation",
+    "committee_minutes", "committee_transcripts", "auto_archive",
+)
+_WEEKLY_TIER_RECORDED = (
+    "ft_participants", "fta", "trade_defence", "trade_defence_bodies", "howtheyvote_members", "gi",
+    "cohesion", "cohesion_finances", "cohesion_outcomes", "eusf", "cap_payments", "commissioner_agendas",
+)
+_MONTHLY_TIER_RECORDED = ("officials", "euvoc_releases", "authority_labels_freshness")
+
+
+def _record_tier_results(tier: str, results: dict, keys) -> None:
+    """One sync_runs row per job in `keys`, from the runner's result: a failure is then visible on
+    /sync/health by name and to the dispatcher, not only in a log line. Never fails the tier.
+
+    Stamped when recorded (the tier's end), not with the job's own times: the dispatcher judges the
+    rows that FINISHED after its previous verdict, so a row inserted at the tier's end with an earlier
+    finish could fall behind that cursor and never be judged."""
+    try:
+        from services.sync.freshness import record_run
+        db = SessionLocal()
+        try:
+            for key in keys:
+                res = results.get(key)
+                if not isinstance(res, dict):
+                    continue
+                status = res.get("status", "failed")
+                record_run(db, source_key=key, tier=tier, status=status,
+                           error=(None if status == "success" else
+                                  str(res.get("stderr_tail") or res.get("error") or res.get("reason") or "")[:1000]))
+        finally:
+            db.close()
+    except Exception as e:  # noqa: BLE001 -- recording must not fail the tier
+        logger.error(f"[CRON] {tier}: could not record its jobs: {e}")
+
 
 def _failure_detail(stderr: str | None, stdout: str | None, returncode=None) -> str:
     """What a failed child said, for the sync_runs error column.
@@ -541,7 +586,8 @@ async def cron_sync_hot_6h(
 
     results["oeil"] = await _run_async_service("oeil", _oeil)
     results["eurlex"] = await _run_async_service("eurlex", _eurlex)
-    results["texts_adopted"] = await _run_async_service("texts_adopted", _texts_adopted)
+    # its own name: the feed registry's "texts_adopted" is another job (scripts/sync_texts_adopted.py)
+    results["texts_adopted_rss"] = await _run_async_service("texts_adopted_rss", _texts_adopted)
     results["commission_docs"] = await _run_async_service("commission_docs", _commission_docs)
     # The register sync takes a procedure only from a title that quotes one: 1,623 of 1,627
     # documents had none (15 Oct 2026). Cellar files each proposal and its staff working
@@ -582,6 +628,7 @@ async def cron_sync_hot_6h(
     results["eu_laws_eurovoc"] = await _run_script_async("eu_laws_eurovoc", "scripts/sync_eu_law_eurovoc.py", ["--limit", "600", "--apply"], timeout=600)
 
     logger.info(f"[CRON] hot-6h tier sync complete: {results}")
+    _record_tier_results("hot_6h", results, _HOT_TIER_RECORDED)
     return {"status": "success", "tier": "hot_6h", "results": results}
 
 
@@ -638,6 +685,7 @@ async def cron_sync_warm_12h(
     results["auto_archive"] = await _run_script_async("auto_archive", "scripts/auto_archive_old_items.py", [], timeout=300)
 
     logger.info(f"[CRON] warm-12h tier sync complete: {results}")
+    _record_tier_results("warm_12h", results, _WARM_TIER_RECORDED)
     return {"status": "success", "tier": "warm_12h", "results": results}
 
 
@@ -1028,36 +1076,20 @@ async def cron_sync_daily(
     # /api/sync/health nor the morning routine reads. A failed or incomplete
     # day would have been invisible. Recorded here from the runner's result,
     # whose failure detail now carries stdout and the return code.
-    try:
-        from services.sync.freshness import record_run
-        _db = SessionLocal()
-        try:
-            for _key in _TENDERATOR_CHAIN + _DAILY_TIER_RECORDED:
-                _res = results.get(_key)
-                if not isinstance(_res, dict):
-                    continue
-                _status = _res.get("status", "failed")
-                record_run(_db, source_key=_key, tier="daily", status=_status,
-                           error=(None if _status == "success" else
-                                  str(_res.get("stderr_tail") or _res.get("error")
-                                      or _res.get("reason") or "")[:1000]))
-        finally:
-            _db.close()
-    except Exception as e:  # noqa: BLE001 -- recording must not fail the tier
-        logger.error(f"[CRON] daily: could not record the Tenderator chain: {e}")
+    _record_tier_results("daily", results, _TENDERATOR_CHAIN + _DAILY_TIER_RECORDED)
 
-    # The nightly jobs' verdict, mailed when it is not healthy (17 Oct 2026). /sync/health showed a
-    # job that stopped or stayed degraded, but nobody reads a page at night, and the dispatcher only
-    # turns red on two failed runs in a row: a job that stops writes no run to judge.
+    # The jobs' verdict, every judged tier, mailed once a day when it is not healthy (17 Oct 2026).
+    # /sync/health showed a job that stopped or stayed degraded, but nobody reads a page at night, and
+    # the dispatcher only turns red on two failed runs in a row: a job that stops writes no run to judge.
     try:
-        from api.sync_status import daily_jobs_verdict
+        from api.sync_status import jobs_verdicts
         _db = SessionLocal()
         try:
-            _send_jobs_alert(daily_jobs_verdict(_db))
+            _send_jobs_alert(jobs_verdicts(_db))
         finally:
             _db.close()
     except Exception as e:  # noqa: BLE001 -- the alert must not fail the tier
-        logger.error(f"[CRON] daily: nightly jobs verdict not sent: {e}")
+        logger.error(f"[CRON] daily: jobs verdict not sent: {e}")
 
     return {"status": "success", "tier": "daily", "results": results}
 
@@ -1589,6 +1621,7 @@ async def cron_sync_weekly(
     results["commissioner_agendas"] = await _run_script_async("commissioner_agendas", "scripts/backfill_commissioner_agenda_bodies.py", ["--apply", "--limit", "50"], timeout=600)
 
     logger.info(f"[CRON] weekly tier sync complete: {results}")
+    _record_tier_results("weekly", results, _WEEKLY_TIER_RECORDED)
     return {"status": "success", "tier": "weekly", "results": results}
 
 
@@ -1609,6 +1642,7 @@ async def cron_sync_monthly(
     results["authority_labels_freshness"] = await _run_script_async("authority_labels_freshness", "scripts/check_authority_labels_freshness.py", [], timeout=300)
 
     logger.info(f"[CRON] monthly tier sync complete: {results}")
+    _record_tier_results("monthly", results, _MONTHLY_TIER_RECORDED)
     return {"status": "success", "tier": "monthly", "results": results}
 
 
@@ -1674,41 +1708,46 @@ def _send_staleness_email(stale: list[dict]) -> None:
         logger.warning("[CRON] Staleness email failed: %s", exc)
 
 
-def _jobs_alert(verdict: dict) -> tuple[str, str] | None:
-    """(subject, html) for the nightly jobs that need a look, or None when there is nothing to say."""
-    by_job = {d["job"]: d for d in verdict.get("detail", [])}
+def _jobs_alert(verdicts: dict) -> tuple[str, str] | None:
+    """(subject, html) for the scheduled jobs that need a look, every judged tier, or None."""
     lines = {}  # one line per job, its first reason (a failed job can also be stale)
-    for job in verdict.get("failing", []):
-        lines.setdefault(job, f"<li><strong>{job}</strong>: last run {by_job[job]['last_status']}"
-                              f" ({html_escape((by_job[job].get('error') or '')[:200])})</li>")
-    for job in verdict.get("stale", []):
-        lines.setdefault(job, f"<li><strong>{job}</strong>: no run since {by_job[job]['last_run']}"
-                              f" (limit {by_job[job]['stale_after_hours']} h)</li>")
-    for job in verdict.get("degraded_too_long", []):
-        lines.setdefault(job, f"<li><strong>{job}</strong>: degraded, {by_job[job]['degraded_too_long']}"
-                              f" (last success {by_job[job]['last_success'] or 'never'})</li>")
-    if verdict.get("healthy") is not False or not lines:
+    for tier, verdict in verdicts.items():
+        if verdict.get("error"):
+            lines[(tier, "")] = f"<li><strong>{tier}</strong>: could not be judged ({html_escape(verdict['error'][:200])})</li>"
+            continue
+        by_job = {d["job"]: d for d in verdict.get("detail", [])}
+        for job in verdict.get("failing", []):
+            lines.setdefault((tier, job), f"<li><strong>{tier} / {job}</strong>: last run {by_job[job]['last_status']}"
+                                          f" ({html_escape((by_job[job].get('error') or '')[:200])})</li>")
+        for job in verdict.get("stale", []):
+            lines.setdefault((tier, job), f"<li><strong>{tier} / {job}</strong>: no run since {by_job[job]['last_run']}"
+                                          f" (limit {by_job[job]['stale_after_hours']} h)</li>")
+        for job in verdict.get("degraded_too_long", []):
+            lines.setdefault((tier, job), f"<li><strong>{tier} / {job}</strong>: degraded, "
+                                          f"{by_job[job]['degraded_too_long']} (last success "
+                                          f"{by_job[job]['last_success'] or 'never'})</li>")
+    if not lines:
         return None
-    html = ("<p>These nightly jobs need a look (from /api/sync/health, jobs.daily):</p>"
+    html = ("<p>These scheduled jobs need a look (from /api/sync/health, jobs):</p>"
             f"<ul>{''.join(lines.values())}</ul>"
             "<p>Retired and accepted jobs are not listed; see the page for every job.</p>")
-    return f"[Brubru] {len(lines)} nightly job(s) need a look", html
+    return f"[Brubru] {len(lines)} scheduled job(s) need a look", html
 
 
-def _send_jobs_alert(verdict: dict) -> None:
-    """Mail the operator the nightly jobs' verdict when it is not healthy, as the fast tier does for feeds."""
-    alert = _jobs_alert(verdict)
+def _send_jobs_alert(verdicts: dict) -> None:
+    """Mail the operator the jobs' verdicts when one is not healthy, as the fast tier does for feeds."""
+    alert = _jobs_alert(verdicts)
     if not alert:
         return
     recipient = settings.ALERT_EMAIL or settings.SMTP_USER
     if not recipient:
-        logger.warning("[CRON] Nightly jobs need a look but no ALERT_EMAIL/SMTP_USER configured")
+        logger.warning("[CRON] Scheduled jobs need a look but no ALERT_EMAIL/SMTP_USER configured")
         return
     from services.email_service import EmailService
     if EmailService().send(to=recipient, subject=alert[0], html_body=alert[1]):
-        logger.info("[CRON] Nightly jobs alert sent to %s", recipient)
+        logger.info("[CRON] Scheduled jobs alert sent to %s", recipient)
     else:
-        logger.error("[CRON] Nightly jobs alert could not be sent to %s", recipient)
+        logger.error("[CRON] Scheduled jobs alert could not be sent to %s", recipient)
 
 
 # A run that is a problem for the cron verdict: it failed, or it stopped itself at its

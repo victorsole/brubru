@@ -75,3 +75,10 @@ def test_a_parenthesised_celex_survives_the_whole_post_processing(service):
 
 def test_the_entry_count_is_the_file_count():
     assert DATA["metadata"]["total_entries"] == len(ACRONYMS)
+
+
+def test_ppwr_links_to_the_packaging_regulation_and_corrects_a_wrong_number(service):
+    """Added on Victor's go (17 Oct 2026): Regulation (EU) 2025/40, verified at Cellar."""
+    assert "CELEX:32025R0040" in service._linkify_legislation("The PPWR applies from 12 August 2026.")
+    wrong = "See the [Packaging and Packaging Waste Regulation](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1828)."
+    assert "CELEX:32025R0040" in service._linkify_legislation(wrong)

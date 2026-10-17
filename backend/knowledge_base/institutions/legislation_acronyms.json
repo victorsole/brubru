@@ -4,7 +4,7 @@
     "description": "Comprehensive acronym-to-CELEX mapping from automated extraction + manual curation",
     "source": "docs/LEG_2025-11/ + manual curation",
     "extraction_date": "2025-11-19",
-    "total_entries": 511,
+    "total_entries": 512,
     "auto_extracted": 658,
     "manually_curated": 20,
     "extraction_stats": {
@@ -221,6 +221,13 @@
         ],
         "reason": "Cellar check of every CELEX in this file (17 Oct 2026, after the Auditor named two): 68 CELEX do not exist. 'PACT Act' (32024R1828) and 'TDI' (32024L0900) name no EU act, and their full names made the chat rewrite correct links to the Packaging and Packaging Waste Regulation (32025R0040) and the Tax Dispute Resolution Directive (32017L1852) to those 404s; 'ESMIG' is a system, not a law. 112 ECB act numbers pointed at a CELEX derived from the OJ number (older ECB decisions are filed under their own number, e.g. ECB/2014/49 = 32014D0049(01)) or at the act they amend; 110 now point at the act whose own title carries that ECB number at Cellar. ECB/2020/33 could not be found, and ECB/2014/13 and ECB/2014/19 (ECB recommendations) only as the subject of Commission opinions; all three were removed. The 125 other ECB entries already pointed at the right act; their titles, cut short by the extraction, were replaced by Cellar's.",
         "titles_refreshed": 125
+      },
+      {
+        "date": "2026-10-17",
+        "added": [
+          "PPWR"
+        ],
+        "reason": "Victor's go (17 Oct 2026): the Packaging and Packaging Waste Regulation, Regulation (EU) 2025/40, title verified at Cellar. Its full name also lets the linkifier correct a wrong CELEX on a link with that text, which 'PACT Act' used to break."
       }
     ]
   },
@@ -3917,6 +3924,14 @@
       "type": "Regulation",
       "year": 2008,
       "full_name": "Classification, Labelling and Packaging"
+    },
+    "PPWR": {
+      "celex": "32025R0040",
+      "full_title": "Regulation (EU) 2025/40 of the European Parliament and of the Council of 19 December 2024 on packaging and packaging waste, amending Regulation (EU) 2019/1020 and Directive (EU) 2019/904, and repealing Directive 94/62/EC",
+      "type": "Regulation",
+      "year": 2025,
+      "source_file": "manual curation 2026-10-17",
+      "full_name": "Packaging and Packaging Waste Regulation"
     }
   }
 }
