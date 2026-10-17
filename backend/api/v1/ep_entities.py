@@ -1096,7 +1096,66 @@ async def list_ep_documents(
     # `has_more` stayed true. Only 800 of the records were reachable. The same bug was
     # fixed in /council-documents on 27 Aug 2026; this endpoint never got the fix.
     depth = page * limit
-    a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast(), AmendmentDocument.id).limit(depth).all()
+    # The merge runs on (id, date) only, and only the page's rows are then read in full
+    # (17 Oct 2026). Reading page*limit WHOLE rows, each with its amendment text (129 KB),
+    # sent 35 GB from the database in four days; /council-documents read the same way and
+    # took Supabase over its egress quota (fixed there on 15 Oct).
+    a_keys = (aq.with_entities(AmendmentDocument.id, AmendmentDocument.document_date)
+              .order_by(AmendmentDocument.document_date.desc().nullslast(), AmendmentDocument.id)
+              .limit(depth).all())
+
+    # Branch 2: committee_work items
+    cq = db.query(CommitteeWorkItem)
+    if committee:
+        cq = cq.filter(CommitteeWorkItem.committee_code == committee.upper())
+    if procedure_reference:
+        cq = cq.filter(CommitteeWorkItem.procedure_ref == procedure_reference)
+    if q:
+        cq = cq.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
+    if updated_from:
+        cq = cq.filter(CommitteeWorkItem.last_updated >= updated_from)
+    if updated_to:
+        cq = cq.filter(CommitteeWorkItem.last_updated <= updated_to)
+    if document_type:
+        # This branch never applied the filter, so every document_type query returned all
+        # 575 work items on top of whatever branch 1 matched: that is why the per-type
+        # totals added up to 8,858 against a corpus of 1,931 (GovClipping, 24 Sep 2026).
+        # The expression has to match what this branch EMITS as document_type below.
+        cq = cq.filter(func.lower(_cw_document_type_sql()) == document_type)
+    # The window applies to the date this branch serves as document_date. It was
+    # missing, so every published_from/published_to call returned all 575 work items.
+    if published_from:
+        cq = cq.filter(CommitteeWorkItem.vote_date >= published_from)
+    if published_to:
+        cq = cq.filter(CommitteeWorkItem.vote_date <= datetime.combine(published_to, time.max))
+    c_total = cq.count()
+    # Ordered by last_updated, not vote_date: every committee_work row has a NULL
+    # vote_date, so they all tie at the bottom of the merge key below and last_updated is
+    # the only order that makes the page deterministic.
+    c_keys = (cq.with_entities(CommitteeWorkItem.id, CommitteeWorkItem.vote_date)
+              .order_by(CommitteeWorkItem.vote_date.desc().nullslast(), CommitteeWorkItem.id)
+              .limit(depth).all())
+
+    # Sort union by document_date desc and apply page slice.
+    # `total` reflects the FULL DB count across both source tables (honest).
+    # A TOTAL order: date descending, then id ascending. Sorting on the date alone left
+    # thousands of rows tied (every committee-work row is undated) and each branch cut its
+    # own tied rows differently from the merge, so a full walk repeated 2 ids and skipped
+    # others in BOTH windows, which rules out a concurrent write. The branches above use
+    # the same (date desc, id asc) order, so the merged slice and the branch cutoffs agree.
+    # A work item sorts on its vote date even where the date it serves comes from OEIL. Both
+    # columns are timestamps in the database (amendment_documents.document_date at midnight,
+    # though the model says Date): the key is the date each item serves.
+    keys = ([("a", str(i), d.date() if isinstance(d, datetime) else d) for i, d in a_keys]
+            + [("c", str(i), v.date() if v else None) for i, v in c_keys])
+    keys.sort(key=lambda k: k[1])
+    keys.sort(key=lambda k: k[2] or date.min, reverse=True)
+    window = keys[(page - 1) * limit: page * limit]
+    a_ids = [i for kind, i, _ in window if kind == "a"]
+    c_ids = [i for kind, i, _ in window if kind == "c"]
+    a_rows = aq.filter(AmendmentDocument.id.in_(a_ids)).all() if a_ids else []
+    c_rows = cq.filter(CommitteeWorkItem.id.in_(c_ids)).all() if c_ids else []
+
     lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in a_rows])
     for r in a_rows:
         fallback = f"{AD_TYPE_MAP.get(r.document_type, r.document_type or 'doc')} for {r.procedure_reference} ({r.committee_code})"
@@ -1126,46 +1185,15 @@ async def list_ep_documents(
             updated_date=row_updated(r),
         ))
 
-    # Branch 2: committee_work items
-    sort_date: dict = {}
-    cq = db.query(CommitteeWorkItem)
-    if committee:
-        cq = cq.filter(CommitteeWorkItem.committee_code == committee.upper())
-    if procedure_reference:
-        cq = cq.filter(CommitteeWorkItem.procedure_ref == procedure_reference)
-    if q:
-        cq = cq.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
-    if updated_from:
-        cq = cq.filter(CommitteeWorkItem.last_updated >= updated_from)
-    if updated_to:
-        cq = cq.filter(CommitteeWorkItem.last_updated <= updated_to)
-    if document_type:
-        # This branch never applied the filter, so every document_type query returned all
-        # 575 work items on top of whatever branch 1 matched: that is why the per-type
-        # totals added up to 8,858 against a corpus of 1,931 (GovClipping, 24 Sep 2026).
-        # The expression has to match what this branch EMITS as document_type below.
-        cq = cq.filter(func.lower(_cw_document_type_sql()) == document_type)
-    # The window applies to the date this branch serves as document_date. It was
-    # missing, so every published_from/published_to call returned all 575 work items.
-    if published_from:
-        cq = cq.filter(CommitteeWorkItem.vote_date >= published_from)
-    if published_to:
-        cq = cq.filter(CommitteeWorkItem.vote_date <= datetime.combine(published_to, time.max))
-    c_total = cq.count()
-    # Ordered by last_updated, not vote_date: every committee_work row has a NULL
-    # vote_date, so they all tie at the bottom of the merge key below and last_updated is
-    # the only order that makes the page deterministic.
-    c_rows = cq.order_by(CommitteeWorkItem.vote_date.desc().nullslast(), CommitteeWorkItem.id).limit(depth).all()
     # Victor's decision (2 Oct 2026), built 15 Oct: a work item with no committee vote is
     # dated by the procedure's committee referral, read from its OEIL key events; 574 of
-    # 575 served document_date null. The merge below still orders on vote_date, so pages
+    # 575 served document_date null. The merge above still orders on vote_date, so pages
     # keep their boundaries; only the served date changes.
     lc_work = _build_lc_lookup(db, [r.procedure_ref for r in c_rows])
     oeil_dates = _oeil_procedure_dates(db, [r.procedure_ref for r in c_rows if not r.vote_date
                                             and not _referral_date(lc_work.get(r.procedure_ref))])
     for r in c_rows:
         lc = lc_work.get(r.procedure_ref)
-        sort_date[str(r.id)] = r.vote_date.date() if r.vote_date else None
         items.append(EPDocumentItem(
             id=str(r.id),
             source="committee_work",
@@ -1193,17 +1221,9 @@ async def list_ep_documents(
             updated_date=row_updated(r),
         ))
 
-    # Sort union by document_date desc and apply page slice.
-    # `total` reflects the FULL DB count across both source tables (honest).
-    # A TOTAL order: date descending, then id ascending. Sorting on the date alone left
-    # thousands of rows tied (every committee-work row is undated) and each branch cut its
-    # own tied rows differently from the merge, so a full walk repeated 2 ids and skipped
-    # others in BOTH windows, which rules out a concurrent write. The branches above use
-    # the same (date desc, id asc) order, so the merged slice and the branch cutoffs agree.
-    items.sort(key=lambda x: x.id)
-    items.sort(key=lambda x: (sort_date[x.id] if x.id in sort_date else x.document_date) or date.min, reverse=True)
     total = a_total + c_total
-    page_data = items[(page - 1) * limit : page * limit]
+    by_id = {it.id: it for it in items}
+    page_data = [by_id[i] for _, i, _ in window if i in by_id]
     return build_envelope(
         page_data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,

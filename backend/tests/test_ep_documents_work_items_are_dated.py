@@ -18,6 +18,10 @@ class _Q:
     def __getattr__(self, name):
         return lambda *a, **k: self
 
+    def with_entities(self, *cols):
+        # the merge reads (id, date) keys first, then the page's whole rows (17 Oct 2026)
+        return _Q([tuple(getattr(r, c.key) for c in cols) for r in self.rows])
+
     def count(self):
         return len(self.rows)
 
