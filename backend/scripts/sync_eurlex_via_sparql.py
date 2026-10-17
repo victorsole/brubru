@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-SPARQL-driven EUR-Lex delta sync.
+SPARQL-driven EUR-Lex delta sync. NOT SCHEDULED: retired from the hot tier on 17 Oct 2026 (Victor's
+decision). Scheduled from 14 May 2026, its --apply path crashed on the first act outside sector 3
+(CarriageStatusEnum.PROPOSED does not exist) and it never wrote a row; nothing recorded the failure.
+New acts reach eu_laws through sync_eu_laws_from_cellar.py. Fix the status before any --apply run.
 
 Drop-in companion to scripts/sync_eurlex_feeds.py. Replaces the RSS-feed
 discovery layer with direct Cellar SPARQL queries — covering the full

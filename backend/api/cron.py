@@ -399,11 +399,11 @@ _DAILY_TIER_RECORDED = (
 # The other scheduled tiers' jobs, recorded the same way (17 Oct 2026). Until then 35 of their 45
 # jobs wrote no sync_runs row: a failure lived in a log line only. cellar_recent had crashed on
 # every run that met a non-sector-3 act since it was scheduled on 14 May 2026 (an enum value
-# that never existed) and had never inserted a row. Each job's script must not record itself
-# (tests/test_every_tier_job_recorded.py); the ones that do are left out of these lists.
+# that never existed) and had never inserted a row; retired the same day. Each job's script must
+# not record itself (tests/test_every_tier_job_recorded.py); the ones that do are left out here.
 _HOT_TIER_RECORDED = (
     "oeil", "eurlex", "texts_adopted_rss", "commission_docs", "commission_doc_procedures",
-    "texts_submitted", "college_agendas", "calendar", "cellar_recent", "eu_laws_bodies",
+    "texts_submitted", "college_agendas", "calendar", "eu_laws_bodies",
     "commission_docs_complete", "eu_laws_eurovoc",
 )
 _WARM_TIER_RECORDED = (
@@ -557,7 +557,7 @@ async def cron_sync_hot_6h(
 ):
     """
     Hot-tier sync (every 6 hours): OEIL + EUR-Lex + Texts Adopted/Submitted + Commission Docs +
-    College agendas + Calendar + Cellar /recent + eu_laws from Cellar.
+    College agendas + Calendar + eu_laws from Cellar (and their text and EuroVoc).
 
     Cadence: 00:00 / 06:00 / 12:00 / 18:00 UTC. Sources where same-day freshness is a conversion lever.
     """
@@ -613,8 +613,11 @@ async def cron_sync_hot_6h(
     # reads the register and reports what it holds that Cellar does not; it ingests nothing. 9 Oct 2026.
     results["com_register"] = await _run_script_async("com_register", "scripts/sync_com_register.py", ["--apply", "--record"], timeout=300)
     results["calendar"] = await _run_script_async("calendar", "scripts/sync_eu_calendar.py", [], timeout=900)
-    results["cellar_recent"] = await _run_script_async("cellar_recent", "scripts/sync_eurlex_via_sparql.py", ["--days", "1", "--apply"], timeout=600)
-    # eu_laws had no recurring ingest until 15 Sep 2026 (the script above writes legislative_carriages).
+    # cellar_recent (scripts/sync_eurlex_via_sparql.py) was RETIRED on 17 Oct 2026, Victor's decision. Scheduled
+    # here from 14 May 2026, it crashed on every run that met a non-sector-3 act (CarriageStatusEnum.PROPOSED
+    # never existed) and never wrote a row of legislative_carriages; nothing recorded the failure. New acts reach
+    # eu_laws below; what it would have added (merger and State-aid notices, corrigenda) are not legislative files.
+    # eu_laws had no recurring ingest until 15 Sep 2026.
     results["eu_laws_cellar"] = await _run_script_async("eu_laws_cellar", "scripts/sync_eu_laws_from_cellar.py", ["--days", "14", "--apply"], timeout=900)
     # The sync above inserts metadata only. Nothing fetched the new acts' text until 7 Oct
     # 2026, so every law published after the 2 Oct backfill reached /laws with a null body.

@@ -84,3 +84,15 @@ def test_the_recorder_writes_one_row_per_listed_job_and_never_raises(monkeypatch
         ("cellar_recent", "hot_6h", "failed", "AttributeError: PROPOSED"), ("oeil", "hot_6h", "success", None)]
     monkeypatch.setattr(cron, "SessionLocal", lambda: (_ for _ in ()).throw(RuntimeError("db down")))
     cron._record_tier_results("hot_6h", results, ("oeil",))  # logged, not raised
+
+
+def test_the_retired_cellar_recent_is_scheduled_nowhere():
+    """Retired 17 Oct 2026 (Victor): it never wrote a row in five months and crashed unseen."""
+    for fn in TREE.body:
+        for n in ast.walk(fn):
+            if isinstance(n, ast.Call) and getattr(n.func, "id", "") in ("_run_script_async", "_run_script"):
+                assert [a.value for a in n.args[:2] if isinstance(a, ast.Constant)][:2] != [
+                    "cellar_recent", "scripts/sync_eurlex_via_sparql.py"]
+                assert not any(isinstance(a, ast.Constant) and a.value == "scripts/sync_eurlex_via_sparql.py"
+                               for a in n.args)
+    assert "cellar_recent" not in cron._HOT_TIER_RECORDED

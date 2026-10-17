@@ -7,9 +7,9 @@ Why this exists
 Found 15 September 2026: eu_laws had no recurring ingest. Its rows came from
 the November 2025 Publications Office bulk export (LEG_2025-11) plus hand
 one-shots, so 1,856 OJ L regulations, directives and decisions published since
-then were missing, including the Digital Omnibus on AI. The daily
-sync_eurlex_via_sparql.py finds new acts but writes them to
-legislative_carriages, never to eu_laws.
+then were missing, including the Digital Omnibus on AI. The scheduled
+sync_eurlex_via_sparql.py was meant to write new acts to legislative_carriages,
+never to eu_laws (it never wrote a row; retired 17 Oct 2026).
 
 What it does
 ------------
