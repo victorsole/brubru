@@ -211,7 +211,8 @@ async def list_intl_cooperation(
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
     rows = db.execute(
-        text(f"SELECT {_COLS} FROM economy_items WHERE {clause} "
+        # body_txt is parsed into the award fields on every item; body_html is read only when served
+        text(f"SELECT {_COLS if include_body else _COLS.replace('body_html', 'NULL::text AS body_html')} FROM economy_items WHERE {clause} "
              f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
     ).fetchall()
     return build_envelope([_parse(r, with_body=include_body) for r in rows], total, page, limit)

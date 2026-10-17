@@ -338,6 +338,9 @@ _ECONOMY_COLS = ("id::text AS id, body_code, news_kind AS item_type, title, summ
                  "public_url, document_date, creation_date, fetched_at, "
                  "coalesce(updated_at, fetched_at, creation_date) AS updated_at, "
                  "body_txt, body_html")
+# include_body=false: the same shape without the texts, which the database would otherwise send
+# and the list drop (17 Oct 2026, Supabase egress over quota).
+_NO_BODY = "NULL::text AS body_txt, NULL::text AS body_html"
 
 
 def _coerce_id(raw):
@@ -346,7 +349,7 @@ def _coerce_id(raw):
     return int(txt) if txt.isdigit() else txt
 
 
-def _institutional_sql(codes, kinds, since, until, q, updated_from=None, updated_to=None):
+def _institutional_sql(codes, kinds, since, until, q, updated_from=None, updated_to=None, with_body=True):
     """Projection of eu_news_items onto the economy_items news shape.
 
     Returns (sql, params), or (None, {}) when the requested scope excludes all
@@ -442,17 +445,18 @@ def _institutional_sql(codes, kinds, since, until, q, updated_from=None, updated
         # since the last backfill run has body_source IS NULL, and serving the
         # summary beats serving nothing. TODO: compose on write in the eu_news
         # ingest so the fallback stops being reachable.
-        "coalesce(n.body_txt, n.summary) AS body_txt, n.body_html "
-        f"FROM eu_news_items n WHERE {' AND '.join(where)}"
+        + ("coalesce(n.body_txt, n.summary) AS body_txt, n.body_html " if with_body else _NO_BODY + " ")
+        + f"FROM eu_news_items n WHERE {' AND '.join(where)}"
     )
     return sql, params
 
 
-def _news_source_sql(codes, kinds, since, until, q, updated_from=None, updated_to=None):
+def _news_source_sql(codes, kinds, since, until, q, updated_from=None, updated_to=None, with_body=True):
     """The full news corpus: agencies (economy_items) + institutions (eu_news_items)."""
     clause, params = _build_where(codes, kinds, since, until, q, updated_from, updated_to)
-    econ = f"SELECT {_ECONOMY_COLS} FROM economy_items WHERE {clause}"
-    inst_sql, inst_params = _institutional_sql(codes, kinds, since, until, q, updated_from, updated_to)
+    cols = _ECONOMY_COLS if with_body else _ECONOMY_COLS.replace("body_txt, body_html", _NO_BODY)
+    econ = f"SELECT {cols} FROM economy_items WHERE {clause}"
+    inst_sql, inst_params = _institutional_sql(codes, kinds, since, until, q, updated_from, updated_to, with_body)
     if inst_sql is None:
         return f"({econ})", params
     return f"({econ} UNION ALL {inst_sql})", {**params, **inst_params}
@@ -637,7 +641,7 @@ async def list_news(
     # Agencies (economy_items) UNION institutions (eu_news_items) -- see
     # _INSTITUTIONAL_NEWS. Before 25 Aug 2026 this read economy_items alone and
     # could not return a single Commission, Parliament or Council item.
-    src, params = _news_source_sql(codes, kinds, from_, to, q, updated_from, updated_to)
+    src, params = _news_source_sql(codes, kinds, from_, to, q, updated_from, updated_to, with_body=include_body)
     total = db.execute(text(f"SELECT count(*) FROM {src} u"), params).scalar() or 0
     params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
     rows = db.execute(text(

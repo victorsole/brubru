@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, any_, case, func, literal, or_, text
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
 from models.eu_law import EULaw
@@ -423,6 +423,12 @@ async def list_laws(
         query = query.order_by(EULaw.created_at.desc().nullslast())
     else:
         query = query.order_by(EULaw.date.desc().nullslast())
+    if not include_body:
+        # The bodies are 103 KB of a 107 KB row: without this, include_body=false blanked them
+        # only after the database had sent them (17 Oct 2026, Supabase egress over quota; a
+        # metadata walk of the corpus moved 3.4 GB). raiseload: a later read fails loudly
+        # instead of fetching each row's text again behind the caller's back.
+        query = query.options(defer(EULaw.body_html, raiseload=True), defer(EULaw.body_txt, raiseload=True))
     rows = (
         stable(query).offset((page - 1) * limit)
         .limit(limit)
