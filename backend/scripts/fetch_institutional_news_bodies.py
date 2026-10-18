@@ -46,7 +46,7 @@ from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
 from services.scrapers.economy_common import (  # noqa: E402
-    decode_mixed, error_body_reason, extract_html, moved_to_parent, redirected_to_a_gate,
+    decode_mixed, error_body_reason, extract_html, extract_office, moved_to_parent, redirected_to_a_gate,
 )
 from api.v1._body import body_from_html_or_text  # noqa: E402
 from services.news.page_widgets import clean_html, clean_text  # noqa: E402
@@ -663,39 +663,9 @@ def _pdf_text(raw: bytes) -> str | None:
 
 
 def _office_text(raw: bytes) -> str | None:
-    """Text of a .docx / .pptx / .xlsx, or of the PDFs and Office files inside a .zip."""
-    import io
-    import zipfile
-    from xml.etree import ElementTree as ET
-    try:
-        z = zipfile.ZipFile(io.BytesIO(raw))
-    except zipfile.BadZipFile:
-        return None
-    names = z.namelist()
-
-    def runs(xml: bytes, para_tag: str, text_tag: str) -> list[str]:
-        out = []
-        for el in ET.fromstring(xml).iter():
-            if el.tag.endswith(para_tag):
-                t = "".join(x.text or "" for x in el.iter() if x.tag.endswith(text_tag)).strip()
-                if t:
-                    out.append(t)
-        return out
-
-    if "word/document.xml" in names:
-        return "\n".join(runs(z.read("word/document.xml"), "}p", "}t")) or None
-    if any(n.startswith("ppt/slides/slide") for n in names):
-        slides = sorted(n for n in names if re.match(r"ppt/slides/slide\d+\.xml$", n))
-        return "\n".join(t for n in slides for t in runs(z.read(n), "}p", "}t")) or None
-    if "xl/sharedStrings.xml" in names:
-        return "\n".join(runs(z.read("xl/sharedStrings.xml"), "}si", "}t")) or None
-    parts = []
-    for n in names:
-        if n.lower().endswith(".pdf"):
-            parts.append(_pdf_text(z.read(n)) or "")
-        elif n.lower().endswith((".docx", ".pptx", ".xlsx")):
-            parts.append(_office_text(z.read(n)) or "")
-    return "\n\n".join(p for p in parts if p).strip() or None
+    """Text of a .docx / .pptx / .xlsx, or of the PDFs and Office files inside a .zip
+    (the shared parser in economy_common; PDFs inside a zip read with this script's reader)."""
+    return extract_office(raw, pdf_text=_pdf_text)
 
 
 def _ocr_pdf(raw: bytes, max_pages: int = 60) -> str | None:

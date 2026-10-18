@@ -611,11 +611,14 @@ def _drop_furniture_bodies(it) -> None:
     blocked by a banner that merely happens to be longer.
     """
     from services.news.rendered_article import looks_like_challenge, looks_like_consent_banner_only
+    from services.scrapers.economy_common import looks_like_file_bytes
     bt = getattr(it, "body_txt", None)
     # Markup with no text in it is no body either: an EDA news row stored the literal
     # "<body>\n\n</body>" (15 characters) as its body_txt (18 Oct 2026).
     tags_only = bool(bt) and not re.sub(r"<[^>]*>", "", bt).strip()
-    if bt and (tags_only or looks_like_consent_banner_only(bt) or looks_like_challenge(bt)):
+    # Nor is a file's bytes read as text ("PK... [Content_Types].xml", "%PDF-"): 84 rows, 18 Oct 2026.
+    if bt and (tags_only or looks_like_consent_banner_only(bt) or looks_like_challenge(bt)
+               or looks_like_file_bytes(bt)):
         it.body_txt = None
         it.body_html = None
 

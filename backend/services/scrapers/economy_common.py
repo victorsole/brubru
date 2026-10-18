@@ -352,6 +352,58 @@ def extract_pdf(content: bytes) -> str | None:
         return None
 
 
+def extract_office(raw: bytes, pdf_text=None) -> str | None:
+    """Text of a .docx / .pptx / .xlsx, or of the PDFs and Office files inside a .zip.
+
+    One parser for both paths (it was the body fetcher's alone, so the economy scrapers had
+    none; 18 Oct 2026). `pdf_text` reads a PDF found inside a zip (default extract_pdf)."""
+    import zipfile
+    from xml.etree import ElementTree as ET
+
+    pdf_text = pdf_text or extract_pdf
+    try:
+        z = zipfile.ZipFile(io.BytesIO(raw))
+    except zipfile.BadZipFile:
+        return None
+    names = z.namelist()
+
+    def runs(xml: bytes, para_tag: str, text_tag: str) -> list[str]:
+        out = []
+        for el in ET.fromstring(xml).iter():
+            if el.tag.endswith(para_tag):
+                t = "".join(x.text or "" for x in el.iter() if x.tag.endswith(text_tag)).strip()
+                if t:
+                    out.append(t)
+        return out
+
+    if "word/document.xml" in names:
+        return "\n".join(runs(z.read("word/document.xml"), "}p", "}t")) or None
+    if any(n.startswith("ppt/slides/slide") for n in names):
+        slides = sorted(n for n in names if re.match(r"ppt/slides/slide\d+\.xml$", n))
+        return "\n".join(t for n in slides for t in runs(z.read(n), "}p", "}t")) or None
+    if "xl/sharedStrings.xml" in names:
+        return "\n".join(runs(z.read("xl/sharedStrings.xml"), "}si", "}t")) or None
+    parts = []
+    for n in names:
+        if n.lower().endswith(".pdf"):
+            parts.append(pdf_text(z.read(n)) or "")
+        elif n.lower().endswith((".docx", ".pptx", ".xlsx")):
+            parts.append(extract_office(z.read(n), pdf_text) or "")
+    return "\n\n".join(p for p in parts if p).strip() or None
+
+
+def looks_like_file_bytes(text: str | None) -> bool:
+    """True when a "body" is a file's bytes read as text: a zip/Office container or a PDF."""
+    if not text:
+        return False
+    head = text[:4000]
+    return ((head.startswith("PK") and ("[Content_Types].xml" in head or "\x00" in head or "\ufffd" in head[:200]))
+            or head.startswith("%PDF-"))
+
+
+_FILE_EXT = re.compile(r"\.(docx|xlsx|pptx|zip|odt|ods|odp|doc|xls|ppt)(?:$|[?#])", re.I)
+
+
 def fetch_detail(url: str) -> tuple[str | None, str | None, str]:
     """Return (body_txt, body_html, source_kind) for one item URL.
 
@@ -387,9 +439,20 @@ def fetch_detail_dated(url: str):
     if redirected_to_a_gate(url, getattr(r, "url", None)):
         return None, None, "gated", None, None
     ctype = (r.headers.get("content-type") or "").lower()
-    if "application/pdf" in ctype or url.lower().endswith(".pdf"):
-        return (extract_pdf(r.content),
+    raw = r.content or b""
+    if "application/pdf" in ctype or url.lower().endswith(".pdf") or raw[:5] == b"%PDF-":
+        return (extract_pdf(raw),
                 f'<p>PDF document: <a href="{url}">{url}</a></p>', "pdf", None, None)
+    if raw[:4] == b"PK\x03\x04":
+        # An Office file or a zip, judged by its bytes, not its type: a .docx is served as
+        # application/vnd.openxmlformats-officedocument.wordprocessingml.document, which
+        # CONTAINS "xml", so it passed as a page and its bytes were stored as the body of
+        # 84 publications (ESMA 60, EBA 16, AMLA 7, EISMEA 1; 18 Oct 2026).
+        m = _FILE_EXT.search(url)
+        kind = m.group(1).lower() if m else "zip"
+        text = extract_office(raw)
+        return ((text[:_BODY_CAP] if text and len(text) >= 200 else None),
+                f'<p>Document: <a href="{url}">{url}</a></p>', kind, None, None)
     if "html" not in ctype and "xml" not in ctype:
         # Office docs (.docx/.xlsx), archives, images, etc. — do not parse as HTML.
         kind = (ctype.split(";")[0].split("/")[-1] or "file")[:20] or "file"
