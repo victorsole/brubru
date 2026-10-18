@@ -32,6 +32,7 @@ Usage:
 
 import argparse
 import datetime as dt
+import random
 import sys
 import time
 from pathlib import Path
@@ -268,7 +269,12 @@ def main() -> int:
         new = sorted((i for i in listed if reference(i) not in held),
                      key=lambda i: (i.split("-")[2], int(i.split("-")[3])), reverse=True)
         by_ref = {reference(i): i for i in listed}
+        # The answer re-check is rolling work, and it used to run oldest first: with ~730
+        # unanswered questions and room for ~400 per run, the newest ~300 were NEVER
+        # re-checked, run after run (18 Oct 2026). Shuffled, every question is reached
+        # within a couple of runs (three a day).
         refresh = [by_ref[r] for r in stale if r in by_ref]
+        random.shuffle(refresh)
         print(f"[INFO] listed {len(listed)} for {years}; held {len(held)}; "
               f"new {len(new)}; unanswered to re-check {len(refresh)}")
 
@@ -306,18 +312,24 @@ def main() -> int:
             _flush(db_url, pending)
 
     left = len(queue) - done
+    # Only NEW questions not yet read make a run partial. The re-check backlog is rolling
+    # work that never empties; reporting it as "degraded" made every run look stalled
+    # ("385-473 question(s) left for the next run", 18 Oct 2026) while EP Open Data
+    # listed nothing we did not hold.
+    left_new = max(0, len(new) - min(done, len(new)))
+    left_recheck = left - left_new
     print(f"\n=== DONE === inserted={inserted} answers_refreshed={refreshed} "
-          f"missing_upstream={missing_upstream} errors={errors} left_for_next_run={left} "
-          f"({time.monotonic() - started:.0f}s)")
+          f"missing_upstream={missing_upstream} errors={errors} new_left={left_new} "
+          f"rechecks_left={left_recheck} ({time.monotonic() - started:.0f}s)")
     if errors and errors > done // 2:
         print(f"[ERROR] {errors} of {done} item fetches failed")
         return 1
-    if left or errors:
-        if shortfall:
-            # Reported even when the run otherwise finished its budget: a partial listing is
-            # a partial run, and saying "success" here is how a gap stays invisible.
-            print(f"[SYNC_STATUS] degraded: {shortfall}")
-        print(f"[SYNC_STATUS] degraded: {left} question(s) left for the next run, "
+    if shortfall:
+        # Reported even when the run otherwise finished its budget: a partial listing is
+        # a partial run, and saying "success" here is how a gap stays invisible.
+        print(f"[SYNC_STATUS] degraded: {shortfall}")
+    if left_new or errors:
+        print(f"[SYNC_STATUS] degraded: {left_new} new question(s) left for the next run, "
               f"{errors} fetch error(s)")
     return 0
 
