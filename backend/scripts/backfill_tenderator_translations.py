@@ -243,6 +243,12 @@ def _write_batch(spec: dict, table: str, writes):
     conn = _db()
     try:
         cur = conn.cursor()
+        # The language of a notice is a fact it always had, not a change of the notice:
+        # keep the change signal (brubru.keep_change_signal = this transaction, migrations
+        # 293/302/303). Without it every new TED notice was re-sent to GovClipping the
+        # morning after it arrived, when this sweep filled detected_lang: 100 of the 101
+        # tenders in their 18 Oct window (brubru_change_log: detected_lang alone).
+        cur.execute("SELECT set_config('brubru.keep_change_signal', txid_current()::text, true)")
         for item_id, lang, trans_rows in writes:
             cur.execute(
                 f"UPDATE {table} SET detected_lang=%s WHERE {spec['pk']}=%s::{spec['pk_cast']}",
