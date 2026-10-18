@@ -394,6 +394,64 @@ def _browser_download(url: str) -> bytes | None:
         return None
 
 
+def _norm_line(s: str) -> str:
+    return " ".join(s.split()).lower()
+
+
+def _cut_rendered_chrome(text: str | None, html: str | None) -> str | None:
+    """The browser's page text without the site's own header, menus and footer.
+
+    The browser reads the WHOLE page, so a short page came back padded past the 200
+    characters a body needs with site chrome: CPVO's newsletter form and "I am looking
+    for" menu under a two-sentence announcement (~900 characters), and its main menu and
+    breadcrumb over an event page that holds only a title, a date and "online, Italy"
+    (18 Oct 2026). Both are cut, using the page's own elements:
+      - the opening run of lines that belong to its <nav> elements, wherever they sit (the
+        breadcrumb is a <nav> inside <main>), and to a <header>/<aside> outside the content
+        (case-folded: the browser applies CSS capitals, "HOME", "NEWS & EVENTS");
+      - everything from its <footer>'s opening lines, at their LAST occurrence.
+    A header, aside or footer inside <main>/<article> is content (a title, a byline), and a
+    line that is the page's <h1> stops the cut. What is left is judged by the caller."""
+    if not text or not html:
+        return text
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html, "html.parser")
+    chrome: set[str] = set()
+    for el in soup.find_all(["header", "nav", "aside"]):
+        if el.name == "nav" or not el.find_parent(["main", "article"]):
+            chrome.update(_norm_line(ln) for ln in el.get_text("\n", strip=True).split("\n"))
+    chrome.discard("")
+    # The breadcrumb ends with the page's own headline: that line is never chrome.
+    chrome -= {_norm_line(h.get_text(" ", strip=True)) for h in soup.find_all("h1")}
+    lines = text.split("\n")
+    k = 0
+    while k < len(lines) and (not lines[k].strip() or _norm_line(lines[k]) in chrome):
+        k += 1
+    text = "\n".join(lines[k:]) if k < len(lines) else text
+
+    # The footer is found as WHOLE lines: its first line, followed by its second, at their
+    # last occurrence. A substring search would cut an article at any mention of the words a
+    # hidden footer line starts with ("European Commission").
+    lines = text.split("\n")
+    norm = [_norm_line(ln) for ln in lines]
+    cut = None
+    for ft in soup.find_all("footer"):
+        if ft.find_parent(["main", "article"]):
+            continue
+        flines = [ln for ln in (_norm_line(x) for x in ft.get_text("\n", strip=True).split("\n")) if len(ln) >= 12]
+        if not flines:
+            continue
+        for j in range(len(norm) - 1, 0, -1):
+            if norm[j] != flines[0]:
+                continue
+            nxt = next((n for n in norm[j + 1:j + 4] if n), "")
+            if len(flines) == 1 or nxt[:30] == flines[1][:30]:
+                cut = j if cut is None else min(cut, j)
+                break
+    return "\n".join(lines[:cut]).rstrip() if cut else text
+
+
 def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | None, str | None]:
     """The free fallback when Scrape.do is missing, spent or failing: a local browser.
 
@@ -469,9 +527,10 @@ def _browser_page(url: str, why_paid_failed: str) -> tuple[str | None, str | Non
     # the page actually renders rather than guessing a container. Use it when it is richer
     # and passes the same furniture checks.
     if len(res.text or "") > len(text_ or ""):
-        candidate = strip_page_furniture(res.text)
+        candidate = strip_page_furniture(_cut_rendered_chrome(res.text, res.html))
+        # Judged as it will be stored: the share lines ("Facebook", "E-mail") go at write.
         if (not looks_like_challenge(candidate) and not looks_like_listing(candidate)
-                and len(candidate) >= 200):
+                and len(clean_text(candidate) or "") >= 200):
             return candidate, None, None
 
     return text_, html_, (reason if text_ else f"{why_paid_failed}; browser: {reason}")
@@ -718,6 +777,25 @@ def _from_publications_office(html: str, timeout: int = 90) -> str | None:
     return text_
 
 
+def _content_html(html: str | None) -> str:
+    """The page without its SITE header, menus and footer: the files a record page means.
+
+    A site footer links the same files from every page: CPVO's links the newsletter privacy
+    statement, and because the longest PDF wins, five CPVO news items stored that
+    11,394-character notice as their article and eight more were about to (18 Oct 2026).
+    Only site chrome goes: a sidebar, or a footer inside <main>/<article>, can carry the
+    item's own download."""
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html or "", "html.parser")
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+    for tag in soup.find_all(["header", "nav", "footer"]):
+        if not tag.decomposed and not tag.find_parent(["main", "article"]):
+            tag.decompose()
+    return str(soup)
+
+
 def _follow_to_pdf(html: str, page_url: str, timeout: int = 60) -> str | None:
     """The document a record page links to, when the page itself is only metadata.
 
@@ -742,7 +820,7 @@ def _follow_to_pdf(html: str, page_url: str, timeout: int = 60) -> str | None:
 
     candidates: list[str] = []
     for pattern in (_PDF_LINK, _PDF_DOWNLOAD):
-        for href in pattern.findall(html or ""):
+        for href in pattern.findall(_content_html(html)):
             absolute = urllib.parse.urljoin(page_url, href)
             if absolute not in candidates:
                 candidates.append(absolute)

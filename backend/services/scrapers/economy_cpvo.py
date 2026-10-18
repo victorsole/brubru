@@ -65,17 +65,27 @@ def ingest_cpvo_topics(*, fetch_bodies: bool = True) -> list[Item]:
 
 
 def _parse_listing(html: str):
-    """news / events: heading link + time[datetime]."""
+    """news / events: heading + its link + time[datetime].
+
+    The card is ONE link wrapping image, type label, heading, teaser and date, so the
+    heading sits inside the link, not the link inside the heading. Taking the link's text
+    stored the whole card as the title on 77 of 77 news and 67 of 72 events (found
+    18 Oct 2026: "Official Announcement Official Publications 5.2026 The Official Gazette
+    of the CPVO has been published. ... 15 October 2026"); the body fetcher then refused
+    every such page, because no page carries that "title"."""
     main = BeautifulSoup(html, "html.parser").select_one("main") or BeautifulSoup(html, "html.parser")
     out = []
     for row in main.select(".views-row"):
-        a = row.select_one("h2 a[href], h3 a[href]") or next(
-            (x for x in row.find_all("a", href=True) if x.get_text(strip=True)), None)
+        head = row.select_one("h2, h3")
+        a = None
+        if head is not None:
+            a = head.select_one("a[href]") or head.find_parent("a", href=True)
+        a = a or next((x for x in row.find_all("a", href=True) if x.get_text(strip=True)), None)
         t = row.select_one("time[datetime]")
         if not a or not a.get("href") or not t:
             continue
         url = norm_url(a["href"] if a["href"].startswith("http") else _BASE + a["href"])
-        title = clean(a.get_text(" ", strip=True))
+        title = clean((head or a).get_text(" ", strip=True))
         if not title:
             continue
         out.append((url, title, _iso_dt(t.get("datetime"))))

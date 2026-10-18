@@ -76,14 +76,28 @@ def _is_machine_token(value: str) -> bool:
     return bool(_MACHINE_TOKEN.match(value.strip()))
 
 
+# A link that wraps a whole card carries the headline as a heading INSIDE it. CPVO's
+# card is one <a> around type label, <h2> headline, teaser and date: the whole text was
+# stored as the title when it fitted 220 characters ("Official Announcement Official
+# Publications 5.2026 The Official Gazette of the CPVO has been published. ... 15 October
+# 2026"), the slug when it did not (18 Oct 2026).
+_INNER_HEADING = re.compile(r"<h([1-4])\b[^>]*>(.*?)</h\1\s*>", re.S | re.I)
+
+
 def _resolve_title_with_source(attrs: str, inner: str, path: str) -> tuple[str | None, str]:
-    """(title, source): anchor text -> aria-label/title attr -> img alt -> slug.
+    """(title, source): heading inside the anchor -> anchor text -> aria-label/title
+    attr -> img alt -> slug.
 
     The source matters because a card links one item twice: an image link first (no
     text, so the title comes from an attribute or the image's alt text: "Banner
     promoting the ENISA NIS 360 report...") and the headline link after it. The caller
     lets a later anchor-TEXT title replace an earlier fallback (15 Sep 2026: 19 of 20
     ENISA titles were the attribute or the alt text)."""
+    # Same bounds as anchor text: the CJEU's `<a><h3>Information</h3></a>` stays refused.
+    for hm in _INNER_HEADING.finditer(inner or ""):
+        h = _clean(hm.group(2))
+        if 15 <= len(h) <= 220 and not _CTA_TEXT.match(h):
+            return h, "text"
     t = _clean(_html.unescape(inner))
     if 15 <= len(t) <= 220 and not _CTA_TEXT.match(t):
         return t, "text"
