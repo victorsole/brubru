@@ -1220,6 +1220,16 @@ def main() -> int:
                     "       count(*) FILTER (WHERE length(body_txt) >= 1200) "
                     "FROM economy_items WHERE body_code = :code AND item_type = ANY(:types)"),
                     {"code": args.body_code, "types": args.item_type or ["news"]}).fetchone()
+            elif args.ids_file:
+                # The listed rows themselves. This branch used to count by institution, and
+                # with --ids-file there is none: it reported "0 row(s)" after restoring all
+                # 11 articles it had just written (18 Oct 2026), a verification that could
+                # never see its own work.
+                n, avg_now, full = db.execute(text(
+                    "SELECT count(*), coalesce(round(avg(nullif(length(body_txt),0))),0), "
+                    "       count(*) FILTER (WHERE length(body_txt) >= 1200) "
+                    "FROM eu_news_items WHERE id = ANY(CAST(:ids AS uuid[]))"),
+                    {"ids": ids}).fetchone()
             else:
                 n, avg_now, full = db.execute(text(
                     "SELECT count(*), coalesce(round(avg(nullif(length(body_txt),0))),0), "

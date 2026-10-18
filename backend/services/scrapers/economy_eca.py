@@ -155,6 +155,23 @@ async def _ingest_listing(url: str, parser, item_type: str, *, fetch_bodies: boo
     return items
 
 
+def _page_title(soup) -> str:
+    """The page's own title. Not the first <h1>: Court of Auditors pages open with a
+    SharePoint breadcrumb heading, "Skip Navigation Links" + the page's internal name,
+    and the real heading comes second. 12 of 14 topic rows were stored as "Skip
+    Navigation Links Governance", "... OrgChartStructure" (18 Oct 2026), and the body
+    fetcher then refused every real page because its text did not name such a title.
+    og:title carries the heading the site shows ("Governance", "Organisation")."""
+    og = soup.select_one('meta[property="og:title"]')
+    if og and og.get("content") and clean(og["content"]):
+        return clean(og["content"])
+    for h in soup.select("main h1, h1"):
+        t = clean(h.get_text(" ", strip=True))
+        if t and not t.lower().startswith("skip navigation links"):
+            return t
+    return ""
+
+
 async def _ingest_topics_async(*, fetch_bodies: bool) -> list[Item]:
     from playwright.async_api import async_playwright
     items: list[Item] = []
@@ -169,8 +186,7 @@ async def _ingest_topics_async(*, fetch_bodies: bool) -> list[Item]:
             if not html:
                 continue
             soup = BeautifulSoup(html, "html.parser")
-            h1 = soup.select_one("main h1, h1")
-            title = clean(h1.get_text(" ", strip=True)) if h1 else ""
+            title = _page_title(soup)
             # The SPA h1 is a route slug; prefer a real heading or the slug text.
             if not title or "-" in title and " " not in title:
                 title = clean(path.rsplit("/", 1)[-1].replace("-", " ").title())
