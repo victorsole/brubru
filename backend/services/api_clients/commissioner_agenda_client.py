@@ -100,6 +100,31 @@ class AgendaItem:
 
 # ---------- profile registry ----------
 
+# Words every agenda title shares. Scored together with the names, they let two different
+# meetings match: "Commissioner Albuquerque meets Ms Stephanie Yon-Courtin, member of the
+# European Parliament" and "Commissioner Suica meets with Ms Fabienne Keller, Member of the
+# European Parliament" share 6 of 10 words, all of them these, and scored exactly the 0.6
+# threshold, so four Albuquerque meetings of 20 Oct 2026 carried the Suica-Keller page.
+_BOILERPLATE = frozenset("""
+commissioner commissioners executive vice president high representative meets meet meeting
+with receives receive member members the european parliament and for attends attend
+participates participate delivers deliver speech keynote visit visits minister ministers
+mrs from his her their event conference opening remarks
+""".split())
+
+
+def _distinct_tokens(normalised_title: str) -> set:
+    return {t for t in (normalised_title or "").split() if len(t) > 2 and t not in _BOILERPLATE}
+
+
+def _title_score(a: str, b: str) -> float:
+    """Overlap of the DISTINCTIVE words of two normalised titles (names, subjects)."""
+    ta, tb = _distinct_tokens(a), _distinct_tokens(b)
+    if not ta or not tb:
+        return 0.0
+    return len(ta & tb) / max(len(ta), len(tb))
+
+
 def _strip_accents(s: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", s) if unicodedata.category(c) != "Mn")
 
@@ -324,7 +349,8 @@ class CommissionerAgendaClient:
         return out
 
     @staticmethod
-    def _lookup_rss_url(entries: List[Tuple[date, str, str]], item: "AgendaItem") -> str:
+    def _lookup_rss_url(entries: List[Tuple[date, str, str]], item: "AgendaItem",
+                        surname: str = "") -> str:
         """Pick the RSS URL whose title has the largest token-overlap with the
         HTML item, allowing a ±1 day window on the date.
 
@@ -338,21 +364,18 @@ class CommissionerAgendaClient:
         """
         if not entries or not item.title:
             return ""
-        html_tokens = {t for t in _norm(item.title).split() if len(t) > 2}
-        if not html_tokens:
-            return ""
+        title = _norm(item.title)
         best_url = ""
         best_score = 0.0
         for d, rss_title, url in entries:
             day_delta = abs((d - item.date).days)
             if day_delta > 1:
                 continue
-            rss_tokens = {t for t in rss_title.split() if len(t) > 2}
-            if not rss_tokens:
+            # The live feed is GLOBAL (the latest items of every Commissioner): an entry
+            # that does not name this Commissioner is someone else's event.
+            if surname and surname not in rss_title.split():
                 continue
-            overlap = len(html_tokens & rss_tokens)
-            denom = max(len(html_tokens), len(rss_tokens))
-            score = overlap / denom if denom else 0.0
+            score = _title_score(title, rss_title)
             if score > best_score:
                 best_score = score
                 best_url = url
@@ -581,8 +604,8 @@ class CommissionerAgendaClient:
 
         out: Dict[Tuple[date, str], str] = {}
         for it in items:
-            html_tokens = {t for t in _norm(it.title).split() if len(t) > 2}
-            if not html_tokens:
+            title = _norm(it.title)
+            if not _distinct_tokens(title):
                 continue
             best_url = ""
             best_score = 0.0
@@ -590,12 +613,7 @@ class CommissionerAgendaClient:
                 row_date = r[0] if isinstance(r[0], date) else date.fromisoformat(str(r[0]))
                 if abs((row_date - it.date).days) > 1:
                     continue
-                row_tokens = {t for t in (r[1] or "").split() if len(t) > 2}
-                if not row_tokens:
-                    continue
-                overlap = len(html_tokens & row_tokens)
-                denom = max(len(html_tokens), len(row_tokens))
-                score = overlap / denom if denom else 0.0
+                score = _title_score(title, r[1] or "")
                 if score > best_score:
                     best_score = score
                     best_url = r[2]
@@ -647,7 +665,7 @@ class CommissionerAgendaClient:
                     location=it.location,
                     detail_url=(
                         db_urls.get((it.date, _norm(it.title)))
-                        or self._lookup_rss_url(entries, it)
+                        or self._lookup_rss_url(entries, it, surname=(_norm(profile.name).split() or [""])[-1])
                     ),
                 )
                 for it in items
