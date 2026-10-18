@@ -57,12 +57,17 @@ def test_the_extractor_refuses_a_challenge_page():
     assert "challenge" in (reason or "").lower()
 
 
+def _serving(raw: bytes):
+    """A stand-in for the fetcher's _read: these bytes, and with `with_url` the URL itself
+    (no redirect)."""
+    return lambda url, timeout, accept="*/*", with_url=False: (raw, url) if with_url else raw
+
+
 def test_the_fetcher_refuses_a_challenge_page(monkeypatch):
     """The economy extractor path is the one that stored 555 of them."""
     import fetch_institutional_news_bodies as fetcher
 
-    monkeypatch.setattr(fetcher, "_read",
-                        lambda url, timeout, accept="*/*": f"<html><body>{CEDEFOP}</body></html>".encode())
+    monkeypatch.setattr(fetcher, "_read", _serving(f"<html><body>{CEDEFOP}</body></html>".encode()))
     # A direct-route challenge now falls back to a local browser (5 Oct 2026). Stub it as
     # walled too: the real one launched Chromium against the live site and left its event
     # loop running, which failed every async test after this one (145 in CI, 6 Oct 2026).
@@ -107,7 +112,7 @@ def test_pdf_bytes_are_never_stored_as_a_body(monkeypatch):
     import fetch_institutional_news_bodies as fetcher
 
     fake_pdf = b"%PDF-1.7\n%\xc3\xa3\xcf\xd3\n1 0 obj <</Metadata 142 0 R>> endobj\n%%EOF"
-    monkeypatch.setattr(fetcher, "_read", lambda url, timeout, accept="*/*": fake_pdf)
+    monkeypatch.setattr(fetcher, "_read", _serving(fake_pdf))
     body_txt, body_html, reason = fetcher.fetch("https://curia.europa.eu/docs/cp260037en.pdf")
     assert body_txt is None, "raw PDF bytes were accepted as an article"
     assert "pdf" in (reason or "").lower()
@@ -117,7 +122,7 @@ def test_a_readable_pdf_is_parsed_not_refused(monkeypatch):
     """The point is to READ the document, not to drop every PDF."""
     import fetch_institutional_news_bodies as fetcher
 
-    monkeypatch.setattr(fetcher, "_read", lambda url, timeout, accept="*/*": b"%PDF-1.7 fake")
+    monkeypatch.setattr(fetcher, "_read", _serving(b"%PDF-1.7 fake"))
     monkeypatch.setattr(fetcher, "_pdf_text",
                         lambda raw: "PRESS RELEASE No 37/26 Luxembourg, 17 March 2026. " * 10)
     body_txt, _, reason = fetcher.fetch("https://curia.europa.eu/docs/cp260037en.pdf")

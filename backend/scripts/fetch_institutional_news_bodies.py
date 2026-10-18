@@ -45,7 +45,9 @@ sys.path.insert(0, str(BACKEND))
 from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
-from services.scrapers.economy_common import error_body_reason, extract_html  # noqa: E402
+from services.scrapers.economy_common import (  # noqa: E402
+    decode_mixed, error_body_reason, extract_html, moved_to_parent,
+)
 from api.v1._body import body_from_html_or_text  # noqa: E402
 from services.news.page_widgets import clean_html, clean_text  # noqa: E402
 
@@ -303,15 +305,16 @@ def _note_rate_limit(exc: urllib.error.HTTPError, attempt: int) -> float:
     return delay
 
 
-def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
-    """Fetch, retrying a rate limit up to 3 times. Other HTTP errors raise at once."""
+def _read(url: str, timeout: int, accept: str = "*/*", with_url: bool = False):
+    """Fetch, retrying a rate limit up to 3 times. Other HTTP errors raise at once.
+    With `with_url`, (bytes, the URL the redirects ended at)."""
     last: Exception | None = None
     for attempt in range(3):
         _respect_backoff()
         try:
             req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept})
             with urllib.request.urlopen(req, timeout=timeout) as r:
-                return r.read()
+                return (r.read(), r.geturl()) if with_url else r.read()
         except urllib.error.HTTPError as exc:
             if exc.code not in _RETRY_STATUS:
                 raise
@@ -849,6 +852,15 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
                 return body_txt, body_html, None
             # Fall through: the portal page is better than nothing if Cellar has no copy.
 
+    # The Court of Auditors: its own article file or English PDF, never the rendered page
+    # (hidden copies decoded to U+FFFD, SharePoint metadata, other reports; economy_eca).
+    eca = re.search(r"eca\.europa\.eu/en/(news|publications)/", url or "")
+    if eca:
+        from services.scrapers.economy_eca import own_body
+        body_txt, body_html, _kind = own_body(url, "news" if eca.group(1) == "news" else "publication")
+        if body_txt:
+            return body_txt, body_html, None
+
     pdf_url = presscorner_pdf(url)
     if pdf_url:
         try:
@@ -886,7 +898,11 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
         return None, None, f"{pdf_problem}; rendered: {reason}"
 
     try:
-        raw = _read(url, timeout, accept="text/html,*/*")
+        raw, final_url = _read(url, timeout, accept="text/html,*/*", with_url=True)
+        if moved_to_parent(url, final_url):
+            # The item was removed and its URL now leads to the section listing. Not a wall:
+            # no other route is tried, and nothing is stored over what the row holds.
+            return None, None, "moved: the page now redirects to its section's listing"
         if looks_like_pdf(raw):
             # A PDF is a document, not a page. Parse it or refuse it; never store the bytes.
             body_txt = _pdf_text(raw)
@@ -906,7 +922,8 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
             return None, None, "office/zip file carried no readable text"
         if b"\x00" in raw[:2000]:
             return None, None, "binary file, not a page"
-        html = raw.decode("utf-8", "replace")
+        # Not "replace": a Windows quote in a UTF-8 page became U+FFFD (Court of Auditors).
+        html = decode_mixed(raw)
     except urllib.error.HTTPError as exc:
         # A wall is not an absence of text. 403 means our address is blocked and a 429 that
         # survived three backoffs means the same in practice; Scrape.do fetches from

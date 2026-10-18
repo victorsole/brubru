@@ -7,6 +7,7 @@ No LLM is used anywhere in economy ingestion.
 """
 from __future__ import annotations
 
+import codecs
 import io
 import re
 import time
@@ -200,6 +201,40 @@ def http_get(url: str) -> requests.Response | None:
     return None
 
 
+def _cp1252_for_invalid_utf8(err: UnicodeDecodeError):
+    return err.object[err.start:err.end].decode("cp1252", errors="replace"), err.end
+
+
+codecs.register_error("cp1252_fallback", _cp1252_for_invalid_utf8)
+
+
+def decode_mixed(raw: bytes) -> str:
+    """UTF-8, with any byte that is not valid UTF-8 read as Windows-1252.
+
+    A file can be UTF-8 with Windows quotes pasted in: the Court of Auditors' news
+    body.html holds “ as E2 80 9C in one paragraph and as a bare 0x93 in the next. Decoded
+    as UTF-8 the bare bytes become U+FFFD, and 81 ECA bodies were storing "the �industrial
+    leadership� priority" (18 Oct 2026)."""
+    return raw.decode("utf-8", errors="cp1252_fallback")
+
+
+def moved_to_parent(requested: str, final: str | None) -> bool:
+    """True when a request was redirected UP to a parent section of the same site.
+
+    The item is gone and what came back is its section's listing: EU-OSHA removed 11
+    highlights whose URLs now lead to /en/highlights, and the stored "body" of each was the
+    same page of other items (18 Oct 2026). http -> https, www., a trailing slash or a
+    language default are not this."""
+    from urllib.parse import urlparse
+
+    if not final:
+        return False
+    a, b = urlparse(requested), urlparse(final)
+    host = lambda u: u.netloc.lower().removeprefix("www.")  # noqa: E731
+    pa, pb = a.path.rstrip("/"), b.path.rstrip("/")
+    return host(a) == host(b) and pa != pb and pa.startswith(pb + "/")
+
+
 def to_dt(struct) -> datetime | None:
     if not struct:
         return None
@@ -236,25 +271,42 @@ def extract_html(html: str) -> tuple[str | None, str | None]:
     h1_text = " ".join(h1.get_text(" ", strip=True).split()) if h1 else ""
     for tag in soup(["script", "style", "noscript", "nav", "header", "footer", "aside", "form"]):
         tag.decompose()
-    node = soup.find("main") or soup.find("article") or soup.body or soup
-    body_html = clean(str(node)[:_BODY_CAP])
-    body_txt = clean(_no_widget_lines(node.get_text("\n", strip=True))[:_BODY_CAP])
-    if body_txt and len(h1_text) >= 15 and h1_text.lower() not in body_txt[:1500].lower():
-        import html as _html_mod
-        body_txt = f"{h1_text}\n{body_txt}"
-        body_html = f"<h1>{_html_mod.escape(h1_text)}</h1>{body_html or ''}"
 
-    if body_txt:
-        if looks_like_challenge(body_txt) or looks_like_listing(body_txt):
-            return None, None
-        # Strip the navigation run a page opens with, then judge what is left. An article
-        # BEHIND a nav bar survives; a page that is only the nav bar does not.
-        stripped = strip_page_furniture(body_txt)
-        if len(stripped) < _MIN_BODY_AFTER_STRIPPING:
-            return None, None
-        body_txt = stripped
+    def _from(node):
+        body_html = clean(str(node)[:_BODY_CAP])
+        body_txt = clean(_no_widget_lines(node.get_text("\n", strip=True))[:_BODY_CAP])
+        if body_txt and len(h1_text) >= 15 and h1_text.lower() not in body_txt[:1500].lower():
+            import html as _html_mod
+            body_txt = f"{h1_text}\n{body_txt}"
+            body_html = f"<h1>{_html_mod.escape(h1_text)}</h1>{body_html or ''}"
 
-    return (body_txt or None), (body_html or None)
+        if body_txt:
+            if looks_like_challenge(body_txt) or looks_like_listing(body_txt):
+                return None, None
+            # Strip the navigation run a page opens with, then judge what is left. An article
+            # BEHIND a nav bar survives; a page that is only the nav bar does not.
+            stripped = strip_page_furniture(body_txt)
+            if len(stripped) < _MIN_BODY_AFTER_STRIPPING:
+                return None, None
+            body_txt = stripped
+
+        return (body_txt or None), (body_html or None)
+
+    first = soup.find("main") or soup.find("article") or soup.body or soup
+    result = _from(first)
+    if result[0]:
+        return result
+    # A page without <main> falls back to its FIRST <article>, and on EU-OSHA that is a
+    # 141-character related-publication card, so every highlight came out as nothing
+    # (18 Oct 2026). Only when that choice yields no text are the page's own content
+    # containers tried: the Drupal full-view node, then role="main", then id="main".
+    for node in (soup.select_one('[class*="view-mode-full"]'), soup.find(attrs={"role": "main"}),
+                 soup.find(id="main")):
+        if node is not None and node is not first:
+            got = _from(node)
+            if got[0]:
+                return got
+    return result
 
 
 def extract_pdf(content: bytes) -> str | None:
@@ -303,6 +355,8 @@ def fetch_detail_dated(url: str):
     r = http_get(url)
     if r is None:
         return None, None, "unreachable", None, None
+    if moved_to_parent(url, getattr(r, "url", None)):
+        return None, None, "moved", None, None
     ctype = (r.headers.get("content-type") or "").lower()
     if "application/pdf" in ctype or url.lower().endswith(".pdf"):
         return (extract_pdf(r.content),

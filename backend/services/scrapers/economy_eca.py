@@ -25,7 +25,9 @@ from datetime import datetime, timezone
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, extract_html
+from services.scrapers.economy_common import (
+    Item, clean, norm_url, extract_html, http_get, extract_pdf, decode_mixed,
+)
 
 _BASE = "https://www.eca.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -67,6 +69,61 @@ def _date(s: str) -> datetime | None:
 
 def _abs(href: str) -> str:
     return norm_url(href if href.startswith("http") else _BASE + href)
+
+
+# The rendered page is not the item's text. A news page holds its article twice, the second
+# copy in a hidden block that the site's script decodes badly, and a publication page holds
+# hidden SharePoint metadata ("|20d56233-...;#3346;#Katar�na KASZASOV�|...") or, for a record,
+# only "Access document" and the summaries of OTHER reports. 81 ECA bodies stored U+FFFD,
+# 29 the metadata, 27 other reports (18 Oct 2026). The site's own files are read instead:
+#   news        : the article file the page loads, ECAHTMLNews/<id>/en/body.html, over the
+#                 site's public SharePoint REST API (no browser, no consent banner);
+#   publication : the English PDF, ECAPublications/<id>/<id>_EN.pdf.
+_NEWS_BODY = "{base}/_api/web/getFileByServerRelativePath(decodedUrl='///ECAHTMLNews/{code}/en/body.html')/$value"
+_PUB_PDF = "{base}/ECAPublications/{code}/{code}_EN.pdf"
+_CODE = re.compile(r"/en/(news|publications)/([A-Za-z0-9][A-Za-z0-9_.-]+)/?$")
+
+
+def news_body(url: str) -> tuple[str | None, str | None]:
+    """(body_txt, body_html) of an ECA news item from its article file, or (None, None)."""
+    m = _CODE.search(url or "")
+    if not m or m.group(1) != "news":
+        return None, None
+    r = http_get(_NEWS_BODY.format(base=_BASE, code=m.group(2)))
+    if r is None or not r.content:
+        return None, None
+    fragment = decode_mixed(r.content)
+    text = clean(BeautifulSoup(fragment, "html.parser").get_text("\n", strip=True))
+    if len(text) < 200:
+        return None, None
+    return text, clean(fragment)
+
+
+def publication_pdf(url: str) -> str | None:
+    """The text of an ECA publication's English PDF, or None."""
+    m = _CODE.search(url or "")
+    if not m or m.group(1) != "publications":
+        return None
+    pdf_url = _PUB_PDF.format(base=_BASE, code=m.group(2))
+    r = http_get(pdf_url)
+    if r is None or not r.content.startswith(b"%PDF"):
+        return None
+    text = extract_pdf(r.content)
+    return text if text and len(text) >= 200 else None
+
+
+def own_body(url: str, item_type: str) -> tuple[str | None, str | None, str | None]:
+    """(body_txt, body_html, source_kind) from the item's own file, or (None, None, None)."""
+    if item_type == "news":
+        txt, html = news_body(url)
+        return (txt, html, "html") if txt else (None, None, None)
+    if item_type == "publication":
+        txt = publication_pdf(url)
+        if txt:
+            m = _CODE.search(url)
+            pdf_url = _PUB_PDF.format(base=_BASE, code=m.group(2))
+            return txt, f'<p>PDF document: <a href="{pdf_url}">{pdf_url}</a></p>', "pdf"
+    return None, None, None
 
 
 async def _render(page, url: str, settle: int = 3000) -> str | None:
@@ -147,9 +204,13 @@ async def _ingest_listing(url: str, parser, item_type: str, *, fetch_bodies: boo
                       public_url=purl, document_date=doc_dt, creation_date=now,
                       source_kind="html", guid=purl)
             if fetch_bodies:
-                dhtml = await _render(page, purl, settle=2000)
-                if dhtml:
-                    it.body_txt, it.body_html = extract_html(dhtml)
+                txt, html, kind = own_body(purl, item_type)
+                if txt:
+                    it.body_txt, it.body_html, it.source_kind = txt, html, kind
+                else:
+                    dhtml = await _render(page, purl, settle=2000)
+                    if dhtml:
+                        it.body_txt, it.body_html = extract_html(dhtml)
             items.append(it)
         await b.close()
     return items

@@ -20,7 +20,7 @@ from datetime import datetime, timezone
 from bs4 import BeautifulSoup
 
 from services.scrapers.economy_common import (
-    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics,
+    Item, clean, norm_url, http_get, fetch_detail, _iso_dt, snapshot_topics, extract_pdf,
 )
 
 _BASE = "https://osha.europa.eu"
@@ -116,7 +116,33 @@ def _scrape(item_type: str, *, fetch_bodies: bool, max_pages: int) -> list[Item]
             it.body_txt, it.body_html = body_txt, body_html
             if kind == "pdf":
                 it.source_kind = "pdf"
+            elif item_type == "publication" and kind != "known" and len(body_txt or "") < 1200:
+                pdf = publication_pdf(it.public_url)
+                if pdf and len(pdf[0]) > len(body_txt or ""):
+                    it.body_txt, it.body_html, it.source_kind = pdf[0], pdf[1], "pdf"
     return items
+
+
+def publication_pdf(url: str) -> tuple[str, str] | None:
+    """(text, html link) of the PDF a publication page offers in its own Download block.
+
+    A publication page is a record: a summary, "Download in: en" and a dated "Related
+    resources" list, which the extractor refuses as a listing, so 8 case studies of 15 Oct
+    2026 had no body (18 Oct 2026). The document is the PDF in div.download-pdf."""
+    r = http_get(url)
+    if r is None:
+        return None
+    a = BeautifulSoup(r.text, "html.parser").select_one('.download-pdf a[href$=".pdf"], .download-pdf a[href*=".pdf?"]')
+    if a is None:
+        return None
+    link = a["href"] if a["href"].startswith("http") else _BASE + a["href"]
+    f = http_get(link)
+    if f is None or not f.content.startswith(b"%PDF"):
+        return None
+    text = extract_pdf(f.content)
+    if not text or len(text) < 200:
+        return None
+    return text, f'<p>PDF document: <a href="{link}">{link}</a></p>'
 
 
 def ingest_eu_osha_news(*, fetch_bodies: bool = True, max_pages: int = 6) -> list[Item]:
