@@ -28,7 +28,7 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from api.v1._pagination import stable
-from ._row_dates import row_updated
+from ._row_dates import row_created, row_updated
 
 logger = logging.getLogger(__name__)
 
@@ -128,7 +128,7 @@ def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
         body_txt="\n".join(lines),
         body_html="<article>" + "".join(parts_html) + "</article>",
         document_date=r.meeting_date.date() if hasattr(r.meeting_date, "date") and r.meeting_date else None,
-        creation_date=r.last_updated,
+        creation_date=row_created(r),
         updated_date=row_updated(r),
         meeting_start_date=r.meeting_date,
     )

@@ -117,15 +117,29 @@ class TestVotes:
         assert item.updated_date == LATER
 
 
+class TestWebstreams:
+    def test_creation_date_is_first_seen_not_last_updated(self):
+        from api.v1.webstreams import _row_to_item
+        r = SimpleNamespace(id="w1", committee_code="AFET", title="AFET Committee Meeting", meeting_date=FIRST,
+                            multimedia_url="https://multimedia.europarl.europa.eu/en/x", video_url=None,
+                            event_id="x", language="EN", duration_seconds=None, speaker_count=None,
+                            word_count=None, status="pending", related_procedure_refs=[], transcribed_at=None,
+                            transcript_text=None, first_seen=FIRST, last_updated=LATER)
+        item = _row_to_item(r)
+        assert item.creation_date == FIRST
+        assert item.updated_date == LATER
+
+
 class TestTheSourceNoLongerCopiesTheChangeStamp:
     """A grep guard beside the behavioural tests: the pattern that caused the bug must not
     come back under another name."""
 
     @pytest.mark.parametrize("path", ["api/v1/w4_endpoints.py", "api/v1/texts_adopted.py",
-                                      "api/v1/ep_entities.py"])
+                                      "api/v1/ep_entities.py", "api/v1/webstreams.py", "api/v1/eprs.py"])
     def test_no_mapping_serves_last_updated_as_creation_date(self, path):
         import pathlib
         src = pathlib.Path(__file__).resolve().parents[1].joinpath(path).read_text()
         for bad in ("creation_date=r.last_updated", "creation_date=r.updated_at",
-                    "creation_date=vote.updated_at"):
+                    "creation_date=vote.updated_at",
+                    'creation_date=getattr(r, "last_updated", None)'):
             assert bad not in src, f"{path} still maps {bad}"
