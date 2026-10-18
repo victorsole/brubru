@@ -117,12 +117,25 @@ def _distinct_tokens(normalised_title: str) -> set:
     return {t for t in (normalised_title or "").split() if len(t) > 2 and t not in _BOILERPLATE}
 
 
-def _title_score(a: str, b: str) -> float:
-    """Overlap of the DISTINCTIVE words of two normalised titles (names, subjects)."""
-    ta, tb = _distinct_tokens(a), _distinct_tokens(b)
+def _title_score(a: str, b: str, ignore: frozenset = frozenset()) -> float:
+    """How much of the shorter title's DISTINCTIVE words (names, subjects) the other holds.
+
+    Measured against the SHORTER title because the Commission's feed truncates titles at
+    about 90 characters: scored against the longer one, a truncated feed title kept too
+    few distinctive words to reach the threshold, and Commissioner Jorgensen's meetings
+    of 19 Oct 2026 found no link although their stored links were there. Two distinctive
+    words in common at least, so a short title cannot match on one shared name.
+    """
+    # The Commissioner's own surname is in every one of their events, so it says nothing
+    # about WHICH event: with it counted, "Jorgensen participates in the Visegrad energy
+    # ministers meeting" matched "Jorgensen participates in the Energy Solutions event".
+    ta, tb = _distinct_tokens(a) - ignore, _distinct_tokens(b) - ignore
     if not ta or not tb:
         return 0.0
-    return len(ta & tb) / max(len(ta), len(tb))
+    common = len(ta & tb)
+    if common < 2:
+        return 0.0
+    return common / min(len(ta), len(tb))
 
 
 def _strip_accents(s: str) -> str:
@@ -375,7 +388,7 @@ class CommissionerAgendaClient:
             # that does not name this Commissioner is someone else's event.
             if surname and surname not in rss_title.split():
                 continue
-            score = _title_score(title, rss_title)
+            score = _title_score(title, rss_title, frozenset({surname}) if surname else frozenset())
             if score > best_score:
                 best_score = score
                 best_url = url
@@ -568,7 +581,7 @@ class CommissionerAgendaClient:
 
     @staticmethod
     def _lookup_db_urls(
-        items: List["AgendaItem"], leader_id: str, db
+        items: List["AgendaItem"], leader_id: str, db, surname: str = ""
     ) -> Dict[Tuple[date, str], str]:
         """Batch-fetch detail URLs from the DB for a list of agenda items.
 
@@ -589,11 +602,18 @@ class CommissionerAgendaClient:
                 _sql("""
                     SELECT event_date, title_normalised, detail_url
                     FROM commission_calendar_urls
-                    WHERE leader_id = :leader_id
+                    WHERE (leader_id = :leader_id
+                           OR (:surname <> '' AND title_normalised LIKE :surname_like))
                       AND event_date BETWEEN :from_date AND :to_date
                 """),
                 {
+                    # The persisted rows carry the feed's own category code ("0001",
+                    # "0004"), never the COM_... leader id the calendar page uses, so a
+                    # leader-id filter alone found NOTHING (18 Oct 2026) and every link
+                    # came from the live feed's last 30 items. The surname finds them.
                     "leader_id": leader_id,
+                    "surname": surname or "",
+                    "surname_like": f"% {surname} %" if surname else "",
                     "from_date": min(dates) - timedelta(days=1),
                     "to_date": max(dates) + timedelta(days=1),
                 },
@@ -613,7 +633,7 @@ class CommissionerAgendaClient:
                 row_date = r[0] if isinstance(r[0], date) else date.fromisoformat(str(r[0]))
                 if abs((row_date - it.date).days) > 1:
                     continue
-                score = _title_score(title, r[1] or "")
+                score = _title_score(title, r[1] or "", frozenset({surname}) if surname else frozenset())
                 if score > best_score:
                     best_score = score
                     best_url = r[2]
@@ -656,7 +676,8 @@ class CommissionerAgendaClient:
             items = self._parse_items(html or "")
             rss = await self._get(RSS_FEED_URL)
             self._persist_rss_to_db(rss or "", db)
-            db_urls = self._lookup_db_urls(items, leader_id, db)
+            surname = (_norm(profile.name).split() or [""])[-1]
+            db_urls = self._lookup_db_urls(items, leader_id, db, surname=surname)
             entries = self._build_rss_url_entries(rss or "")
             items = [
                 AgendaItem(
@@ -665,7 +686,7 @@ class CommissionerAgendaClient:
                     location=it.location,
                     detail_url=(
                         db_urls.get((it.date, _norm(it.title)))
-                        or self._lookup_rss_url(entries, it, surname=(_norm(profile.name).split() or [""])[-1])
+                        or self._lookup_rss_url(entries, it, surname=surname)
                     ),
                 )
                 for it in items

@@ -66,3 +66,47 @@ def test_the_global_feed_only_offers_the_commissioners_entries():
 def test_fetch_agenda_passes_the_surname():
     import inspect
     assert "surname=" in inspect.getsource(C.fetch_agenda)
+
+
+# 18 Oct 2026, afternoon rerun: two more faults behind the same field.
+# (1) The persisted links carry the feed's category code ("0001"), never the COM_... leader
+#     id, so the stored-link lookup filtered by leader id found nothing.
+# (2) Scored on distinctive words but counting the Commissioner's own surname, "Visegrad
+#     energy ministers meeting" matched "Energy Solutions event"; scored against the longer
+#     title, a truncated feed title found nothing.
+class _Rows:
+    def __init__(self, rows): self.rows = rows
+    def fetchall(self): return self.rows
+
+
+class _DB:
+    def __init__(self, rows): self.rows = rows; self.params = None
+    def execute(self, sql, params): self.params = params; return _Rows(self.rows)
+
+
+STORED = [
+    (date(2026, 10, 18), "commissioner jørgensen participates in the energy solutions event with green power denmark",
+     "https://commission.europa.eu/calendar/commissioner-jorgensen-participates-energy-solutions-event-green-power-denmark_en"),
+    (date(2026, 10, 18), "commissioner jørgensen participates in the visegrad energy ministers meeting",
+     "https://commission.europa.eu/calendar/commissioner-jorgensen-participates-visegrad-energy-ministers-meeting_en"),
+    (date(2026, 10, 18), "commissioner jørgensen meets with the buildings for future a",
+     "https://commission.europa.eu/calendar/commissioner-jorgensen-meets-buildings-future-association_en"),
+]
+
+
+def test_stored_links_are_found_by_surname_and_each_event_gets_its_own():
+    db = _DB(STORED)
+    items = [_item(19, "Commissioner Jørgensen participates in the Visegrad Energy Ministers meeting"),
+             _item(19, "Commissioner Jørgensen meets with the Buildings for Future association")]
+    out = C._lookup_db_urls(items, "COM_00006AAAF26A", db, surname="jørgensen")
+    assert db.params["surname_like"] == "% jørgensen %"
+    got = {k[1]: v for k, v in out.items()}
+    assert got[mod._norm(items[0].title)].endswith("visegrad-energy-ministers-meeting_en")
+    assert got[mod._norm(items[1].title)].endswith("buildings-future-association_en")
+
+
+def test_the_surname_alone_does_not_make_two_events_match():
+    assert mod._title_score(
+        mod._norm("Commissioner Jørgensen participates in the Visegrad Energy Ministers meeting"),
+        "commissioner jørgensen participates in the energy solutions event with green power denmark",
+        frozenset({"jørgensen"})) == 0.0
