@@ -79,3 +79,11 @@ class TestTheEconomySyncSendsNoBannerBody:
         import inspect
         src = inspect.getsource(sync)
         assert "_reject_future_news_date(it)\n            _drop_furniture_bodies(it)" in src
+
+
+def test_markup_without_text_goes_out_as_null():
+    """An EDA news row held the literal "<body>\\n\\n</body>" as its body_txt (18 Oct 2026)."""
+    sync = importlib.import_module("scripts.sync_economy")
+    it = SimpleNamespace(body_txt="<body>\n\n</body>", body_html="<body></body>")
+    sync._drop_furniture_bodies(it)
+    assert it.body_txt is None and it.body_html is None

@@ -174,7 +174,18 @@ def _cut_site_footer(body: str | None) -> str | None:
         i = body.find(marker)
         if i > 200:
             body = body[:i].rstrip()
+    # The Council's press-contacts block always FOLLOWS the release, so it is cut wherever
+    # it starts. A landing page with nothing above it ("European Council conclusions, 15
+    # and 16 October 2026 / Visit the meeting page / Press contacts / Maria Tomasik /
+    # Spokesperson ...", 18 Oct 2026) then comes out shorter than the summary already held
+    # and is not stored over it.
+    m = _COUNCIL_CONTACTS.search(body)
+    if m:
+        body = body[:m.start()].rstrip()
     return body
+
+
+_COUNCIL_CONTACTS = re.compile(r"\n\s*Press contacts\s*\n(?=.{0,400}?(?:Spokesperson|Press officer))", re.S)
 
 
 def is_institutional(url: str) -> bool:

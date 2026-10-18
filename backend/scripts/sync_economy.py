@@ -20,6 +20,7 @@ import contextlib
 import datetime as _dt
 from functools import partial
 import os
+import re
 import signal
 import sys
 import time
@@ -611,7 +612,10 @@ def _drop_furniture_bodies(it) -> None:
     """
     from services.news.rendered_article import looks_like_challenge, looks_like_consent_banner_only
     bt = getattr(it, "body_txt", None)
-    if bt and (looks_like_consent_banner_only(bt) or looks_like_challenge(bt)):
+    # Markup with no text in it is no body either: an EDA news row stored the literal
+    # "<body>\n\n</body>" (15 characters) as its body_txt (18 Oct 2026).
+    tags_only = bool(bt) and not re.sub(r"<[^>]*>", "", bt).strip()
+    if bt and (tags_only or looks_like_consent_banner_only(bt) or looks_like_challenge(bt)):
         it.body_txt = None
         it.body_html = None
 
