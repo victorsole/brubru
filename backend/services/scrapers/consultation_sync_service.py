@@ -364,14 +364,17 @@ class ConsultationSyncService:
             self.db.add(history)
             existing.status = new_status
 
-        # Update other fields. The list response carries no description, no
-        # feedback count and often no dates; writing those empties over stored
-        # values blanked what the detail fetch and the Have Your Say sweep had
-        # recorded (2,516 of 4,124 Commission rows had no dates, 25 Sep 2026).
-        # An empty scraped value never overwrites a stored one.
-        existing.title = item.title or existing.title
-        for field in ("short_title", "description", "dg_responsible", "policy_areas",
-                      "start_date", "end_date", "portal_url", "feedback_url"):
+        # Title, short title, description, DG, policy areas, dates and portal link on
+        # an EXISTING row belong to the Have Your Say sweep too (sync_have_your_say.py,
+        # 15 minutes later, from the portal's unfiltered API). This job's list view
+        # spells them differently (its own slug in the portal URL, the DG's name
+        # instead of its code, the list title), so writing them made the two jobs
+        # rewrite each other every night: 622 changes on 153 initiatives in two days,
+        # and all 143 consultations in GovClipping's 18 Oct window were that flip
+        # (brubru_change_log). An empty value never overwrote a stored one before
+        # either (2,516 of 4,124 rows had lost their dates on 25 Sep 2026); now this
+        # job writes only the feedback link, which the sweep never sets.
+        for field in ("feedback_url",):
             value = getattr(item, field, None)
             if value:
                 setattr(existing, field, value)

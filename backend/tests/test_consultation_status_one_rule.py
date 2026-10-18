@@ -108,3 +108,30 @@ def test_open_now_is_still_recorded():
     row = _row(E.UPCOMING)
     changed = _svc()._update_consultation(row, _item("open"))
     assert row.status == E.OPEN and changed is True
+
+
+def test_the_sweeps_columns_are_left_to_the_sweep():
+    """18 Oct 2026: this job and the Have Your Say sweep rewrote each other's title, portal
+    link and DG every night (622 changes on 153 initiatives in two days)."""
+    svc = _svc()
+    existing = SimpleNamespace(
+        id="x", status="open", title="New rules on fighting organised crime",
+        short_title="New rules on fighting organised crime", description="Have Your Say initiative 14639.",
+        dg_responsible="HOME", policy_areas=["Security"], start_date=date(2026, 1, 1),
+        end_date=date(2026, 2, 1), feedback_count=10,
+        portal_url="https://ec.europa.eu/info/law/better-regulation/have-your-say/initiatives/14639-new-rules-on-fighting-organised-crime_en",
+        feedback_url=None, consultation_type="initiative", relevance_score=0, scraped_at=None,
+        last_updated=None)
+    before = dict(vars(existing))
+    item = SimpleNamespace(
+        status="open", title="Fighting organised crime – new EU rules", short_title="Fighting organised crime",
+        description="List text", dg_responsible="Migration and Home Affairs", policy_areas=["Home affairs"],
+        start_date=date(2026, 1, 2), end_date=date(2026, 3, 1), feedback_count=0,
+        portal_url="https://ec.europa.eu/info/law/better-regulation/have-your-say/initiatives/14639-fighting-organised-crime_en",
+        feedback_url="https://ec.europa.eu/info/law/better-regulation/have-your-say/initiatives/14639/feedback_en",
+        consultation_type="initiative", scraped_at=None)
+    svc._update_consultation(existing, item)
+    for col in ("title", "short_title", "description", "dg_responsible", "policy_areas",
+                "start_date", "end_date", "portal_url", "consultation_type", "feedback_count"):
+        assert getattr(existing, col) == before[col], f"{col} was overwritten by the list view"
+    assert existing.feedback_url == item.feedback_url
