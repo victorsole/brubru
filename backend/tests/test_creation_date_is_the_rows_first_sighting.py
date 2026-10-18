@@ -45,6 +45,16 @@ class TestTheHelper:
     def test_none_row(self):
         assert row_created(None) is None
 
+    def test_never_later_than_the_last_change(self):
+        # EPRS rows re-inserted on 15 Oct 2026: first_seen 14:42, last change 13:02.
+        r = SimpleNamespace(first_seen=LATER, last_updated=FIRST)
+        assert row_created(r) == FIRST
+
+    def test_mixed_clocks_keep_the_anchor(self):
+        from datetime import timezone
+        r = SimpleNamespace(first_seen=LATER, last_updated=FIRST.replace(tzinfo=timezone.utc))
+        assert row_created(r) == LATER
+
     def test_created_and_updated_are_different_questions(self):
         r = _row()
         assert row_created(r) == FIRST and row_updated(r) == LATER

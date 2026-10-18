@@ -69,14 +69,22 @@ def row_created(row: Any) -> Optional[datetime]:
     """
     if row is None:
         return None
-    if isinstance(row, dict):
-        for name in _CREATED_COLUMNS:
-            v = row.get(name)
-            if v is not None:
-                return v
-        return None
+    created = None
+    get = row.get if isinstance(row, dict) else (lambda name: getattr(row, name, None))
     for name in _CREATED_COLUMNS:
-        v = getattr(row, name, None)
+        v = get(name)
         if v is not None:
-            return v
-    return None
+            created = v
+            break
+    # A row cannot have been created after it last changed. 1,105 EPRS rows were deleted
+    # and re-inserted by the text backfill of 15 Oct 2026 (14:42 UTC): their first_seen is
+    # that re-insert while their last change, carried over, is earlier, and the change
+    # trigger pins first_seen. Served as is, every one read "created after updated".
+    updated = row_updated(row)
+    if created is not None and updated is not None:
+        try:
+            if updated < created:
+                return updated
+        except TypeError:  # naive against aware: two different clocks, keep the anchor
+            pass
+    return created
