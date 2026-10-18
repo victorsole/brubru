@@ -614,7 +614,8 @@ def adoption_to_store(held, register_day, title):
 
 # A title carries the act's OWN number when the number follows the act type at the head:
 # "Commission Implementing Decision (EU) 2024/2638 of ...", "Commission Regulation (EU) No
-# 234/2024 ...", and, before 2015, "2012/67/EU: Commission Implementing Decision of 3
+# 234/2024 ...", "Commission Implementing Decision 2023/98 of ..." (no marker: 32 published acts,
+# 18 Oct 2026), and, before 2015, "2012/67/EU: Commission Implementing Decision of 3
 # February 2012 ..." (the number first). Drafts read "(EU) …/...", "(EU)  / amending" or "COMMISSION IMPLEMENTING
 # DECISION on ..." (no number at all). An amending title cites OTHER acts' numbers further
 # on; only the head counts. Used in the upsert's SQL (PostgreSQL ~*) and by
@@ -623,7 +624,7 @@ def adoption_to_store(held, register_day, title):
 NUMBERED_TITLE = (r"^\s*(\d{4}/\d+/(eu|ec|eec|euratom):|"
                   r"(commission|council|european parliament and (of the )?council)?\s*"
                   r"(delegated\s+|implementing\s+)?(regulation|decision|directive)\s*"
-                  r"\((eu|ec|eec|euratom|eu, euratom)\)\s*(no\s*)?\d{2,4}/\d+)")
+                  r"(\(?(eu|ec|eec|euratom|eu, euratom|cfsp)\)?\s*)?(no\s*)?\d{1,4}/\d+)")
 _NUMBERED = re.compile(NUMBERED_TITLE, re.I)
 _DRAFT_ELLIPSIS = re.compile(r"(…|\.{2,})\s*/\s*(…|\.{2,})")
 

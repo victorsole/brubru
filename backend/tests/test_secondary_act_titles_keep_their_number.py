@@ -83,6 +83,12 @@ class TestTheRegexKnowsItsOwnNumberFromACitedOne:
         "Council Decision (EU, Euratom) 2024/1234 of 1 January 2024 on something",
         "2012/67/EU: Commission Implementing Decision of 3 February 2012 amending Decision 2002/...",
         "2013/51/EU: Commission Implementing Decision of 23 January 2013 on the a",
+        # Numbered without the (EU) marker (32 published acts held such a title, 18 Oct 2026).
+        "Commission Implementing Decision 2023/98 of 9 January 2023 amending Implementing Decision (EU) 2021/1195",
+        "Council Decision (CFSP) 2026/1072 of 11 May 2026 amending Decision 2014/145/CFSP",
+        "Council Decision 2014/145/CFSP of 17 March 2014 concerning restrictive measures",
+        "Commission Implementing Decision EU 2023/1795 of 10 July 2023 pursuant to Regulation (EU) 2016/679",
+        "Commission Delegated Regulation (EU) No 3/2014 of 24 October 2013 supplementing Regulation (EU) No 168/2013",
     ])
     def test_numbered_forms(self, title):
         assert mod._NUMBERED.search(title)
@@ -92,6 +98,8 @@ class TestTheRegexKnowsItsOwnNumberFromACitedOne:
         "COMMISSION IMPLEMENTING REGULATION (EU)  /... laying down",
         "COMMISSION REGULATION (EU) No  /.. amending Annex XVII",
         "COMMISSION IMPLEMENTING DECISION on the harmonised standards",
+        "COMMISSION IMPLEMENTING DECISION amending Implementing Decision (EU) 2020/1550",
+        "COMMISSION DELEGATED REGULATION (EU) .../... supplementing Regulation (EU) 2019/2088",
     ])
     def test_draft_forms(self, title):
         assert not mod._NUMBERED.search(title)
