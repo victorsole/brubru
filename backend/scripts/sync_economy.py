@@ -600,6 +600,22 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
 _PAST_ONLY_TYPES = {"news", "press_release", "publication", "speech", "statement"}
 
 
+def _drop_furniture_bodies(it) -> None:
+    """A body that is only a consent banner or a bot check is no body at all.
+
+    The upsert keeps the LONGER body, so junk competes with junk on length: on 17 Oct 2026
+    the Court of Auditors run rendered a 334-character cookie banner and it replaced the
+    307-character one already stored, on 77 rows (98 of 135 ECA rows hold a banner).
+    Sent as NULL, the stored body stays, and a real article fetched later is never
+    blocked by a banner that merely happens to be longer.
+    """
+    from services.news.rendered_article import looks_like_challenge, looks_like_consent_banner_only
+    bt = getattr(it, "body_txt", None)
+    if bt and (looks_like_consent_banner_only(bt) or looks_like_challenge(bt)):
+        it.body_txt = None
+        it.body_html = None
+
+
 def _reject_future_news_date(it) -> None:
     """Null a future document_date on a past-only item type.
 
@@ -785,6 +801,7 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
     for it in items:
         if it.public_url:
             _reject_future_news_date(it)
+            _drop_furniture_bodies(it)
             by_url[(it.body_code, it.item_type, it.public_url)] = it
     _refuse_undated_new_news(by_url)
     _repoint_by_reference(db, by_url.values())

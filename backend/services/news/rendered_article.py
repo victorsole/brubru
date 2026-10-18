@@ -67,6 +67,45 @@ def looks_like_chrome(text: str) -> bool:
     return any(head.startswith(opener) for opener in _CHROME_OPENERS)
 
 
+
+# A consent banner alone is not an article. The Court of Auditors renders, before its
+# page, "Skip Navigation Links News / Skip to content / ... / We use cookies or similar
+# technologies ... / Cookie policy / . / Refuse / Accept / Title modal" and nothing else
+# reached the parser: 98 of 135 ECA rows stored that as their body, and the "longer body
+# wins" rule let a 334-character banner replace a 307-character one (18 Oct 2026). Opening
+# tokens cannot catch it ("Skip Navigation Links" is new), so judge by what is LEFT once
+# every banner line is removed: a page whose remaining prose is under 200 characters is
+# a banner, however it opens. Real articles about cookie consent run longer than this
+# check looks (2,000 characters) or keep their prose lines.
+_BANNER_LINE = re.compile(
+    r"(?i)^\s*(?:skip (?:navigation links|to (?:main )?content|to search|to navigation)\b.*"
+    r"|(?:we use|this (?:site|website) uses) cookies\b.*"
+    r"|.{0,120}\bcookie (?:policy|settings|preferences|notice)\b.{0,60}"
+    r"|(?:manage|customi[sz]e) (?:cookies|preferences)\b.*"
+    r"|refuse(?: all)?|accept(?: all)?(?: cookies)?|reject(?: all)?"
+    r"|title modal|close|[.,:;|]+)\s*$")
+
+
+_BANNER_SENTENCE = re.compile(
+    r"(?i)\b(?:we use cookies|this (?:site|website) uses cookies|our cookie policy|accept all cookies"
+    r"|cookie policy by clicking)\b")
+
+
+def looks_like_consent_banner_only(text: str) -> bool:
+    """True when the text is a cookie banner and page furniture with no article in it."""
+    # A banner SENTENCE must be there: a footer link called "Cookies" under a short real
+    # notice is not one (EU Funding & Tenders news, 3 rows), nor a trade mark named "The
+    # Original* cookies" (EUIPO). Checked 18 Oct 2026 on the 1,303 bodies under 2,000
+    # characters that mention cookies: these four were the only false hits without it.
+    if not text or len(text) > 2000 or not _BANNER_SENTENCE.search(text):
+        return False
+    prose = [ln.strip() for ln in text.splitlines()
+             if ln.strip() and not _BANNER_LINE.match(ln)]
+    # The banner's first line carries the section label ("... Links News"); a lone short
+    # label is not prose either.
+    prose = [ln for ln in prose if len(ln) > 25 or " " in ln.strip()]
+    return len(" ".join(prose)) < 200
+
 # A listing page is not an article. The trade site's /news_en rendered 3,053 characters of
 # index -- "Showing results 1 to 10", ten headlines and their dates -- which scored well on
 # length and opened with no consent banner. Stored as a body it would read as a real article

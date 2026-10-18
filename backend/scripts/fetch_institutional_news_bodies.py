@@ -310,8 +310,9 @@ def _read(url: str, timeout: int, accept: str = "*/*") -> bytes:
 
 
 from services.news.rendered_article import (extract_article, looks_like_challenge,
-                                            looks_like_chrome, looks_like_listing,
-                                            strip_page_furniture, visible_text)
+                                            looks_like_chrome, looks_like_consent_banner_only,
+                                            looks_like_listing, strip_page_furniture,
+                                            visible_text)
 
 
 # What counts as a whole body, matching scripts/api_body_coverage.py.
@@ -882,6 +883,13 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
     if looks_like_challenge(body_txt or ""):
         # Never stored, never solved. The row keeps whatever it had and is retried later.
         return None, None, "bot challenge, not the document: back off and retry later"
+    if looks_like_consent_banner_only(body_txt or ""):
+        # A cookie banner and nothing else (Court of Auditors, 98 rows, 18 Oct 2026).
+        # Follow the page's own file before giving up, as for any record page.
+        from_pdf = _follow_to_pdf(html, url, timeout)
+        if from_pdf and not looks_like_consent_banner_only(from_pdf):
+            return from_pdf, None, None
+        return None, None, "consent banner, not the document"
     if looks_like_chrome(body_txt or ""):
         # Strip the furniture, then judge what is left. 120 ECA rows held exactly 307
         # characters of "Skip to content ... We use cookies ... Refuse Accept Title modal" and
