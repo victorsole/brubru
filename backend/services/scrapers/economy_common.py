@@ -235,6 +235,33 @@ def moved_to_parent(requested: str, final: str | None) -> bool:
     return host(a) == host(b) and pa != pb and pa.startswith(pb + "/")
 
 
+_RETURN_PARAMS = ("destination", "returnurl", "return_url", "return", "redirect", "redirect_to",
+                  "redirect_uri", "next", "backurl", "goto")
+
+
+def redirected_to_a_gate(requested: str, final: str | None) -> bool:
+    """True when a request was redirected to a page that sends the reader back to it once they
+    accept or sign in: ?destination=<the requested path> and its kin.
+
+    The European Stability Mechanism answers every funding press release with its investor
+    disclaimer (/investors/esm/disclaimer?destination=/press-releases/...), which asks the
+    reader to confirm they are not a U.S. person and "will not copy, transmit or otherwise
+    send any information on this web site to any person". 64 rows stored that disclaimer as
+    their article (18 Oct 2026). A gate is never clicked through and never stored."""
+    from urllib.parse import parse_qsl, unquote, urlparse
+
+    if not final:
+        return False
+    a, b = urlparse(requested), urlparse(final)
+    if a.netloc.lower().removeprefix("www.") != b.netloc.lower().removeprefix("www."):
+        return False
+    target = a.path.rstrip("/")
+    for key, value in parse_qsl(b.query):
+        if key.lower() in _RETURN_PARAMS and urlparse(unquote(value)).path.rstrip("/") == target:
+            return True
+    return False
+
+
 def to_dt(struct) -> datetime | None:
     if not struct:
         return None
@@ -357,6 +384,8 @@ def fetch_detail_dated(url: str):
         return None, None, "unreachable", None, None
     if moved_to_parent(url, getattr(r, "url", None)):
         return None, None, "moved", None, None
+    if redirected_to_a_gate(url, getattr(r, "url", None)):
+        return None, None, "gated", None, None
     ctype = (r.headers.get("content-type") or "").lower()
     if "application/pdf" in ctype or url.lower().endswith(".pdf"):
         return (extract_pdf(r.content),

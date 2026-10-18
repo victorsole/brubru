@@ -46,7 +46,7 @@ from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
 from services.scrapers.economy_common import (  # noqa: E402
-    decode_mixed, error_body_reason, extract_html, moved_to_parent,
+    decode_mixed, error_body_reason, extract_html, moved_to_parent, redirected_to_a_gate,
 )
 from api.v1._body import body_from_html_or_text  # noqa: E402
 from services.news.page_widgets import clean_html, clean_text  # noqa: E402
@@ -903,6 +903,10 @@ def fetch(url: str, timeout: int = 40, render: bool = False) -> tuple[str | None
             # The item was removed and its URL now leads to the section listing. Not a wall:
             # no other route is tried, and nothing is stored over what the row holds.
             return None, None, "moved: the page now redirects to its section's listing"
+        if redirected_to_a_gate(url, final_url):
+            # A disclaimer or sign-in that sends the reader back once they accept: never
+            # clicked through, never stored (ESM investor disclaimers, 64 rows, 18 Oct 2026).
+            return None, None, "gated: the page redirects to a disclaimer or sign-in"
         if looks_like_pdf(raw):
             # A PDF is a document, not a page. Parse it or refuse it; never store the bytes.
             body_txt = _pdf_text(raw)
