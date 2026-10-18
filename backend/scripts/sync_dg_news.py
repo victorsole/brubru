@@ -88,6 +88,13 @@ def main():
     counts = {"added": 0, "updated": 0, "skipped": 0, "same_story": 0, "sources": 0, "empty": 0,
               "errors": 0, "refused_undated": 0}
     refused_all: list = []
+    # One sighting per item per run. The same article is listed by the hub and by its
+    # DG's own newsroom with a different title or summary; written twice a run, the row
+    # flipped between the two every run and every flip re-sent it (18 Oct 2026: titles
+    # and summaries rewritten 3 s apart, e.g. "Wildfire resilience in Tuscany"). The
+    # first source in ALL_SOURCES writes; a later sighting only counts as a fetch.
+    seen: set = set()
+    counts["repeat_sighting"] = 0
     try:
         for src in ALL_SOURCES:
             try:
@@ -105,6 +112,11 @@ def main():
                 counts["refused_undated"] += len(refused)
                 refused_all.extend(refused)
                 for it in items:
+                    it["entry_key"] = canonical_public_url(it["entry_key"], it.get("institution", "COMMISSION"))
+                    if it["entry_key"] in seen:
+                        counts["repeat_sighting"] += 1
+                        continue
+                    seen.add(it["entry_key"])
                     counts[_upsert(db, it)] += 1
                 # Every key SEEN, not only the changed ones: a sighting is a fetch.
                 stamp_fetched(db, [i["entry_key"] for i in items])

@@ -99,5 +99,19 @@ def _compose_body(mapper, connection, target):  # noqa: ANN001
     target.body_txt, target.body_html, target.body_source = txt, htm, src
 
 
+def _recompose_unless_fetched(mapper, connection, target):  # noqa: ANN001
+    # On UPDATE a composed body follows its title and summary, but a fetched article is
+    # never replaced by a composition. The listener used to recompose unconditionally:
+    # whenever a feed sync touched a summary, the article that
+    # fetch_institutional_news_bodies.py had stored (raw SQL, body_source
+    # 'fetched:article') became "title + summary + Published by" again, and the fetcher
+    # put the article back an hour later. 17 Commission and EEAS rows flipped 233 times
+    # in two days and were re-sent to GovClipping each time; 11 sat as placeholders on
+    # 18 Oct 2026 (e.g. "EU delivering on COP17", 5,442 chars -> 330).
+    if target.body_source and not str(target.body_source).startswith("composed") and target.body_txt:
+        return
+    _compose_body(mapper, connection, target)
+
+
 event.listen(EuNewsItem, "before_insert", _compose_body)
-event.listen(EuNewsItem, "before_update", _compose_body)
+event.listen(EuNewsItem, "before_update", _recompose_unless_fetched)
