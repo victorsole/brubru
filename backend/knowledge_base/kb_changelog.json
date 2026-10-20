@@ -2,6 +2,110 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "textile_epr_waste_framework_directive_2025_1892",
+      "title": "Textile EPR under the Waste Framework Directive",
+      "summary": "EP position of 20 Oct 2026 on suspending the EPR authorised-representative obligation for small enterprises until 2035",
+      "refs": [
+        "32025L1892"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "air_passenger_rights_regulation",
+      "title": "Air Passenger Rights Regulation",
+      "summary": "Parliament's final vote on the enforcement of passenger rights 2023/0437(COD), 652 to 2, 20 Oct 2026",
+      "refs": [
+        "32004R0261"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "eu_recovery_resilience_facility",
+      "title": "Recovery and Resilience Facility",
+      "summary": "Dombrovskis, 19 Oct 2026: EUR 451 billion disbursed, nearly 70% of milestones assessed",
+      "refs": [
+        "32021R0241"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "innovation_fund",
+      "title": "EU Innovation Fund",
+      "summary": "77 net-zero projects selected for EUR 3.4 billion on 19 Oct 2026; next calls December 2026",
+      "refs": []
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "eu_special_representatives",
+      "title": "EU Special Representatives",
+      "summary": "Ilze Brands Kehris appointed EUSR for Human Rights by Decision (CFSP) 2026/2352",
+      "refs": [
+        "32026D2352"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "european_peace_facility",
+      "title": "European Peace Facility",
+      "summary": "Council Decision (CFSP) 2026/2334: EUR 20 million assistance measure for the Armed Forces of Nigeria",
+      "refs": [
+        "32026D2334"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "crma_critical_raw_materials_act",
+      "title": "Critical Raw Materials Act",
+      "summary": "Parliament's first-reading position on the CRMA amendment 2025/0385(COD) adopted 20 Oct 2026, 470 to 83",
+      "refs": [
+        "32024R1252"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "eu_andorra_association_agreement",
+      "title": "EU-Andorra Association Agreement",
+      "summary": "Signed 19 Oct 2026 with San Marino plus updated Monetary Agreements; EP consent next",
+      "refs": [
+        "52024PC0189"
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "action": "updated",
+      "guide": "eu_arctic_policy",
+      "title": "EU Arctic Policy and the 2026 Strategy",
+      "summary": "New Arctic Strategy adopted 20 Oct 2026 as JOIN(2026) 100: four priorities, Arctic Cable Hub, Polar Research Hub, Pan-Arctic Cable",
+      "refs": []
+    },
+    {
+      "date": "2026-10-20",
+      "action": "added",
+      "guide": "eu_fisheries_aquaculture_vision_2040",
+      "title": "Vision 2040 for fisheries and aquaculture",
+      "summary": "Commission Communication COM(2026) 701 of 20 Oct 2026: priorities, landing-obligation dialogue, traceability by 2029, EUR 2 bn reserved CFP allocation proposed",
+      "refs": []
+    },
+    {
+      "date": "2026-10-20",
+      "action": "added",
+      "guide": "eu_organic_regulation_targeted_amendments_2025_0417",
+      "title": "Organic Regulation targeted amendments 2025/0417(COD)",
+      "summary": "Council-Parliament provisional agreement of 20 Oct 2026 on the targeted amendments to Regulation 2018/848: EU logo on equivalent imports, 11 countries recognised to 2036, small-operator thresholds doubled",
+      "refs": [
+        "52025PC0780"
+      ]
+    },
+    {
       "date": "2026-10-16",
       "action": "updated",
       "guide": "eu_pharmaceutical_legislation_reform",

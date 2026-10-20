@@ -1,6 +1,7 @@
 # EU Innovation Fund
 
 ## QUICK FACTS
+- **LATEST (Monday 19 October 2026, press release IP/26/2187): 77 net-zero technology projects selected for EUR 3.4 billion under the Innovation Fund call launched in December 2025 (the 2025 Net-Zero Technologies Call, now closed), spread across 23 countries of the European Economic Area.** By topic (the release's figures): large-scale 12 projects, about EUR 1.58 billion; medium-scale 17, about EUR 458 million; small-scale 20, about EUR 124 million; clean-tech manufacturing 12, almost EUR 895 million (heat pumps, solar panels, electrolysers, EV batteries, a rare-earth magnet facility); pilots 16, about EUR 394 million. Firsts: a small modular nuclear reactor project and a direct air carbon capture and storage (DACCS) project; 6 critical raw materials projects. Estimated avoidance: about 290 million tonnes of CO2-equivalent over the projects' first decade. 84 further projects passed evaluation without funding and receive the STEP seal together with the 77; 160 proposals remain eligible for EIB Project Development Assistance. Grant agreements are prepared with CINEA; results of that phase announced in the first quarter of 2027. Next calls planned for early December 2026, including a EUR 1 billion clean-tech manufacturing topic in line with the RESourceEU Action Plan. NOT READ: the list of the 77 projects.
 - **LATEST (24 September 2026): terms and conditions published for the second EUR 1 billion industrial heat auction (IF26 Heat Auction)**, funded from EU ETS revenues; bidding expected to open in **early December 2026**. Fixed premium per tonne of direct CO2 abated, for up to five years. Eligible: electrified heat (heat pumps, thermal storage, plasma torches, electric boilers), direct renewable heat (solar, thermal, geothermal) and, for the first time, nuclear technologies such as small modular reactors; the heat threshold is lowered to above 80 degrees C (was above 100 degrees C). Member States can top up via Auction-as-a-Service. The first auction (IF25) selected 65 projects; both are pilots for the Industrial Decarbonisation Bank (EUR 100 billion target). Source: DG CLIMA, 24 September 2026.
 - What: one of the world's largest funding programmes for deploying net-zero and innovative technologies
 - Funding source: EU Emissions Trading System (ETS) allowance auction revenues
@@ -18,7 +19,7 @@
 - Call types: large-scale (>EUR 7.5M capex), small-scale (<EUR 7.5M), competitive bidding (auctions), net-zero pilot
 - Grant rate: up to 60% of relevant costs (up to 100% for competitive bidding)
 - Disbursement: milestone-based (40% at financial close, 60% conditional on verified emissions reductions)
-- Current open call: 2025 Net-Zero Technologies Call, budget EUR 2.9 billion, deadline 23 April 2026
+- 2025 Net-Zero Technologies Call: deadline was 23 April 2026; results on 19 October 2026 (first bullet). Next calls: early December 2026
 - ECA Special Report 11/2026: "high potential, but slow progress and little impact on emissions reduction"
 - 5 award criteria: GHG emissions avoidance, degree of innovation, project maturity, replicability, cost efficiency
 - ECF complement: European Competitiveness Fund (EUR 451 billion MFF 2028-2034) will complement Innovation Fund
