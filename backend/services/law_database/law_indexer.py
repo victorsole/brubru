@@ -192,7 +192,6 @@ class EULawIndexer:
                     oj_reference=metadata.get('oj_reference'),
                     policy_area=policy_area,
                     is_primary_legislation=is_primary,
-                    legal_basis=metadata.get('legal_basis', []),
                     citations=metadata.get('citations', []),
                     subject_matter=metadata.get('subject_matter', []),
                     xml_path=metadata['xml_path'],

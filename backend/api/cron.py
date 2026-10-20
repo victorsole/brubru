@@ -392,6 +392,7 @@ _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc",
     "carriage_status_notifications", "tris_titles", "eu_laws_in_force", "eu_laws_oj_reference",
+    "eu_laws_legal_basis",
 )
 # "tbt" left this list on 17 Oct 2026: sync_dg_grow.py records its own run as wto_tbt, so every
 # night wrote two rows for one run (tests/test_sync_health_jobs.py checks no script here records).
@@ -842,6 +843,9 @@ async def cron_sync_daily(
     # eu_laws.oj_reference: the Official Journal citation from Cellar for a law without it (17 Oct 2026: a law imported
     # from a bulk export arrives without one; the importers no longer write the column). Keeps updated_at.
     results["eu_laws_oj_reference"] = await _run_script_async("eu_laws_oj_reference", "scripts/fill_eu_laws_oj_reference.py", ["--apply"], timeout=1800)
+    # eu_laws.legal_basis: the Treaty articles and acts a law is adopted under, from Cellar, in one form, for the laws
+    # never read (20 Oct 2026: four shapes from three writers; the importers no longer write it). Keeps updated_at.
+    results["eu_laws_legal_basis"] = await _run_script_async("eu_laws_legal_basis", "scripts/fill_eu_laws_legal_basis.py", ["--apply"], timeout=1800)
     # Full Have Your Say sweep. The job above had only ever collected 362 of the
     # ~4,100 initiatives on the portal, so a user tracking a file could be told there
     # was no consultation on it when there was one (found 11 Aug 2026 looking for

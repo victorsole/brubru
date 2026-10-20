@@ -104,7 +104,15 @@ class LawItem(BaseModel):
             "Cellar. Empty while the act is not indexed yet (new acts lag a few weeks)."
         ),
     )
-    legal_basis: list = Field(default_factory=list)
+    legal_basis: list[str] = Field(
+        default_factory=list,
+        description=(
+            "What the law is adopted under, read from the Publications Office (Cellar) and written as EU acts cite it: "
+            "Treaty articles first ('Article 114 TFEU', 'Article 29 TEU', 'Article 100a EEC Treaty'), then the acts it "
+            "implements or is based on ('Directive (EU) 2025/2205 of the European Parliament and of the Council'). "
+            "Empty when the law has none (a corrigendum, most older CFSP acts) or before a new law is read (within a day)."
+        ),
+    )
     eurlex_url: Optional[str] = None
     text_url: Optional[str] = Field(None, description="Brubru endpoint for the full body (XML or plain text). Call this URL to retrieve the actual law content.")
     # The 5 mandatory Brubru v1 datapoints
@@ -254,7 +262,7 @@ GET /api/v1/laws?corrects=32016R0679
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference` (the Official Journal citation as the acts cite it: `OJ L 119, 4.5.2016, p. 1`, or `OJ L, 2025/40, 22.1.2025` since 1 October 2023); what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]`, `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference` (the Official Journal citation as the acts cite it: `OJ L 119, 4.5.2016, p. 1`, or `OJ L, 2025/40, 22.1.2025` since 1 October 2023); what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]` (what the law is adopted under, as EU acts cite it: Treaty articles such as `Article 114 TFEU` first, then the acts it implements or is based on, from the Publications Office), `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
 
 `doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
 
@@ -480,7 +488,7 @@ GET /api/v1/laws/32016R0679
 ```
 
 **You get back**
-A `LawItem` with `celex`, `title`, `doc_type` (normalised), `adopted_on`, `oj_reference`, what the CELEX states (`sector`, `year`, `number`, `document_type`, `corrected_act`...), `alias` and `acronym`, the Publications Office's metadata (`authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`), `policy_area`, `legal_basis[]`, `eurlex_url`, `text_url` (relative URL to the text endpoint), `body_txt` and `body_html`, plus the 5 envelope-level datapoints. The fields are the list's; see it for their meaning. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.
+A `LawItem` with `celex`, `title`, `doc_type` (normalised), `adopted_on`, `oj_reference`, what the CELEX states (`sector`, `year`, `number`, `document_type`, `corrected_act`...), `alias` and `acronym`, the Publications Office's metadata (`authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`), `policy_area`, `legal_basis[]` (what the law is adopted under, as EU acts cite it: Treaty articles such as `Article 114 TFEU` first, then the acts it implements or is based on, from the Publications Office), `eurlex_url`, `text_url` (relative URL to the text endpoint), `body_txt` and `body_html`, plus the 5 envelope-level datapoints. The fields are the list's; see it for their meaning. HTTP 404 with `reason_code: not_found` if the CELEX isn't in our mirror.
 
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from EUR-Lex RSS feeds + Cellar SPARQL sector-3.""",

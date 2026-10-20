@@ -194,7 +194,6 @@ def import_document(
             date=parsed.date,
             policy_area=determine_policy_area(parsed),
             is_primary_legislation=is_primary_legislation(parsed),
-            legal_basis=parsed.legal_basis if parsed.legal_basis else None,
             citations=parsed.citations if parsed.citations else None,
             xml_path=str(xml_path),
             extra_metadata={

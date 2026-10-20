@@ -66,7 +66,7 @@ TABLE = ROOT / "backend/data/leg_2026-10_table/leg_2026-10_table.csv"
 VERSION = "LEG_2026-10"
 # oj_reference is not written: since 17 Oct 2026 fill_eu_laws_oj_reference.py writes the citation from Cellar
 WRITES = ("xml_path", "content_hash", "title", "doc_type", "doc_type_normalized", "date",
-          "legal_basis", "citations", "is_primary_legislation", "policy_area", "subject_matter", "extra_metadata")
+          "citations", "is_primary_legislation", "policy_area", "subject_matter", "extra_metadata")
 
 
 def plan(db, parser):
@@ -122,7 +122,7 @@ def new_values(f, xp_parser) -> tuple:
          "doc_type": p.doc_type or type_label(f["celex"], f["dn"]),
          "doc_type_normalized": type_label(f["celex"], f["dn"]),
          "date": f["date"] or (p.date.isoformat() if p.date else None),
-         "legal_basis": fields["legal_basis"], "citations": fields["citations"],
+         "citations": fields["citations"],
          "is_primary_legislation": fields["is_primary_legislation"], "policy_area": fields["policy_area"],
          "subject_matter": xp_parser._extract_subject_matter(root) or None,
          "extra_metadata": json.dumps(extra, default=str)}
@@ -134,12 +134,12 @@ DROP = "ARRAY[" + ", ".join(f"'{k}'" for k in FILE_KEYS + DERIVED_FROM_FILE) + "
 # key is lost
 UPDATE = ("UPDATE eu_laws e SET xml_path = v.xml_path, content_hash = v.content_hash, title = v.title, "
           "doc_type = v.doc_type, doc_type_normalized = v.doc_type_normalized, date = v.date, "
-          "legal_basis = v.legal_basis, citations = v.citations, "
+          "citations = v.citations, "
           "is_primary_legislation = v.is_primary_legislation, policy_area = v.policy_area, subject_matter = v.subject_matter, "
           f"extra_metadata = (coalesce(e.extra_metadata, '{{}}'::jsonb) - {DROP}) || v.extra_metadata "
           f"FROM (VALUES %s) AS v (id, {', '.join(WRITES)}) WHERE e.id = v.id AND e.corpus_version = 'LEG_2026-10' "
           "RETURNING e.id")
-TEMPLATE = "(%s, %s, %s, %s, %s, %s, %s::date, %s::text[], %s::text[], %s::boolean, %s, %s::text[], %s::jsonb)"
+TEMPLATE = "(%s, %s, %s, %s, %s, %s, %s::date, %s::text[], %s::boolean, %s, %s::text[], %s::jsonb)"  # legal_basis: fill_eu_laws_legal_basis.py
 RETYPE = ("UPDATE eu_laws e SET doc_type_normalized = v.t FROM (VALUES %s) AS v (id, t) "
           "WHERE e.id = v.id AND e.corpus_version = 'LEG_2026-10' RETURNING e.id")
 MEASURE = ("SELECT count(*) FILTER (WHERE doc_type_normalized IN ('Annex', 'Table of Contents')), "
