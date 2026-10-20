@@ -40,3 +40,10 @@ def test_fra_serves_its_calls_for_interest_as_tenders(monkeypatch):
     _fake_portal(monkeypatch)
     items = ap.ingest_fra_tenders()
     assert {i.item_type for i in items} == {"tender"} and len(items) == 2
+
+
+def test_eu_osha_tenders_come_from_the_portal(monkeypatch):
+    # 20 Oct 2026: its own pages gave 11 tenders with 155-313-character bodies; the portal 96.
+    calls = _fake_portal(monkeypatch)
+    assert [i.title for i in ap.ingest_eu_osha_tenders()] == ["eu_osha tender"]
+    assert calls == [("eu_osha", "47352424", True)]

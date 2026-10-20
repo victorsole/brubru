@@ -2296,32 +2296,12 @@ def _parse_eu_osha_views(html: str, base: str, body_code: str, item_type: str,
     return out
 
 
-def ingest_eu_osha_tenders(*, fetch_bodies: bool = True, max_pages: int = 4, **_) -> list[Item]:
-    """EU-OSHA procurement. The site's WAF fingerprints TLS and drops raw HTTP
-    clients (requests/urllib -> RemoteDisconnected), while a real browser and
-    curl pass, so fetch via the headless-browser WafBrowserFetcher (same tool
-    used for FRA). Two current listings: open calls for tender and calls for
-    expression of interest. (The old /calls_archive/<year> tree is gone.)"""
-    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
-    items: list[Item] = []
-    seen: set[str] = set()
-    pages = [
-        "/en/about-eu-osha/procurement/calls-tender",
-        "/en/about-eu-osha/procurement/calls-expression-interest",
-    ]
-    with WafBrowserFetcher() as f:
-        for path in pages:
-            res = f.fetch(_EU_OSHA + path, strip_chrome=False)
-            if getattr(res, "error", None) or not getattr(res, "html", None):
-                continue
-            for it in _parse_eu_osha_views(res.html, _EU_OSHA,
-                                           body_code="eu_osha", item_type="tender",
-                                           source_kind="eu_osha_procurement"):
-                if it.guid in seen:
-                    continue
-                seen.add(it.guid)
-                items.append(it)
-    return items
+def ingest_eu_osha_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    """EU-OSHA's tenders, from its notices on the Funding & Tenders portal (buyer 47352424).
+    Its own pages, read through a browser past a WAF, listed 11 current procedures with bodies
+    of 155-313 characters (20 Oct 2026); the portal holds 96, each with its description,
+    facts and documents, as for EMA, EEA, EFSA and ENISA."""
+    return [it for it in _ft_agency("eu_osha") if it.item_type == "tender"]
 
 
 def ingest_eu_osha_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
