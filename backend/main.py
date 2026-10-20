@@ -415,6 +415,14 @@ async def _v1_rate_limit_headers(request, call_next):
     return response
 
 
+# Gzip JSON inside the container (20 Oct 2026): Railway bills the bytes that leave it, and its
+# edge only compressed after them (130 GB, USD 6.53 in a week). Registered LAST so it is the
+# outermost layer: every middleware above reads the JSON before it is compressed. JSON only:
+# the chat's event stream and file downloads pass through untouched.
+from api.compression_middleware import JsonGzipMiddleware  # noqa: E402
+app.add_middleware(JsonGzipMiddleware, minimum_size=1024, compresslevel=5)
+
+
 if __name__ == "__main__":
     import uvicorn
 
