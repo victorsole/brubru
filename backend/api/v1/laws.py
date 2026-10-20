@@ -119,6 +119,14 @@ class LawItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of eurlex_url).")
     body_txt: Optional[str] = Field(None, description="Plain text of the act, stored from Cellar. Pass include_body=false to omit it.")
     body_html: Optional[str] = Field(None, description="XHTML of the act, stored from Cellar. Pass include_body=false to omit it.")
+    body_withheld: Optional[str] = Field(
+        None,
+        description=(
+            "Set only on a list page that leaves out a stored text too large to carry in a page: the few laws over "
+            "5,000,000 characters (the EBA benchmarking regulations, 20-40 MB each). The law's own URL (`self`) "
+            "serves it in full. Null otherwise."
+        ),
+    )
     document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
@@ -184,7 +192,12 @@ def _eurlex_url(celex: Optional[str]) -> Optional[str]:
     return f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
 
 
-def _law_item(r, include_body: bool = True) -> "LawItem":
+# A list page carries no text over this many characters (20 Oct 2026: a page holding the 20-40 MB EBA benchmarking
+# regulations froze the backend for 50 minutes); the single-law route serves it.
+LIST_BODY_MAX_CHARS = 5_000_000
+
+
+def _law_item(r, include_body: bool = True, bodies: Optional[dict] = None) -> "LawItem":
     """One row as a LawItem. Shared so the row-id path and the CELEX path cannot drift.
 
     The body used to be null here, with the list telling callers to fetch
@@ -194,7 +207,20 @@ def _law_item(r, include_body: bool = True) -> "LawItem":
 
     include_body=false stays available because a caller paging the whole corpus for
     metadata should not have to carry roughly 41 KB of XHTML per row to get it.
+
+    `bodies` is the list's: {row id: (body_txt, body_html)} read for the page's rows up to
+    LIST_BODY_MAX_CHARS; a row missing from it carries body_withheld instead. Without it (the
+    single-law route) the row's own bodies are served, whatever their size.
     """
+    txt = html = withheld = None
+    if include_body:
+        if bodies is None:
+            txt, html = getattr(r, "body_txt", None), getattr(r, "body_html", None)
+        elif r.id in bodies:
+            txt, html = bodies[r.id]
+        elif (getattr(r, "body_chars", None) or 0) > LIST_BODY_MAX_CHARS:
+            withheld = (f"The text is {r.body_chars:,} characters, too large for a list page: "
+                        "read it in full at this law's own URL (self).")
     return LawItem(
         id=r.id,
         celex=r.celex,
@@ -220,8 +246,9 @@ def _law_item(r, include_body: bool = True) -> "LawItem":
         eurlex_url=_eurlex_url(r.celex),
         text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
         public_url=_eurlex_url(r.celex),
-        body_txt=getattr(r, "body_txt", None) if include_body else None,
-        body_html=getattr(r, "body_html", None) if include_body else None,
+        body_txt=txt,
+        body_html=html,
+        body_withheld=withheld,
         document_date=r.date,
         creation_date=r.created_at,
         updated_date=row_updated(r),
@@ -262,7 +289,7 @@ GET /api/v1/laws?corrects=32016R0679
 ```
 
 **You get back**
-A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference` (the Official Journal citation as the acts cite it: `OJ L 119, 4.5.2016, p. 1`, or `OJ L, 2025/40, 22.1.2025` since 1 October 2023); what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]` (what the law is adopted under, as EU acts cite it: Treaty articles such as `Article 114 TFEU` first, then the acts it implements or is based on, from the Publications Office), `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them), plus the 5 envelope-level datapoints.
+A `PaginatedResponse[LawItem]` envelope. Each item carries `id`, `celex`, `title`, `doc_type`, `adopted_on`, `oj_reference` (the Official Journal citation as the acts cite it: `OJ L 119, 4.5.2016, p. 1`, or `OJ L, 2025/40, 22.1.2025` since 1 October 2023); what the CELEX states: `sector`, `sector_name`, `year`, `number`, `document_type_code`, `document_type` (EUR-Lex's label), `corrected_act` (for a corrigendum); Brubru's curated `alias` and `acronym`; the Publications Office's metadata: `authors[]`, `in_force`, `eli`, `entry_into_force[]`, `application_dates[]`, `effect_dates[]`, `procedures[]`; then `policy_area` (the EuroVoc domain), `eurovoc[]` (the act's EuroVoc descriptors, as the Publications Office indexed it), `legal_basis[]` (what the law is adopted under, as EU acts cite it: Treaty articles such as `Article 114 TFEU` first, then the acts it implements or is based on, from the Publications Office), `eurlex_url`, `text_url`, `body_txt` and `body_html` (the act's text, stored from Cellar; `include_body=false` omits them; a list page leaves out a text over 5,000,000 characters, which the law's own URL serves, and `body_withheld` says so), plus the 5 envelope-level datapoints.
 
 `doc_type` is Brubru's normalised family (from the document's own heading); `document_type` is the official label of the CELEX descriptor. They agree on nearly every law; where a CELEX letter and a heading differ (an act headed "Decision" filed under another descriptor), filter on the one you mean.
 
@@ -431,21 +458,25 @@ async def list_laws(
         query = query.order_by(EULaw.created_at.desc().nullslast())
     else:
         query = query.order_by(EULaw.date.desc().nullslast())
-    if not include_body:
-        # The bodies are 103 KB of a 107 KB row: without this, include_body=false blanked them
-        # only after the database had sent them (17 Oct 2026, Supabase egress over quota; a
-        # metadata walk of the corpus moved 3.4 GB). raiseload: a later read fails loudly
-        # instead of fetching each row's text again behind the caller's back.
-        query = query.options(defer(EULaw.body_html, raiseload=True), defer(EULaw.body_txt, raiseload=True))
+    # The bodies are 103 KB of a 107 KB row: never read with the rows (17 Oct 2026, Supabase egress over quota:
+    # include_body=false blanked them only after the database had sent them; a metadata walk moved 3.4 GB).
+    # raiseload: a later read fails loudly instead of fetching each row's text behind the caller's back.
+    query = query.options(defer(EULaw.body_html, raiseload=True), defer(EULaw.body_txt, raiseload=True))
     rows = (
         stable(query).offset((page - 1) * limit)
         .limit(limit)
         .all()
     )
+    # Then the page's own bodies, in one query, up to LIST_BODY_MAX_CHARS (20 Oct 2026: a page holding the 20-40 MB
+    # EBA benchmarking regulations froze the backend for 50 minutes); a larger text is never read for a list.
+    bodies = {}
+    if include_body and rows:
+        bodies = {i: (t, h) for i, t, h in db.query(EULaw.id, EULaw.body_txt, EULaw.body_html).filter(
+            EULaw.id.in_([r.id for r in rows]), func.coalesce(EULaw.body_chars, 0) <= LIST_BODY_MAX_CHARS).all()}
 
     # One builder for list and item alike: this list kept its own copy of the
     # LawItem construction, which is exactly how the two drift apart.
-    data = [_law_item(r, include_body=include_body) for r in rows]
+    data = [_law_item(r, include_body=include_body, bodies=bodies if include_body else None) for r in rows]
 
     return build_envelope(
         data,

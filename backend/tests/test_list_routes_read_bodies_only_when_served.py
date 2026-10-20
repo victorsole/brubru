@@ -5,6 +5,8 @@ uncompressed. /laws, /news/all and /funding/international-cooperation blanked bo
 body_html on include_body=false only AFTER the database had sent them (an eu_laws row is 107 KB,
 103 KB of it the two bodies: a metadata walk of the corpus moved 3.4 GB). Each route now leaves
 them out of the query; with include_body=true the query, and so the response, is what it was.
+/laws (20 Oct 2026) never reads the bodies with the rows: a second query reads the page's own, up to a size
+(tests/test_laws_list_body_cap.py).
 """
 from __future__ import annotations
 
@@ -77,9 +79,9 @@ def test_laws_without_bodies_does_not_read_them(monkeypatch, params):
 
 
 @pytest.mark.parametrize("params", [{}, {"include_body": "true"}])
-def test_laws_with_bodies_reads_them(monkeypatch, params):
-    sql = _laws_sql(monkeypatch, params)
-    assert "eu_laws.body_html" in sql and "eu_laws.body_txt" in sql
+def test_laws_with_bodies_reads_them_apart_from_the_rows(monkeypatch, params):
+    sql = _laws_sql(monkeypatch, params)  # the page query: the bodies come in a second query, for the page's rows
+    assert "eu_laws.body_html" not in sql and "eu_laws.body_txt" not in sql, sql[:400]
 
 
 def test_a_law_item_without_bodies_never_touches_them():

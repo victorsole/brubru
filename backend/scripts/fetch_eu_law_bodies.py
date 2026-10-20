@@ -23,6 +23,8 @@ Bounded and resumable: --limit rows per run, unfetched first then stalest, so a
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 import os
 import pathlib
 import re
@@ -80,6 +82,35 @@ STORE = text(
      WHERE id = :rid
     """
 )
+
+# Above this many characters (text + HTML) a body is written through COPY, one column per transaction: inlined as
+# one SQL literal, the 42 MB text and 42 MB XHTML of 32018R0688 (EBA benchmarking ITS) restarted Postgres twice on
+# 18 Oct 2026. Sent apart from the SQL text (bound parameters, text and HTML in two statements), the same bodies
+# were written in 22-42 s each with no restart; COPY sends the value as data in the same way.
+BIG = 4_000_000
+COPY_TMP = "CREATE TEMP TABLE _big_body (v text) ON COMMIT DROP"
+COPY_IN = "COPY _big_body (v) FROM STDIN WITH (FORMAT csv)"
+SET_TXT = "UPDATE eu_laws SET body_txt = b.v FROM _big_body b WHERE eu_laws.id = %s"
+SET_HTML = ("UPDATE eu_laws SET body_html = b.v, body_chars = %s, body_fetched_at = now() "
+            "FROM _big_body b WHERE eu_laws.id = %s")
+
+
+def store(engine, rid: int, html: str, txt: str) -> None:
+    """Write one law's body; a large one as COPY data, the text first, then the HTML with the fetch mark."""
+    if len(html) + len(txt) <= BIG:
+        with engine.begin() as conn:
+            conn.execute(STORE, {"rid": rid, "html": html, "txt": txt, "n": len(txt)})
+        return
+    for value, sql, args in ((txt, SET_TXT, (rid,)), (html, SET_HTML, (len(txt), rid))):
+        buf = io.StringIO()
+        csv.writer(buf).writerow([value])
+        buf.seek(0)
+        with engine.begin() as conn:
+            cur = conn.connection.cursor()
+            cur.execute(COPY_TMP)
+            cur.copy_expert(COPY_IN, buf)
+            cur.execute(sql, args)
+
 
 PROGRESS = text(
     """
@@ -237,9 +268,7 @@ def main() -> int:
             raw, txt = got
             for _try in range(5):
                 try:
-                    with engine.begin() as conn:
-                        conn.execute(STORE, {"rid": r.id, "html": raw, "txt": txt,
-                                             "n": len(txt)})
+                    store(engine, r.id, raw, txt)
                     break
                 except Exception:
                     engine.dispose(); time.sleep(2 * (_try + 1))

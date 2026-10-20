@@ -162,6 +162,7 @@ def test_laws_filters_on_created_and_rejects_an_inverted_window(monkeypatch):
         def filter(self, *a): self.filters += a; return self
         def count(self): return 0
         def order_by(self, *a): return self
+        def options(self, *a): return self  # the bodies are always deferred (20 Oct 2026)
         def offset(self, n): return self
         def limit(self, n): return self
         def all(self): return []
