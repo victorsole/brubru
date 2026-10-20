@@ -118,7 +118,14 @@ def ingest_eu_funding_recipients(*, fetch_bodies: bool = True, year: int | None 
         fund = clean(g(row, c_fund))
         subj = clean(g(row, c_subj))
         start = g(row, c_start)
-        doc_dt = _iso_dt(str(start)[:10]) if start else _iso_dt(f"{year}-01-01")
+        start_dt = _iso_dt(str(start)[:10]) if start else None
+        if start_dt is not None and start_dt.tzinfo is None:
+            start_dt = start_dt.replace(tzinfo=timezone.utc)
+        # The row's date is its project start; a start still to come is not a date the record
+        # carries yet, and it sorted commitments for 2027-2028 to the top of the feed (20 Oct
+        # 2026: 33 rows). It stays in the body. No start at all: NULL, never 1 January of the
+        # year (a year read as 1 January is how 57 FRA rows were misdated).
+        doc_dt = start_dt if start_dt and start_dt <= now else None
         amt_str = None
         if amount is not None:
             try:
@@ -136,6 +143,7 @@ def ingest_eu_funding_recipients(*, fetch_bodies: bool = True, year: int | None 
             f"Management type: {clean(g(row, c_mgmt))}" if g(row, c_mgmt) else "",
             f"Beneficiary country: {country}" if country else "",
             f"Legal commitment ref: {lc}" if lc else "",
+            f"Project start: {start_dt.date().isoformat()}" if start_dt else "",
             f"Year: {year}",
         ]
         lines = [l for l in lines if l]

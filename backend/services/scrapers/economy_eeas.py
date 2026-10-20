@@ -32,7 +32,7 @@ import asyncio
 import re
 from datetime import datetime, timezone
 
-from services.scrapers.economy_common import Item, clean, extract_html
+from services.scrapers.economy_common import Item, clean, extract_html, extract_item_date
 
 _BASE = "https://www.eeas.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -181,15 +181,21 @@ async def _scrape_listing(item_type: str, path: str, *, fetch_bodies: bool,
             if url in seen:
                 continue
             seen.add(url)
+            # A tender card's date is its deadline ("Deadline to express your interest:
+            # 28th October 2026"): 35 of 165 tenders were dated in the future on 20 Oct
+            # 2026. A tender is dated from its own page, or not at all.
+            card_date = None if item_type == "tender" else _parse_date(r.get("date"))
             items.append(Item(
                 body_code="eeas", item_type=item_type, title=clean(r["title"])[:300],
-                public_url=url, document_date=_parse_date(r.get("date")),
+                public_url=url, document_date=card_date,
                 creation_date=now, source_kind="html", guid=url))
         if fetch_bodies:
             for it in items[:body_cap]:
                 html = await _render(page, it.public_url, settle_ms=800)
                 if html:
                     it.body_txt, it.body_html = extract_html(html)
+                    if item_type == "tender":
+                        it.document_date, _ = extract_item_date(html)
         await b.close()
     return items
 

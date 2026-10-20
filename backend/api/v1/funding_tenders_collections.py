@@ -12,7 +12,7 @@ ships, these endpoints return honest empty (no fixtures).
 All queries filter is_test=False so any future fixture row never leaks.
 """
 
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -511,9 +511,23 @@ class FtFundedProjectItem(BaseModel):
     body_txt: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal project page).")
-    document_date: Optional[date] = Field(None, description="Project start date (the canonical 'when this happened' date).")
+    document_date: Optional[date] = Field(None, description="When the project was published on the F&T Portal (published_at); the project start date where no publication date is recorded; never a date in the future (start_date and end_date carry the project's own dates).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
+
+
+def _project_date(r) -> Optional[date]:
+    """The publication date, else a start date already passed, else None.
+
+    Until 20 Oct 2026 this was the START date, so projects starting in 2027 sorted to the top of
+    /funding/ft-funded-projects as if they were the newest records (193 start in the future;
+    published_at, held for 83,850 of 109,636, was there all along)."""
+    today = datetime.now(timezone.utc).date()
+    for v in (r.published_at, r.start_date):
+        d = v.date() if isinstance(v, datetime) else v
+        if d is not None and d <= today:
+            return d
+    return None
 
 
 def _project_to_item(
@@ -536,7 +550,7 @@ def _project_to_item(
         published_at=r.published_at, last_updated=r.last_updated,
         has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
-        document_date=r.start_date,
+        document_date=_project_date(r),
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
     )
 

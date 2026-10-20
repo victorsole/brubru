@@ -676,6 +676,12 @@ _ITEM_DATE_CARRIERS = (
                 r'(\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4})\s*<', re.I)),
     ("published_label",
      re.compile(r'\bPublished:\s*(?:<[^>]+>\s*)*(\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4})\b')),
+    # EUAA procurement pages (20 Oct 2026): "Published on the EUAA website: 20/12/2024",
+    # beside "Validity CEI until: 19/12/2029" and "Deadline: 19 December 2029". The page has
+    # no other date carrier, and the listing gave only the deadline, which was stored as the
+    # item's date. Day first, as everywhere on that site.
+    ("published_on_website_label",
+     re.compile(r'\bPublished on (?:the )?[A-Za-z][\w .-]{0,40}?website:\s*(?:<[^>]+>\s*)*(\d{1,2}/\d{1,2}/\d{4})\b')),
 )
 
 # Class suffixes that end in -date but do not mean "published on". Checked against the
@@ -792,6 +798,15 @@ def _parse_ecl_cards(html: str, base: str):
         if doc_dt is None:
             meta = ci.select_one(".ecl-content-block__primary-meta-item time") or t
             doc_dt = parse_listing_date(meta.get_text(" ", strip=True)) if meta else None
+        # A call or tender card prints "Opening date ..." and "Deadline date ..." (HaDEA,
+        # ECCC, EISMEA, the JUs). The opening date is when the call was published; the
+        # deadline never is. On 20 Oct 2026 HaDEA's calls carried their deadlines (17 of 34
+        # in the future) and its tenders, which print only a deadline, the same. Read the
+        # labelled opening date, and nothing else, on such a card.
+        card_text = ci.get_text(" ", strip=True)
+        if "Deadline date" in card_text or "Opening date" in card_text:
+            om = re.search(r"Opening date\s+(\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4})", card_text)
+            doc_dt = parse_listing_date(om.group(1)) if om else None
         desc = ci.select_one(".ecl-content-block__description")
         summary = clean(desc.get_text(" ", strip=True)[:1000]) if desc else None
         out.append((url, title, doc_dt, summary))
@@ -827,7 +842,14 @@ def scrape_ecl_listing(body_code: str, item_type: str, listing_urls, base: str,
                 break
     if fetch_bodies:
         for it in items:
-            body_txt, body_html, kind = fetch_detail(it.public_url)
+            if it.document_date is None and item_type in ("call", "tender", "eoi_call", "grant"):
+                # A tender card prints only its deadline, which is not kept (_parse_ecl_cards);
+                # its own page names the publication date (HaDEA, 20 Oct 2026: "Publication
+                # date 11 June 2026", read from the page's first <time>).
+                body_txt, body_html, kind, page_dt, _carrier = fetch_detail_dated(it.public_url)
+                it.document_date = page_dt
+            else:
+                body_txt, body_html, kind = fetch_detail(it.public_url)
             it.body_txt, it.body_html = body_txt, body_html
             if kind == "pdf":
                 it.source_kind = "pdf"

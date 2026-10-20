@@ -75,8 +75,40 @@ def _build(*, body_code: str, item_type: str, title: str, url: str, reference: s
         summary=clean(" · ".join(bits)) or clean(title)[:120],
         body_txt=clean("\n".join(lines)),
         body_html=clean("<ul>" + "".join(f"<li>{l}</li>" for l in lines) + "</ul>"),
-        document_date=published or deadline, creation_date=now, source_kind=source_kind,
+        # The publication date, or nothing. Until 20 Oct 2026 a listing without one gave the
+        # DEADLINE here, so expert lists open until 2029 sorted to the top of /funding/all as
+        # if published in 2029 (EUAA, Eurojust, EUDA, ETF, ERA). Victor's rule for ECDC on
+        # 30 Sep: the item's published date, else NULL, never the deadline.
+        document_date=published, creation_date=now, source_kind=source_kind,
         guid=reference or url)
+
+
+def _from_item_pages(items: list[Item], *, fetch_bodies: bool = True) -> list[Item]:
+    """Read each listed item's own page: its publication date and its text.
+
+    For listings that print only a title, a reference and a deadline (Eurojust, ETF, EUAA,
+    EUDA, ERA): the card alone gave a body of 32-160 characters and no publication date.
+    Inside a sync an item already stored complete is not fetched again ("known"), and the
+    upsert keeps what is stored. A page that cannot be read leaves the card as it was."""
+    if not fetch_bodies:
+        return items
+    from services.scrapers.economy_common import fetch_detail_dated
+    for it in items:
+        if not it.public_url or "#" in it.public_url:
+            continue          # a row without its own page (listing URL + fragment)
+        try:
+            txt, html, kind, dt, _carrier = fetch_detail_dated(it.public_url)
+        except Exception:  # noqa: BLE001 -- one page never stops the listing
+            continue
+        if kind in ("known", "unreachable", "moved", "gated"):
+            continue
+        if txt and len(txt) > len(it.body_txt or ""):
+            it.body_txt, it.body_html = txt, html
+            if kind != "html":
+                it.source_kind = kind
+        if dt is not None:
+            it.document_date = dt
+    return items
 
 
 # --------------------------------------------------------------------------- #
@@ -830,7 +862,8 @@ def ingest_eurojust_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     seen = {i.public_url for i in items}
     merged = items + [i for i in low if i.public_url not in seen]
     # keep only real tenders (those carrying a tender reference, not nav links)
-    return [i for i in merged if i.guid and not i.guid.startswith("http")]
+    real = [i for i in merged if i.guid and not i.guid.startswith("http")]
+    return _from_item_pages(real, fetch_bodies=fetch_bodies)
 
 # --- ETF — field-cards with linked short-title + deadline in body --------- #
 _ETF = "https://www.etf.europa.eu"
@@ -839,10 +872,10 @@ _ETF = "https://www.etf.europa.eu"
 def ingest_etf_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     # deadline_field="deadline" finds the field; the closing date also appears in
     # the card body ("Deadline ... DD/MM/YYYY"), which the window date-search picks up.
-    return parse_field_cards(
+    return _from_item_pages(parse_field_cards(
         _fetch(_ETF + "/en/about/procurement"), _ETF, body_code="etf", item_type="tender",
         source_kind="etf_procurement", title_substr="/en/about/procurement/",
-        ref_field="deadline", deadline_field="deadline", status="Open")
+        ref_field="deadline", deadline_field="deadline", status="Open"), fetch_bodies=fetch_bodies)
 
 
 # --- EUAA — Drupal Views positional table -------------------------------- #
@@ -850,12 +883,12 @@ _EUAA = "https://euaa.europa.eu"
 
 
 def ingest_euaa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return parse_positional_table(
+    return _from_item_pages(parse_positional_table(
         _fetch(_EUAA + "/about-us/procurement"), _EUAA,
         body_code="euaa", item_type="eoi_call",
         source_kind="euaa_procurement",
         title_col=1, ref_col=0, deadline_col=2, status="Open",
-    )
+    ), fetch_bodies=fetch_bodies)
 
 
 # --- EUDA — plain HTML table (no Drupal markers) -------------------------- #
@@ -863,11 +896,11 @@ _EUDA = "https://www.euda.europa.eu"
 
 
 def ingest_euda_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return parse_positional_table(
+    return _from_item_pages(parse_positional_table(
         _fetch(_EUDA + "/about/procurement_en"), _EUDA,
         body_code="euda", item_type="tender", source_kind="euda_procurement",
         title_col=1, ref_col=0, deadline_col=3, status="Open",
-    )
+    ), fetch_bodies=fetch_bodies)
 
 
 # --- ENISA — Drupal Views with positional headers + <time datetime> ------- #
@@ -1182,10 +1215,10 @@ def _parse_era_articles(html: str, base: str) -> list[Item]:
 
 
 def ingest_era_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    return _parse_era_articles(
+    return _from_item_pages(_parse_era_articles(
         _fetch(_ERA + "/agency/procurement_en?f%5B0%5D=era_procurement_status%3Aopen"),
         _ERA,
-    )
+    ), fetch_bodies=fetch_bodies)
 
 
 # --- ECDC — ct-procurement article cards, paginated ?page=N --------------- #
@@ -2420,10 +2453,13 @@ def _ted_to_item(n: dict, *, body_code: str, item_type: str, source_kind: str) -
         except (ValueError, TypeError):
             deadline = None
     ted_url = f"https://ted.europa.eu/en/notice/-/detail/{pub_num}"
+    pub_raw = n.get("publication-date")
+    pub_raw = pub_raw[0] if isinstance(pub_raw, list) and pub_raw else pub_raw
+    published = _parse_date(str(pub_raw)[:10]) if isinstance(pub_raw, str) and pub_raw else None
     return _build(
         body_code=body_code, item_type=item_type, title=title, url=ted_url,
         reference=pub_num, status=procedure or "Open",
-        deadline=deadline, now=now, source_kind=source_kind,
+        deadline=deadline, now=now, source_kind=source_kind, published=published,
     )
 
 
