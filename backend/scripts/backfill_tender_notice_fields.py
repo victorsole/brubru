@@ -49,6 +49,7 @@ PAUSE_S = 0.3
 _NOTICE_TYPE = r"<cbc:NoticeTypeCode[^>]*>([^<]+)<"
 _BUYER_LEGAL = r'<cbc:PartyTypeCode listName="buyer-legal-type"[^>]*>([^<]+)<'
 _CURRENCY = r'<cbc:EstimatedOverallContractAmount currencyID="([A-Z]{3})"'
+_NOTICE_ID = r'<cbc:ID schemeName="notice-id">([^<]+)<'
 
 
 def _db_url() -> str:
@@ -81,8 +82,9 @@ def _passes():
     currency_src = f"""SELECT id, substring(xml_content from '{_CURRENCY}') AS cur, estimated_value_currency AS old
                          FROM tenders WHERE id BETWEEN %(a)s AND %(b)s
                           AND estimated_value IS NOT NULL AND xml_content IS NOT NULL"""
-    labels_src = f"""SELECT x.id, x.nt, coalesce(m.ft, t.form_type) AS ft, x.blt, lv.lvl
+    labels_src = f"""SELECT x.id, x.nt, coalesce(m.ft, t.form_type) AS ft, x.blt, lv.lvl, x.nid
                        FROM (SELECT id, substring(xml_content from '{_NOTICE_TYPE}') AS nt,
+                                    substring(xml_content from '{_NOTICE_ID}') AS nid,
                                     lower(substring(xml_content from '{_BUYER_LEGAL}')) AS blt
                                FROM tenders WHERE id BETWEEN %(a)s AND %(b)s AND xml_content IS NOT NULL) x
                        JOIN tenders t ON t.id = x.id
@@ -90,7 +92,8 @@ def _passes():
                        LEFT JOIN {level_map} AS lv(code, lvl) ON lv.code = x.blt
                       WHERE x.nt IS NOT NULL
                         AND (t.notice_subtype IS DISTINCT FROM x.nt OR t.form_type IS DISTINCT FROM coalesce(m.ft, t.form_type)
-                             OR t.buyer_legal_type IS DISTINCT FROM x.blt OR t.buyer_level IS DISTINCT FROM lv.lvl)"""
+                             OR t.buyer_legal_type IS DISTINCT FROM x.blt OR t.buyer_level IS DISTINCT FROM lv.lvl
+                             OR (x.nid IS NOT NULL AND t.notice_id IS DISTINCT FROM x.nid))"""
     lots_src = """SELECT id, sum((l->>'estimated_value')::float8) AS total, min(coalesce(l->>'currency', 'EUR')) AS cur
                     FROM tenders, jsonb_array_elements(lots) AS l
                    WHERE id BETWEEN %(a)s AND %(b)s AND estimated_value IS NULL AND jsonb_typeof(lots) = 'array'
@@ -103,7 +106,8 @@ def _passes():
               WHERE t.id = s.id AND s.cur IS NOT NULL AND s.old IS DISTINCT FROM s.cur""",
          f"SELECT count(*) FROM ({currency_src}) s WHERE s.cur IS NOT NULL AND s.old IS DISTINCT FROM s.cur"),
         ("labels", False,
-         f"""UPDATE tenders t SET notice_subtype = s.nt, form_type = s.ft, buyer_legal_type = s.blt, buyer_level = s.lvl
+         f"""UPDATE tenders t SET notice_subtype = s.nt, form_type = s.ft, buyer_legal_type = s.blt, buyer_level = s.lvl,
+                                     notice_id = coalesce(s.nid, t.notice_id)
                FROM ({labels_src}) s WHERE t.id = s.id""",
          f"SELECT count(*) FROM ({labels_src}) s"),
         ("lot_values", True,

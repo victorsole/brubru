@@ -359,7 +359,12 @@ class EFormsParser:
     def _extract_identifiers(self, root: ET.Element) -> Dict[str, Any]:
         """Extract notice identifiers"""
         return {
-            "notice_id": self._find_text(root, ".//cbc:ID"),
+            # The notice's own id (BT-701): the cbc:ID whose scheme is notice-id, else the root's
+            # own cbc:ID. Never a nested one: the first cbc:ID in the document is usually an
+            # organisation ("ORG-0001"), which was stored as notice_id until 20 Oct 2026.
+            "notice_id": (next((e.text.strip() for e in root.iter(f"{{{EFORMS_NS['cbc']}}}ID")
+                                if e.get("schemeName") == "notice-id" and e.text), None)
+                          or self._find_text(root, "cbc:ID")),
             "uuid": self._find_text(root, ".//cbc:UUID"),
             "issue_date": self._find_text(root, ".//cbc:IssueDate"),
             "issue_time": self._find_text(root, ".//cbc:IssueTime"),

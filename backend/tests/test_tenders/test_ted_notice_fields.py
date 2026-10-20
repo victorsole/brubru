@@ -60,6 +60,8 @@ def test_the_daily_import_stores_them(monkeypatch):
     assert (t.estimated_value, t.estimated_value_currency) == (10_000_000, "SEK")
     assert (t.form_type, t.notice_subtype) == ("competition", "cn-standard")
     assert (t.buyer_legal_type, t.buyer_level) == ("la", "local")
+    # The notice's own id (cbc:ID schemeName="notice-id"), not its first cbc:ID ("ORG-0001").
+    assert t.notice_id == "5bcd089d-3060-4868-84f4-6d2cdef05576"
 
 
 def test_the_api_serves_and_filters_them():

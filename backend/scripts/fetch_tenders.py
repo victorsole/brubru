@@ -443,7 +443,7 @@ class TenderFetcher:
         # Build tender from API data + parsed XML
         tender = Tender(
             publication_number=publication_number,
-            notice_id=notice.get("noticeId"),
+            notice_id=parsed_data.get("notice_id") or notice.get("noticeId"),
             title=parsed_data.get("title") or title or "",
             description=parsed_data.get("description"),
             official_name=parsed_data.get("official_name") or official_name,
