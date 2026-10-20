@@ -191,13 +191,16 @@ async def list_intl_cooperation(
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
     where = [_BASE.replace("FROM economy_items WHERE ", "")]
     params: dict = {"limit": limit, "offset": (page - 1) * limit}
+    # The programme is matched on `summary` ("name | amount | programme | country"), which has a
+    # trigram index, not on body_txt: an ILIKE over 188,187 bodies made a 10-item page take 70-77 s
+    # (20 Oct 2026). Same rows: 2,732 of 20,000 sampled matched either way, none disagreed.
     if programme:
         if programme not in _PROGRAMMES:
             raise HTTPException(status_code=400, detail=f"programme must be one of {sorted(_PROGRAMMES)}")
-        where.append("body_txt ILIKE :prog")
+        where.append("summary ILIKE :prog")
         params["prog"] = f"%{_PROGRAMMES[programme][0]}%"
     else:
-        where.append("(" + " OR ".join(f"body_txt ILIKE :f{i}" for i in range(len(_ALL_FRAGMENTS))) + ")")
+        where.append("(" + " OR ".join(f"summary ILIKE :f{i}" for i in range(len(_ALL_FRAGMENTS))) + ")")
         for i, frag in enumerate(_ALL_FRAGMENTS):
             params[f"f{i}"] = f"%{frag}%"
     if funding_type:

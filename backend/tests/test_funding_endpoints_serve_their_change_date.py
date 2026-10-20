@@ -23,10 +23,20 @@ from core.database import get_db  # noqa: E402
 CHANGED = datetime(2026, 10, 17, 22, 0, tzinfo=timezone.utc)
 
 
+class _Row(dict):
+    """A result row read either way: r["col"], r.col, r._mapping."""
+    __getattr__ = dict.__getitem__
+
+    @property
+    def _mapping(self):
+        return self
+
+
 class _Rows:
-    def __init__(self, rows): self.rows = rows
+    def __init__(self, rows): self.rows = [_Row(r) for r in rows]
     def mappings(self): return self
     def all(self): return self.rows
+    def fetchall(self): return self.rows
     def scalar(self): return len(self.rows)
 
 
@@ -98,3 +108,17 @@ def test_funded_projects_and_opportunities_map_their_change_column():
     for fn in (fc.list_funded_projects, inf.list_funding_opportunities):
         params = inspect.signature(fn).parameters
         assert "updated_from" in params and "updated_to" in params
+
+
+def test_international_cooperation_matches_programmes_on_the_indexed_summary():
+    # 20 Oct 2026: an ILIKE over 188,187 bodies made a 10-item page take 70-77 s.
+    from api.v2.funding import international_cooperation as ic
+    row = {"id": 1, "title": "MINISTRY OF FINANCE", "summary": "MINISTRY | EUR 1 | Neighbourhood, Development and International Cooperation | Ukraine",
+           "public_url": "https://ec.europa.eu/budget/financial-transparency-system/index.html#2025-x",
+           "body_txt": "Beneficiary: MINISTRY\nProgramme: Neighbourhood, Development and International Cooperation\nYear: 2025",
+           "body_html": None, "document_date": None, "creation_date": CHANGED, "updated_at": CHANGED, "source_kind": "fts"}
+    db = _Db(row)
+    r = _client(ic.router, db).get("/api/v2/funding/international-cooperation", params={"programme": "ndici", "limit": 5})
+    assert r.status_code == 200, r.text
+    sql = db.sql[-1][0]
+    assert "summary ILIKE :prog" in sql and "body_txt ILIKE :prog" not in sql
