@@ -45,11 +45,22 @@ turned a run red every day for three weeks: 17 of the 54 "Deploy Crashed" mails 
 6-13 October. So the FIRST refusal of an item is `failed`, and a run that refuses only
 items the previous row already named is `degraded`: still in the ledger and in
 /api/sync/health, no longer an alarm. A new item in the list is a failure again.
+
+Another website's page is a warning (20 October 2026)
+-----------------------------------------------------
+EDPS's news listing linked a Maastricht University event page that prints no date. Refusing
+it was right, but it was recorded `failed` and turned the cron red on 19 Oct: a page on
+another website is not the source's own news, and nothing we fix on our side can date it.
+A refused item whose host differs from the hosts of its own listing (`mark_off_site`) is
+named in the record like any other, and a run whose new refusals are all such pages is
+`degraded`.
 """
 from __future__ import annotations
 
 import sys
+from collections import Counter
 from typing import Iterable, List, Tuple
+from urllib.parse import urlsplit
 
 from sqlalchemy import text
 
@@ -88,7 +99,30 @@ def date_new_items(db, items: Iterable[dict], *, fetcher=None) -> Tuple[List[dic
         else:
             it["undated_reason"] = why
             refused.append(it)
+    mark_off_site(refused, [i.get("source_url") or "" for i in items])
     return keep, refused
+
+
+def _host(url: str) -> str:
+    host = (urlsplit(url or "").hostname or "").lower()
+    return host[4:] if host.startswith("www.") else host
+
+
+def mark_off_site(refused: List[dict], listed_urls: Iterable[str]) -> None:
+    """Set `off_site` on refused items whose page is on another website than their listing.
+
+    The listing's own hosts are its most common one and any host holding two or more of
+    its items. With nothing to compare (one item, every host different) nothing is marked:
+    unproven means it stays a failure."""
+    counts = Counter(h for h in (_host(u) for u in listed_urls) if h)
+    if not counts:
+        return
+    top = max(counts.values())
+    own = {h for h, n in counts.items() if n == top or n >= 2}
+    for it in refused:
+        h = _host(it.get("source_url") or "")
+        if h and h not in own:
+            it["off_site"] = True
 
 
 def _already_reported(db, source_key: str, refused: List[dict]) -> bool:
@@ -116,15 +150,16 @@ def _already_reported(db, source_key: str, refused: List[dict]) -> bool:
 def record_refusals(db, writer_key: str, refused: List[dict]) -> None:
     """Write one ledger row naming every refused item, and say it on stderr.
 
-    `failed` the first time an item is refused, `degraded` while the same items are
-    refused again. Call once at the END of a run, after the writer's own commits:
-    record_run commits, and calling it mid-source would commit that source's
-    half-written transaction.
+    `failed` the first time an item of the source's own site is refused, `degraded` while
+    the same items are refused again and when every refused item is on another website.
+    Call once at the END of a run, after the writer's own commits: record_run commits, and
+    calling it mid-source would commit that source's half-written transaction.
     """
     if not refused:
         return
     lines = [f"{i.get('source_key') or i.get('institution') or '?'}  "
-             f"{i.get('undated_reason')}  {i.get('source_url')}"
+             f"{i.get('undated_reason')}{' (another website)' if i.get('off_site') else ''}  "
+             f"{i.get('source_url')}"
              for i in refused[:_MAX_LISTED]]
     more = len(refused) - len(lines)
     msg = (f"{len(refused)} new news item(s) NOT written: no publication date on the "
@@ -132,5 +167,6 @@ def record_refusals(db, writer_key: str, refused: List[dict]) -> None:
            + (f"\n...and {more} more" if more > 0 else ""))
     print(f"[{writer_key}] REFUSED undated items:\n{msg}", file=sys.stderr)
     key = f"{writer_key}{REFUSAL_SOURCE_SUFFIX}"
-    status = "degraded" if _already_reported(db, key, refused) else "failed"
+    own_site = [i for i in refused if not i.get("off_site")]
+    status = "degraded" if not own_site or _already_reported(db, key, own_site) else "failed"
     record_run(db, source_key=key, tier=None, status=status, items_added=0, error=msg)

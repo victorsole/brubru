@@ -206,3 +206,67 @@ def test_economy_guard_makes_no_query_when_nothing_is_undated(monkeypatch):
     monkeypatch.setattr(se, "_UNDATED_REFUSED", [])
     by_url = {("ecb", "news", "https://e/a"): SimpleNamespace(document_date=datetime(2026, 9, 1, tzinfo=timezone.utc))}
     assert se._refuse_undated_new_news(by_url, existing_fn=_never, resolve=_never) == []
+
+
+# --- another website's page is a warning (20 Oct 2026) ------------------------
+
+EDPS_EVENT = "https://www.maastrichtuniversity.nl/events/ecpc-10th-anniversary-conference"
+
+
+def test_a_refused_page_on_another_website_is_a_warning_not_a_failure(monkeypatch):
+    # 19 Oct 2026: EDPS's news listing linked a Maastricht University event page with no
+    # date. Refusing it was right; recording it `failed` turned the cron red.
+    import scripts.sync_economy as se
+    monkeypatch.setattr(se, "_UNDATED_REFUSED", [])
+    when = datetime(2026, 10, 15, tzinfo=timezone.utc)
+    by_url = {("edps", "news", f"https://www.edps.europa.eu/press-publications/press-news/news/2026/n{n}_en"):
+              SimpleNamespace(document_date=when) for n in range(9)}
+    by_url[("edps", "news", EDPS_EVENT)] = SimpleNamespace(document_date=None)
+    refused = se._refuse_undated_new_news(by_url, existing_fn=lambda keys: set(),
+                                          resolve=lambda url: (None, "no_carrier"))
+    assert refused == [{"source_key": "edps/news", "undated_reason": "no_carrier",
+                        "source_url": EDPS_EVENT, "off_site": True}]
+    status, text_ = _recorded_status(monkeypatch, _Ledger(None), refused)
+    assert status == "degraded"
+    assert EDPS_EVENT in text_ and "(another website)" in text_
+
+
+def test_a_refused_page_on_the_sources_own_site_is_still_a_failure(monkeypatch):
+    import scripts.sync_economy as se
+    monkeypatch.setattr(se, "_UNDATED_REFUSED", [])
+    own = "https://www.clean-aviation.eu/discover-our-highlights-2025-2026-0"
+    by_url = {("aviation", "news", f"https://www.clean-aviation.eu/news-{n}"):
+              SimpleNamespace(document_date=datetime(2026, 10, 1, tzinfo=timezone.utc)) for n in range(5)}
+    by_url[("aviation", "news", own)] = SimpleNamespace(document_date=None)
+    refused = se._refuse_undated_new_news(by_url, existing_fn=lambda keys: set(),
+                                          resolve=lambda url: (None, "no_carrier"))
+    assert "off_site" not in refused[0]
+    assert _recorded_status(monkeypatch, _Ledger(None), refused)[0] == "failed"
+
+
+def test_an_own_site_item_among_off_site_ones_keeps_the_run_a_failure(monkeypatch):
+    refused = [dict(_item("a", url=EDPS_EVENT), undated_reason="no_carrier", off_site=True),
+               dict(_item("b", url="https://www.edps.europa.eu/news/b"), undated_reason="no_carrier")]
+    assert _recorded_status(monkeypatch, _Ledger(None), refused)[0] == "failed"
+    # Once the own-site item was named, the same pair is a standing gap.
+    _, text_ = _recorded_status(monkeypatch, _Ledger(None), refused)
+    assert _recorded_status(monkeypatch, _Ledger(text_), refused)[0] == "degraded"
+
+
+def test_nothing_is_marked_off_site_without_a_listing_to_compare():
+    lone = [{"source_url": EDPS_EVENT}]
+    write_guard.mark_off_site(lone, [EDPS_EVENT])
+    assert "off_site" not in lone[0]
+    two_hosts = [{"source_url": EDPS_EVENT}]
+    write_guard.mark_off_site(two_hosts, [EDPS_EVENT, "https://www.edps.europa.eu/news/x"])
+    assert "off_site" not in two_hosts[0]   # one item each: no host is the listing's own
+
+
+def test_the_news_writers_mark_off_site_pages_too(monkeypatch):
+    items = [_item(f"k{n}", url=f"https://commission.europa.eu/news/{n}") for n in range(4)]
+    items.append(_item("ext", url=EDPS_EVENT))
+    monkeypatch.setattr(write_guard, "resolve_item_date", lambda url, fetcher=None: (None, "no_carrier"))
+    _, refused = date_new_items(_Db(set()), items)
+    by_url = {i["source_url"]: i for i in refused}
+    assert by_url[EDPS_EVENT].get("off_site") is True
+    assert "off_site" not in by_url["https://commission.europa.eu/news/0"]

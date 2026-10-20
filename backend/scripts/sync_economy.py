@@ -683,6 +683,7 @@ def _refuse_undated_new_news(by_url: dict, *, existing_fn=_existing_urls, resolv
         return []
     if resolve is None:
         from services.news.item_date import resolve_item_date as resolve
+    listed = [k[2] for k in by_url]   # before refusals are popped: the listing's own hosts
     existing = existing_fn(undated)
     refused = []
     for k in undated:
@@ -695,6 +696,8 @@ def _refuse_undated_new_news(by_url: dict, *, existing_fn=_existing_urls, resolv
             by_url.pop(k)
             refused.append({"source_key": f"{k[0]}/{k[1]}", "undated_reason": why,
                             "source_url": k[2]})
+    from services.news.write_guard import mark_off_site
+    mark_off_site(refused, listed)
     _UNDATED_REFUSED.extend(refused)
     return refused
 
