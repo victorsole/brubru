@@ -102,11 +102,22 @@ def compose_body(fund: str, name: str, m: dict) -> tuple[str, str]:
     return txt, html
 
 
+def _ms_key(ms):
+    """A Member State code, or TOTAL for the source's EU-wide total row, which it labels with the
+    day it was computed ("TOTAL (20/10/26)"): keyed on that label, it was a new row every run."""
+    ms = (ms or "").strip()
+    return "TOTAL" if ms.upper().startswith("TOTAL") else ms
+
+
 def upsert(db: ChunkedDb, fund: str) -> int:
     dataset, name, slug = FUNDS[fund]
     public_url = f"https://cohesiondata.ec.europa.eu/funds/{slug}/21-27"
     rows = fetch(dataset)
-    db.execute("DELETE FROM eu_cap_payments WHERE fund = %s", (fund,))
+    # Upsert on (fund, ms), then drop the Member States the source no longer lists (20 Oct
+    # 2026, migration 307): deleting and re-inserting the fund each run gave new ids every week
+    # and made every row read "changed". The source has no per-country page: the fund's page.
+    db.execute("SELECT now()")
+    started = db.cur.fetchone()[0]
     for row in rows:
         m = _map_eagf(row) if fund == "EAGF" else _map_eafrd(row)
         bt, bh = compose_body(fund, name, m)
@@ -120,14 +131,23 @@ def upsert(db: ChunkedDb, fund: str) -> int:
               (%(fund)s,%(ms)s,%(plan)s,%(npf)s,%(nip)s,%(total)s,%(rate)s,
                %(y23)s,%(y24)s,%(y25)s,%(y26)s,%(y27)s,
                %(url)s,%(bt)s,%(bh)s,'composed',%(ds)s,%(raw)s)
+            ON CONFLICT (fund, ms) DO UPDATE SET
+              planned_eu_amount = EXCLUDED.planned_eu_amount, net_pre_financing = EXCLUDED.net_pre_financing,
+              net_interim_payments = EXCLUDED.net_interim_payments, total_eur = EXCLUDED.total_eur,
+              payment_rate = EXCLUDED.payment_rate, fy_2023 = EXCLUDED.fy_2023, fy_2024 = EXCLUDED.fy_2024,
+              fy_2025 = EXCLUDED.fy_2025, fy_2026 = EXCLUDED.fy_2026, fy_2027 = EXCLUDED.fy_2027,
+              public_url = EXCLUDED.public_url, body_txt = EXCLUDED.body_txt, body_html = EXCLUDED.body_html,
+              body_source = EXCLUDED.body_source, source_dataset = EXCLUDED.source_dataset,
+              raw = EXCLUDED.raw, fetched_at = now()
             """,
-            {"fund": fund, "ms": m["ms"], "plan": m["planned_eu_amount"],
+            {"fund": fund, "ms": _ms_key(m["ms"]), "plan": m["planned_eu_amount"],
              "npf": m["net_pre_financing"], "nip": m["net_interim_payments"],
              "total": m["total_eur"], "rate": m["payment_rate"],
              "y23": m["fy_2023"], "y24": m["fy_2024"], "y25": m["fy_2025"],
              "y26": m["fy_2026"], "y27": m["fy_2027"],
              "url": public_url, "bt": bt, "bh": bh, "ds": dataset, "raw": Json(row)},
         )
+    db.execute("DELETE FROM eu_cap_payments WHERE fund = %s AND fetched_at < %s", (fund, started))
     return len(rows)
 
 

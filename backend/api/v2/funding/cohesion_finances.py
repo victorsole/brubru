@@ -34,7 +34,7 @@ router = APIRouter()
 
 class _DataPoints(BaseModel):
     """The 5 mandatory Brubru datapoints — present even when null."""
-    public_url: Optional[str] = Field(None, description="Canonical URL of the fund's Cohesion Open Data page.")
+    public_url: Optional[str] = Field(None, description="The row's page on Cohesion Open Data: its programme's page (/programmes/<CCI>) for cohesion finances and outcomes; the fund's page for CAP payments and the Solidarity Fund, whose source publishes no page per country or case.")
     body_txt: Optional[str] = Field(None, description="Plain-text body (full on detail; null on list).")
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
     document_date: Optional[datetime] = Field(None, description="The programme's status / adoption date.")

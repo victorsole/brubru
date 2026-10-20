@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from urllib import parse as uparse
@@ -66,7 +67,11 @@ def _fmt(v):
     return f"{n:,.0f}" if n == int(n) else f"{n:,.2f}"
 
 
-def _public_url(fund: str) -> str:
+def _public_url(fund: str, cci: str | None = None) -> str:
+    """The programme's own page on Cohesion Open Data (/programmes/<CCI>), else the fund's
+    page; every row of a fund linked the fund's page until 20 Oct 2026."""
+    if cci and re.match(r"^20\d{2}[A-Z]{2}\d{2}[A-Z]{4}\d{3}$", cci):
+        return f"https://cohesiondata.ec.europa.eu/programmes/{cci}"
     slug = FUND_PAGE.get(fund)
     return (f"https://cohesiondata.ec.europa.eu/funds/{slug}/21-27" if slug
             else f"https://cohesiondata.ec.europa.eu/d/{DATASET}")
@@ -157,8 +162,9 @@ def fetch_fund(fund: str) -> list[dict]:
     return rows
 
 
-def _row_tuple(fund: str, row: dict, public_url: str) -> tuple:
+def _row_tuple(fund: str, row: dict) -> tuple:
     body_txt, body_html = compose_body(fund, row)
+    public_url = _public_url(fund, row.get("cci"))
     return (
         fund, row.get("fund_family"), row.get("ms"), row.get("ms_name"),
         row.get("cci"), row.get("programme_short_title"), row.get("programme_status"),
@@ -172,20 +178,35 @@ def _row_tuple(fund: str, row: dict, public_url: str) -> tuple:
         _num(row.get("target_value_2029")), _num(row.get("decided_value")),
         _num(row.get("implemented_value")), row.get("tod_cycle"), DATASET, Json(row),
         public_url, body_txt, body_html, "composed", _date(row.get("programme_adoption_date")),
+        Json(row),   # again, for row_key = md5(raw::text), computed by Postgres as in 307
     )
 
 
 def upsert_fund(db: ChunkedDb, fund: str, rows: list[dict]) -> None:
-    db.execute("DELETE FROM eu_cohesion_outcomes WHERE fund = %s AND source_dataset = %s",
-               (fund, DATASET))
+    """Upsert on the row's content key, then drop the rows the source no longer lists (20 Oct
+    2026, migration 307). It deleted the fund and inserted it again every week: new ids each
+    run, creation_date = the last run, and every row "changed" for a partner syncing by date.
+    No set of served columns identifies a row (the source differs in fields Brubru does not
+    keep), so the key is md5 of the source record: an unchanged record keeps its row, id and
+    dates; a changed one arrives as a new row and the old one is removed."""
+    db.execute("SELECT now()")
+    started = db.cur.fetchone()[0]
+    unique: dict[str, dict] = {}
+    for r in rows:   # one statement cannot update the same row twice: drop exact repeats
+        unique.setdefault(json.dumps(r, sort_keys=True), r)
     cols_sql = ", ".join(INSERT_COLS)
-    public_url = _public_url(fund)
-    tuples = [_row_tuple(fund, r, public_url) for r in rows]
+    tuples = [_row_tuple(fund, r) for r in unique.values()]
+    template = "(" + ", ".join(["%s"] * len(INSERT_COLS)) + ", md5(%s::jsonb::text))"
     execute_values(
         db.cur,
-        f"INSERT INTO eu_cohesion_outcomes ({cols_sql}) VALUES %s",
-        tuples, page_size=1000,
+        f"INSERT INTO eu_cohesion_outcomes ({cols_sql}, row_key) VALUES %s "
+        "ON CONFLICT (fund, source_dataset, row_key) DO UPDATE SET "
+        "public_url = EXCLUDED.public_url, body_txt = EXCLUDED.body_txt, "
+        "body_html = EXCLUDED.body_html, document_date = EXCLUDED.document_date, fetched_at = now()",
+        tuples, template=template, page_size=1000,
     )
+    db.execute("DELETE FROM eu_cohesion_outcomes WHERE fund = %s AND source_dataset = %s AND fetched_at < %s",
+               (fund, DATASET, started))
 
 
 # Fund codes with a live /api/v2/funding/<fund>/outcomes endpoint (BMVI skipped).

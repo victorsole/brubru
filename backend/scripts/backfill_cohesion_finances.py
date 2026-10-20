@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -55,7 +56,15 @@ def _eur(v):
     return f"EUR {n:,.0f}" if n else "n/a"
 
 
-def _public_url(fund: str) -> str:
+_CCI = re.compile(r"^20\d{2}[A-Z]{2}\d{2}[A-Z]{4}\d{3}$")
+
+
+def _public_url(fund: str, cci: str | None = None) -> str:
+    """The programme's own page on Cohesion Open Data (/programmes/<CCI>, rendered for ERDF,
+    Interreg and others on 20 Oct 2026); the fund's page when the row has no CCI. Until then
+    every row of a fund linked the fund's page."""
+    if cci and _CCI.match(cci):
+        return f"https://cohesiondata.ec.europa.eu/programmes/{cci}"
     slug = FUND_PAGE.get(fund)
     return (f"https://cohesiondata.ec.europa.eu/funds/{slug}/21-27" if slug
             else f"https://cohesiondata.ec.europa.eu/d/{DATASET}")
@@ -191,10 +200,13 @@ def fetch_interreg() -> list[dict]:
 
 
 def upsert_fund(db: ChunkedDb, fund: str, rows: list[dict], source_dataset: str = DATASET) -> None:
-    # One fund's finances come from exactly one dataset, so delete by fund.
-    db.execute("DELETE FROM eu_cohesion_finances WHERE fund = %s", (fund,))
-    public_url = _public_url(fund)
+    # Upsert on (fund, cci, category), then drop the rows the source no longer lists (20 Oct
+    # 2026, migration 307). It deleted the fund and inserted it again every week: new ids each
+    # run, creation_date = the last run, and every row "changed" for a partner syncing by date.
+    db.execute("SELECT now()")
+    started = db.cur.fetchone()[0]
     for row in rows:
+        public_url = _public_url(fund, row.get("cci"))
         vals = {c: _num(row.get(c)) for c in NUMERIC_COLS}
         body_txt, body_html = compose_body(fund, row)
         db.execute(
@@ -212,6 +224,19 @@ def upsert_fund(db: ChunkedDb, fund: str, rows: list[dict], source_dataset: str 
                %(y2021)s, %(y2022)s, %(y2023)s, %(y2024)s, %(y2025)s, %(y2026)s, %(y2027)s,
                %(tnf)s, %(tf)s, %(total)s, %(share)s, %(ds)s, %(raw)s,
                %(public_url)s, %(body_txt)s, %(body_html)s, 'composed', %(status_date)s)
+            ON CONFLICT (fund, cci, (coalesce(financial_allocation_category, ''))) DO UPDATE SET
+              ms = EXCLUDED.ms, cci_title = EXCLUDED.cci_title, dg = EXCLUDED.dg,
+              status = EXCLUDED.status, status_date = EXCLUDED.status_date, ver = EXCLUDED.ver,
+              y2021 = EXCLUDED.y2021, y2022 = EXCLUDED.y2022, y2023 = EXCLUDED.y2023,
+              y2024 = EXCLUDED.y2024, y2025 = EXCLUDED.y2025, y2026 = EXCLUDED.y2026,
+              y2027 = EXCLUDED.y2027,
+              total_non_flexible_amount = EXCLUDED.total_non_flexible_amount,
+              total_flexible_amount = EXCLUDED.total_flexible_amount, total = EXCLUDED.total,
+              share_of_fa_in_total = EXCLUDED.share_of_fa_in_total,
+              source_dataset = EXCLUDED.source_dataset, raw = EXCLUDED.raw,
+              public_url = EXCLUDED.public_url, body_txt = EXCLUDED.body_txt,
+              body_html = EXCLUDED.body_html, body_source = EXCLUDED.body_source,
+              document_date = EXCLUDED.document_date, fetched_at = now()
             """,
             {
                 "fund": fund,
@@ -232,6 +257,7 @@ def upsert_fund(db: ChunkedDb, fund: str, rows: list[dict], source_dataset: str 
                 "public_url": public_url, "body_txt": body_txt, "body_html": body_html,
             },
         )
+    db.execute("DELETE FROM eu_cohesion_finances WHERE fund = %s AND fetched_at < %s", (fund, started))
 
 
 def main() -> None:
