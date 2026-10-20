@@ -131,6 +131,25 @@ _BASE = ("FROM economy_items WHERE body_code='commission' AND item_type='funding
 # item served updated_date = null (API audit, 16 Oct 2026).
 _COLS = "id, public_url, body_txt, body_html, document_date, creation_date, updated_at"
 
+# The page itself is an index range (8 ms), but its exact total reads every matching award's
+# heap page: 21,224 rows, 15,000 blocks, 4.6 s (20 Oct 2026). The awards change when the yearly
+# FTS file is re-read, so a total is kept for 15 minutes per filter combination.
+_TOTALS: dict = {}
+_TOTAL_TTL_S = 900
+
+
+def _cached_total(db, clause: str, params: dict) -> int:
+    import time
+    key = (clause, tuple(sorted((k, str(v)) for k, v in params.items() if k not in ("limit", "offset"))))
+    hit = _TOTALS.get(key)
+    if hit and time.monotonic() - hit[0] < _TOTAL_TTL_S:
+        return hit[1]
+    total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+    if len(_TOTALS) > 512:
+        _TOTALS.clear()
+    _TOTALS[key] = (time.monotonic(), total)
+    return total
+
 _DESC = """**What it does**
 The award (recipient) side of **EU international cooperation** — who received EU money under the three external-action instruments, parsed into structured fields:
 - **NDICI - Global Europe** (`programme=ndici`) — ~11.9k awards
@@ -212,7 +231,7 @@ async def list_intl_cooperation(
     if q:
         where.append("(title ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
     clause = " AND ".join(where)
-    total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+    total = _cached_total(db, clause, params)
     rows = db.execute(
         # body_txt is parsed into the award fields on every item; body_html is read only when served
         text(f"SELECT {_COLS if include_body else _COLS.replace('body_html', 'NULL::text AS body_html')} FROM economy_items WHERE {clause} "

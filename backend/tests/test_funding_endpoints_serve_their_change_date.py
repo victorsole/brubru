@@ -122,3 +122,15 @@ def test_international_cooperation_matches_programmes_on_the_indexed_summary():
     assert r.status_code == 200, r.text
     sql = db.sql[-1][0]
     assert "summary ILIKE :prog" in sql and "body_txt ILIKE :prog" not in sql
+
+
+def test_international_cooperation_counts_once_per_window():
+    from api.v2.funding import international_cooperation as ic
+    ic._TOTALS.clear()
+    row = {"id": 1, "title": "A", "summary": "A | Humanitarian Aid (HUMA)", "public_url": "https://x", "body_txt": "Beneficiary: A",
+           "body_html": None, "document_date": None, "creation_date": CHANGED, "updated_at": CHANGED, "source_kind": "fts"}
+    db = _Db(row)
+    client = _client(ic.router, db)
+    for page in (1, 2):
+        assert client.get("/api/v2/funding/international-cooperation", params={"programme": "humanitarian", "page": page}).status_code == 200
+    assert sum(1 for sql, _ in db.sql if sql.startswith("SELECT count(*)")) == 1
