@@ -2,11 +2,14 @@
 """Build the LEG_2026-10 summary tables: one row per OJ publication, ordered by CELEX.
 
 Outputs (CSV UTF-8 with BOM, plus one Excel) in --out:
-  leg_2026-10_table.csv     8 columns in Victor's order, then extras (base_celex, date, in_force, eli, ...)
+  leg_2026-10_table.csv     8 columns in Victor's order, then extras (base_celex, date, in_force, eli, ..., source)
   leg_2026-10_eurovoc.csv   one row per (act, EuroVoc concept): label, microthesaurus, domain
   leg_2026-10_table.xlsx    Read me (method check), Table, EuroVoc, Statistics (live formulas)
   aliases.csv               INPUT: celex, alias, acronym, source. Edit it and rebuild; seeded once
                             from legislation_acronyms.json (entries with a full_name only).
+
+The dump is the 11 Oct 2026 export plus the OJ L publications added daily since by update_leg_from_oj.py;
+`source` says which (a folder added daily carries brubru_source.json).
 
 Every value is read from the dump itself (`tree_non_inferred.rdf` of each UUID folder, plus the
 Formex title for the few acts whose RDF has no English title). No LLM, no network except the
@@ -43,6 +46,8 @@ from backend.services.celex_types import CELEX_RE, CORR_RE, TYPE_LABELS, base_of
 RDF = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
 CDM = "{http://publications.europa.eu/ontology/cdm#}"
 WRAPPERS = (".doc.xml", ".toc.xml", ".doc.fmx.xml", ".toc.fmx.xml")
+SOURCE_FILE = "brubru_source.json"  # written by update_leg_from_oj.py in every folder it adds
+EXPORT_SOURCE = "LEG_2026-10 export"
 CELLAR = "https://publications.europa.eu/webapi/rdf/sparql"
 
 ELI_PREFIX = {"R": ("reg", "reg_impl", "reg_del"), "L": ("dir", "dir_impl", "dir_del"),
@@ -52,7 +57,7 @@ SUFFIX_RE = re.compile(r"(?:\(\d{2}\))*(?:R\(\d{2}\))*$")  # used by pick_eli on
 TABLE_HEADERS = ["CELEX", "Sector", "Year", "Type of document", "Number of document", "Title of document",
                  "Alias of document", "Acronym of the alias"]
 EXTRA_HEADERS = ["base_celex", "date_document", "in_force", "eli", "author", "eurovoc_count",
-                 "eurovoc_domains", "title_source", "kind_sheet", "eurovoc_microthesauri", "eurovoc_concepts", "has_text", "title_other_language"]
+                 "eurovoc_domains", "title_source", "kind_sheet", "eurovoc_microthesauri", "eurovoc_concepts", "has_text", "title_other_language", "source"]
 EV_HEADERS = ["celex", "concept_id", "concept_uri", "label_en", "microthesaurus", "domain"]
 
 
@@ -86,7 +91,6 @@ def parse_folder(args):
             if code in others:
                 title_other = f"{code}: {others[code]}"
                 break
-    source = "rdf" if title else ""
     title_formex = ""
     has_text = (base / "fmx4").is_dir()
     if not title and has_text:  # last resort when neither the RDF nor Cellar has it: the TITLE of the first Formex part that has one
@@ -99,6 +103,10 @@ def parse_folder(args):
                 title_formex = " ".join(re.sub(r"<[^>]+>", " ", m.group(1)).split())
                 break
     celexes = lit("resource_legal_id_celex")
+    marker = base / SOURCE_FILE
+    source = EXPORT_SOURCE
+    if marker.exists():
+        source = f"OJ daily {json.loads(marker.read_text(encoding='utf-8'))['oj_date']}"
     return {
         "folder": folder, "n_celex_literals": len(set(celexes)), "celex": celexes[0] if celexes else None,
         "sector": (lit("resource_legal_id_sector") or [None])[0],
@@ -113,7 +121,8 @@ def parse_folder(args):
         # the ELI the metadata states on the work: one per folder or none, and that publication's own (20 of 20
         # suffixed CELEX checked at Cellar, 16 Oct 2026); the regex above stops at "(" and cut 701 short
         "eli_work": sorted(set(lit("resource_legal_eli"))),
-        "title": title or "", "title_source": source, "title_formex": title_formex, "has_text": has_text, "title_other": title_other,
+        "title": title or "", "title_source": "rdf" if title else "", "title_formex": title_formex, "has_text": has_text, "title_other": title_other,
+        "source": source,
     }
 
 
@@ -342,6 +351,8 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     qs = lambda name: "'" + name.replace("'", "''") + "'"
     rng = lambda sheet, col, last: f"{qs(sheet)}!${col}$2:${col}${last}"
     T = lambda col: rng("Table", col, n + 1)
+    ISSUER_COL = col_letter(len(TABLE_HEADERS + EXTRA_HEADERS))  # kind sheets: Table's columns, then the issuer
+    SRC = col_letter((TABLE_HEADERS + EXTRA_HEADERS).index("source"))
     E = lambda col: rng("EuroVoc", col, nev + 1)
 
     # ---- Read me (written first so it is the first tab); formulas reference the later sheets
@@ -357,10 +368,11 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     py_sector = Counter(t[1] for t in table)
     rows = [
         ("LEG_2026-10: summary table by CELEX and EuroVoc", None, None, None, None, "title"),
-        (f"Built on {built_on} by backend/scripts/build_leg_table.py. Source: docs/LEG_2026-10, the Publications Office bulk export of 11 Oct 2026 (legislation in force, Formex 4 + metadata). One row = one OJ publication (one UUID folder, one CELEX). has_text = yes when the folder holds Formex text; the others (older acts, corrigenda) are described by metadata only.", None, None, None, None, "text"),
+        (f"Built on {built_on} by backend/scripts/build_leg_table.py. Source: docs/LEG_2026-10, the Publications Office bulk export of 11 Oct 2026 (legislation in force, Formex 4 + metadata), plus the OJ L publications added every day since from Cellar (column source; {qa['rows_from_oj_daily']:,} rows). One row = one OJ publication (one UUID folder, one CELEX). has_text = yes when the folder holds Formex text; the others (older acts, corrigenda) are described by metadata only.", None, None, None, None, "text"),
         ("", None, None, None, None, "text"),
         ("Method check", "Formula", "Second count", "Check", "How the second count was made. Only 'Rows in Table' and 'Rows with text' are read from disk; the others check that the sheets agree with each other. An independent audit (re-derived from the raw files) was run separately.", "header"),
-        ("Rows in Table", f"=COUNTA({T('A')})", qa["folders_in_export"], "chk", "Folders of the export, counted on disk before parsing (each holds a metadata file)", "row"),
+        ("Rows in Table", f"=COUNTA({T('A')})", qa["folders_in_export"], "chk", "Folders in docs/LEG_2026-10 (the export and the daily additions), counted on disk before parsing (each holds a metadata file)", "row"),
+        ("Rows added from the daily OJ", f"=COUNTIF({T(SRC)},\"OJ daily*\")", qa["rows_from_oj_daily"], "chk", "Folders holding brubru_source.json, counted while building", "row"),
         ("Rows with text (has_text = yes)", f"=COUNTIF({T('T')},\"yes\")", qa["folders_with_text"], "chk", "Folders holding an fmx4 directory (Formex text), counted on disk", "row"),
         ("Sector 3 rows", f"=COUNTIF({T('B')},3)", py_sector.get(3, 0), "chk", "Counted from the table rows in the builder", "row"),
         ("Regulations (R)", f"=COUNTIF({T('D')},\"R = Regulation\")", py_type.get("R = Regulation", 0), "chk", "Counted from the table rows in the builder", "row"),
@@ -395,6 +407,7 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
         ("eli", "ELI URI in the RDF", None, None, "Only the URI whose type, year and number match the act; empty when none or several match.", "row"),
         ("eurovoc_count / eurovoc_domains", "work_is_about_concept_eurovoc", None, None, "Number of EuroVoc concepts of the act and the EuroVoc domains of their microthesauri (code and name). Concept labels and microthesauri: EuroVoc 4.24 on Cellar. Detail in the EuroVoc sheet.", "row"),
         ("author", "work_created_by_agent", None, None, "Authority-table code(s) of the creating body, '|' separated.", "row"),
+        ("source", "brubru_source.json", None, None, "'LEG_2026-10 export' for the folders of the 11 Oct 2026 export; 'OJ daily YYYY-MM-DD' for a publication added by update_leg_from_oj.py, with the date of the Official Journal that published it.", "row"),
     ]
     r = 0
     idx_first = idx_last = None
@@ -442,7 +455,7 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     heads = TABLE_HEADERS + EXTRA_HEADERS
     for j, h in enumerate(heads):
         tb.write(0, j, h, head)
-    widths = [16, 7, 7, 34, 11, 110, 34, 14, 16, 12, 10, 44, 14, 13, 40, 12, 30, 60, 90, 10, 70]
+    widths = [16, 7, 7, 34, 11, 110, 34, 14, 16, 12, 10, 44, 14, 13, 40, 12, 30, 60, 90, 10, 70, 24]
     for j, w in enumerate(widths):
         tb.set_column(j, j, w)
     for i, row in enumerate(table, start=1):
@@ -528,12 +541,18 @@ def write_xlsx(path, table, ev_rows, qa, domains, built_on, kinds, meta):
     block("In force (metadata flag)", ["true", "false", "unknown"], lambda lab, rr: f"=COUNTIF({T('K')},A{rr + 1})")
     block("Title source", ["rdf", "cellar", "formex", "none"], lambda lab, rr: f"=COUNTIF({T('P')},A{rr + 1})")
     block("Has text (Formex text in the export)", ["yes", "no"], lambda lab, rr: f"=COUNTIF({T('T')},A{rr + 1})")
+    st.write(r, 0, "Source", head); st.write(r, 1, "Rows", head); st.write(r, 2, "Share", head); r += 1
+    for lab, crit in ((EXPORT_SOURCE, EXPORT_SOURCE), ("Added from the daily OJ (any date)", "OJ daily*")):
+        st.write(r, 0, lab)
+        st.write_formula(r, 1, f'=COUNTIF({T(SRC)},"{crit}")', num)
+        st.write_formula(r, 2, f"=B{r + 1}/{n}", f(num_format="0.0%")); r += 1
+    r += 1
     for name in ("Regulations", "Directives"):
         rows_ = kinds[name]
         st.write(r, 0, f"{name} sheet: who the title says adopted the act", head); st.write(r, 1, "Rows", head); st.write(r, 2, "Share", head); r += 1
         for iss in sorted({x[-1] for x in rows_}):
             st.write(r, 0, iss)
-            st.write_formula(r, 1, f"=COUNTIF({rng(name, 'V', len(rows_) + 1)},A{r + 1})", num)
+            st.write_formula(r, 1, f"=COUNTIF({rng(name, ISSUER_COL, len(rows_) + 1)},A{r + 1})", num)
             st.write_formula(r, 2, f"=B{r + 1}/{len(rows_)}", f(num_format="0.0%")); r += 1
         r += 1
     st.write(r, 0, "EuroVoc", head); st.write(r, 1, "Value", head); r += 1
@@ -628,7 +647,7 @@ def main():
                       len(r["eurovoc"]), " | ".join(domains), r["title_source"] or "none", kind_of(m["t"], r["title"], r["celex"]),
                       " | ".join(sorted({x for i in r["eurovoc"] for x in meta["mts"].get(i, [])})),
                       " | ".join(sorted(meta["concept"][i] for i in r["eurovoc"] if i in meta["concept"])),
-                      "yes" if r["has_text"] else "no", r["title_other"] if not r["title"] else ""])
+                      "yes" if r["has_text"] else "no", r["title_other"] if not r["title"] else "", r["source"]])
         for i in sorted(r["eurovoc"], key=lambda x: (meta["concept"].get(x, "~"), x)):
             mt, dom = mt_domain(i)
             ev_rows.append([r["celex"], i, f"http://eurovoc.europa.eu/{i}", meta["concept"].get(i, ""), mt, dom])
@@ -645,6 +664,8 @@ def main():
     qa["rows_with_eli"] = sum(1 for t in table if t[11])
     qa["rows_unmapped_type"] = sum(1 for t in table if "(not in the EUR-Lex table)" in t[3])
     qa["eurovoc_pairs"] = len(ev_rows)
+    qa["rows_from_export"] = sum(1 for t in table if t[21] == EXPORT_SOURCE)
+    qa["rows_from_oj_daily"] = len(table) - qa["rows_from_export"]
 
     for name, headers, rows in (("leg_2026-10_table.csv", TABLE_HEADERS + EXTRA_HEADERS, table),
                                 ("leg_2026-10_eurovoc.csv", EV_HEADERS, ev_rows)):

@@ -5,3 +5,5 @@ pytest-asyncio==0.23.3
 # fastapi 0.109 pins starlette 0.35, whose TestClient passes app= to httpx.Client;
 # httpx 0.28 removed it and every TestClient fixture fails.
 httpx<0.28
+# build_leg_table.py writes the LEG_2026-10 Excel with it (test_update_leg_from_oj.py builds one).
+XlsxWriter==3.2.9
