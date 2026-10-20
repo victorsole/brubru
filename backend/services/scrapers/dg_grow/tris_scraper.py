@@ -109,6 +109,14 @@ class TRISScraper(BaseScraper):
             rate_limit_delay=3.0,  # Conservative - EC website
             cache_ttl=3600,  # 1h cache
         )
+        # Run state that `_safe_notification` and `_via_scrapedo` read and write. Until 20 Oct
+        # 2026 it was created only by the new-notification sweep, so refresh_tris_titles.py,
+        # which calls `_safe_notification` directly, raised AttributeError on the first
+        # throttled id and failed every night from 17 Oct (cron red twice in a row).
+        self.throttled = False
+        self.budget_hit = False
+        self.uncertain_ids: List[int] = []
+        self.paid_fetches = 0
 
     async def search(self, query: str, **kwargs) -> List[Dict[str, Any]]:
         """Search technical regulation notifications."""

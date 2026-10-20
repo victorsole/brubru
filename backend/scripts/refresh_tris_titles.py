@@ -29,7 +29,7 @@ for p in (str(BACKEND.parent), str(BACKEND)):
 from sqlalchemy import create_engine, text  # noqa: E402
 from sqlalchemy.orm import Session  # noqa: E402
 
-from services.scrapers.dg_grow.tris_scraper import SECTION_HEADINGS  # noqa: E402
+from services.scrapers.dg_grow.tris_scraper import SECTION_HEADINGS, TrisRateLimited  # noqa: E402
 
 _ENGLISH = set("the of and for on to in amending amendment regulation regulations draft decree law "
                "act order rules concerning on requirements technical with by ordinance bill".split())
@@ -87,7 +87,14 @@ async def run(apply: bool, limit: int, max_seconds: int) -> int:
                 print("[INFO] time budget reached")
                 break
             nid = int(re.search(r"/notification/(\d+)", r.source_url).group(1))
-            notif = await svc.tris._safe_notification(nid)
+            try:
+                notif = await svc.tris._safe_notification(nid)
+            except TrisRateLimited:
+                # TRIS refused us and Scrape.do could not read the page either. The titles
+                # wait for the next run; refusing access is not a failure of this job.
+                print(f"[SYNC_STATUS] degraded: TRIS throttled at notification {nid} (directly and via "
+                      f"Scrape.do); read {read}, {fixed} fixed, the rest wait for the next run")
+                break
             read += 1
             if not notif or needs_title(notif.get("title")):
                 still += 1
