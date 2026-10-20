@@ -522,6 +522,29 @@ def ingest_ema_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return [it for it in _ema_all() if it.item_type == "tender"]
 
 
+# Agencies whose own procurement page gave nothing (20 Oct 2026, /api/v2/funding read: the
+# Eurofound, FRA and EU-OSHA-calls endpoints had answered total 0 since they were published)
+# while the Funding & Tenders portal holds their notices: Eurofound 10 (3 open), FRA 2 (both
+# open, though FRA's own page said "no open procedures"), EU-OSHA's calls for expression of
+# interest. Buyer ids read from SEDIA's cftPartyLegalEntityId on one notice of each.
+_FT_AGENCY_BUYER_IDS = {"eurofound": "47352392", "fra": "47352374", "eu_osha": "47352424"}
+_FT_AGENCY_CACHE: dict = {}
+
+
+def _ft_agency(body_code: str) -> list[Item]:
+    """Every portal notice of one agency, tenders and calls for expression of interest split,
+    read once per half hour (its tender and call ingestors run back to back)."""
+    import time
+    hit = _FT_AGENCY_CACHE.get(body_code)
+    if hit and time.time() - hit[0] < 1800:
+        return hit[1]
+    items = _ft_buyer_notices(body_code=body_code, buyer_id=_FT_AGENCY_BUYER_IDS[body_code],
+                              source_kind=f"{body_code}_ft_notice", now=datetime.now(timezone.utc),
+                              split_eoi=True)
+    _FT_AGENCY_CACHE[body_code] = (time.time(), items)
+    return items
+
+
 def ingest_ema_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return [it for it in _ema_all() if it.item_type == "eoi_call"]
 
@@ -1998,25 +2021,15 @@ def ingest_eige_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
 _FRA = "https://fra.europa.eu"
 
 
-def _fetch_fra_playwright(path: str) -> str:
-    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
-    with WafBrowserFetcher() as f:
-        return f.fetch(_FRA + path, strip_chrome=False).html
-
-
 def ingest_fra_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    """FRA is behind Anubis bot-challenge; Playwright clears it. The Ongoing
-    Procedures page returns 'There are no open procedures at the present
-    time.' when empty; we return []. When listings are present, parse via
-    parse_views_table with FRA's Drupal field names."""
-    html = _fetch_fra_playwright("/en/about-fra/procurement/ongoing-procedures")
-    if "no open procedures" in html.lower():
-        return []
-    return parse_views_table(
-        html, _FRA, body_code="fra", item_type="tender",
-        source_kind="fra_procurement",
-        ref_field="reference", deadline_field="closing-date", status="Open",
-    )
+    """FRA's notices on the Funding & Tenders portal, calls for expression of interest
+    included (FRA has no calls endpoint). Its own Ongoing Procedures page sits behind a bot
+    challenge and said "There are no open procedures at the present time" while the portal
+    held two open FRA tenders (20 Oct 2026); /fra-tenders had never served a row."""
+    items = _ft_agency("fra")
+    for it in items:
+        it.item_type = "tender"
+    return items
 
 
 # --- EEA — F&T-only for open calls; stub returning [] --------------------- #
@@ -2312,62 +2325,27 @@ def ingest_eu_osha_tenders(*, fetch_bodies: bool = True, max_pages: int = 4, **_
 
 
 def ingest_eu_osha_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    """Calls for expression of interest at /calls-expression-interest; layout
-    matches _parse_eu_osha_views. EU-OSHA's WAF drops raw HTTP (_fetch ->
-    RemoteDisconnected), so render via WafBrowserFetcher like ingest_eu_osha_tenders.
-    Returns [] cleanly when there are no open EOI calls."""
-    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
-    with WafBrowserFetcher() as f:
-        res = f.fetch(_EU_OSHA + "/en/about-eu-osha/procurement/calls-expression-interest",
-                      strip_chrome=False)
-    return _parse_eu_osha_views(
-        getattr(res, "html", "") or "", _EU_OSHA,
-        body_code="eu_osha", item_type="eoi_call",
-        source_kind="eu_osha_procurement",
-    )
+    """EU-OSHA's calls for expression of interest, from its notices on the Funding & Tenders
+    portal. Its own /calls-expression-interest page (behind a WAF, read through a browser)
+    gave nothing until 20 Oct 2026 while the portal listed an open call for remunerated
+    experts (procedure type 47396202)."""
+    return [it for it in _ft_agency("eu_osha") if it.item_type == "eoi_call"]
 
 
 # --- Eurofound — Playwright sub-page crawl -------------------------------- #
 _EUROFOUND = "https://www.eurofound.europa.eu"
 
 
-def _fetch_eurofound_playwright(path: str) -> str:
-    from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
-    with WafBrowserFetcher() as f:
-        return f.fetch(_EUROFOUND + path, strip_chrome=False).html
-
-
 def ingest_eurofound_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    """Eurofound rate-limits raw HTTP (429); Playwright gets through. The
-    parser mirrors the EU-OSHA views-row pattern; if Eurofound's per-tab
-    listing markup diverges, this returns [] cleanly and a follow-up pass
-    can refine the regex once row examples are captured."""
-    # Eurofound consolidated its procurement onto a single /en/about/procurement
-    # page (Aug 2026); the old /calls-tenders-140k + /calls-tenders-below-140k
-    # sub-pages 404. Returns [] cleanly when the page shows no open procedures.
-    items: list[Item] = []
-    try:
-        html = _fetch_eurofound_playwright("/en/about/procurement")
-    except Exception:
-        return []
-    items += _parse_eu_osha_views(
-        html, _EUROFOUND, body_code="eurofound", item_type="tender",
-        source_kind="eurofound_procurement",
-    )
-    return items
+    """Eurofound's notices on the Funding & Tenders portal. Its own /en/about/procurement page
+    (rate-limited, read through a browser) was parsed with EU-OSHA's markup and gave nothing
+    from August 2026 to 20 Oct; the portal holds every procedure the page links to."""
+    return [it for it in _ft_agency("eurofound") if it.item_type == "tender"]
 
 
 def ingest_eurofound_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
-    # Same consolidated /en/about/procurement page as tenders (old
-    # /calls-expression-interest sub-page 404s).
-    try:
-        html = _fetch_eurofound_playwright("/en/about/procurement")
-    except Exception:
-        return []
-    return _parse_eu_osha_views(
-        html, _EUROFOUND, body_code="eurofound", item_type="eoi_call",
-        source_kind="eurofound_procurement",
-    )
+    """Eurofound's calls for expression of interest, from the same portal reading."""
+    return [it for it in _ft_agency("eurofound") if it.item_type == "eoi_call"]
 
 
 # --- EIB — procurement via TED API v3 ------------------------------------ #

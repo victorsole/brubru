@@ -1,0 +1,42 @@
+"""Four agency endpoints answered total 0 since they were published (20 Oct 2026).
+
+/funding/eurofound-tenders, eurofound-calls, fra-tenders and eu-osha-calls: Eurofound's page was
+parsed with EU-OSHA's markup, FRA's page (behind a bot challenge) said "no open procedures" while
+the Funding & Tenders portal held two open FRA tenders, and EU-OSHA's calls page gave nothing
+while the portal listed an open call for experts. They now read the portal by buyer id, as EMA,
+EEA, EFSA, ENISA and ECDC do (Victor, 30 Sep 2026).
+"""
+import importlib
+import pathlib
+import sys
+from types import SimpleNamespace
+
+BACKEND = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BACKEND))
+ap = importlib.import_module("services.scrapers.agency_procurement")
+
+
+def _fake_portal(monkeypatch):
+    calls = []
+
+    def notices(*, body_code, buyer_id, source_kind, now, split_eoi=False):
+        calls.append((body_code, buyer_id, split_eoi))
+        return [SimpleNamespace(item_type="tender", title=f"{body_code} tender", extras={}),
+                SimpleNamespace(item_type="eoi_call", title=f"{body_code} experts", extras={})]
+    monkeypatch.setattr(ap, "_ft_buyer_notices", notices)
+    monkeypatch.setattr(ap, "_FT_AGENCY_CACHE", {})
+    return calls
+
+
+def test_each_agency_reads_its_own_buyer_id_once(monkeypatch):
+    calls = _fake_portal(monkeypatch)
+    assert [i.title for i in ap.ingest_eurofound_tenders()] == ["eurofound tender"]
+    assert [i.title for i in ap.ingest_eurofound_calls()] == ["eurofound experts"]
+    assert [i.title for i in ap.ingest_eu_osha_calls()] == ["eu_osha experts"]
+    assert calls == [("eurofound", "47352392", True), ("eu_osha", "47352424", True)]   # cached per agency
+
+
+def test_fra_serves_its_calls_for_interest_as_tenders(monkeypatch):
+    _fake_portal(monkeypatch)
+    items = ap.ingest_fra_tenders()
+    assert {i.item_type for i in items} == {"tender"} and len(items) == 2
