@@ -1,0 +1,43 @@
+-- RLS Audit Record — 2026-10-01 (monthly sweep, 1st of month, 07:00 UTC)
+-- This file is a tracking record only. No DDL is executed.
+-- Reference: memory/feedback_supabase_rls.md + CLAUDE.md learned rule
+--            "Supabase Data API grants are mandatory on new public.* tables"
+--
+-- Scope: All migrations numbered > 044 (since 044_enable_rls_post_034.sql, 30 Apr 2026)
+-- Migrations scanned: 045 through 235+ (190 files)
+-- Tables with CREATE TABLE public.*: 30
+-- Unprotected tables (missing ENABLE ROW LEVEL SECURITY): 0
+--
+-- Result: NO GAPS FOUND.
+-- Every public.* table created since migration 044 includes
+-- ALTER TABLE public.<name> ENABLE ROW LEVEL SECURITY in its own migration file.
+--
+-- Protected tables (30):
+--   050: commission_calendar_urls
+--   075: ft_programmes, ft_participants
+--   077: private_guides
+--   079: api_usage_events, api_topup_events, api_sandbox_pool
+--   083: client_submissions
+--   085: law_xref
+--   086: legissum_summaries
+--   087: proprietary_report_bodies
+--   108: sync_runs
+--   143: tender_pipeline
+--   145: eic_fund_portfolio_companies
+--   146: tender_files
+--   191: procedure_snapshots
+--   193: social_platforms, social_accounts
+--   195: social_posts
+--   209: compliance_workspaces
+--   211: password_reset_tokens
+--   218: scraper_health_state
+--   224: post_processing_deletions
+--   233: infringement_decisions, infringement_cases
+--   234: api_record_snapshots
+--   238: mcp_connections
+--   244: job_cursors
+--   251: ep_external_documents
+--   263: procurement_documents
+--
+-- Next audit: 2026-11-01 at 07:00 UTC.
+-- Verify after each new CREATE TABLE public.* migration that RLS is in the same file.
