@@ -166,6 +166,7 @@ A single `CAPPaymentItem` with the body populated, or HTTP 404 with `reason_code
         if not r:
             raise HTTPException(status_code=404, detail={"reason_code": "not_found", "message": f"No {fund_code} row with id {row_id}"})
         return _row_to_item(r, with_body=True)
+    get_cap_row.brubru_item_key = (fund_code.lower(), "cap_payment")
 
 
 # ---- Registered CAP funds (one line per fund; built one at a time) ----

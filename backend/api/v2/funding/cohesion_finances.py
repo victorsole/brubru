@@ -200,6 +200,7 @@ Same weekly sync as the list endpoint.""",
         if not r:
             raise HTTPException(status_code=404, detail={"reason_code": "not_found", "message": f"No {fund_code} row with id {row_id}"})
         return _row_to_item(r, with_body=True)
+    get_fund_row.brubru_item_key = (fund_code.lower(), "cohesion_allocation")
 
 
 # ---- Registered funds (one line per fund; built one at a time) ----

@@ -22,6 +22,7 @@ from datetime import date, datetime, time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from pydantic import Field
 from sqlalchemy import and_, false, or_
 from sqlalchemy.orm import Session
 
@@ -95,6 +96,15 @@ class EntrepreneurInstrumentItem(FtCallProposalItem):
     programme: Optional[str] = None          # HORIZON (EIC) | Single Market Programme | ...
     instrument_family: Optional[str] = None  # EIC Accelerator | EDIH | EaSI microfinance | ...
     intermediary: Optional[str] = None       # who delivers it — the point of the endpoint
+    # The call on its own endpoint; this list has no item route (none until 20 Oct 2026).
+    self: Optional[str] = Field(None, description="The call on /api/v2/funding/ft-calls-for-proposals/{topic_id}.")
+
+
+def _with_self(item: EntrepreneurInstrumentItem, base: str) -> EntrepreneurInstrumentItem:
+    from urllib.parse import quote
+    if item.topic_id:
+        item.self = f"{base}/api/v2/funding/ft-calls-for-proposals/{quote(item.topic_id, safe='')}"
+    return item
 
 
 def _to_item(r: FtCallForProposals, body_threshold: int) -> EntrepreneurInstrumentItem:
@@ -188,7 +198,7 @@ async def entrepreneur_instruments(
         .all()
     )
     return build_envelope(
-        [_to_item(r, body_threshold) for r in rows],
+        [_with_self(_to_item(r, body_threshold), str(request.base_url).rstrip("/")) for r in rows],
         total=total, page=page, limit=limit,
         op_core_title="EU entrepreneur financial instruments (intermediated)",
         op_core_type="EU funding instruments",

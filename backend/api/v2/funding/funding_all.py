@@ -13,6 +13,7 @@ from datetime import date
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from pydantic import Field
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -25,6 +26,35 @@ from ..economy_endpoints import (EconomyItem, _row_to_item, _LIST_COLS, _DETAIL_
 
 router = APIRouter()
 
+
+class FundingAllItem(EconomyItem):
+    self: Optional[str] = Field(None, description="This item on its own endpoint (e.g. /api/v2/funding/euaa-calls/123).")
+
+
+_ITEM_ROUTES: Optional[dict] = None
+
+
+def _item_routes(app) -> dict:
+    """(body_code, item_type) -> the item route that serves it, read from the live route table
+    (each detail route is tagged brubru_item_key), so a link cannot point at a route that is not
+    served. /funding/all has no item route of its own: until 20 Oct 2026 its items had no `self`."""
+    global _ITEM_ROUTES
+    if _ITEM_ROUTES is None:
+        _ITEM_ROUTES = {}
+        for r in app.routes:
+            key = getattr(getattr(r, "endpoint", None), "brubru_item_key", None)
+            if key and "GET" in (getattr(r, "methods", None) or ()):
+                _ITEM_ROUTES.setdefault(key, r.path)
+    return _ITEM_ROUTES
+
+
+def _with_self(item: EconomyItem, base: str, routes: dict) -> FundingAllItem:
+    path = routes.get((item.body_code, item.item_type))
+    link = None
+    if path and item.id is not None:
+        link = base + path.replace("{item_id}", str(item.id)).replace("{row_id}", str(item.id))
+    return FundingAllItem(**item.model_dump(), self=link)
+
 _FUNDING_TYPES = ("tender", "grant", "eoi_call", "startup_funding")
 # Plus the cohesion / structural-fund allocations (eu_cohesion_finances), unioned in.
 _ALL_TYPES = _FUNDING_TYPES + ("cohesion_allocation", "solidarity_case", "cap_payment")
@@ -33,9 +63,9 @@ _ALL_TYPES = _FUNDING_TYPES + ("cohesion_allocation", "solidarity_case", "cap_pa
 # allocations, (c) EU Solidarity Fund disaster cases, and (d) the CAP fund
 # payments (EAGF/EAFRD), all mapped to the same EconomyItem shape. The agency
 # side is pre-filtered to funding item_types; the rest are mapped on the fly.
-# updated_date: the agency side carries economy_items.updated_at (its change signal);
-# the other three tables' updated_at is a write time not yet checked as one, so they
-# serve NULL, as their own routes do (API audit, 16 Oct 2026).
+# updated_date: every side carries its table's updated_at. The cohesion, Solidarity Fund and CAP
+# tables served NULL until 20 Oct 2026, when migrations 306 and 307 made their updated_at a change
+# signal (a trigger that moves it only when a served column changes; rows kept across runs).
 _UNION_CTE_TMPL = """
 WITH all_funding AS (
     SELECT id, body_code, item_type, title, summary, public_url,
@@ -49,7 +79,7 @@ WITH all_funding AS (
              || coalesce(financial_allocation_category, '')
              || ' · total EUR ' || coalesce(round(total)::text, '0')) AS summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           NULL::timestamptz AS updated_at
+           updated_at
     FROM eu_cohesion_finances
     UNION ALL
     SELECT id, 'eusf' AS body_code, 'solidarity_case' AS item_type,
@@ -58,14 +88,14 @@ WITH all_funding AS (
              || ' · ' || coalesce(disaster_type, '')
              || ' · EUSF paid EUR ' || coalesce(round(eusf_grant_paid_meur)::text, '0') || 'm') AS summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           NULL::timestamptz AS updated_at
+           updated_at
     FROM eu_solidarity_fund
     UNION ALL
     SELECT id, lower(fund) AS body_code, 'cap_payment' AS item_type,
            (upper(fund) || ' — ' || coalesce(ms, '')) AS title,
            (coalesce(ms, '') || ' · total EUR ' || coalesce(round(total_eur)::text, '0')) AS summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           NULL::timestamptz AS updated_at
+           updated_at
     FROM eu_cap_payments
 )
 """
@@ -99,7 +129,7 @@ A paginated list; each item carries `body_code` (the agency or fund), `item_type
 Live from the database; agency items refresh as their pages are re-synced; cohesion allocations refresh weekly (Sunday 05:00 UTC)."""
 
 
-@router.get("/all", response_model=PaginatedResponse[EconomyItem], tags=["v2-funding"],
+@router.get("/all", response_model=PaginatedResponse[FundingAllItem], tags=["v2-funding"],
             summary="All EU funding — agency tenders/grants/calls + cohesion-fund allocations, every body",
             description=_DESC)
 async def funding_all(
@@ -153,4 +183,6 @@ async def funding_all(
         text(f"{_union_cte(include_body)} SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM all_funding{clause} "
              f"ORDER BY {_ORDER_SQL[order]}, item_type LIMIT :limit OFFSET :offset"), params
     ).fetchall()
-    return build_envelope([_row_to_item(r, with_body=include_body) for r in rows], total, page, limit)
+    base, routes = str(request.base_url).rstrip("/"), _item_routes(request.app)
+    return build_envelope([_with_self(_row_to_item(r, with_body=include_body), base, routes) for r in rows],
+                          total, page, limit)

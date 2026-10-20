@@ -322,6 +322,9 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         if item is None:
             raise HTTPException(status_code=404, detail=f"No {body_name} {noun_singular} with id {item_id}")
         return item
+    # What this item route serves, so an aggregate (/funding/all) can point each of its rows at
+    # its own route without a second copy of the slug table (core.self_links.item_route_for).
+    detail_ep.brubru_item_key = (body_code, item_type)
 
     router.add_api_route(
         path_hint, list_ep, methods=["GET"],
