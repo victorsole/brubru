@@ -88,15 +88,18 @@ def test_an_fts_row_starting_in_the_future_keeps_its_start_in_the_body(monkeypat
     from openpyxl import Workbook
     cf = importlib.import_module("services.scrapers.commission_funding")
     wb = Workbook(); ws = wb.active
-    ws.append(["Name of beneficiary", "Commitment total amount", "Programme name", "Project start date", "Beneficiary country"])
-    ws.append(["MESSETURM PROPCO", 31678, "DA/JU/EUI", "2028-04-01", "Luxembourg"])
-    ws.append(["UNIVERSITA DI ROMA", 1000, "Horizon Europe", "2025-01-01", "Italy"])
+    ws.append(["Name of beneficiary", "Commitment total amount", "Programme name", "Project start date",
+               "Beneficiary country", "Type of contract*"])
+    ws.append(["MESSETURM PROPCO", 31678, "DA/JU/EUI", "2028-04-01", "Luxembourg", "Building rental"])
+    ws.append(["UNIVERSITA DI ROMA", 1000, "Horizon Europe", "2025-01-01", "Italy", "Action Grant"])
     buf = io.BytesIO(); wb.save(buf)
     monkeypatch.setattr(cf.requests, "get", lambda *a, **k: SimpleNamespace(content=buf.getvalue()))
     items = {i.title: i for i in cf.ingest_eu_funding_recipients(year=2025)}
     future, past = items["MESSETURM PROPCO"], items["UNIVERSITA DI ROMA"]
     assert future.document_date is None and "Project start: 2028-04-01" in future.body_txt
     assert past.document_date.date() == date(2025, 1, 1)
+    # "Funding type" is "Type of contract*" in the files re-saved in Sep/Oct 2026.
+    assert "Funding type: Action Grant" in past.body_txt
 
 
 def test_a_cancelled_topic_is_closed_whatever_the_portal_status():

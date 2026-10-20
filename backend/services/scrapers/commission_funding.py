@@ -84,7 +84,10 @@ def ingest_eu_funding_recipients(*, fetch_bodies: bool = True, year: int | None 
     c_prog = _col(idx, "Programme name")
     c_subj = _col(idx, "Subject of grant")
     c_cty = _col(idx, "Beneficiary country")
-    c_fund = _col(idx, "Funding type")
+    # "Funding type" became "Type of contract*" (Action Grant, Contribution Agreements, the
+    # procurement categories) in the files the Commission re-saved on 29 Sep / 1 Oct 2026: no
+    # 2025 row had a funding type, so /international-cooperation served funding_type null.
+    c_fund = _col(idx, "Funding type", "Type of contract")
     c_mgmt = _col(idx, "Management type")
     c_dept = _col(idx, "Responsible depart")
     c_bln = _col(idx, "Budget line name")

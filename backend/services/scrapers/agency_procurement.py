@@ -2491,6 +2491,12 @@ def _eib_date(value: str) -> datetime | None:
         return None
 
 
+# extract_item_date carriers that name a PUBLICATION date in machine-readable form. Generic
+# <time> elements and date-classed text are left out: on procurement pages they are often deadlines.
+_PUBLICATION_CARRIERS = ("jsonld_datePublished", "og_published", "og_published_rev",
+                         "published_label", "published_on_website_label")
+
+
 def _eib_detail(page: str) -> dict:
     """One procedure page: description blocks, file links, the Official Journal history,
     the publication date and the deadline."""
@@ -2553,6 +2559,14 @@ def _eib_detail(page: str) -> dict:
                 if m:
                     out["published"] = _eib_date(m.group(1))
                     break
+    if out["published"] is None:
+        # Calls for expression of interest print no "Issue of" row; their page carries
+        # schema.org datePublished (eu4b-0001: 12 Dec 2023). 38 EIB calls had no date (20 Oct
+        # 2026). Machine-readable publication tags only: a <time> on these pages may be a deadline.
+        from services.scrapers.economy_common import extract_item_date
+        dt, carrier = extract_item_date(page)
+        if carrier in _PUBLICATION_CARRIERS:
+            out["published"] = dt
     return out
 
 
