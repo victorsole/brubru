@@ -95,7 +95,12 @@ ON CONFLICT (code) DO UPDATE SET
 """
 
 
-def upsert_committees(db: ChunkedDb, throttle: float, dry_run: bool, limit: int = 0) -> int:
+def _out_of_time(deadline: float | None, margin: float = 0.0) -> bool:
+    return deadline is not None and time.monotonic() + margin > deadline
+
+
+def upsert_committees(db: ChunkedDb, throttle: float, dry_run: bool, limit: int = 0,
+                      deadline: float | None = None) -> int:
     print("[INFO] Fetching committee codes...", flush=True)
     codes = get_json(f"{BASE}/committees/codes")
     if not isinstance(codes, list):
@@ -107,6 +112,9 @@ def upsert_committees(db: ChunkedDb, throttle: float, dry_run: bool, limit: int 
 
     upserted = 0
     for i, code in enumerate(codes, 1):
+        if _out_of_time(deadline):
+            print(f"[INFO] committees: time budget reached after {i - 1} of {len(codes)}", flush=True)
+            break
         if i > 1:
             time.sleep(throttle)
         try:
@@ -231,18 +239,32 @@ def write_cursor(db, page: int, note: str) -> None:
 
 
 def upsert_documents(db: ChunkedDb, throttle: float, dry_run: bool, limit: int = 0,
-                     max_seconds: float = 0.0) -> int:
+                     max_seconds: float = 0.0, deadline: float | None = None) -> int:
     # RESUME. This walked from page 0 every run and the 900-second timeout killed it around
     # page 120, so it re-read the same ~12,000 documents three times a day and never reached
     # the tail: 95,461 of 115,206 stored, ~19,700 on pages it had never visited once. A
     # bigger timeout does not fix a job that always starts at the beginning.
+    #
+    # The budget is the WHOLE job's (20 Oct 2026). It used to start here, after the committee
+    # pass, which had grown to 631 committees (~4 minutes): 720 s of documents on top of it
+    # passed the cron's 900 s timeout, and the run was killed at page 884 instead of stopping.
+    # main() hands both passes one deadline; a page is not started unless the slowest page
+    # seen so far still fits (a deep page takes ~8 s to fetch, plus 100 upserts).
     started = time.monotonic()
+    if deadline is None and max_seconds:
+        deadline = started + max_seconds
+    slowest = 0.0
     page = 0 if dry_run else read_cursor(db)
     first_page = page
+    if _out_of_time(deadline):
+        print(f"[SYNC_STATUS] degraded: the committee pass used the time budget; documents "
+              f"resume at page {page} next run", flush=True)
+        return 0
     total = 0
     counts = {"upserted": 0, "errors": 0}
     print("[INFO] Paging through Comitology documents...", flush=True)
     while True:
+        page_started = time.monotonic()
         try:
             payload = post_json(f"{BASE}/documents/search?page={page}&size={PAGE_SIZE}", {})
         except Exception as exc:
@@ -309,7 +331,8 @@ def upsert_documents(db: ChunkedDb, throttle: float, dry_run: bool, limit: int =
             break
         # Stop on the BUDGET, not on the timeout: a killed process saves no cursor and the
         # next run starts over, which is the whole defect.
-        if max_seconds and (time.monotonic() - started) > max_seconds:
+        slowest = max(slowest, time.monotonic() - page_started)
+        if _out_of_time(deadline, margin=slowest):
             if not dry_run:
                 write_cursor(db, page, f"budget {max_seconds:.0f}s reached")
                 print(f"[SYNC_STATUS] degraded: stopped at page {page} of ~{(total // PAGE_SIZE) + 1} "
@@ -341,13 +364,15 @@ def main():
     ap.add_argument("--skip-documents", action="store_true")
     args = ap.parse_args()
 
+    deadline = time.monotonic() + args.max_seconds if args.max_seconds else None
     db = ChunkedDb()
     try:
         if not args.skip_committees:
-            upsert_committees(db, args.throttle, dry_run=not args.apply, limit=args.limit if not args.apply else 0)
+            upsert_committees(db, args.throttle, dry_run=not args.apply,
+                              limit=args.limit if not args.apply else 0, deadline=deadline)
         if not args.skip_documents:
             upsert_documents(db, args.throttle, dry_run=not args.apply, limit=args.limit,
-                             max_seconds=args.max_seconds)
+                             max_seconds=args.max_seconds, deadline=deadline)
     finally:
         db.close()
 
