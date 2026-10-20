@@ -124,6 +124,12 @@ OK_STATUSES = ("success", "ok", "skipped", "degraded")
 # `stale_after_hours`: the news feeds' 7 hours is shorter than the 8-hour gap between
 # their own runs, so it would make every single failure red again.
 NO_GOOD_RUN_HOURS = 36
+# Ledger rows that name items a source refused (services/news/write_guard.py: a NEW news item
+# nobody could date is not written). They are written only when something is refused, so
+# "no good run for 36 h" is true of every one after a quiet spell, and two sources' pages
+# printing no date on consecutive runs is not a job that broke. A gap in a source's page,
+# never red: listed as a first failure, in the ledger and on /api/sync/health (20 Oct 2026).
+NEVER_RED_SUFFIXES = ("_undated_refused",)
 
 
 def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
@@ -258,6 +264,8 @@ def _judge_row(r: dict, now: datetime.datetime | None) -> tuple[str, str] | None
         return ("red", label) if r.get("status") not in OK_STATUSES else None
     if not r.get("problem"):
         return None
+    if str(r.get("source_key") or "").endswith(NEVER_RED_SUFFIXES):
+        return "first", label
     if r.get("previous_problem"):
         return "red", f"{label} (twice in a row)"
     if r.get("status") not in OK_STATUSES:

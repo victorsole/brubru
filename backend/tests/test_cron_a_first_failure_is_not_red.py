@@ -258,3 +258,14 @@ def test_a_stopped_run_through_the_real_runner_is_degraded_and_leaves_no_child(t
     assert time.monotonic() - t0 < 30, "the runner waited on an orphan's pipe"
     assert res["status"] == "degraded", res
     assert "eit/news" in res["stderr_tail"] and "eit/event" in res["stderr_tail"]
+
+
+def test_a_refused_undated_item_is_never_red():
+    # 19 Oct 2026: EDPS's new undatable item was judged "twice in a row" against a refusal row
+    # of other items; and a refusal after a quiet spell had "no good run" for days.
+    for row in (_row("economy_edps_undated_refused", "failed", previous_problem=True),
+                _row("economy_satcen_undated_refused", "failed", last_good_at="2026-10-10T03:00:00+00:00"),
+                _row("news_dg_undated_refused", "failed", last_good_at=None)):
+        assert cd._judge_row(row, None) == ("first", f"{row['source_key']}=failed")
+    # The same history on a real job is still red.
+    assert cd._judge_row(_row("economy_edps", "failed", previous_problem=True), None)[0] == "red"
