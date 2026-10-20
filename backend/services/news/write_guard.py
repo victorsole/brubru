@@ -51,9 +51,9 @@ Another website's page is a warning (20 October 2026)
 EDPS's news listing linked a Maastricht University event page that prints no date. Refusing
 it was right, but it was recorded `failed` and turned the cron red on 19 Oct: a page on
 another website is not the source's own news, and nothing we fix on our side can date it.
-A refused item whose host differs from the hosts of its own listing (`mark_off_site`) is
-named in the record like any other, and a run whose new refusals are all such pages is
-`degraded`.
+A refused item outside its listing's own site (`mark_off_site`, by registrable domain, so
+another europa.eu page still counts as the EU's own) is named in the record like any other,
+and a run whose new refusals are all such pages is `degraded`.
 """
 from __future__ import annotations
 
@@ -103,25 +103,28 @@ def date_new_items(db, items: Iterable[dict], *, fetcher=None) -> Tuple[List[dic
     return keep, refused
 
 
-def _host(url: str) -> str:
-    host = (urlsplit(url or "").hostname or "").lower()
-    return host[4:] if host.startswith("www.") else host
+def _site(url: str) -> str:
+    """The registrable part of the host: edps.europa.eu -> europa.eu, www.fpf.org -> fpf.org."""
+    host = (urlsplit(url or "").hostname or "").lower().rstrip(".")
+    return ".".join(host.split(".")[-2:]) if host else ""
 
 
 def mark_off_site(refused: List[dict], listed_urls: Iterable[str]) -> None:
     """Set `off_site` on refused items whose page is on another website than their listing.
 
-    The listing's own hosts are its most common one and any host holding two or more of
-    its items. With nothing to compare (one item, every host different) nothing is marked:
-    unproven means it stays a failure."""
-    counts = Counter(h for h in (_host(u) for u in listed_urls) if h)
+    The listing's own sites are its most common one and any site holding two or more of
+    its items. Sites are compared by registrable domain, so a europa.eu listing linking
+    another institution's europa.eu page stays a failure: only pages outside the source's
+    estate are warnings. With nothing to compare (one item, every site different) nothing
+    is marked: unproven means it stays a failure."""
+    counts = Counter(s for s in (_site(u) for u in listed_urls) if s)
     if not counts:
         return
     top = max(counts.values())
-    own = {h for h, n in counts.items() if n == top or n >= 2}
+    own = {s for s, n in counts.items() if n == top or n >= 2}
     for it in refused:
-        h = _host(it.get("source_url") or "")
-        if h and h not in own:
+        s = _site(it.get("source_url") or "")
+        if s and s not in own:
             it["off_site"] = True
 
 

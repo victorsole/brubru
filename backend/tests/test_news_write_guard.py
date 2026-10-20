@@ -270,3 +270,11 @@ def test_the_news_writers_mark_off_site_pages_too(monkeypatch):
     by_url = {i["source_url"]: i for i in refused}
     assert by_url[EDPS_EVENT].get("off_site") is True
     assert "off_site" not in by_url["https://commission.europa.eu/news/0"]
+
+
+def test_another_europa_eu_site_is_not_off_site():
+    # An EDPS story on transparency-register.europa.eu is still an EU page we should date.
+    item = [{"source_url": "https://transparency-register.europa.eu/news/x_en"}]
+    listed = [f"https://www.edps.europa.eu/news/{n}" for n in range(5)] + [item[0]["source_url"]]
+    write_guard.mark_off_site(item, listed)
+    assert "off_site" not in item[0]
