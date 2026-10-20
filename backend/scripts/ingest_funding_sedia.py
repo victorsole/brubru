@@ -357,6 +357,17 @@ def derive_status(sedia_status: Optional[str], opening: Optional[dt.datetime],
     return sedia_status or "unknown"
 
 
+_CANCELLED = re.compile(r"(?:^|[\s(\-–])CANCEL+ED\)?\s*$", re.I)
+
+
+def is_cancelled(topic_id: Optional[str], title: Optional[str]) -> bool:
+    """The portal withdraws a topic by renaming it, not by changing its status: on 20 Oct 2026
+    "Startup Europe - CANCELLED" (HORIZON-EIE-2027-01-CONNECT-01-CANCELLED) still carried status
+    forthcoming (31094501) and opening and deadline dates in 2027, so it was served as
+    forthcoming. A cancelled topic accepts no proposals: closed, with the word in its title."""
+    return bool(_CANCELLED.search(str(topic_id or "")) or _CANCELLED.search(str(title or "")))
+
+
 def first_or_none(arr) -> Optional[Any]:
     if isinstance(arr, list) and arr:
         return arr[0]
@@ -488,6 +499,8 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
     deadline, final_deadline = pick_deadlines(md.get("deadlineDate"), today)
     published = parse_iso_date(first_or_none(md.get("startDate"))) or parse_iso_date(first_or_none(md.get("es_SortDate")))
     status = derive_status(sedia_status, published, final_deadline, today)
+    if is_cancelled(topic_id, title):
+        status = "closed"
     types = md.get("typesOfAction") or []
     type_of_action = types[0] if types else None
 
