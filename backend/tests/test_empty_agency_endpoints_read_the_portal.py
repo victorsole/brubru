@@ -47,3 +47,17 @@ def test_eu_osha_tenders_come_from_the_portal(monkeypatch):
     calls = _fake_portal(monkeypatch)
     assert [i.title for i in ap.ingest_eu_osha_tenders()] == ["eu_osha tender"]
     assert calls == [("eu_osha", "47352424", True)]
+
+
+def test_a_body_selling_its_own_assets_is_not_a_tender():
+    # 20 Oct 2026: nine auctions, disposals and giveaways were served as tenders and calls.
+    se = importlib.import_module("scripts.sync_economy")
+    def it(title, item_type="tender"):
+        return SimpleNamespace(item_type=item_type, title=title)
+    for t in ("Notice of public auction - furniture", "Auction Sale of Agency Vehicle",
+              "Disposal of furniture and ICT equipment", "AUCTION – SALE OF USED VEHICLES",
+              "Διατίθεται δωρεάν ο παλιός εξοπλισμός του Cedefop"):
+        assert se._is_asset_disposal(it(t)), t
+    for t in ("Provision of auction platform services", "Sale of publications service"):
+        assert not se._is_asset_disposal(it(t)), t
+    assert not se._is_asset_disposal(it("Fixed Premium Auction for RFNBO hydrogen", "grant"))

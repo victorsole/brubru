@@ -671,6 +671,22 @@ def _existing_urls(keys) -> set:
     return {(r[0], r[1], r[2]) for r in rows}
 
 
+# A body selling or giving away its own assets is not buying anything: on 20 Oct 2026 the
+# tender and call endpoints served nine such notices (ECHA "Notice of public auction -
+# furniture" twice, ENISA "Auction Sale of Agency Vehicle", ECDC "Disposal of furniture and ICT
+# equipment", an EEAS donation and vehicle auction, and Cedefop's Greek notice giving its old
+# equipment away, twice). Procurement types only: the Innovation Fund's "Fixed Premium
+# Auction" is a funding competition and is item type grant.
+_ASSET_DISPOSAL = re.compile(
+    r"\b(?:public\s+auction|auction\s*[-–]?\s*sale|sale\s+by\s+auction|notice\s+of\s+(?:public\s+)?auction"
+    r"|sale\s+of\s+(?:used|surplus|old|second-hand|agency)|disposal\s+of|donation\s+of\s+surplus"
+    r"|free\s+of\s+charge)\b|δωρεάν", re.I)
+
+
+def _is_asset_disposal(it) -> bool:
+    return it.item_type in ("tender", "eoi_call") and bool(_ASSET_DISPOSAL.search(it.title or ""))
+
+
 def _refuse_undated_new_news(by_url: dict, *, existing_fn=_existing_urls, resolve=None) -> list:
     """Date NEW undated news items from their own page; drop the ones that stay undated.
 
@@ -809,6 +825,8 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
     # (ON CONFLICT DO UPDATE cannot affect one row twice in the same statement).
     by_url: dict = {}
     for it in items:
+        if it.public_url and _is_asset_disposal(it):
+            continue
         if it.public_url:
             _reject_future_news_date(it)
             _drop_furniture_bodies(it)
