@@ -42,6 +42,13 @@ _PDF_YEAR = re.compile(r"/(\d{4})_(\d{3,4})_")
 _SKIP_HEADINGS = ("ART publications", "About the Analysis", "Contact", "Previous ART")
 
 
+class FetchBlocked(RuntimeError):
+    """The Council served a browser challenge. We never work around one (an enforced block),
+    so this is the source refusing us, not a broken job: recorded `degraded`, named, and the
+    papers wait for a run the Council lets through. Recorded `failed`, it turned the cron red
+    every Sunday from 27 Sep to 18 Oct 2026 (Railway is challenged; a laptop run is not)."""
+
+
 def scrape() -> list[dict]:
     from bs4 import BeautifulSoup
 
@@ -52,7 +59,7 @@ def scrape() -> list[dict]:
         html = res.html or ""
     low = html[:4000].lower()
     if any(m in low for m in ("just a moment", "checking your browser", "enable javascript and cookies")):
-        raise RuntimeError("consilium served a browser challenge for the ART listing: a FETCH BLOCK, "
+        raise FetchBlocked("consilium served a browser challenge for the ART listing: a FETCH BLOCK, "
                            "never 'no papers'")
     soup = BeautifulSoup(html, "lxml")
     papers: list[dict] = []
@@ -109,7 +116,7 @@ def main() -> int:
     args = ap.parse_args()
 
     started = datetime.now(timezone.utc)
-    error, inserted, updated = None, 0, 0
+    error, inserted, updated, blocked = None, 0, 0, False
     try:
         papers = scrape()
         if not papers:
@@ -133,6 +140,9 @@ def main() -> int:
             print(f"[APPLIED] inserted={inserted} updated={updated}")
         else:
             print("[DRY-RUN] re-run with --apply")
+    except FetchBlocked as exc:
+        blocked, error = True, f"blocked: {exc}; not circumvented, the papers wait for the next run"
+        print(f"[SYNC_STATUS] degraded: {error}")
     except Exception as exc:  # recorded, then a failing exit
         error = f"{type(exc).__name__}: {exc}"
         print(f"[ERROR] {error}")
@@ -142,13 +152,13 @@ def main() -> int:
                 from services.sync.freshness import record_run
                 db = SessionLocal()
                 record_run(db, source_key="council_art", tier="weekly",
-                           status="failed" if error else "success",
+                           status="degraded" if blocked else ("failed" if error else "success"),
                            items_added=inserted, error=error, started_at=started,
                            finished_at=datetime.now(timezone.utc))
                 db.close()
             except Exception as exc:  # noqa: BLE001
                 print(f"[WARN] could not record the run: {type(exc).__name__}: {exc}")
-    return 1 if error else 0
+    return 1 if error and not blocked else 0
 
 
 if __name__ == "__main__":

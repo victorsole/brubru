@@ -1580,7 +1580,12 @@ async def cron_sync_weekly(
         "scripts/derive_ft_participants.py",
         ["--apply"], timeout=1800,
     )
-    results["fta"] = await _run_script_async("fta", "scripts/backfill_eu_trade_agreements.py", ["--apply", "--limit", "20"], timeout=1800)
+    # --apply --limit 20 re-read all ~1,650 agreements until 20 Oct 2026 (--limit capped dry runs
+    # only) and the timeout killed it. Now: the new ones plus the 20 refreshed longest ago, inside
+    # a budget that leaves the listing phase and the final commit room in the timeout.
+    results["fta"] = await _run_script_async(
+        "fta", "scripts/backfill_eu_trade_agreements.py",
+        ["--apply", "--limit", "20", "--max-seconds", "1500"], timeout=1800)
     # --days, not --limit: --limit only caps a DRY run, so "--apply --limit 20" re-walked
     # 1995-now and re-hydrated every known act oldest-first, timing out before 2026.
     # The table stopped at 12 May 2026 (15 Sep 2026 finding). A 21-day window covers a

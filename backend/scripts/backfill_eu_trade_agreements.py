@@ -404,7 +404,24 @@ def _open_db():
     return conn
 
 
+def weekly_slice(universe: list[dict], held: dict, limit: int) -> list[dict]:
+    """What one scheduled run reads: every agreement not held yet (newest first), then the
+    `limit` held ones refreshed longest ago.
+
+    The weekly cron passed `--apply --limit 20`, but --limit only capped a DRY run, so each
+    run re-hydrated all ~1,650 agreements, one SPARQL query each, and the 1,800 s timeout
+    killed it (18 Oct 2026, its first scheduled run: "no good run on record", cron red).
+    `held` maps a held CELEX to its updated_at, which every upsert sets to now(), so the
+    refreshed rows move to the back and the next run takes the next ones."""
+    new = sorted((u for u in universe if u["celex"] not in held),
+                 key=lambda u: str(u.get("date") or ""), reverse=True)
+    old = sorted((u for u in universe if u["celex"] in held),
+                 key=lambda u: held[u["celex"]].timestamp() if held[u["celex"]] else 0.0)
+    return new + old[:max(limit, 0)]
+
+
 async def main_async(args):
+    started = time.monotonic()
     print("[INFO] Listing sector-2 type-A CELEX universe via Cellar SPARQL...", flush=True)
     universe = await fetch_celex_universe()
     print(f"[INFO] {len(universe):,} type-A signed agreements", flush=True)
@@ -414,15 +431,25 @@ async def main_async(args):
     cur = conn.cursor()
 
     # Determine which already have body (skip body-fetch if not refreshing)
-    cur.execute("SELECT celex, has_body FROM eu_trade_agreements")
-    existing = {row[0]: bool(row[1]) for row in cur.fetchall()}
+    cur.execute("SELECT celex, has_body, updated_at FROM eu_trade_agreements")
+    held_rows = cur.fetchall()
+    existing = {row[0]: bool(row[1]) for row in held_rows}
 
     if not args.apply:
         universe = universe[: args.limit]
+    elif not args.all:
+        n_new = sum(1 for u in universe if u["celex"] not in existing)
+        universe = weekly_slice(universe, {row[0]: row[2] for row in held_rows}, args.limit)
+        print(f"[INFO] this run: {n_new} new + {len(universe) - n_new} held, refreshed longest ago "
+              f"first (--all reads every one)", flush=True)
 
     counts = {"upserted": 0, "body_xhtml": 0, "body_pdf": 0, "no_body": 0, "errors": 0}
+    stopped_at = None
     for i, row in enumerate(universe, 1):
         celex = row["celex"]
+        if args.max_seconds and time.monotonic() - started > args.max_seconds:
+            stopped_at = i
+            break
 
         # Refresh metadata always.
         try:
@@ -529,6 +556,10 @@ async def main_async(args):
 
     print()
     print(f"[DONE] {counts}{' (DRY)' if not args.apply else ''}")
+    if stopped_at is not None:
+        # Stop on the budget, inside the cron's timeout: a killed run records nothing useful.
+        print(f"[SYNC_STATUS] degraded: stopped after {stopped_at - 1} of {len(universe)} agreement(s) "
+              f"at the {args.max_seconds:.0f}s budget; the rest are read on the next run", flush=True)
     cur.close()
     conn.close()
 
@@ -540,6 +571,10 @@ def main():
     ap.add_argument("--throttle", type=float, default=THROTTLE_S)
     ap.add_argument("--refresh-bodies", action="store_true",
                     help="Re-fetch body even if has_body=true (overrides cache)")
+    ap.add_argument("--all", action="store_true",
+                    help="With --apply, re-read every agreement (a manual backfill), not the weekly slice")
+    ap.add_argument("--max-seconds", type=float, default=0.0,
+                    help="Stop cleanly after this long, inside the caller's timeout")
     args = ap.parse_args()
     asyncio.run(main_async(args))
 
