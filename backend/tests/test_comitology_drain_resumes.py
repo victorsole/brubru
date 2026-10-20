@@ -32,7 +32,9 @@ def test_it_stops_on_its_own_budget():
     """A process killed by the timeout writes no cursor, so the next run starts over."""
     assert "max_seconds" in _SOURCE
     assert "budget" in _SOURCE.lower()
-    budget_block = _SOURCE.split("if max_seconds and")[1][:400]
+    # Since 20 Oct 2026 the budget is one deadline for the whole job; the stop itself is
+    # exercised on a simulated clock in test_comitology_stops_inside_the_cron_timeout.py.
+    budget_block = _SOURCE.split("if _out_of_time(deadline, margin=slowest):")[1][:400]
     assert "write_cursor" in budget_block, "stopping on the budget must SAVE the cursor"
 
 
