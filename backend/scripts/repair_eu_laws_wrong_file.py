@@ -53,7 +53,7 @@ from sqlalchemy import text  # noqa: E402
 from backend.core.database import SessionLocal  # noqa: E402
 from backend.scripts.fix_eu_laws_2025_leftovers import check  # noqa: E402
 from backend.scripts.import_corpus_update import (DERIVED_FROM_FILE, FILE_KEYS, MAIN_ROOTS, MATCH_MIN,  # noqa: E402
-                                                  WRONG_FILE_TYPES, act_confirmed, number_in_title,
+                                                  WRONG_FILE_TYPES, act_confirmed, act_date, number_in_title,
                                                   compute_file_hash, file_root, main_file,
                                                   parsed_fields, stored_path, title_match, usable_title,
                                                   type_label)
@@ -121,7 +121,7 @@ def new_values(f, xp_parser) -> tuple:
     v = {"id": f["id"], "xml_path": fields["xml_path"], "content_hash": fields["content_hash"], "title": f["title"],
          "doc_type": p.doc_type or type_label(f["celex"], f["dn"]),
          "doc_type_normalized": type_label(f["celex"], f["dn"]),
-         "date": f["date"] or (p.date.isoformat() if p.date else None),
+         "date": act_date(f["celex"], f["title"], f["date"] or (p.date.isoformat() if p.date else None)),
          "citations": fields["citations"],
          "is_primary_legislation": fields["is_primary_legislation"], "policy_area": fields["policy_area"],
          "subject_matter": xp_parser._extract_subject_matter(root) or None,

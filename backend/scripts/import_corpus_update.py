@@ -76,6 +76,8 @@ from backend.scripts.leg_folder import (  # noqa: F401 (re-exported for the repa
     strip_number_prefix,
     usable_title,
     numbered_title,
+    title_date,
+    act_date,
     rdf_meta,
     title_match,
     main_file,
@@ -403,7 +405,9 @@ def process_corpus(
                         logger.info(f"[WARN] {uuid}: {xml_rel} not written ({why_not})")
                     continue
                 fields["title"] = numbered_title(usable_title(m["title"]) or fields["title"], xml_path)
-                fields["date"] = m["date"] or fields["date"]
+                # the date the title gives the act, else the metadata's (Cellar errs: 32026R0144 held 2025-01-14)
+                fields["date"] = act_date(cx or (row.celex if row is not None else None), fields["title"],
+                                          m["date"] or fields["date"])
                 fields.update(export_metadata(corpus_path, uuid, cx or (row.celex if row is not None else None)))
 
                 if parsed.celex and cx and parsed.celex != cx:

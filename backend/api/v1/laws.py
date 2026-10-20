@@ -63,7 +63,7 @@ class LawItem(BaseModel):
     celex: Optional[str] = None
     title: Optional[str] = None
     doc_type: Optional[str] = None
-    adopted_on: Optional[date] = Field(None, description="Adoption / publication date")
+    adopted_on: Optional[date] = Field(None, description="The act's date: the one its title gives it (its adoption), else the Publications Office's; for a corrigendum, its own publication date (`corrected_act` names the act it corrects).")
     oj_reference: Optional[str] = Field(None, description=(
         "The Official Journal citation, as the acts cite each other (read from the Publications Office's Cellar): "
         "`OJ L 119, 4.5.2016, p. 1` for an act published in an issue (until 30 September 2023), "
@@ -127,7 +127,8 @@ class LawItem(BaseModel):
             "serves it in full. Null otherwise."
         ),
     )
-    document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
+    document_date: Optional[date] = Field(None, description="Alias of adopted_on: "
+                                          "The act's date: the one its title gives it (its adoption), else the Publications Office's; for a corrigendum, its own publication date (`corrected_act` names the act it corrects).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
@@ -581,7 +582,7 @@ class LawTextResponse(BaseModel):
     celex: str
     title: Optional[str] = None
     doc_type: Optional[str] = None
-    adopted_on: Optional[date] = None
+    adopted_on: Optional[date] = Field(None, description="The act's date: the one its title gives it (its adoption), else the Publications Office's; for a corrigendum, its own publication date (`corrected_act` names the act it corrects).")
     format: str = Field(..., description="xml | plain")
     content: str
     content_length: int
@@ -590,7 +591,8 @@ class LawTextResponse(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of eurlex_url).")
     body_txt: Optional[str] = Field(None, description="Plain-text body — populated when format=plain (mirrors `content`).")
     body_html: Optional[str] = Field(None, description="HTML/XHTML body — populated when format=xml (mirrors `content`).")
-    document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
+    document_date: Optional[date] = Field(None, description="Alias of adopted_on: "
+                                          "The act's date: the one its title gives it (its adoption), else the Publications Office's; for a corrigendum, its own publication date (`corrected_act` names the act it corrects).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 

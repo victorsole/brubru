@@ -91,6 +91,7 @@ from sqlalchemy import text  # noqa: E402
 from core.database import SessionLocal  # noqa: E402
 from scripts.leg_export_metadata import (OEIL_PAIRS_SQL, Budget, CellarDown, cellar_facts,  # noqa: E402
                                          oeil_procedures)
+from scripts.leg_folder import act_date  # noqa: E402
 from services.oj_citation import act_citation  # noqa: E402
 from services.sync.freshness import record_run  # noqa: E402
 
@@ -252,31 +253,19 @@ def oj_reference(celex: str, pub: str, oj_number: Optional[str] = None, oj_year:
     return act_citation("L", y, n, date.fromisoformat(pub[:10]))
 
 
-_MONTHS = {m: i for i, m in enumerate(
-    ["january", "february", "march", "april", "may", "june", "july", "august",
-     "september", "october", "november", "december"], 1)}
-_TITLE_DATE_RE = re.compile(r"\bof\s+(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})")
-
-
-def document_date(docdate: Optional[str], pub: str, title: str) -> Optional[str]:
+def document_date(docdate: Optional[str], pub: str, title: str, celex: Optional[str] = None) -> Optional[str]:
     """Adoption date, guarded against Cellar data errors.
 
-    An act cannot be adopted after it is published. Cellar held
-    work_date_document 2029-09-10 for 32026R2053, whose title says
-    10 September 2026. When the recorded date is later than the OJ publication
-    date, take the date written in the title; failing that, the publication date.
+    The date the title gives the act wins (leg_folder.act_date): Cellar held
+    work_date_document 2029-09-10 for 32026R2053 ("of 10 September 2026") and
+    2021-11-21 for 32024D2955 ("of 21 November 2024"). A corrigendum keeps
+    Cellar's date, its own publication. Without a title date, Cellar's, unless
+    it is later than the OJ publication date (an act cannot be adopted after it
+    is published); failing that, the publication date.
     """
     pub = (pub or "")[:10]
     d = (docdate or "")[:10]
-    if d and (not pub or d <= pub):
-        return d
-    m = _TITLE_DATE_RE.search((title or "").replace("\xa0", " "))
-    if m and m.group(2).lower() in _MONTHS:
-        try:
-            return date(int(m.group(3)), _MONTHS[m.group(2).lower()], int(m.group(1))).isoformat()
-        except ValueError:
-            pass
-    return pub or None
+    return act_date(celex, title, d if d and (not pub or d <= pub) else None) or pub or None
 
 
 def metadata_columns(facts: Optional[Dict], oeil: Optional[set] = None) -> Dict:
@@ -305,7 +294,7 @@ def build_row(r: Dict[str, str], rel: Dict[str, List[str]], classify, facts: Opt
         "cellar_work": r.get("work"),
         "ingested_by": "sync_eu_laws_from_cellar",
     }
-    doc_date = document_date(r.get("docdate"), r.get("pub", ""), title)
+    doc_date = document_date(r.get("docdate"), r.get("pub", ""), title, celex)
     return {
         "uuid": str(_uuid.uuid4()),
         "celex": celex,

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 import xml.etree.ElementTree as ET
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
@@ -81,6 +82,39 @@ def numbered_title(title: Optional[str], act_file: Optional[Path]) -> Optional[s
     m = _NO_DOC_C.search(block.group(1)) if block else None
     number = " ".join(re.sub(r"<[^>]+>", " ", m.group(1)).split()) if m else ""
     return f"{title} {number}" if re.search(r"\d", number) else title
+
+
+# The date an act's title gives it ("Commission Implementing Regulation (EU) 2026/144 of 14 January 2026 ..."). Cellar's
+# work_date_document is wrong for some acts (20 Oct 2026, every LEG_2026-10 title read against it, the signature read
+# where they differ: 32026R0144 held 2025-01-14, 32013D0719 "of 16 November 2012" 2013-11-16, 32022L2523 "of 14 December
+# 2022" 2022-12-15). A date after a lowercase word other than of/the/and/for is another act's ("Corrigendum to ...",
+# "... adopting the Agency Rules ... of 5 May 1960"). The signature is not used: an annexed agreement carries its own,
+# and 21 acts are signed on another day than their title's.
+_MONTHS = ("january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
+           "november", "december")
+_TITLE_DATE = re.compile(r"\bof\s+(\d{1,2})\s+(" + "|".join(_MONTHS) + r")\s+(\d{4})(?!\d)", re.I)
+_TITLE_HEAD_WORDS = {"of", "the", "and", "for"}
+_CORRIGENDUM = re.compile(r"R\(\d{2}\)$")
+
+
+def title_date(title: Optional[str]) -> Optional[str]:
+    """The date a title gives its own act, as YYYY-MM-DD; None when it states none or the date is another act's."""
+    t = " ".join((title or "").replace("\xa0", " ").split())
+    m = _TITLE_DATE.search(t)
+    if not m or any(w not in _TITLE_HEAD_WORDS for w in re.findall(r"\b[a-z]{2,}\b", t[:m.start()])):
+        return None
+    try:
+        return date(int(m.group(3)), _MONTHS.index(m.group(2).lower()) + 1, int(m.group(1))).isoformat()
+    except ValueError:
+        return None
+
+
+def act_date(celex: Optional[str], title: Optional[str], recorded):
+    """The value of eu_laws.date: for a corrigendum the recorded date (Cellar's: its own publication; its title names
+    or repeats the corrected act's date), for any other act the date its title gives it, else the recorded date."""
+    if _CORRIGENDUM.search(celex or ""):
+        return recorded
+    return title_date(title) or recorded
 
 
 def rdf_meta(corpus_path: Path, uuid: str) -> dict:
