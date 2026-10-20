@@ -66,6 +66,23 @@ def usable_title(title: Optional[str]) -> Optional[str]:
     return None if not t or re.search(r"/\s*(?:…|\.\.\.)", t) else t
 
 
+# The number an act prints under its title in the OJ C series (<TITLE><TI>...<NO.DOC.C>2014/C 34/01</NO.DOC.C></TI>).
+_TITLE_BLOCK = re.compile(r"<TITLE>(.*?)</TITLE>", re.S)
+_NO_DOC_C = re.compile(r"<NO\.DOC\.C>(.*?)</NO\.DOC\.C>", re.S)
+
+
+def numbered_title(title: Optional[str], act_file: Optional[Path]) -> Optional[str]:
+    """A title that is only the act's type ("Decision": the Parliament Secretary-General's staff decisions in OJ C, 10
+    laws) takes the number the act prints under it: "Decision 2014/C 34/01" (Victor, 20 Oct 2026). The metadata and
+    the parser give the bare word; any title with a digit, or a file without that number, is left as it is."""
+    if not title or re.search(r"\d", title) or act_file is None or not Path(act_file).exists():
+        return title
+    block = _TITLE_BLOCK.search(Path(act_file).read_text(encoding="utf-8", errors="replace")[:40000])
+    m = _NO_DOC_C.search(block.group(1)) if block else None
+    number = " ".join(re.sub(r"<[^>]+>", " ", m.group(1)).split()) if m else ""
+    return f"{title} {number}" if re.search(r"\d", number) else title
+
+
 def rdf_meta(corpus_path: Path, uuid: str) -> dict:
     """What the folder's own metadata states: {'title': the English expression title, 'date': work_date_document}."""
     out = {"title": None, "date": None}

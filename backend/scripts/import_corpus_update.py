@@ -75,6 +75,7 @@ from backend.scripts.leg_folder import (  # noqa: F401 (re-exported for the repa
     file_root,
     strip_number_prefix,
     usable_title,
+    numbered_title,
     rdf_meta,
     title_match,
     main_file,
@@ -401,7 +402,7 @@ def process_corpus(
                     if verbose:
                         logger.info(f"[WARN] {uuid}: {xml_rel} not written ({why_not})")
                     continue
-                fields["title"] = usable_title(m["title"]) or fields["title"]
+                fields["title"] = numbered_title(usable_title(m["title"]) or fields["title"], xml_path)
                 fields["date"] = m["date"] or fields["date"]
                 fields.update(export_metadata(corpus_path, uuid, cx or (row.celex if row is not None else None)))
 
