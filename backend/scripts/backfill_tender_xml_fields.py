@@ -62,6 +62,9 @@ SAFE_FIELDS = {
     # varchar(2) column), so re-parsing can repair the rows the TED SPARQL
     # loader filled with language codes.
     "buyer_country",
+    # 20 Oct 2026: the buyer's legal type and level of government (local, regional,
+    # national, EU), read from the same XML.
+    "buyer_legal_type", "buyer_level",
 }
 
 

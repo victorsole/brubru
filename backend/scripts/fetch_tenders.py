@@ -461,7 +461,15 @@ class TenderFetcher:
             # stored -- but a town whose name parses as a number would land in
             # estimated_value, which the matcher scores on.
             estimated_value=parsed_data.get("estimated_value"),
-            estimated_value_currency=parsed_data.get("currency", "EUR"),
+            # The parser returns `estimated_value_currency`. This read `currency`, found
+            # nothing and stored "EUR" for every notice: on 20 Oct 2026, 1,070 of 3,325
+            # valued notices in a week were SEK, RON, CZK, PLN, NOK, DKK... shown as euros.
+            estimated_value_currency=parsed_data.get("estimated_value_currency") or "EUR",
+            # Read by the parser and never stored until 20 Oct 2026 (56,526 of 57,135 empty).
+            form_type=parsed_data.get("form_type"),
+            notice_subtype=parsed_data.get("notice_subtype"),
+            buyer_legal_type=parsed_data.get("buyer_legal_type"),
+            buyer_level=parsed_data.get("buyer_level"),
             publication_date=self._parse_date(notice.get("PD") or notice.get("publicationDate")),
             submission_deadline=parsed_data.get("submission_deadline") or self._parse_date(notice.get("DD") or notice.get("deadline")),
             contract_duration_months=parsed_data.get("duration_months"),

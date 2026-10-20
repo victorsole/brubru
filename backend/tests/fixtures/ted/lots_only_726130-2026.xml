@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ContractNotice xmlns="urn:oasis:names:specification:ubl:schema:xsd:ContractNotice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:efac="http://data.europa.eu/p27/eforms-ubl-extension-aggregate-components/1" xmlns:efbc="http://data.europa.eu/p27/eforms-ubl-extension-basic-components/1" xmlns:efext="http://data.europa.eu/p27/eforms-ubl-extensions/1" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2">
+   <ext:UBLExtensions>
+      <ext:UBLExtension>
+         <ext:ExtensionContent>
+            <efext:EformsExtension>
+               <efac:NoticeSubType>
+                  <cbc:SubTypeCode listName="notice-subtype">17</cbc:SubTypeCode>
+               </efac:NoticeSubType>
+               <efac:Organizations>
+                  <efac:Organization>
+                     <efac:Company>
+                        <cbc:WebsiteURI>www.zwikandrychow.pl</cbc:WebsiteURI>
+                        <cac:PartyIdentification>
+                           <cbc:ID schemeName="organization">ORG-0001</cbc:ID>
+                        </cac:PartyIdentification>
+                        <cac:PartyName>
+                           <cbc:Name languageID="POL">Zakład Wodociągów i Kanalizacji Spółka z o. o.</cbc:Name>
+                        </cac:PartyName>
+                        <cac:PostalAddress>
+                           <cbc:CityName>Andrychów</cbc:CityName>
+                           <cbc:PostalZone>34-120</cbc:PostalZone>
+                           <cbc:CountrySubentityCode listName="nuts">PL21A</cbc:CountrySubentityCode>
+                           <cac:Country>
+                              <cbc:IdentificationCode listName="country">POL</cbc:IdentificationCode>
+                           </cac:Country>
+                        </cac:PostalAddress>
+                        <cac:PartyLegalEntity>
+                           <cbc:CompanyID>0000238820</cbc:CompanyID>
+                        </cac:PartyLegalEntity>
+                        <cac:Contact>
+                           <cbc:Telephone>338752640</cbc:Telephone>
+                           <cbc:ElectronicMail>sekretariat@zwikandrychow.pl</cbc:ElectronicMail>
+                        </cac:Contact>
+                     </efac:Company>
+                  </efac:Organization>
+                  <efac:Organization>
+                     <efac:Company>
+                        <cbc:WebsiteURI>https://www.gov.pl/web/uzp/krajowa-izba-odwolawcza</cbc:WebsiteURI>
+                        <cac:PartyIdentification>
+                           <cbc:ID schemeName="organization">ORG-0002</cbc:ID>
+                        </cac:PartyIdentification>
+                        <cac:PartyName>
+                           <cbc:Name languageID="POL">Krajowa Izba Odwoławcza</cbc:Name>
+                        </cac:PartyName>
+                        <cac:PostalAddress>
+                           <cbc:CityName>Warszawa</cbc:CityName>
+                           <cbc:PostalZone>02-676</cbc:PostalZone>
+                           <cbc:CountrySubentityCode listName="nuts">PL911</cbc:CountrySubentityCode>
+                           <cac:Country>
+                              <cbc:IdentificationCode listName="country">POL</cbc:IdentificationCode>
+                           </cac:Country>
+                        </cac:PostalAddress>
+                        <cac:PartyLegalEntity>
+                           <cbc:CompanyID>010828091</cbc:CompanyID>
+                        </cac:PartyLegalEntity>
+                        <cac:Contact>
+                           <cbc:Telephone>224587801</cbc:Telephone>
+                           <cbc:ElectronicMail>odwolania@uzp.gov.pl</cbc:ElectronicMail>
+                        </cac:Contact>
+                     </efac:Company>
+                  </efac:Organization>
+                  <efac:Organization>
+                     <efac:Company>
+                        <cbc:WebsiteURI>https://op.europa.eu</cbc:WebsiteURI>
+                        <cac:PartyIdentification>
+                           <cbc:ID schemeName="organization">ORG-0000</cbc:ID>
+                        </cac:PartyIdentification>
+                        <cac:PartyName>
+                           <cbc:Name languageID="POL">Publications Office of the European Union</cbc:Name>
+                        </cac:PartyName>
+                        <cac:PostalAddress>
+                           <cbc:CityName>Luxembourg</cbc:CityName>
+                           <cbc:PostalZone>2417</cbc:PostalZone>
+                           <cbc:CountrySubentityCode listName="nuts">LU000</cbc:CountrySubentityCode>
+                           <cac:Country>
+                              <cbc:IdentificationCode listName="country">LUX</cbc:IdentificationCode>
+                           </cac:Country>
+                        </cac:PostalAddress>
+                        <cac:PartyLegalEntity>
+                           <cbc:CompanyID>PUBL</cbc:CompanyID>
+                        </cac:PartyLegalEntity>
+                        <cac:Contact>
+                           <cbc:Telephone>+352 29291</cbc:Telephone>
+                           <cbc:ElectronicMail>ted@publications.europa.eu</cbc:ElectronicMail>
+                        </cac:Contact>
+                     </efac:Company>
+                  </efac:Organization>
+               </efac:Organizations>
+            <efac:Publication><efbc:NoticePublicationID schemeName="ojs-notice-id">00726130-2026</efbc:NoticePublicationID><efbc:GazetteID schemeName="ojs-id">203/2026</efbc:GazetteID><efbc:PublicationDate>2026-10-20+02:00</efbc:PublicationDate></efac:Publication></efext:EformsExtension>
+         </ext:ExtensionContent>
+      </ext:UBLExtension>
+   </ext:UBLExtensions>
+   <cbc:UBLVersionID>2.3</cbc:UBLVersionID>
+   <cbc:CustomizationID>eforms-sdk-1.14</cbc:CustomizationID>
+   <cbc:ID schemeName="notice-id">3ae61d13-9140-4a7e-886c-d68558522cd0</cbc:ID>
+   <cbc:ContractFolderID>01b7bf77-9271-4f8c-89f0-85b5648f26b9</cbc:ContractFolderID>
+   <cbc:IssueDate>2026-10-18Z</cbc:IssueDate>
+   <cbc:IssueTime>18:41:02Z</cbc:IssueTime>
+   <cbc:VersionID>01</cbc:VersionID>
+   <cbc:RequestedPublicationDate>2026-10-20Z</cbc:RequestedPublicationDate>
+   <cbc:RegulatoryDomain>32014L0025</cbc:RegulatoryDomain>
+   <cbc:NoticeTypeCode listName="competition">cn-standard</cbc:NoticeTypeCode>
+   <cbc:NoticeLanguageCode listName="language">POL</cbc:NoticeLanguageCode>
+   <cac:ContractingParty>
+      <cac:ContractingPartyType>
+         <cbc:PartyTypeCode listName="buyer-legal-type">la</cbc:PartyTypeCode>
+      </cac:ContractingPartyType>
+      <cac:ContractingActivity>
+         <cbc:ActivityTypeCode listName="authority-activity">gen-pub</cbc:ActivityTypeCode>
+      </cac:ContractingActivity>
+      <cac:ContractingActivity>
+         <cbc:ActivityTypeCode listName="entity-activity">water</cbc:ActivityTypeCode>
+      </cac:ContractingActivity>
+      <cac:Party>
+         <cac:PartyIdentification>
+            <cbc:ID schemeName="organization">ORG-0001</cbc:ID>
+         </cac:PartyIdentification>
+         <cac:ServiceProviderParty>
+            <cbc:ServiceTypeCode listName="organisation-role">ted-esen</cbc:ServiceTypeCode>
+            <cac:Party>
+               <cac:PartyIdentification>
+                  <cbc:ID schemeName="organization">ORG-0000</cbc:ID>
+               </cac:PartyIdentification>
+            </cac:Party>
+         </cac:ServiceProviderParty>
+      </cac:Party>
+   </cac:ContractingParty>
+   <cac:TenderingTerms>
+      <cac:TendererQualificationRequest>
+         <cac:SpecificTendererRequirement>
+            <cbc:TendererRequirementTypeCode listName="exclusion-grounds-source">epo-procurement-document</cbc:TendererRequirementTypeCode>
+         </cac:SpecificTendererRequirement>
+      </cac:TendererQualificationRequest>
+      <cac:LotDistribution>
+         <cbc:MaximumLotsAwardedNumeric>2</cbc:MaximumLotsAwardedNumeric>
+         <cbc:MaximumLotsSubmittedNumeric>2</cbc:MaximumLotsSubmittedNumeric>
+      </cac:LotDistribution>
+   </cac:TenderingTerms>
+   <cac:TenderingProcess>
+      <cbc:Description languageID="POL">Zamawiający zgodnie z art. 139 i nast. ustawy najpierw dokona badania i oceny ofert, a następnie dokona kwalifikacji podmiotowej wykonawcy, którego oferta została najwyżej oceniona w zakresie braku podstaw wykluczenia oraz spełniania warunków udziału w postępowaniu.</cbc:Description>
+      <cbc:ProcedureCode listName="procurement-procedure-type">open</cbc:ProcedureCode>
+      <cac:ProcessJustification>
+         <cbc:ProcessReasonCode listName="accelerated-procedure">false</cbc:ProcessReasonCode>
+      </cac:ProcessJustification>
+   </cac:TenderingProcess>
+   <cac:ProcurementProject>
+      <cbc:ID schemeName="InternalID">5/CW/0134</cbc:ID>
+      <cbc:Name languageID="POL">Wzmocnienie cyberbezpieczeństwa infrastruktury wodociągowej ZWIK Andrychów - dostawa sprzętu i oprogramowania IT oraz systemów zasilania gwarantowanego i awaryjnego</cbc:Name>
+      <cbc:Description languageID="POL">1.	Przedmiotem zamówienia jest realizacja zadań obejmująca dostawę infrastruktury sprzętowo-programowej. Postępowanie jest podzielone na 2 części:
+a)	Część 1. Dostawa sprzętu i oprogramowania IT					
+b)	Część 2. Systemy zasilania gwarantowanego i awaryjnego
+2.	Wszystkie dostarczone urządzenia informatyczne, dla których program Energy Star przewiduje kategorię produktów, muszą spełniać wymogi normy Energy Star lub równoważnej (zgodnie z kryteriami DNSH dla inwestycji cyfrowych).
+3.	Sprzęt musi być fabrycznie nowy i wolny od substancji z listy REACH/RoHS (lub równoważne), w zakresie, w jakim przepisy te mają zastosowanie do danego urządzenia.
+4.	Opis przedmiotu zamówienia (OPZ) zawarty jest w załączniku nr 1 do swz i będzie on wprowadzony jako załącznik do umowy w sprawie zamówienia publicznego.</cbc:Description>
+      <cbc:ProcurementTypeCode listName="contract-nature">supplies</cbc:ProcurementTypeCode>
+      <cac:MainCommodityClassification>
+         <cbc:ItemClassificationCode listName="cpv">48822000</cbc:ItemClassificationCode>
+      </cac:MainCommodityClassification>
+      <cac:AdditionalCommodityClassification>
+         <cbc:ItemClassificationCode listName="cpv">31122000</cbc:ItemClassificationCode>
+      </cac:AdditionalCommodityClassification>
+      <cac:RealizedLocation>
+         <cac:Address>
+            <cbc:CountrySubentityCode listName="nuts">PL21A</cbc:CountrySubentityCode>
+            <cac:Country>
+               <cbc:IdentificationCode listName="country">POL</cbc:IdentificationCode>
+            </cac:Country>
+         </cac:Address>
+      </cac:RealizedLocation>
+   </cac:ProcurementProject>
+   <cac:ProcurementProjectLot>
+      <cbc:ID schemeName="Lot">LOT-0001</cbc:ID>
+      <cac:TenderingTerms>
+         <cbc:FundingProgramCode listName="eu-funded">eu-funds</cbc:FundingProgramCode>
+         <cac:RequiredFinancialGuarantee>
+            <cbc:GuaranteeTypeCode listName="tender-guarantee-required">false</cbc:GuaranteeTypeCode>
+         </cac:RequiredFinancialGuarantee>
+         <cac:CallForTendersDocumentReference>
+            <cbc:ID>5/CW/0134</cbc:ID>
+            <cbc:DocumentType>non-restricted-document</cbc:DocumentType>
+            <cac:Attachment>
+               <cac:ExternalReference>
+                  <cbc:URI>https://ezamowienia.gov.pl</cbc:URI>
+               </cac:ExternalReference>
+            </cac:Attachment>
+         </cac:CallForTendersDocumentReference>
+         <cac:PaymentTerms>
+            <cbc:Note languageID="POL">Wszelkie informacje na temat warunków finansowania i płatności zawiera wzór umowy</cbc:Note>
+         </cac:PaymentTerms>
+         <cac:TendererQualificationRequest>
+            <cac:SpecificTendererRequirement>
+               <cbc:TendererRequirementTypeCode listName="selection-criteria-source">epo-procurement-document</cbc:TendererRequirementTypeCode>
+            </cac:SpecificTendererRequirement>
+         </cac:TendererQualificationRequest>
+         <cac:TendererQualificationRequest>
+            <cbc:CompanyLegalFormCode listName="required">false</cbc:CompanyLegalFormCode>
+         </cac:TendererQualificationRequest>
+         <cac:TendererQualificationRequest>
+            <cac:SpecificTendererRequirement>
+               <cbc:TendererRequirementTypeCode listName="reserved-procurement">none</cbc:TendererRequirementTypeCode>
+            </cac:SpecificTendererRequirement>
+         </cac:TendererQualificationRequest>
+         <cac:ContractExecutionRequirement>
+            <cbc:ExecutionRequirementCode listName="reserved-execution">no</cbc:ExecutionRequirementCode>
+         </cac:ContractExecutionRequirement>
+         <cac:ContractExecutionRequirement>
+            <cbc:ExecutionRequirementCode listName="conditions">performance</cbc:ExecutionRequirementCode>
+            <cbc:Description languageID="POL">Miejscem dostawy i realizacji prac wdrożeniowych jest siedziba Zamawiającego</cbc:Description>
+         </cac:ContractExecutionRequirement>
+         <cac:ContractExecutionRequirement>
+            <cbc:ExecutionRequirementCode listName="ecatalog-submission">not-allowed</cbc:ExecutionRequirementCode>
+         </cac:ContractExecutionRequirement>
+         <cac:AwardingTerms>
+            <cac:AwardingCriterion>
+               <cac:SubordinateAwardingCriterion>
+                  <ext:UBLExtensions>
+                     <ext:UBLExtension>
+                        <ext:ExtensionContent>
+                           <efext:EformsExtension>
+                              <efac:AwardCriterionParameter>
+                                 <efbc:ParameterCode listName="number-weight">poi-exa</efbc:ParameterCode>
+                                 <efbc:ParameterNumeric>60</efbc:ParameterNumeric>
+                              </efac:AwardCriterionParameter>
+                           </efext:EformsExtension>
+                        </ext:ExtensionContent>
+                     </ext:UBLExtension>
+                  </ext:UBLExtensions>
+                  <cbc:AwardingCriterionTypeCode listName="award-criterion-type">price</cbc:AwardingCriterionTypeCode>
+                  <cbc:Name languageID="POL">Cena brutto wykonania przedmiotu zamówienia</cbc:Name>
+                  <cbc:Description languageID="POL">Ocena ofert w kryterium „Cena brutto za wykonanie przedmiotu zamówienia” zostanie 
+dokonana według wzoru: Cena=(Najniższa cena wykonania zamówienia spośród ofert 
+niepodlegających odrzuceniu)/(Cena wykonania zamówienia oferty ocenianej) x 60 pkt</cbc:Description>
+               </cac:SubordinateAwardingCriterion>
+               <cac:SubordinateAwardingCriterion>
+                  <ext:UBLExtensions>
+                     <ext:UBLExtension>
+                        <ext:ExtensionContent>
+                           <efext:EformsExtension>
+                              <efac:AwardCriterionParameter>
+                                 <efbc:ParameterCode listName="number-weight">poi-exa</efbc:ParameterCode>
+                                 <efbc:ParameterNumeric>25</efbc:ParameterNumeric>
+                              </efac:AwardCriterionParameter>
+                           </efext:EformsExtension>
+                        </ext:ExtensionContent>
+                     </ext:UBLExtension>
+                  </ext:UBLExtensions>
+                  <cbc:AwardingCriterionTypeCode listName="award-criterion-type">quality</cbc:AwardingCriterionTypeCode>
+                  <cbc:Name languageID="POL">Zgodność z zasadą DNSH – efektywność energetyczna serwera</cbc:Name>
+                  <cbc:Description languageID="POL">Kryterium odnosi się do zasady „niewyrządzania znaczącej szkody środowisku” (DNSH – Do No Significant Harm), wynikającej z Załącznika nr 2 do Regulaminu Konkursu Grantowego oraz § 5 Wzoru Umowy o powierzenie Grantu. Serwer (poz. OPZ: „Serwer”) pracuje w trybie ciągłym (24/7), a jego sprawność energetyczna ma bezpośredni i mierzalny wpływ na zużycie energii elektrycznej przez Zamawiającego przez cały okres eksploatacji.
+OPZ dla pozycji „Serwer” (pkt 1.1) wymaga, aby zasilacze serwera posiadały sprawność co najmniej 80 PLUS Platinum (lub równoważna). Ocenie podlega zaoferowanie zasilaczy serwera o wyższej klasie sprawności energetycznej ponad wymagane minimum. Klasy sprawności energetycznej wg standardu 80 PLUS: Standard → Bronze → Silver → Gold → Platinum → Titanium. Wykonawca wskazuje klasę sprawności energetycznej zasilaczy oferowanego serwera w Formularzu ofertowym. Punkty w tym kryterium zostaną przyznane:
+Zadeklarowana klasa efektywności energetycznej
+zasilaczy serwera	Liczba punktów
+80 PLUS Platinum (lub równoważna) (minimum wymagane przez OPZ)	0 pkt
+80 PLUS Titanium  (lub równoważna)	25 pkt
+</cbc:Description>
+               </cac:SubordinateAwardingCriterion>
+               <cac:SubordinateAwardingCriterion>
+                  <ext:UBLExtensions>
+                     <ext:UBLExtension>
+                        <ext:ExtensionContent>
+                           <efext:EformsExtension>
+                              <efac:AwardCriterionParameter>
+                                 <efbc:ParameterCode listName="number-weight">poi-exa</efbc:ParameterCode>
+                                 <efbc:ParameterNumeric>15</efbc:ParameterNumeric>
+                              </efac:AwardCriterionParameter>
+                           </efext:EformsExtension>
+                        </ext:ExtensionContent>
+                     </ext:UBLExtension>
+                  </ext:UBLExtensions>
+                  <cbc:AwardingCriterionTypeCode listName="award-criterion-type">quality</cbc:AwardingCriterionTypeCode>
+                  <cbc:Name languageID="POL">Czas naprawy gwarancyjnej sprzętu</cbc:Name>
+                  <cbc:Description languageID="POL">Ocenie podlega zadeklarowany przez Wykonawcę jednolity czas skutecznej naprawy urządzenia albo jego wymiany na sprawne urządzenie o parametrach nie gorszych, liczony od zgłoszenia awarii przez Zamawiającego, dla urządzeń dostarczanych w Części 1: serwerów, serwerów NAS, urządzeń UTM, przełączników LAN CORE i IDF, kontrolera oraz punktów dostępowych Wi-Fi. Maksymalny czas naprawy wymagany we wzorze umowy (§ 6 ust. 3) wynosi 5 dni roboczych.
+Wykonawca wskazuje zaoferowany czas naprawy w Formularzu ofertowym. Punkty w tym kryterium zostaną przyznane zgodnie z poniższą tabelą:
+Zadeklarowany czas naprawy gwarancyjnej	Liczba punktów
+do 5 dni roboczych (maksimum wymagane we wzorze umowy)	0 pkt
+do 3 dni roboczych	8 pkt
+do końca następnego dnia roboczego po dniu zgłoszenia (NBD)	15 pkt</cbc:Description>
+               </cac:SubordinateAwardingCriterion>
+            </cac:AwardingCriterion>
+         </cac:AwardingTerms>
+         <cac:AdditionalInformationParty>
+            <cac:PartyIdentification>
+               <cbc:ID>ORG-0001</cbc:ID>
+            </cac:PartyIdentification>
+         </cac:AdditionalInformationParty>
+         <cac:TenderRecipientParty>
+            <cbc:EndpointID>https://ezamowienia.gov.pl</cbc:EndpointID>
+         </cac:TenderRecipientParty>
+         <cac:TenderValidityPeriod>
+            <cbc:DurationMeasure unitCode="DAY">90</cbc:DurationMeasure>
+         </cac:TenderValidityPeriod>
+         <cac:AppealTerms>
+            <cac:PresentationPeriod>
+               <cbc:Description languageID="POL">1. Wykonawcy oraz innemu podmiotowi, jeżeli ma lub miał 
+interes w uzyskaniu zamówienia oraz poniósł lub może ponieść szkodę w wyniku naruszenia 
+przez Zamawiającego przepisów ustawy przysługują środki ochrony prawnej. 2. Środki 
+ochrony prawnej wobec ogłoszenia wszczynającego postępowanie o udzielenie zamówienia 
+oraz dokumentów zamówienia przysługują również organizacjom wpisanym na listę, o której 
+mowa w art. 469 pkt 15 ustawy, oraz Rzecznikowi Małych i Średnich Przedsiębiorców. 3. 
+Przepisy dotyczące środków ochrony prawnej są określone w dziale IX ustawy. 4. Odwołanie 
+przysługuje na niezgodną z przepisami ustawy czynność Zamawiającego, podjętą w 
+postępowaniu o udzielenie zamówienia, w tym na projektowane postanowienie umowy oraz 
+zaniechanie czynności w postępowaniu o udzielenie zamówienia, do której Zamawiający był 
+obowiązany na podstawie ustawy. 5. Na orzeczenie Izby oraz postanowienie Prezesa Izby, o 
+którym mowa w art. 519 ust. 1 ustawy, stronom oraz uczestnikom postępowania 
+odwoławczego przysługuje skarga do sądu.</cbc:Description>
+            </cac:PresentationPeriod>
+            <cac:AppealInformationParty>
+               <cac:PartyIdentification>
+                  <cbc:ID>ORG-0002</cbc:ID>
+               </cac:PartyIdentification>
+            </cac:AppealInformationParty>
+            <cac:AppealReceiverParty>
+               <cac:PartyIdentification>
+                  <cbc:ID>ORG-0002</cbc:ID>
+               </cac:PartyIdentification>
+            </cac:AppealReceiverParty>
+         </cac:AppealTerms>
+         <cac:Language>
+            <cbc:ID>POL</cbc:ID>
+         </cac:Language>
+      </cac:TenderingTerms>
+      <cac:TenderingProcess>
+         <cbc:SubmissionMethodCode listName="esubmission">required</cbc:SubmissionMethodCode>
+         <cbc:GovernmentAgreementConstraintIndicator>false</cbc:GovernmentAgreementConstraintIndicator>
+         <cac:TenderSubmissionDeadlinePeriod>
+            <cbc:EndDate>2026-11-19+01:00</cbc:EndDate>
+            <cbc:EndTime>10:00:00+01:00</cbc:EndTime>
+         </cac:TenderSubmissionDeadlinePeriod>
+         <cac:OpenTenderEvent>
+            <cbc:OccurrenceDate>2026-11-19+01:00</cbc:OccurrenceDate>
+            <cbc:OccurrenceTime>10:30:00+01:00</cbc:OccurrenceTime>
+            <cac:OccurenceLocation>
+               <cbc:Description languageID="POL"> Otwarcie ofert następuje przez Platformę e-Zamówienia</cbc:Description>
+            </cac:OccurenceLocation>
+         </cac:OpenTenderEvent>
+         <cac:AuctionTerms>
+            <cbc:AuctionConstraintIndicator>false</cbc:AuctionConstraintIndicator>
+         </cac:AuctionTerms>
+         <cac:ContractingSystem>
+            <cbc:ContractingSystemTypeCode listName="framework-agreement">none</cbc:ContractingSystemTypeCode>
+         </cac:ContractingSystem>
+         <cac:ContractingSystem>
+            <cbc:ContractingSystemTypeCode listName="dps-usage">none</cbc:ContractingSystemTypeCode>
+         </cac:ContractingSystem>
+      </cac:TenderingProcess>
+      <cac:ProcurementProject>
+         <cbc:ID schemeName="InternalID">część 1</cbc:ID>
+         <cbc:Name languageID="POL">Dostawa sprzętu i oprogramowania IT</cbc:Name>
+         <cbc:Description languageID="POL">1.	Przedmiotem zamówienia jest realizacja zadań obejmująca dostawę infrastruktury sprzętowo-programowej - Dostawa sprzętu i oprogramowania IT					
+2.	Wszystkie dostarczone urządzenia informatyczne, dla których program Energy Star przewiduje kategorię produktów, muszą spełniać wymogi normy Energy Star lub równoważnej (zgodnie z kryteriami DNSH dla inwestycji cyfrowych).
+3.	Sprzęt musi być fabrycznie nowy i wolny od substancji z listy REACH/RoHS (lub równoważne), w zakresie, w jakim przepisy te mają zastosowanie do danego urządzenia.
+4.	Opis przedmiotu zamówienia (OPZ) zawarty jest w załączniku nr 1 do swz i będzie on wprowadzony jako załącznik do umowy w sprawie zamówienia publicznego.
+</cbc:Description>
+         <cbc:ProcurementTypeCode listName="contract-nature">supplies</cbc:ProcurementTypeCode>
+         <cbc:Note languageID="POL">Zamówienie należy wykonać w terminie 30 dni kalendarzowych licząc od dnia podpisania umowy. W związku z planowanym terminem zakończenia realizacji Projektu, Zamawiający zastrzega, że realizacja ww. zamówienia nie może trwać dłużej niż do 28.12.2026 r.
+</cbc:Note>
+         <cac:RequestedTenderTotal>
+            <cbc:EstimatedOverallContractAmount currencyID="PLN">927189.67</cbc:EstimatedOverallContractAmount>
+         </cac:RequestedTenderTotal>
+         <cac:MainCommodityClassification>
+            <cbc:ItemClassificationCode listName="cpv">48822000</cbc:ItemClassificationCode>
+         </cac:MainCommodityClassification>
+         <cac:AdditionalCommodityClassification>
+            <cbc:ItemClassificationCode listName="cpv">48821000</cbc:ItemClassificationCode>
+         </cac:AdditionalCommodityClassification>
+         <cac:RealizedLocation>
+            <cac:Address>
+               <cbc:CountrySubentityCode listName="nuts">PL21A</cbc:CountrySubentityCode>
+               <cac:Country>
+                  <cbc:IdentificationCode listName="country">POL</cbc:IdentificationCode>
+               </cac:Country>
+            </cac:Address>
+         </cac:RealizedLocation>
+         <cac:PlannedPeriod>
+            <cbc:DurationMeasure unitCode="DAY">30</cbc:DurationMeasure>
+         </cac:PlannedPeriod>
+         <cac:ContractExtension>
+            <cbc:MaximumNumberNumeric>0</cbc:MaximumNumberNumeric>
+         </cac:ContractExtension>
+      </cac:ProcurementProject>
+   </cac:ProcurementProjectLot>
+   <cac:ProcurementProjectLot>
+      <cbc:ID schemeName="Lot">LOT-0002</cbc:ID>
+      <cac:TenderingTerms>
+         <cbc:FundingProgramCode listName="eu-funded">eu-funds</cbc:FundingProgramCode>
+         <cac:RequiredFinancialGuarantee>
+            <cbc:GuaranteeTypeCode listName="tender-guarantee-required">false</cbc:GuaranteeTypeCode>
+         </cac:RequiredFinancialGuarantee>
+         <cac:CallForTendersDocumentReference>
+            <cbc:ID>5/CW/0134</cbc:ID>
+            <cbc:DocumentType>non-restricted-document</cbc:DocumentType>
+            <cac:Attachment>
+               <cac:ExternalReference>
+                  <cbc:URI>https://ezamowienia.gov.pl</cbc:URI>
+               </cac:ExternalReference>
+            </cac:Attachment>
+         </cac:CallForTendersDocumentReference>
+         <cac:PaymentTerms>
+            <cbc:Note languageID="POL">Wszelkie informacje na temat warunków finansowania i płatności zawiera wzór umowy</cbc:Note>
+         </cac:PaymentTerms>
+         <cac:TendererQualificationRequest>
+            <cac:SpecificTendererRequirement>
+               <cbc:TendererRequirementTypeCode listName="selection-criteria-source">epo-procurement-document</cbc:TendererRequirementTypeCode>
+            </cac:SpecificTendererRequirement>
+         </cac:TendererQualificationRequest>
+         <cac:TendererQualificationRequest>
+            <cbc:CompanyLegalFormCode listName="required">false</cbc:CompanyLegalFormCode>
+         </cac:TendererQualificationRequest>
+         <cac:TendererQualificationRequest>
+            <cac:SpecificTendererRequirement>
+               <cbc:TendererRequirementTypeCode listName="reserved-procurement">none</cbc:TendererRequirementTypeCode>
+            </cac:SpecificTendererRequirement>
+         </cac:TendererQualificationRequest>
+         <cac:ContractExecutionRequirement>
+            <cbc:ExecutionRequirementCode listName="reserved-execution">no</cbc:ExecutionRequirementCode>
+         </cac:ContractExecutionRequirement>
+         <cac:ContractExecutionRequirement>
+            <cbc:ExecutionRequirementCode listName="conditions">performance</cbc:ExecutionRequirementCode>
+            <cbc:Description languageID="POL">Miejscem dostawy i realizacji prac wdrożeniowych jest siedziba Zamawiającego</cbc:Description>
+         </cac:ContractExecutionRequirement>
+         <cac:ContractExecutionRequirement>
+            <cbc:ExecutionRequirementCode listName="ecatalog-submission">not-allowed</cbc:ExecutionRequirementCode>
+         </cac:ContractExecutionRequirement>
+         <cac:AwardingTerms>
+            <cac:AwardingCriterion>
+               <cac:SubordinateAwardingCriterion>
+                  <ext:UBLExtensions>
+                     <ext:UBLExtension>
+                        <ext:ExtensionContent>
+                           <efext:EformsExtension>
+                              <efac:AwardCriterionParameter>
+                                 <efbc:ParameterCode listName="number-weight">poi-exa</efbc:ParameterCode>
+                                 <efbc:ParameterNumeric>60</efbc:ParameterNumeric>
+                              </efac:AwardCriterionParameter>
+                           </efext:EformsExtension>
+                        </ext:ExtensionContent>
+                     </ext:UBLExtension>
+                  </ext:UBLExtensions>
+                  <cbc:AwardingCriterionTypeCode listName="award-criterion-type">price</cbc:AwardingCriterionTypeCode>
+                  <cbc:Name languageID="POL">Cena brutto wykonania przedmiotu zamówienia</cbc:Name>
+                  <cbc:Description languageID="POL">Ocena ofert w kryterium „Cena brutto za wykonanie przedmiotu zamówienia” zostanie 
+dokonana według wzoru: Cena=(Najniższa cena wykonania zamówienia spośród ofert 
+niepodlegających odrzuceniu)/(Cena wykonania zamówienia oferty ocenianej) x 60 pkt</cbc:Description>
+               </cac:SubordinateAwardingCriterion>
+               <cac:SubordinateAwardingCriterion>
+                  <ext:UBLExtensions>
+                     <ext:UBLExtension>
+                        <ext:ExtensionContent>
+                           <efext:EformsExtension>
+                              <efac:AwardCriterionParameter>
+                                 <efbc:ParameterCode listName="number-weight">poi-exa</efbc:ParameterCode>
+                                 <efbc:ParameterNumeric>40</efbc:ParameterNumeric>
+                              </efac:AwardCriterionParameter>
+                           </efext:EformsExtension>
+                        </ext:ExtensionContent>
+                     </ext:UBLExtension>
+                  </ext:UBLExtensions>
+                  <cbc:AwardingCriterionTypeCode listName="award-criterion-type">quality</cbc:AwardingCriterionTypeCode>
+                  <cbc:Name languageID="POL">Czas przyjazdu serwisu gwarancyjnego do agregatu stacjonarnego</cbc:Name>
+                  <cbc:Description languageID="POL">Ocenie podlega zadeklarowany przez Wykonawcę czas przyjazdu serwisu gwarancyjnego na obiekt, tj. do miejsca posadowienia agregatu stacjonarnego na terenie Oczyszczalni Ścieków w Andrychowie, w sytuacjach awaryjnych, liczony od zgłoszenia awarii przez Zamawiającego. Maksymalny czas przyjazdu wymagany w OPZ wynosi 24 godziny.
+Wykonawca wskazuje zaoferowany czas przyjazdu serwisu gwarancyjnego w Formularzu ofertowym.
+Zadeklarowany czas przyjazdu serwisu gwarancyjnego 	Liczba punktów
+do 24 godzin (maksimum wymagane przez OPZ)	0 pkt
+do 12 godzin	20 pkt
+do 8 godzin	40 pkt
+</cbc:Description>
+               </cac:SubordinateAwardingCriterion>
+            </cac:AwardingCriterion>
+         </cac:AwardingTerms>
+         <cac:AdditionalInformationParty>
+            <cac:PartyIdentification>
+               <cbc:ID>ORG-0001</cbc:ID>
+            </cac:PartyIdentification>
+         </cac:AdditionalInformationParty>
+         <cac:TenderRecipientParty>
+            <cbc:EndpointID>https://ezamowienia.gov.pl</cbc:EndpointID>
+         </cac:TenderRecipientParty>
+         <cac:TenderValidityPeriod>
+            <cbc:DurationMeasure unitCode="DAY">90</cbc:DurationMeasure>
+         </cac:TenderValidityPeriod>
+         <cac:AppealTerms>
+            <cac:PresentationPeriod>
+               <cbc:Description languageID="POL">1. Wykonawcy oraz innemu podmiotowi, jeżeli ma lub miał 
+interes w uzyskaniu zamówienia oraz poniósł lub może ponieść szkodę w wyniku naruszenia 
+przez Zamawiającego przepisów ustawy przysługują środki ochrony prawnej. 2. Środki 
+ochrony prawnej wobec ogłoszenia wszczynającego postępowanie o udzielenie zamówienia 
+oraz dokumentów zamówienia przysługują również organizacjom wpisanym na listę, o której 
+mowa w art. 469 pkt 15 ustawy, oraz Rzecznikowi Małych i Średnich Przedsiębiorców. 3. 
+Przepisy dotyczące środków ochrony prawnej są określone w dziale IX ustawy. 4. Odwołanie 
+przysługuje na niezgodną z przepisami ustawy czynność Zamawiającego, podjętą w 
+postępowaniu o udzielenie zamówienia, w tym na projektowane postanowienie umowy oraz 
+zaniechanie czynności w postępowaniu o udzielenie zamówienia, do której Zamawiający był 
+obowiązany na podstawie ustawy. 5. Na orzeczenie Izby oraz postanowienie Prezesa Izby, o 
+którym mowa w art. 519 ust. 1 ustawy, stronom oraz uczestnikom postępowania 
+odwoławczego przysługuje skarga do sądu.</cbc:Description>
+            </cac:PresentationPeriod>
+            <cac:AppealInformationParty>
+               <cac:PartyIdentification>
+                  <cbc:ID>ORG-0002</cbc:ID>
+               </cac:PartyIdentification>
+            </cac:AppealInformationParty>
+            <cac:AppealReceiverParty>
+               <cac:PartyIdentification>
+                  <cbc:ID>ORG-0002</cbc:ID>
+               </cac:PartyIdentification>
+            </cac:AppealReceiverParty>
+         </cac:AppealTerms>
+         <cac:Language>
+            <cbc:ID>POL</cbc:ID>
+         </cac:Language>
+      </cac:TenderingTerms>
+      <cac:TenderingProcess>
+         <cbc:SubmissionMethodCode listName="esubmission">required</cbc:SubmissionMethodCode>
+         <cbc:GovernmentAgreementConstraintIndicator>false</cbc:GovernmentAgreementConstraintIndicator>
+         <cac:TenderSubmissionDeadlinePeriod>
+            <cbc:EndDate>2026-11-19+01:00</cbc:EndDate>
+            <cbc:EndTime>10:00:00+01:00</cbc:EndTime>
+         </cac:TenderSubmissionDeadlinePeriod>
+         <cac:OpenTenderEvent>
+            <cbc:OccurrenceDate>2026-11-19+01:00</cbc:OccurrenceDate>
+            <cbc:OccurrenceTime>10:30:00+01:00</cbc:OccurrenceTime>
+            <cac:OccurenceLocation>
+               <cbc:Description languageID="POL"> Otwarcie ofert następuje przez Platformę e-Zamówienia</cbc:Description>
+            </cac:OccurenceLocation>
+         </cac:OpenTenderEvent>
+         <cac:AuctionTerms>
+            <cbc:AuctionConstraintIndicator>false</cbc:AuctionConstraintIndicator>
+         </cac:AuctionTerms>
+         <cac:ContractingSystem>
+            <cbc:ContractingSystemTypeCode listName="framework-agreement">none</cbc:ContractingSystemTypeCode>
+         </cac:ContractingSystem>
+         <cac:ContractingSystem>
+            <cbc:ContractingSystemTypeCode listName="dps-usage">none</cbc:ContractingSystemTypeCode>
+         </cac:ContractingSystem>
+      </cac:TenderingProcess>
+      <cac:ProcurementProject>
+         <cbc:ID schemeName="InternalID">część 2</cbc:ID>
+         <cbc:Name languageID="POL">Systemy zasilania gwarantowanego i awaryjnego</cbc:Name>
+         <cbc:Description languageID="POL">1.	Przedmiotem zamówienia jest realizacja zadań obejmująca dostawę infrastruktury sprzętowo-programowej - Systemy zasilania gwarantowanego i awaryjnego.					
+2.	Wszystkie dostarczone urządzenia informatyczne, dla których program Energy Star przewiduje kategorię produktów, muszą spełniać wymogi normy Energy Star lub równoważnej (zgodnie z kryteriami DNSH dla inwestycji cyfrowych).
+3.	Sprzęt musi być fabrycznie nowy i wolny od substancji z listy REACH/RoHS (lub równoważne), w zakresie, w jakim przepisy te mają zastosowanie do danego urządzenia.
+4.	Opis przedmiotu zamówienia (OPZ) zawarty jest w załączniku nr 1 do swz i będzie on wprowadzony jako załącznik do umowy w sprawie zamówienia publicznego.
+</cbc:Description>
+         <cbc:ProcurementTypeCode listName="contract-nature">supplies</cbc:ProcurementTypeCode>
+         <cbc:Note languageID="POL">Zamówienie należy wykonać w terminie 30 dni kalendarzowych licząc od dnia podpisania umowy. W związku z planowanym terminem zakończenia realizacji Projektu, Zamawiający zastrzega, że realizacja ww. zamówienia nie może trwać dłużej niż do 28.12.2026 r.
+</cbc:Note>
+         <cac:RequestedTenderTotal>
+            <cbc:EstimatedOverallContractAmount currencyID="PLN">585600</cbc:EstimatedOverallContractAmount>
+         </cac:RequestedTenderTotal>
+         <cac:MainCommodityClassification>
+            <cbc:ItemClassificationCode listName="cpv">31122000</cbc:ItemClassificationCode>
+         </cac:MainCommodityClassification>
+         <cac:RealizedLocation>
+            <cac:Address>
+               <cbc:CountrySubentityCode listName="nuts">PL21A</cbc:CountrySubentityCode>
+               <cac:Country>
+                  <cbc:IdentificationCode listName="country">POL</cbc:IdentificationCode>
+               </cac:Country>
+            </cac:Address>
+         </cac:RealizedLocation>
+         <cac:PlannedPeriod>
+            <cbc:DurationMeasure unitCode="DAY">30</cbc:DurationMeasure>
+         </cac:PlannedPeriod>
+         <cac:ContractExtension>
+            <cbc:MaximumNumberNumeric>0</cbc:MaximumNumberNumeric>
+         </cac:ContractExtension>
+      </cac:ProcurementProject>
+   </cac:ProcurementProjectLot>
+</ContractNotice>

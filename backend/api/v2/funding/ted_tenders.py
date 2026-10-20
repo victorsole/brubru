@@ -43,8 +43,11 @@ For consultancies / SMEs looking for EU funding opportunities — filter by `cpv
 - `procedure_type` — TED procedure type code.
 - `contract_nature` — `works` / `supplies` / `services`.
 - `cpv_main`, `cpv_code` — CPV filter.
-- `form_type` — TED form code (F02 / F03 / F14 / etc).
-- `min_value`, `max_value` — estimated-value range in EUR.
+- `form_type` — TED form type: `planning` (prior information notices), `competition`, `result`, `cont-modif`; `legacy` for pre-eForms notices.
+- `notice_subtype` — eForms notice type, e.g. `pin-only`, `cn-standard`.
+- `buyer_level` — `local` / `regional` / `national` / `eu` / `international`; `buyer_legal_type` — the eForms code itself (`la`, `ra`, `cga`, `eu-ins-bod-ag` ...).
+- `currency` — ISO 4217 code of the estimated value; `min_value` / `max_value` compare in the notice's own currency, so add `currency=EUR` to compare euros with euros.
+- `min_value`, `max_value` — estimated-value range, in the notice's own currency.
 - `deadline_from`, `deadline_to` — submission_deadline window.
 - `published_from`, `published_to` — publication date window.
 - `updated_from`, `updated_to` — incremental sync.
@@ -57,7 +60,7 @@ GET /api/v2/funding/tenders?buyer_country=BE&contract_nature=services
 ```
 
 **You get back**
-A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `title`, `description`, `official_name`, `buyer_country`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.
+A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `official_name`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publishes daily by definition (the "Daily" in the name). Backed by `backend/scripts/backfill_tenders_description.py`.""",
@@ -70,9 +73,13 @@ async def list_tenders(
     contract_nature: Optional[str] = Query(None, description="works | supplies | services"),
     cpv_main: Optional[str] = Query(None),
     cpv_code: Optional[str] = Query(None, description="Match any CPV in cpv_codes"),
-    form_type: Optional[str] = Query(None),
-    min_value: Optional[float] = Query(None),
-    max_value: Optional[float] = Query(None),
+    form_type: Optional[str] = Query(None, description="planning | competition | result | cont-modif | legacy ..."),
+    notice_subtype: Optional[str] = Query(None, description="eForms notice type, e.g. pin-only, cn-standard"),
+    buyer_level: Optional[str] = Query(None, description="local | regional | national | eu | international"),
+    buyer_legal_type: Optional[str] = Query(None, description="eForms buyer legal type code, e.g. la, ra, cga, eu-ins-bod-ag"),
+    currency: Optional[str] = Query(None, description="ISO 4217 code of estimated_value, e.g. EUR"),
+    min_value: Optional[float] = Query(None, description="estimated_value >= value, in the notice's own currency"),
+    max_value: Optional[float] = Query(None, description="estimated_value <= value, in the notice's own currency"),
     deadline_from: Optional[date] = Query(None, description="submission_deadline >= value"),
     deadline_to: Optional[date] = Query(None),
     published_from: Optional[date] = Query(None, description="publication_date >= value"),
@@ -84,7 +91,7 @@ async def list_tenders(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TenderItem]:
-    return await _v1.list_tenders(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
+    return await _v1.list_tenders(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
 
 
 @tenders_router.get(

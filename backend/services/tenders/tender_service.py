@@ -49,6 +49,7 @@ _XML_SAFE_FIELDS = {
     "has_lots", "lot_count", "lots", "documents_url", "submission_url",
     "is_framework", "xml_content", "raw_json", "form_type",
     "notice_subtype", "notice_id", "submission_deadline", "buyer_country",
+    "buyer_legal_type", "buyer_level",
 }
 
 

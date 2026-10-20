@@ -41,6 +41,43 @@ logger_module = logging.getLogger(__name__)
 # and from the default "hide passed deadlines" feed filter.
 _DATE_OFFSET = re.compile(r"(?:Z|[+-]\d{2}:\d{2})$")
 
+# The buyer's level of government, from the eForms buyer-legal-type code (BT-11). The code
+# list (knowledge_base/tenders/codelists/buyer_legal_types.json) names the level for
+# authorities and for the bodies, undertakings and subsidised organisations they control;
+# a plain "body-pl", "pub-undert", "org-sub", defence contractor or special-rights entity
+# does not say, and stays None rather than guessed (20 Oct 2026: a partner asked for
+# municipal / regional / national / EU and the field was in every stored XML, unread).
+BUYER_LEVELS = {
+    "la": "local", "body-pl-la": "local", "pub-undert-la": "local", "org-sub-la": "local",
+    "ra": "regional", "body-pl-ra": "regional", "pub-undert-ra": "regional", "org-sub-ra": "regional",
+    "cga": "national", "body-pl-cga": "national", "pub-undert-cga": "national", "org-sub-cga": "national",
+    "eu-ins-bod-ag": "eu",
+    "int-org": "international",
+}
+
+
+def buyer_level(buyer_legal_type: Optional[str]) -> Optional[str]:
+    return BUYER_LEVELS.get((buyer_legal_type or "").strip().lower())
+
+
+_SDK_NOTICE_TYPES = Path(__file__).resolve().parents[2] / "knowledge_base" / "tenders" / "eforms" / "notice-types.json"
+_FORM_TYPES: Optional[Dict[str, str]] = None
+
+
+def form_type_of(notice_type_code: Optional[str]) -> Optional[str]:
+    """TED's form type (planning, competition, result, cont-modif, dir-awa-pre ...) of an
+    eForms notice type code (pin-only, cn-standard, can-standard ...), from the SDK's own
+    notice-types.json: a pin-cfc-standard is a call for competition, not planning."""
+    global _FORM_TYPES
+    if _FORM_TYPES is None:
+        try:
+            subs = json.loads(_SDK_NOTICE_TYPES.read_text(encoding="utf-8")).get("noticeSubTypes") or []
+            _FORM_TYPES = {s["type"]: s["formType"] for s in subs if s.get("type") and s.get("formType")}
+        except Exception as e:  # noqa: BLE001 -- fall back to the root element
+            logger_module.warning(f"eForms notice types unreadable ({e}); form type from the root element")
+            _FORM_TYPES = {}
+    return _FORM_TYPES.get((notice_type_code or "").strip())
+
 
 def _json_safe(value: Any) -> Any:
     """Recursively convert a parsed dict into something JSONB accepts."""
@@ -104,6 +141,16 @@ LEGACY_TED_NS = {
     "n2016": "http://publications.europa.eu/resource/schema/ted/2016/nuts",
     "n2021": "http://publications.europa.eu/resource/schema/ted/2021/nuts",
 }
+
+
+def lots_total(lots: List[Dict[str, Any]]):
+    """(sum, currency) when every lot states a value in one currency, else None."""
+    if not lots or any(lot.get("estimated_value") is None for lot in lots):
+        return None
+    currencies = {lot.get("currency") or "EUR" for lot in lots}
+    if len(currencies) != 1:
+        return None
+    return sum(float(lot["estimated_value"]) for lot in lots), currencies.pop()
 
 
 class EFormsParser:
@@ -189,9 +236,10 @@ class EFormsParser:
         # eForms format (standard path)
         logger.debug("Detected eForms XML format")
 
-        # Determine notice type from root element
+        # Determine notice type from root element; the SDK's form type of the notice's own
+        # type code wins (a PriorInformationNotice root can be a call for competition).
         root_tag = root.tag.split('}')[-1] if '}' in root.tag else root.tag
-        notice_type = self._determine_notice_type(root_tag)
+        notice_type = form_type_of(self._find_text(root, ".//cbc:NoticeTypeCode")) or self._determine_notice_type(root_tag)
 
         # Extract all fields
         result = {
@@ -224,6 +272,15 @@ class EFormsParser:
         result["lots"] = self._extract_lots(root)
         result["has_lots"] = len(result["lots"]) > 0
         result["lot_count"] = len(result["lots"])
+
+        # No notice-level value, but every lot states one in a single currency: the notice's
+        # value is their sum (20 Oct 2026: 260 of 4,092 valueless notices in a week). A lot
+        # without a value, or two currencies, leaves it unknown rather than understated.
+        if result.get("estimated_value") is None:
+            total = lots_total(result["lots"])
+            if total is not None:
+                result["estimated_value"], result["estimated_value_currency"] = total
+                result["estimated_value_from_lots"] = True
 
         # What is being bought. Until 25 Sep 2026 the eForms path never set this,
         # only the legacy one did, so 31,829 of 32,070 stored tenders (99%) had no
@@ -352,13 +409,16 @@ class EFormsParser:
                         "phone": self._find_text(contact, "cbc:Telephone"),
                     }
 
-            # Buyer type
-            buyer_type = contracting_party.find(
-                ".//cac:ContractingPartyType/cbc:PartyTypeCode",
-                EFORMS_NS
-            )
+            # Buyer type. A party can carry two type codes (buyer-legal-type and
+            # buyer-contracting-type); the legal type is the one that says local, regional,
+            # central government or EU.
+            codes = contracting_party.findall(".//cac:ContractingPartyType/cbc:PartyTypeCode", EFORMS_NS)
+            legal = next((c for c in codes if c.get("listName") == "buyer-legal-type"), None)
+            buyer_type = legal if legal is not None else (codes[0] if codes else None)
             if buyer_type is not None:
                 buyer["buyer_type"] = buyer_type.text
+            if legal is not None and (legal.text or "").strip():
+                buyer["buyer_legal_type"] = legal.text.strip()
 
             # Main activity
             activity = contracting_party.find(
@@ -774,6 +834,8 @@ class EFormsParser:
             "contract_nature": parsed.get("contract_nature"),
             "estimated_value": parsed.get("estimated_value"),
             "estimated_value_currency": parsed.get("estimated_value_currency", "EUR"),
+            "buyer_legal_type": parsed.get("buyer_legal_type"),
+            "buyer_level": buyer_level(parsed.get("buyer_legal_type")),
             "submission_deadline": parsed.get("submission_deadline"),
             "contract_duration_months": parsed.get("contract_duration_months"),
             "award_criteria_type": parsed.get("award_criteria_type"),

@@ -422,11 +422,14 @@ class TenderItem(BaseModel):
     id: int
     publication_number: str
     notice_id: Optional[str] = None
-    form_type: Optional[str] = None
+    form_type: Optional[str] = Field(None, description="TED form type: planning (prior information notices), competition, result, cont-modif, dir-awa-pre, consultation, completion; legacy for pre-eForms notices.")
+    notice_subtype: Optional[str] = Field(None, description="The eForms notice type: pin-only, pin-rtl, cn-standard, cn-social, can-standard ...")
     title: str
     description: Optional[str] = None
     official_name: Optional[str] = None
     buyer_country: Optional[str] = None
+    buyer_legal_type: Optional[str] = Field(None, description="The buyer's eForms legal type (BT-11): la (local authority), ra (regional authority), cga (central government authority), eu-ins-bod-ag (EU institution, body or agency), body-pl-la (body governed by public law controlled by a local authority) ...")
+    buyer_level: Optional[str] = Field(None, description="local | regional | national | eu | international, from buyer_legal_type; null when the notice's legal type does not say (a plain body governed by public law, public undertaking, defence contractor...).")
     procedure_type: Optional[str] = None
     cpv_codes: list = Field(default_factory=list)
     cpv_main: Optional[str] = None
@@ -496,8 +499,11 @@ For consultancies / SMEs looking for EU funding opportunities — filter by `cpv
 - `procedure_type` — TED procedure type code.
 - `contract_nature` — `works` / `supplies` / `services`.
 - `cpv_main`, `cpv_code` — CPV filter.
-- `form_type` — TED form code (F02 / F03 / F14 / etc).
-- `min_value`, `max_value` — estimated-value range in EUR.
+- `form_type` — TED form type: `planning` (prior information notices), `competition`, `result`, `cont-modif`; `legacy` for pre-eForms notices.
+- `notice_subtype` — eForms notice type, e.g. `pin-only`, `cn-standard`.
+- `buyer_level` — `local` / `regional` / `national` / `eu` / `international`; `buyer_legal_type` — the eForms code itself (`la`, `ra`, `cga`, `eu-ins-bod-ag` ...).
+- `min_value`, `max_value` — estimated-value range, in the notice's OWN currency (`estimated_value_currency`: SEK, PLN, CZK ... as well as EUR). Add `currency=EUR` to compare euros with euros.
+- `currency` — ISO 4217 code of the estimated value.
 - `deadline_from`, `deadline_to` — submission_deadline window.
 - `published_from`, `published_to` — publication date window.
 - `updated_from`, `updated_to` — incremental sync.
@@ -510,7 +516,7 @@ GET /api/v1/tenders?buyer_country=BE&contract_nature=services
 ```
 
 **You get back**
-A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `title`, `description`, `official_name`, `buyer_country`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.
+A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `official_name`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publishes daily by definition (the "Daily" in the name). Backed by `backend/scripts/backfill_tenders_description.py`.""",
@@ -523,9 +529,13 @@ async def list_tenders(
     contract_nature: Optional[str] = Query(None, description="works | supplies | services"),
     cpv_main: Optional[str] = Query(None),
     cpv_code: Optional[str] = Query(None, description="Match any CPV in cpv_codes"),
-    form_type: Optional[str] = Query(None),
-    min_value: Optional[float] = Query(None),
-    max_value: Optional[float] = Query(None),
+    form_type: Optional[str] = Query(None, description="planning | competition | result | cont-modif | legacy ..."),
+    notice_subtype: Optional[str] = Query(None, description="eForms notice type, e.g. pin-only, cn-standard"),
+    buyer_level: Optional[str] = Query(None, description="local | regional | national | eu | international"),
+    buyer_legal_type: Optional[str] = Query(None, description="eForms buyer legal type code, e.g. la, ra, cga, eu-ins-bod-ag"),
+    currency: Optional[str] = Query(None, description="ISO 4217 code of estimated_value, e.g. EUR"),
+    min_value: Optional[float] = Query(None, description="estimated_value >= value, in the notice's own currency"),
+    max_value: Optional[float] = Query(None, description="estimated_value <= value, in the notice's own currency"),
     deadline_from: Optional[date] = Query(None, description="submission_deadline >= value"),
     deadline_to: Optional[date] = Query(None),
     published_from: Optional[date] = Query(None, description="publication_date >= value"),
@@ -551,6 +561,14 @@ async def list_tenders(
         filters.append(Tender.cpv_codes.any(cpv_code))
     if form_type:
         filters.append(Tender.form_type == form_type)
+    if notice_subtype:
+        filters.append(Tender.notice_subtype == notice_subtype)
+    if buyer_level:
+        filters.append(Tender.buyer_level == buyer_level.lower())
+    if buyer_legal_type:
+        filters.append(Tender.buyer_legal_type == buyer_legal_type.lower())
+    if currency:
+        filters.append(Tender.estimated_value_currency == currency.upper())
     if min_value is not None:
         filters.append(Tender.estimated_value >= min_value)
     if max_value is not None:
@@ -594,8 +612,9 @@ async def list_tenders(
     data = [
         TenderItem(
             id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
-            form_type=r.form_type, title=r.title, description=r.description,
+            form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
             official_name=r.official_name, buyer_country=r.buyer_country,
+            buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
             procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
             cpv_main=r.cpv_main, contract_nature=r.contract_nature,
             estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
@@ -654,8 +673,9 @@ async def get_tender_detail(
         })
     return TenderItem(
         id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
-        form_type=r.form_type, title=r.title, description=r.description,
+        form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
         official_name=r.official_name, buyer_country=r.buyer_country,
+        buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
         procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
         cpv_main=r.cpv_main, contract_nature=r.contract_nature,
         estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",

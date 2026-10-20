@@ -42,6 +42,11 @@ class Tender(Base):
     title = Column(Text, nullable=False)
     description = Column(Text)
     official_name = Column(String(500))  # Contracting authority
+    # eForms buyer-legal-type (BT-11: la, ra, cga, eu-ins-bod-ag, body-pl-la ...) and the level
+    # of government it names (local, regional, national, eu, international; NULL when the code
+    # does not say). Migration 305, 20 Oct 2026.
+    buyer_legal_type = Column(String(40))
+    buyer_level = Column(String(20), index=True)
     buyer_country = Column(String(2), index=True)  # ISO 3166-1 alpha-2
 
     # Procedure
