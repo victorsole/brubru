@@ -30,17 +30,20 @@ router = APIRouter()
 class CAPPaymentItem(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
     fund: str
-    ms: Optional[str] = None
-    planned_eu_amount: Optional[float] = None
-    net_pre_financing: Optional[float] = None
-    net_interim_payments: Optional[float] = None
-    total_eur: Optional[float] = None
-    payment_rate: Optional[float] = None
-    fy_2023: Optional[float] = None
-    fy_2024: Optional[float] = None
-    fy_2025: Optional[float] = None
-    fy_2026: Optional[float] = None
-    fy_2027: Optional[float] = None
+    # Each fund's source file carries its own columns (read 20 Oct 2026): EAFRD the plan, pre-
+    # financing, interim payments and payment rate, with no year split; EAGF the payments by
+    # financial year only. A column the fund's file does not carry is null on every row of it.
+    ms: Optional[str] = Field(None, description="Member State code; TOTAL for the source's EU-wide total row.")
+    planned_eu_amount: Optional[float] = Field(None, description="EAFRD only: the EU amount of the adopted CAP plan.")
+    net_pre_financing: Optional[float] = Field(None, description="EAFRD only.")
+    net_interim_payments: Optional[float] = Field(None, description="EAFRD only.")
+    total_eur: Optional[float] = Field(None, description="Net payments to date (EAFRD) or the total paid (EAGF).")
+    payment_rate: Optional[float] = Field(None, description="EAFRD only: payments as a share of the plan.")
+    fy_2023: Optional[float] = Field(None, description="EAGF only: paid in financial year 2023.")
+    fy_2024: Optional[float] = Field(None, description="EAGF only.")
+    fy_2025: Optional[float] = Field(None, description="EAGF only.")
+    fy_2026: Optional[float] = Field(None, description="EAGF only.")
+    fy_2027: Optional[float] = Field(None, description="EAGF only, once the financial year is paid.")
 
 
 _STRUCT = ("id, fund, ms, planned_eu_amount, net_pre_financing, net_interim_payments, "
