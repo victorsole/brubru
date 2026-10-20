@@ -19,6 +19,7 @@ from core.database import get_db  # noqa: F401
 from models.user import User  # noqa: F401
 from api.v1._body import body_threshold_param  # noqa: F401
 from api.v1._deps import api_user_with_rate_limit  # noqa: F401
+from api.v1._date_bounds import UpperBoundDatetime  # noqa: F401
 from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import infringements_funding as _v1
 from api.v1.infringements_funding import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
@@ -66,13 +67,15 @@ async def list_funding_opportunities(
     q: Optional[str] = Query(None, description="Substring match on title/short_summary"),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FundingItem]:
-    return await _v1.list_funding_opportunities(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return await _v1.list_funding_opportunities(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @funding_router.get(

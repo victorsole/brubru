@@ -9,6 +9,7 @@ item contract (5 datapoints + composed body + list/detail split).
 """
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -19,6 +20,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
 
@@ -43,8 +45,8 @@ class CAPPaymentItem(_DataPoints):
 
 _STRUCT = ("id, fund, ms, planned_eu_amount, net_pre_financing, net_interim_payments, "
            "total_eur, payment_rate, fy_2023, fy_2024, fy_2025, fy_2026, fy_2027")
-_LIST_COLS = f"{_STRUCT}, public_url, document_date, created_at AS creation_date"
-_DETAIL_COLS = f"{_STRUCT}, public_url, body_txt, body_html, document_date, created_at AS creation_date"
+_LIST_COLS = f"{_STRUCT}, public_url, document_date, created_at AS creation_date, updated_at AS updated_date"
+_DETAIL_COLS = f"{_STRUCT}, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date"
 
 
 def _row_to_item(r, *, with_body: bool) -> CAPPaymentItem:
@@ -90,6 +92,8 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         request: Request,
         ms: Optional[str] = Query(None, description="Member State ISO code"),
         q: Optional[str] = Query(None, description="Substring on the body"),
+        updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+        updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
         include_body: bool = Query(
@@ -110,6 +114,10 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
             where.append("ms ILIKE :ms"); params["ms"] = ms
         if q:
             where.append("body_txt ILIKE :q"); params["q"] = f"%{q}%"
+        if updated_from:
+            where.append("updated_at >= :uf"); params["uf"] = updated_from
+        if updated_to:
+            where.append("updated_at <= :ut"); params["ut"] = updated_to
         where_sql = " AND ".join(where)
         total = db.execute(text(f"SELECT COUNT(*) FROM eu_cap_payments WHERE {where_sql}"), params).scalar() or 0
         params2 = {**params, "limit": limit, "offset": (page - 1) * limit}

@@ -13,6 +13,7 @@ Source: https://commission.europa.eu/funding-and-tenders/find-funding/eu-funding
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -65,14 +66,31 @@ class ProgrammeItem(_DataPoints):
     source: str = Field(..., description="Where the data comes from / why it is a gap.")
 
 
+def _config_dates() -> tuple:
+    """(created, updated) of the programme list: the config's own $created / $updated."""
+    d = json.loads(_CONFIG.read_text(encoding="utf-8"))
+    def _d(v):
+        try:
+            return datetime.fromisoformat(v).replace(tzinfo=timezone.utc) if v else None
+        except ValueError:
+            return None
+    return _d(d.get("$created")), _d(d.get("$updated"))
+
+
 def _to_item(p: dict, *, with_body: bool) -> ProgrammeItem:
     bt, bh = _compose_body(p)
+    created, updated = _config_dates()
     return ProgrammeItem(
         programme=p["programme"], acronym=p["acronym"], heading=p["heading"],
         cluster=p["cluster"], coverage=p["coverage"], via=p.get("via"),
         endpoint=p.get("endpoint"), source=p["source"],
-        public_url=_EC_URL, body_txt=(bt if with_body else None),
+        # The programme's own page (until 20 Oct 2026 every programme linked the same EC
+        # list page); the list page when a programme has none.
+        public_url=p.get("apply_url") or _EC_URL, body_txt=(bt if with_body else None),
         body_html=(bh if with_body else None),
+        # The list was compiled on $created and last revised on $updated (it is a reference
+        # file, not a feed): both were null on every programme until 20 Oct 2026.
+        creation_date=created, updated_date=updated,
     )
 
 

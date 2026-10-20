@@ -2,6 +2,8 @@
  "$schema_version": "1.0",
  "$source": "https://commission.europa.eu/funding-and-tenders/find-funding/eu-funding-programmes_en",
  "$generated": "2026-06-15b",
+ "$created": "2026-06-15",
+ "$updated": "2026-06-26",
  "$note": "EC 2021-2027 MFF funding programmes by the Commission's own 6-heading classification, with Brubru coverage. coverage: covered | gap | skipped. via: endpoint (dedicated Brubru endpoint) | ft_calls (reachable via /api/v2/funding/ft-calls-for-proposals).",
  "programmes": [
   {

@@ -9,7 +9,7 @@ million. Follows the standard v2 item contract (5 datapoints + composed body).
 """
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
 
@@ -45,7 +46,8 @@ class EUSFCase(_DataPoints):
 _STRUCT = (
     "id, year_of_occurrence, cci_number, applicant_country, name_of_disaster, disaster_type, "
     "status, category, first_damage_date, total_direct_damage_meur, eligible_emergency_cost_meur, "
-    "damage_pct, eusf_grant_paid_meur, public_url, document_date, created_at AS creation_date"
+    "damage_pct, eusf_grant_paid_meur, public_url, document_date, created_at AS creation_date, "
+    "updated_at AS updated_date"
 )
 _LIST_COLS = _STRUCT
 _DETAIL_COLS = _STRUCT + ", body_txt, body_html"
@@ -98,6 +100,8 @@ async def list_eusf(
     status: Optional[str] = Query(None, description="Status substring"),
     year: Optional[int] = Query(None, description="Year of occurrence"),
     q: Optional[str] = Query(None, description="Substring on the disaster name or body"),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
     include_body: bool = Query(
@@ -124,6 +128,10 @@ async def list_eusf(
         where.append("year_of_occurrence = :yr"); params["yr"] = year
     if q:
         where.append("(name_of_disaster ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+    if updated_from:
+        where.append("updated_at >= :uf"); params["uf"] = updated_from
+    if updated_to:
+        where.append("updated_at <= :ut"); params["ut"] = updated_to
     clause = (" WHERE " + " AND ".join(where)) if where else ""
 
     total = db.execute(text(f"SELECT COUNT(*) FROM eu_solidarity_fund{clause}"), params).scalar() or 0

@@ -21,6 +21,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
 
@@ -55,8 +56,8 @@ _STRUCT = (
     "ind_code, indicator_short_name, indicator_long_name, measurement_unit, "
     "baseline_value, milestone_value_2024, target_value_2029, decided_value, implemented_value"
 )
-_LIST_COLS = f"id, public_url, document_date, created_at AS creation_date, {_STRUCT}"
-_DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at AS creation_date, {_STRUCT}"
+_LIST_COLS = f"id, public_url, document_date, created_at AS creation_date, updated_at AS updated_date, {_STRUCT}"
+_DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date, {_STRUCT}"
 
 
 def _row_to_item(r, *, with_body: bool) -> CohesionOutcomeItem:
@@ -104,6 +105,8 @@ Synced weekly (Sunday 05:00 UTC) from `cohesiondata.ec.europa.eu`, dataset xi3a-
         ms: Optional[str] = Query(None, description="Member State ISO code"),
         type: Optional[str] = Query(None, description="result (RESF) | output (OESF) | common (COMMON)"),
         q: Optional[str] = Query(None, description="Substring on the indicator name or body"),
+        updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+        updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
         include_body: bool = Query(
@@ -128,6 +131,10 @@ Synced weekly (Sunday 05:00 UTC) from `cohesiondata.ec.europa.eu`, dataset xi3a-
             params["itype"] = f"%{type_map.get(type.lower(), type)}%"
         if q:
             where.append("(indicator_long_name ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+        if updated_from:
+            where.append("updated_at >= :uf"); params["uf"] = updated_from
+        if updated_to:
+            where.append("updated_at <= :ut"); params["ut"] = updated_to
         where_sql = " AND ".join(where)
 
         total = db.execute(text(f"SELECT COUNT(*) FROM eu_cohesion_outcomes WHERE {where_sql}"), params).scalar() or 0

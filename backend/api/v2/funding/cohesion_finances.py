@@ -26,6 +26,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
+from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 
 router = APIRouter()
@@ -38,7 +39,8 @@ class _DataPoints(BaseModel):
     body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
     document_date: Optional[datetime] = Field(None, description="The programme's status / adoption date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the row.")
-    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
+    # Served from 20 Oct 2026 (migration 306): updated_at moves only when a served column changes.
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync (filter with updated_from / updated_to).")
 
 
 class CohesionFinanceItem(_DataPoints):
@@ -69,8 +71,8 @@ _STRUCT = (
     "y2021, y2022, y2023, y2024, y2025, y2026, y2027, "
     "total_non_flexible_amount, total_flexible_amount, total, share_of_fa_in_total"
 )
-_LIST_COLS = f"id, public_url, document_date, created_at AS creation_date, {_STRUCT}"
-_DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at AS creation_date, {_STRUCT}"
+_LIST_COLS = f"id, public_url, document_date, created_at AS creation_date, updated_at AS updated_date, {_STRUCT}"
+_DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date, {_STRUCT}"
 
 
 def _row_to_item(r, *, with_body: bool) -> CohesionFinanceItem:
@@ -118,6 +120,8 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         ms: Optional[str] = Query(None, description="Member State ISO code"),
         status: Optional[str] = Query(None, description="Programme status substring"),
         q: Optional[str] = Query(None, description="Substring on the programme title or body"),
+        updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+        updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
         include_body: bool = Query(
@@ -140,6 +144,10 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
             where.append("status ILIKE :status"); params["status"] = f"%{status}%"
         if q:
             where.append("(cci_title ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+        if updated_from:
+            where.append("updated_at >= :uf"); params["uf"] = updated_from
+        if updated_to:
+            where.append("updated_at <= :ut"); params["ut"] = updated_to
         where_sql = " AND ".join(where)
 
         total = db.execute(text(f"SELECT COUNT(*) FROM eu_cohesion_finances WHERE {where_sql}"), params).scalar() or 0

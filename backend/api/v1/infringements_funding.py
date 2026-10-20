@@ -26,6 +26,7 @@ from ._body import (
     body_threshold_param,
     compose_html_from_sections,
 )
+from ._date_bounds import UpperBoundDatetime
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
@@ -246,7 +247,7 @@ class FundingItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal topic page).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
-    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync (filter with updated_from / updated_to). A re-sync that finds the same content does not move it (migration 306).")
 
 
 def _funding_to_item(
@@ -283,6 +284,7 @@ def _funding_to_item(
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
+        updated_date=r.last_updated,
     )
 
 
@@ -325,6 +327,8 @@ async def list_funding_opportunities(
     q: Optional[str] = Query(None, description="Substring match on title/short_summary"),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -349,6 +353,10 @@ async def list_funding_opportunities(
         filters.append(FundingOpportunity.deadline >= deadline_from)
     if deadline_to:
         filters.append(FundingOpportunity.deadline <= datetime.combine(deadline_to, time.max))
+    if updated_from:
+        filters.append(FundingOpportunity.last_updated >= updated_from)
+    if updated_to:
+        filters.append(FundingOpportunity.last_updated <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 

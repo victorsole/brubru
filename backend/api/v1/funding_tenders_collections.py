@@ -513,7 +513,7 @@ class FtFundedProjectItem(BaseModel):
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal project page).")
     document_date: Optional[date] = Field(None, description="When the project was published on the F&T Portal (published_at); the project start date where no publication date is recorded; never a date in the future (start_date and end_date carry the project's own dates).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
-    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
+    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync (filter with updated_from / updated_to). A re-sync that finds the same content does not move it (migration 306).")
 
 
 def _project_date(r) -> Optional[date]:
@@ -552,6 +552,7 @@ def _project_to_item(
         public_url=r.source_url,
         document_date=_project_date(r),
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
+        updated_date=r.last_updated,
     )
 
 
@@ -596,6 +597,8 @@ async def list_funded_projects(
     q: Optional[str] = Query(None),
     start_from: Optional[date] = Query(None),
     end_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -619,6 +622,10 @@ async def list_funded_projects(
         filters.append(FtFundedProject.start_date >= start_from)
     if end_to:
         filters.append(FtFundedProject.end_date <= end_to)
+    if updated_from:
+        filters.append(FtFundedProject.last_updated >= updated_from)
+    if updated_to:
+        filters.append(FtFundedProject.last_updated <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
