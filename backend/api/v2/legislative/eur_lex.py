@@ -686,16 +686,16 @@ async def get_law_detail(
 @router.get(
     "/laws/{celex}/text",
     response_model=LawTextResponse,
-    summary="Full text of one adopted EU law — plain text or raw XML",
+    summary="Full text of one adopted EU law — plain text or XHTML",
     description="""**What it does**
-Returns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (the 30,246 publications with text of the LEG_2026-10 bulk export); falls back to a live Cellar fetch (`publications.europa.eu/resource/celex/{celex}`). Returns the body as whitespace-normalised plain text (default) or raw markup.
+Returns the full text of one adopted EU law identified by its CELEX: the text Brubru stores for every law, the same `body_txt` (or, with `format=xml`, `body_html`) that the list and the single-law route serve. Only a law published in the last hours, whose text is not stored yet, is read live from the Publications Office (Cellar, `publications.europa.eu/resource/celex/{celex}`), with the page's hidden header left out.
 
 **When to use it**
-When you need the actual legal text — for citation, full-text analysis, or feeding a downstream LLM context. For pre-parsed structured access (recital -> article mapping, definition extraction) use the legal-text endpoints under this same source.
+When you need the legal text alone, without the metadata: for citation, full-text analysis, or feeding a downstream LLM context. It is also the way to the text of the few laws a list page leaves out for their size (`body_withheld`).
 
 **Input**
 - `celex` (path) — EU legal identifier (case-insensitive).
-- `format` — `plain` (default) or `xml` (raw Formex markup).
+- `format` — `plain` (default: the plain text) or `xml` (the XHTML as Cellar serves it).
 
 **Try it**
 ```
@@ -704,10 +704,10 @@ GET /api/v2/legislative/eur-lex/laws/32016R0679/text?format=xml
 ```
 
 **You get back**
-A `LawTextResponse` with `celex`, `title`, `doc_type`, `adopted_on`, `format`, `content`, `content_length`, `eurlex_url`, plus the 5 envelope-level datapoints (`body_txt` mirrors `content` when format=plain, `body_html` when format=xml).
+A `LawTextResponse` with `celex`, `title`, `doc_type`, `adopted_on`, `format`, `content` (the text), `content_length`, `eurlex_url`, plus the 5 envelope-level datapoints (`body_txt` mirrors `content` when format=plain, `body_html` when format=xml).
 
 **Data freshness**
-Live pass-through; the local Formex cache is regenerated quarterly from the LEG_YYYY-MM bulk export. Once an act is published in the OJ its text doesn't change (only consolidations get new CELEX numbers).""",
+The stored text, read from Cellar for every law (all 30,868 on 20 October 2026) and for a new law within hours of its publication. A published act's text does not change; a correction is a separate CELEX (a corrigendum).""",
 )
 async def get_law_text(
     celex: str,

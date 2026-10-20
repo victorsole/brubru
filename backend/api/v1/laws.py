@@ -598,16 +598,16 @@ class LawTextResponse(BaseModel):
 @router.get(
     "/{celex}/text",
     response_model=LawTextResponse,
-    summary="Full text of one adopted EU law — plain text or raw XML",
+    summary="Full text of one adopted EU law — plain text or XHTML",
     description="""**What it does**
-Returns the full legal text of an adopted EU law identified by its CELEX. Tries the local Formex V4 XML cache first (the 30,246 publications with text of the LEG_2026-10 bulk export); falls back to live fetch from Cellar (`publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml`). Returns the body as either whitespace-normalised plain text (default) or raw markup.
+Returns the full text of one adopted EU law identified by its CELEX: the text Brubru stores for every law, the same `body_txt` (or, with `format=xml`, `body_html`) that the list and the single-law route serve. Only a law published in the last hours, whose text is not stored yet, is read live from the Publications Office (Cellar, `publications.europa.eu/resource/celex/{celex}`), with the page's hidden header left out.
 
 **When to use it**
-When you need the actual legal text — for citation, full-text analysis, or feeding into a downstream LLM context. The local Formex cache is fast (~50ms); Cellar fallback is slower (~2-3s) but always works for any post-1952 CELEX. For pre-parsed structured access (recital ↔ article mapping, definition extraction), use the `/api/v1/legal-text/*` endpoints instead.
+When you need the legal text alone, without the metadata: for citation, full-text analysis, or feeding a downstream LLM context. It is also the way to the text of the few laws a list page leaves out for their size (`body_withheld`).
 
 **Input**
 - `celex` (path) — EU legal identifier (case-insensitive).
-- `format` — `plain` (default, whitespace-normalised) or `xml` (raw Formex markup).
+- `format` — `plain` (default: the plain text) or `xml` (the XHTML as Cellar serves it).
 
 **Try it**
 ```
@@ -616,10 +616,10 @@ GET /api/v1/laws/32016R0679/text?format=xml
 ```
 
 **You get back**
-A `LawTextResponse` with `celex`, `title`, `doc_type`, `adopted_on`, `format`, `content` (the actual text), `content_length`, `eurlex_url`, plus the 5 envelope-level datapoints (`body_txt` mirrors `content` when format=plain, `body_html` when format=xml).
+A `LawTextResponse` with `celex`, `title`, `doc_type`, `adopted_on`, `format`, `content` (the text), `content_length`, `eurlex_url`, plus the 5 envelope-level datapoints (`body_txt` mirrors `content` when format=plain, `body_html` when format=xml).
 
 **Data freshness**
-Live pass-through (the local Formex cache is regenerated quarterly from the LEG_YYYY-MM bulk export). For acts NOT in the local cache, the live Cellar fetch always reflects the latest published text — but the Publications Office is the slow-changing authoritative source: once an act is published in the OJ, its text doesn't change (only consolidations get new CELEX numbers).""",
+The stored text, read from Cellar for every law (all 30,868 on 20 October 2026) and for a new law within hours of its publication. A published act's text does not change; a correction is a separate CELEX (a corrigendum).""",
 )
 async def get_law_text(
     celex: str,
@@ -627,29 +627,26 @@ async def get_law_text(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> LawTextResponse:
-    from pathlib import Path
     import re
+    import urllib.parse
 
-    row = db.query(EULaw).filter(EULaw.celex == celex.upper()).first()
+    # The stored text, the one the list and the item serve (20 Oct 2026). This route used to read the act from Cellar
+    # on every call and strip its tags with a regex that kept the page's <head>, so GDPR's text began with Cellar's
+    # file name "L_2016119EN.01000101.xml". Only the column asked for is read: a body is up to 42 MB.
+    unused = EULaw.body_html if format == "plain" else EULaw.body_txt
+    row = db.query(EULaw).options(defer(unused, raiseload=True)).filter(EULaw.celex == celex.upper()).first()
     if not row:
         raise HTTPException(
             status_code=404,
             detail={"error": f"CELEX {celex} not found", "reason_code": "not_found", "resource": "law", "id": celex},
         )
 
-    xml_path = row.xml_path or ""
-    raw = ""
-    # Prefer local LEG corpus if deployed
-    if xml_path:
-        repo_root = Path(__file__).resolve().parents[3]
-        full_path = repo_root / xml_path
-        if full_path.exists():
-            raw = full_path.read_text(encoding="utf-8", errors="ignore")
-
-    # Fallback to EUR-Lex Cellar API (works on prod where LEG XML isn't shipped)
-    if not raw:
+    text = row.body_txt if format == "plain" else row.body_html
+    if not text:
+        # A law of the last hours, its text not stored yet (the daily fetch fills it): read it from Cellar.
         import httpx
-        cellar_url = f"https://publications.europa.eu/resource/celex/{row.celex}"
+        raw = ""
+        cellar_url = "https://publications.europa.eu/resource/celex/" + urllib.parse.quote(row.celex, safe="")
         try:
             async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as hc:
                 resp = await hc.get(cellar_url, headers={"Accept": "application/xhtml+xml, text/html", "Accept-Language": "eng"})
@@ -657,17 +654,17 @@ async def get_law_text(
                     raw = resp.text
         except Exception as exc:  # noqa: BLE001
             logger.warning(f"Cellar fetch failed for {row.celex}: {exc}")
-
-    if not raw:
-        raise HTTPException(
-            status_code=404,
-            detail={"error": f"Text unavailable for CELEX {celex}", "reason_code": "text_unavailable", "resource": "law", "id": celex},
-        )
-    if format == "plain":
-        text = re.sub(r"<[^>]+>", " ", raw)
-        text = re.sub(r"\s+", " ", text).strip()
-    else:
-        text = raw
+        if not raw:
+            raise HTTPException(
+                status_code=404,
+                detail={"error": f"Text unavailable for CELEX {celex}", "reason_code": "text_unavailable", "resource": "law", "id": celex},
+            )
+        if format == "plain":
+            # the <head> carries Cellar's file name as its <title>: not the act's text
+            raw = re.sub(r"<(script|style|head)\b[^>]*>.*?</\1>", " ", raw, flags=re.S | re.I)
+            text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw)).strip()
+        else:
+            text = raw
 
     return LawTextResponse(
         celex=row.celex,
