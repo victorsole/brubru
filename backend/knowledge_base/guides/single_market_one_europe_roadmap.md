@@ -1,6 +1,7 @@
 # "One Europe, One Market" Roadmap: Interinstitutional Single Market Deepening Plan to End-2027
 
 ## QUICK FACTS
+- **LATEST (Wednesday 21 October 2026, SPEECH/26/2222, President von der Leyen's speech to the plenary on the European Council conclusions of 15-16 October 2026): three new economic-security steps announced.** (1) **"In December, we will present the DiversifyEU package"**: country-agnostic, to help European companies diversify supply chains, principle "no critical dependence on a single supplier" (a Commission plan, NOT a published document: no COM number yet as of 22 October 2026); (2) deterrence: "a new instrument" to limit access to the Single Market faster when EU interests are threatened; (3) solidarity against economic coercion targeting one Member State or industry. Also cited: new trade restrictions affecting almost USD 3 trillion of global trade last year. Not read: any document; the speech only. https://ec.europa.eu/commission/presscorner/detail/en/speech_26_2222
 
 - **Adopted**: 23-24 April 2026 by the **three EU institutions** in joint declaration during the Cyprus informal European Council
 - **Signatories**: Roberta Metsola (President of the European Parliament); Nikos Christodoulides (President of the rotating Council Presidency, Cyprus); Ursula von der Leyen (President of the European Commission)

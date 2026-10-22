@@ -2,6 +2,114 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "crma_critical_raw_materials_act",
+      "title": "Critical Raw Materials Act",
+      "summary": "Decision (EU) 2026/2349 in the OJ of 22 Oct 2026: 46 strategic projects of the second round",
+      "refs": [
+        "32026D2349",
+        "32024R1252"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "eu_recovery_resilience_facility",
+      "title": "Recovery and Resilience Facility",
+      "summary": "Germany's final EUR 6 billion payment request positively assessed 21 Oct 2026 (IP/26/2224)",
+      "refs": [
+        "32021R0241"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "dsa_enforcement",
+      "title": "DSA Enforcement and Cases",
+      "summary": "Formal proceedings against Booking.com opened 21 Oct 2026 (IP/26/2223)",
+      "refs": [
+        "32022R2065"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "ppwr_packaging_waste_regulation",
+      "title": "PPWR Packaging and Packaging Waste Regulation",
+      "summary": "Council mandate 21 Oct 2026 on the EPR authorised-representative suspension 2025/0395(COD)",
+      "refs": [
+        "32025R0040"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "textile_epr_waste_framework_directive_2025_1892",
+      "title": "Textile EPR and Waste Framework Directive",
+      "summary": "Council mandate 21 Oct 2026 on 2025/0395(COD): authorised representative exemption below 1 tonne a year",
+      "refs": [
+        "32025L1892"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "digital_omnibus_package",
+      "title": "Digital Omnibus Package",
+      "summary": "Council position 21 Oct 2026 on the non-AI Digital Omnibus 2025/0360(COD)",
+      "refs": [
+        "32016R0679"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "eu_ets_review_2026",
+      "title": "EU ETS Review 2026",
+      "summary": "Provisional agreement 20 Oct 2026 on the MSR amendment 2026/0085(COD): invalidation threshold 400 to 700 million allowances",
+      "refs": [
+        "32015D1814"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "added",
+      "guide": "sfdr_review_2025_0361",
+      "title": "SFDR Review (SFDR 2.0): state of play",
+      "summary": "New guide: Council position 24 June 2026, EP mandate confirmed 7 October 2026, trilogues next",
+      "refs": [
+        "32019R2088"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "added",
+      "guide": "eu_securitisation_review_2025_0826",
+      "title": "EU Securitisation Review: provisional agreement of 21 October 2026",
+      "summary": "New guide: Council-Parliament deal on 2025/0826(COD) and 2025/0825(COD), resilient category, STS verifier supervision",
+      "refs": [
+        "32017R2402",
+        "32013R0575"
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "single_market_one_europe_roadmap",
+      "title": "Single Market: One Europe, One Market Roadmap",
+      "summary": "DiversifyEU package announced for December 2026 in SPEECH/26/2222",
+      "refs": []
+    },
+    {
+      "date": "2026-10-22",
+      "action": "updated",
+      "guide": "eu_commission_transparency_and_college_agenda",
+      "title": "Commission Transparency and College Agenda",
+      "summary": "SEC(2026) 2581: 2027 work programme and enlargement package moved to 4 November 2026",
+      "refs": []
+    },
+    {
       "date": "2026-10-20",
       "action": "updated",
       "guide": "textile_epr_waste_framework_directive_2025_1892",
