@@ -11,7 +11,7 @@ export const PrivacyPage = () => {
         <section className="policy-page__section">
           <p className="policy-page__intro">
             <strong>Effective Date:</strong> November 2025<br />
-            <strong>Last Updated:</strong> November 2025
+            <strong>Last Updated:</strong> 22 October 2026
           </p>
           <p>
             Beresol BV ("we," "us," or "our") operates Brubru (https://brubru.beresol.eu), an AI-powered
@@ -28,7 +28,7 @@ export const PrivacyPage = () => {
           <h2>1. Data Controller</h2>
           <p>
             <strong>Beresol BV</strong><br />
-            Brussels, Belgium<br />
+            Apeldoorn, Netherlands<br />
             European Union<br />
             Email: <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a>
           </p>
@@ -285,7 +285,7 @@ export const PrivacyPage = () => {
         </section>
 
         <div className="policy-page__footer">
-          <p>Last Updated: November 2025</p>
+          <p>Last Updated: 22 October 2026</p>
           <p>
             <Link to="/about" className="policy-page__link">About</Link> ·
             <Link to="/terms" className="policy-page__link">Terms of Service</Link> ·
