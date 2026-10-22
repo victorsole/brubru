@@ -8,7 +8,7 @@ Two independent bugs served closed consultations as open:
     period that closed weeks earlier.
 """
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -84,6 +84,11 @@ class TestPickPeriod:
         assert _pick_period([_p("DISABLED")], TODAY) == (None, None, None)
 
 
+# A deadline still ahead whenever the suite runs: a fixed date (20 Oct 2026) turned
+# both "future deadline" tests red the day after it passed.
+_FUTURE = date.today() + timedelta(days=60)
+
+
 class _D:
     """A closing date shaped like the datetime the mirror receives."""
     def __init__(self, d): self._d = d
@@ -92,7 +97,7 @@ class _D:
 
 class TestAgencyStatus:
     def test_source_closed_is_believed(self):
-        assert _status(_D(date(2026, 12, 1)), "Closed") is S.CLOSED
+        assert _status(_D(_FUTURE), "Closed") is S.CLOSED
 
     def test_stated_open_past_its_deadline_is_closed(self):
         assert _status(_D(date(2026, 9, 27)), "Open") is S.CLOSED
@@ -102,15 +107,15 @@ class TestAgencyStatus:
         assert _status(None, "Open") is S.CLOSED
 
     def test_open_with_a_future_deadline(self):
-        assert _status(_D(date(2026, 10, 20)), "Open") is S.OPEN
+        assert _status(_D(_FUTURE), "Open") is S.OPEN
 
     def test_no_stated_status_falls_back_to_the_deadline(self):
-        assert _status(_D(date(2026, 10, 20)), None) is S.OPEN
+        assert _status(_D(_FUTURE), None) is S.OPEN
         assert _status(_D(date(2026, 1, 1)), None) is S.CLOSED
         assert _status(None, None) is S.CLOSED
 
     def test_upcoming_is_preserved(self):
-        assert _status(_D(date(2026, 12, 1)), "Upcoming") is S.UPCOMING
+        assert _status(_D(_FUTURE), "Upcoming") is S.UPCOMING
 
 
 class TestBodyFacts:
