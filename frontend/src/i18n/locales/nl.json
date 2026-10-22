@@ -1787,7 +1787,9 @@
     "cookies": "Cookies",
     "subprocessors": "Subverwerkers",
     "trademarkLine": "Het merk Brubru is eigendom van",
-    "trademarkRegistered": "BV en is geregistreerd bij EUIPO"
+    "trademarkRegistered": "BV en is geregistreerd bij EUIPO",
+    "sourceCredit": "Bevat inhoud van de EU-instellingen, © Europese Unie, hergebruikt volgens hun hergebruiksvoorwaarden.",
+    "dataLicence": "Datalicentie"
   },
   "talkToBrubru": "Praat hierover met Brubru",
   "feedback": {

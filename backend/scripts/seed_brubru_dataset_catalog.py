@@ -29,6 +29,7 @@ load_dotenv(ROOT / ".env")
 from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
+from services.vocabularies.licences import licence_for  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger("seed-catalog")
@@ -52,8 +53,8 @@ EUROVOC_THEMES = {
     "official_journal": "http://eurovoc.europa.eu/3032",         # EU Official Journal
 }
 
-# CC-BY-4.0 — Brubru's default reuse policy (mirrors the EU PSI reuse policy).
-LICENSE_CC_BY_4 = "http://creativecommons.org/licenses/by/4.0/"
+# Licences: free datasets CC BY 4.0, keyed ones Brubru's own terms, written
+# as the EU licence list's addresses (services/vocabularies/licences.py).
 
 
 def _datasets_to_seed() -> List[Dict[str, Any]]:
@@ -97,7 +98,6 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
                     "format": "HTML",
                 },
             ],
-            "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1D",
         },
         {
@@ -134,7 +134,6 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
                     "format": "JSON",
                 },
             ],
-            "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1D",
         },
         {
@@ -167,7 +166,6 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
                     "format": "JSON",
                 },
             ],
-            "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1D",
         },
         {
@@ -205,7 +203,6 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
                     "format": "HTML",
                 },
             ],
-            "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1D",
         },
         {
@@ -254,7 +251,6 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
                     "format": "JSON",
                 },
             ],
-            "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1D",
         },
         {
@@ -280,7 +276,6 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
                     "format": "Markdown",
                 },
             ],
-            "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1W",
         },
         {
@@ -325,7 +320,6 @@ def _datasets_to_seed() -> List[Dict[str, Any]]:
                     "format": "JSON",
                 },
             ],
-            "license": LICENSE_CC_BY_4,
             "accrual_periodicity": "P1D",
         },
     ]
@@ -359,7 +353,7 @@ def upsert_row(db, row: Dict[str, Any]) -> None:
             "description": json.dumps(row.get("description") or {}),
             "dcat_theme": row.get("dcat_theme") or [],
             "distribution": json.dumps(row.get("distribution") or []),
-            "license": row.get("license"),
+            "license": licence_for(row["dcat_uri"]),
             "accrual": row.get("accrual_periodicity"),
             "validated_at": datetime.now(timezone.utc),
         },

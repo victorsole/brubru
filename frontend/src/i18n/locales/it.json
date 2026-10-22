@@ -2843,7 +2843,9 @@
     "cookies": "Cookie",
     "subprocessors": "Sub-responsabili",
     "trademarkLine": "Il marchio Brubru appartiene a",
-    "trademarkRegistered": "BV ed è registrato presso l'EUIPO"
+    "trademarkRegistered": "BV ed è registrato presso l'EUIPO",
+    "sourceCredit": "Contiene contenuti delle istituzioni dell'UE, © Unione europea, riutilizzati secondo le loro condizioni di riutilizzo.",
+    "dataLicence": "Licenza dei dati"
   },
   "talkToBrubru": "Parlane con Brubru",
   "feedback": {

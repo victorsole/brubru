@@ -2843,7 +2843,9 @@
     "cookies": "Galetes",
     "subprocessors": "Subprocessadors",
     "trademarkLine": "La marca Brubru pertany a",
-    "trademarkRegistered": "BV i està registrada a l'EUIPO"
+    "trademarkRegistered": "BV i està registrada a l'EUIPO",
+    "sourceCredit": "Conté continguts de les institucions de la UE, © Unió Europea, reutilitzats segons les seves condicions de reutilització.",
+    "dataLicence": "Llicència de dades"
   },
   "talkToBrubru": "Parla amb Brubru d'això",
   "feedback": {

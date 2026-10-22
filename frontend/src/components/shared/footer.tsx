@@ -57,6 +57,13 @@ export const Footer = ({ isSidebarOpen }: FooterProps) => {
                   </a>
                   {' '}{t('footer.trademarkRegistered')}
                 </p>
+                {/* The credit the EU sources ask for; the terms say what each dataset may be reused under */}
+                <p className="footer__trademark">
+                  {t('footer.sourceCredit')}{' '}
+                  <Link to="/terms#data-licence" className="footer__beresol-link">
+                    {t('footer.dataLicence')}
+                  </Link>
+                </p>
               </div>
             </div>
           </div>

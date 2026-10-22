@@ -167,7 +167,7 @@ def test_catalan_list_parity_and_stats(client, fresh_user):
     stats = client.get(f"{BASE}/catalan/stats", headers=h)
     assert stats.status_code == 200, stats.text
     s = stats.json()
-    assert s["total"] > 0 and s["licence"] == "MIT"
+    assert s["total"] > 0 and s["licence"] == "CC BY 4.0"
     assert s["by_doc_type"], "stats must include by_doc_type breakdown"
 
 

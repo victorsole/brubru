@@ -13,6 +13,8 @@ v2 surface. The legacy v1 viewer has been retired (its raw spec stays available 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
+from services.vocabularies.licences import BRUBRU_DATA_TERMS, BRUBRU_DATA_TERMS_TITLE
+
 router = APIRouter(tags=["v2-docs"])
 
 
@@ -76,9 +78,15 @@ def v2_openapi(request: Request) -> JSONResponse:
         "institution (Parliament, Commission, Council, European Council, Eurogroup) "
         "plus legislative, funding, open-data and proprietary collections. "
         "Authentication via the X-API-Key header (Professional subscription required). "
-        "60 req/min soft rate limit per key."
+        "60 req/min soft rate limit per key. "
+        "Licence: Brubru's data terms (the Catalan translations are CC BY 4.0). "
+        "The EU institutions' own content stays (c) European Union under its "
+        "reuse terms: every response says so in its X-Source-Credit header."
     )
     info["version"] = "v2"
+    # The licence the data carries, in the slots OpenAPI gives it.
+    info["termsOfService"] = "https://brubru.beresol.eu/terms"
+    info["license"] = {"name": BRUBRU_DATA_TERMS_TITLE, "url": BRUBRU_DATA_TERMS}
     spec = {
         "openapi": full.get("openapi", "3.1.0"),
         "info": info,

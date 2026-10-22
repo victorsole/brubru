@@ -34,6 +34,7 @@ load_dotenv(project_root / ".env")
 from sqlalchemy import text
 
 from core.database import SessionLocal
+from services.vocabularies.licences import licence_for
 
 URI = "https://brubru.beresol.eu/datasets/eu-digital-product-passport"
 TITLE = "EU Digital Product Passport regime (ESPR, registry, standards, sectors)"
@@ -156,7 +157,7 @@ def main() -> int:
                         WHERE dcat_uri = :u"""),
                     {"t": TITLE, "d": json.dumps(DESCRIPTION, ensure_ascii=False),
                      "th": THEMES, "di": json.dumps(DISTRIBUTION, ensure_ascii=False),
-                     "l": "http://creativecommons.org/licenses/by/4.0/",
+                     "l": licence_for(URI),
                      "p": "P1D", "u": URI},
                 )
             else:
@@ -170,7 +171,7 @@ def main() -> int:
                     {"u": URI, "t": TITLE,
                      "d": json.dumps(DESCRIPTION, ensure_ascii=False),
                      "th": THEMES, "di": json.dumps(DISTRIBUTION, ensure_ascii=False),
-                     "l": "http://creativecommons.org/licenses/by/4.0/", "p": "P1D"},
+                     "l": licence_for(URI), "p": "P1D"},
                 )
             db.commit()
 

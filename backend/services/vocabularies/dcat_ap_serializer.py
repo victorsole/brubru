@@ -37,6 +37,8 @@ except ImportError as _e:  # noqa: BLE001
     BNode = Graph = Literal = Namespace = URIRef = None  # type: ignore[assignment]
     DCAT = DCTERMS = FOAF = RDF = SKOS = XSD = None  # type: ignore[assignment]
 
+from services.vocabularies.licences import BRUBRU_DATA_TERMS, BRUBRU_DATA_TERMS_TITLE
+
 logger = logging.getLogger(__name__)
 
 # ----------------------------------------------------------------------
@@ -164,9 +166,15 @@ def _add_dataset(g: Graph, row: Dict[str, Any], contact: URIRef) -> URIRef:
         if isinstance(theme_uri, str) and theme_uri.startswith("http"):
             g.add((ds_uri, DCAT.theme, URIRef(theme_uri)))
 
-    # Licence
-    if row.get("license"):
-        g.add((ds_uri, DCTERMS.license, URIRef(row["license"])))
+    # Licence: on the resource (a DataService carries it there) and on every
+    # distribution below, which is where data.europa.eu's quality check reads
+    # it. Brubru's own terms are not in the EU list, so they get a title.
+    licence = URIRef(row["license"]) if row.get("license") else None
+    if licence is not None:
+        g.add((ds_uri, DCTERMS.license, licence))
+        g.add((licence, RDF.type, DCTERMS.LicenseDocument))
+        if row["license"] == BRUBRU_DATA_TERMS:
+            g.add((licence, DCTERMS.title, Literal(BRUBRU_DATA_TERMS_TITLE, lang="en")))
 
     # Update frequency
     if row.get("accrual_periodicity"):
@@ -194,6 +202,8 @@ def _add_dataset(g: Graph, row: Dict[str, Any], contact: URIRef) -> URIRef:
             g.add((dist_node, DCTERMS["format"], Literal(d["format"])))
         if d.get("title"):
             g.add((dist_node, DCTERMS.title, Literal(d["title"], lang="en")))
+        if licence is not None:
+            g.add((dist_node, DCTERMS.license, licence))
         g.add((ds_uri, DCAT.distribution, dist_node))
 
     # ADMS-style identifier

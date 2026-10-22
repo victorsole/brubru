@@ -2843,7 +2843,9 @@
     "cookies": "Cookies",
     "subprocessors": "Subprocessors",
     "trademarkLine": "Brubru's trademark belongs to",
-    "trademarkRegistered": "BV and is registered at EUIPO"
+    "trademarkRegistered": "BV and is registered at EUIPO",
+    "sourceCredit": "Contains content of the EU institutions, © European Union, reused under their reuse terms.",
+    "dataLicence": "Data licence"
   },
   "talkToBrubru": "Talk to Brubru about this",
   "feedback": {

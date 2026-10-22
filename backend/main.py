@@ -214,7 +214,7 @@ app.add_middleware(
     # download button can only read these if they are explicitly exposed.
     # X-Export-Rows tells the user how many rows they actually got (exports are
     # capped per endpoint); Content-Disposition carries the filename.
-    expose_headers=["X-Export-Rows", "Content-Disposition", "X-Brubru-Unknown-Params"],
+    expose_headers=["X-Export-Rows", "Content-Disposition", "X-Brubru-Unknown-Params", "X-Source-Credit", "Link"],
 )
 
 # Billing refund middleware (Phase B — refunds 5xx debits on /api/v1/*).
@@ -387,6 +387,8 @@ from api.v2 import router as v2_router, docs_alias_router as v2_docs_alias
 app.include_router(v2_router)
 app.include_router(v2_docs_alias)
 
+from services.vocabularies.licences import BRUBRU_DATA_TERMS, SOURCE_CREDIT  # noqa: E402
+
 
 @app.middleware("http")
 async def _v1_rate_limit_headers(request, call_next):
@@ -406,6 +408,11 @@ async def _v1_rate_limit_headers(request, call_next):
         response.headers["X-Source"] = "brubru.beresol.eu"
         # Phase 3 of docs/applications/euvoc.md — declare OP Core conformance.
         response.headers["X-OP-Core-Conformance"] = "v1.0"
+        # The credit the EU sources ask for (CC BY 4.0: source + changes stated)
+        # and the terms the data carries (RFC 8288 rel="license"). Appended, not
+        # set: a deprecated alias already sends a Link (successor-version).
+        response.headers["X-Source-Credit"] = SOURCE_CREDIT
+        response.headers.append("Link", f'<{BRUBRU_DATA_TERMS}>; rel="license"')
         # Query params the endpoint does not accept and therefore did NOT apply.
         # Warn-only by default (API_STRICT_QUERY_PARAMS=true makes it a 422); the
         # header is what makes a silently-dropped filter visible to the caller.

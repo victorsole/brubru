@@ -26,6 +26,8 @@ from typing import Optional
 
 from fastapi import APIRouter, Query
 
+from services.vocabularies.licences import BRUBRU_DATA_TERMS, BRUBRU_DATA_TERMS_TITLE
+
 router = APIRouter(prefix="/api/mcp/openapi", tags=["mcp-openapi"])
 
 DEFAULT_BASE_URL = os.environ.get("BRUBRU_PUBLIC_URL", "https://brubru.beresol.eu")
@@ -56,7 +58,7 @@ def _spec(base_url: str) -> dict:
             ),
             "version": "1.0.0",
             "contact": {"name": "Brubru", "url": "https://brubru.beresol.eu/mcp", "email": "hello@beresol.eu"},
-            "license": {"name": "Proprietary"},
+            "license": {"name": BRUBRU_DATA_TERMS_TITLE, "url": BRUBRU_DATA_TERMS},
         },
         "servers": [{"url": base_url, "description": "Brubru API"}],
         "components": {

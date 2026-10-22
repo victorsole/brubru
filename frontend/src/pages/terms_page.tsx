@@ -1,9 +1,21 @@
 // frontend/src/pages/terms_page.tsx
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './policy_pages.css';
 import { DEMO_MAILTO_EN } from '../utils/demo_invitation';
 
 export const TermsPage = () => {
+  // The footer and every API response link /terms#data-licence: land on that section.
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (!hash) return;
+    const timer = window.setTimeout(
+      () => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'instant', block: 'start' }),
+      250,
+    );
+    return () => window.clearTimeout(timer);
+  }, [hash]);
+
   return (
     <div className="policy-page">
       <div className="policy-page__container">
@@ -12,7 +24,7 @@ export const TermsPage = () => {
         <section className="policy-page__section">
           <p className="policy-page__intro">
             <strong>Effective Date:</strong> November 2025<br />
-            <strong>Last Updated:</strong> November 2025
+            <strong>Last Updated:</strong> 22 October 2026
           </p>
           <p>
             These Terms of Service ("Terms") govern your access to and use of Brubru
@@ -196,8 +208,10 @@ export const TermsPage = () => {
 
           <h3>6.2 Our Intellectual Property</h3>
           <p>
-            Brubru and all related software, trademarks, logos, and content are the exclusive
-            property of Beresol BV. You may not:
+            Brubru's software, trademarks and logos are the exclusive property of Beresol BV. So is
+            what Brubru adds to public information: its selection and structure, classifications,
+            summaries, translations, knowledge guides and databases, which section 6.4 licenses to
+            you. You may not:
           </p>
           <ul>
             <li>Copy, modify, or create derivative works of our software</li>
@@ -205,11 +219,64 @@ export const TermsPage = () => {
             <li>Remove copyright or proprietary notices</li>
           </ul>
 
-          <h3>6.3 Third-Party Content</h3>
+          <h3>6.3 Content of the EU Institutions</h3>
           <p>
-            Brubru aggregates content from EU institutional sources (EUR-Lex, OEIL, European Parliament, etc.).
-            This content remains the property of the respective institutions and is used in accordance with
-            their terms and applicable EU law.
+            Brubru reuses content published by the EU institutions and bodies (EUR-Lex, the European
+            Parliament, the Council, the Commission, OEIL and others). That content remains
+            &copy; European Union and is reused under each source's own terms:
+          </p>
+          <ul>
+            <li>
+              EUR-Lex: legal documents under Commission Decision 2011/833/EU, for commercial or
+              non-commercial purposes; editorial content, summaries and consolidated texts under
+              CC BY 4.0; metadata under CC0.
+            </li>
+            <li>The Commission and data.europa.eu: CC BY 4.0, with credit given and any changes indicated.</li>
+            <li>
+              The European Parliament: reuse with the source acknowledged; a partial reproduction
+              cites the link to the complete item.
+            </li>
+          </ul>
+          <p>
+            Brubru changes this content when it structures, classifies, summarises or translates it.
+            Each item links to its original (its <code>public_url</code>); only the Official Journal of
+            the European Union is authentic. EU logos and trademarks are not licensed. Nothing in these
+            Terms restricts your own reuse of the EU's content under the EU's terms.
+          </p>
+
+          <h3 id="data-licence">6.4 Data Licence</h3>
+          <p>Two licences apply to the data Brubru publishes, depending on how it is served:</p>
+          <ul>
+            <li>
+              <strong>Free, without an API key:</strong> the Catalan translations of EU legislation and
+              the europa.eu source registry are licensed under{' '}
+              <a
+                href="https://creativecommons.org/licenses/by/4.0/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="policy-page__link"
+              >
+                Creative Commons Attribution 4.0 International (CC BY 4.0)
+              </a>
+              . You may reuse them, including commercially, if you credit "Brubru (Beresol BV)" and the
+              original source, link the licence and say what you changed. Until 22 October 2026 the
+              Catalan translations were published under the MIT licence; copies obtained before that
+              date keep it.
+            </li>
+            <li>
+              <strong>Behind an API key or a subscription:</strong> the REST API (v1 and v2), the MCP
+              servers, the knowledge guides and the datasets served through them (EU legislation
+              search, vocabularies, digital product passport, textile circularity and others) are
+              licensed to you for your own use and for the work you deliver to your clients or
+              readers, including reasonable extracts with credit to Brubru. You may not resell or
+              redistribute them in bulk, or use them to build a competing dataset or service, without
+              a written agreement. A partner with a written agreement follows that agreement.
+            </li>
+          </ul>
+          <p>
+            In both cases the EU's own content inside the data remains under the EU's terms (section
+            6.3): this licence covers what Brubru adds. Every API response states the credit in its{' '}
+            <code>X-Source-Credit</code> header and links this section in its <code>Link</code> header.
           </p>
         </section>
 
@@ -437,7 +504,7 @@ export const TermsPage = () => {
         </section>
 
         <div className="policy-page__footer">
-          <p>Last Updated: November 2025</p>
+          <p>Last Updated: 22 October 2026</p>
           <p>
             <Link to="/about" className="policy-page__link">About</Link> ·
             <Link to="/privacy" className="policy-page__link">Privacy Policy</Link> ·

@@ -4,9 +4,9 @@
 OPEN-SOURCE / FREE TIER
 ========================
 Unlike the rest of /api/v1/*, this surface is NOT gated by X-API-Key.
-The underlying corpus is published under the MIT licence (see the
-landing page footer at https://brubru.beresol.eu/legislacio-ue-catala/);
-gating it would be at odds with that licence. Free public endpoints
+The translations are published under CC BY 4.0 (MIT until 22 Oct 2026;
+see the landing page footer at https://brubru.beresol.eu/legislacio-ue-catala/);
+gating them would be at odds with that licence. Free public endpoints
 share the global rate-limit middleware; no per-key tier is enforced.
 
 The /api/v1/catalan-translations namespace exposes the binding-law
@@ -303,7 +303,7 @@ class CatalanStats(BaseModel):
     by_category: list[CategoryCount]
     by_engine: list[EngineCount]
     last_translated_at: Optional[datetime] = None
-    licence: str = Field("MIT", description="Translations are MIT-licensed; redistribution permitted with attribution.")
+    licence: str = Field("CC BY 4.0", description="Translations are licensed CC BY 4.0: reuse, including commercial, with credit to Brubru (Beresol BV) and to the source, (c) European Union, EUR-Lex.")
 
 
 # --------------------------------------------------------------------------- #
@@ -378,7 +378,7 @@ def _binding_law_filter(query):
         "- `limit` 1–200 (default 50); `page` 1+.\n\n"
         "**Try it.** `GET /api/v1/catalan-translations?q=GDPR&limit=3` (no API key required).\n\n"
         "**You get back.** Per row: `celex`, `doc_type`, `short_name`, `title_ca`, `title_en`, `category`/`category_en`, `articles_count`, `recitals_count`, `html_size_bytes`, `engine`, `ca_url` (canonical render on `brubru.beresol.eu`), `source_eurlex_url`, timestamps.\n\n"
-        "**Open data.** No API key required. MIT-licensed. Subject to the standard global rate limit.\n\n"
+        "**Open data.** No API key required. Licensed CC BY 4.0 (credit Brubru and the source, (c) European Union, EUR-Lex). Subject to the standard global rate limit.\n\n"
         "---\n\n"
         "## Català\n\n"
         "**Què fa.** Retorna un catàleg paginat dels actes legals vinculants de la UE (Reglaments, Directives, Decisions) traduïts al català per Brubru amb el motor de traducció automàtica de Softcatalà.\n\n"
@@ -393,7 +393,7 @@ def _binding_law_filter(query):
         "- `limit` 1–200 (per defecte 50); `page` 1+.\n\n"
         "**Prova-ho.** `GET /api/v1/catalan-translations?q=GDPR&limit=3` (sense clau API).\n\n"
         "**Què obtens.** Per fila: `celex`, `doc_type`, `short_name`, `title_ca`, `title_en`, `category`/`category_en`, `articles_count`, `recitals_count`, `html_size_bytes`, `engine`, `ca_url` (rendització canònica a `brubru.beresol.eu`), `source_eurlex_url`, marques de temps.\n\n"
-        "**Dades obertes.** No cal clau API. Llicència MIT. Subjecte al límit de freqüència global estàndard.\n\n"
+        "**Dades obertes.** No cal clau API. Llicència CC BY 4.0 (cal citar Brubru i la font, © Unió Europea, EUR-Lex). Subjecte al límit de freqüència global estàndard.\n\n"
         "---\n\n"
         "**Data freshness.** Brubru-generated content (not synced from external sources). New translations are added by the `/catalan` skill in a separate conversation; the corpus grows by tens of acts per week. Daily sync of disk-to-DB via `backend/scripts/sync_catalan_disk_to_db.py`.\n\n"
         "**Actualització de dades.** Contingut generat per Brubru (no se sincronitza des de fonts externes). Es generen noves traduccions amb l'skill `/catalan` en una conversa separada; el corpus creix per desenes d'actes a la setmana. Sincronització diària de disc a BD mitjançant `backend/scripts/sync_catalan_disk_to_db.py`."
@@ -457,7 +457,7 @@ async def list_catalan_translations(
         limit=limit,
         updated_from=updated_from,
         updated_to=updated_to,
-        op_core_title="EU binding-law corpus translated into Catalan (Brubru, MIT)",
+        op_core_title="EU binding-law corpus translated into Catalan (Brubru, CC BY 4.0)",
         op_core_type="EU legislation translation catalogue",
         op_core_identifier=str(request.url),
         op_core_language="ca",
@@ -486,7 +486,7 @@ async def list_catalan_translations(
         "- `by_category[]` — `{category, category_en, count}` (use these names for the `category` / `category_en` filters)\n"
         "- `by_engine[]` — `{engine, count}` (`softcatala` vs `sonnet`)\n"
         "- `last_translated_at` — timestamp of the most recent ingestion\n"
-        "- `licence` — always `MIT`\n\n"
+        "- `licence` — always `CC BY 4.0`\n\n"
         "---\n\n"
         "## Català\n\n"
         "**Què fa.** Retorna comptadors agregats de les traduccions catalanes d'actes de la UE agrupats per `doc_type`, `category` (català + anglès) i `engine`, més l'objectiu canònic de 8.710 actes i el percentatge de cobertura actual.\n\n"
@@ -501,7 +501,7 @@ async def list_catalan_translations(
         "- `by_category[]` — `{category, category_en, count}` (fes servir aquests noms als filtres `category` / `category_en`)\n"
         "- `by_engine[]` — `{engine, count}` (`softcatala` vs `sonnet`)\n"
         "- `last_translated_at` — marca de temps de la ingesta més recent\n"
-        "- `licence` — sempre `MIT`\n\n"
+        "- `licence` — sempre `CC BY 4.0`\n\n"
         "---\n\n"
         "**Data freshness.** Live aggregate query over the `catalan_translations` table on each request. The underlying table grows as new translations are added via the `/catalan` skill (Brubru-curated, not synced from external sources).\n\n"
         "**Actualització de dades.** Consulta agregada en directe a la taula `catalan_translations` a cada petició. La taula creix amb les noves traduccions generades amb l'skill `/catalan` (contingut Brubru, no se sincronitza des de fonts externes)."
@@ -550,7 +550,7 @@ async def catalan_translations_stats(db: Session = Depends(get_db)) -> CatalanSt
         ],
         by_engine=[EngineCount(engine=e[0], count=e[1]) for e in by_eng],
         last_translated_at=last_translated,
-        licence="MIT",
+        licence="CC BY 4.0",
     )
 
 
