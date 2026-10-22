@@ -980,7 +980,8 @@
       "note": "X-API-Key est aussi accepté pour les scripts curl. Bearer est la valeur par défaut pour Postman, OpenAPI et les SDK."
     },
     "envelope": {
-      "description": "Tous les endpoints paginés renvoient la même structure. Les intégrateurs codent une seule fois contre l'enveloppe et changent de dataset en changeant le chemin."
+      "description": "Tous les endpoints paginés renvoient la même structure. Les intégrateurs codent une seule fois contre l'enveloppe et changent de dataset en changeant le chemin.",
+      "licence": "L'attribution et la licence voyagent dans les en-têtes de réponse, pas dans le corps: X-Source-Credit porte le crédit que demandent les sources de l'UE et Link pointe vers la licence (les conditions des données Brubru; les traductions en catalan sont sous CC BY 4.0). Conservez le crédit si vous republiez un extrait."
     },
     "errors": {
       "code": "Code",
@@ -4863,12 +4864,15 @@
       "canon": "Canon",
       "deep_dive": "Analyse approfondie"
     },
-    "tabDatasets": "Données ouvertes",
-    "datasetsTitle": "Données ouvertes",
-    "datasetsDesc": "Tout ce que Brubru publie en données ouvertes: les corpus derrière le produit, chacun avec les points d'accès que vous pouvez appeler.",
+    "tabDatasets": "Jeux de données Brubru",
+    "datasetsTitle": "Jeux de données Brubru",
+    "datasetsDesc": "Tout ce que Brubru publie: les corpus derrière le produit, chacun avec sa licence et les points d'accès que vous pouvez appeler. Les jeux gratuits sont sous CC BY 4.0; ceux qui demandent une clé relèvent des conditions des données Brubru.",
     "datasetsKpi": "jeux de données",
     "datasetsKpiDist": "distributions",
     "datasetsThemes": "thèmes EuroVoc",
+    "licenceCcBy": "CC BY 4.0",
+    "licenceTerms": "Conditions des données Brubru",
+    "licenceTitle": "Licence: ce que vous pouvez faire de ce jeu de données",
     "datasetsNoDist": "Pas encore de téléchargement public",
     "periodDaily": "mis à jour quotidiennement",
     "periodWeekly": "mis à jour chaque semaine",

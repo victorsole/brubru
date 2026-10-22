@@ -6,9 +6,10 @@
  *   - Deep Dives: animated summary of the thematic deep-dive reports.
  *   - Knowledge Guides: synthetic mirror of /guides/index.html (categories + counts).
  *   - Dret europeu en catala: Catalan-only; mirror of /legislacio-ue-catala/.
- *   - Open datasets: the DCAT catalogue (brubru_dataset_catalog), which described
+ *   - Brubru datasets: the DCAT catalogue (brubru_dataset_catalog), which described
  *     every Brubru dataset to the outside world while no surface in the product
- *     read it. Each card is a dataset, each chip a callable distribution.
+ *     read it. Each card is a dataset, each chip a callable distribution, and the
+ *     badge its licence (free = CC BY 4.0, keyed = Brubru's data terms, 22 Oct 2026).
  *   - Policy Areas: "who does what" across the EU institutions, PI-aware, charts.
  *   - Beresol Monitors: live Beresol policy-intelligence digests (Beresol Monitor API).
  *
@@ -37,7 +38,7 @@ import {
   mdiShieldOutline, mdiSwapHorizontal, mdiRobotOutline, mdiAtomVariant, mdiRocketLaunchOutline,
   mdiGold, mdiChartLine, mdiChevronDown, mdiChevronUp,
   mdiHistory, mdiPlusCircleOutline, mdiPencilOutline, mdiBookPlusOutline,
-  mdiMagnify, mdiClose, mdiChevronRight, mdiCloseCircle, mdiDumbbell,
+  mdiMagnify, mdiClose, mdiChevronRight, mdiCloseCircle, mdiDumbbell, mdiScaleBalance,
 } from '@mdi/js';
 import { createPortal } from 'react-dom';
 import { marked } from 'marked';
@@ -211,7 +212,7 @@ export function DatabasesTab() {
     ['deep', mdiFileDocumentMultipleOutline, t('db.tabDeep', 'Deep Dives')],
     ['guides', mdiBookshelf, t('db.tabGuides', 'Knowledge Guides')],
     ...(isCa ? [['catalan', mdiTranslate, t('db.tabCatalan', 'Dret europeu en català')]] as [Sub, string, string][] : []),
-    ['datasets', mdiDatabaseOutline, t('db.tabDatasets', 'Open datasets')],
+    ['datasets', mdiDatabaseOutline, t('db.tabDatasets', 'Brubru datasets')],
     ['policy', mdiSitemapOutline, t('db.tabPolicy', 'Policy Areas')],
     ['partners', mdiRadar, t('db.tabPartners', 'Beresol Monitors')],
   ];
@@ -255,7 +256,16 @@ const PERIODICITY: Record<string, [string, string]> = {
   P1M: ['db.periodMonthly', 'updated monthly'],
 };
 
-// ------------------------------------------------------------- Open datasets
+// The catalogue's dct:license, as services/vocabularies/licences.py writes it:
+// free datasets CC BY 4.0, keyed ones Brubru's data terms (Terms 6.4).
+const LICENCES: Record<string, [string, string, string]> = {
+  'http://publications.europa.eu/resource/authority/licence/CC_BY_4_0':
+    ['db.licenceCcBy', 'CC BY 4.0', 'https://creativecommons.org/licenses/by/4.0/'],
+  'https://brubru.beresol.eu/terms#data-licence':
+    ['db.licenceTerms', 'Brubru data terms', '/terms#data-licence'],
+};
+
+// ------------------------------------------------------------- Brubru datasets
 // brubru_dataset_catalog held DCAT metadata for the outside world while nothing
 // in the product read it, so a user could not see what Brubru publishes. Each
 // card is a dataset; each chip under it is a distribution you can actually open.
@@ -272,8 +282,8 @@ function OpenDatasets({ data, t }: { data: DatasetsResult | null; t: any }) {
     <div className="db-section">
       <LibHero
         icon={mdiDatabaseOutline}
-        title={t('db.datasetsTitle', 'Open datasets')}
-        subtitle={t('db.datasetsDesc', 'Everything Brubru publishes as open data: the corpora behind the product, each with the endpoints you can call.')}
+        title={t('db.datasetsTitle', 'Brubru datasets')}
+        subtitle={t('db.datasetsDesc', "Everything Brubru publishes: the corpora behind the product, each with its licence and the endpoints you can call. Free datasets are CC BY 4.0; datasets behind a key are under Brubru's data terms.")}
         kpis={[
           { value: data.count, label: t('db.datasetsKpi', 'datasets') },
           { value: data.datasets.reduce((n, d) => n + d.distributions.length, 0),
@@ -321,6 +331,13 @@ function OpenDatasets({ data, t }: { data: DatasetsResult | null; t: any }) {
                 </a>
               )))}
             </div>
+            {d.license && LICENCES[d.license] && (
+              <a className="db-dataset-card__licence" href={LICENCES[d.license][2]}
+                 target="_blank" rel="noopener noreferrer"
+                 title={t('db.licenceTitle', 'Licence: what you may do with this dataset')}>
+                <Icon path={mdiScaleBalance} size={0.5} /> {t(LICENCES[d.license][0], LICENCES[d.license][1])}
+              </a>
+            )}
             <span className="db-canon-card__celex">
               {d.themes.length} {t('db.datasetsThemes', 'EuroVoc themes')}
               {/* accrual_periodicity is an ISO 8601 duration: correct in DCAT,

@@ -1196,6 +1196,9 @@ html.landing-scroll-snap {
 .landing .footer__copy { font-size: var(--font-size-xs); color: var(--color-text-muted); }
 .landing .footer__copy a { color: var(--color-text-muted); text-decoration: underline; text-underline-offset: 2px; transition: color var(--transition-fast); }
 .landing .footer__copy a:hover { color: white; }
+.landing .footer__credit { max-width: var(--container-max); margin: var(--spacing-md) auto 0; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+.landing .footer__credit a { color: var(--color-text-muted); text-decoration: underline; text-underline-offset: 2px; transition: color var(--transition-fast); }
+.landing .footer__credit a:hover { color: white; }
 
 .landing .footer__links {
   display: flex;

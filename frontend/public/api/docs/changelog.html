@@ -175,6 +175,14 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>22 October 2026: a licence and a source credit on every response</h3>
+<p>Every <code>/api/v1</code> and <code>/api/v2</code> response now carries two more headers: <code>X-Source-Credit</code>, the credit the EU sources ask for (&copy; European Union, reused under Commission Decision 2011/833/EU, CC BY 4.0 and each source's reuse notice, and what Brubru changed), and <code>Link: &lt;https://brubru.beresol.eu/terms#data-licence&gt;; rel="license"</code>. Both are readable from a browser (CORS). Nothing in the body changes.</p>
+<ul>
+<li><strong>Licence:</strong> data served behind a key is under <a href="/terms#data-licence">Brubru's data terms</a> (Terms of Service, section 6.4). The Catalan translations are now <strong>CC BY 4.0</strong> (they were MIT): <code>/catalan-translations/stats</code> returns <code>"licence": "CC BY 4.0"</code>.</li>
+<li><strong>OpenAPI:</strong> <code>/api/openapi.json</code> declares <code>info.license</code> and <code>info.termsOfService</code>.</li>
+<li><strong>DCAT catalogue</strong> (<code>/api/datasets.ttl</code>, <code>.rdf</code>, <code>.json</code>): every distribution carries <code>dct:license</code>, written as the EU licence list's address for CC BY 4.0.</li>
+</ul>
+
 <h3>16 October 2026: deprecated text aliases are now empty; creation_date is the first sighting</h3>
 <p>Every item serves its text once. The old alias fields that repeated <code>body_txt</code> stay in the JSON for compatibility but are now always empty: <code>body</code> (register documents, delegated and implementing acts, EP documents, institutional publications, the specialised feeds), <code>text</code> (consultation feedback), <code>full_text</code> and <code>has_full_text</code> (adopted and tabled texts). Read <code>body_txt</code>, <code>body_html</code> and <code>has_body</code>. Pages shrink by a third on the heaviest endpoints; one implementing act went from 124 MB to 83 MB. The keys are removed in the next major version.</p>
 <p><strong>Fixed:</strong> <code>creation_date</code> on parliamentary questions, adopted and tabled texts, TRIS notifications, votes and committee work items is now when Brubru first saw the row. It used to repeat the last update time, so a re-fetched row looked new.</p>

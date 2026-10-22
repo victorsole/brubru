@@ -980,7 +980,8 @@
       "note": "X-API-Key wordt ook geaccepteerd voor curl-scripts. Bearer is de standaard voor Postman, OpenAPI en SDK's."
     },
     "envelope": {
-      "description": "Elk gepagineerd eindpunt retourneert dezelfde vorm. Integrators coderen één keer tegen de envelop en wisselen van dataset door het pad te wijzigen."
+      "description": "Elk gepagineerd eindpunt retourneert dezelfde vorm. Integrators coderen één keer tegen de envelop en wisselen van dataset door het pad te wijzigen.",
+      "licence": "Naamsvermelding en licentie reizen mee in de response-headers, niet in de body: X-Source-Credit bevat de vermelding die de EU-bronnen vragen en Link verwijst naar de licentie (de datavoorwaarden van Brubru; de Catalaanse vertalingen vallen onder CC BY 4.0). Behoud de vermelding als u een fragment herpubliceert."
     },
     "errors": {
       "code": "Code",
@@ -3807,12 +3808,15 @@
       "canon": "Canon",
       "deep_dive": "Diepteanalyse"
     },
-    "tabDatasets": "Open data",
-    "datasetsTitle": "Open data",
-    "datasetsDesc": "Alles wat Brubru als open data publiceert: de corpora achter het product, elk met de endpoints die je kunt aanroepen.",
+    "tabDatasets": "Brubru-datasets",
+    "datasetsTitle": "Brubru-datasets",
+    "datasetsDesc": "Alles wat Brubru publiceert: de corpora achter het product, elk met zijn licentie en de endpoints die je kunt aanroepen. Gratis datasets vallen onder CC BY 4.0; datasets achter een sleutel onder de datavoorwaarden van Brubru.",
     "datasetsKpi": "datasets",
     "datasetsKpiDist": "distributies",
     "datasetsThemes": "EuroVoc-thema's",
+    "licenceCcBy": "CC BY 4.0",
+    "licenceTerms": "Datavoorwaarden van Brubru",
+    "licenceTitle": "Licentie: wat je met deze dataset mag doen",
     "datasetsNoDist": "Nog geen publieke download",
     "periodDaily": "dagelijks bijgewerkt",
     "periodWeekly": "wekelijks bijgewerkt",

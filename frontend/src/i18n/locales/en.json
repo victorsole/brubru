@@ -980,7 +980,8 @@
       "note": "X-API-Key is also accepted for curl-friendly scripts. Bearer is the default for Postman, OpenAPI tooling, and SDKs."
     },
     "envelope": {
-      "description": "Every paginated endpoint returns the same shape. Partners can code once against the envelope and swap datasets by changing the path."
+      "description": "Every paginated endpoint returns the same shape. Partners can code once against the envelope and swap datasets by changing the path.",
+      "licence": "Attribution and licence travel in the response headers, not the body: X-Source-Credit carries the credit the EU sources ask for, and Link points to the licence (Brubru's data terms; the Catalan translations are CC BY 4.0). Keep the credit when you republish an extract."
     },
     "errors": {
       "code": "Code",
@@ -4863,12 +4864,15 @@
       "canon": "Canon",
       "deep_dive": "Deep dive"
     },
-    "tabDatasets": "Open datasets",
-    "datasetsTitle": "Open datasets",
-    "datasetsDesc": "Everything Brubru publishes as open data: the corpora behind the product, each with the endpoints you can call.",
+    "tabDatasets": "Brubru datasets",
+    "datasetsTitle": "Brubru datasets",
+    "datasetsDesc": "Everything Brubru publishes: the corpora behind the product, each with its licence and the endpoints you can call. Free datasets are CC BY 4.0; datasets behind a key are under Brubru's data terms.",
     "datasetsKpi": "datasets",
     "datasetsKpiDist": "distributions",
     "datasetsThemes": "EuroVoc themes",
+    "licenceCcBy": "CC BY 4.0",
+    "licenceTerms": "Brubru data terms",
+    "licenceTitle": "Licence: what you may do with this dataset",
     "datasetsNoDist": "No public download yet",
     "periodDaily": "updated daily",
     "periodWeekly": "updated weekly",

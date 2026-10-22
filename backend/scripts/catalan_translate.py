@@ -1650,6 +1650,7 @@ def generate_html(translated: dict, celex: str, display_ref: str = '') -> str:
   <p>
     Traducci&oacute; al catal&agrave; per <a href="https://brubru.beresol.eu">Brubru</a>, l'assistent d'IA per a pol&iacute;tiques europees de <a href="https://beresol.eu">Beresol</a>.
     <br>Aquesta no &eacute;s una traducci&oacute; oficial. El text jur&iacute;dicament vinculant &eacute;s la versi&oacute; en les lleng&uuml;es oficials de la UE disponible a <a href="https://eur-lex.europa.eu" target="_blank" rel="noopener">EUR-Lex</a>.
+    <br>Text original &copy; Uni&oacute; Europea, EUR-Lex, reutilitzat segons la Decisi&oacute; 2011/833/UE. Traducci&oacute; publicada sota la llic&egrave;ncia <a href="https://creativecommons.org/licenses/by/4.0/deed.ca" target="_blank" rel="noopener">CC BY 4.0</a>: cal citar Brubru (Beresol BV) i la font. <a href="https://brubru.beresol.eu/terms#data-licence">Llic&egrave;ncia de dades</a>.
   </p>
 </footer>
 

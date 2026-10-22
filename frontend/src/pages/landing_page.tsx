@@ -632,6 +632,11 @@ export const LandingPage = () => {
             </a>
           </div>
         </div>
+        {/* The credit the EU sources ask for, as on every other page's footer */}
+        <p className="footer__credit">
+          {t('footer.sourceCredit')}{' '}
+          <Link to="/terms#data-licence">{t('footer.dataLicence')}</Link>
+        </p>
       </footer>
     </div>
   );

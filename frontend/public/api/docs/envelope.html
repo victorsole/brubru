@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Response envelope: Brubru EU Data API</title>
-<meta name="description" content="Brubru API response envelope: pagination, filter echo, detail_level. Attribution lives on response headers (X-Powered-By / X-Source).">
+<meta name="description" content="Brubru API response envelope: pagination, filter echo, detail_level. Attribution and licence live on response headers (X-Powered-By, X-Source, X-Source-Credit, Link).">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css?v=20260811">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -190,9 +190,13 @@ Every paginated endpoint returns the same JSON envelope. Code once against it an
 <p>Attribution lives on response headers, not in the body:</p>
 <pre><code>X-Powered-By: Brubru
 X-Source: brubru.beresol.eu
+X-Source-Credit: Contains content of the EU institutions and bodies, (c) European Union, reused under Commission Decision 2011/833/EU, CC BY 4.0 and each source's reuse notice. Brubru changed it: structure, classification, summaries and translations. Each item's public_url links its original; only the Official Journal is authentic. Terms: https://brubru.beresol.eu/terms#data-licence
+Link: &lt;https://brubru.beresol.eu/terms#data-licence&gt;; rel="license"
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 58
 X-RateLimit-Tier: free</code></pre>
+
+<p><strong>Licence.</strong> Data served behind a key is licensed under <a href="/terms#data-licence">Brubru's data terms</a>; the Catalan translations are <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The EU institutions' own content stays &copy; European Union under its reuse terms: when you republish an extract, keep the credit from <code>X-Source-Credit</code> and link the item's <code>public_url</code>. <code>Link</code> may also carry <code>rel="successor-version"</code> on a deprecated path.</p>
 
 <h2>Pagination fields</h2>
 <table>

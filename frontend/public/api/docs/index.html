@@ -456,9 +456,13 @@ Brubru is a vertical EU data provider. Our REST API gives developers, RegTech pl
 <p>Provenance and rate-limit info live on response headers, not in the body:</p>
 <pre><code>X-Powered-By: Brubru
 X-Source: brubru.beresol.eu
+X-Source-Credit: Contains content of the EU institutions and bodies, (c) European Union, reused under Commission Decision 2011/833/EU, CC BY 4.0 and each source's reuse notice. Brubru changed it: structure, classification, summaries and translations. Each item's public_url links its original; only the Official Journal is authentic. Terms: https://brubru.beresol.eu/terms#data-licence
+Link: &lt;https://brubru.beresol.eu/terms#data-licence&gt;; rel="license"
 X-RateLimit-Limit: 60
 X-RateLimit-Remaining: 58
 X-RateLimit-Tier: free</code></pre>
+
+<p><strong>Licence.</strong> Data served behind a key is licensed under <a href="/terms#data-licence">Brubru's data terms</a>; the Catalan translations are <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The EU institutions' own content stays &copy; European Union under its reuse terms: when you republish an extract, keep the credit from <code>X-Source-Credit</code> and link the item's <code>public_url</code>.</p>
 
 <p>Full details on <a href="/api/docs/envelope.html">Response envelope</a>.</p>
 

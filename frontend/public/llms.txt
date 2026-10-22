@@ -15,7 +15,7 @@ Brubru is organised into six canonical products:
 - [Tenderator](https://brubru.beresol.eu/tenderator): EU public-procurement and funding intelligence over TED notices, with AI matching and bid-readiness analysis.
 - [Brubru Public Data API](https://brubru.beresol.eu/api): a paid REST API over Brubru's EU legal and institutional data — 27,103 laws, OJ publications, OEIL procedures, the Council register, the EU Who-is-Who, and the Publications Office / data.europa.eu surfaces — billed via prepaid micro-credits.
 
-Additional capabilities: AI document generation (position papers, MEP briefings, talking points, and more) inside My EU Bubble; AI legislative-outcome Predictions (timeline, EP plenary vote, Council QMV, resolution leading indicators); and a growing public library of EU legislation machine-translated into Catalan at https://brubru.beresol.eu/legislacio-ue-catala/.
+Additional capabilities: AI document generation (position papers, MEP briefings, talking points, and more) inside My EU Bubble; AI legislative-outcome Predictions (timeline, EP plenary vote, Council QMV, resolution leading indicators); and a growing public library of EU legislation machine-translated into Catalan at https://brubru.beresol.eu/legislacio-ue-catala/ (CC BY 4.0).
 
 ## Public Pages
 
@@ -121,6 +121,11 @@ Brubru offers a 14-day free trial. There is no permanent free tier. Annual billi
 - [Beresol BV](https://beresol.eu): Technology company specialising in AI-powered solutions for policy and advocacy professionals
 - [Beresol Public Affairs](https://beresol.eu/public-affairs): Open reports and monitors on EU policy topics
 - Contact: hello@beresol.eu
+
+## Licence
+
+- Brubru's own data is licensed by how it is served. Free datasets (the Catalan translations of EU legislation, the europa.eu source registry) are CC BY 4.0: reuse them, including commercially, with credit to Brubru (Beresol BV) and the original source. Data behind an API key (the REST API, the MCP servers, the knowledge guides) is under Brubru's data terms: https://brubru.beresol.eu/terms#data-licence
+- Content of the EU institutions stays (c) European Union, reused under Commission Decision 2011/833/EU, CC BY 4.0 and each source's reuse notice. Only the Official Journal of the European Union is authentic. Every API response carries this credit in its X-Source-Credit header.
 
 ## Optional
 

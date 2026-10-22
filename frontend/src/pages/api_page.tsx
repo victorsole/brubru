@@ -215,13 +215,13 @@ export const ApiPage = () => {
   "published_to": "2026-01-31",
   "published_end": "2026-01-31",
   "detail_level": "Full",
-  "data": [ ... ],
-  "meta": {
-    "source": "brubru.beresol.eu",
-    "powered_by": "Brubru",
-    "fetched_at": "2026-04-15T12:34:56Z"
-  }
+  "data": [ ... ]
 }`}</code></pre>
+            {/* The meta block left the body on 30 Apr 2026; provenance, credit and licence are headers */}
+            <p>
+              {t('api.envelope.licence')}{' '}
+              <a href="/terms#data-licence" className="policy-page__link">{t('footer.dataLicence')}</a>
+            </p>
           </section>
 
           {/* Code examples */}

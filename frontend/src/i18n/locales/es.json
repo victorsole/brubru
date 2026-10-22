@@ -980,7 +980,8 @@
       "note": "X-API-Key también se acepta para scripts con curl. Bearer es el estándar en Postman, OpenAPI y SDKs."
     },
     "envelope": {
-      "description": "Todos los endpoints paginados devuelven la misma estructura. Los integradores pueden codificar una vez contra la envoltura y cambiar de dataset cambiando la ruta."
+      "description": "Todos los endpoints paginados devuelven la misma estructura. Los integradores pueden codificar una vez contra la envoltura y cambiar de dataset cambiando la ruta.",
+      "licence": "La atribución y la licencia viajan en las cabeceras de respuesta, no en el cuerpo: X-Source-Credit lleva el crédito que piden las fuentes de la UE y Link apunta a la licencia (los términos de datos de Brubru; las traducciones al catalán son CC BY 4.0). Mantenga el crédito si republica un fragmento."
     },
     "errors": {
       "code": "Código",
@@ -4863,12 +4864,15 @@
       "canon": "Canon",
       "deep_dive": "Análisis en profundidad"
     },
-    "tabDatasets": "Datos abiertos",
-    "datasetsTitle": "Datos abiertos",
-    "datasetsDesc": "Todo lo que Brubru publica como datos abiertos: los corpus detrás del producto, cada uno con los endpoints que puedes llamar.",
+    "tabDatasets": "Conjuntos de datos de Brubru",
+    "datasetsTitle": "Conjuntos de datos de Brubru",
+    "datasetsDesc": "Todo lo que Brubru publica: los corpus detrás del producto, cada uno con su licencia y los endpoints que puedes llamar. Los conjuntos gratuitos son CC BY 4.0; los que requieren clave siguen los términos de datos de Brubru.",
     "datasetsKpi": "conjuntos de datos",
     "datasetsKpiDist": "distribuciones",
     "datasetsThemes": "temas EuroVoc",
+    "licenceCcBy": "CC BY 4.0",
+    "licenceTerms": "Términos de datos de Brubru",
+    "licenceTitle": "Licencia: qué puedes hacer con este conjunto de datos",
     "datasetsNoDist": "Aún no hay descarga pública",
     "periodDaily": "actualizado a diario",
     "periodWeekly": "actualizado semanalmente",
