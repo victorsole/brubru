@@ -68,7 +68,12 @@ class OPCoreMetadata(BaseModel):
 
 
 class PaginatedResponse(BaseModel, Generic[T]):
-    """Standard paginated response envelope used by every v1 endpoint."""
+    """Standard paginated response envelope used by every v1 endpoint.
+
+    When a request carries a query parameter the endpoint does not accept, the envelope
+    opens with `ignored_parameters` (those NOT applied) and `accepted_parameters`, and
+    the `X-Brubru-Unknown-Params` header repeats the first list. Absent otherwise.
+    """
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

@@ -388,12 +388,16 @@ app.include_router(v2_router)
 app.include_router(v2_docs_alias)
 
 from services.vocabularies.licences import BRUBRU_DATA_TERMS, SOURCE_CREDIT  # noqa: E402
+from api.v1._query_guard import report_in_body  # noqa: E402
 
 
 @app.middleware("http")
 async def _v1_rate_limit_headers(request, call_next):
     response = await call_next(request)
     if request.url.path.startswith(("/api/v1/", "/api/v2/")):
+        # The parameters NOT applied go in the JSON body too, not only in the header
+        # below: an assistant reading the API sees the body alone (23 Oct 2026).
+        response = await report_in_body(request, response)
         limit = getattr(request.state, "rate_limit_limit", None)
         remaining = getattr(request.state, "rate_limit_remaining", None)
         tier = getattr(request.state, "rate_limit_tier", None)

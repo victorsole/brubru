@@ -29,6 +29,16 @@ parameter starts getting 422. So:
 Flip the flag once the warn header has been quiet in production for a while. That is
 the deprecation window, and it is a one-variable change rather than a redeploy.
 
+The header alone was not enough (23 Oct 2026)
+---------------------------------------------
+A caller reading the API through an assistant sees the JSON body and nothing else: the
+Brubru MCP tool `query_brubru_api` relays status, path and body. On 20 Oct a session sent
+`department=CNECT` and `responsible_department=CNECT&subject=observatory` to
+`/api/v2/funding/eu-funding-recipients`, got all 188,187 rows back with the header set,
+never saw it, and concluded the endpoint "only filters by organisation name". So the
+JSON body now says it too: `report_in_body` puts `ignored_parameters` and
+`accepted_parameters` at the top of a JSON object response (Victor: report, not reject).
+
 Why a dependency and not middleware
 -----------------------------------
 The accepted parameter names come from the MATCHED route, which only exists after
@@ -39,12 +49,14 @@ A dependency runs after routing and before the handler body, which is exactly ri
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
 from typing import FrozenSet
 
 from fastapi import HTTPException, Request
 from fastapi.dependencies.utils import get_flat_dependant
+from starlette.responses import Response
 
 logger = logging.getLogger(__name__)
 
@@ -102,6 +114,7 @@ def check_query_params(request: Request) -> None:
             return
 
         request.state.unknown_query_params = unknown
+        request.state.accepted_query_params = sorted(accepted | _GLOBAL_ALLOWED)
         logger.warning(
             "[query-guard] %s %s: unknown query params %s (accepts %s)",
             request.method, request.url.path, unknown, sorted(accepted),
@@ -123,3 +136,38 @@ def check_query_params(request: Request) -> None:
     except Exception as exc:  # noqa: BLE001
         logger.error("[query-guard] introspection failed on %s: %s: %s",
                      request.url.path, type(exc).__name__, exc)
+
+
+# A body above this is left as it is (the header still says what was ignored): parsing
+# and re-encoding a multi-megabyte page doubles its memory for one warning.
+_REPORT_MAX_BYTES = 16 * 1024 * 1024
+
+
+async def report_in_body(request: Request, response: Response) -> Response:
+    """Write the ignored parameters into a JSON object response, at the top.
+
+    Runs in the attribution middleware in main.py, which sits inside the gzip layer, so
+    the body here is plain JSON. Only a 200 JSON object is touched, only when something
+    was ignored; a list, a CSV export, an error or a compressed body passes unchanged.
+    The report itself never fails a response: on any error the body goes out unchanged.
+    """
+    unknown = getattr(request.state, "unknown_query_params", None)
+    if not unknown or response.status_code != 200:
+        return response
+    if "json" not in response.headers.get("content-type", "") or "content-encoding" in response.headers:
+        return response
+    body = b"".join([chunk async for chunk in response.body_iterator])
+    try:
+        payload = json.loads(body) if len(body) <= _REPORT_MAX_BYTES else None
+        if isinstance(payload, dict) and "ignored_parameters" not in payload:
+            accepted = getattr(request.state, "accepted_query_params", None) or []
+            payload = {"ignored_parameters": list(unknown), "accepted_parameters": list(accepted), **payload}
+            body = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), default=str).encode("utf-8")
+    except Exception as exc:  # noqa: BLE001 - a warning is never worth a broken page
+        logger.warning("[query-guard] body report skipped on %s: %s: %s",
+                       request.url.path, type(exc).__name__, exc)
+    out = Response(content=body, status_code=response.status_code, media_type=response.media_type)
+    # raw_headers, not a dict: a response may carry the same header twice (Link).
+    out.raw_headers = [(k, v) for k, v in response.raw_headers if k.lower() != b"content-length"] \
+        + [(b"content-length", str(len(body)).encode())]
+    return out
