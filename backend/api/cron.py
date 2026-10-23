@@ -376,7 +376,8 @@ def _kill_process_group(proc, name: str) -> None:
 
 _TENDERATOR_CHAIN = (
     "tenders_fetch", "tenders", "tenders_country_repair",
-    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_call_budgets", "ft_tenders_bridge",
+    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_cascade_calls", "ft_call_budgets",
+    "ft_tenders_bridge",
     "tender_matching",
     "tenderator_translations_ted", "tenderator_translations_ft_tenders",
     "tenderator_translations_ft_proposals", "tenderator_translations_ft_projects",
@@ -1001,6 +1002,12 @@ async def cron_sync_daily(
         # call and tender (~30 SEDIA pages at ~10 s each) instead of a 500-row
         # budget that never reached tenders or the English records.
         ["--apply", "--limit", "500", "--write-ft"], timeout=1800,
+    )
+
+    # Calls for funding in cascade, issued by EU-funded projects: their own table since 23 Oct 2026
+    # (until then folded into the topic that funds them). Every one is re-read, ~17 SEDIA pages.
+    results["ft_cascade_calls"] = await _run_script_async(
+        "ft_cascade_calls", "scripts/ingest_ft_cascade_calls.py", ["--apply"], timeout=900,
     )
 
     # Budgets of calls for proposals, from the portal's topic file (budgetOverviewJSONItem).

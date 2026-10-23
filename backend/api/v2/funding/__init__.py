@@ -45,6 +45,8 @@ from . import ft_programmes as _ft_programmes
 from . import international_cooperation as _international_cooperation
 # EU F&T Portal news + events (economy_items body 'ftportal', SEDIA news/events indexes).
 from . import ft_news_events as _ft_news_events
+# Calls for funding in cascade, issued by EU-funded projects (ft_cascade_calls, 23 Oct 2026).
+from . import ft_cascade_calls as _ft_cascade_calls
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -70,3 +72,4 @@ router.include_router(_cohesion_cap.router)
 router.include_router(_ft_programmes.router)
 router.include_router(_international_cooperation.router)
 router.include_router(_ft_news_events.router)
+router.include_router(_ft_cascade_calls.router)

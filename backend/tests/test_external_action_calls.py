@@ -62,7 +62,7 @@ def test_the_first_pass_asks_for_external_actions_and_keeps_them(monkeypatch, tm
     dump = tmp_path / "rows.json"
     monkeypatch.setattr(sys, "argv", ["ingest_funding_sedia.py", "--skip-refresh", "--dump-json", str(dump)])
     sedia.main()
-    assert ["1", "8", "2"] in asked
+    assert ["1", "2"] in asked                      # topics and External Action calls; cascade calls have their own job
     rows = json.loads(dump.read_text())
     assert rows["EuropeAid/187686/ID/ACT/MK"]["source_url"].endswith("187686PROSPECTSEN")
 

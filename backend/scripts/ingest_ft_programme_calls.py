@@ -244,7 +244,9 @@ def ingest_programme(cur, slug: str, *, apply: bool) -> int:
                 # Type 6 is a topic UPDATE record: same identifier and title, no
                 # status, no deadline, and a startDate that is the update time.
                 # Letting it win `seen[...]` below overwrote the real topic record.
-                if row.get("record_type") and row["record_type"] not in ("1", "2", "8"):
+                # Type 8 (calls for funding in cascade, filed under the topic's identifier) has its
+                # own table since 23 Oct 2026; merged here it overwrote the topic's own record.
+                if row.get("record_type") and row["record_type"] not in ("1", "2"):
                     continue
                 if not _matches(row["topic_id"], prefixes):
                     continue

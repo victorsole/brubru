@@ -115,7 +115,13 @@ def html_strip(html: str, max_len: int = 4000) -> str:
 # how 700 calls ended at status 'unknown' and how HORIZON-MISS-2026-02-CANCER-04
 # acquired a published_at two days after the call actually opened.
 TENDER_TYPES = ["0"]
-GRANT_TYPES = ["1", "8"]
+# Calls for proposals, one record per topic. Type 8, the calls for funding in cascade that
+# EU-funded projects issue, was read here until 23 Oct 2026: the portal files each under the
+# identifier of the topic that funds it, so topic and cascade calls merged into one row (111
+# topic rows carried a cascade call's dates). They have their own table now:
+# scripts/ingest_ft_cascade_calls.py -> ft_cascade_calls.
+GRANT_TYPES = ["1"]
+CASCADE_TYPES = ["8"]
 # EU External Action calls for proposals (PROSPECT, EuropeAid/...): the portal lists them under
 # "EU External Actions" in its calls for proposals. Pass 2 already refreshed this type; pass 1 never
 # fetched it, so the 21 open ones of 23 Oct 2026 were missing (Victor: add them).
@@ -989,8 +995,8 @@ def main():
             row = normalise_row(r)
             if row is None:
                 continue
-            if row["record_type"] and row["record_type"] not in GRANT_TYPES + TENDER_TYPES + ["2"]:
-                continue  # type 6 update records and other noise
+            if row["record_type"] and row["record_type"] not in GRANT_TYPES + TENDER_TYPES + EXTERNAL_ACTION_TYPES:
+                continue  # type 6 update records, cascade calls (their own table) and other noise
             if row["is_tender"] and not allow_tenders:
                 continue
             rows[row["topic_id"]] = prefer(rows.get(row["topic_id"]), row)
@@ -1048,7 +1054,7 @@ def main():
         for i in range(0, len(stored), 100):
             batch = stored[i:i + 100]
             q = {"bool": {"must": [{"terms": {"identifier": batch}},
-                                   {"terms": {"type": GRANT_TYPES + TENDER_TYPES + ["2"]}}]}}
+                                   {"terms": {"type": GRANT_TYPES + TENDER_TYPES + EXTERNAL_ACTION_TYPES}}]}}
             for page, results in iter_structured(q, page_size=100, max_pages=5, pause=0.3):
                 if results is None:
                     stats["fetch_failures"] += 1
