@@ -27,12 +27,37 @@ OTHER = "On page 5, Article 2(1): for: 'Member States shall' , read: 'Member Sta
 TWO = "Article 1: for: 'shall' , read: 'may' ; title and signature: for: 3 March 2022 , read: 2 March 2022 ."
 
 
+def _pairs(text, celex=None):
+    return [c[:2] for c in corrected_dates(text, celex)]
+
+
 def test_the_pairs_each_shape_states():
-    assert corrected_dates(EURATOM) == [("2006-04-04", "2005-04-04")]
-    assert corrected_dates(ELLIPSIS) == [("2022-07-26", "2022-12-05")] * 2
-    assert corrected_dates(GLUED) == [("2019-10-14", "2019-10-23")] * 2
-    assert corrected_dates(OTHER) == []
-    assert corrected_dates(TWO) == [("2022-03-03", "2022-03-02")]
+    assert _pairs(EURATOM) == [("2006-04-04", "2005-04-04")]
+    assert _pairs(ELLIPSIS) == [("2022-07-26", "2022-12-05")] * 2
+    assert _pairs(GLUED) == [("2019-10-14", "2019-10-23")] * 2
+    assert _pairs(OTHER) == []
+    assert _pairs(TWO) == [("2022-03-03", "2022-03-02")]
+
+
+def test_stated_means_the_correction_says_it_is_the_acts_own_date():
+    """Register O66: the place before "for:" names the title, signature or adoption date, or the corrected text quotes
+    the act's number."""
+    assert [c[2] for c in corrected_dates(EURATOM)] == [True]          # "in the title and the signature"
+    assert [c[2] for c in corrected_dates(ELLIPSIS)] == [True, True]   # "the title ...", "place and date of adoption"
+    assert [c[2] for c in corrected_dates(GLUED)] == [True, False]     # "in the title"; "on page 2" alone says nothing
+    assert [c[2] for c in corrected_dates(GLUED, "32019D1798")] == [True, False]  # "Done at ..." quotes no number
+    assert [c[2] for c in corrected_dates(TWO)] == [True]               # "title and signature", after an Article fix
+    cover = ("On the cover and on page 7: for: \u2018Commission Implementing Decision (EU) 2018/1109 of 1 August 2018 "
+             "renewing the authorisation\u2019 , read: \u2018Commission Implementing Decision (EU) 2018/1109 of 3 August "
+             "2018 renewing the authorisation\u2019 .")
+    assert corrected_dates(cover, "32018D1109") == [("2018-08-01", "2018-08-03", True)]   # quotes 2018/1109
+    assert corrected_dates(cover, "32018D1110") == [("2018-08-01", "2018-08-03", False)]  # another act's number
+    assert corrected_dates(cover, "32018D0110") == [("2018-08-01", "2018-08-03", False)]  # 2018/110 is not 2018/1109
+    # the corrigendum's own heading ("... on the signature of an Agreement") is not where the correction applies
+    heading = ("Corrigendum to Council Decision (EU) 2020/1 of 12 May 2020 on the signature, on behalf of the Union, "
+               "of an Agreement ( Official Journal of the European Union L 1 of 13 May 2020 ) On page 5, Article 3: "
+               "for: \u2018from 12 May 2020\u2019 , read: \u2018from 15 May 2020\u2019 .")
+    assert corrected_dates(heading, "32020D0001") == [("2020-05-12", "2020-05-15", False)]
 
 
 def test_three_readings_must_agree():

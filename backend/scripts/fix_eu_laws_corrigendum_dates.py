@@ -38,7 +38,7 @@ O65 = ["32006D0635", "32007D0360", "32007R0580", "32008D0373", "32010D0183", "32
 
 def decide(stored, pairs, cellar):
     """(new date, None) when the three readings agree, else (None, why)."""
-    news = {new for old, new in pairs if old == stored}
+    news = {c[1] for c in pairs if c[0] == stored}
     if not news:
         return None, f"no corrigendum corrects {stored} (pairs {pairs[:3]})"
     if len(news) > 1:
@@ -98,7 +98,7 @@ def main() -> int:
             pairs = []
             for k, uuid in sorted(corr_of.get(c, [])):
                 if uuid and (dump / uuid).is_dir():
-                    pairs += title_date_corrections(corrigendum_text(dump / uuid))
+                    pairs += title_date_corrections(corrigendum_text(dump / uuid), c)
             new, why = decide(stored, pairs, cellar.get(c, []))
             if new:
                 changes.append((i, c, stored, new))

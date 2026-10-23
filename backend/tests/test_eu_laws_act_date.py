@@ -72,6 +72,22 @@ def test_a_corrigendum_that_corrects_the_title_date_wins_with_cellar():
     assert act_date("32006D0635R(01)", "Corrigendum to " + EURATOM, "2007-04-03", fixed) == "2007-04-03"
 
 
+def test_a_stated_correction_of_the_title_date_wins_alone():
+    """Register O66 (23 Oct 2026): 32005H0737R(01) "on page 54 in the title and on page 57 in the signature: for:
+    18 May 2005, read: 18 October 2005", while Cellar still holds 18 May 2005."""
+    title = "Commission Recommendation of 18 May 2005 on collective cross-border management of copyright"
+    stated = [("2005-05-18", "2005-10-18", True)]
+    assert act_date("32005H0737", title, "2005-05-18", stated) == "2005-10-18"
+    assert act_date("32005H0737", title, None, stated) == "2005-10-18"
+    # the same correction not stated needs Cellar: here Cellar holds the old date, so the title stays
+    assert act_date("32005H0737", title, "2005-05-18", [("2005-05-18", "2005-10-18", False)]) == "2005-05-18"
+    # two stated corrections that disagree: no single answer, so neither moves the date alone
+    two = stated + [("2005-05-18", "2005-11-18", True)]
+    assert act_date("32005H0737", title, "2005-05-18", two) == "2005-05-18"
+    # a stated correction of another date than the title's moves nothing
+    assert act_date("32005H0737", title, "2005-05-18", [("2005-06-01", "2005-10-18", True)]) == "2005-05-18"
+
+
 def test_the_daily_sync_takes_the_title_date():
     spec = importlib.util.spec_from_file_location("sync_eu_laws_from_cellar_act_date", _PATH)
     mod = importlib.util.module_from_spec(spec)
@@ -246,9 +262,9 @@ def test_recheck_reads_cellar_again_when_the_export_date_is_stale(tmp_path, monk
     (tmp_path / "u-act").mkdir()
     (tmp_path / "u-act" / "tree_non_inferred.rdf").write_text(RDF.format(celex="32022R0363", date="2022-01-02", title=title))
     (tmp_path / "u-corr" / "fmx4").mkdir(parents=True)
+    # not stated (no place, no number), so Cellar must confirm it: the live read is what is tested here
     (tmp_path / "u-corr" / "fmx4" / "corr.xml").write_text(
-        "<CORR><P>On page 40, title, date of adoption, and on page 42, in the signature: for: 24 January 2022 , "
-        "read: 2 March 2022 .</P></CORR>")
+        "<CORR><P>On page 40: for: 24 January 2022 , read: 2 March 2022 .</P></CORR>")
     db = _Db([(1, "32022R0363", "u-act", "2022-01-24", title, "LEG_2026-10"),
               (2, "32022R0363R(01)", "u-corr", "2022-03-08", "Corrigendum to " + title, "LEG_2026-10")])
     assert fx.recheck_acts(db, {"32022R0363"}, tmp_path) == 1
@@ -273,7 +289,30 @@ ARTICLE_DATES = [
 @pytest.mark.parametrize("celex,title,cellar,passage", ARTICLE_DATES)
 def test_a_corrected_article_date_equal_to_the_title_date_moves_nothing(celex, title, cellar, passage):
     from backend.scripts.leg_folder import title_date_corrections
-    pairs = title_date_corrections(passage)
-    assert pairs and pairs[0][0] == title_date(title)  # the parser does read a pair from the title's date...
-    assert act_date(celex, title, cellar, pairs) == cellar  # ...which Cellar does not confirm: the title's date stays
+    pairs = title_date_corrections(passage, celex)
+    assert pairs and pairs[0][0] == title_date(title)  # the parser does read a correction of the title's date...
+    assert not pairs[0][2]                              # ...not stated: "in Article 2", no act number
+    assert act_date(celex, title, cellar, pairs) == cellar  # ...and Cellar does not confirm it: the title's date stays
+
+
+COVER_TITLE = "Commission Implementing Decision (EU) 2018/1109 of 1 August 2018 renewing the authorisation"
+COVER = ("On the cover and on page 7: for: \u2018Commission Implementing Decision (EU) 2018/1109 of 1 August 2018 renewing "
+         "the authorisation\u2019 , read: \u2018Commission Implementing Decision (EU) 2018/1109 of 3 August 2018 renewing "
+         "the authorisation\u2019 .")
+
+
+def test_recheck_a_correction_stated_only_by_the_acts_number(tmp_path, monkeypatch):
+    """32018D1109R(01) names no title or signature, but quotes the act's number: stated, so Cellar (still 1 August,
+    register O66) is not needed. The corrigendum read from its folder must be parsed with the act's CELEX."""
+    import backend.scripts.fix_eu_laws_dates as fx
+    monkeypatch.setattr(fx, "cellar_dates", lambda celexes: {"32018D1109": "2018-08-01"})
+    (tmp_path / "u-act").mkdir()
+    (tmp_path / "u-act" / "tree_non_inferred.rdf").write_text(RDF.format(celex="32018D1109", date="2018-08-01",
+                                                                         title=COVER_TITLE))
+    (tmp_path / "u-corr" / "fmx4").mkdir(parents=True)
+    (tmp_path / "u-corr" / "fmx4" / "corr.xml").write_text(f"<CORR><P>{COVER}</P></CORR>", encoding="utf-8")
+    db = _Db([(1, "32018D1109", "u-act", "2018-08-01", COVER_TITLE, "LEG_2026-10"),
+              (2, "32018D1109R(01)", "u-corr", "2018-08-10", "Corrigendum to " + COVER_TITLE, "LEG_2026-10")])
+    assert fx.recheck_acts(db, {"32018D1109"}, tmp_path) == 1
+    assert db.updates == [(1, "2018-08-03")]
 

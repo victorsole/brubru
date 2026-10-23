@@ -114,15 +114,23 @@ def act_date(celex: Optional[str], title: Optional[str], recorded, corrections=(
     or repeats the corrected act's date), for any other act the date its title gives it, else the recorded date.
 
     The title itself can be wrong (23 Oct 2026, register O65): a corrigendum may correct it, "for: 4 April 2006, read:
-    4 April 2005" (32006D0635R(01)). corrections are the (old, new) pairs the act's corrigenda state
-    (title_date_corrections); the recorded date wins over the title only when one of them corrects the title's date to
-    exactly the recorded date. Two witnesses, so a corrigendum correcting another date in the text that happens to
-    equal the title's, or a Cellar error, never moves it alone."""
+    4 April 2005" (32006D0635R(01)). corrections are the (old, new, stated) triples the act's corrigenda give
+    (title_date_corrections; plain (old, new) pairs count as not stated). A correction of the title's date wins:
+      - alone when stated, i.e. its passage says it corrects the act's own date (names the title, signature or
+        adoption date, or quotes the act's number): Cellar kept the uncorrected date of 20 acts (O66, 32005H0737
+        "for: 18 May 2005, read: 18 October 2005");
+      - otherwise only when the recorded date (Cellar's) is the corrected one: a corrigendum of an Article date that
+        happens to equal the title's (32014D0447 "eligible as of 9 July 2014") never moves it alone."""
     if _CORRIGENDUM.search(celex or ""):
         return recorded
     t = title_date(title)
-    if t and recorded and recorded != t and (t, recorded) in set(corrections or ()):
-        return recorded
+    if t:
+        corr = [tuple(c) + (False,) * (3 - len(c)) for c in corrections or ()]
+        stated = {new for old, new, sure in corr if old == t and sure}
+        if len(stated) == 1:
+            return stated.pop()
+        if recorded and recorded != t and (t, recorded) in {(old, new) for old, new, _sure in corr}:
+            return recorded
     return t or recorded
 
 
@@ -144,19 +152,41 @@ def _first_date(s: str) -> Optional[str]:
         return None
 
 
-def title_date_corrections(text: Optional[str]) -> list:
-    """Every (old, new) date pair a corrigendum states as "for: ... <date> ... read: ... <date>", in ISO form."""
+# Where a correction says it applies, written before "for:" ("On page 26 in the title and the signature: for: ..."). The
+# OJ citation of the corrigendum's own heading is cut off first: a heading such as "... on the signature of an
+# Agreement ( Official Journal of the European Union L 261 of 22 September 2006 )" must not count.
+_STATED_PLACE = re.compile(r"\btitles?\b|\bsignature\b|\badoption\b|concluding formula|closing formula|place and date",
+                           re.I)
+_OJ_CITATION = re.compile(r"Official Journal of the European Union[^)]*\)", re.I)
+# a place starts after the previous correction's value or sentence: "; ", ". ", a closing quotation mark or "read:"
+_PLACE_START = re.compile(r";|\.\s|[\u2019\u201d'\"]|\bread\s*:", re.I)
+
+
+def _act_numbers(celex: Optional[str]) -> tuple:
+    """The act's number as titles write it, from its CELEX: 32018D1109 -> ("2018/1109", "1109/2018")."""
+    m = re.match(r"^\d(\d{4})[A-Z]{1,2}0*(\d+)", celex or "")
+    return (f"{m.group(1)}/{m.group(2)}", f"{m.group(2)}/{m.group(1)}") if m else ()
+
+
+def title_date_corrections(text: Optional[str], celex: Optional[str] = None) -> list:
+    """Every (old, new, stated) date correction a corrigendum gives as "for: ... <date> ... read: ... <date>", in ISO
+    form. stated: the correction says it is of the act's own date, because the place it names (the text before "for:")
+    is the title, the signature or the adoption date, or because what it corrects quotes the act's number (celex)."""
     t = " ".join((text or "").replace("\xa0", " ").split())
+    numbers = [re.compile(r"(?<!\d)" + re.escape(n) + r"(?!\d)") for n in _act_numbers(celex)]
     out = []
     for m in _FOR_READ.finditer(t):
         old, new = _first_date(m.group(1)), _first_date(m.group(2))
         if old and new and old != new:
-            out.append((old, new))
+            # the place is what comes just before "for:", back to the end of the previous correction or sentence
+            place = _PLACE_START.split(_OJ_CITATION.split(t[max(0, m.start() - 300):m.start()])[-1])[-1]
+            stated = bool(_STATED_PLACE.search(place)) or any(n.search(m.group(1)) for n in numbers)
+            out.append((old, new, stated))
     return out
 
 
 def corrigendum_corrections(db, acts, dump: Optional[Path] = None) -> dict:
-    """{act CELEX: [(old, new), ...]} stated by the corrigenda eu_laws holds for these acts (CELEX + "R(NN)"): each
+    """{act CELEX: [(old, new, stated), ...]} given by the corrigenda eu_laws holds for these acts (CELEX + "R(NN)"): each
     corrigendum read from its folder under dump, else from its stored body_txt (a row synced from Cellar has no folder).
     Takes the caller's session and imports sqlalchemy only when called (see the module docstring)."""
     from sqlalchemy import text
@@ -168,14 +198,15 @@ def corrigendum_corrections(db, acts, dump: Optional[Path] = None) -> dict:
     out, unread = {}, []
     for celex, uuid in rows:
         if dump is not None and uuid and (Path(dump) / uuid).is_dir():
-            out.setdefault(_CORRIGENDUM.sub("", celex), []).extend(
-                title_date_corrections(corrigendum_text(Path(dump) / uuid)))
+            act = _CORRIGENDUM.sub("", celex)
+            out.setdefault(act, []).extend(title_date_corrections(corrigendum_text(Path(dump) / uuid), act))
         else:
             unread.append(celex)
     if unread:
         for celex, body in db.execute(text("SELECT celex, body_txt FROM eu_laws WHERE celex = ANY(:c)"),
                                       {"c": unread}).fetchall():
-            out.setdefault(_CORRIGENDUM.sub("", celex), []).extend(title_date_corrections(body))
+            act = _CORRIGENDUM.sub("", celex)
+            out.setdefault(act, []).extend(title_date_corrections(body, act))
     return out
 
 

@@ -90,7 +90,10 @@ def fresh_recorded(rows, recorded_of, corr) -> dict:
     stale = {}
     for _i, celex, uuid, stored, title, version in rows:
         t = title_date(title)
-        news = {new for old, new in corr.get(celex, ()) if old == t}
+        found = [c for c in corr.get(celex, ()) if c[0] == t]
+        if any(len(c) > 2 and c[2] for c in found):
+            continue  # a stated correction needs no second witness (act_date)
+        news = {c[1] for c in found}
         if uuid and news and (recorded_of(uuid, version) or stored) not in news:
             stale[celex] = uuid
     live = cellar_dates(stale) if stale else {}
@@ -164,16 +167,18 @@ def main() -> int:
                                "WHERE coalesce(celex, '') <> '' ORDER BY id")).fetchall()
         db.rollback()
         recorded_of = functools.lru_cache(maxsize=None)(recorded_of)
-        # only acts whose title and Cellar disagree can be moved by a corrigendum: their corrigenda, in one query
         disagree = [r[1] for r in rows if not re.search(r"R\(\d{2}\)$", r[1]) and title_date(r[4])
                     and (recorded_of(r[2], r[5]) or r[3]) != title_date(r[4])]
-        corr = corrigendum_corrections(db, disagree, dump)
+        # every act with a corrigendum: a stated correction moves a date even where title and Cellar agree (O66)
+        corrected = sorted({re.sub(r"R\(\d{2}\)$", "", r[1]) for r in rows if re.search(r"R\(\d{2}\)$", r[1])})
+        corr = corrigendum_corrections(db, corrected, dump)
         live = fresh_recorded(rows, recorded_of, corr)
         changes, cellar_wrong = changes_for(rows, lambda u, v: live.get(u) or recorded_of(u, v), lambda c: corr.get(c, ()))
         print(f"[INFO] {len(rows)} laws read | to change: {len(changes)} "
               f"{dict(collections.Counter(c[4] for c in changes))} | stored right, Cellar wrong: {len(cellar_wrong)} "
-              f"| title and Cellar disagree: {len(disagree)}, with a corrigendum's correction: {len(corr)}, "
-              f"Cellar re-read: {len(live)}")
+              f"| title and Cellar disagree: {len(disagree)} | acts with a corrigendum: {len(corrected)}, with a stated "
+              f"title-date correction: {sum(any(len(c) > 2 and c[2] for c in v) for v in corr.values())} "
+              f"| Cellar re-read: {len(live)}")
         for c in changes[:8]:
             print(f"[INFO]   e.g. {c[1]}: {c[2]} -> {c[3]} ({c[4]})")
         if not a.apply:

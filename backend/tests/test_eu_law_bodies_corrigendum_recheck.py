@@ -95,15 +95,23 @@ def _conn(**kw):
 
 def test_the_act_of_a_new_corrigendum_takes_the_date_it_corrects_to(monkeypatch):
     monkeypatch.setattr(fx, "cellar_dates", lambda celexes: {"32006D0635": "2005-04-04"})
-    conn = _conn()
+    conn = _conn(corrigenda={"32006D0635R(01)": "On page 26: for: 4 April 2006 , read: 4 April 2005 ."})
     assert feb.recheck_corrected_acts(_Engine(conn)) == (1, 1)
     assert conn.updates == [(1, "2005-04-04")] and conn.commits == 1
 
 
-def test_cellar_not_yet_corrected_leaves_the_title_date(monkeypatch):
+def test_a_stated_correction_moves_the_date_even_when_cellar_kept_the_old_one(monkeypatch):
+    # register O66: "in the title and the signature" is stated, so Cellar is not asked
+    monkeypatch.setattr(fx, "cellar_dates", lambda celexes: pytest.fail("Cellar read for a stated correction"))
+    conn = _conn()
+    assert feb.recheck_corrected_acts(_Engine(conn)) == (1, 1)
+    assert conn.updates == [(1, "2005-04-04")]
+
+
+def test_an_unstated_correction_waits_for_cellar(monkeypatch):
     # the next runs within RECHECK_DAYS read Cellar again
     monkeypatch.setattr(fx, "cellar_dates", lambda celexes: {"32006D0635": "2006-04-04"})
-    conn = _conn()
+    conn = _conn(corrigenda={"32006D0635R(01)": "On page 26: for: 4 April 2006 , read: 4 April 2005 ."})
     assert feb.recheck_corrected_acts(_Engine(conn)) == (1, 0)
     assert conn.updates == []
 
@@ -147,3 +155,16 @@ def test_a_failed_recheck_fails_the_run_after_the_bodies_are_stored(monkeypatch,
     rc, stored = _run_main(monkeypatch, boom)
     assert rc == 1 and stored == [7]
     assert "re-check of the acts of new corrigenda failed" in capsys.readouterr().out
+
+
+def test_a_correction_stated_by_the_acts_number_read_from_body_txt(monkeypatch):
+    """No export on Railway: the corrigendum comes from body_txt and must still be parsed with the act's CELEX."""
+    monkeypatch.setattr(fx, "cellar_dates", lambda celexes: {"32018D1109": "2018-08-01"})
+    title = "Commission Implementing Decision (EU) 2018/1109 of 1 August 2018 renewing the authorisation"
+    body = ("On the cover and on page 7: for: \u2018Commission Implementing Decision (EU) 2018/1109 of 1 August 2018 "
+            "renewing\u2019 , read: \u2018Commission Implementing Decision (EU) 2018/1109 of 3 August 2018 renewing\u2019 .")
+    conn = _conn(recent=["32018D1109R(01)"], acts=[(5, "32018D1109", "u5", "2018-08-01", title, "OJ_2026-10")],
+                 corrigenda={"32018D1109R(01)": body})
+    assert feb.recheck_corrected_acts(_Engine(conn)) == (1, 1)
+    assert conn.updates == [(5, "2018-08-03")]
+
