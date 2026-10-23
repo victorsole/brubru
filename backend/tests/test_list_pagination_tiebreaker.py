@@ -73,6 +73,10 @@ class _FakeQuery:
     def filter(self, *a, **k):
         return self
 
+    def options(self, *a, **k):
+        # Loader options (the tenders list defers its stored XML) do not change the order.
+        return self
+
     def order_by(self, *clauses):
         self._rec.orm_order.append(
             [str(c.compile(dialect=postgresql.dialect())) for c in clauses]

@@ -15,7 +15,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
 from models.eprs_publication import EPRSPublication
@@ -443,7 +443,10 @@ class TenderItem(BaseModel):
     ted_url: Optional[str] = None
     summary: Optional[str] = None
     sme_suitability_score: Optional[float] = None
-    status: Optional[str] = None
+    status: Optional[str] = Field(None, description=(
+        "open | closed | forthcoming. TED publishes none: it is set daily from the notice type and its own "
+        "deadline (award and modification notices closed, a passed deadline closed, a prior information "
+        "notice without a deadline forthcoming)."))
     last_synced_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     # The contracted datapoints. Until 1 October 2026 this model carried none of
@@ -547,7 +550,13 @@ async def list_tenders(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TenderItem]:
-    query = db.query(Tender)
+    # The stored eForms XML (57 KB a notice on average) and its parsed copies are never served by
+    # the list; loading them sent ~6 MB a page out of the database for nothing (23 Oct 2026).
+    query = db.query(Tender).options(
+        defer(Tender.xml_content), defer(Tender.raw_json), defer(Tender.lots), defer(Tender.sme_analysis),
+        defer(Tender.award_criteria), defer(Tender.selection_criteria), defer(Tender.exclusion_grounds),
+        defer(Tender.minimum_requirements),
+    )
     filters = []
     if buyer_country:
         filters.append(Tender.buyer_country == buyer_country.upper())
