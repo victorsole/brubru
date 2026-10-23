@@ -35,12 +35,16 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 MIN_CHARS = 200
 MAX_CHARS = 8000          # the same cap the ingest applies
 
+# EU External Action calls (EuropeAid/...) have no topicDetails page: their text is in their
+# documents and their description is composed by the ingester (23 Oct 2026). Asking for them
+# would 404 every night and count them as a gap.
 PICK = text("""SELECT topic_id FROM ft_calls_for_proposals
-                WHERE length(coalesce(description,'')) < 400 ORDER BY published_at DESC NULLS LAST, topic_id
+                WHERE length(coalesce(description,'')) < 400 AND topic_id NOT LIKE 'EuropeAid/%' ORDER BY published_at DESC NULLS LAST, topic_id
                 LIMIT :lim""")
 STORE = text("""UPDATE ft_calls_for_proposals SET description=:d, last_updated=now()
                  WHERE topic_id=:t AND length(coalesce(description,'')) < length(:d)""")
-GAP = text("SELECT count(*) FROM ft_calls_for_proposals WHERE length(coalesce(description,'')) < 400")
+GAP = text("SELECT count(*) FROM ft_calls_for_proposals WHERE length(coalesce(description,'')) < 400 "
+           "AND topic_id NOT LIKE 'EuropeAid/%'")
 
 
 def _db() -> str:

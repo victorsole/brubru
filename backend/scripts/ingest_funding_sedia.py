@@ -116,6 +116,10 @@ def html_strip(html: str, max_len: int = 4000) -> str:
 # acquired a published_at two days after the call actually opened.
 TENDER_TYPES = ["0"]
 GRANT_TYPES = ["1", "8"]
+# EU External Action calls for proposals (PROSPECT, EuropeAid/...): the portal lists them under
+# "EU External Actions" in its calls for proposals. Pass 2 already refreshed this type; pass 1 never
+# fetched it, so the 21 open ones of 23 Oct 2026 were missing (Victor: add them).
+EXTERNAL_ACTION_TYPES = ["2"]
 OPEN_STATUS_CODES = ["31094501", "31094502"]  # forthcoming, open
 
 
@@ -264,6 +268,9 @@ def clean_facet_label(raw: str) -> str:
 
 
 _PARTY_LABELS: Dict[str, str] = {}
+# PROSPECT's programme divisions (e.g. 42921320 "Instrument for Pre-accession Assistance"), which
+# the portal shows as an External Action call's programme. Filled from the facet endpoint.
+_PROSPECT_DIVISION_LABELS: Dict[str, str] = {}
 _CONTRACT_TYPE_LABELS: Dict[str, str] = {
     "31095498": "Services", "31095499": "Supplies", "31095501": "Works",
     "42893160": "Grants", "42958121": "Twinning",
@@ -289,7 +296,8 @@ def load_programme_labels() -> int:
         return 0
     n = 0
     targets = {"frameworkProgramme": _PROGRAMME_LABELS, "cftPartyLegalEntityId": _PARTY_LABELS,
-               "contractType": _CONTRACT_TYPE_LABELS}
+               "contractType": _CONTRACT_TYPE_LABELS,
+               "programmeDivisionProspect": _PROSPECT_DIVISION_LABELS}
     for facet in data.get("facets") or []:
         target = targets.get(facet.get("name"))
         if target is None:
@@ -384,6 +392,9 @@ def parse_iso_date(s: str) -> Optional[dt.datetime]:
 
 
 TENDER_PORTAL_BASE = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/tender-details"
+# The portal's own page for an External Action call, keyed on the record's REFERENCE
+# ("187686PROSPECTSEN"), as the portal's search links it.
+PROSPECT_PORTAL_BASE = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/prospect-details"
 
 
 def _lead_authority(md: Dict[str, Any]) -> Optional[str]:
@@ -480,6 +491,47 @@ def tender_lots_text(md: Dict[str, Any], description: str) -> str:
     return "\n".join(out)
 
 
+def external_action_fields(md: Dict[str, Any], topic_id: str, title: str, published, deadline,
+                           framework_label: Optional[str]) -> Dict[str, Any]:
+    """An External Action call carries no description: its text is in its documents. The portal's
+    own page shows programme, zone, budget, type, dates and documents, so the description is
+    composed from those same fields of the record (a composed body, as for other records without
+    text). The zone is the identifier's last part (MK, Multi): the record's codes have no names."""
+    division = _PROSPECT_DIVISION_LABELS.get(str(first_or_none(md.get("programmeDivisionProspect")) or ""), "").strip()
+    programme = division or framework_label
+    ct = str(first_or_none(md.get("contractType")) or "")
+    kind = _CONTRACT_TYPE_LABELS.get(ct)
+    budget = _to_number(first_or_none(md.get("budget")))
+    currency = first_or_none(md.get("currency")) or "EUR"
+    zone = str(topic_id).rsplit("/", 1)[-1] if "/" in str(topic_id) else None
+    docs = []
+    for raw in md.get("publicationDocuments") or []:
+        try:
+            d = json.loads(raw) if isinstance(raw, str) else raw
+        except ValueError:
+            continue
+        for doc in (d if isinstance(d, list) else [d]):
+            name = (doc or {}).get("nameDoc")
+            if name:
+                docs.append(f"{name} ({(doc.get('languageDoc') or '').strip()}, {(doc.get('finalPublicDocDate') or '')[:10]})")
+    lines = [title,
+             f"EU External Action call for proposals {topic_id}.",
+             f"Programme: {programme}." if programme else "",
+             f"Geographical zone: {zone}." if zone else "",
+             f"Type: {kind}." if kind else "",
+             f"Budget: {currency} {budget:,.0f}." if budget is not None else "",
+             f"Published: {published.date().isoformat()}." if published else "",
+             f"Deadline: {deadline.date().isoformat()}." if deadline else "",
+             ("Documents: " + "; ".join(docs) + ".") if docs else ""]
+    return {
+        "programme": programme,
+        "type_of_action": kind,
+        "indicative_budget": budget,
+        "budget_currency": currency,
+        "description": "\n".join(x for x in lines if x)[:8000],
+    }
+
+
 def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Optional[Dict[str, Any]]:
     today = today or dt.date.today()
     md = result.get("metadata") or {}
@@ -510,6 +562,10 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
 
     portal_url = f"{TENDER_PORTAL_BASE if is_tender else PORTAL_BASE}/{topic_id}"
     documents_url = first_or_none(md.get("url")) or first_or_none(md.get("esST_URL"))
+    is_external = record_type in EXTERNAL_ACTION_TYPES
+    if is_external:
+        reference = result.get("reference") or first_or_none(md.get("REFERENCE"))
+        portal_url = f"{PROSPECT_PORTAL_BASE}/{reference}" if reference else (documents_url or portal_url)
 
     call_id = first_or_none(md.get("callIdentifier"))
     # SEDIA publishes the SAME topic once per EU language. fetch_sedia_page now
@@ -540,6 +596,8 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
         "target_audience": None,
         "published_at": published,
     }
+    if is_external:
+        row.update(external_action_fields(md, topic_id, title, published, deadline, row["programme"]))
     if is_tender:
         ct = str(first_or_none(md.get("contractType")) or "")
         lot_text = tender_lots_text(md, row["description"])
@@ -932,7 +990,7 @@ def main():
     # Pass 1: every OPEN or FORTHCOMING call topic, English, uncapped (~1,400).
     # This is the pass that answers "what can I apply to"; it used to depend on
     # a 500-row budget shared with 19 full-text prefix queries.
-    for label, types, allow_tenders in (("grants", GRANT_TYPES, False),
+    for label, types, allow_tenders in (("grants", GRANT_TYPES + EXTERNAL_ACTION_TYPES, False),
                                         ("tenders", TENDER_TYPES, True)):
         if label == "tenders" and not args.write_ft:
             continue
