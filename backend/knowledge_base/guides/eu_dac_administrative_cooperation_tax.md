@@ -1,6 +1,7 @@
 # Directive on Administrative Cooperation in Tax (DAC1 to DAC9): Information Exchange and Reporting
 
 ## QUICK FACTS
+- **EPRS Briefing (22 October 2026): "Simplifying and recasting the Directive on administrative cooperation in taxation (DAC) framework"** (EPRS_BRI(2026)796996). Finding not read: cite title and reference only.
 - **Base act**: Council Directive 2011/16/EU on administrative cooperation in the field of taxation ("DAC"), adopted 15 February 2011, repealing the 1977 Mutual Assistance Directive. Legal basis **Article 115 TFEU** (approximation of laws affecting the internal market) -- Council unanimity, European Parliament consulted only (no co-decision).
 - **Nine amendments to date (DAC1-DAC9)**, each adding a new automatic-exchange category or cooperation tool:
   | Amendment | Directive | Adopted | Subject | Applies from |

@@ -1,6 +1,7 @@
 # European Grids Package
 
 ## QUICK FACTS
+- **STATE OF PLAY (23 October 2026, from OEIL):** the **TEN-E revision 2025/0399(COD)** (rapporteur Tsvetelina Penkova, ITRE) is **in trilogues**: committee vote 10 September 2026, report tabled 11 September, decision to enter negotiations 14 and 16 September. ITRE's meeting of 22 October 2026 carried the file again (report and amendment documents listed in eMeeting): a negotiations update, NOT a new vote. **European Business Wallets 2025/0358(COD)** (rapporteur Eero Heinäluoma, ITRE) is also in trilogues: report tabled 23 September, negotiations decision 5 and 7 October 2026. Say "in trilogue" for both; do not say Parliament's position is still pending.
 - **LATEST (15 September 2026, PCI/PMI CALL OPEN AND COUNCIL PUSHBACK).** The Commission opened the
   **call for candidate Projects of Common Interest and Projects of Mutual Interest** under the TEN-E
   Regulation on **14 September 2026**: electricity transmission and storage close **13 November 2026**

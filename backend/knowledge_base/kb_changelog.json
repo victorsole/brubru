@@ -2,6 +2,160 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "methane_regulation_amendment_com_2026_569",
+      "title": "Methane Regulation amendment (postponement proposal)",
+      "summary": "Parliament position 22 Oct 2026: three-year postponement, 341-225",
+      "refs": []
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "eu_anti_money_laundering",
+      "title": "EU Anti-Money Laundering Framework",
+      "summary": "Impl. Reg. 2026/2354 on beneficial ownership formats published 22 Oct 2026 (applies 10 Jul 2027)",
+      "refs": [
+        "32026R2354"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "energy_grids_package",
+      "title": "European Grids Package",
+      "summary": "TEN-E revision and European Business Wallets are in trilogue (state of play 23 Oct 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "eu_energy_policy",
+      "title": "EU Energy Policy Framework",
+      "summary": "AG Rantos opinion of 22 Oct 2026: the 2022 solidarity contribution on energy windfall profits is valid (watch, not a judgment)",
+      "refs": [
+        "32022R1854"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "eu_customs_reform",
+      "title": "EU Customs Reform",
+      "summary": "Union handling fee set at EUR 2 per item by Delegated Regulation 2026/2152, applies 1 Nov 2026",
+      "refs": [
+        "32026R2152",
+        "32026R2108"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "MFF 2028-2034",
+      "summary": "Erasmus+ 2028-2034 mandate adopted in plenary 22 Oct 2026 (454-34-93, EUR 47.39 bn); Justice programme and Global Europe committee votes 19 Oct",
+      "refs": []
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "cop31_antalya_eu_position_2026",
+      "title": "COP31 Antalya: EU position",
+      "summary": "Parliament's COP31 resolution adopted 22 Oct 2026 (fossil-fuel exit, climate finance, adaptation)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "black_sea_shipping_attacks_october_2026",
+      "title": "Attacks on Black Sea shipping",
+      "summary": "Parliament resolution of 22 Oct 2026 (432-52-88): consider an EU naval operation; Russia held responsible by Parliament",
+      "refs": []
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "eu_methane_regulation",
+      "title": "EU Methane Regulation",
+      "summary": "Parliament position of 22 Oct 2026 on the postponement proposal 2026/0325(COD): three-year delay for importers, 341-225",
+      "refs": [
+        "32024R1787"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "batteries_regulation",
+      "title": "EU Batteries Regulation",
+      "summary": "Delegated Regulation 2026/1770 (OJ 22 Oct 2026) sets the eight removability derogations; updated guidelines C/2026/5531; Art 11 applies 18 Feb 2027",
+      "refs": [
+        "32026R1770",
+        "52026XC05531",
+        "32023R1542"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "updated",
+      "guide": "digital_markets_act",
+      "title": "Digital Markets Act (DMA)",
+      "summary": "Google Play anti-steering decision summary published (OJ C/2026/5546, 23 Oct 2026): EUR 430 million fine, fee findings, 60-day cease-and-desist",
+      "refs": [
+        "52026DMA100075",
+        "32022R1925"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "added",
+      "guide": "sakharov_prize_2026_icc",
+      "title": "Sakharov Prize 2026: the International Criminal Court and its officials",
+      "summary": "Parliament's 2026 Sakharov Prize goes to the ICC and its officials (announced 22 Oct 2026)",
+      "refs": []
+    },
+    {
+      "date": "2026-10-23",
+      "action": "added",
+      "guide": "cpc_recycling_claims_plastic_bottles_2026",
+      "title": "Recycling claims on plastic bottles: CPC commitments of Coca-Cola, Nestlé and Danone",
+      "summary": "CPC network commitments of 22 Oct 2026: 'Recycle me' replaces 'Recycle me again'; 100% recycled excluding cap and label",
+      "refs": [
+        "32017R2394",
+        "32005L0029"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "added",
+      "guide": "ecj_access_to_lawyer_hungary_czechia_2026",
+      "title": "Right of access to a lawyer: Court judgments against Hungary and the Czech Republic",
+      "summary": "Court of Justice, 22 Oct 2026: questioning without a lawyer after 2 h (HU) or 48 h (CZ) breaches Directive 2013/48",
+      "refs": [
+        "62024CJ0660",
+        "62024CJ0681",
+        "32013L0048"
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "action": "added",
+      "guide": "ep_resolution_houthis_terrorist_listing_2026",
+      "title": "Houthi attacks: Parliament's resolution of 22 October 2026",
+      "summary": "Parliament asks the Council to put the Houthis on the EU terrorist list; a Council decision is still needed",
+      "refs": []
+    },
+    {
+      "date": "2026-10-23",
+      "action": "added",
+      "guide": "aml_beneficial_ownership_formats_2026_2354",
+      "title": "Beneficial ownership information: the EU data formats (Impl. Reg. 2026/2354)",
+      "summary": "First technical act of the 2024 AML package in the OJ (22 Oct 2026): field formats for the central registers, applies 10 July 2027",
+      "refs": [
+        "32026R2354",
+        "32024L1640"
+      ]
+    },
+    {
       "date": "2026-10-22",
       "action": "updated",
       "guide": "crma_critical_raw_materials_act",

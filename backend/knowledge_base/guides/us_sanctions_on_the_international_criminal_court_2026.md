@@ -1,6 +1,7 @@
 # US sanctions on the International Criminal Court and the EU response (9-10 October 2026)
 
 ## QUICK FACTS
+- **22 October 2026: Parliament awarded the 2026 Sakharov Prize for Freedom of Thought to the ICC and its officials** (announced by President Metsola in plenary). Detail in `sakharov_prize_2026_icc`.
 - **What was announced:** on **9 October 2026** the United States announced its intention to impose sanctions on the **International Criminal Court (ICC) as an institution**. The Commission says there is a **six-month delay before the measures are applicable**, which leaves "room for dialogue"; the High Representative "takes note" of the US decision to delay the entry into force and gives no period.
 - **EU responses (the Commission and High Representative statements were read in full; Parliament's is cited by headline):**
   - **Commission statement, 9 October 2026 (STATEMENT/26/2127):** the EU "has been a constant supporter" of the ICC; the US announcement is "deeply regrettable"; the EU "will work closely with the ICC to ensure it continues to operate effectively" and with all **125 States Parties** to the Rome Statute; it "stands ready to take any necessary measures to enable the Court to carry out its work both in investigating and prosecuting war crimes and crimes against humanity, and to protect the interests of EU operators within the Single Market".

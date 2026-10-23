@@ -1,6 +1,7 @@
 # NDICI-Global Europe: the EU's External-Action Funding Instrument 2021-2027
 
 ## QUICK FACTS
+- **Successor instrument 2028-2034, Global Europe (2025/0227(COD), rapporteur Michael Gahler, AFET with the joint committee): committee vote and decision to open negotiations 19 October 2026, report tabled 20 October, indicative plenary 11 November 2026** (OEIL key events as held in Brubru's store, 23 October 2026). Content of Parliament's position not read: do not describe amounts.
 - **Full name:** Neighbourhood, Development and International Cooperation Instrument, Global Europe (NDICI-Global Europe)
 - **Legal base:** Regulation (EU) 2021/947 of the European Parliament and of the Council of 9 June 2021
 - **CELEX:** 32021R0947

@@ -1,0 +1,141 @@
+{
+ "_about": "23 Oct 2026 /news round: one natural question per language per topic; negatives must reach none of these guides.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "digital_markets_act#google_play_fine": [
+   "How much was Google fined for Google Play under the DMA?",
+   "Quelle amende Google Play a-t-elle reçue au titre du DMA ?",
+   "Hoe hoog is de boete voor Google Play onder de DMA?",
+   "¿Cuál es la multa a Google Play bajo la DMA?",
+   "Quina multa ha rebut Google Play sota la DMA?",
+   "Qual è la sanzione per Google Play ai sensi del DMA?"
+  ],
+  "batteries_regulation#derogations": [
+   "Which products are exempt from the battery removability rules?",
+   "Quelles sont les dérogations à l'amovibilité des batteries ?",
+   "Welke uitzonderingen gelden voor verwijderbare batterijen?",
+   "¿Qué excepciones hay para las baterías extraíbles?",
+   "Quines excepcions hi ha per a les bateries extraïbles?",
+   "Quali deroghe esistono per le batterie rimovibili?"
+  ],
+  "aml_beneficial_ownership_formats_2026_2354#formats": [
+   "What formats must beneficial ownership information follow in the EU registers?",
+   "Quels formats pour les bénéficiaires effectifs dans le registre central ?",
+   "Welk formaat geldt voor uiteindelijk begunstigden in het UBO-register?",
+   "¿Qué formatos exige el registro de titularidad real?",
+   "Quins formats exigeix el registre de titularitat real?",
+   "Quali formati prevede il registro della titolarità effettiva?"
+  ],
+  "eu_methane_regulation#postponement": [
+   "Did Parliament back the methane postponement for importers?",
+   "Le Parlement a-t-il voté le report du règlement méthane pour les importateurs ?",
+   "Steunt het Parlement het uitstel van de methaanverordening?",
+   "¿Aprobó el Parlamento el aplazamiento del reglamento de metano?",
+   "Ha aprovat el Parlament l'ajornament del reglament del metà?",
+   "Il Parlamento ha approvato il rinvio del regolamento sul metano per gli importatori?"
+  ],
+  "black_sea_shipping_attacks_october_2026#resolution": [
+   "Does Parliament want an EU naval operation in the Black Sea?",
+   "Le Parlement veut-il une opération navale en mer Noire ?",
+   "Wil het Parlement een marineoperatie in de Zwarte Zee?",
+   "¿Pide el Parlamento una operación naval en el mar Negro?",
+   "Demana el Parlament una operació naval al mar Negra?",
+   "Il Parlamento chiede un'operazione navale nel Mar Nero?"
+  ],
+  "ep_resolution_houthis_terrorist_listing_2026#listing": [
+   "Does Parliament want the Houthis on the EU terrorist list?",
+   "Le Parlement veut-il inscrire les Houthis sur la liste terroriste ?",
+   "Wil het Parlement de Houthi's op de terreurlijst?",
+   "¿Quiere el Parlamento a los hutíes en la lista terrorista?",
+   "Vol el Parlament els hutis a la llista terrorista?",
+   "Il Parlamento vuole gli Houthi nella lista terroristica?"
+  ],
+  "cop31_antalya_eu_position_2026#parliament": [
+   "What did Parliament adopt as its COP31 resolution?",
+   "Que contient la résolution COP31 du Parlement européen ?",
+   "Wat staat in de resolutie COP31 van het Europees Parlement?",
+   "¿Qué dice la resolución COP31 del Parlamento Europeo?",
+   "Què diu la resolució COP31 del Parlament Europeu?",
+   "Cosa dice la risoluzione COP31 del Parlamento europeo?"
+  ],
+  "mff_2028_2034#erasmus": [
+   "How much budget does Parliament want for Erasmus+ 2028-2034?",
+   "Quel budget Erasmus+ 2028 le Parlement demande-t-il ?",
+   "Welke begroting Erasmus+ 2028 wil het Europees Parlement?",
+   "¿Qué presupuesto Erasmus+ 2028 pide el Parlamento?",
+   "Quin pressupost Erasmus+ 2028 demana el Parlament?",
+   "Quale bilancio Erasmus+ 2028 chiede il Parlamento?"
+  ],
+  "ecj_access_to_lawyer_hungary_czechia_2026#judgment": [
+   "Why did the Court rule against Hungary on access to a lawyer?",
+   "Pourquoi la Cour condamne-t-elle la Hongrie sur le droit d'accès à un avocat ?",
+   "Waarom veroordeelde het Hof Hongarije over het recht op toegang tot een advocaat?",
+   "¿Por qué condenó el Tribunal a Hungría por el derecho de acceso a un abogado?",
+   "Per què ha condemnat el Tribunal Hongria pel dret d'accés a un advocat?",
+   "Perché la Corte ha condannato l'Ungheria sul diritto di accesso a un difensore?"
+  ],
+  "eu_energy_policy#solidarity_contribution": [
+   "What did Advocate General Rantos say about the solidarity contribution on energy companies?",
+   "Que dit l'avocat général sur la contribution de solidarité temporaire ?",
+   "Wat zei de advocaat-generaal over de solidariteitsbijdrage energiebedrijven?",
+   "¿Qué dijo el abogado general sobre la contribución solidaria temporal?",
+   "Què ha dit l'advocat general sobre la contribució solidària temporal?",
+   "Cosa ha detto l'avvocato generale sul contributo di solidarietà temporaneo?"
+  ],
+  "eu_customs_reform#handling_fee": [
+   "How much is the EU customs handling fee per item?",
+   "Combien coûte la redevance de traitement douanière par article ?",
+   "Hoe hoog is de behandelingsvergoeding douane per artikel?",
+   "¿Cuánto es la tasa de tramitación aduanera por artículo?",
+   "Quant és la taxa de tramitació duanera per article?",
+   "Quanto costa la tariffa di gestione doganale per articolo?"
+  ],
+  "cpc_recycling_claims_plastic_bottles_2026#commitments": [
+   "What did Coca-Cola commit to on recycling claims on bottles?",
+   "Quelles allégations de recyclage Coca-Cola doit-elle changer ?",
+   "Welke recyclingclaims op flessen past Coca-Cola aan?",
+   "¿Qué declaraciones de reciclaje cambia Coca-Cola en sus botellas?",
+   "Quines afirmacions de reciclatge canvia Coca-Cola a les ampolles?",
+   "Quali dichiarazioni di riciclo cambia Coca-Cola sulle bottiglie?"
+  ],
+  "sakharov_prize_2026_icc#laureate": [
+   "Who won the Sakharov Prize 2026?",
+   "Qui a reçu le prix Sakharov 2026 ?",
+   "Wie won de Sacharovprijs 2026?",
+   "¿Quién ganó el premio Sájarov 2026?",
+   "Qui ha guanyat el premi Sàkharov 2026?",
+   "Chi ha vinto il premio Sacharov 2026?"
+  ],
+  "energy_grids_package#ten_e_trilogue": [
+   "Is the TEN-E revision in trilogue?",
+   "La révision TEN-E 2025/0399 est-elle en trilogue ?",
+   "Zit de TEN-E herziening 2025/0399 in de triloog?",
+   "¿Está la revisión TEN-E 2025/0399 en diálogo tripartito?",
+   "Està la revisió TEN-E 2025/0399 en trílegs?",
+   "La revisione TEN-E 2025/0399 è in trilogo?"
+  ],
+  "ndici_global_europe_instrument#global_europe_vote": [
+   "When did AFET vote on Global Europe 2028-2034?",
+   "Quand l'AFET a-t-elle voté Global Europe 2028-2034 ?",
+   "Wanneer stemde AFET over Global Europe 2028-2034?",
+   "¿Cuándo votó AFET Global Europe 2028-2034?",
+   "Quan va votar AFET Global Europe 2028-2034?",
+   "Quando ha votato AFET Global Europe 2028-2034?"
+  ]
+ },
+ "negatives": [
+  "What is the VAT rate on books in Spain?",
+  "Qui est le rapporteur du Chips Act 2 ?",
+  "Hoe registreer ik een BOB-kaas?",
+  "¿Qué dice la Ley de Servicios Digitales sobre los patrones oscuros?",
+  "Quants habitants té Andorra?",
+  "Quanto costa un caffè a Roma?"
+ ]
+}

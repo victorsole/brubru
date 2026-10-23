@@ -1,6 +1,7 @@
 # Battery Regulation: Removability Exemptions Public Consultation (DG ENV, April 2026)
 
 ## QUICK FACTS
+- **OUTCOME (Official Journal, 22 October 2026): the derogations are law.** Delegated Regulation (EU) 2026/1770 of 14 July 2026 (CELEX 32026R1770) replaces Article 11(2) with exactly eight product categories (washable appliances, medical imaging/radiotherapy and IVD devices, small or sealed wearables, rechargeable toys until 31 July 2030, food thermometer probes, ATEX equipment, on-body drug delivery, roof-mounted ag/construction telematics); updated guidelines published as Commission Notice C/2026/5531. Full list and dates in `batteries_regulation` (LATEST bullet). Article 11 applies from 18 February 2027.
 - Topic: Public consultation on **exemptions from the battery removability and replaceability requirement** under Article 11 of Regulation (EU) 2023/1542 (Batteries Regulation)
 - Launched: **28 April 2026** by DG ENV (Environment)
 - Parent regulation: **Regulation (EU) 2023/1542** on batteries and waste batteries (CELEX **32023R1542**), repealing Directive 2006/66/EC
@@ -10,7 +11,7 @@
 - Responsible Commissioner: **Jessika Roswall** (Environment, Water Resilience and a Competitive Circular Economy)
 - Source: ec.europa.eu/info/law/better-regulation/have-your-say/initiatives + Commission press release 28 April 2026
 
-## Why this consultation matters
+## Why this consultation matters (history: the outcome is Delegated Regulation (EU) 2026/1770, eight categories, see QUICK FACTS)
 Article 11 of the Batteries Regulation **requires** that portable batteries integrated in products be **removable and replaceable by end-users**, and that LMT (light means of transport, e.g. e-bikes, e-scooters) batteries be removable and replaceable by an independent professional. The article allows for **derogations** for products where battery non-removability is justified for **safety, performance, medical, or hygiene reasons**.
 
 The 28 April 2026 consultation seeks stakeholder views on which product categories should benefit from derogations and the technical/safety justifications for each. Affected sectors:

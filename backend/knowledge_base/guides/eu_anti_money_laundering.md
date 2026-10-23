@@ -1,6 +1,7 @@
 # EU Anti-Money Laundering Framework: AMLA, 6th Directive, and International Comparison
 
 ## QUICK FACTS
+- **First technical act in the OJ (22 October 2026): Commission Implementing Regulation (EU) 2026/2354 on formats for submitting beneficial ownership information** (CELEX 32026R2354), under AMLD6; applies from **10 July 2027** with the package. Field-by-field summary in `aml_beneficial_ownership_formats_2026_2354`.
 - **Adjacent ruling (3 September 2026):** in **Case C-798/24 [Jautiva]** the Court applied the same proportionality reasoning as C-37/20 to **shareholder** registers held under company law, holding that the GDPR read with the Charter precludes unconditional public access to all shareholders' personal data. AML and sanctions implementation were argued as justifications and did not carry unconditional publication. See `eu_company_law_shareholder_disclosure`.
 - AML Package adopted 30 May 2024 (official adoption), entered into force 9 July 2024
 - Three instruments: AMLR (Regulation), AMLD6 (Directive), AMLAR (AMLA Regulation)

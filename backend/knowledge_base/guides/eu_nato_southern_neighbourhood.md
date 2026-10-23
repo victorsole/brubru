@@ -1,6 +1,7 @@
 # EU-NATO Relations in the Southern Neighbourhood
 
 ## QUICK FACTS
+- **22 October 2026: Parliament asked the Council to put the Houthis on the EU terrorist list** (resolution 2026/2939(RSP), after a proposal by HR/VP Kallas; attacks on Saudi Arabia, Yemen offensive, Red Sea shipping). A Council decision is needed; none adopted yet. Detail in `ep_resolution_houthis_terrorist_listing_2026`.
 - Topic: EU-NATO strategic cooperation in the Southern Neighbourhood -- North Africa, Sahel, Mashreq, Eastern Mediterranean. Hybrid threats, migration, energy security, counterterrorism
 - EPRS Briefing (20 April 2026): "EU-NATO relations in the southern neighbourhood" -- EPRS analysis of coordination, geographic scope, hybrid threat response. Ref: EPRS_UNK_bad0cfcc472a
 - Strategic anchor documents: EU Strategic Compass for Security and Defence (March 2022); NATO Strategic Concept (Madrid 2022); Joint Declarations EU-NATO 2016, 2018, 2023

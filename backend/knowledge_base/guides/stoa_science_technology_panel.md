@@ -1,6 +1,7 @@
 # STOA: Panel for the Future of Science and Technology
 
 ## QUICK FACTS
+- **STOA Study (19 October 2026)**: "Open science and the effects of Generative Artificial Intelligence in scientific exchange": generative AI could strengthen open science (accessibility, findability, usability) or weaken it by obscuring provenance, deepening dependency on opaque infrastructures, reinforcing inequalities and causing "synthetic overload" of AI-generated content that researchers cannot verify. Source: STOA publications search, abstract only.
 - **STOA Study (25 September 2026)**: "Technology assessment for an EU digital tool for preventive healthcare": assesses the technological feasibility, system readiness and long-term sustainability of an EU digital prevention tool; finds the potential depends on systems that are interoperable, governed and trusted. Source: EP Think Tank, STOA publications.
 - **Topic:** STOA: Panel for the Future of Science and Technology (European Parliament's standing scientific foresight panel)
 - **Institution:** European Parliament (cross-committee MEP panel; not a full committee)

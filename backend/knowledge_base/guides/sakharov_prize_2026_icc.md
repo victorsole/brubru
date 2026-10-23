@@ -1,0 +1,14 @@
+# Sakharov Prize 2026: the International Criminal Court and its officials (22 October 2026)
+
+## QUICK FACTS
+- **What happened:** on **Thursday 22 October 2026**, in the Strasbourg hemicycle, European Parliament President **Roberta Metsola** announced that the **2026 Sakharov Prize for Freedom of Thought** is awarded collectively to the **International Criminal Court (ICC) and its officials**. Quote: "With the award of the Sakharov prize to the International Criminal Court and its officials, the European Parliament recognises the Court's important work in upholding international law and justice."
+- **What the ICC is:** the world's first permanent international criminal court, governed by the **Rome Statute**; it investigates and tries individuals for genocide, war crimes, crimes against humanity and the crime of aggression, as a court of last resort complementing national courts.
+- **Why now:** Parliament's 2025 annual reports on the CFSP and on human rights and democracy expressed deep concern at the **US sanctions imposed since 2025 on the ICC, its prosecutors, judges, staff and partners**; MEPs have repeatedly asked the Commission to activate the EU **blocking statute** (Regulation (EC) No 2271/96) to protect ICC officials. The 9 October 2026 US announcement of sanctions on the Court as an institution is in `us_sanctions_on_the_international_criminal_court_2026`.
+- **Who said what on the day (official accounts, 22 October 2026):** Commission President von der Leyen: "I welcome the Sakharov Prize awarded to the International Criminal Court. For victims of the world's gravest crimes, justice means a voice"; "The ICC must be free to pursue its mission, independently, and without pressure or intimidation. Europe stands firmly behind President Tomoko Akane, the Court's judges" (Bluesky). The candidacy was put forward by S&D (César Luena) and supported by The Left (Manon Aubry); Greens (Terry Reintke) and Renew MEPs welcomed it publicly.
+- **Ceremony:** the prize is handed over at the December plenary in Strasbourg; the press release does not give the 2026 date. Prize value EUR 50,000 (standing rule; not restated in the release).
+- **Not read:** the Conference of Presidents' decision and the other finalists' names (not in the press release). Do not name runners-up.
+- **Related guides:** `us_sanctions_on_the_international_criminal_court_2026`, `fundamental_rights_report_ep_2024_2025`.
+- **Search words (other languages):** prix Sakharov 2026 Cour pénale internationale; Sacharovprijs 2026 Internationaal Strafhof; premio Sájarov 2026 Corte Penal Internacional; premi Sàkharov 2026 Cort Penal Internacional; premio Sacharov 2026 Corte penale internazionale.
+
+## Source
+EP press release of 22 October 2026 (20261018IPR48263) and the official Bluesky posts of 22 October 2026 held in Brubru's social store.
