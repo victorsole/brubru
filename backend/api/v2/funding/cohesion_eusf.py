@@ -9,7 +9,7 @@ million. Follows the standard v2 item contract (5 datapoints + composed body).
 """
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -36,7 +36,12 @@ class EUSFCase(_DataPoints):
     disaster_type: Optional[str] = None
     status: Optional[str] = None
     category: Optional[str] = None
-    first_damage_date: Optional[date] = None
+    # No damage date (23 Oct 2026, Victor): the source's own is unreliable, 13 of 197 cases dated
+    # after their own application (day and month swapped: Storm Gudrun, Lorca, Lesbos), and it is
+    # not when anything was published. It stays in the stored source record only.
+    document_date: Optional[datetime] = Field(None, description=(
+        "When the Commission last published the dataset these figures come from (the Cohesion "
+        "Open Data platform's own last-refresh time). The source gives no per-case publication date."))
     total_direct_damage_meur: Optional[float] = None
     eligible_emergency_cost_meur: Optional[float] = None
     damage_pct: Optional[float] = None
@@ -45,7 +50,7 @@ class EUSFCase(_DataPoints):
 
 _STRUCT = (
     "id, year_of_occurrence, cci_number, applicant_country, name_of_disaster, disaster_type, "
-    "status, category, first_damage_date, total_direct_damage_meur, eligible_emergency_cost_meur, "
+    "status, category, total_direct_damage_meur, eligible_emergency_cost_meur, "
     "damage_pct, eusf_grant_paid_meur, public_url, document_date, created_at AS creation_date, "
     "updated_at AS updated_date"
 )

@@ -19,7 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib import request as ureq
 
@@ -30,6 +30,7 @@ from _specialised_helpers import ChunkedDb  # noqa: E402
 
 DATASET = "7a49-av34"
 RESOURCE_URL = f"https://cohesiondata.ec.europa.eu/resource/{DATASET}.json"
+VIEW_URL = f"https://cohesiondata.ec.europa.eu/api/views/{DATASET}.json"
 PUBLIC_URL = "https://ec.europa.eu/regional_policy/funding/solidarity-fund_en"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
@@ -88,6 +89,24 @@ def compose_body(r: dict, vals: dict) -> tuple[str, str]:
     return txt, html
 
 
+def published_at():
+    """When the Commission last published the dataset: the platform's `rowsUpdatedAt`.
+
+    Each case's document_date (23 Oct 2026). The source gives no per-case publication date, and
+    the first-damage date it was served as until then is not one, and is unreliable: 13 of 197
+    cases are dated after their own application (day and month swapped). None if the platform's
+    record cannot be read; the caller then keeps the date it holds.
+    """
+    req = ureq.Request(VIEW_URL, headers={"User-Agent": UA, "Accept": "application/json"})
+    try:
+        with ureq.urlopen(req, timeout=60) as r:
+            stamp = json.loads(r.read()).get("rowsUpdatedAt")
+        return datetime.fromtimestamp(int(stamp), timezone.utc) if stamp else None
+    except Exception as exc:  # noqa: BLE001 - reported by the caller as a degraded run
+        print(f"[EUSF] could not read {VIEW_URL}: {type(exc).__name__}: {exc}")
+        return None
+
+
 def fetch() -> list[dict]:
     rows: list[dict] = []
     offset, page = 0, 1000
@@ -117,6 +136,9 @@ def main() -> None:
     if not rows:
         print("[EUSF] [ERROR] the source returned no cases: a failed fetch, not an empty fund")
         sys.exit(1)
+    published = published_at()
+    if published is None:
+        print("[SYNC_STATUS] degraded: EUSF dataset publication date unreadable; document_date kept as held")
     db = ChunkedDb()
     inserted = updated = unchanged = 0
     keys = set()
@@ -149,10 +171,12 @@ def main() -> None:
                   eligible_emergency_cost_meur = EXCLUDED.eligible_emergency_cost_meur,
                   damage_pct = EXCLUDED.damage_pct, eusf_grant_paid_meur = EXCLUDED.eusf_grant_paid_meur,
                   public_url = EXCLUDED.public_url, body_txt = EXCLUDED.body_txt, body_html = EXCLUDED.body_html,
-                  document_date = EXCLUDED.document_date, raw = EXCLUDED.raw,
-                  updated_at = now(), fetched_at = now()
-                WHERE (eu_solidarity_fund.raw, eu_solidarity_fund.body_txt, eu_solidarity_fund.public_url)
-                      IS DISTINCT FROM (EXCLUDED.raw, EXCLUDED.body_txt, EXCLUDED.public_url)
+                  document_date = coalesce(EXCLUDED.document_date, eu_solidarity_fund.document_date),
+                  raw = EXCLUDED.raw, updated_at = now(), fetched_at = now()
+                WHERE (eu_solidarity_fund.raw, eu_solidarity_fund.body_txt, eu_solidarity_fund.public_url,
+                       eu_solidarity_fund.document_date)
+                      IS DISTINCT FROM (EXCLUDED.raw, EXCLUDED.body_txt, EXCLUDED.public_url,
+                       coalesce(EXCLUDED.document_date, eu_solidarity_fund.document_date))
                 RETURNING (xmax = 0) AS inserted
                 """,
                 {
@@ -164,7 +188,7 @@ def main() -> None:
                     "doia": r.get("date_of_initial_application"),
                     "damage": vals["damage"], "emerg": vals["emerg"], "pct": vals["pct"], "paid": vals["paid"],
                     "url": PUBLIC_URL, "bt": body_txt, "bh": body_html,
-                    "docdate": _date(r.get("first_damage_date")), "raw": Json(r),
+                    "docdate": published, "raw": Json(r),
                 },
             )
             got = db.cur.fetchone()

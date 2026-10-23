@@ -78,7 +78,7 @@ def test_the_solidarity_fund_serves_its_change_date():
     from api.v2.funding import cohesion_eusf as ce
     row = {"id": 7, "year_of_occurrence": 2023, "cci_number": "2023ES16SPO001", "applicant_country": "ES",
            "name_of_disaster": "Floods", "disaster_type": "Flood", "status": "Accepted", "category": "Major",
-           "first_damage_date": None, "total_direct_damage_meur": 1.0, "eligible_emergency_cost_meur": None,
+           "total_direct_damage_meur": 1.0, "eligible_emergency_cost_meur": None,
            "damage_pct": None, "eusf_grant_paid_meur": 1.0, "public_url": "https://ec.europa.eu/x",
            "document_date": None, "creation_date": CHANGED, "updated_date": CHANGED}
     db = _Db(row)
