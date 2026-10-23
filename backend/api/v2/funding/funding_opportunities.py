@@ -32,7 +32,10 @@ funding_router = APIRouter(prefix="/funding-opportunities", tags=["v2-funding-op
     "",
     response_model=PaginatedResponse[FundingItem],
     summary="EU funding opportunities — open + forthcoming calls across programmes (alternate view)",
-    description="""**What it does**
+    deprecated=True,
+    description="""**Deprecated alias (23 Oct 2026).** The same calls as `/api/v2/funding/ft-calls-for-proposals`, which has more filters: since 23 Oct this route reads that endpoint's data (the separate table it read held a stale copy of the same calls plus 208 calls for tenders). It answers until 23 Oct 2027.
+
+**What it does**
 Returns EU funding opportunities (calls for proposals) from the Funding & Tenders Portal across Horizon Europe, Digital Europe, CEF, EU4Health, Erasmus+, and other Commission programmes. Each row carries the topic_id, call_id, programme, title, short summary + description, status, type of action, deadlines, budget, source URL, target audience.
 
 **When to use it**
@@ -82,7 +85,10 @@ async def list_funding_opportunities(
     "/{topic_id:path}",
     response_model=FundingItem,
     summary="Look up one EU funding opportunity by its topic_id",
-    description="""**What it does**
+    deprecated=True,
+    description="""**Deprecated alias (23 Oct 2026).** The same call as `/api/v2/funding/ft-calls-for-proposals/{topic_id}`: since 23 Oct this route reads that endpoint's data (the separate table it read held a stale copy of the same calls plus 208 calls for tenders). It answers until 23 Oct 2027.
+
+**What it does**
 Fetches a single EU funding opportunity by its topic_id. Returns the same shape as the list endpoint, with the full description + body composition.
 
 **When to use it**

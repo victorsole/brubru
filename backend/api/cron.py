@@ -987,14 +987,11 @@ async def cron_sync_daily(
     # F&T Portal news + events (economy_items body 'ftportal') backing
     # /api/v2/funding/ft-news + /ft-events. SEDIA news/events indexes.
     results["ft_news_events"] = await _run_script_async("ft_news_events", "scripts/ingest_ft_news_events.py", ["--all", "--apply"], timeout=600)
-    # F&T Portal opportunities (funding_opportunities + ft_calls_for_proposals)
-    # — Horizon, EIC, EIE, CEF, Digital Europe, Erasmus+, CREA, CERV, EU4Health.
-    # Pulled from SEDIA search API; idempotent upsert on topic_id / call_id.
-    # Closes the 33-day ingest gap surfaced 30 June 2026 (last batch 27 May).
-    # --write-ft is load-bearing. Without it this writes funding_opportunities
-    # ONLY, and the Tenderator's unified feed reads ft_calls_for_proposals --
-    # so the daily job refreshed a table no Tenderator surface queries while
-    # the one it does query sat untouched since 15 Jun 2026.
+    # F&T Portal calls: calls for proposals into ft_calls_for_proposals, and with --write-ft the
+    # calls for tenders into ft_calls_for_tenders. Pulled from the SEDIA search API; idempotent
+    # upsert on topic_id / tender_reference. The job key keeps its old name for the run history:
+    # funding_opportunities, the table it also wrote until 23 Oct 2026, is retired (a stale
+    # second copy of the same calls).
     results["ft_funding_opportunities"] = await _run_script_async(
         "ft_funding_opportunities",
         "scripts/ingest_funding_sedia.py",

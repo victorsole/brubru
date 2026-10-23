@@ -41,7 +41,6 @@ from core.database import SessionLocal
 TABLES = {
     "ft_calls_for_proposals": ("deadline", "topic_id"),
     "ft_calls_for_tenders": ("deadline", "id::text"),
-    "funding_opportunities": ("deadline", "topic_id"),
 }
 STALE = ("open", "unknown")
 

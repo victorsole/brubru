@@ -180,7 +180,9 @@ def _get_db():
 
 
 # ---------------------------------------------------------------------------
-# Live EU funding calls (funding_opportunities, synced daily from the F&T Portal)
+# Live EU funding calls (ft_calls_for_proposals, synced daily from the F&T Portal). Until 23 Oct
+# 2026 this read funding_opportunities, a stale second copy that also held calls for tenders filed
+# as calls (15 of them open or forthcoming): the noise search_funding was reported for.
 # ---------------------------------------------------------------------------
 
 def _funding_rows(where_extra: str, params: Dict[str, Any], limit: int) -> List[Dict[str, Any]]:
@@ -190,10 +192,11 @@ def _funding_rows(where_extra: str, params: Dict[str, Any], limit: int) -> List[
         rows = db.execute(
             text(
                 f"""
-                SELECT topic_id, programme, title, short_summary, status,
+                SELECT topic_id, framework_programme AS programme, title,
+                       left(split_part(coalesce(description, ''), E'\n\n', 1), 600) AS short_summary, status,
                        to_char(deadline, 'YYYY-MM-DD') AS deadline,
                        indicative_budget, budget_currency, source_url
-                FROM funding_opportunities
+                FROM ft_calls_for_proposals
                 WHERE is_test = false AND lower(status) IN ('open', 'forthcoming')
                 {where_extra}
                 ORDER BY (lower(status) = 'open') DESC, deadline ASC NULLS LAST
@@ -243,7 +246,7 @@ def _related_funding(query: str, limit: int = 8) -> List[Dict[str, Any]]:
             k = f"t{i}"
             params[k] = f"%{t}%"
             ors.append(
-                f"(title ILIKE :{k} OR short_summary ILIKE :{k} OR programme ILIKE :{k} "
+                f"(title ILIKE :{k} OR description ILIKE :{k} OR framework_programme ILIKE :{k} "
                 f"OR array_to_string(keywords, ' ') ILIKE :{k})"
             )
         rows = _funding_rows("AND (" + " OR ".join(ors) + ")", params, limit)

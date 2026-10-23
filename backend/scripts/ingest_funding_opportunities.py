@@ -174,6 +174,10 @@ def upsert_row(cursor, row):
 
 
 def main():
+    # Retired 23 Oct 2026 with the funding_opportunities table it writes: the calls come from
+    # scripts/ingest_funding_sedia.py into ft_calls_for_proposals. Never scheduled since June.
+    print("[RETIRED] funding_opportunities is retired; run scripts/ingest_funding_sedia.py instead")
+    sys.exit(2)
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()

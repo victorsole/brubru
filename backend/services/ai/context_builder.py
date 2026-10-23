@@ -11776,8 +11776,12 @@ class ContextBuilder:
             return None
 
     async def _fetch_funding_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
-        """Open + forthcoming funding calls — queries funding_opportunities
-        + ft_calls_for_proposals together, prioritised by deadline soonest-first."""
+        """Open + forthcoming funding calls from ft_calls_for_proposals, soonest deadline first.
+
+        Until 23 Oct 2026 this read funding_opportunities too, a second copy of the same calls
+        (each one listed twice), and rewrote "programme" inside "framework_programme" for the
+        second query: every question naming a programme failed on a column that does not exist
+        and the chat got no funding block at all."""
         from sqlalchemy import text
         try:
             db = SessionLocal()
@@ -11789,7 +11793,7 @@ class ContextBuilder:
                 where_prog = "true"
                 if intent.get("programme"):
                     params["prog"] = f"%{intent['programme']}%"
-                    where_prog = "(programme ILIKE :prog OR framework_programme ILIKE :prog)"
+                    where_prog = "framework_programme ILIKE :prog"
                 # Free-text terms
                 terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
                          if t.lower() not in self._FUNDING_STOP][:3]
@@ -11797,38 +11801,24 @@ class ContextBuilder:
                 if terms:
                     cl = []
                     for i, t in enumerate(terms):
-                        cl.append(f"(title ILIKE :fd{i} OR short_summary ILIKE :fd{i})")
+                        cl.append(f"(title ILIKE :fd{i} OR description ILIKE :fd{i})")
                         params[f"fd{i}"] = f"%{t}%"
                     term_where = "(" + " OR ".join(cl) + ")"
-                # Pull from funding_opportunities (primary)
-                rows_fo = db.execute(text(f"""
-                    SELECT 'funding_opportunity' AS src, topic_id AS ref, title, programme AS prog,
-                           type_of_action, deadline, indicative_budget, status, source_url
-                      FROM funding_opportunities
-                     WHERE COALESCE(is_test, false) = false
-                       AND {where_status}
-                       AND {where_prog.replace('framework_programme', 'programme')}
-                       AND {term_where.replace('short_summary', 'short_summary')}
-                     ORDER BY deadline ASC NULLS LAST
-                     LIMIT 6
-                """), params).mappings().all()
-                # Pull from ft_calls_for_proposals (secondary, may overlap)
-                rows_cp = db.execute(text(f"""
+                rows = db.execute(text(f"""
                     SELECT 'ft_call' AS src, topic_id AS ref, title,
                            framework_programme AS prog, type_of_action, deadline,
                            indicative_budget, status, source_url
                       FROM ft_calls_for_proposals
                      WHERE COALESCE(is_test, false) = false
                        AND {where_status}
-                       AND {where_prog.replace('programme', 'framework_programme')}
-                       AND {term_where.replace('short_summary', 'description')}
+                       AND {where_prog}
+                       AND {term_where}
                      ORDER BY deadline ASC NULLS LAST
-                     LIMIT 6
+                     LIMIT 10
                 """), params).mappings().all()
-                rows = list(rows_fo) + list(rows_cp)
                 if not rows: return None
                 lines = [
-                    "EU OPEN FUNDING CALLS (from funding_opportunities + ft_calls_for_proposals):",
+                    "EU OPEN FUNDING CALLS (from the Funding & Tenders Portal):",
                     f"Query keyword: '{intent.get('keyword')}'"
                     + (f" | programme: {intent['programme']}" if intent.get("programme") else ""),
                     "",
@@ -11845,7 +11835,7 @@ class ContextBuilder:
                     lines.append(f"      {prog} | status {st} | deadline {dl} | budget €{budget:,.0f} | src {src}")
                 lines.append("")
                 lines.append("Source: ec.europa.eu/info/funding-tenders/opportunities. "
-                             "Brubru endpoints: /api/v1/funding-opportunities + /api/v1/ft-calls-for-proposals.")
+                             "Brubru endpoint: /api/v2/funding/ft-calls-for-proposals.")
                 block = "\n".join(lines)
                 return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
             finally:

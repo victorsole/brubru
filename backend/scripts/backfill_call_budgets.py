@@ -181,12 +181,6 @@ def main() -> int:
                         "UPDATE ft_calls_for_proposals SET indicative_budget = :b, "
                         "budget_currency = 'EUR', last_updated = now() "
                         "WHERE topic_id = :t"), {"b": total, "t": r.topic_id})
-                    # funding_opportunities mirrors the same calls
-                    db.execute(text(
-                        "UPDATE funding_opportunities SET indicative_budget = :b, "
-                        "budget_currency = 'EUR', last_updated = now() "
-                        "WHERE topic_id = :t AND indicative_budget IS NULL"),
-                        {"b": total, "t": r.topic_id})
             if args.apply and len(found) % 50 == 0:
                 db.commit()
             time.sleep(0.4)

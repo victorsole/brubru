@@ -108,7 +108,8 @@ def test_funded_projects_and_opportunities_map_their_change_column():
     from api.v1 import infringements_funding as inf
     import inspect
     assert "updated_date=r.last_updated" in inspect.getsource(fc._project_to_item)
-    assert "updated_date=r.last_updated" in inspect.getsource(inf._funding_to_item)
+    # funding-opportunities reads ft_calls_for_proposals since 23 Oct 2026 (its change column).
+    assert "updated_date=r.content_updated_at" in inspect.getsource(inf._funding_to_item)
     for fn in (fc.list_funded_projects, inf.list_funding_opportunities):
         params = inspect.signature(fn).parameters
         assert "updated_from" in params and "updated_to" in params

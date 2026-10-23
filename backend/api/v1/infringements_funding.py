@@ -18,7 +18,8 @@ from sqlalchemy import and_, func
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from models.infringement_funding import FundingOpportunity, InfringementProcedure
+from models.infringement_funding import InfringementProcedure
+from models.funding_tenders import FtCallForProposals
 from models.user import User
 
 from ._body import (
@@ -250,21 +251,33 @@ class FundingItem(BaseModel):
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync (filter with updated_from / updated_to). A re-sync that finds the same content does not move it (migration 306).")
 
 
+def _short_summary(description: Optional[str]) -> Optional[str]:
+    """The description's first paragraph, at most 600 characters: what the ingester stored as
+    short_summary in the retired funding_opportunities table."""
+    if not description:
+        return None
+    first = description.strip().split("\n\n", 1)[0].strip()
+    return first[:600] or None
+
+
 def _funding_to_item(
-    r: FundingOpportunity,
+    r: FtCallForProposals,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> FundingItem:
+    # Read from ft_calls_for_proposals since 23 Oct 2026: funding_opportunities was a second copy
+    # of the same calls, written by the same ingester, that the later repairs never reached
+    # (1,089 shorter descriptions, 4 deadlines), plus 208 calls for tenders filed as calls.
+    short_summary = _short_summary(r.description)
     body_html, body_text, has_body = compose_html_from_sections([
-        ("Summary", r.short_summary),
         ("Description", r.description),
     ], threshold=body_threshold)
     return FundingItem(
         id=str(r.id),
         topic_id=r.topic_id,
         call_id=r.call_id,
-        programme=r.programme,
+        programme=r.framework_programme,
         title=r.title,
-        short_summary=r.short_summary,
+        short_summary=short_summary,
         description=r.description,
         status=r.status,
         type_of_action=r.type_of_action,
@@ -277,14 +290,14 @@ def _funding_to_item(
         keywords=list(r.keywords or []),
         target_audience=list(r.target_audience or []),
         published_at=r.published_at,
-        last_updated=r.last_updated,
+        last_updated=r.content_updated_at,
         has_body=has_body,
         body_html=body_html,
         body_txt=body_text,
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
-        creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
-        updated_date=r.last_updated,
+        creation_date=r.first_seen_at,
+        updated_date=r.content_updated_at,
     )
 
 
@@ -292,7 +305,10 @@ def _funding_to_item(
     "",
     response_model=PaginatedResponse[FundingItem],
     summary="EU funding opportunities — open + forthcoming calls across programmes (alternate view)",
-    description="""**What it does**
+    deprecated=True,
+    description="""**Deprecated alias (23 Oct 2026).** The same calls as `/api/v1/ft-calls-for-proposals`, which has more filters: since 23 Oct this route reads that endpoint's data (the separate table it read held a stale copy of the same calls plus 208 calls for tenders). It answers until 23 Oct 2027.
+
+**What it does**
 Returns EU funding opportunities (calls for proposals) from the Funding & Tenders Portal across Horizon Europe, Digital Europe, CEF, EU4Health, Erasmus+, and other Commission programmes. Each row carries the topic_id, call_id, programme, title, short summary + description, status, type of action, deadlines, budget, source URL, target audience.
 
 **When to use it**
@@ -335,28 +351,26 @@ async def list_funding_opportunities(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FundingItem]:
-    query = db.query(FundingOpportunity).filter(FundingOpportunity.is_test == False)  # noqa: E712
+    model = FtCallForProposals
+    query = db.query(model).filter(model.is_test == False)  # noqa: E712
     filters = []
     if programme:
-        filters.append(FundingOpportunity.programme.ilike(f"%{programme}%"))
+        filters.append(model.framework_programme.ilike(f"%{programme}%"))
     if status:
-        filters.append(FundingOpportunity.status == status.lower())
+        filters.append(model.status == status.lower())
     if type_of_action:
-        filters.append(FundingOpportunity.type_of_action.ilike(f"%{type_of_action}%"))
+        filters.append(model.type_of_action.ilike(f"%{type_of_action}%"))
     if q:
         like = f"%{q}%"
-        filters.append(
-            (FundingOpportunity.title.ilike(like))
-            | (FundingOpportunity.short_summary.ilike(like))
-        )
+        filters.append((model.title.ilike(like)) | (model.description.ilike(like)))
     if deadline_from:
-        filters.append(FundingOpportunity.deadline >= deadline_from)
+        filters.append(model.deadline >= deadline_from)
     if deadline_to:
-        filters.append(FundingOpportunity.deadline <= datetime.combine(deadline_to, time.max))
+        filters.append(model.deadline <= datetime.combine(deadline_to, time.max))
     if updated_from:
-        filters.append(FundingOpportunity.last_updated >= updated_from)
+        filters.append(model.content_updated_at >= updated_from)
     if updated_to:
-        filters.append(FundingOpportunity.last_updated <= updated_to)
+        filters.append(model.content_updated_at <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
@@ -366,8 +380,8 @@ async def list_funding_opportunities(
         # closed calls). Partners hit the endpoint to find opportunities they
         # can still apply to, not historic data.
         stable(query.order_by(
-            FundingOpportunity.deadline.desc().nullslast(),
-            FundingOpportunity.id.desc(),
+            model.deadline.desc().nullslast(),
+            model.id.desc(),
         ))
         .offset((page - 1) * limit)
         .limit(limit)
@@ -383,7 +397,10 @@ async def list_funding_opportunities(
     "/{topic_id:path}",
     response_model=FundingItem,
     summary="Look up one EU funding opportunity by its topic_id",
-    description="""**What it does**
+    deprecated=True,
+    description="""**Deprecated alias (23 Oct 2026).** The same call as `/api/v1/ft-calls-for-proposals/{topic_id}`: since 23 Oct this route reads that endpoint's data (the separate table it read held a stale copy of the same calls plus 208 calls for tenders). It answers until 23 Oct 2027.
+
+**What it does**
 Fetches a single EU funding opportunity by its topic_id. Returns the same shape as the list endpoint, with the full description + body composition.
 
 **When to use it**
@@ -409,9 +426,9 @@ async def get_funding_opportunity(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FundingItem:
-    r = resolve_row(db, FundingOpportunity, topic_id,
+    r = resolve_row(db, FtCallForProposals, topic_id,
                     natural_keys=("topic_id",),
-                    extra_filters=(FundingOpportunity.is_test == False,))  # noqa: E712
+                    extra_filters=(FtCallForProposals.is_test == False,))  # noqa: E712
     if not r:
         raise HTTPException(
             status_code=404,

@@ -13,11 +13,11 @@ Endpoint:
     identifier), languages (["en"]), sort.
 
 Passes (see main):
-    1. every open/forthcoming grant topic (type 1, 8) and, with --write-ft,
-       every open/forthcoming call for tenders (type 0), English, uncapped;
+    1. every open/forthcoming grant topic (type 1) and External Action call (type 2) and, with
+       --write-ft, every open/forthcoming call for tenders (type 0), English, uncapped;
     2. re-read by identifier of stored rows that can still be wrong;
     3. optional (--discover / --text) full-text prefix discovery;
-    then a date-derived status pass over all three tables.
+    then a date-derived status pass over both tables.
 
 Mapping:
     topic_id      = identifier (e.g. "HORIZON-CL5-2026-D2-01-04")
@@ -619,67 +619,6 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
     return row
 
 
-def upsert(cur, row: Dict[str, Any]) -> None:
-    cur.execute(
-        """
-        INSERT INTO funding_opportunities
-            (topic_id, call_id, programme, title, short_summary, description, status,
-             type_of_action, deadline, deadline_secondary, indicative_budget,
-             budget_currency, source_url, documents_url, keywords, target_audience,
-             published_at, scraped_at, last_updated)
-        VALUES (%(topic_id)s, %(call_id)s, %(programme)s, %(title)s, %(short_summary)s,
-                %(description)s, %(status)s, %(type_of_action)s, %(deadline)s,
-                %(deadline_secondary)s, %(indicative_budget)s, %(budget_currency)s,
-                %(source_url)s, %(documents_url)s, %(keywords)s, %(target_audience)s,
-                %(published_at)s, NOW(), NOW())
-        ON CONFLICT (topic_id) DO UPDATE SET
-            call_id = EXCLUDED.call_id,
-            title = EXCLUDED.title,
-            short_summary = EXCLUDED.short_summary,
-            -- The LONGER value wins. SEDIA's search record carries no description for
-            -- older closed calls, so assigning it unconditionally would blank text a
-            -- backfill (backfill_ft_call_descriptions.py) read from the portal's own
-            -- topic page, on the very next nightly run.
-            description = CASE WHEN length(coalesce(EXCLUDED.description,'')) >= length(coalesce(funding_opportunities.description,'')) THEN EXCLUDED.description ELSE funding_opportunities.description END,
-            -- The SEDIA search record carries no status field at all, so
-            -- normalise_row falls back to 'unknown' on every row. Assigning
-            -- that unconditionally overwrote a known 'open' or 'closed' with
-            -- 'unknown' on every nightly run, which is how twelve LIFE 2025
-            -- calls ended up statusless, and it would have undone
-            -- close_expired_calls.py the same night it ran. Only a real status
-            -- may replace a real status.
-            status = CASE WHEN EXCLUDED.status = 'unknown'
-                          THEN funding_opportunities.status ELSE EXCLUDED.status END,
-            type_of_action = COALESCE(EXCLUDED.type_of_action, funding_opportunities.type_of_action),
-            -- The programme NAME. Until 15 Sep 2026 this column held the programme
-            -- PERIOD ("2021 - 2027") and was never updated on conflict, so the
-            -- period is cleared here whenever no name is available.
-            programme = COALESCE(EXCLUDED.programme,
-                                 CASE WHEN funding_opportunities.programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
-                                      THEN NULL ELSE funding_opportunities.programme END),
-            published_at = COALESCE(EXCLUDED.published_at, funding_opportunities.published_at),
-            deadline_secondary = COALESCE(EXCLUDED.deadline_secondary, funding_opportunities.deadline_secondary),
-            -- Never let an absent field erase a present one. The SEDIA search
-            -- record carries no deadline for many topics, so EXCLUDED.deadline
-            -- is NULL and a plain assignment wiped the real date: one run
-            -- cleared the deadline on all 31 LIFE 2026 calls, which is the
-            -- single most important thing a funding feed knows. Same reasoning
-            -- for the budget, which the search API never carries at all and
-            -- which is filled in from the portal's topic page.
-            deadline = COALESCE(EXCLUDED.deadline, funding_opportunities.deadline),
-            keywords = EXCLUDED.keywords,
-            -- scraped_at on the conflict path too, so "when did we last SEE
-            -- this call" is answerable. Without it scraped_at only ever
-            -- recorded a topic's first sighting, so the table looked frozen
-            -- whether the job was healthy or dead and there was no way to
-            -- tell the two apart from the data.
-            scraped_at = NOW(),
-            last_updated = NOW()
-        """,
-        row,
-    )
-
-
 def is_call_for_tenders(row: Dict[str, Any]) -> bool:
     """True when a SEDIA row is a call for TENDERS, not a call for proposals.
 
@@ -761,12 +700,8 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
 
 
 def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
-    """Mirror the same row into the sibling ft_calls_for_proposals table.
-
-    Schema parity: ft_calls_for_proposals has `framework_programme` where
-    funding_opportunities has `programme`, and no `short_summary` field.
-    All other columns line up 1:1, so we just rename + drop.
-    """
+    """Write a call for proposals into ft_calls_for_proposals (the only calls table since 23 Oct
+    2026). The row's `programme` is the table's `framework_programme`; it has no short_summary."""
     payload = dict(row)
     payload["framework_programme"] = payload.pop("programme", None)
     payload.pop("short_summary", None)
@@ -808,7 +743,7 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
             status = CASE WHEN EXCLUDED.status = 'unknown'
                           THEN ft_calls_for_proposals.status ELSE EXCLUDED.status END,
             type_of_action = COALESCE(EXCLUDED.type_of_action, ft_calls_for_proposals.type_of_action),
-            -- See funding_opportunities.programme: the period is not a programme.
+            -- The portal's programme period ("2014 - 2020") is not a programme.
             framework_programme = COALESCE(EXCLUDED.framework_programme,
                 CASE WHEN ft_calls_for_proposals.framework_programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
                      THEN NULL ELSE ft_calls_for_proposals.framework_programme END),
@@ -880,9 +815,9 @@ def _write(cur, row: Dict[str, Any], write_ft: bool) -> None:
             if write_ft:
                 upsert_ft_tenders(cur, row)
         else:
-            upsert(cur, row)
-            if write_ft:
-                upsert_ft_calls(cur, row)
+            # ft_calls_for_proposals only, since 23 Oct 2026: funding_opportunities was a second
+            # copy of the same calls that the later repairs never reached; it is retired.
+            upsert_ft_calls(cur, row)
         cur.execute("RELEASE SAVEPOINT sedia_row")
     except Exception:
         cur.execute("ROLLBACK TO SAVEPOINT sedia_row")
@@ -936,7 +871,7 @@ def refresh_status_from_dates(cur, today_sql: str = "CURRENT_DATE") -> Dict[str,
     passed is open. Rows without a deadline are never guessed at.
     """
     changed = {}
-    for table in ("ft_calls_for_proposals", "funding_opportunities", "ft_calls_for_tenders"):
+    for table in ("ft_calls_for_proposals", "ft_calls_for_tenders"):
         final = ("GREATEST(deadline, COALESCE(deadline_secondary, deadline))"
                  if table != "ft_calls_for_tenders" else "deadline")
         cur.execute(f"""
@@ -965,8 +900,8 @@ def main():
                     help="SEDIA full-text query for the prefix-discovery pass. If "
                          "omitted, iterates over the DEFAULT_QUERIES programme prefixes.")
     ap.add_argument("--write-ft", action="store_true",
-                    help="Also write ft_calls_for_proposals and ft_calls_for_tenders "
-                         "(the tables the Tenderator and /api/v2/funding/ft-* read).")
+                    help="Also write calls for tenders into ft_calls_for_tenders (calls for "
+                         "proposals always go to ft_calls_for_proposals).")
     ap.add_argument("--discover", action="store_true",
                     help="Also run the legacy full-text prefix queries to find closed "
                          "historical topics never stored (slow; implied by --text).")
@@ -1040,9 +975,6 @@ def main():
                  WHERE NOT is_test AND (status IS DISTINCT FROM 'closed'
                        OR framework_programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
                        OR COALESCE(detected_lang, 'en') <> 'en')
-                UNION SELECT topic_id FROM funding_opportunities
-                 WHERE NOT is_test AND (status IS DISTINCT FROM 'closed'
-                       OR programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$')
                 UNION SELECT tender_reference FROM ft_calls_for_tenders
                  WHERE tender_reference ~ '-(CN|PIN)$'
                    AND (status IS DISTINCT FROM 'closed'

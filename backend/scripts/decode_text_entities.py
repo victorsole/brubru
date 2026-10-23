@@ -26,7 +26,6 @@ TARGETS = (
     ("secondary_acts", "id", ("title", "description", "text_body"), "last_updated"),
     ("commission_documents", "id", ("title", "text_body"), "last_updated"),
     ("rsb_opinions", "id", ("title", "summary", "full_text"), "last_updated"),
-    ("funding_opportunities", "id", ("title", "short_summary", "description"), "last_updated"),
 )
 _ENTITY = re.compile(r"&(?:amp|lt|gt|quot|apos|nbsp|#\d{2,6}|#x[0-9a-fA-F]{2,5});")
 
