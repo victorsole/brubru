@@ -809,6 +809,16 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
             published_at = COALESCE(EXCLUDED.published_at, ft_calls_for_proposals.published_at),
             deadline_secondary = COALESCE(EXCLUDED.deadline_secondary, ft_calls_for_proposals.deadline_secondary),
             deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_proposals.deadline),
+            -- The links and the budget were set on the first insert only (23 Oct 2026): 11 EU
+            -- External Action calls stored on 15 Sep kept a topic-details link the portal does not
+            -- have, and a budget changed at the source never reached a stored call. The links are
+            -- built from the record every run; a budget the record gives wins, and a row the record
+            -- gives none keeps its own (backfill_call_budgets.py fills those from the topic pages).
+            source_url = EXCLUDED.source_url,
+            documents_url = COALESCE(EXCLUDED.documents_url, ft_calls_for_proposals.documents_url),
+            indicative_budget = COALESCE(EXCLUDED.indicative_budget, ft_calls_for_proposals.indicative_budget),
+            budget_currency = CASE WHEN EXCLUDED.indicative_budget IS NOT NULL THEN EXCLUDED.budget_currency
+                                   ELSE ft_calls_for_proposals.budget_currency END,
             keywords = EXCLUDED.keywords,
             -- scraped_at on the conflict path too, so "when did we last SEE
             -- this call" is answerable. Without it scraped_at only ever

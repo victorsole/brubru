@@ -74,3 +74,20 @@ def test_the_description_backfill_leaves_external_actions_alone():
     for stmt in (backfill.PICK, backfill.GAP):
         sql = str(stmt.compile(dialect=postgresql.psycopg2.dialect()))
         assert "topic_id NOT LIKE 'EuropeAid/%%'" in sql      # one wildcard once the driver reads it
+
+
+def test_a_refresh_corrects_the_link_and_takes_a_budget_the_record_gives(monkeypatch):
+    """Links and budgets used to be written on the first insert only."""
+    _labels(monkeypatch)
+    seen = []
+
+    class _Cur:
+        def execute(self, sql, params=None): seen.append((sql, params))
+
+    sedia.upsert_ft_calls(_Cur(), sedia.normalise_row(RECORD, today=TODAY))
+    sql, params = seen[0]
+    conflict = sql.split("ON CONFLICT", 1)[1]
+    assert "source_url = EXCLUDED.source_url" in conflict
+    assert "indicative_budget = COALESCE(EXCLUDED.indicative_budget, ft_calls_for_proposals.indicative_budget)" in conflict
+    assert "WHEN EXCLUDED.indicative_budget IS NOT NULL THEN EXCLUDED.budget_currency" in conflict
+    assert params["source_url"].endswith("prospect-details/187686PROSPECTSEN") and params["indicative_budget"] == 1300000.0
