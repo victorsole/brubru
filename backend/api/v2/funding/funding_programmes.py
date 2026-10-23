@@ -48,11 +48,17 @@ def _compose_body(p: dict) -> tuple[str, str]:
         cov_txt = "Not yet covered by Brubru."
     else:
         cov_txt = "Deliberately not covered."
-    txt = (f"{p['programme']} ({p['acronym']}). EC classification: heading "
-           f"\"{p['heading']}\", cluster \"{p['cluster']}\". {cov_txt} Source: {p['source']}.")
+    act = p.get("founding_act")
+    act_txt = (f" Established by {act['title']}, published in the Official Journal on {act['published']}."
+               if act else f" {p.get('founding_act_note') or ''}".rstrip())
+    txt = (f"{p['programme']} ({p['acronym']}), {p.get('period') or ''}. EC classification: heading "
+           f"\"{p['heading']}\", cluster \"{p['cluster']}\".{act_txt} {cov_txt} Source: {p['source']}.")
     html = (f"<article><h3>{p['programme']} ({p['acronym']})</h3>"
-            f"<p>EC heading: <strong>{p['heading']}</strong> &middot; cluster: {p['cluster']}.</p>"
-            f"<p>{cov_txt}</p><p>Data source: {p['source']}.</p></article>")
+            f"<p>EC heading: <strong>{p['heading']}</strong> &middot; cluster: {p['cluster']}"
+            f" &middot; period: {p.get('period') or ''}.</p>"
+            + (f"<p>Established by {act['title']}, published in the Official Journal on {act['published']}.</p>"
+               if act else (f"<p>{p['founding_act_note']}</p>" if p.get("founding_act_note") else ""))
+            + f"<p>{cov_txt}</p><p>Data source: {p['source']}.</p></article>")
     return txt, html
 
 
@@ -60,11 +66,15 @@ class ProgrammeItem(_DataPoints):
     # Its own descriptions, not the cohesion lists' it inherited ("the programme's status /
     # adoption date", "the row's page on Cohesion Open Data"), which described nothing here.
     public_url: Optional[str] = Field(None, description="The programme's own page on the Commission's website (its funding or application page).")
-    document_date: Optional[datetime] = Field(None, description="No publication date is held for a programme: the directory records none, so this is null on every item.")
+    document_date: Optional[datetime] = Field(None, description=(
+        "The Official Journal publication date of the act that established the programme, read at "
+        "Cellar (Horizon Europe: Regulation (EU) 2021/695, OJ L 170, 12.5.2021). The act is named in "
+        "the body. Null only for the Common Foreign and Security Policy, which no act establishes."))
     creation_date: Optional[datetime] = Field(None, description="When Brubru compiled the directory: the list's own date, the same on every programme.")
     updated_date: Optional[datetime] = Field(None, description="When the directory was last revised, the same on every programme (filter with updated_from / updated_to).")
     programme: str
     acronym: str
+    period: Optional[str] = Field(None, description="The programming period, as the Funding & Tenders Portal groups programmes (e.g. 2021-2027).")
     heading: str = Field(..., description="One of the 6 EC MFF headings.")
     cluster: str
     coverage: str = Field(..., description="covered | gap | skipped")
@@ -84,12 +94,21 @@ def _config_dates() -> tuple:
     return _d(d.get("$created")), _d(d.get("$updated"))
 
 
+def _published(p: dict) -> Optional[datetime]:
+    """The founding act's OJ publication day (config `founding_act.published`, read at Cellar)."""
+    act = p.get("founding_act") or {}
+    try:
+        return datetime.fromisoformat(act["published"]).replace(tzinfo=timezone.utc) if act.get("published") else None
+    except ValueError:
+        return None
+
+
 def _to_item(p: dict, *, with_body: bool) -> ProgrammeItem:
     bt, bh = _compose_body(p)
     created, updated = _config_dates()
     return ProgrammeItem(
         programme=p["programme"], acronym=p["acronym"], heading=p["heading"],
-        cluster=p["cluster"], coverage=p["coverage"], via=p.get("via"),
+        cluster=p["cluster"], coverage=p["coverage"], via=p.get("via"), period=p.get("period"),
         endpoint=p.get("endpoint"), source=p["source"],
         # The programme's own page (until 20 Oct 2026 every programme linked the same EC
         # list page); the list page when a programme has none.
@@ -98,6 +117,7 @@ def _to_item(p: dict, *, with_body: bool) -> ProgrammeItem:
         # The list was compiled on $created and last revised on $updated (it is a reference
         # file, not a feed): both were null on every programme until 20 Oct 2026.
         creation_date=created, updated_date=updated,
+        document_date=_published(p),
     )
 
 
@@ -116,6 +136,7 @@ The single source of truth for "every EU fund". Iterate it to know the full univ
 - `heading` — substring on the EC heading (e.g. `Cohesion`, `Natural Resources`).
 - `cluster` — substring on the EC cluster.
 - `coverage` — `covered` | `gap` | `skipped`.
+- `period` — the programming period, e.g. `2021-2027`.
 - `q` — substring on the programme name, acronym or body.
 - `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync on the list's own dates (every programme carries them): the whole list when it was revised in the window, nothing otherwise.
 - `limit` (default 100, max 200), `page` (1-indexed).
@@ -128,7 +149,7 @@ GET /api/v2/funding/programmes?heading=Natural Resources
 ```
 
 **You get back**
-A `PaginatedResponse[ProgrammeItem]`. Each item carries `programme`, `acronym`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`public_url` is the programme's own page on the Commission's website; `body_txt`/`body_html` null on the list unless `include_body=true`).
+A `PaginatedResponse[ProgrammeItem]`. Each item carries `programme`, `acronym`, `period`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`document_date` is the OJ publication of the act that established the programme; `public_url` is the programme's own page on the Commission's website; `body_txt`/`body_html` null on the list unless `include_body=true`).
 
 **Data freshness**
 Static reference, updated when the Commission's programme list changes (config: `funding_programmes.json`).""",
@@ -138,6 +159,7 @@ async def list_programmes(
     heading: Optional[str] = Query(None, description="EC heading substring"),
     cluster: Optional[str] = Query(None, description="EC cluster substring"),
     coverage: Optional[str] = Query(None, description="covered | gap | skipped"),
+    period: Optional[str] = Query(None, description="Programming period, e.g. 2021-2027 (as the Funding & Tenders Portal groups programmes)."),
     q: Optional[str] = Query(None, description="Substring on programme name / acronym / body"),
     created_from: Optional[datetime] = Query(None, description="List compiled on or after (ISO date or datetime, UTC): every programme carries the list's own dates."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="List compiled on or before; a bare date covers the whole day."),
@@ -164,6 +186,8 @@ async def list_programmes(
         progs = [p for p in progs if cluster.lower() in p["cluster"].lower()]
     if coverage:
         progs = [p for p in progs if p["coverage"] == coverage.lower()]
+    if period:
+        progs = [p for p in progs if (p.get("period") or "").replace(" ", "") == period.replace(" ", "")]
     if q:
         ql = q.lower()
         progs = [p for p in progs if ql in p["programme"].lower() or ql in p["acronym"].lower() or ql in p["source"].lower()]

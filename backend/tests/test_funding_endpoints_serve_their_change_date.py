@@ -96,7 +96,11 @@ def test_programmes_link_their_own_page_and_carry_the_lists_dates():
     horizon = next(i for i in items if i["acronym"] == "Horizon Europe")
     assert horizon["public_url"].endswith("/programmes/horizon")
     assert len({i["public_url"] for i in items}) > len(items) // 2
-    assert horizon["creation_date"].startswith("2026-06-15") and horizon["updated_date"].startswith("2026-06-26")
+    # The list's own $created / $updated (the config moves $updated whenever it is revised).
+    created, updated = fp._config_dates()
+    assert horizon["creation_date"].startswith(created.date().isoformat())
+    assert horizon["updated_date"].startswith(updated.date().isoformat())
+    assert created.date().isoformat() == "2026-06-15"
 
 
 def test_funded_projects_and_opportunities_map_their_change_column():

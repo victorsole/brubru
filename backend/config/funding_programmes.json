@@ -3,7 +3,7 @@
  "$source": "https://commission.europa.eu/funding-and-tenders/find-funding/eu-funding-programmes_en",
  "$generated": "2026-06-15b",
  "$created": "2026-06-15",
- "$updated": "2026-06-26",
+ "$updated": "2026-10-23",
  "$note": "EC 2021-2027 MFF funding programmes by the Commission's own 6-heading classification, with Brubru coverage. coverage: covered | gap | skipped. via: endpoint (dedicated Brubru endpoint) | ft_calls (reachable via /api/v2/funding/ft-calls-for-proposals).",
  "programmes": [
   {
@@ -22,7 +22,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 95.5,
-   "apply_url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/programmes/horizon"
+   "apply_url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/programmes/horizon",
+   "founding_act": {
+    "celex": "32021R0695",
+    "published": "2021-05-12",
+    "title": "Regulation (EU) 2021/695 of the European Parliament and of the Council of 28 April 2021 establishing Horizon Europe – the Framework Programme for Research and Innovation, laying down its rules for participation and dissemination, and repealing Regulations (EU) No 1290/2013 and (EU) No 1291/2013 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Euratom Research and Training Programme",
@@ -40,7 +45,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.38,
-   "apply_url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/programmes/euratom2027"
+   "apply_url": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/programmes/euratom2027",
+   "founding_act": {
+    "celex": "32021R0765",
+    "published": "2021-05-12",
+    "title": "Council Regulation (Euratom) 2021/765 of 10 May 2021 establishing the Research and Training Programme of the European Atomic Energy Community for the period 2021-2025 complementing Horizon Europe – the Framework Programme for Research and Innovation and repealing Regulation (Euratom) 2018/1563"
+   }
   },
   {
    "programme": "ITER",
@@ -58,7 +68,12 @@
    "programme_type": "procurement",
    "period": "2021-2027",
    "budget_eur_bn": 5.61,
-   "apply_url": "https://fusionforenergy.europa.eu/get-involved/"
+   "apply_url": "https://fusionforenergy.europa.eu/get-involved/",
+   "founding_act": {
+    "celex": "32007D0198",
+    "published": "2007-03-30",
+    "title": "2007/198/Euratom: Council Decision of 27 March 2007 establishing the European Joint Undertaking for ITER and the Development of Fusion Energy and conferring advantages upon it"
+   }
   },
   {
    "programme": "InvestEU",
@@ -76,7 +91,12 @@
    "programme_type": "financial-instrument",
    "period": "2021-2027",
    "budget_eur_bn": 26.2,
-   "apply_url": "https://investeu.europa.eu/index_en"
+   "apply_url": "https://investeu.europa.eu/index_en",
+   "founding_act": {
+    "celex": "32021R0523",
+    "published": "2021-03-26",
+    "title": "Regulation (EU) 2021/523 of the European Parliament and of the Council of 24 March 2021 establishing the InvestEU Programme and amending Regulation (EU) 2015/1017"
+   }
   },
   {
    "programme": "Connecting Europe Facility",
@@ -94,7 +114,12 @@
    "programme_type": "blended",
    "period": "2021-2027",
    "budget_eur_bn": 33.71,
-   "apply_url": "https://cinea.ec.europa.eu/programmes/connecting-europe-facility_en"
+   "apply_url": "https://cinea.ec.europa.eu/programmes/connecting-europe-facility_en",
+   "founding_act": {
+    "celex": "32021R1153",
+    "published": "2021-07-14",
+    "title": "Regulation (EU) 2021/1153 of the European Parliament and of the Council of 7 July 2021 establishing the Connecting Europe Facility and repealing Regulations (EU) No 1316/2013 and (EU) No 283/2014 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Digital Europe Programme",
@@ -112,7 +137,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 7.59,
-   "apply_url": "https://digital-strategy.ec.europa.eu/en/activities/digital-programme"
+   "apply_url": "https://digital-strategy.ec.europa.eu/en/activities/digital-programme",
+   "founding_act": {
+    "celex": "32021R0694",
+    "published": "2021-05-11",
+    "title": "Regulation (EU) 2021/694 of the European Parliament and of the Council of 29 April 2021 establishing the Digital Europe Programme and repealing Decision (EU) 2015/2240 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Single Market Programme",
@@ -130,7 +160,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 4.21,
-   "apply_url": "https://eismea.ec.europa.eu/programmes/single-market-programme_en"
+   "apply_url": "https://eismea.ec.europa.eu/programmes/single-market-programme_en",
+   "founding_act": {
+    "celex": "32021R0690",
+    "published": "2021-05-03",
+    "title": "Regulation (EU) 2021/690 of the European Parliament and of the Council of 28 April 2021 establishing a programme for the internal market, competitiveness of enterprises, including small and medium-sized enterprises, the area of plants, animals, food and feed, and European statistics (Single Market Programme) and repealing Regulations (EU) No 99/2013, (EU) No 1287/2013, (EU) No 254/2014 and (EU) No 652/2014 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "EU Anti-Fraud Programme",
@@ -148,7 +183,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.181,
-   "apply_url": "https://anti-fraud.ec.europa.eu/olaf-and-you/funding-grants-calls-proposals_en"
+   "apply_url": "https://anti-fraud.ec.europa.eu/olaf-and-you/funding-grants-calls-proposals_en",
+   "founding_act": {
+    "celex": "32021R0785",
+    "published": "2021-05-17",
+    "title": "Regulation (EU) 2021/785 of the European Parliament and of the Council of 29 April 2021 establishing the Union Anti-Fraud Programme and repealing Regulation (EU) No 250/2014"
+   }
   },
   {
    "programme": "Cooperation in the field of taxation (Fiscalis)",
@@ -166,7 +206,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.269,
-   "apply_url": "https://taxation-customs.ec.europa.eu/about-us/tenders-and-grants_en"
+   "apply_url": "https://taxation-customs.ec.europa.eu/about-us/tenders-and-grants_en",
+   "founding_act": {
+    "celex": "32021R0847",
+    "published": "2021-05-28",
+    "title": "Regulation (EU) 2021/847 of the European Parliament and of the Council of 20 May 2021 establishing the ‘Fiscalis’ programme for cooperation in the field of taxation and repealing Regulation (EU) No 1286/2013"
+   }
   },
   {
    "programme": "Cooperation in the field of customs (Customs)",
@@ -184,7 +229,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.95,
-   "apply_url": "https://taxation-customs.ec.europa.eu/about-us/tenders-and-grants_en"
+   "apply_url": "https://taxation-customs.ec.europa.eu/about-us/tenders-and-grants_en",
+   "founding_act": {
+    "celex": "32021R0444",
+    "published": "2021-03-15",
+    "title": "Regulation (EU) 2021/444 of the European Parliament and of the Council of 11 March 2021 establishing the Customs programme for cooperation in the field of customs and repealing Regulation (EU) No 1294/2013"
+   }
   },
   {
    "programme": "European Space Programme",
@@ -202,7 +252,12 @@
    "programme_type": "procurement",
    "period": "2021-2027",
    "budget_eur_bn": 14.88,
-   "apply_url": "https://www.euspa.europa.eu/opportunities"
+   "apply_url": "https://www.euspa.europa.eu/opportunities",
+   "founding_act": {
+    "celex": "32021R0696",
+    "published": "2021-05-12",
+    "title": "Regulation (EU) 2021/696 of the European Parliament and of the Council of 28 April 2021 establishing the Union Space Programme and the European Union Agency for the Space Programme and repealing Regulations (EU) No 912/2010, (EU) No 1285/2013 and (EU) No 377/2014 and Decision No 541/2014/EU"
+   }
   },
   {
    "programme": "European Regional Development Fund",
@@ -220,7 +275,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 226.0,
-   "apply_url": "https://ec.europa.eu/regional_policy/funding/erdf_en"
+   "apply_url": "https://ec.europa.eu/regional_policy/funding/erdf_en",
+   "founding_act": {
+    "celex": "32021R1058",
+    "published": "2021-06-30",
+    "title": "Regulation (EU) 2021/1058 of the European Parliament and of the Council of 24 June 2021 on the European Regional Development Fund and on the Cohesion Fund"
+   }
   },
   {
    "programme": "Cohesion Fund",
@@ -238,7 +298,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 48.03,
-   "apply_url": "https://ec.europa.eu/regional_policy/funding/cohesion-fund_en"
+   "apply_url": "https://ec.europa.eu/regional_policy/funding/cohesion-fund_en",
+   "founding_act": {
+    "celex": "32021R1058",
+    "published": "2021-06-30",
+    "title": "Regulation (EU) 2021/1058 of the European Parliament and of the Council of 24 June 2021 on the European Regional Development Fund and on the Cohesion Fund"
+   }
   },
   {
    "programme": "Interreg (European Territorial Cooperation)",
@@ -256,7 +321,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 8.05,
-   "apply_url": "https://www.interreg.eu/"
+   "apply_url": "https://www.interreg.eu/",
+   "founding_act": {
+    "celex": "32021R1059",
+    "published": "2021-06-30",
+    "title": "Regulation (EU) 2021/1059 of the European Parliament and of the Council of 24 June 2021 on specific provisions for the European territorial cooperation goal (Interreg) supported by the European Regional Development Fund and external financing instruments"
+   }
   },
   {
    "programme": "REACT-EU",
@@ -274,7 +344,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://ec.europa.eu/regional_policy/funding/react-eu_en"
+   "apply_url": "https://ec.europa.eu/regional_policy/funding/react-eu_en",
+   "founding_act": {
+    "celex": "32020R2221",
+    "published": "2020-12-28",
+    "title": "Regulation (EU) 2020/2221 of the European Parliament and of the Council of 23 December 2020 amending Regulation (EU) No 1303/2013 as regards additional resources and implementing arrangements to provide assistance for fostering crisis repair in the context of the COVID-19 pandemic and its social consequences and for preparing a green, digital and resilient recovery of the economy (REACT-EU)"
+   }
   },
   {
    "programme": "Support to the Turkish Cypriot community",
@@ -292,7 +367,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://ec.europa.eu/regional_policy/"
+   "apply_url": "https://ec.europa.eu/regional_policy/",
+   "founding_act": {
+    "celex": "32006R0389",
+    "published": "2006-03-07",
+    "title": "Council Regulation (EC) No 389/2006 of 27 February 2006 establishing an instrument of financial support for encouraging the economic development of the Turkish Cypriot community and amending Council Regulation (EC) No 2667/2000 on the European Agency for Reconstruction"
+   }
   },
   {
    "programme": "Recovery and Resilience Facility",
@@ -310,7 +390,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 723.8,
-   "apply_url": "https://commission.europa.eu/business-economy-euro/economic-recovery/recovery-and-resilience-facility_en"
+   "apply_url": "https://commission.europa.eu/business-economy-euro/economic-recovery/recovery-and-resilience-facility_en",
+   "founding_act": {
+    "celex": "32021R0241",
+    "published": "2021-02-18",
+    "title": "Regulation (EU) 2021/241 of the European Parliament and of the Council of 12 February 2021 establishing the Recovery and Resilience Facility"
+   }
   },
   {
    "programme": "Technical Support Instrument",
@@ -328,7 +413,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.864,
-   "apply_url": "https://reform-support.ec.europa.eu/what-we-do/technical-support-instrument_en"
+   "apply_url": "https://reform-support.ec.europa.eu/what-we-do/technical-support-instrument_en",
+   "founding_act": {
+    "celex": "32021R0240",
+    "published": "2021-02-18",
+    "title": "Regulation (EU) 2021/240 of the European Parliament and of the Council of 10 February 2021 establishing a Technical Support Instrument"
+   }
   },
   {
    "programme": "Protection of the Euro Against Counterfeiting (Pericles)",
@@ -346,7 +436,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.007,
-   "apply_url": "https://economy-finance.ec.europa.eu/euro/protection-euro-against-counterfeiting_en"
+   "apply_url": "https://economy-finance.ec.europa.eu/euro/protection-euro-against-counterfeiting_en",
+   "founding_act": {
+    "celex": "32021R0840",
+    "published": "2021-05-27",
+    "title": "Regulation (EU) 2021/840 of the European Parliament and of the Council of 20 May 2021 establishing an exchange, assistance and training programme for the protection of the euro against counterfeiting for the period 2021-2027 (the ‘Pericles IV’ programme), and repealing Regulation (EU) No 331/2014"
+   }
   },
   {
    "programme": "Union Civil Protection Mechanism (rescEU)",
@@ -364,7 +459,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection/calls-proposals_en"
+   "apply_url": "https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/financing-civil-protection/calls-proposals_en",
+   "founding_act": {
+    "celex": "32013D1313",
+    "published": "2013-12-20",
+    "title": "Decision No 1313/2013/EU of the European Parliament and of the Council of 17 December 2013 on a Union Civil Protection Mechanism Text with EEA relevance"
+   }
   },
   {
    "programme": "EU4Health",
@@ -382,7 +482,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 5.3,
-   "apply_url": "https://hadea.ec.europa.eu/programmes/eu4health_en"
+   "apply_url": "https://hadea.ec.europa.eu/programmes/eu4health_en",
+   "founding_act": {
+    "celex": "32021R0522",
+    "published": "2021-03-26",
+    "title": "Regulation (EU) 2021/522 of the European Parliament and of the Council of 24 March 2021 establishing a Programme for the Union’s action in the field of health (‘EU4Health Programme’) for the period 2021-2027, and repealing Regulation (EU) No 282/2014 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "EU Solidarity Fund",
@@ -400,7 +505,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://ec.europa.eu/regional_policy/funding/solidarity-fund_en"
+   "apply_url": "https://ec.europa.eu/regional_policy/funding/solidarity-fund_en",
+   "founding_act": {
+    "celex": "32002R2012",
+    "published": "2002-11-14",
+    "title": "Council Regulation (EC) No 2012/2002 of 11 November 2002 establishing the European Union Solidarity Fund"
+   }
   },
   {
    "programme": "European Social Fund Plus",
@@ -418,7 +528,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 99.3,
-   "apply_url": "https://ec.europa.eu/european-social-fund-plus/en"
+   "apply_url": "https://ec.europa.eu/european-social-fund-plus/en",
+   "founding_act": {
+    "celex": "32021R1057",
+    "published": "2021-06-30",
+    "title": "Regulation (EU) 2021/1057 of the European Parliament and of the Council of 24 June 2021 establishing the European Social Fund Plus (ESF+) and repealing Regulation (EU) No 1296/2013"
+   }
   },
   {
    "programme": "Erasmus+",
@@ -436,7 +551,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 26.2,
-   "apply_url": "https://erasmus-plus.ec.europa.eu/opportunities"
+   "apply_url": "https://erasmus-plus.ec.europa.eu/opportunities",
+   "founding_act": {
+    "celex": "32021R0817",
+    "published": "2021-05-28",
+    "title": "Regulation (EU) 2021/817 of the European Parliament and of the Council of 20 May 2021 establishing Erasmus+: the Union Programme for education and training, youth and sport and repealing Regulation (EU) No 1288/2013 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "European Solidarity Corps",
@@ -454,7 +574,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.01,
-   "apply_url": "https://youth.europa.eu/solidarity_en"
+   "apply_url": "https://youth.europa.eu/solidarity_en",
+   "founding_act": {
+    "celex": "32021R0888",
+    "published": "2021-06-08",
+    "title": "Regulation (EU) 2021/888 of the European Parliament and of the Council of 20 May 2021 establishing the European Solidarity Corps Programme and repealing Regulations (EU) 2018/1475 and (EU) No 375/2014 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Justice Programme",
@@ -472,7 +597,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.305,
-   "apply_url": "https://commission.europa.eu/funding-tenders/find-funding/find-calls-funding-topic/justice-and-fundamental-rights-funding-opportunities_en"
+   "apply_url": "https://commission.europa.eu/funding-tenders/find-funding/find-calls-funding-topic/justice-and-fundamental-rights-funding-opportunities_en",
+   "founding_act": {
+    "celex": "32021R0693",
+    "published": "2021-05-05",
+    "title": "Regulation (EU) 2021/693 of the European Parliament and of the Council of 28 April 2021 establishing the Justice Programme and repealing Regulation (EU) No 1382/2013"
+   }
   },
   {
    "programme": "Citizens, Equality, Rights and Values Programme",
@@ -490,7 +620,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.55,
-   "apply_url": "https://commission.europa.eu/about/departments-and-executive-agencies/justice-and-consumers/justice-and-consumers-funding-tenders_en"
+   "apply_url": "https://commission.europa.eu/about/departments-and-executive-agencies/justice-and-consumers/justice-and-consumers-funding-tenders_en",
+   "founding_act": {
+    "celex": "32021R0692",
+    "published": "2021-05-05",
+    "title": "Regulation (EU) 2021/692 of the European Parliament and of the Council of 28 April 2021 establishing the Citizens, Equality, Rights and Values Programme and repealing Regulation (EU) No 1381/2013 of the European Parliament and of the Council and Council Regulation (EU) No 390/2014"
+   }
   },
   {
    "programme": "Creative Europe",
@@ -508,7 +643,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 2.44,
-   "apply_url": "https://culture.ec.europa.eu/creative-europe"
+   "apply_url": "https://culture.ec.europa.eu/creative-europe",
+   "founding_act": {
+    "celex": "32021R0818",
+    "published": "2021-05-28",
+    "title": "Regulation (EU) 2021/818 of the European Parliament and of the Council of 20 May 2021 establishing the Creative Europe Programme (2021 to 2027) and repealing Regulation (EU) No 1295/2013 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "European Agricultural Guarantee Fund",
@@ -526,7 +666,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 291.1,
-   "apply_url": "https://agriculture.ec.europa.eu/common-agricultural-policy/financing-cap_en"
+   "apply_url": "https://agriculture.ec.europa.eu/common-agricultural-policy/financing-cap_en",
+   "founding_act": {
+    "celex": "32021R2116",
+    "published": "2021-12-06",
+    "title": "Regulation (EU) 2021/2116 of the European Parliament and of the Council of 2 December 2021 on the financing, management and monitoring of the common agricultural policy and repealing Regulation (EU) No 1306/2013"
+   }
   },
   {
    "programme": "European Agricultural Fund for Rural Development",
@@ -544,7 +689,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 95.5,
-   "apply_url": "https://agriculture.ec.europa.eu/common-agricultural-policy/rural-development_en"
+   "apply_url": "https://agriculture.ec.europa.eu/common-agricultural-policy/rural-development_en",
+   "founding_act": {
+    "celex": "32021R2116",
+    "published": "2021-12-06",
+    "title": "Regulation (EU) 2021/2116 of the European Parliament and of the Council of 2 December 2021 on the financing, management and monitoring of the common agricultural policy and repealing Regulation (EU) No 1306/2013"
+   }
   },
   {
    "programme": "European Maritime, Fisheries and Aquaculture Fund",
@@ -562,7 +712,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 6.108,
-   "apply_url": "https://cinea.ec.europa.eu/programmes/european-maritime-fisheries-and-aquaculture-fund_en"
+   "apply_url": "https://cinea.ec.europa.eu/programmes/european-maritime-fisheries-and-aquaculture-fund_en",
+   "founding_act": {
+    "celex": "32021R1139",
+    "published": "2021-07-13",
+    "title": "Regulation (EU) 2021/1139 of the European Parliament and of the Council of 7 July 2021 establishing the European Maritime, Fisheries and Aquaculture Fund and amending Regulation (EU) 2017/1004"
+   }
   },
   {
    "programme": "Programme for the Environment and Climate Action (LIFE)",
@@ -580,7 +735,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 5.43,
-   "apply_url": "https://cinea.ec.europa.eu/programmes/life_en"
+   "apply_url": "https://cinea.ec.europa.eu/programmes/life_en",
+   "founding_act": {
+    "celex": "32021R0783",
+    "published": "2021-05-17",
+    "title": "Regulation (EU) 2021/783 of the European Parliament and of the Council of 29 April 2021 establishing a Programme for the Environment and Climate Action (LIFE), and repealing Regulation (EU) No 1293/2013 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Just Transition Fund",
@@ -598,7 +758,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 17.5,
-   "apply_url": "https://ec.europa.eu/regional_policy/funding/just-transition-fund_en"
+   "apply_url": "https://ec.europa.eu/regional_policy/funding/just-transition-fund_en",
+   "founding_act": {
+    "celex": "32021R1056",
+    "published": "2021-06-30",
+    "title": "Regulation (EU) 2021/1056 of the European Parliament and of the Council of 24 June 2021 establishing the Just Transition Fund"
+   }
   },
   {
    "programme": "Innovation Fund",
@@ -616,7 +781,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 40.0,
-   "apply_url": "https://cinea.ec.europa.eu/programmes/innovation-fund_en"
+   "apply_url": "https://cinea.ec.europa.eu/programmes/innovation-fund_en",
+   "founding_act": {
+    "celex": "32018L0410",
+    "published": "2018-03-19",
+    "title": "Directive (EU) 2018/410 of the European Parliament and of the Council of 14 March 2018 amending Directive 2003/87/EC to enhance cost-effective emission reductions and low-carbon investments, and Decision (EU) 2015/1814 (Text with EEA relevance. )"
+   }
   },
   {
    "programme": "Modernisation Fund",
@@ -634,7 +804,12 @@
    "programme_type": "financial-instrument",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://modernisationfund.eu/"
+   "apply_url": "https://modernisationfund.eu/",
+   "founding_act": {
+    "celex": "32018L0410",
+    "published": "2018-03-19",
+    "title": "Directive (EU) 2018/410 of the European Parliament and of the Council of 14 March 2018 amending Directive 2003/87/EC to enhance cost-effective emission reductions and low-carbon investments, and Decision (EU) 2015/1814 (Text with EEA relevance. )"
+   }
   },
   {
    "programme": "Asylum, Migration and Integration Fund",
@@ -652,7 +827,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 9.88,
-   "apply_url": "https://home-affairs.ec.europa.eu/funding/asylum-migration-and-integration-funds_en"
+   "apply_url": "https://home-affairs.ec.europa.eu/funding/asylum-migration-and-integration-funds_en",
+   "founding_act": {
+    "celex": "32021R1147",
+    "published": "2021-07-15",
+    "title": "Regulation (EU) 2021/1147 of the European Parliament and of the Council of 7 July 2021 establishing the Asylum, Migration and Integration Fund"
+   }
   },
   {
    "programme": "Integrated Border Management Fund",
@@ -670,7 +850,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://home-affairs.ec.europa.eu/funding/border-management-and-visa-instruments_en"
+   "apply_url": "https://home-affairs.ec.europa.eu/funding/border-management-and-visa-instruments_en",
+   "founding_act": {
+    "celex": "32021R1148",
+    "published": "2021-07-15",
+    "title": "Regulation (EU) 2021/1148 of the European Parliament and of the Council of 7 July 2021 establishing, as part of the Integrated Border Management Fund, the Instrument for Financial Support for Border Management and Visa Policy"
+   }
   },
   {
    "programme": "Internal Security Fund",
@@ -688,7 +873,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.93,
-   "apply_url": "https://home-affairs.ec.europa.eu/funding/internal-security-funds_en"
+   "apply_url": "https://home-affairs.ec.europa.eu/funding/internal-security-funds_en",
+   "founding_act": {
+    "celex": "32021R1149",
+    "published": "2021-07-15",
+    "title": "Regulation (EU) 2021/1149 of the European Parliament and of the Council of 7 July 2021 establishing the Internal Security Fund"
+   }
   },
   {
    "programme": "Nuclear Decommissioning (Lithuania)",
@@ -706,7 +896,12 @@
    "programme_type": "procurement",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://energy.ec.europa.eu/topics/nuclear-energy/nuclear-decommissioning_en"
+   "apply_url": "https://energy.ec.europa.eu/topics/nuclear-energy/nuclear-decommissioning_en",
+   "founding_act": {
+    "celex": "32021R0101",
+    "published": "2021-02-01",
+    "title": "Council Regulation (EU) 2021/101 of 25 January 2021 establishing the nuclear decommissioning assistance programme of the Ignalina nuclear power plant in Lithuania and repealing Regulation (EU) No 1369/2013"
+   }
   },
   {
    "programme": "Nuclear Safety and Decommissioning",
@@ -724,7 +919,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://energy.ec.europa.eu/topics/nuclear-energy/nuclear-safety_en"
+   "apply_url": "https://energy.ec.europa.eu/topics/nuclear-energy/nuclear-safety_en",
+   "founding_act": {
+    "celex": "32021R0100",
+    "published": "2021-02-01",
+    "title": "Council Regulation (Euratom) 2021/100 of 25 January 2021 establishing a dedicated financial programme for the decommissioning of nuclear facilities and the management of radioactive waste, and repealing Regulation (Euratom) No 1368/2013"
+   }
   },
   {
    "programme": "European Defence Fund",
@@ -742,7 +942,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 7.95,
-   "apply_url": "https://defence-industry-space.ec.europa.eu/eu-defence-industry/european-defence-fund-edf_en"
+   "apply_url": "https://defence-industry-space.ec.europa.eu/eu-defence-industry/european-defence-fund-edf_en",
+   "founding_act": {
+    "celex": "32021R0697",
+    "published": "2021-05-12",
+    "title": "Regulation (EU) 2021/697 of the European Parliament and of the Council of 29 April 2021 establishing the European Defence Fund and repealing Regulation (EU) 2018/1092 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Global Europe: Neighbourhood, Development and International Cooperation Instrument",
@@ -760,7 +965,12 @@
    "programme_type": "blended",
    "period": "2021-2027",
    "budget_eur_bn": 79.46,
-   "apply_url": "https://international-partnerships.ec.europa.eu/funding-and-technical-assistance_en"
+   "apply_url": "https://international-partnerships.ec.europa.eu/funding-and-technical-assistance_en",
+   "founding_act": {
+    "celex": "32021R0947",
+    "published": "2021-06-14",
+    "title": "Regulation (EU) 2021/947 of the European Parliament and of the Council of 9 June 2021 establishing the Neighbourhood, Development and International Cooperation Instrument – Global Europe, amending and repealing Decision No 466/2014/EU of the European Parliament and of the Council and repealing Regulation (EU) 2017/1601 of the European Parliament and of the Council and Council Regulation (EC, Euratom) No 480/2009 (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Humanitarian Aid",
@@ -778,7 +988,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 11.6,
-   "apply_url": "https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/funding-humanitarian-aid_en"
+   "apply_url": "https://civil-protection-humanitarian-aid.ec.europa.eu/funding-evaluations/funding-humanitarian-aid_en",
+   "founding_act": {
+    "celex": "31996R1257",
+    "published": "1996-07-02",
+    "title": "Council Regulation (EC) No 1257/96 of 20 June 1996 concerning humanitarian aid"
+   }
   },
   {
    "programme": "Common Foreign and Security Policy",
@@ -796,7 +1011,9 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://www.eeas.europa.eu/"
+   "apply_url": "https://www.eeas.europa.eu/",
+   "founding_act": null,
+   "founding_act_note": "No act establishes it: the CFSP budget is set under Article 41 TEU, so no publication date is given."
   },
   {
    "programme": "Overseas Countries and Territories",
@@ -814,7 +1031,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": null,
-   "apply_url": "https://international-partnerships.ec.europa.eu/"
+   "apply_url": "https://international-partnerships.ec.europa.eu/",
+   "founding_act": {
+    "celex": "32021D1764",
+    "published": "2021-10-07",
+    "title": "Council Decision (EU) 2021/1764 of 5 October 2021 on the association of the Overseas Countries and Territories with the European Union including relations between the European Union on the one hand, and Greenland and the Kingdom of Denmark on the other (Decision on the Overseas Association, including Greenland)"
+   }
   },
   {
    "programme": "Pre-Accession Assistance",
@@ -832,7 +1054,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 14.16,
-   "apply_url": "https://enlargement.ec.europa.eu/funding-technical-assistance/grants-and-tenders_en"
+   "apply_url": "https://enlargement.ec.europa.eu/funding-technical-assistance/grants-and-tenders_en",
+   "founding_act": {
+    "celex": "32021R1529",
+    "published": "2021-09-20",
+    "title": "Regulation (EU) 2021/1529 of the European Parliament and of the Council of 15 September 2021 establishing the Instrument for Pre-Accession assistance (IPA III)"
+   }
   },
   {
    "programme": "Clean Hydrogen JU",
@@ -850,7 +1077,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.0,
-   "apply_url": "https://www.clean-hydrogen.europa.eu/apply-funding_en"
+   "apply_url": "https://www.clean-hydrogen.europa.eu/apply-funding_en",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   },
   {
    "programme": "Chips JU",
@@ -868,7 +1100,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 4.18,
-   "apply_url": "https://www.chips-ju.europa.eu/"
+   "apply_url": "https://www.chips-ju.europa.eu/",
+   "founding_act": {
+    "celex": "32023R1781",
+    "published": "2023-09-18",
+    "title": "Regulation (EU) 2023/1781 of the European Parliament and of the Council of 13 September 2023 establishing a framework of measures for strengthening Europe’s semiconductor ecosystem and amending Regulation (EU) 2021/694 (Chips Act) (Text with EEA relevance)"
+   }
   },
   {
    "programme": "Smart Networks and Services JU",
@@ -886,7 +1123,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.9,
-   "apply_url": "https://smart-networks.europa.eu/current-call-for-proposals/"
+   "apply_url": "https://smart-networks.europa.eu/current-call-for-proposals/",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   },
   {
    "programme": "Clean Aviation JU",
@@ -904,7 +1146,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.7,
-   "apply_url": "https://www.clean-aviation.eu/clean-aviation-calls/call-for-proposals"
+   "apply_url": "https://www.clean-aviation.eu/clean-aviation-calls/call-for-proposals",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   },
   {
    "programme": "SESAR 3 JU",
@@ -922,7 +1169,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.6,
-   "apply_url": "https://www.sesarju.eu/"
+   "apply_url": "https://www.sesarju.eu/",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   },
   {
    "programme": "Circular Bio-based Europe JU",
@@ -940,7 +1192,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.0,
-   "apply_url": "https://www.cbe.europa.eu/open-calls-proposals"
+   "apply_url": "https://www.cbe.europa.eu/open-calls-proposals",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   },
   {
    "programme": "Innovative Health Initiative JU",
@@ -958,7 +1215,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 1.2,
-   "apply_url": "https://www.ihi.europa.eu/apply-funding"
+   "apply_url": "https://www.ihi.europa.eu/apply-funding",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   },
   {
    "programme": "Global Health EDCTP3 JU",
@@ -976,7 +1238,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.8,
-   "apply_url": "https://www.global-health-edctp3.europa.eu/"
+   "apply_url": "https://www.global-health-edctp3.europa.eu/",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   },
   {
    "programme": "EuroHPC JU",
@@ -994,7 +1261,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 7.0,
-   "apply_url": "https://www.eurohpc-ju.europa.eu/participate/calls_en"
+   "apply_url": "https://www.eurohpc-ju.europa.eu/participate/calls_en",
+   "founding_act": {
+    "celex": "32021R1173",
+    "published": "2021-07-19",
+    "title": "Council Regulation (EU) 2021/1173 of 13 July 2021 on establishing the European High Performance Computing Joint Undertaking and repealing Regulation (EU) 2018/1488"
+   }
   },
   {
    "programme": "Europe's Rail JU",
@@ -1012,7 +1284,12 @@
    "programme_type": "grants",
    "period": "2021-2027",
    "budget_eur_bn": 0.6,
-   "apply_url": "https://rail-research.europa.eu/participate/call-for-proposals/"
+   "apply_url": "https://rail-research.europa.eu/participate/call-for-proposals/",
+   "founding_act": {
+    "celex": "32021R2085",
+    "published": "2021-11-30",
+    "title": "Council Regulation (EU) 2021/2085 of 19 November 2021 establishing the Joint Undertakings under Horizon Europe and repealing Regulations (EC) No 219/2007, (EU) No 557/2014, (EU) No 558/2014, (EU) No 559/2014, (EU) No 560/2014, (EU) No 561/2014 and (EU) No 642/2014"
+   }
   }
  ],
  "_enriched": "2026-06-26 — added institution/managing_body/body_code/dg/programme_type/period/budget_eur_bn/apply_url + 10 Joint Undertakings. Budgets are indicative 2021-2027 MFF headline allocations (current prices); verify against the EC source for legal precision."
