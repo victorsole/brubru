@@ -589,7 +589,7 @@ GET /api/v1/funded-projects?q=climate&type_of_action=IA
 A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `title`, `framework_programme`, `type_of_action`, `coordinator_name`, `coordinator_country`, `consortium_size`, `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal project page).
 
 **Data freshness**
-Synced once per week (Sunday 05:00 UTC, weekly tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results. CORDIS (the more comprehensive research-results portal) is reachable separately via `/api/v1/discover/eurio`. is_test=True seed rows are filtered out at query time.""",
+Read every Sunday from 05:00 UTC (weekly tier, since 25 Oct 2026; until then the rows were last read on 6 May for CORDIS and 15 Jun for the F&T Portal): Horizon Europe, Horizon 2020 and FP7 from the CORDIS bulk dumps (cordis.europa.eu/data), each read when CORDIS has refreshed it, which is about monthly; every other programme from the F&T Portal's projects-results index (ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results). `status` is set every day from the source's word and the project's own dates. CORDIS is also reachable via `/api/v1/discover/eurio`. is_test=True seed rows are filtered out at query time.""",
 )
 async def list_funded_projects(
     request: Request,
@@ -668,7 +668,7 @@ GET /api/v1/funded-projects/101082345
 A single `FtFundedProjectItem` (same shape as the list endpoint's `data[i]`), or HTTP 404 with `reason_code: not_found`.
 
 **Data freshness**
-Same as the list endpoint — weekly Sunday 05:00 UTC sync from the F&T Portal projects-results page.""",
+Same as the list endpoint: read every Sunday from CORDIS (Horizon Europe, Horizon 2020, FP7) and the F&T Portal (every other programme); `status` set every day.""",
 )
 async def get_funded_project(
     project_id: str,

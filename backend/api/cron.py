@@ -414,6 +414,7 @@ _WARM_TIER_RECORDED = (
     "committee_minutes", "committee_transcripts", "auto_archive",
 )
 _WEEKLY_TIER_RECORDED = (
+    "cordis_projects", "ft_projects_nonh2020", "project_status_weekly",
     "ft_participants", "fta", "trade_defence", "trade_defence_bodies", "howtheyvote_members", "gi",
     "cohesion", "cohesion_finances", "cohesion_outcomes", "eusf", "cap_payments", "commissioner_agendas",
 )
@@ -1579,7 +1580,7 @@ async def cron_sync_weekly(
     authorization: str = Header(...),
 ):
     """
-    Weekly sync (Sunday 05:00 UTC): FTAs + GIs + cohesion datasets + trade defence + commissioners.
+    Weekly sync (Sunday 05:00 UTC): funded projects + FTAs + GIs + cohesion datasets + trade defence + commissioners.
 
     Cadence: once per week. Slow-moving universes.
     """
@@ -1592,6 +1593,19 @@ async def cron_sync_weekly(
     # fine for our browser (no Scrape.do credits), so it is read here instead.
     results["council_art"] = await _run_script_async(
         "council_art", "scripts/sync_council_art.py", ["--apply"], timeout=600)
+
+    # EU-funded projects (ft_funded_projects). Nothing ran either loader until 23 Oct 2026 (CORDIS
+    # last read 6 May, the F&T Portal 15 Jun) though the endpoint said weekly. CORDIS serves Horizon
+    # Europe, H2020 and FP7 as dumps it refreshes about monthly; a dump already read is skipped. The
+    # F&T Portal serves every other programme, crawled in a browser. Then the status rule, so a new
+    # project never serves the source's word, then ft_participants, which derives from these rows.
+    results["cordis_projects"] = await _run_script_async(
+        "cordis_projects", "scripts/ingest_cordis_projects.py", ["--programme", "all", "--apply"],
+        timeout=2700)
+    results["ft_projects_nonh2020"] = await _run_script_async(
+        "ft_projects_nonh2020", "scripts/ingest_ft_projects_nonh2020.py", ["--apply"], timeout=3600)
+    results["project_status_weekly"] = await _run_script_async(
+        "project_status_weekly", "scripts/refresh_project_status.py", ["--apply"], timeout=600)
 
     # ft_participants, derived from the participant payload already stored on
     # ft_funded_projects. Weekly because its source (funded projects) moves

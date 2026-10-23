@@ -19,7 +19,15 @@ deliverables / funding queries from a single SELECT.
 
 UPSERT on project_id. Run:
     python3.12 backend/scripts/ingest_cordis_projects.py [--limit 5000] [--apply]
-                                                         [--programme horizon|h2020|fp7|all]
+                                                         [--programme horizon|h2020|fp7|all] [--force]
+
+Weekly tier since 23 Oct 2026 (api/cron.py, --programme all), followed by the status rule
+(services/funding/project_status.py). Until then nothing ran it: the last read was 6 May. CORDIS
+refreshes a dump about monthly (Horizon Europe and H2020 on 8 Oct 2026; FP7 last on 2 Jan 2025),
+so a dump whose Last-Modified is not newer than the one we last read IN FULL is skipped (kept in
+job_cursors as cordis_dump_<programme>, saved only when a whole dump was read and written, so a
+run cut short reads it again); --force reads it anyway. A dump read that yields no project exits 1; projects that could not be
+written are reported as degraded.
 """
 
 from __future__ import annotations
@@ -27,9 +35,11 @@ from __future__ import annotations
 import argparse
 import csv
 import datetime as dt
+import email.utils
 import io
 import json
 import sys
+import tempfile
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -38,9 +48,10 @@ from typing import Any, Dict, List, Optional
 import psycopg2
 import psycopg2.extras
 
+# The real environment first, then a local .env: this script's own reader looked at the repo-root
+# .env only, which Railway does not have (the same bug ingest_funding_sedia.get_env documents).
+from ingest_funding_sedia import get_env
 
-ROOT = Path(__file__).resolve().parents[2]
-ENV = ROOT / ".env"
 USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0; +https://brubru.beresol.eu)"
 
 DUMPS = {
@@ -50,19 +61,41 @@ DUMPS = {
 }
 
 
-def get_env(key: str) -> str:
-    if not ENV.exists():
-        return ""
-    for line in ENV.read_text().splitlines():
-        if line.startswith(f"{key}="):
-            return line.split("=", 1)[1].strip()
-    return ""
+def dump_modified(url: str) -> Optional[dt.datetime]:
+    """The dump's Last-Modified, as naive UTC (the column type), or None if the server gives none."""
+    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        stamp = r.headers.get("Last-Modified")
+    if not stamp:
+        return None
+    return email.utils.parsedate_to_datetime(stamp).astimezone(dt.timezone.utc).replace(tzinfo=None)
+
+
+def last_read(conn, programme: str) -> Optional[dt.datetime]:
+    """The Last-Modified of the dump last read in full. Not max(scraped_at): a run killed halfway
+    stamps part of the rows, which would make a half-read dump look read."""
+    with conn.cursor() as cur:
+        cur.execute("SELECT cursor_value FROM job_cursors WHERE job_key = %s", (f"cordis_dump_{programme}",))
+        row = cur.fetchone()
+    conn.commit()
+    return dt.datetime.fromisoformat(row[0]) if row else None
+
+
+def save_read(conn, programme: str, modified: dt.datetime, built: int, written: int) -> None:
+    with conn.cursor() as cur:
+        cur.execute("""
+            INSERT INTO job_cursors (job_key, cursor_value, note, updated_at)
+            VALUES (%s, %s, %s, now())
+            ON CONFLICT (job_key) DO UPDATE SET cursor_value = EXCLUDED.cursor_value,
+                note = EXCLUDED.note, updated_at = now()
+        """, (f"cordis_dump_{programme}", modified.isoformat(),
+              f"dump read in full: {built} projects, {written} written"))
+    conn.commit()
 
 
 def download(url: str, dest: Path) -> None:
-    if dest.exists() and dest.stat().st_size > 1_000_000:
-        print(f"  [cache] {dest}")
-        return
+    # Always a fresh copy: a cached zip was reused for as long as /tmp lived, so a scheduled run
+    # could re-read an old dump without saying so.
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=120) as r, dest.open("wb") as f:
         while True:
@@ -217,55 +250,6 @@ def normalise(
     }
 
 
-def upsert(cur, row: dict) -> None:
-    # Wrap JSONB-bound fields in psycopg2.extras.Json so they serialise correctly.
-    params = dict(row)
-    for k in ("organisations", "topics", "euroscivoc", "legal_basis_details", "web_links"):
-        params[k] = psycopg2.extras.Json(params.get(k) or [])
-    cur.execute(
-        """
-        INSERT INTO ft_funded_projects
-            (project_id, project_acronym, title, objective, keywords, topic_code, grant_doi,
-             framework_programme, type_of_action,
-             coordinator_name, coordinator_country, start_date, end_date, total_cost,
-             eu_contribution, cost_currency, status, source_status, source_url, published_at,
-             organisations, topics, euroscivoc, legal_basis_details, web_links,
-             scraped_at, last_updated)
-        VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s, %(keywords)s,
-                %(topic_code)s, %(grant_doi)s,
-                %(framework_programme)s, %(type_of_action)s, %(coordinator_name)s,
-                %(coordinator_country)s, %(start_date)s, %(end_date)s, %(total_cost)s,
-                %(eu_contribution)s, %(cost_currency)s, %(status)s, %(status)s, %(source_url)s,
-                %(published_at)s,
-                %(organisations)s, %(topics)s, %(euroscivoc)s,
-                %(legal_basis_details)s, %(web_links)s,
-                NOW(), NOW())
-        ON CONFLICT (project_id) DO UPDATE SET
-            title = EXCLUDED.title,
-            objective = EXCLUDED.objective,
-            keywords = EXCLUDED.keywords,
-            topic_code = EXCLUDED.topic_code,
-            grant_doi = EXCLUDED.grant_doi,
-            -- The source word only: the served status is set by services/funding/project_status.py
-            -- from it and the dates (23 Oct 2026); writing it here flipped the field every run.
-            source_status = EXCLUDED.source_status,
-            start_date = COALESCE(EXCLUDED.start_date, ft_funded_projects.start_date),
-            end_date = COALESCE(EXCLUDED.end_date, ft_funded_projects.end_date),
-            coordinator_name = EXCLUDED.coordinator_name,
-            coordinator_country = EXCLUDED.coordinator_country,
-            total_cost = EXCLUDED.total_cost,
-            eu_contribution = EXCLUDED.eu_contribution,
-            organisations = EXCLUDED.organisations,
-            topics = EXCLUDED.topics,
-            euroscivoc = EXCLUDED.euroscivoc,
-            legal_basis_details = EXCLUDED.legal_basis_details,
-            web_links = EXCLUDED.web_links,
-            last_updated = NOW()
-        """,
-        params,
-    )
-
-
 _UPSERT_SQL = """
     INSERT INTO ft_funded_projects
         (project_id, project_acronym, title, objective, keywords, topic_code, grant_doi,
@@ -303,6 +287,7 @@ _UPSERT_SQL = """
         euroscivoc = EXCLUDED.euroscivoc,
         legal_basis_details = EXCLUDED.legal_basis_details,
         web_links = EXCLUDED.web_links,
+        scraped_at = NOW(),
         last_updated = NOW()
 """
 
@@ -314,12 +299,57 @@ def _params_for(rec: dict) -> dict:
     return p
 
 
-def ingest_dump(programme: str, conn, args) -> int:
-    cache = Path("/tmp") / f"cordis-{programme}.zip"
-    print(f"\n[INFO] downloading {DUMPS[programme]} -> {cache}", flush=True)
+def ingest_dump(programme: str, conn, args) -> Optional[tuple]:
+    """(projects built, projects written), or None when the dump is unchanged since our last read."""
+    modified, read = dump_modified(DUMPS[programme]), last_read(conn, programme)
+    if not args.force and modified and read and modified <= read:
+        print(f"\n[OK] {programme}: dump unchanged since {modified:%d %b %Y} "
+              f"(last read {read:%d %b %Y}); skipped", flush=True)
+        return None
+    cache = Path(tempfile.gettempdir()) / f"cordis-{programme}.zip"
+    print(f"\n[INFO] downloading {DUMPS[programme]} (modified {modified}) -> {cache}", flush=True)
     download(DUMPS[programme], cache)
     print(f"[INFO] {cache.stat().st_size / 1024 / 1024:.1f} MB", flush=True)
-    inserted = 0
+    try:
+        built, written = _read_dump(programme, cache, conn, args)
+    finally:
+        cache.unlink(missing_ok=True)
+    if args.apply and modified and built:
+        save_read(conn, programme, modified, built, written)
+    return built, written
+
+
+BATCH_SIZE = 200
+
+
+def _write(conn, chunk: List[dict]) -> int:
+    """One SQL round-trip per batch (execute_batch); a failed batch falls back to row by row."""
+    cur = conn.cursor()
+    try:
+        psycopg2.extras.execute_batch(cur, _UPSERT_SQL, [_params_for(r) for r in chunk],
+                                      page_size=BATCH_SIZE)
+        conn.commit()
+        return len(chunk)
+    except Exception as exc:  # noqa: BLE001
+        conn.rollback()
+        print(f"  [BATCH ERR] {exc} — falling back to per-row", flush=True)
+    written = 0
+    for r in chunk:
+        try:
+            cur.execute(_UPSERT_SQL, _params_for(r))
+            conn.commit()
+            written += 1
+        except Exception as exc2:  # noqa: BLE001
+            conn.rollback()
+            print(f"    [SKIP] {r.get('project_id')}: {exc2}", flush=True)
+    return written
+
+
+def _read_dump(programme: str, cache: Path, conn, args) -> tuple:
+    """Streams project.csv: each batch is written as it is built and each project's lookups are
+    dropped once used, so the whole dump is never held twice (H2020 peaked at 0.8 GB that way)."""
+    built = inserted = 0
+    chunk: List[dict] = []
     with zipfile.ZipFile(cache) as z:
         coord_map = load_coordinator_map(z)
         full_orgs_map = load_full_org_map(z)
@@ -332,11 +362,6 @@ def ingest_dump(programme: str, conn, args) -> int:
             f"eurosci={len(eurosci_map)} legal={len(legal_map)} weblinks={len(weblink_map)}",
             flush=True,
         )
-
-        # Build the full record list in memory first, then batch-upsert with
-        # execute_batch (one SQL round-trip per BATCH_SIZE rows instead of one
-        # per row — orders of magnitude faster on Supabase pooler).
-        records: List[dict] = []
         with z.open("project.csv") as f:
             reader = csv.DictReader(io.TextIOWrapper(f, encoding="utf-8-sig"), delimiter=";")
             for row in reader:
@@ -346,29 +371,29 @@ def ingest_dump(programme: str, conn, args) -> int:
                 topics = [
                     {"topic": (t.get("topic") or "").strip() or None,
                      "title": (t.get("title") or "").strip() or None}
-                    for t in topics_map.get(pid, [])
+                    for t in topics_map.pop(pid, [])
                 ]
                 eurosci = [
                     {"code": (e.get("euroSciVocCode") or "").strip() or None,
                      "path": (e.get("euroSciVocPath") or "").strip() or None,
                      "title": (e.get("euroSciVocTitle") or "").strip() or None}
-                    for e in eurosci_map.get(pid, [])
+                    for e in eurosci_map.pop(pid, [])
                 ]
                 legal = [
                     {"code": (lb.get("legalBasis") or "").strip() or None,
                      "title": (lb.get("title") or "").strip() or None,
                      "unique_programme_part": _to_bool(lb.get("uniqueProgrammePart"))}
-                    for lb in legal_map.get(pid, [])
+                    for lb in legal_map.pop(pid, [])
                 ]
                 weblinks = [
                     {"url": (w.get("physUrl") or "").strip() or None,
                      "type": (w.get("type") or "").strip() or None,
                      "title": (w.get("title") or "").strip() or None}
-                    for w in weblink_map.get(pid, [])
+                    for w in weblink_map.pop(pid, [])
                 ]
                 rec = normalise(
-                    row, coord_map.get(pid, {}), programme.upper(),
-                    organisations=full_orgs_map.get(pid, []),
+                    row, coord_map.pop(pid, {}), programme.upper(),
+                    organisations=full_orgs_map.pop(pid, []),
                     topics=topics,
                     euroscivoc=eurosci,
                     legal_basis_details=legal,
@@ -376,50 +401,31 @@ def ingest_dump(programme: str, conn, args) -> int:
                 )
                 if not rec["title"]:
                     continue
-                if args.limit and len(records) >= args.limit:
+                if args.limit and built >= args.limit:
                     break
-                records.append(rec)
-
-        print(f"[INFO] built {len(records):,} project records", flush=True)
-        if not args.apply:
-            return len(records)
-
-        BATCH_SIZE = 200
-        cur = conn.cursor()
-        for i in range(0, len(records), BATCH_SIZE):
-            chunk = records[i: i + BATCH_SIZE]
-            try:
-                psycopg2.extras.execute_batch(
-                    cur,
-                    _UPSERT_SQL,
-                    [_params_for(r) for r in chunk],
-                    page_size=BATCH_SIZE,
-                )
-                conn.commit()
-                inserted += len(chunk)
-            except Exception as exc:  # noqa: BLE001
-                conn.rollback()
-                print(f"  [BATCH ERR @ {i}] {exc} — falling back to per-row", flush=True)
-                for r in chunk:
-                    try:
-                        cur.execute(_UPSERT_SQL, _params_for(r))
-                        conn.commit()
-                        inserted += 1
-                    except Exception as exc2:  # noqa: BLE001
-                        conn.rollback()
-                        print(f"    [SKIP] {r.get('project_id')}: {exc2}", flush=True)
-            if (i + BATCH_SIZE) % 2000 == 0 or (i + BATCH_SIZE) >= len(records):
-                print(f"  ... {min(i + BATCH_SIZE, len(records)):,}/{len(records):,}", flush=True)
+                built += 1
+                if not args.apply:
+                    continue
+                chunk.append(rec)
+                if len(chunk) == BATCH_SIZE:
+                    inserted += _write(conn, chunk)
+                    chunk = []
+                    if built % 2000 == 0:
+                        print(f"  ... {built:,} written so far: {inserted:,}", flush=True)
+        if chunk:
+            inserted += _write(conn, chunk)
+    print(f"[INFO] built {built:,} project records", flush=True)
     print(f"[DONE] {programme}: inserted={inserted}", flush=True)
-    return inserted
+    return built, inserted
 
 
-def main():
+def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--limit", type=int, default=0, help="0 = unbounded")
     ap.add_argument("--programme", choices=["horizon", "h2020", "fp7", "all"], default="horizon")
-    args = ap.parse_args()
+    ap.add_argument("--force", action="store_true", help="Read a dump even if unchanged since our last read.")
+    args = ap.parse_args(argv)
 
     db_url = get_env("DATABASE_URL")
     if not db_url:
@@ -427,16 +433,22 @@ def main():
         sys.exit(1)
     conn = psycopg2.connect(db_url)
 
-    total = 0
-    if args.programme in ("horizon", "all"):
-        total += ingest_dump("horizon", conn, args)
-    if args.programme in ("h2020", "all"):
-        total += ingest_dump("h2020", conn, args)
-    if args.programme in ("fp7", "all"):
-        total += ingest_dump("fp7", conn, args)
-
-    print(f"\n[GRAND TOTAL] inserted={total} apply={args.apply}")
+    outcome = {p: ingest_dump(p, conn, args) for p in ("horizon", "h2020", "fp7")
+               if args.programme in (p, "all")}
+    conn.close()
+    read = {p: o for p, o in outcome.items() if o is not None}
+    print(f"\n[GRAND TOTAL] built={sum(b for b, _ in read.values())} "
+          f"inserted={sum(w for _, w in read.values())} skipped={sorted(set(outcome) - set(read))} "
+          f"apply={args.apply}")
+    empty = [p for p, (built, _) in read.items() if built == 0]
+    if empty:
+        print(f"[ERROR] dump read but no project built: {empty} (format change or a truncated file)")
+        return 1
+    short = {p: built - written for p, (built, written) in read.items() if args.apply and written < built}
+    if short:
+        print(f"[SYNC_STATUS] degraded: projects not written {short} (see the [SKIP] lines)")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

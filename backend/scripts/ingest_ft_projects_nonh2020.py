@@ -19,6 +19,11 @@ returns them alongside the CORDIS rows. Upsert on project_id.
 Run:
     python3.12 backend/scripts/ingest_ft_projects_nonh2020.py --probe
     python3.12 backend/scripts/ingest_ft_projects_nonh2020.py --apply --max-pages 50
+
+Weekly tier since 23 Oct 2026 (api/cron.py), followed by the status rule
+(services/funding/project_status.py); until then it ran by hand (last 15 Jun). A run that writes
+nothing exits 1; a year slice the index refused is reported as degraded, so a partial read is
+never recorded as a full one.
 """
 from __future__ import annotations
 
@@ -242,6 +247,7 @@ ON CONFLICT (project_id) DO UPDATE SET
     coordinator_name=COALESCE(EXCLUDED.coordinator_name, ft_funded_projects.coordinator_name),
     coordinator_country=COALESCE(EXCLUDED.coordinator_country, ft_funded_projects.coordinator_country),
     coordinator_pic=COALESCE(EXCLUDED.coordinator_pic, ft_funded_projects.coordinator_pic),
+    scraped_at=NOW(),
     last_updated=NOW()
 """
 
@@ -264,6 +270,7 @@ def crawl(*, apply: bool, max_pages: int, size: int, probe: bool,
     conn = psycopg2.connect(get_env("DATABASE_URL")) if apply else None
     cur = conn.cursor() if conn else None
     written = 0
+    refused = []   # year slices the index stopped answering
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(
@@ -306,11 +313,12 @@ def crawl(*, apply: bool, max_pages: int, size: int, probe: bool,
                 res = _fetch(page, pnum, size, query)
                 if not res or res.get("status") != 200:
                     print(f"  [{year} p{pnum}] gave up (status={res.get('status') if res else '?'})")
+                    refused.append(f"{year} p{pnum}")
                     break
                 try:
                     data = json.loads(res["body"])
                 except Exception:  # noqa: BLE001
-                    print(f"  [{year} p{pnum}] unparseable"); break
+                    print(f"  [{year} p{pnum}] unparseable"); refused.append(f"{year} p{pnum}"); break
                 total = data.get("totalResults", 0)
                 results = data.get("results") or []
                 if not results:
@@ -330,10 +338,13 @@ def crawl(*, apply: bool, max_pages: int, size: int, probe: bool,
                 time.sleep(2.5)  # be gentle — the CDN soft-blocks rapid looping
             print(f"[{year}] +{year_written}  (running total {written})")
         browser.close()
+    if conn:
+        conn.close()
     print(f"\n[DONE] written={written} apply={apply}")
+    return written, refused
 
 
-def main():
+def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--probe", action="store_true", help="Fetch page 1 only, print, no DB write.")
     ap.add_argument("--apply", action="store_true", help="Write to DB.")
@@ -341,10 +352,19 @@ def main():
     ap.add_argument("--page-size", type=int, default=100)
     ap.add_argument("--year-from", type=int, default=2014)
     ap.add_argument("--year-to", type=int, default=2027)
-    args = ap.parse_args()
-    crawl(apply=args.apply, max_pages=args.max_pages, size=args.page_size, probe=args.probe,
-          year_from=args.year_from, year_to=args.year_to)
+    args = ap.parse_args(argv)
+    out = crawl(apply=args.apply, max_pages=args.max_pages, size=args.page_size, probe=args.probe,
+                year_from=args.year_from, year_to=args.year_to)
+    if out is None:                      # --probe
+        return 0
+    written, refused = out
+    if args.apply and not written:
+        print(f"[ERROR] no project written (slices refused: {refused or 'none'})")
+        return 1
+    if refused:
+        print(f"[SYNC_STATUS] degraded: the index refused {len(refused)} year slice(s): {', '.join(refused)}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

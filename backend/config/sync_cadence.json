@@ -391,9 +391,9 @@
     {
       "path_prefix": "/api/v2/funding/ft-funded-projects (non-research subset)",
       "source": "EU F&T Portal projects-results (SEDIA_NONH2020_PROD index) — browser-driven, year-sliced (API caps pagination at offset 10k)",
-      "script": "scripts/ingest_ft_projects_nonh2020.py --apply --year-from 2014 --year-to 2027",
-      "tier": "manual",
-      "notes": "~28k NON-research funded projects (CEF/LIFE/Erasmus/Creative Europe/JUST/AMIF/ISF/external action) into ft_funded_projects, framework_programme=programme abbrev. LOCAL ONLY — needs Playwright/Chromium (not on Railway). The index soft-blocks raw HTTP (500 'Send timeout'); only an in-browser fetch() works. External-action subset is just 36 (F&T projects DB barely holds aid). Re-run periodically to top up the current year."
+      "script": "scripts/ingest_ft_projects_nonh2020.py --apply (weekly tier, then scripts/refresh_project_status.py --apply)",
+      "tier": "weekly",
+      "notes": "~28k NON-research funded projects (CEF/LIFE/Erasmus/Creative Europe/JUST/AMIF/ISF/external action) into ft_funded_projects, framework_programme=programme abbrev. Weekly tier since 23 Oct 2026 (it ran by hand until then, last 15 Jun); the Railway image installs Chromium (backend/Dockerfile). The index soft-blocks raw HTTP (500 'Send timeout'); only an in-browser fetch() works. A run that writes nothing exits 1; a refused year slice is reported degraded. External-action subset is just 36 (F&T projects DB barely holds aid)."
     },
     {
       "path_prefix": "/api/v2/funding/international-cooperation",
@@ -439,10 +439,10 @@
     },
     {
       "path_prefix": "/api/v1/funded-projects",
-      "source": "CORDIS (cordis.europa.eu) + Funding & Tenders Portal",
-      "script": "scripts/sync_eurio.py (TODO)",
+      "source": "CORDIS bulk dumps (cordis.europa.eu/data: Horizon Europe, H2020, FP7) + Funding & Tenders Portal projects-results (every other programme)",
+      "script": "scripts/ingest_cordis_projects.py --programme all --apply, scripts/ingest_ft_projects_nonh2020.py --apply, then scripts/refresh_project_status.py --apply (weekly tier); refresh_project_status.py also daily",
       "tier": "weekly",
-      "notes": "CORDIS publishes new project metadata weekly."
+      "notes": "Scheduled 23 Oct 2026: until then no job ran either loader (CORDIS last read 6 May, F&T 15 Jun). CORDIS refreshes each dump about monthly (Horizon Europe and H2020 on 8 Oct 2026, FP7 last on 2 Jan 2025); a dump whose Last-Modified is not newer than the one last read in full (job_cursors, cordis_dump_<programme>, saved only after a complete read) is skipped. status is one vocabulary set daily from source_status and the dates (services/funding/project_status.py)."
     },
     {
       "path_prefix": "/api/v1/press-releases",
