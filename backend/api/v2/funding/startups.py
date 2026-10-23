@@ -36,6 +36,7 @@ from api.v1._body import body_threshold_param
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
 from api.v1._pagination import stable
+from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, orm_order, orm_window, validate_window
 
 router = APIRouter()
 
@@ -148,7 +149,7 @@ Each item is tagged with a derived **`stage`** (idea / seed / growth / scale-up 
 For a founder, scale-up or SME (or an advisor / accelerator) who wants the EU money they can apply to, in one call, instead of digging through the whole portal. Combine `stage=growth&status=open` to find, say, the open Accelerator round.
 
 **Input**
-`stage` (idea | seed | growth | scale-up | sme), `instrument` (grant | blended | equity | prize), `status` (open | forthcoming | closed | unknown), `q` (free text), `deadline_from` / `deadline_to`, `page`, `limit`.
+`stage` (idea | seed | growth | scale-up | sme), `instrument` (grant | blended | equity | prize), `status` (open | forthcoming | closed | unknown), `q` (free text), `deadline_from` / `deadline_to`, `page`, `limit`. `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
 
 **Try it**
 ```
@@ -178,6 +179,11 @@ async def funding_startups(
     q: Optional[str] = Query(None, description="Substring match on title/description."),
     deadline_from: Optional[date] = Query(None),
     deadline_to: Optional[date] = Query(None),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("deadline_desc", description="deadline_desc (default) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -208,11 +214,19 @@ async def funding_startups(
     if deadline_to:
         filters.append(FtCallForProposals.deadline <= datetime.combine(deadline_to, time.max))
 
+    if order != "deadline_desc" and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {['deadline_desc'] + list(SYNC_ORDERS)}")
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     query = db.query(FtCallForProposals).filter(and_(*filters))
+    query = orm_window(query, window, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at)
+    # Same columns as /ft-calls-for-proposals, which serves them as creation_date / updated_date.
+    sort = (orm_order(order, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at, FtCallForProposals.id)
+            or (FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc()))
     total = query.count()
-    rows = (stable(query.order_by(FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc()))
+    rows = (stable(query.order_by(*sort))
             .offset((page - 1) * limit).limit(limit).all())
-    return build_envelope([_to_item(r, body_threshold) for r in rows], total=total, page=page, limit=limit)
+    return build_envelope([_to_item(r, body_threshold) for r in rows], total=total, page=page, limit=limit,
+                          updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
 @router.get("/startups/{topic_id:path}", response_model=StartupFundingItem, tags=["v2-funding"],

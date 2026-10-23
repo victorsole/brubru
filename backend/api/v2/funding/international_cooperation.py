@@ -28,6 +28,8 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
+from api.v1._change_window import (SYNC_ORDERS, UpperBoundDatetime, any_window, sql_order, sql_window,
+                                   validate_window)
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
@@ -162,7 +164,7 @@ Each item carries `beneficiary`, `country`, `amount_eur`, `funding_type` (grant 
 Market & competitive intelligence for the EU external-action market: which organisations win EU aid money, in which countries, under which instrument, as grants or service contracts. `funding_type=Procurement contract` isolates technical-assistance service contracts; `country=Türkiye` gives the geographic view.
 
 **Input**
-`programme` (ndici | ipa3 | humanitarian), `funding_type` (substring, e.g. `Grant`, `Procurement`), `country` (substring), `year`, `q` (free text), `order` (recent | oldest | year), `page`, `limit`.
+`programme` (ndici | ipa3 | humanitarian), `funding_type` (substring, e.g. `Grant`, `Procurement`), `country` (substring), `year`, `q` (free text), `order` (recent | oldest | year), `page`, `limit`. `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
 
 **Try it**
 ```
@@ -193,7 +195,11 @@ async def list_intl_cooperation(
     country: Optional[str] = Query(None, description="Beneficiary country substring."),
     year: Optional[int] = Query(None, description="FTS budget year, e.g. 2024."),
     q: Optional[str] = Query(None, description="Free text over beneficiary, subject, programme."),
-    order: str = Query("recent", description="recent | oldest | year."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("recent", description="recent | oldest | year | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
     include_body: bool = Query(
@@ -206,8 +212,9 @@ async def list_intl_cooperation(
         ),
     ),
 ):
-    if order not in _ORDERS:
-        raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
+    if order not in _ORDERS and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     where = [_BASE.replace("FROM economy_items WHERE ", "")]
     params: dict = {"limit": limit, "offset": (page - 1) * limit}
     # The programme is matched on `summary` ("name | amount | programme | country"), which has a
@@ -230,14 +237,19 @@ async def list_intl_cooperation(
         where.append("body_txt ILIKE :yr"); params["yr"] = f"%Year: {year}%"
     if q:
         where.append("(title ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+    # The change window, on the columns served as creation_date / updated_date.
+    sql_window(where, params, window, "creation_date", "updated_at")
     clause = " AND ".join(where)
-    total = _cached_total(db, clause, params)
+    # A change window is counted live: a 15-minute-old total would miss what just changed.
+    total = (db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+             if any_window(window) else _cached_total(db, clause, params))
     rows = db.execute(
         # body_txt is parsed into the award fields on every item; body_html is read only when served
         text(f"SELECT {_COLS if include_body else _COLS.replace('body_html', 'NULL::text AS body_html')} FROM economy_items WHERE {clause} "
-             f"ORDER BY {_ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
+             f"ORDER BY {sql_order(order, 'creation_date', 'updated_at') or _ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
     ).fetchall()
-    return build_envelope([_parse(r, with_body=include_body) for r in rows], total, page, limit)
+    return build_envelope([_parse(r, with_body=include_body) for r in rows], total, page, limit,
+                          updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
 @router.get("/international-cooperation/{item_id}", response_model=IntlCoopItem, tags=["v2-funding"],

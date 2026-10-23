@@ -34,6 +34,7 @@ from api.v1._body import body_threshold_param
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
 from api.v1._pagination import stable
+from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, orm_order, orm_window, validate_window
 
 router = APIRouter()
 
@@ -135,6 +136,8 @@ For an accelerator, incubator, business angel or ecosystem builder (like KinEtix
 - `programme` — one of the coarse labels (e.g. `HORIZON (EIC)`, `Digital Europe`, `Single Market Programme`).
 - `deadline_before` — only calls closing on/before this date.
 - `q` — free text over title / description.
+- `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`).
+- `order` — `deadline_desc` (default), or `updated_asc` to page a change window (also `updated_desc`, `created_asc`, `created_desc`).
 - `limit` (default 20, max 50), `page`.
 
 **Try it**
@@ -167,6 +170,11 @@ async def entrepreneur_instruments(
     programme: Optional[str] = Query(None, description="Coarse programme label, e.g. 'HORIZON (EIC)', 'Digital Europe', 'Single Market Programme'"),
     deadline_before: Optional[date] = Query(None, description="Only calls closing on/before this date (YYYY-MM-DD)"),
     q: Optional[str] = Query(None, description="Substring match on title / description"),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("deadline_desc", description="deadline_desc (default) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     limit: int = Query(20, ge=1, le=50),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -189,10 +197,17 @@ async def entrepreneur_instruments(
         like = f"%{q}%"
         filters.append((FtCallForProposals.title.ilike(like)) | (FtCallForProposals.description.ilike(like)))
 
+    if order != "deadline_desc" and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {['deadline_desc'] + list(SYNC_ORDERS)}")
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     query = db.query(FtCallForProposals).filter(and_(*filters))
+    query = orm_window(query, window, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at)
+    # Same columns as /ft-calls-for-proposals, which serves them as creation_date / updated_date.
+    sort = (orm_order(order, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at, FtCallForProposals.id)
+            or (FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc()))
     total = query.count()
     rows = (
-        stable(query.order_by(FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc()))
+        stable(query.order_by(*sort))
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -200,6 +215,7 @@ async def entrepreneur_instruments(
     return build_envelope(
         [_with_self(_to_item(r, body_threshold), str(request.base_url).rstrip("/")) for r in rows],
         total=total, page=page, limit=limit,
+        updated_from=window["updated_from"], updated_to=window["updated_to"],
         op_core_title="EU entrepreneur financial instruments (intermediated)",
         op_core_type="EU funding instruments",
         op_core_identifier=str(request.url),

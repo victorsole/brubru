@@ -21,6 +21,8 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1._row_dates import row_updated
+from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order,
+                                   sql_window, validate_window)
 
 _ORDERS = {"recent", "oldest", "title"}
 # coalesce(document_date, creation_date), not bare document_date, in BOTH the filter
@@ -148,11 +150,18 @@ _PROCUREMENT_COLS = ", tender_reference, status, deadline"
 
 
 def _list_items(db: Session, body_code: str, item_type: str, q, since, until, order,
-                page, limit, include_body: bool = False, procurement: bool = False):
+                page, limit, include_body: bool = False, procurement: bool = False, window=None):
     where = ["body_code = :bc", "item_type = :it"]
     params = {"bc": body_code, "it": item_type, "limit": limit, "offset": (page - 1) * limit}
     date_sort = _PROC_DATE_SORT if procurement else _DATE_SORT
-    order_sql = (_PROC_ORDER_SQL if procurement else _ORDER_SQL)[order]
+    # The incremental-sync window and orders (23 Oct 2026): every factory list carried
+    # updated_date and none could be filtered on it, so a partner re-read whole lists to
+    # find what changed. updated_at is the change-only signal (brubru_touch_if_changed)
+    # and is set on every row; creation_date is when Brubru first stored the row.
+    order_sql = (sql_order(order, "creation_date", "updated_at")
+                 or (_PROC_ORDER_SQL if procurement else _ORDER_SQL)[order])
+    if window:
+        sql_window(where, params, window, "creation_date", "updated_at")
     if q:
         where.append("search_vector @@ plainto_tsquery('english', :q)")
         params["q"] = q
@@ -194,6 +203,7 @@ Track what {acro} is publishing without scraping its website. Filter by free tex
 
 **Input**
 `q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).
+<<SYNC_PARAMS>>
 
 **Try it**
 ```
@@ -205,6 +215,8 @@ A paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body
 
 **Data freshness**
 Refreshed from {source}."""
+# The incremental-sync parameters, worded once for every endpoint that offers them.
+_DESC_LIST = _DESC_LIST.replace("<<SYNC_PARAMS>>", SYNC_PARAMS_DOC)
 
 _DESC_DETAIL = """**What it does**
 Returns one {body} {noun_singular} in full, including `body_txt` and `body_html`.
@@ -290,7 +302,11 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         # everywhere removes the whole failure class and breaks no existing caller.
         from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
         to: Optional[date] = Query(None, include_in_schema=False),
-        order: str = Query("recent", description="recent | oldest | title."),
+        created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+        created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+        updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
+        updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+        order: str = Query("recent", description="recent | oldest | title | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
         page: int = Query(1, ge=1),
         limit: int = Query(20, ge=1, le=100),
         include_body: bool = Query(
@@ -303,14 +319,16 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
             ),
         ),
     ):
-        if order not in _ORDERS:
-            raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
+        if order not in _ORDERS and order not in SYNC_ORDERS:
+            raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")
         since = since or from_
         until = until or to
+        window = validate_window(created_from, created_to, updated_from, updated_to)
         items, total = _list_items(db, body_code, item_type, q, since, until, order,
                                    page, limit, include_body=include_body,
-                                   procurement=procurement)
-        return build_envelope(items, total, page, limit)
+                                   procurement=procurement, window=window)
+        return build_envelope(items, total, page, limit,
+                              updated_from=window["updated_from"], updated_to=window["updated_to"])
 
     async def detail_ep(
         request: Request,

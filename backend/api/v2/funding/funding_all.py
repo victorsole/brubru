@@ -9,7 +9,7 @@ Portal calls remain separate dedicated endpoints.
 """
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -23,6 +23,8 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
 from ..economy_endpoints import (EconomyItem, _row_to_item, _LIST_COLS, _DETAIL_COLS, _ORDER_SQL,
                                   _ORDERS, build_envelope)
+from api.v1._change_window import (SYNC_ORDERS, UpperBoundDatetime, sql_order, sql_window,
+                                   validate_window)
 
 router = APIRouter()
 
@@ -113,7 +115,7 @@ One feed of **every EU fund** Brubru covers — the decentralised agency funding
 "Show me everything across EU funding", whether an agency tender, a Justice/Innovation-Fund grant call, or a Member State's cohesion-fund allocation. Filter by `type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`, `just`, `innovfund`), `status`, `q` (free text), and `since`/`until` on the date.
 
 **Input**
-`type`, `body`, `status`, `q` (free text), `since`/`until` (date range), `order`, `page`, `limit`.
+`type`, `body`, `status`, `q` (free text), `since`/`until` (date range), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `order` (page a change window with `updated_asc`), `page`, `limit`.
 
 **Try it**
 ```
@@ -142,7 +144,11 @@ async def funding_all(
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
     since: Optional[date] = Query(None, description="Deadline on/after this date (YYYY-MM-DD)."),
     until: Optional[date] = Query(None, description="Deadline on/before this date (YYYY-MM-DD)."),
-    order: str = Query("recent", description="recent | oldest | title."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
+    order: str = Query("recent", description="recent | oldest | title | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
     include_body: bool = Query(
@@ -155,8 +161,9 @@ async def funding_all(
         ),
     ),
 ):
-    if order not in _ORDERS:
-        raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS)}")
+    if order not in _ORDERS and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     params = {"ftypes": list(_FUNDING_TYPES), "limit": limit, "offset": (page - 1) * limit}
     where: list[str] = []
     if type:
@@ -173,6 +180,9 @@ async def funding_all(
         where.append("document_date >= :since"); params["since"] = since
     if until:
         where.append("document_date < CAST(:until AS date) + 1"); params["until"] = until
+    # Every side of the union projects its table's own creation_date and updated_at (filled on
+    # all 982 + 203 + 56 cohesion, Solidarity Fund and CAP rows and on every economy_items row).
+    sql_window(where, params, window, "creation_date", "updated_at")
     clause = (" WHERE " + " AND ".join(where)) if where else ""
     total = db.execute(
         text(f"{_union_cte(False)} SELECT count(*) FROM all_funding{clause}"), params
@@ -181,8 +191,10 @@ async def funding_all(
     # overlap), so item_type completes the key and OFFSET pages cannot overlap.
     rows = db.execute(
         text(f"{_union_cte(include_body)} SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM all_funding{clause} "
-             f"ORDER BY {_ORDER_SQL[order]}, item_type LIMIT :limit OFFSET :offset"), params
+             f"ORDER BY {sql_order(order, 'creation_date', 'updated_at') or _ORDER_SQL[order]}, item_type "
+             f"LIMIT :limit OFFSET :offset"), params
     ).fetchall()
     base, routes = str(request.base_url).rstrip("/"), _item_routes(request.app)
     return build_envelope([_with_self(_row_to_item(r, with_body=include_body), base, routes) for r in rows],
-                          total, page, limit)
+                          total, page, limit,
+                          updated_from=window["updated_from"], updated_to=window["updated_to"])

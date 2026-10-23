@@ -25,6 +25,7 @@ from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from api.v1._change_window import UpperBoundDatetime, validate_window
 from .cohesion_finances import _DataPoints
 
 router = APIRouter()
@@ -110,6 +111,7 @@ The single source of truth for "every EU fund". Iterate it to know the full univ
 - `cluster` — substring on the EC cluster.
 - `coverage` — `covered` | `gap` | `skipped`.
 - `q` — substring on the programme name, acronym or body.
+- `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync on the list's own dates (every programme carries them): the whole list when it was revised in the window, nothing otherwise.
 - `limit` (default 100, max 200), `page` (1-indexed).
 
 **Try it**
@@ -131,6 +133,10 @@ async def list_programmes(
     cluster: Optional[str] = Query(None, description="EC cluster substring"),
     coverage: Optional[str] = Query(None, description="covered | gap | skipped"),
     q: Optional[str] = Query(None, description="Substring on programme name / acronym / body"),
+    created_from: Optional[datetime] = Query(None, description="List compiled on or after (ISO date or datetime, UTC): every programme carries the list's own dates."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="List compiled on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="List last revised on or after (ISO date or datetime, UTC). The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="List last revised on or before; a bare date covers the whole day."),
     limit: int = Query(100, ge=1, le=200),
     include_body: bool = Query(
         False,
@@ -155,11 +161,20 @@ async def list_programmes(
     if q:
         ql = q.lower()
         progs = [p for p in progs if ql in p["programme"].lower() or ql in p["acronym"].lower() or ql in p["source"].lower()]
+    # The change window: every programme carries the list's own $created / $updated, so a
+    # window either keeps the whole list or none of it, which is what a sync needs to know.
+    w = validate_window(created_from, created_to, updated_from, updated_to)
+    created, updated = _config_dates()
+    for key, value, keep in (("created_from", created, lambda v, b: v >= b), ("created_to", created, lambda v, b: v <= b),
+                             ("updated_from", updated, lambda v, b: v >= b), ("updated_to", updated, lambda v, b: v <= b)):
+        if w[key] is not None and (value is None or not keep(value, w[key])):
+            progs = []
     total = len(progs)
-    window = progs[(page - 1) * limit: (page - 1) * limit + limit]
-    items = [_to_item(p, with_body=include_body) for p in window]
+    page_rows = progs[(page - 1) * limit: (page - 1) * limit + limit]
+    items = [_to_item(p, with_body=include_body) for p in page_rows]
     return build_envelope(
         items, total=total, page=page, limit=limit,
+        updated_from=w["updated_from"], updated_to=w["updated_to"],
         op_core_title="EU funding programmes directory (EC classification)",
         op_core_type="dataset", op_core_identifier="brubru:funding-programmes",
     )
