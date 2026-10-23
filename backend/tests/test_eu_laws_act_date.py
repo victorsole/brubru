@@ -254,3 +254,26 @@ def test_recheck_reads_cellar_again_when_the_export_date_is_stale(tmp_path, monk
     assert fx.recheck_acts(db, {"32022R0363"}, tmp_path) == 1
     assert db.updates == [(1, "2022-03-02")]
 
+
+# Two real corrigenda that correct a date in an Article equal to the act's own (audit of 23 Oct 2026, register O65)
+ARTICLE_DATES = [
+    ("32014D0447", "Council Decision 2014/447/CFSP of 9 July 2014 amending Decision 2013/354/CFSP on the European Union "
+     "Police Mission for the Palestinian Territories (EUPOL COPPS)", "2014-07-09",
+     "On page 29, in point (4) of Article 1, concerning Article 12(6): for: \u20186. Expenditure shall be eligible as of "
+     "9 July 2014.\u2019 , read: \u20186. Expenditure shall be eligible as of 1 July 2014.\u2019 ."),
+    ("32026D1912", "Council Implementing Decision (EU) 2026/1912 of 30 July 2026 amending Implementing Decision (EU) "
+     "2022/382", "2026-07-30",
+     "On page 4, in Article 2: for: \u2018This Article does not apply to persons enjoying temporary protection in a given "
+     "Member State before or on 30 July 2026 and continuously retaining such status\u2019 , read: \u2018This Article "
+     "does not apply to persons enjoying temporary protection in a given Member State before or on 4 August 2026 and "
+     "continuously retaining such status\u2019 ."),
+]
+
+
+@pytest.mark.parametrize("celex,title,cellar,passage", ARTICLE_DATES)
+def test_a_corrected_article_date_equal_to_the_title_date_moves_nothing(celex, title, cellar, passage):
+    from backend.scripts.leg_folder import title_date_corrections
+    pairs = title_date_corrections(passage)
+    assert pairs and pairs[0][0] == title_date(title)  # the parser does read a pair from the title's date...
+    assert act_date(celex, title, cellar, pairs) == cellar  # ...which Cellar does not confirm: the title's date stays
+

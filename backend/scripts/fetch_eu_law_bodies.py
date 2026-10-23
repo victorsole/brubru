@@ -124,6 +124,30 @@ PROGRESS = text(
 )
 
 
+# A corrigendum may correct its act's title date ("for: 4 April 2006, read: 4 April 2005", 32006D0635R(01)). Its text
+# is first readable here: the hot tier's sync inserts it without one (register O65, 23 Oct 2026). Every run re-checks
+# the acts of the corrigenda whose text arrived in the last RECHECK_DAYS days, so a run that fails here is retried by
+# the next; the re-check writes a date only when the corrigendum and Cellar, read live, agree on it.
+RECHECK_DAYS = 3
+RECENT_CORRIGENDA = text(
+    """
+    SELECT celex FROM eu_laws
+     WHERE celex ~ 'R\\(\\d\\d\\)$' AND coalesce(body_chars, 0) > 0
+       AND body_fetched_at > now() - make_interval(days => :days)
+    """
+)
+
+
+def recheck_corrected_acts(engine, days: int = RECHECK_DAYS) -> tuple[int, int]:
+    """(acts re-checked, dates corrected) for the acts of the corrigenda whose text arrived in the last `days` days."""
+    from scripts.fix_eu_laws_dates import recheck_acts
+    with engine.connect() as conn:
+        acts = {re.sub(r"R\(\d\d\)$", "", r.celex) for r in conn.execute(RECENT_CORRIGENDA, {"days": days})}
+        if not acts:
+            return 0, 0
+        return len(acts), recheck_acts(conn, acts, None)
+
+
 def _database_url() -> str:
     # The cron runs this inside the Railway container, which has the variable and no .env.
     if os.environ.get("DATABASE_URL"):
@@ -287,6 +311,14 @@ def main() -> int:
     print(f"[INFO] fetched  : {before.fetched} -> {after.fetched} of {after.total}")
     print(f"[INFO] real bodies : {after.real_bodies}   avg {after.avg_chars} chars")
     print(f"[INFO] remaining   : {after.total - after.fetched}")
+    try:
+        checked, corrected = recheck_corrected_acts(engine)
+        print(f"[INFO] acts of new corrigenda re-checked: {checked}, dates corrected: {corrected}")
+        recheck_failed = False
+    except Exception as e:
+        print(f"[ERROR] re-check of the acts of new corrigenda failed ({type(e).__name__}: {e}); "
+              f"the next run re-checks the last {RECHECK_DAYS} days again")
+        recheck_failed = True
 
     if stored == 0 and rows:
         print("[ERROR] not one body was stored; Cellar is refusing us, which is a "
@@ -295,6 +327,8 @@ def main() -> int:
     if skipped > stored:
         print(f"[ERROR] {skipped} skipped against {stored} stored: this run's picture "
               f"is not trustworthy, re-run with a larger --pause")
+        return 1
+    if recheck_failed:
         return 1
     print("[OK] every stored body is a real act text, measured by length")
     return 0
