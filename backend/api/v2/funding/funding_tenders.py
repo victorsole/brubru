@@ -231,7 +231,7 @@ For research orgs and consultancies doing competitive intelligence on EU funding
 - `framework_programme` — substring (e.g. `Horizon Europe`, `Horizon 2020`).
 - `coordinator_country` — ISO-2 (2 chars exact).
 - `type_of_action` — substring (`RIA`, `IA`, `CSA`).
-- `status` — planned | ongoing | ended | terminated | suspended | unknown (the source's own words still filter).
+- `status` — planned | ongoing | ended | terminated | suspended | unknown. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave.
 - `q` — substring search on title + objective.
 - `start_from`, `end_to` — start-date / end-date window.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -254,7 +254,7 @@ async def list_funded_projects(
     framework_programme: Optional[str] = Query(None),
     coordinator_country: Optional[str] = Query(None, min_length=2, max_length=2),
     type_of_action: Optional[str] = Query(None),
-    status: Optional[str] = Query(None, description="planned | ongoing | ended | terminated | suspended | unknown, set from the source and the project's own dates. The source's own words (signed, closed, Ongoing, Ended, Forthcoming...) still filter, on the word the source gave."),
+    status: Optional[str] = Query(None, description="planned | ongoing | ended | terminated | suspended | unknown, set from the source and the project's own dates. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; a word in the list above (Ongoing, Ended...) means the status set here, in any case."),
     q: Optional[str] = Query(None),
     start_from: Optional[date] = Query(None),
     end_to: Optional[date] = Query(None),
