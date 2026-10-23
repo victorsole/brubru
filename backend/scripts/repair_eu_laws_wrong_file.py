@@ -54,6 +54,7 @@ from backend.core.database import SessionLocal  # noqa: E402
 from backend.scripts.fix_eu_laws_2025_leftovers import check  # noqa: E402
 from backend.scripts.import_corpus_update import (DERIVED_FROM_FILE, FILE_KEYS, MAIN_ROOTS, MATCH_MIN,  # noqa: E402
                                                   WRONG_FILE_TYPES, act_confirmed, act_date, number_in_title,
+                                                  corrigendum_corrections,
                                                   compute_file_hash, file_root, main_file,
                                                   parsed_fields, stored_path, title_match, usable_title,
                                                   type_label)
@@ -107,6 +108,9 @@ def plan(db, parser):
         fix.append({"id": i, "celex": celex, "path": picked, "parsed": p, "title": t_title,
                     "date": t_date if re.fullmatch(r"\d{4}-\d{2}-\d{2}", t_date or "") else None,
                     "dn": dn})
+    corr = corrigendum_corrections(db, [f["celex"] for f in fix], CORPUS)  # a corrigendum may correct the title's date
+    for f in fix:
+        f["corrections"] = corr.get(f["celex"], [])
     return fix, retype, review, why, len(rows)
 
 
@@ -121,7 +125,8 @@ def new_values(f, xp_parser) -> tuple:
     v = {"id": f["id"], "xml_path": fields["xml_path"], "content_hash": fields["content_hash"], "title": f["title"],
          "doc_type": p.doc_type or type_label(f["celex"], f["dn"]),
          "doc_type_normalized": type_label(f["celex"], f["dn"]),
-         "date": act_date(f["celex"], f["title"], f["date"] or (p.date.isoformat() if p.date else None)),
+         "date": act_date(f["celex"], f["title"], f["date"] or (p.date.isoformat() if p.date else None),
+                          f.get("corrections", ())),
          "citations": fields["citations"],
          "is_primary_legislation": fields["is_primary_legislation"], "policy_area": fields["policy_area"],
          "subject_matter": xp_parser._extract_subject_matter(root) or None,

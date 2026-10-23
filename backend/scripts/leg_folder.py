@@ -2,7 +2,7 @@
 
 Pure functions, no database imports, so tests can load them next to the API (CI runs every test in one process, and
 importing the models under two module names breaks the mapping). import_corpus_update.py re-exports them; the repair
-scripts of 15 Oct 2026 read them from there.
+scripts of 15 Oct 2026 read them from there. corrigendum_corrections alone queries: it takes the caller's session.
 """
 from __future__ import annotations
 
@@ -109,12 +109,81 @@ def title_date(title: Optional[str]) -> Optional[str]:
         return None
 
 
-def act_date(celex: Optional[str], title: Optional[str], recorded):
+def act_date(celex: Optional[str], title: Optional[str], recorded, corrections=()):
     """The value of eu_laws.date: for a corrigendum the recorded date (Cellar's: its own publication; its title names
-    or repeats the corrected act's date), for any other act the date its title gives it, else the recorded date."""
+    or repeats the corrected act's date), for any other act the date its title gives it, else the recorded date.
+
+    The title itself can be wrong (23 Oct 2026, register O65): a corrigendum may correct it, "for: 4 April 2006, read:
+    4 April 2005" (32006D0635R(01)). corrections are the (old, new) pairs the act's corrigenda state
+    (title_date_corrections); the recorded date wins over the title only when one of them corrects the title's date to
+    exactly the recorded date. Two witnesses, so a corrigendum correcting another date in the text that happens to
+    equal the title's, or a Cellar error, never moves it alone."""
     if _CORRIGENDUM.search(celex or ""):
         return recorded
-    return title_date(title) or recorded
+    t = title_date(title)
+    if t and recorded and recorded != t and (t, recorded) in set(corrections or ()):
+        return recorded
+    return t or recorded
+
+
+# "for: <old text> read: <new text>", up to the next correction ("for:", "On page", a numbered item) or the end. The
+# shapes, read in 26 corrigenda on 23 Oct 2026: "title: for: 29 May 2007 read: 25 May 2007", "for: … of 26 July 2022 …,
+# read: … of 5 December 2022 …", "adoption date: for: 15 March 2021, read: 15 February 2021", a whole title in each.
+_CORR_DATE = re.compile(r"\b(\d{1,2})\s+(" + "|".join(_MONTHS) + r")\s*(\d{4})(?!\d)", re.I)
+_FOR_READ = re.compile(r"\bfor\s*:(.*?)\bread\s*:(.*?)(?=\bfor\s*:|\bOn (?:the )?(?:page|cover)|\s\d+\.\s+On\b|\Z)",
+                       re.I | re.S)
+
+
+def _first_date(s: str) -> Optional[str]:
+    m = _CORR_DATE.search(s)
+    if not m:
+        return None
+    try:
+        return date(int(m.group(3)), _MONTHS.index(m.group(2).lower()) + 1, int(m.group(1))).isoformat()
+    except ValueError:
+        return None
+
+
+def title_date_corrections(text: Optional[str]) -> list:
+    """Every (old, new) date pair a corrigendum states as "for: ... <date> ... read: ... <date>", in ISO form."""
+    t = " ".join((text or "").replace("\xa0", " ").split())
+    out = []
+    for m in _FOR_READ.finditer(t):
+        old, new = _first_date(m.group(1)), _first_date(m.group(2))
+        if old and new and old != new:
+            out.append((old, new))
+    return out
+
+
+def corrigendum_corrections(db, acts, dump: Optional[Path] = None) -> dict:
+    """{act CELEX: [(old, new), ...]} stated by the corrigenda eu_laws holds for these acts (CELEX + "R(NN)"): each
+    corrigendum read from its folder under dump, else from its stored body_txt (a row synced from Cellar has no folder).
+    Takes the caller's session and imports sqlalchemy only when called (see the module docstring)."""
+    from sqlalchemy import text
+    acts = sorted({a for a in acts if a})
+    if not acts:
+        return {}
+    rows = db.execute(text("SELECT celex, uuid FROM eu_laws WHERE celex ~ 'R\\(\\d\\d\\)$' "
+                           "AND regexp_replace(celex, 'R\\(\\d\\d\\)$', '') = ANY(:a)"), {"a": acts}).fetchall()
+    out, unread = {}, []
+    for celex, uuid in rows:
+        if dump is not None and uuid and (Path(dump) / uuid).is_dir():
+            out.setdefault(_CORRIGENDUM.sub("", celex), []).extend(
+                title_date_corrections(corrigendum_text(Path(dump) / uuid)))
+        else:
+            unread.append(celex)
+    if unread:
+        for celex, body in db.execute(text("SELECT celex, body_txt FROM eu_laws WHERE celex = ANY(:c)"),
+                                      {"c": unread}).fetchall():
+            out.setdefault(_CORRIGENDUM.sub("", celex), []).extend(title_date_corrections(body))
+    return out
+
+
+def corrigendum_text(folder: Path) -> str:
+    """A corrigendum folder's own text, tags stripped: the Formex files holding the act, never the cover page."""
+    parts = [re.sub(r"<[^>]+>", " ", f.read_text(encoding="utf-8", errors="replace"))
+             for f in sorted(folder.rglob("*.xml")) if file_root(f) in MAIN_ROOTS]
+    return " ".join(" ".join(parts).split())
 
 
 def rdf_meta(corpus_path: Path, uuid: str) -> dict:

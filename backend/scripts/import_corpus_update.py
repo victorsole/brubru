@@ -78,6 +78,7 @@ from backend.scripts.leg_folder import (  # noqa: F401 (re-exported for the repa
     numbered_title,
     title_date,
     act_date,
+    corrigendum_corrections,
     rdf_meta,
     title_match,
     main_file,
@@ -266,6 +267,8 @@ def process_corpus(
         "absent_unverified": 0,
         "no_act_file": 0,
         "not_confirmed": 0,
+        "dates_rechecked": 0,
+        "dates_corrected": 0,
         "errors": 0,
     }
 
@@ -297,6 +300,9 @@ def process_corpus(
             ).all()
         }
         logger.info(f"[INFO] Loaded {len(existing)} existing laws from database")
+        # acts the rule must see again at the end: a corrigendum written in this run may correct its act's title date,
+        # and an act whose title and Cellar disagree may have a corrigendum written later in the run (register O65)
+        recheck = set()
 
         held = {
             c: u for c, u in db.query(EULaw.celex, EULaw.uuid).filter(EULaw.celex.isnot(None)).all()
@@ -408,6 +414,11 @@ def process_corpus(
                 # the date the title gives the act, else the metadata's (Cellar errs: 32026R0144 held 2025-01-14)
                 fields["date"] = act_date(cx or (row.celex if row is not None else None), fields["title"],
                                           m["date"] or fields["date"])
+                written_celex = cx or (row.celex if row is not None else None)
+                if written_celex and re.search(r"R\(\d{2}\)$", written_celex):
+                    recheck.add(re.sub(r"R\(\d{2}\)$", "", written_celex))
+                elif written_celex and m["date"] and title_date(fields["title"]) not in (None, m["date"]):
+                    recheck.add(written_celex)
                 fields.update(export_metadata(corpus_path, uuid, cx or (row.celex if row is not None else None)))
 
                 if parsed.celex and cx and parsed.celex != cx:
@@ -496,6 +507,12 @@ def process_corpus(
                          "AND NOT EXISTS (SELECT 1 FROM eu_laws o WHERE o.celex = :c)"), f,
                 ).rowcount
             db.commit()
+        stats["dates_rechecked"] = len(recheck)
+        if recheck and not dry_run:
+            from backend.scripts.fix_eu_laws_dates import recheck_acts
+            stats["dates_corrected"] = recheck_acts(db, recheck, corpus_path)
+            logger.info(f"[INFO] {len(recheck)} acts re-checked for a corrigendum's date: "
+                        f"{stats['dates_corrected']} dates corrected")
         stats["without_celex_after"] = db.execute(
             text("SELECT count(*) FROM eu_laws WHERE corpus_version = :v AND coalesce(celex, '') = ''"),
             {"v": corpus_version},

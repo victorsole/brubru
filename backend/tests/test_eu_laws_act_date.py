@@ -55,6 +55,23 @@ def test_act_date():
     assert act_date("32016R0679", "no date here", None) is None
 
 
+EURATOM = "Commission Decision 2006/635/Euratom of 4 April 2006 on the conclusion, by way of signature, of an Agreement"
+
+
+def test_a_corrigendum_that_corrects_the_title_date_wins_with_cellar():
+    """Register O65 (23 Oct 2026): 32006D0635R(01) reads "for: 4 April 2006, read: 4 April 2005"; Cellar holds 2005-04-04."""
+    fixed = [("2006-04-04", "2005-04-04")]
+    assert act_date("32006D0635", EURATOM, "2005-04-04", fixed) == "2005-04-04"
+    # without the corrigendum the title wins, as before
+    assert act_date("32006D0635", EURATOM, "2005-04-04") == "2006-04-04"
+    # Cellar holds neither date: the title wins (two witnesses or none)
+    assert act_date("32006D0635", EURATOM, "2006-05-01", fixed) == "2006-04-04"
+    # the corrigendum corrects another date: the title wins
+    assert act_date("32006D0635", EURATOM, "2005-04-04", [("2006-03-01", "2005-04-04")]) == "2006-04-04"
+    # a corrigendum's own date is never moved by its pairs
+    assert act_date("32006D0635R(01)", "Corrigendum to " + EURATOM, "2007-04-03", fixed) == "2007-04-03"
+
+
 def test_the_daily_sync_takes_the_title_date():
     spec = importlib.util.spec_from_file_location("sync_eu_laws_from_cellar_act_date", _PATH)
     mod = importlib.util.module_from_spec(spec)
@@ -77,7 +94,9 @@ class Q:
     def all(self): return []
     def first(self): return None
 class R:
+    rowcount = 0
     def scalar(self): return 0
+    def fetchall(self): return []
 class Session:
     added = []
     def query(self, *a): return Q()
@@ -98,6 +117,9 @@ icu.parsed_fields = lambda p, rel, h, v: {"title": p.title, "date": None, "conte
 class Parser:
     def parse_file(self, path): return SimpleNamespace(title="parsed title", celex=None, date=None)
 icu.FormexParser = Parser
+import backend.scripts.fix_eu_laws_dates as fx
+CALLS = []
+fx.recheck_acts = lambda db, acts, dump: CALLS.append(sorted(acts)) or 0
 '''
 
 RDF = ('<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:j.0="http://publications.europa.eu/ontology/cdm#">'
@@ -121,13 +143,15 @@ def test_the_importer_writes_the_title_date(tmp_path):
     code = FAKE + f'''
 icu.PROJECT_ROOT = Path({str(tmp_path)!r})
 icu.process_corpus(Path({str(tmp_path)!r}), "LEG_TEST")
-print(json.dumps({{o.celex: str(o.date) for o in Session.added}}))
+print(json.dumps({{"added": {{o.celex: str(o.date) for o in Session.added}}, "rechecked": CALLS}}))
 '''
     out = subprocess.run([sys.executable, "-c", textwrap.dedent(code)], cwd=_REPO_ROOT, env=env,
                          capture_output=True, text=True, timeout=120)
     assert out.returncode == 0, out.stderr[-3000:]
     got = json.loads(out.stdout.strip().splitlines()[-1])
-    assert got == {"32026R0144": "2026-01-14", "32021R1832R(01)": "2021-11-19", "32020Q0224(01)": "2019-12-20"}
+    assert got["added"] == {"32026R0144": "2026-01-14", "32021R1832R(01)": "2021-11-19", "32020Q0224(01)": "2019-12-20"}
+    # the run ends by re-checking the act of the corrigendum it wrote and the act whose title and Cellar disagree
+    assert got["rechecked"] == [["32021R1832", "32026R0144"]]
 
 
 def test_the_repair_changes_only_what_the_rule_changes():
@@ -149,3 +173,84 @@ def test_the_repair_changes_only_what_the_rule_changes():
                        (4, "32020Q0224(01)", "2020-02-24", "2019-12-20", "act"),
                        (5, "32024D2955", "2021-11-21", "2024-11-21", "act")]
     assert cellar_wrong == [(3, "32013D0719", "2012-11-16", "2013-11-16")]
+
+
+def test_the_repair_takes_a_corrigendums_date_when_cellar_agrees():
+    from backend.scripts.fix_eu_laws_dates import changes_for
+    rows = [(1, "32006D0635", "u1", "2006-04-04", EURATOM, "LEG_2026-10"),
+            (3, "32013D0719", "u3", "2012-11-16", "Commission Decision of 16 November 2012 State aid", "LEG_2026-10")]
+    cellar = {"u1": "2005-04-04", "u3": "2013-11-16"}
+    corr = {"32006D0635": [("2006-04-04", "2005-04-04")]}
+    changes, cellar_wrong = changes_for(rows, lambda uuid, version: cellar.get(uuid), lambda c: corr.get(c, ()))
+    assert changes == [(1, "32006D0635", "2006-04-04", "2005-04-04", "act")]
+    assert cellar_wrong == [(3, "32013D0719", "2012-11-16", "2013-11-16")]
+
+
+class _Rows:
+    def __init__(self, rows):
+        self.rows, self.rowcount = rows, len(rows)
+
+    def fetchall(self):
+        return self.rows
+
+
+class _Db:
+    """Answers the statements recheck_acts and corrigendum_corrections send; records the UPDATEs."""
+    def __init__(self, laws):
+        self.laws, self.updates = laws, []
+
+    def execute(self, sql, params):
+        import re
+        q = " ".join(str(sql).split())
+        if q.startswith("SELECT id, celex"):
+            return _Rows([r for r in self.laws if r[1] in params["a"]])
+        if "regexp_replace" in q:
+            return _Rows([(r[1], r[2]) for r in self.laws
+                          if r[1].endswith(")") and re.sub(r"R\(\d\d\)$", "", r[1]) in params["a"] and "R(" in r[1]])
+        if q.startswith("SELECT celex, body_txt"):
+            return _Rows([])
+        if q.startswith("UPDATE"):
+            self.updates.append((params["i"], params["new"]))
+            return _Rows([params["i"]])
+        raise AssertionError(q)
+
+    def commit(self):
+        pass
+
+
+def test_recheck_reads_the_corrigendum_and_writes_the_corrected_date(tmp_path):
+    """End to end on a folder dump: the act's Cellar date from its RDF, the correction from the corrigendum's Formex."""
+    from backend.scripts.fix_eu_laws_dates import recheck_acts
+    for uuid, celex, d, title in (("u-act", "32006D0635", "2005-04-04", EURATOM),
+                                  ("u-3", "32013D0719", "2013-11-16", "Commission Decision of 16 November 2012 State aid")):
+        (tmp_path / uuid).mkdir()
+        (tmp_path / uuid / "tree_non_inferred.rdf").write_text(RDF.format(celex=celex, date=d, title=title))
+    (tmp_path / "u-corr" / "fmx4").mkdir(parents=True)
+    (tmp_path / "u-corr" / "fmx4" / "corr.xml").write_text(
+        "<CORR><P>On the cover in the contents and on page 26 in the title and the signature: for: 4 April 2006 , "
+        "read: 4 April 2005 .</P></CORR>")
+    db = _Db([(1, "32006D0635", "u-act", "2006-04-04", EURATOM, "LEG_2026-10"),
+              (2, "32006D0635R(01)", "u-corr", "2007-04-03", "Corrigendum to " + EURATOM, "LEG_2026-10"),
+              (3, "32013D0719", "u-3", "2012-11-16", "Commission Decision of 16 November 2012 State aid", "LEG_2026-10")])
+    assert recheck_acts(db, {"32006D0635", "32013D0719"}, tmp_path) == 1
+    # 32013D0719: Cellar's error and no corrigendum, so the title's date stays
+    assert db.updates == [(1, "2005-04-04")]
+
+
+def test_recheck_reads_cellar_again_when_the_export_date_is_stale(tmp_path, monkeypatch):
+    """32022R0363: the export (11 Oct) held 2022-01-02; the corrigendum reads 2 March 2022, and so does Cellar since the
+    helpdesk's fix of 23 Oct. The stale export date alone would put the title's 24 January back."""
+    import backend.scripts.fix_eu_laws_dates as fx
+    monkeypatch.setattr(fx, "cellar_dates", lambda celexes: {"32022R0363": "2022-03-02"} if "32022R0363" in celexes else {})
+    title = "Commission Delegated Regulation (EU) 2022/363 of 24 January 2022 amending"
+    (tmp_path / "u-act").mkdir()
+    (tmp_path / "u-act" / "tree_non_inferred.rdf").write_text(RDF.format(celex="32022R0363", date="2022-01-02", title=title))
+    (tmp_path / "u-corr" / "fmx4").mkdir(parents=True)
+    (tmp_path / "u-corr" / "fmx4" / "corr.xml").write_text(
+        "<CORR><P>On page 40, title, date of adoption, and on page 42, in the signature: for: 24 January 2022 , "
+        "read: 2 March 2022 .</P></CORR>")
+    db = _Db([(1, "32022R0363", "u-act", "2022-01-24", title, "LEG_2026-10"),
+              (2, "32022R0363R(01)", "u-corr", "2022-03-08", "Corrigendum to " + title, "LEG_2026-10")])
+    assert fx.recheck_acts(db, {"32022R0363"}, tmp_path) == 1
+    assert db.updates == [(1, "2022-03-02")]
+

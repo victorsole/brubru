@@ -10,10 +10,15 @@
   - 86 acts hold the right date while Cellar's is wrong (32013D0719 "of 16 November 2012": Cellar 2013-11-16):
     left as they are, listed.
 
-The rule is leg_folder.act_date, which the importer, the repair script and the daily Cellar sync now apply. Cellar's
+23 Oct 2026 (register O65): the title can be wrong too. In 26 acts a corrigendum corrected the title's date to Cellar's
+("for: 4 April 2006, read: 4 April 2005", 32006D0635R(01)); the rule now takes Cellar's date when a corrigendum of the
+act corrects the title's date to exactly it (leg_folder.act_date, corrigendum_corrections).
+
+The rule is leg_folder.act_date, which the importer, the repair script and the daily Cellar sync apply. Cellar's
 date is the LEG_2026-10 folder's tree_non_inferred.rdf (the export's own metadata); a row with no folder keeps its
-stored date as Cellar's. Each write is skipped when another writer changed the date since it was read; updated_at
-moves (a corrected date partners should receive). Dry run unless --apply.
+stored date as Cellar's. recheck_acts applies the rule to a few acts: the importer calls it for the acts of the
+corrigenda it wrote and for acts whose title and Cellar disagree. Each write is skipped when another writer changed
+the date since it was read; updated_at moves (a corrected date partners should receive). Dry run unless --apply.
 
 Usage (from backend/):
     python3.12 scripts/fix_eu_laws_dates.py [--apply] [--backup] [--dump PATH]
@@ -23,6 +28,7 @@ from __future__ import annotations
 import argparse
 import collections
 import datetime as dt
+import functools
 import json
 import re
 import sys
@@ -33,25 +39,81 @@ BACKEND = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))  # production runs with PYTHONPATH=/app (the backend folder)
 
 CHUNK = 200
+SPARQL = "https://publications.europa.eu/webapi/rdf/sparql"
 UPDATE = """UPDATE eu_laws e SET date = v.new::date
 FROM (VALUES %s) AS v(id, old, new)
 WHERE e.id = v.id AND e.date IS NOT DISTINCT FROM v.old::date
 RETURNING e.id"""
 
 
-def changes_for(rows, recorded_of):
+def changes_for(rows, recorded_of, corrections_of=lambda celex: ()):
     """(id, celex, stored, new, how) for every row whose date the rule changes; (id, celex, stored, cellar) where the
-    stored date is the title's and Cellar's differs."""
+    stored date is the title's and Cellar's differs. corrections_of(celex): the (old, new) pairs its corrigenda state."""
     from scripts.leg_folder import act_date
     out, cellar_wrong = [], []
     for i, celex, uuid, stored, title, version in rows:
         recorded = recorded_of(uuid, version) or stored
-        new = act_date(celex, title, recorded)
+        new = act_date(celex, title, recorded, corrections_of(celex))
         if new and new != stored:
             out.append((i, celex, stored, new, "corrigendum" if re.search(r"R\(\d{2}\)$", celex) else "act"))
         elif recorded != stored:
             cellar_wrong.append((i, celex, stored, recorded))
     return out, cellar_wrong
+
+
+def cellar_dates(celexes) -> dict:
+    """{CELEX: work_date_document} read at Cellar now, for CELEX values with exactly one date."""
+    import urllib.parse
+    import urllib.request
+    vals = " ".join('"%s"^^<http://www.w3.org/2001/XMLSchema#string>' % c for c in sorted(set(celexes)))
+    if not vals:
+        return {}
+    q = ("PREFIX cdm: <http://publications.europa.eu/ontology/cdm#> SELECT ?c ?d WHERE { VALUES ?c { %s } "
+         "?w cdm:resource_legal_id_celex ?c . ?w cdm:work_date_document ?d }" % vals)
+    req = urllib.request.Request(f"{SPARQL}?{urllib.parse.urlencode({'query': q})}",
+                                 headers={"Accept": "application/sparql-results+json",
+                                          "User-Agent": "Brubru data check (hello@beresol.eu)"})
+    got: dict = {}
+    for b in json.load(urllib.request.urlopen(req, timeout=120))["results"]["bindings"]:
+        got.setdefault(b["c"]["value"], set()).add(b["d"]["value"][:10])
+    return {c: d.pop() for c, d in got.items() if len(d) == 1}
+
+
+def fresh_recorded(rows, recorded_of, corr) -> dict:
+    """{uuid: Cellar's date now} for acts whose corrigendum corrects the title to a date the export's metadata does not
+    hold: the export is a snapshot and Cellar may have been corrected since (32022R0363: export 2022-01-02, Cellar
+    2022-03-02 after the helpdesk's fix of 23 Oct 2026). One SPARQL query for the few acts concerned."""
+    stale = {r[1]: r[2] for r in rows if r[1] in corr
+             and (recorded_of(r[2], r[5]) or r[3]) not in {new for _old, new in corr[r[1]]}}
+    live = cellar_dates(stale) if stale else {}
+    return {stale[c]: d for c, d in live.items() if stale.get(c)}
+
+
+def recheck_acts(db, acts, dump: Path) -> int:
+    """Apply the rule again to these acts and write what it changes; returns the rows written. The importer calls it
+    for the acts of the corrigenda it wrote (a corrigendum may correct its act's title date) and for acts whose title
+    and Cellar disagree. Cellar's date is each act's folder under dump; an act with none keeps its stored date."""
+    from sqlalchemy import text
+    from scripts.leg_folder import corrigendum_corrections, rdf_meta
+    acts = sorted({a for a in acts if a})
+    if not acts:
+        return 0
+    rows = db.execute(text("SELECT id, celex, uuid, date::text, title, corpus_version FROM eu_laws "
+                           "WHERE celex = ANY(:a)"), {"a": acts}).fetchall()
+    corr = corrigendum_corrections(db, acts, dump)
+
+    def recorded_of(uuid, version):
+        return rdf_meta(dump, uuid)["date"] if uuid and (Path(dump) / uuid).is_dir() else None
+
+    live = fresh_recorded(rows, recorded_of, corr)
+    changes, _ = changes_for(rows, lambda u, v: live.get(u) or recorded_of(u, v), lambda c: corr.get(c, ()))
+    done = 0
+    for i, _celex, old, new, _how in changes:
+        done += db.execute(text("UPDATE eu_laws SET date = CAST(:new AS date) WHERE id = :i "
+                                "AND date IS NOT DISTINCT FROM CAST(:old AS date)"),
+                           {"new": new, "i": i, "old": old}).rowcount or 0
+    db.commit()
+    return done
 
 
 def main() -> int:
@@ -67,7 +129,7 @@ def main() -> int:
     from psycopg2.extras import execute_values
     from sqlalchemy import text
     from core.database import SessionLocal
-    from scripts.leg_folder import rdf_meta
+    from scripts.leg_folder import corrigendum_corrections, rdf_meta, title_date
     dump = Path(a.dump)
     if not dump.is_dir():
         print(f"[ERROR] no LEG_2026-10 folders at {dump}", file=sys.stderr)
@@ -83,9 +145,17 @@ def main() -> int:
         rows = db.execute(text("SELECT id, celex, uuid, date::text, title, corpus_version FROM eu_laws "
                                "WHERE coalesce(celex, '') <> '' ORDER BY id")).fetchall()
         db.rollback()
-        changes, cellar_wrong = changes_for(rows, recorded_of)
+        recorded_of = functools.lru_cache(maxsize=None)(recorded_of)
+        # only acts whose title and Cellar disagree can be moved by a corrigendum: their corrigenda, in one query
+        disagree = [r[1] for r in rows if not re.search(r"R\(\d{2}\)$", r[1]) and title_date(r[4])
+                    and (recorded_of(r[2], r[5]) or r[3]) != title_date(r[4])]
+        corr = corrigendum_corrections(db, disagree, dump)
+        live = fresh_recorded(rows, recorded_of, corr)
+        changes, cellar_wrong = changes_for(rows, lambda u, v: live.get(u) or recorded_of(u, v), lambda c: corr.get(c, ()))
         print(f"[INFO] {len(rows)} laws read | to change: {len(changes)} "
-              f"{dict(collections.Counter(c[4] for c in changes))} | stored right, Cellar wrong: {len(cellar_wrong)}")
+              f"{dict(collections.Counter(c[4] for c in changes))} | stored right, Cellar wrong: {len(cellar_wrong)} "
+              f"| title and Cellar disagree: {len(disagree)}, with a corrigendum's correction: {len(corr)}, "
+              f"Cellar re-read: {len(live)}")
         for c in changes[:8]:
             print(f"[INFO]   e.g. {c[1]}: {c[2]} -> {c[3]} ({c[4]})")
         if not a.apply:
