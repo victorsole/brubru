@@ -31,7 +31,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from services.economy.body_families import (
-    FAMILIES, bodies_for_family, families_for_body, CALENDAR_ONLY_BODY_NAMES,
+    FAMILIES, bodies_for_family, body_codes, families_for_body, CALENDAR_ONLY_BODY_NAMES,
 )
 
 router = APIRouter()
@@ -87,7 +87,7 @@ def _resolve_scope(bodies, family):
         for slug in [s.strip() for s in family.split(",") if s.strip()]:
             codes |= bodies_for_family(slug)
     if bodies:
-        codes |= {b.strip() for b in bodies.split(",") if b.strip()}
+        codes |= body_codes(bodies)
     return codes or None
 
 

@@ -41,6 +41,11 @@ FAMILIES: dict[str, dict] = {
     "core-institutions": {"label": "Core Institutions",
                           "bodies": ["commission", "parliament", "council", "european-council",
                                      "cor", "eesc", "eurogroup"]},
+    # 23 Oct 2026: the Funding & Tenders Portal's own news and events had no family, so
+    # ?family= could not find them; with it, the executive agencies that run the EU's
+    # funding programmes (they publish the calls, info days and results).
+    "funding": {"label": "EU Funding & Tenders",
+                "bodies": ["ftportal", "eacea", "eismea", "ercea", "hadea", "rea", "cinea"]},
 }
 
 
@@ -63,7 +68,11 @@ CAL_INSTITUTION_TO_BODY: dict[str, str] = {
     "EUROPEAN_COUNCIL": "european-council", "COR": "cor", "EESC": "eesc",
     "EMA": "ema", "ECB": "ecb", "EU_OSHA": "eu_osha", "EEAS": "eeas",
     "EIT": "eit", "EUROFOUND": "eurofound", "FRA": "fra", "CEPOL": "cepol",
-    "THIRD_PARTY": "third-party", "FUNDING": "funding",
+    "THIRD_PARTY": "third-party",
+    # The portal's events, copied into the calendar by scripts/sync_ft_events.py, answer to the
+    # portal's own body code, as its news and its economy-side events do (until 23 Oct 2026 the
+    # calendar copy was "funding" and the other "ftportal": one portal, two codes in /events/all).
+    "FUNDING": "ftportal",
 }
 BODY_TO_CAL_INSTITUTION: dict[str, str] = {v: k for k, v in CAL_INSTITUTION_TO_BODY.items()}
 
@@ -74,5 +83,12 @@ CALENDAR_ONLY_BODY_NAMES: dict[str, str] = {
     "council": "Council of the EU",
     "european-council": "European Council",
     "third-party": "Third-party / external events",
-    "funding": "EU Funding & Tenders",
 }
+
+# Body codes that were served once and are still accepted in a `body=` filter.
+BODY_CODE_ALIASES: dict[str, str] = {"funding": "ftportal"}
+
+
+def body_codes(bodies: str | None) -> set[str]:
+    """The canonical codes of a comma-separated `body=` value, aliases resolved."""
+    return {BODY_CODE_ALIASES.get(b.strip(), b.strip()) for b in (bodies or "").split(",") if b.strip()}

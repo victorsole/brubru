@@ -28,7 +28,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from services.economy.body_families import (
     FAMILIES, bodies_for_family, families_for_body, family_label,
-    BODY_TO_CAL_INSTITUTION, CAL_INSTITUTION_TO_BODY, CALENDAR_ONLY_BODY_NAMES,
+    BODY_TO_CAL_INSTITUTION, CAL_INSTITUTION_TO_BODY, CALENDAR_ONLY_BODY_NAMES, body_codes,
 )
 from api.v1._row_dates import row_updated
 from api.v1._body import body_from_html_or_text, compose_html_from_sections
@@ -129,7 +129,7 @@ def _resolve_scope(bodies: Optional[str], family: Optional[str]):
         for slug in [s.strip() for s in family.split(",") if s.strip()]:
             codes |= bodies_for_family(slug)
     if bodies:
-        codes |= {b.strip() for b in bodies.split(",") if b.strip()}
+        codes |= body_codes(bodies)
     return codes or None
 
 
