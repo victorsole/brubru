@@ -376,7 +376,8 @@ def _kill_process_group(proc, name: str) -> None:
 
 _TENDERATOR_CHAIN = (
     "tenders_fetch", "tender_status", "tenders", "tenders_country_repair",
-    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_cascade_calls", "ft_call_budgets",
+    "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_cascade_calls", "project_status",
+    "ft_call_budgets",
     "ft_tenders_bridge",
     "tender_matching",
     "tenderator_translations_ted", "tenderator_translations_ft_tenders",
@@ -1011,6 +1012,12 @@ async def cron_sync_daily(
     # (until then folded into the topic that funds them). Every one is re-read, ~17 SEDIA pages.
     results["ft_cascade_calls"] = await _run_script_async(
         "ft_cascade_calls", "scripts/ingest_ft_cascade_calls.py", ["--apply"], timeout=900,
+    )
+
+    # Funded projects' status in one vocabulary, from the source word and the project's own dates
+    # (services/funding/project_status.py, 23 Oct 2026): phases change daily as dates pass.
+    results["project_status"] = await _run_script_async(
+        "project_status", "scripts/refresh_project_status.py", ["--apply"], timeout=600,
     )
 
     # Budgets of calls for proposals, from the portal's topic file (budgetOverviewJSONItem).

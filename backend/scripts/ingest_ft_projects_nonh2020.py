@@ -221,17 +221,21 @@ def normalise(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 UPSERT = """
 INSERT INTO ft_funded_projects
     (project_id, project_acronym, title, objective, framework_programme,
-     coordinator_name, coordinator_country, coordinator_pic, status, start_date, end_date,
+     coordinator_name, coordinator_country, coordinator_pic, status, source_status, start_date, end_date,
      eu_contribution, total_cost,
      cost_currency, source_url, is_test, published_at, scraped_at, last_updated)
 VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s,
         %(framework_programme)s, %(coordinator_name)s, %(coordinator_country)s,
-        %(coordinator_pic)s, %(status)s, %(start_date)s,
+        %(coordinator_pic)s, %(status)s, %(status)s, %(start_date)s,
         %(end_date)s, %(eu_contribution)s, %(total_cost)s, 'EUR', %(source_url)s,
         false, %(published_at)s, NOW(), NOW())
 ON CONFLICT (project_id) DO UPDATE SET
     title=EXCLUDED.title, objective=EXCLUDED.objective,
-    framework_programme=EXCLUDED.framework_programme, status=EXCLUDED.status,
+    framework_programme=EXCLUDED.framework_programme,
+    -- The source word only; the served status is services/funding/project_status.py's (23 Oct 2026).
+    source_status=EXCLUDED.source_status,
+    start_date=COALESCE(EXCLUDED.start_date, ft_funded_projects.start_date),
+    end_date=COALESCE(EXCLUDED.end_date, ft_funded_projects.end_date),
     eu_contribution=EXCLUDED.eu_contribution, total_cost=EXCLUDED.total_cost,
     -- Only overwrite the coordinator when the new read actually has one, so a
     -- re-run that hits a sparse payload cannot blank a name we already hold.

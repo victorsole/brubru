@@ -17,10 +17,11 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from sqlalchemy.orm import Session
 
 from core.database import get_db
+from services.funding.project_status import VOCABULARY as PROJECT_STATUSES
 from ._change_window import UpperBoundDatetime, orm_order, orm_window, validate_window
 from models.funding_tenders import (
     FtCallForProposals,
@@ -500,7 +501,7 @@ class FtFundedProjectItem(BaseModel):
     total_cost: Optional[float] = None
     eu_contribution: Optional[float] = None
     cost_currency: Optional[str] = "EUR"
-    status: Optional[str] = None
+    status: Optional[str] = Field(None, description="planned | ongoing | ended | terminated | suspended | unknown: one vocabulary for every programme, from the source and the project's own dates (23 Oct 2026).")
     source_url: str
     published_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
@@ -572,7 +573,7 @@ For research orgs and consultancies doing competitive intelligence on EU funding
 - `framework_programme` — substring (e.g. `Horizon Europe`, `Horizon 2020`).
 - `coordinator_country` — ISO-2 (2 chars exact).
 - `type_of_action` — substring (`RIA`, `IA`, `CSA`).
-- `status` — F&T project status enum.
+- `status` — planned | ongoing | ended | terminated | suspended | unknown (the source's own words still filter).
 - `q` — substring search on title + objective.
 - `start_from`, `end_to` — start-date / end-date window.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -595,7 +596,7 @@ async def list_funded_projects(
     framework_programme: Optional[str] = Query(None),
     coordinator_country: Optional[str] = Query(None, min_length=2, max_length=2),
     type_of_action: Optional[str] = Query(None),
-    status: Optional[str] = Query(None),
+    status: Optional[str] = Query(None, description="planned | ongoing | ended | terminated | suspended | unknown, set from the source and the project's own dates. The source's own words (signed, closed, Ongoing, Ended, Forthcoming...) still filter, on the word the source gave."),
     q: Optional[str] = Query(None),
     start_from: Optional[date] = Query(None),
     end_to: Optional[date] = Query(None),
@@ -616,7 +617,12 @@ async def list_funded_projects(
     if type_of_action:
         filters.append(FtFundedProject.type_of_action.ilike(f"%{type_of_action}%"))
     if status:
-        filters.append(FtFundedProject.status == status.lower())
+        # One vocabulary since 23 Oct 2026; a source word (signed, Ongoing...) filters on the word the
+        # source gave. Lowering the value used to make the F&T words ("Ongoing") unmatchable.
+        if status.strip().lower() in PROJECT_STATUSES:
+            filters.append(FtFundedProject.status == status.strip().lower())
+        else:
+            filters.append(func.lower(FtFundedProject.source_status) == status.strip().lower())
     if q:
         like = f"%{q}%"
         filters.append((FtFundedProject.title.ilike(like)) | (FtFundedProject.objective.ilike(like)))

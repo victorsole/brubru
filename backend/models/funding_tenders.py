@@ -98,7 +98,8 @@ class FtFundedProject(Base):
     total_cost = Column(Numeric(20, 2))
     eu_contribution = Column(Numeric(20, 2))
     cost_currency = Column(String(8), default="EUR")
-    status = Column(String(40))
+    status = Column(String(40))  # planned | ongoing | ended | terminated | suspended | unknown (services/funding/project_status.py)
+    source_status = Column(String(32))  # the source's own word (CORDIS or F&T Portal), not served; migration 311
     source_url = Column(Text, nullable=False)
     is_test = Column(Boolean, nullable=False, default=False)
     published_at = Column(DateTime)
