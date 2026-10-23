@@ -13,7 +13,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib import request as ureq
 
@@ -102,6 +104,30 @@ def compose_body(fund: str, name: str, m: dict) -> tuple[str, str]:
     return txt, html
 
 
+_STATED_AS_OF = re.compile(r"TOTAL\s*\((\d{1,2})/(\d{1,2})/(\d{2,4})\)", re.I)
+
+
+def figures_date(rows: list[dict]):
+    """The day the Commission states these figures as of: its EU-total row's label.
+
+    Each refresh of the dataset restates every Member State as of one day and writes that day
+    into the total row, "TOTAL (23/10/26)" (read 23 Oct 2026: EAGF 10/10/26, EAFRD 23/10/26, the
+    same days as the platform's own last-refresh stamp). It is the publication date of every row
+    of that refresh, so it is each row's document_date. The rows carry no other date; a file
+    without the label gives None, never a made-up date.
+    """
+    for row in rows:
+        label = str(row.get("ms") or row.get("fund") or "")
+        m = _STATED_AS_OF.search(label)
+        if m:
+            d, mo, y = (int(g) for g in m.groups())
+            try:
+                return datetime(y + 2000 if y < 100 else y, mo, d, tzinfo=timezone.utc)
+            except ValueError:
+                return None
+    return None
+
+
 def _ms_key(ms):
     """A Member State code, or TOTAL for the source's EU-wide total row, which it labels with the
     day it was computed ("TOTAL (20/10/26)"): keyed on that label, it was a new row every run."""
@@ -113,6 +139,9 @@ def upsert(db: ChunkedDb, fund: str) -> int:
     dataset, name, slug = FUNDS[fund]
     public_url = f"https://cohesiondata.ec.europa.eu/funds/{slug}/21-27"
     rows = fetch(dataset)
+    as_of = figures_date(rows)
+    if as_of is None:
+        print(f"[SYNC_STATUS] degraded: {fund} figures carry no 'TOTAL (dd/mm/yy)' date; document_date left empty")
     # Upsert on (fund, ms), then drop the Member States the source no longer lists (20 Oct
     # 2026, migration 307): deleting and re-inserting the fund each run gave new ids every week
     # and made every row read "changed". The source has no per-country page: the fund's page.
@@ -126,11 +155,11 @@ def upsert(db: ChunkedDb, fund: str) -> int:
             INSERT INTO eu_cap_payments
               (fund, ms, planned_eu_amount, net_pre_financing, net_interim_payments,
                total_eur, payment_rate, fy_2023, fy_2024, fy_2025, fy_2026, fy_2027,
-               public_url, body_txt, body_html, body_source, source_dataset, raw)
+               public_url, body_txt, body_html, body_source, source_dataset, raw, document_date)
             VALUES
               (%(fund)s,%(ms)s,%(plan)s,%(npf)s,%(nip)s,%(total)s,%(rate)s,
                %(y23)s,%(y24)s,%(y25)s,%(y26)s,%(y27)s,
-               %(url)s,%(bt)s,%(bh)s,'composed',%(ds)s,%(raw)s)
+               %(url)s,%(bt)s,%(bh)s,'composed',%(ds)s,%(raw)s,%(as_of)s)
             ON CONFLICT (fund, ms) DO UPDATE SET
               planned_eu_amount = EXCLUDED.planned_eu_amount, net_pre_financing = EXCLUDED.net_pre_financing,
               net_interim_payments = EXCLUDED.net_interim_payments, total_eur = EXCLUDED.total_eur,
@@ -138,14 +167,14 @@ def upsert(db: ChunkedDb, fund: str) -> int:
               fy_2025 = EXCLUDED.fy_2025, fy_2026 = EXCLUDED.fy_2026, fy_2027 = EXCLUDED.fy_2027,
               public_url = EXCLUDED.public_url, body_txt = EXCLUDED.body_txt, body_html = EXCLUDED.body_html,
               body_source = EXCLUDED.body_source, source_dataset = EXCLUDED.source_dataset,
-              raw = EXCLUDED.raw, fetched_at = now()
+              raw = EXCLUDED.raw, document_date = EXCLUDED.document_date, fetched_at = now()
             """,
             {"fund": fund, "ms": _ms_key(m["ms"]), "plan": m["planned_eu_amount"],
              "npf": m["net_pre_financing"], "nip": m["net_interim_payments"],
              "total": m["total_eur"], "rate": m["payment_rate"],
              "y23": m["fy_2023"], "y24": m["fy_2024"], "y25": m["fy_2025"],
              "y26": m["fy_2026"], "y27": m["fy_2027"],
-             "url": public_url, "bt": bt, "bh": bh, "ds": dataset, "raw": Json(row)},
+             "url": public_url, "bt": bt, "bh": bh, "ds": dataset, "raw": Json(row), "as_of": as_of},
         )
     db.execute("DELETE FROM eu_cap_payments WHERE fund = %s AND fetched_at < %s", (fund, started))
     return len(rows)
@@ -166,7 +195,9 @@ def main() -> None:
                 print(f"[{fund}] [OK] wrote {n} rows")
             else:
                 rows = fetch(FUNDS[fund][0])
-                print(f"[{fund}] [DRY-RUN] would write {len(rows)} rows (use --apply)")
+                as_of = figures_date(rows)
+                print(f"[{fund}] [DRY-RUN] would write {len(rows)} rows, figures as of "
+                      f"{as_of.date() if as_of else 'NOT STATED'} (use --apply)")
     finally:
         if db:
             db.close()

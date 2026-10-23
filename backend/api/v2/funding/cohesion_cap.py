@@ -30,6 +30,10 @@ router = APIRouter()
 class CAPPaymentItem(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
     fund: str
+    document_date: Optional[datetime] = Field(None, description=(
+        "The day the Commission states these figures as of, written in its EU-total row "
+        "(e.g. 'TOTAL (23/10/26)'): the publication date of the refresh every row comes from. "
+        "Each refresh restates all Member States, so the date moves with each refresh."))
     # Each fund's source file carries its own columns (read 20 Oct 2026): EAFRD the plan, pre-
     # financing, interim payments and payment rate, with no year split; EAGF the payments by
     # financial year only. A column the fund's file does not carry is null on every row of it.
