@@ -7,10 +7,18 @@ from every stage. Both run daily, so they rewrote each other: 627 closed->open
 (CBAM extension 14748, military mobility 14850, air services 14620) were shown
 as open for comment. The fixture is real portal output covering every status
 shape seen in the first ~1,200 initiatives.
+
+23 Oct 2026: the client kept a copy of the rule that missed the owner's 29 Sep change and
+trusted the portal's OPEN flag after the deadline, so this test went red on main the day
+initiative 14569's window closed (22 Oct 23:59). Both now call one rule
+(services/api_clients/have_your_say_periods.py), and the comparison is pinned to the day the
+fixture was read, so it cannot change with the calendar.
 """
 import importlib.util
 import json
 from datetime import date
+
+FIXTURE_DAY = date(2026, 9, 25)   # the day the portal records below were read
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -34,8 +42,8 @@ def _ids(r):
 
 @pytest.mark.parametrize("record", RECORDS, ids=_ids)
 def test_parser_and_sweep_agree(record):
-    owner = sweep.map_initiative(record)
-    ours = HaveYourSayClient.__new__(HaveYourSayClient)._parse_initiative(record)
+    owner = sweep.map_initiative(record, today=FIXTURE_DAY)
+    ours = HaveYourSayClient.__new__(HaveYourSayClient)._parse_initiative(record, today=FIXTURE_DAY)
     if owner is None or ours is None:
         pytest.skip("record without id or title")
     assert getattr(ours.status, "value", ours.status) == owner["status"]
@@ -46,8 +54,23 @@ def test_parser_and_sweep_agree(record):
 @pytest.mark.parametrize("iid", ["14748", "14850", "14620"])
 def test_upcoming_only_is_not_open(iid):
     record = next(r for r in RECORDS if _ids(r) == iid)
-    ours = HaveYourSayClient.__new__(HaveYourSayClient)._parse_initiative(record)
+    ours = HaveYourSayClient.__new__(HaveYourSayClient)._parse_initiative(record, today=FIXTURE_DAY)
     assert getattr(ours.status, "value", ours.status) != "open"
+
+
+@pytest.mark.parametrize("day, expected", [(date(2026, 10, 22), "open"), (date(2026, 10, 23), "closed")])
+def test_a_window_closes_on_its_deadline_for_every_reader(day, expected):
+    """14569's only window ends 22 Oct 23:59 while the portal record still says OPEN: the
+    deadline it publishes is the fact, for the owner, the list parser and the detail parser."""
+    record = next(r for r in RECORDS if _ids(r) == "14569")
+    client = HaveYourSayClient.__new__(HaveYourSayClient)
+    owner = sweep.map_initiative(record, today=day)
+    listed = client._parse_initiative(record, today=day)
+    detail = client._parse_detail_response({"initiative": record, "publications": []}, "14569", None, today=day)
+    assert owner["status"] == expected
+    assert getattr(listed.status, "value", listed.status) == expected
+    assert getattr(detail.status, "value", detail.status) == expected
+    assert listed.end_date == owner["end_date"] == detail.end_date == date(2026, 10, 22)
 
 
 def test_update_never_blanks_stored_values():

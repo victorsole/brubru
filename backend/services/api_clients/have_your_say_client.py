@@ -22,6 +22,7 @@ from urllib.parse import urljoin
 import aiohttp
 from aiohttp import ClientSession, ClientTimeout
 
+from services.api_clients.have_your_say_periods import pick_period
 from schemas.scrapers.public_consultation_schemas import (
     ScrapedConsultationItem,
     ScrapedConsultationDetail,
@@ -289,7 +290,8 @@ class HaveYourSayClient:
     def _parse_initiative(
         self,
         data: Dict[str, Any],
-        status_filter: Optional[str] = None
+        status_filter: Optional[str] = None,
+        today: Optional[date] = None,
     ) -> Optional[ScrapedConsultationItem]:
         """Parse a single initiative from API response."""
         initiative_id = str(int(data.get('id', 0)))
@@ -307,36 +309,14 @@ class HaveYourSayClient:
         if not title:
             return None
 
-        # Status and dates: the SAME rule as scripts/sync_have_your_say.py
-        # (map_initiative), which owns this column. This parser used to default
-        # to OPEN whenever no *current* stage said OPEN or CLOSED, and to read an
-        # ADOPTION stage as "outcome published", so the two daily jobs rewrote
-        # each other: 627 closed->open "changes" in 7 days, and initiatives whose
-        # only remaining window was UPCOMING (CBAM extension, military mobility)
-        # shown to users as open for comment. 25 Sep 2026.
+        # Status and dates: the owner's rule itself (services/api_clients/
+        # have_your_say_periods.py, also called by scripts/sync_have_your_say.py, which
+        # owns this column). This parser used to default to OPEN whenever no *current*
+        # stage said OPEN or CLOSED (627 closed->open "changes" in 7 days, 25 Sep 2026),
+        # then kept a copy of the rule that missed the owner's 29 Sep change and still
+        # trusted the portal's OPEN flag after the published deadline (14569, 23 Oct).
         current_statuses = data.get('currentStatuses', []) or []
-        current = next((cs for cs in current_statuses if cs.get('isCurrent')),
-                       current_statuses[0] if current_statuses else {})
-        front_end_stage = current.get('frontEndStage', '') or ''
-        feedback = [cs.get('receivingFeedbackStatus') for cs in current_statuses]
-        if 'OPEN' in feedback:
-            status = ConsultationStatus.OPEN
-        elif 'UPCOMING' in feedback:
-            status = ConsultationStatus.UPCOMING
-        elif 'CLOSED' in feedback:
-            status = ConsultationStatus.CLOSED
-        else:
-            status = (ConsultationStatus.UPCOMING if front_end_stage == 'INIT_PLANNED'
-                      else ConsultationStatus.CLOSED)
-
-        start_date = None
-        end_date = None
-        for cs in current_statuses:
-            if cs.get('receivingFeedbackStatus') in ('OPEN', 'CLOSED', 'UPCOMING'):
-                if start_date is None and cs.get('feedbackStartDate'):
-                    start_date = self._parse_date(cs.get('feedbackStartDate'))
-                if end_date is None and cs.get('feedbackEndDate'):
-                    end_date = self._parse_date(cs.get('feedbackEndDate'))
+        status, start_date, end_date = self._status_and_dates(current_statuses, today)
 
         # Get consultation type from foreseenActType
         act_type = data.get('foreseenActType', '')
@@ -368,6 +348,19 @@ class HaveYourSayClient:
             portal_url=portal_url,
             scraped_at=datetime.now()
         )
+
+    @staticmethod
+    def _status_and_dates(
+        current_statuses: List[Dict[str, Any]], today: Optional[date] = None
+    ) -> Tuple[ConsultationStatus, Optional[date], Optional[date]]:
+        """Status, start and end of ONE feedback period, by the owner's rule."""
+        status, start, end = pick_period(current_statuses, today or date.today())
+        if status is None:
+            # every stage DISABLED: still only planned, or already past feedback
+            current = next((cs for cs in current_statuses if cs.get('isCurrent')),
+                           current_statuses[0] if current_statuses else {})
+            status = 'upcoming' if (current.get('frontEndStage') or '') == 'INIT_PLANNED' else 'closed'
+        return ConsultationStatus(status), start, end
 
     def _parse_date(self, date_str: str) -> Optional[date]:
         """Parse date from API format (YYYY/MM/DD HH:mm:ss)."""
@@ -457,7 +450,8 @@ class HaveYourSayClient:
         self,
         data: Dict[str, Any],
         initiative_id: str,
-        portal_url: Optional[str]
+        portal_url: Optional[str],
+        today: Optional[date] = None,
     ) -> Optional[ScrapedConsultationDetail]:
         """Parse detail API response."""
         # The API returns grouped data
@@ -480,25 +474,9 @@ class HaveYourSayClient:
                 break
 
         # Get dates and status
-        current_statuses = initiative_data.get('currentStatuses', [])
-        status = ConsultationStatus.OPEN
-        start_date = None
-        end_date = None
-
-        for cs in current_statuses:
-            if cs.get('isCurrent'):
-                if cs.get('receivingFeedbackStatus') == 'OPEN':
-                    status = ConsultationStatus.OPEN
-                elif cs.get('receivingFeedbackStatus') == 'CLOSED':
-                    status = ConsultationStatus.CLOSED
-
-                start_str = cs.get('feedbackStartDate')
-                end_str = cs.get('feedbackEndDate')
-                if start_str:
-                    start_date = self._parse_date(start_str)
-                if end_str:
-                    end_date = self._parse_date(end_str)
-                break
+        # The same rule as the list (it defaulted to OPEN and read the current stage only).
+        current_statuses = initiative_data.get('currentStatuses', []) or []
+        status, start_date, end_date = self._status_and_dates(current_statuses, today)
 
         # Get topics
         topics = initiative_data.get('topics', [])
