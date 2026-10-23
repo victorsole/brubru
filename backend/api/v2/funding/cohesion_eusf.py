@@ -149,6 +149,7 @@ async def list_eusf(
     items = [_row_to_item(r, with_body=include_body) for r in rows]
     return build_envelope(
         items, total=total, page=page, limit=limit,
+        updated_from=updated_from, updated_to=updated_to,
         op_core_title="EU Solidarity Fund disaster cases 2002-2021",
         op_core_type="dataset", op_core_identifier="cohesiondata:7a49-av34",
     )

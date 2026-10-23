@@ -57,6 +57,12 @@ def _compose_body(p: dict) -> tuple[str, str]:
 
 
 class ProgrammeItem(_DataPoints):
+    # Its own descriptions, not the cohesion lists' it inherited ("the programme's status /
+    # adoption date", "the row's page on Cohesion Open Data"), which described nothing here.
+    public_url: Optional[str] = Field(None, description="The programme's own page on the Commission's website (its funding or application page).")
+    document_date: Optional[datetime] = Field(None, description="No publication date is held for a programme: the directory records none, so this is null on every item.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru compiled the directory: the list's own date, the same on every programme.")
+    updated_date: Optional[datetime] = Field(None, description="When the directory was last revised, the same on every programme (filter with updated_from / updated_to).")
     programme: str
     acronym: str
     heading: str = Field(..., description="One of the 6 EC MFF headings.")
@@ -122,7 +128,7 @@ GET /api/v2/funding/programmes?heading=Natural Resources
 ```
 
 **You get back**
-A `PaginatedResponse[ProgrammeItem]`. Each item carries `programme`, `acronym`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`public_url` is the EC programmes page; `body_txt`/`body_html` null on the list — fetch the detail endpoint).
+A `PaginatedResponse[ProgrammeItem]`. Each item carries `programme`, `acronym`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`public_url` is the programme's own page on the Commission's website; `body_txt`/`body_html` null on the list unless `include_body=true`).
 
 **Data freshness**
 Static reference, updated when the Commission's programme list changes (config: `funding_programmes.json`).""",

@@ -146,6 +146,7 @@ Synced weekly (Sunday 05:00 UTC) from `cohesiondata.ec.europa.eu`, dataset xi3a-
         items = [_row_to_item(r, with_body=include_body) for r in rows]
         return build_envelope(
             items, total=total, page=page, limit=limit,
+            updated_from=updated_from, updated_to=updated_to,
             op_core_title=f"{fund_name} ({fund_code}) 2021-2027 achievement indicators",
             op_core_type="dataset", op_core_identifier=f"cohesiondata:xi3a-zddk:{fund_code}",
         )

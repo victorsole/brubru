@@ -214,7 +214,8 @@ async def list_calls_for_proposals(
         stable(query.order_by(*_call_order(FtCallForProposals, order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_proposal_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
+    return build_envelope([_proposal_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
+                          updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
 @calls_router.get(
@@ -431,7 +432,8 @@ async def list_calls_for_tenders(
         stable(query.order_by(*_call_order(FtCallForTenders, order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_tender_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
+    return build_envelope([_tender_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
+                          updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
 @tenders_router.get(
@@ -634,7 +636,8 @@ async def list_funded_projects(
         stable(query.order_by(FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc()))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_project_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
+    return build_envelope([_project_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
+                          updated_from=updated_from, updated_to=updated_to)
 
 
 @projects_router.get(
