@@ -19,7 +19,7 @@ from sqlalchemy import (
     Text,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 
 from core.database import Base
 
@@ -99,10 +99,16 @@ class FtFundedProject(Base):
     eu_contribution = Column(Numeric(20, 2))
     cost_currency = Column(String(8), default="EUR")
     status = Column(String(40))  # planned | ongoing | ended | terminated | suspended | unknown (services/funding/project_status.py)
-    source_status = Column(String(32))  # the source's own word (CORDIS or F&T Portal), not served; migration 311
+    source_status = Column(String(32))  # the source's own word (CORDIS or F&T Portal); migration 311, served since 312
     source_url = Column(Text, nullable=False)
     is_test = Column(Boolean, nullable=False, default=False)
     published_at = Column(DateTime)
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     scraped_at = Column(DateTime, server_default=func.now())
     detected_lang = Column(String(8))
+    # In the table all along, never mapped: the item body's "Keywords" section was always empty and
+    # nothing could filter on them (26 Oct 2026, partner search).
+    keywords = Column(Text)
+    topic_code = Column(Text)
+    coordinator_pic = Column(String(20))
+    organisations = Column(JSONB)  # the CORDIS consortium (scripts/ingest_cordis_projects.py)

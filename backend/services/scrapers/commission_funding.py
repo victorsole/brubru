@@ -56,6 +56,153 @@ def _col(idx: dict, *subs: str):
     return None
 
 
+def read_fts_file(year: int | None = None) -> tuple[int, bytes] | None:
+    """(year, the year's Excel bytes): the year asked for, else the most recent published."""
+    if year:
+        try:
+            r = requests.get(f"{_BASE}/{year}_FTS_dataset_en.xlsx", headers={"User-Agent": _UA}, timeout=240)
+        except requests.RequestException:
+            return None
+        return (year, r.content) if r.status_code == 200 and r.content[:2] == b"PK" else None
+    return _fetch_latest()
+
+
+def _norm_header(h) -> str:
+    return " ".join(str(h or "").replace("\u2019", "'").lower().split())
+
+
+def _exact(idx: dict, *names: str):
+    """The column whose header is one of `names` (case, spacing and apostrophes ignored).
+    `_col`'s substring match cannot tell "Beneficiary's contracted amount (EUR)" from
+    "Beneficiary's estimated contracted amount (EUR)" or "Commitment contracted amount (EUR) (A)"."""
+    wanted = {_norm_header(n) for n in names}
+    for h, i in idx.items():
+        if _norm_header(h) in wanted:
+            return i
+    return None
+
+
+_NOT_GIVEN = {None, "", "-", "*****", "N/A - Not applicable", "N/A"}
+
+
+def _yes(v):
+    s = str(v).strip().lower() if v is not None else ""
+    return True if s == "yes" else False if s == "no" else None
+
+
+def _num(v):
+    try:
+        return float(v) if v is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _day(v):
+    if v is None:
+        return None
+    if isinstance(v, datetime):
+        return v.date()
+    d = _iso_dt(str(v)[:10])
+    return d.date() if d else None
+
+
+def fts_records(raw: bytes, year: int):
+    """One dict per beneficiary row of the year's FTS file, with every column the file states
+    (26 Oct 2026: until then only text lines were kept, so the fields could only be parsed back
+    from our own body). `key` and `public_url` are the economy_items row's, computed as before."""
+    from openpyxl import load_workbook  # lazy import (see module-top note)
+    ws = load_workbook(io.BytesIO(raw), read_only=True).active
+    rows = ws.iter_rows(values_only=True)
+    header = list(next(rows))
+    idx = {h: i for i, h in enumerate(header)}
+    c_name = _col(idx, "Name of benefic")
+    c_lc = _col(idx, "Reference of the Leg")
+    c_bref = _col(idx, "Reference (Budget)")
+    c_amt = _col(idx, "Commitment  total", "Commitment total")
+    if c_name is None:
+        return
+    # "Funding type" became "Type of contract*" (Action Grant, Contribution Agreements, the
+    # procurement categories) in the files the Commission re-saved on 29 Sep / 1 Oct 2026: no
+    # 2025 row had a funding type, so /international-cooperation served funding_type null.
+    cols = {
+        "budget": _exact(idx, "Budget"),
+        "registration_number": _exact(idx, "Main registration number of beneficiary"),
+        "vat_number": _exact(idx, "VAT number of beneficiary"),
+        "is_nfpo": _exact(idx, "Not-for-profit organisation (NFPO)"),
+        "is_ngo": _exact(idx, "Non-governmental organisation (NGO)"),
+        "is_coordinator": _exact(idx, "Coordinator"),
+        "city": _exact(idx, "City"),
+        "country": _col(idx, "Beneficiary country"),
+        "nuts2": _exact(idx, "NUTS2"),
+        "beneficiary_amount_eur": _exact(idx, "Beneficiary's contracted amount (EUR)"),
+        "beneficiary_estimated_amount_eur": _exact(idx, "Beneficiary's estimated contracted amount (EUR)"),
+        "beneficiary_estimated_consumed_eur": _exact(idx, "Beneficiary's estimated consumed amount (EUR)"),
+        "commitment_contracted_eur": _exact(idx, "Commitment contracted amount (EUR) (A)"),
+        "commitment_adjustment_eur": _exact(idx, "Additional/Reduced amount (EUR) (B)"),
+        "commitment_total_eur": c_amt,
+        "commitment_consumed_eur": _exact(idx, "Commitment consumed amount (EUR)"),
+        "amount_source": _exact(idx, "Source of (estimated) detailed amount"),
+        "expense_type": _exact(idx, "Expense type"),
+        "call_id": _exact(idx, "Call ID"),
+        "project_id": _exact(idx, "Project ID"),
+        "project_acronym": _exact(idx, "Project Acronym"),
+        "subject": _col(idx, "Subject of grant"),
+        "dg": _col(idx, "Responsible depart"),
+        "budget_line_number": _exact(idx, "Budget line number"),
+        "budget_line_name": _col(idx, "Budget line name"),
+        "programme": _col(idx, "Programme name"),
+        "beneficiary_type": _exact(idx, "Beneficiary type"),
+        "project_start": _col(idx, "Project start"),
+        "project_end": _exact(idx, "Project end date"),
+        "funding_type": _col(idx, "Funding type", "Type of contract"),
+        "management_type": _col(idx, "Management type"),
+        "benefiting_country": _exact(idx, "Benefiting country"),
+    }
+    numeric = {k for k in cols if k.endswith("_eur")}
+    flags = {"is_nfpo", "is_ngo", "is_coordinator"}
+    dates = {"project_start", "project_end"}
+
+    def g(row, i):
+        if i is None or i >= len(row):
+            return None
+        v = row[i]
+        return None if (v in _NOT_GIVEN or (isinstance(v, str) and v.strip() in _NOT_GIVEN)) else v
+
+    def g_key(row, i):  # the loader's own notion of an empty cell: keys and URLs stay those stored
+        if i is None or i >= len(row):
+            return None
+        v = row[i]
+        return v if v not in (None, "", "-", "*****") else None
+
+    seen: set[str] = set()
+    for row in rows:
+        name = clean(g_key(row, c_name))
+        if not name:
+            continue
+        lc = g_key(row, c_lc) or ""
+        bref = g_key(row, c_bref) or ""
+        amount = g_key(row, c_amt)
+        key = hashlib.md5(f"{lc}|{bref}|{name}|{amount}".encode("utf-8")).hexdigest()[:12]
+        if key in seen:
+            continue
+        seen.add(key)
+        rec = {"key": key, "year": year, "beneficiary": name,
+               "lc_reference": lc if lc not in _NOT_GIVEN else None,
+               "budget_reference": bref if bref not in _NOT_GIVEN else None,
+               "public_url": f"https://ec.europa.eu/budget/financial-transparency-system/index.html#{year}-{key}"}
+        for field, i in cols.items():
+            v = g(row, i)
+            if field in numeric:
+                rec[field] = _num(v)
+            elif field in flags:
+                rec[field] = _yes(v)
+            elif field in dates:
+                rec[field] = _day(v)
+            else:
+                rec[field] = clean(str(v)) if v is not None else None
+        yield rec
+
+
 def ingest_eu_funding_recipients(*, fetch_bodies: bool = True, year: int | None = None,
                                  **_) -> list[Item]:
     if year:

@@ -57,6 +57,14 @@ def _select_columns(sql: str) -> list[str]:
 def _value(col: str):
     if col == "id":
         return 1
+    if col.endswith("_eur"):
+        return 1.0
+    if col == "year":
+        return 2025
+    if col.startswith(("is_", "has_")):
+        return True
+    if col in ("project_start", "project_end"):
+        return None
     if col in ("economy_item_id", "file_size"):
         return 1
     if col.endswith(("date", "_at", "deadline")) or col in ("first_seen", "last_updated"):

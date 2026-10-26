@@ -115,10 +115,12 @@ def test_funded_projects_and_opportunities_map_their_change_column():
         assert "updated_from" in params and "updated_to" in params
 
 
-def test_international_cooperation_matches_programmes_on_the_indexed_summary():
-    # 20 Oct 2026: an ILIKE over 188,187 bodies made a 10-item page take 70-77 s.
+def test_international_cooperation_matches_programmes_on_the_file_column():
+    # 20 Oct 2026: an ILIKE over 188,187 bodies made a 10-item page take 70-77 s; since 26 Oct the
+    # programme is the FTS file's own column (migration 313), never the text.
     from api.v2.funding import international_cooperation as ic
-    row = {"id": 1, "title": "MINISTRY OF FINANCE", "summary": "MINISTRY | EUR 1 | Neighbourhood, Development and International Cooperation | Ukraine",
+    from api.v2.funding._fts import FILE_COLUMNS
+    row = dict.fromkeys(FILE_COLUMNS) | {"id": 1, "title": "MINISTRY OF FINANCE", "summary": "MINISTRY | EUR 1 | Neighbourhood, Development and International Cooperation | Ukraine",
            "public_url": "https://ec.europa.eu/budget/financial-transparency-system/index.html#2025-x",
            "body_txt": "Beneficiary: MINISTRY\nProgramme: Neighbourhood, Development and International Cooperation\nYear: 2025",
            "body_html": None, "document_date": None, "creation_date": CHANGED, "updated_at": CHANGED, "source_kind": "fts"}
@@ -126,13 +128,14 @@ def test_international_cooperation_matches_programmes_on_the_indexed_summary():
     r = _client(ic.router, db).get("/api/v2/funding/international-cooperation", params={"programme": "ndici", "limit": 5})
     assert r.status_code == 200, r.text
     sql = db.sql[-1][0]
-    assert "summary ILIKE :prog" in sql and "body_txt ILIKE :prog" not in sql
+    assert "c.programme ILIKE :prog" in sql and "body_txt ILIKE" not in sql
 
 
 def test_international_cooperation_counts_once_per_window():
     from api.v2.funding import international_cooperation as ic
     ic._TOTALS.clear()
-    row = {"id": 1, "title": "A", "summary": "A | Humanitarian Aid (HUMA)", "public_url": "https://x", "body_txt": "Beneficiary: A",
+    from api.v2.funding._fts import FILE_COLUMNS
+    row = dict.fromkeys(FILE_COLUMNS) | {"id": 1, "title": "A", "summary": "A | Humanitarian Aid (HUMA)", "public_url": "https://x", "body_txt": "Beneficiary: A",
            "body_html": None, "document_date": None, "creation_date": CHANGED, "updated_at": CHANGED, "source_kind": "fts"}
     db = _Db(row)
     client = _client(ic.router, db)

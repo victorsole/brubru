@@ -1,0 +1,2614 @@
+{
+ "$source": "Publications Office Named Authority List 'Countries and territories' (countries.xml, table version 20260923-0): code-3166-1-alpha-2, op-styleguide (the EU style code: EL, UK), and the English label, long label, original and alternative names, acronyms and hidden labels of every record (retired records' names as former_names). Kosovo has no ISO code: XK, the code the table's own comment says organisations use. Read to match the FTS file's country names (Belgium, Türkiye, Czech Republic) to the codes CORDIS and the F&T Portal use.",
+ "$read": "2026-10-26",
+ "codes": {
+  "AD": {
+   "alpha3": "AND",
+   "eu_code": "AD",
+   "names": [
+    "Andorra",
+    "Principality of Andorra"
+   ],
+   "former_names": []
+  },
+  "AE": {
+   "alpha3": "ARE",
+   "eu_code": "AE",
+   "names": [
+    "United Arab Emirates",
+    "Emirian"
+   ],
+   "former_names": []
+  },
+  "AF": {
+   "alpha3": "AFG",
+   "eu_code": "AF",
+   "names": [
+    "Afghanistan",
+    "Islamic Republic of Afghanistan"
+   ],
+   "former_names": []
+  },
+  "AG": {
+   "alpha3": "ATG",
+   "eu_code": "AG",
+   "names": [
+    "Antigua and Barbuda"
+   ],
+   "former_names": []
+  },
+  "AI": {
+   "alpha3": "AIA",
+   "eu_code": "AI",
+   "names": [
+    "Anguilla"
+   ],
+   "former_names": [
+    "French Afar and Issas"
+   ]
+  },
+  "AL": {
+   "alpha3": "ALB",
+   "eu_code": "AL",
+   "names": [
+    "Albania",
+    "Republic of Albania"
+   ],
+   "former_names": []
+  },
+  "AM": {
+   "alpha3": "ARM",
+   "eu_code": "AM",
+   "names": [
+    "Armenia",
+    "Republic of Armenia"
+   ],
+   "former_names": []
+  },
+  "AN": {
+   "alpha3": "ANT",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Netherlands Antilles",
+    "Dutch Antilles"
+   ]
+  },
+  "AO": {
+   "alpha3": "AGO",
+   "eu_code": "AO",
+   "names": [
+    "Angola",
+    "Republic of Angola"
+   ],
+   "former_names": []
+  },
+  "AQ": {
+   "alpha3": "ATA",
+   "eu_code": "AQ",
+   "names": [
+    "Antarctica"
+   ],
+   "former_names": []
+  },
+  "AR": {
+   "alpha3": "ARG",
+   "eu_code": "AR",
+   "names": [
+    "Argentina",
+    "Argentine Republic",
+    "Argentine",
+    "Argentinian"
+   ],
+   "former_names": []
+  },
+  "AS": {
+   "alpha3": "ASM",
+   "eu_code": "AS",
+   "names": [
+    "American Samoa",
+    "Territory of American Samoa"
+   ],
+   "former_names": []
+  },
+  "AT": {
+   "alpha3": "AUT",
+   "eu_code": "AT",
+   "names": [
+    "Austria",
+    "Republic of Austria"
+   ],
+   "former_names": []
+  },
+  "AU": {
+   "alpha3": "AUS",
+   "eu_code": "AU",
+   "names": [
+    "Australia",
+    "Commonwealth of Australia"
+   ],
+   "former_names": []
+  },
+  "AW": {
+   "alpha3": "ABW",
+   "eu_code": "AW",
+   "names": [
+    "Aruba"
+   ],
+   "former_names": []
+  },
+  "AX": {
+   "alpha3": "ALA",
+   "eu_code": "AX",
+   "names": [
+    "Åland Islands"
+   ],
+   "former_names": []
+  },
+  "AZ": {
+   "alpha3": "AZE",
+   "eu_code": "AZ",
+   "names": [
+    "Azerbaijan",
+    "Republic of Azerbaijan"
+   ],
+   "former_names": []
+  },
+  "BA": {
+   "alpha3": "BIH",
+   "eu_code": "BA",
+   "names": [
+    "Bosnia and Herzegovina",
+    "Republic of Bosnia and Herzegowina"
+   ],
+   "former_names": []
+  },
+  "BB": {
+   "alpha3": "BRB",
+   "eu_code": "BB",
+   "names": [
+    "Barbados"
+   ],
+   "former_names": []
+  },
+  "BD": {
+   "alpha3": "BGD",
+   "eu_code": "BD",
+   "names": [
+    "Bangladesh",
+    "People’s Republic of Bangladesh",
+    "People's Republic of Bangladesh"
+   ],
+   "former_names": []
+  },
+  "BE": {
+   "alpha3": "BEL",
+   "eu_code": "BE",
+   "names": [
+    "Belgium",
+    "Kingdom of Belgium"
+   ],
+   "former_names": []
+  },
+  "BF": {
+   "alpha3": "BFA",
+   "eu_code": "BF",
+   "names": [
+    "Burkina Faso"
+   ],
+   "former_names": []
+  },
+  "BG": {
+   "alpha3": "BGR",
+   "eu_code": "BG",
+   "names": [
+    "Bulgaria",
+    "Republic of Bulgaria"
+   ],
+   "former_names": [
+    "People’s Republic of Bulgaria"
+   ]
+  },
+  "BH": {
+   "alpha3": "BHR",
+   "eu_code": "BH",
+   "names": [
+    "Bahrain",
+    "Kingdom of Bahrain"
+   ],
+   "former_names": []
+  },
+  "BI": {
+   "alpha3": "BDI",
+   "eu_code": "BI",
+   "names": [
+    "Burundi",
+    "Republic of Burundi"
+   ],
+   "former_names": []
+  },
+  "BJ": {
+   "alpha3": "BEN",
+   "eu_code": "BJ",
+   "names": [
+    "Benin",
+    "Republic of Benin"
+   ],
+   "former_names": []
+  },
+  "BL": {
+   "alpha3": "BLM",
+   "eu_code": "BL",
+   "names": [
+    "Saint Barthélemy",
+    "Collectivity of Saint Barthélemy",
+    "St. Barth’s",
+    "St. Barts",
+    "Saint-Barthélemy"
+   ],
+   "former_names": []
+  },
+  "BM": {
+   "alpha3": "BMU",
+   "eu_code": "BM",
+   "names": [
+    "Bermuda"
+   ],
+   "former_names": []
+  },
+  "BN": {
+   "alpha3": "BRN",
+   "eu_code": "BN",
+   "names": [
+    "Brunei",
+    "Brunei Darussalam",
+    "Negara Brunei Darussalam"
+   ],
+   "former_names": []
+  },
+  "BO": {
+   "alpha3": "BOL",
+   "eu_code": "BO",
+   "names": [
+    "Bolivia",
+    "Plurinational State of Bolivia",
+    "Republic of Bolivia"
+   ],
+   "former_names": []
+  },
+  "BQ": {
+   "alpha3": "BES",
+   "eu_code": null,
+   "names": [
+    "Bonaire, Sint Eustatius and Saba",
+    "Caribbean Netherlands"
+   ],
+   "former_names": [
+    "British Antarctic Territory"
+   ]
+  },
+  "BR": {
+   "alpha3": "BRA",
+   "eu_code": "BR",
+   "names": [
+    "Brazil",
+    "Federative Republic of Brazil"
+   ],
+   "former_names": []
+  },
+  "BS": {
+   "alpha3": "BHS",
+   "eu_code": "BS",
+   "names": [
+    "Bahamas",
+    "Commonwealth of the Bahamas"
+   ],
+   "former_names": []
+  },
+  "BT": {
+   "alpha3": "BTN",
+   "eu_code": "BT",
+   "names": [
+    "Bhutan",
+    "Kingdom of Bhutan"
+   ],
+   "former_names": []
+  },
+  "BU": {
+   "alpha3": "BUR",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Burma",
+    "Union of Burma"
+   ]
+  },
+  "BV": {
+   "alpha3": "BVT",
+   "eu_code": "BV",
+   "names": [
+    "Bouvet Island"
+   ],
+   "former_names": []
+  },
+  "BW": {
+   "alpha3": "BWA",
+   "eu_code": "BW",
+   "names": [
+    "Botswana",
+    "Republic of Botswana"
+   ],
+   "former_names": []
+  },
+  "BY": {
+   "alpha3": "BLR",
+   "eu_code": "BY",
+   "names": [
+    "Belarus",
+    "Republic of Belarus"
+   ],
+   "former_names": [
+    "Byelorussian Soviet Socialist Republic"
+   ]
+  },
+  "BZ": {
+   "alpha3": "BLZ",
+   "eu_code": "BZ",
+   "names": [
+    "Belize"
+   ],
+   "former_names": []
+  },
+  "CA": {
+   "alpha3": "CAN",
+   "eu_code": "CA",
+   "names": [
+    "Canada"
+   ],
+   "former_names": []
+  },
+  "CC": {
+   "alpha3": "CCK",
+   "eu_code": "CC",
+   "names": [
+    "Cocos (Keeling) Islands",
+    "Territory of Cocos (Keeling) Islands",
+    "Cocos Keeling Islands"
+   ],
+   "former_names": []
+  },
+  "CD": {
+   "alpha3": "COD",
+   "eu_code": "CD",
+   "names": [
+    "Democratic Republic of the Congo",
+    "Congo-Kinshasa",
+    "Democratic Republic of Congo"
+   ],
+   "former_names": []
+  },
+  "CF": {
+   "alpha3": "CAF",
+   "eu_code": "CF",
+   "names": [
+    "Central African Republic"
+   ],
+   "former_names": []
+  },
+  "CG": {
+   "alpha3": "COG",
+   "eu_code": "CG",
+   "names": [
+    "Congo",
+    "Republic of the Congo",
+    "Congo-Brazzaville"
+   ],
+   "former_names": []
+  },
+  "CH": {
+   "alpha3": "CHE",
+   "eu_code": "CH",
+   "names": [
+    "Switzerland",
+    "Swiss Confederation"
+   ],
+   "former_names": []
+  },
+  "CI": {
+   "alpha3": "CIV",
+   "eu_code": "CI",
+   "names": [
+    "Côte d’Ivoire",
+    "Republic of Côte d’Ivoire",
+    "Ivory Coast"
+   ],
+   "former_names": []
+  },
+  "CK": {
+   "alpha3": "COK",
+   "eu_code": "CK",
+   "names": [
+    "Cook Islands"
+   ],
+   "former_names": []
+  },
+  "CL": {
+   "alpha3": "CHL",
+   "eu_code": "CL",
+   "names": [
+    "Chile",
+    "Republic of Chile"
+   ],
+   "former_names": []
+  },
+  "CM": {
+   "alpha3": "CMR",
+   "eu_code": "CM",
+   "names": [
+    "Cameroon",
+    "Republic of Cameroon"
+   ],
+   "former_names": []
+  },
+  "CN": {
+   "alpha3": "CHN",
+   "eu_code": "CN",
+   "names": [
+    "China",
+    "People’s Republic of China"
+   ],
+   "former_names": []
+  },
+  "CO": {
+   "alpha3": "COL",
+   "eu_code": "CO",
+   "names": [
+    "Colombia",
+    "Republic of Colombia"
+   ],
+   "former_names": []
+  },
+  "CP": {
+   "alpha3": "CPT",
+   "eu_code": "CP",
+   "names": [
+    "Clipperton",
+    "Clipperton Island"
+   ],
+   "former_names": []
+  },
+  "CQ": {
+   "alpha3": "CRQ",
+   "eu_code": null,
+   "names": [
+    "Sark",
+    "Sark Island",
+    "Isle of Sark"
+   ],
+   "former_names": []
+  },
+  "CR": {
+   "alpha3": "CRI",
+   "eu_code": "CR",
+   "names": [
+    "Costa Rica",
+    "Republic of Costa Rica"
+   ],
+   "former_names": []
+  },
+  "CS": {
+   "alpha3": "CSK",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Czechoslovakia",
+    "Czechoslovak Republic",
+    "Czech",
+    "Serbia and Montenegro",
+    "State Union of Serbia and Montenegro",
+    "Czechoslovak Socialist Republic",
+    "Czech and Slovak Federative Republic"
+   ]
+  },
+  "CT": {
+   "alpha3": "CTE",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Canton and Enderbury Islands"
+   ]
+  },
+  "CU": {
+   "alpha3": "CUB",
+   "eu_code": "CU",
+   "names": [
+    "Cuba",
+    "Republic of Cuba"
+   ],
+   "former_names": []
+  },
+  "CV": {
+   "alpha3": "CPV",
+   "eu_code": "CV",
+   "names": [
+    "Cabo Verde",
+    "Republic of Cabo Verde",
+    "Cape Verde",
+    "Cape Verdean",
+    "Republic of Cape Verde"
+   ],
+   "former_names": []
+  },
+  "CW": {
+   "alpha3": "CUW",
+   "eu_code": "CW",
+   "names": [
+    "Curaçao",
+    "Curacao"
+   ],
+   "former_names": []
+  },
+  "CX": {
+   "alpha3": "CXR",
+   "eu_code": "CX",
+   "names": [
+    "Christmas Island",
+    "Christmas Island Territory"
+   ],
+   "former_names": []
+  },
+  "CY": {
+   "alpha3": "CYP",
+   "eu_code": "CY",
+   "names": [
+    "Cyprus",
+    "Republic of Cyprus"
+   ],
+   "former_names": []
+  },
+  "CZ": {
+   "alpha3": "CZE",
+   "eu_code": "CZ",
+   "names": [
+    "Czechia",
+    "Czech Republic"
+   ],
+   "former_names": []
+  },
+  "DD": {
+   "alpha3": "DDR",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "German Democratic Republic",
+    "East Germany",
+    "GDR",
+    "German"
+   ]
+  },
+  "DE": {
+   "alpha3": "DEU",
+   "eu_code": "DE",
+   "names": [
+    "Germany",
+    "Federal Republic of Germany",
+    "FRG"
+   ],
+   "former_names": [
+    "West Germany"
+   ]
+  },
+  "DJ": {
+   "alpha3": "DJI",
+   "eu_code": "DJ",
+   "names": [
+    "Djibouti",
+    "Republic of Djibouti"
+   ],
+   "former_names": []
+  },
+  "DK": {
+   "alpha3": "DNK",
+   "eu_code": "DK",
+   "names": [
+    "Denmark",
+    "Kingdom of Denmark"
+   ],
+   "former_names": []
+  },
+  "DM": {
+   "alpha3": "DMA",
+   "eu_code": "DM",
+   "names": [
+    "Dominica",
+    "Commonwealth of Dominica"
+   ],
+   "former_names": []
+  },
+  "DO": {
+   "alpha3": "DOM",
+   "eu_code": "DO",
+   "names": [
+    "Dominican Republic"
+   ],
+   "former_names": []
+  },
+  "DY": {
+   "alpha3": "DHY",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Dahomey",
+    "Republic of Dahomey"
+   ]
+  },
+  "DZ": {
+   "alpha3": "DZA",
+   "eu_code": "DZ",
+   "names": [
+    "Algeria",
+    "People’s Democratic Republic of Algeria"
+   ],
+   "former_names": []
+  },
+  "EC": {
+   "alpha3": "ECU",
+   "eu_code": "EC",
+   "names": [
+    "Ecuador",
+    "Republic of Ecuador"
+   ],
+   "former_names": []
+  },
+  "EE": {
+   "alpha3": "EST",
+   "eu_code": "EE",
+   "names": [
+    "Estonia",
+    "Republic of Estonia"
+   ],
+   "former_names": []
+  },
+  "EG": {
+   "alpha3": "EGY",
+   "eu_code": "EG",
+   "names": [
+    "Egypt",
+    "Arab Republic of Egypt"
+   ],
+   "former_names": []
+  },
+  "EH": {
+   "alpha3": "ESH",
+   "eu_code": "EH",
+   "names": [
+    "Western Sahara"
+   ],
+   "former_names": []
+  },
+  "ER": {
+   "alpha3": "ERI",
+   "eu_code": "ER",
+   "names": [
+    "Eritrea",
+    "State of Eritrea"
+   ],
+   "former_names": []
+  },
+  "ES": {
+   "alpha3": "ESP",
+   "eu_code": "ES",
+   "names": [
+    "Spain",
+    "Kingdom of Spain"
+   ],
+   "former_names": [
+    "State of Spain"
+   ]
+  },
+  "ET": {
+   "alpha3": "ETH",
+   "eu_code": "ET",
+   "names": [
+    "Ethiopia",
+    "Federal Democratic Republic of Ethiopia"
+   ],
+   "former_names": [
+    "People’s Democratic Republic of Ethiopia"
+   ]
+  },
+  "EU": {
+   "alpha3": null,
+   "eu_code": null,
+   "names": [
+    "European Union",
+    "EU"
+   ],
+   "former_names": []
+  },
+  "FI": {
+   "alpha3": "FIN",
+   "eu_code": "FI",
+   "names": [
+    "Finland",
+    "Republic of Finland"
+   ],
+   "former_names": []
+  },
+  "FJ": {
+   "alpha3": "FJI",
+   "eu_code": "FJ",
+   "names": [
+    "Fiji",
+    "Republic of Fiji"
+   ],
+   "former_names": []
+  },
+  "FK": {
+   "alpha3": "FLK",
+   "eu_code": "FK",
+   "names": [
+    "Falkland Islands"
+   ],
+   "former_names": []
+  },
+  "FM": {
+   "alpha3": "FSM",
+   "eu_code": "FM",
+   "names": [
+    "Micronesia",
+    "Federated States of Micronesia"
+   ],
+   "former_names": []
+  },
+  "FO": {
+   "alpha3": "FRO",
+   "eu_code": "FO",
+   "names": [
+    "Faroes",
+    "Faroe Islands",
+    "Faeroese"
+   ],
+   "former_names": []
+  },
+  "FR": {
+   "alpha3": "FRA",
+   "eu_code": "FR",
+   "names": [
+    "France",
+    "French Republic"
+   ],
+   "former_names": []
+  },
+  "FX": {
+   "alpha3": "FXX",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Metropolitan France",
+    "France, metropolitan"
+   ]
+  },
+  "GA": {
+   "alpha3": "GAB",
+   "eu_code": "GA",
+   "names": [
+    "Gabon",
+    "Gabonese Republic"
+   ],
+   "former_names": []
+  },
+  "GB": {
+   "alpha3": "GBR",
+   "eu_code": "UK",
+   "names": [
+    "United Kingdom",
+    "United Kingdom of Great Britain and Northern Ireland",
+    "UK"
+   ],
+   "former_names": []
+  },
+  "GD": {
+   "alpha3": "GRD",
+   "eu_code": "GD",
+   "names": [
+    "Grenada"
+   ],
+   "former_names": []
+  },
+  "GE": {
+   "alpha3": "GEO",
+   "eu_code": "GE",
+   "names": [
+    "Georgia"
+   ],
+   "former_names": [
+    "Gilbert and Ellice Islands"
+   ]
+  },
+  "GF": {
+   "alpha3": "GUF",
+   "eu_code": "GF",
+   "names": [
+    "French Guiana",
+    "Departement of French Guiana"
+   ],
+   "former_names": []
+  },
+  "GG": {
+   "alpha3": "GGY",
+   "eu_code": "GG",
+   "names": [
+    "Guernsey",
+    "Bailiwick of Guernsey"
+   ],
+   "former_names": []
+  },
+  "GH": {
+   "alpha3": "GHA",
+   "eu_code": "GH",
+   "names": [
+    "Ghana",
+    "Republic of Ghana"
+   ],
+   "former_names": []
+  },
+  "GI": {
+   "alpha3": "GIB",
+   "eu_code": "GI",
+   "names": [
+    "Gibraltar"
+   ],
+   "former_names": []
+  },
+  "GL": {
+   "alpha3": "GRL",
+   "eu_code": "GL",
+   "names": [
+    "Greenland"
+   ],
+   "former_names": []
+  },
+  "GM": {
+   "alpha3": "GMB",
+   "eu_code": "GM",
+   "names": [
+    "The Gambia",
+    "Republic of The Gambia",
+    "Gambia"
+   ],
+   "former_names": []
+  },
+  "GN": {
+   "alpha3": "GIN",
+   "eu_code": "GN",
+   "names": [
+    "Guinea",
+    "Republic of Guinea",
+    "République of Guinea"
+   ],
+   "former_names": []
+  },
+  "GP": {
+   "alpha3": "GLP",
+   "eu_code": "GP",
+   "names": [
+    "Guadeloupe"
+   ],
+   "former_names": []
+  },
+  "GQ": {
+   "alpha3": "GNQ",
+   "eu_code": "GQ",
+   "names": [
+    "Equatorial Guinea",
+    "Republic of Equatorial Guinea"
+   ],
+   "former_names": []
+  },
+  "GR": {
+   "alpha3": "GRC",
+   "eu_code": "EL",
+   "names": [
+    "Greece",
+    "Hellenic Republic"
+   ],
+   "former_names": [
+    "Kingdom of Greece"
+   ]
+  },
+  "GS": {
+   "alpha3": "SGS",
+   "eu_code": "GS",
+   "names": [
+    "South Georgia and the South Sandwich Islands",
+    "SGSSI"
+   ],
+   "former_names": []
+  },
+  "GT": {
+   "alpha3": "GTM",
+   "eu_code": "GT",
+   "names": [
+    "Guatemala",
+    "Republic of Guatemala"
+   ],
+   "former_names": []
+  },
+  "GU": {
+   "alpha3": "GUM",
+   "eu_code": "GU",
+   "names": [
+    "Guam",
+    "Territory of Guam"
+   ],
+   "former_names": []
+  },
+  "GW": {
+   "alpha3": "GNB",
+   "eu_code": "GW",
+   "names": [
+    "Guinea-Bissau",
+    "Republic of Guinea-Bissau"
+   ],
+   "former_names": []
+  },
+  "GY": {
+   "alpha3": "GUY",
+   "eu_code": "GY",
+   "names": [
+    "Guyana",
+    "Cooperative Republic of Guyana"
+   ],
+   "former_names": []
+  },
+  "HK": {
+   "alpha3": "HKG",
+   "eu_code": "HK",
+   "names": [
+    "Hong Kong",
+    "Hong Kong Special Administrative Region of the People’s Republic of China",
+    "Hong Kong SAR",
+    "Hong Kong Special Administrative Region"
+   ],
+   "former_names": []
+  },
+  "HM": {
+   "alpha3": "HMD",
+   "eu_code": "HM",
+   "names": [
+    "Heard Island and McDonald Islands",
+    "Territory of Heard Island and McDonald Islands",
+    "HIMI"
+   ],
+   "former_names": []
+  },
+  "HN": {
+   "alpha3": "HND",
+   "eu_code": "HN",
+   "names": [
+    "Honduras",
+    "Republic of Honduras"
+   ],
+   "former_names": []
+  },
+  "HR": {
+   "alpha3": "HRV",
+   "eu_code": "HR",
+   "names": [
+    "Croatia",
+    "Republic of Croatia"
+   ],
+   "former_names": []
+  },
+  "HT": {
+   "alpha3": "HTI",
+   "eu_code": "HT",
+   "names": [
+    "Haiti",
+    "Republic of Haiti"
+   ],
+   "former_names": []
+  },
+  "HU": {
+   "alpha3": "HUN",
+   "eu_code": "HU",
+   "names": [
+    "Hungary"
+   ],
+   "former_names": [
+    "Republic of Hungary",
+    "People’s Republic of Hungary"
+   ]
+  },
+  "HV": {
+   "alpha3": "HVO",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Upper Volta",
+    "Republic of Upper Volta"
+   ]
+  },
+  "IC": {
+   "alpha3": null,
+   "eu_code": null,
+   "names": [
+    "Canary Islands",
+    "Autonomous Community of the Canary Islands"
+   ],
+   "former_names": []
+  },
+  "ID": {
+   "alpha3": "IDN",
+   "eu_code": "ID",
+   "names": [
+    "Indonesia",
+    "Republic of Indonesia"
+   ],
+   "former_names": []
+  },
+  "IE": {
+   "alpha3": "IRL",
+   "eu_code": "IE",
+   "names": [
+    "Ireland"
+   ],
+   "former_names": []
+  },
+  "IL": {
+   "alpha3": "ISR",
+   "eu_code": "IL",
+   "names": [
+    "Israel",
+    "State of Israel"
+   ],
+   "former_names": []
+  },
+  "IM": {
+   "alpha3": "IMN",
+   "eu_code": "IM",
+   "names": [
+    "Isle of Man"
+   ],
+   "former_names": []
+  },
+  "IN": {
+   "alpha3": "IND",
+   "eu_code": "IN",
+   "names": [
+    "India",
+    "Republic of India",
+    "Républic of India"
+   ],
+   "former_names": []
+  },
+  "IO": {
+   "alpha3": "IOT",
+   "eu_code": "IO",
+   "names": [
+    "British Indian Ocean Territory",
+    "BIOT"
+   ],
+   "former_names": []
+  },
+  "IQ": {
+   "alpha3": "IRQ",
+   "eu_code": "IQ",
+   "names": [
+    "Iraq",
+    "Republic of Iraq"
+   ],
+   "former_names": []
+  },
+  "IR": {
+   "alpha3": "IRN",
+   "eu_code": "IR",
+   "names": [
+    "Iran",
+    "Islamic Republic of Iran"
+   ],
+   "former_names": []
+  },
+  "IS": {
+   "alpha3": "ISL",
+   "eu_code": "IS",
+   "names": [
+    "Iceland"
+   ],
+   "former_names": []
+  },
+  "IT": {
+   "alpha3": "ITA",
+   "eu_code": "IT",
+   "names": [
+    "Italy",
+    "Italian Republic"
+   ],
+   "former_names": []
+  },
+  "JE": {
+   "alpha3": "JEY",
+   "eu_code": "JE",
+   "names": [
+    "Jersey",
+    "Bailiwick of Jersey"
+   ],
+   "former_names": []
+  },
+  "JM": {
+   "alpha3": "JAM",
+   "eu_code": "JM",
+   "names": [
+    "Jamaica"
+   ],
+   "former_names": []
+  },
+  "JO": {
+   "alpha3": "JOR",
+   "eu_code": "JO",
+   "names": [
+    "Jordan",
+    "Hashemite Kingdom of Jordan"
+   ],
+   "former_names": []
+  },
+  "JP": {
+   "alpha3": "JPN",
+   "eu_code": "JP",
+   "names": [
+    "Japan"
+   ],
+   "former_names": []
+  },
+  "JT": {
+   "alpha3": "JTN",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Johnston Island"
+   ]
+  },
+  "KE": {
+   "alpha3": "KEN",
+   "eu_code": "KE",
+   "names": [
+    "Kenya",
+    "Republic of Kenya"
+   ],
+   "former_names": []
+  },
+  "KG": {
+   "alpha3": "KGZ",
+   "eu_code": "KG",
+   "names": [
+    "Kyrgyzstan",
+    "Kyrgyz Republic"
+   ],
+   "former_names": []
+  },
+  "KH": {
+   "alpha3": "KHM",
+   "eu_code": "KH",
+   "names": [
+    "Cambodia",
+    "Kingdom of Cambodia"
+   ],
+   "former_names": []
+  },
+  "KI": {
+   "alpha3": "KIR",
+   "eu_code": "KI",
+   "names": [
+    "Kiribati",
+    "Republic of Kiribati"
+   ],
+   "former_names": []
+  },
+  "KM": {
+   "alpha3": "COM",
+   "eu_code": "KM",
+   "names": [
+    "Comoros",
+    "Union of the Comoros"
+   ],
+   "former_names": []
+  },
+  "KN": {
+   "alpha3": "KNA",
+   "eu_code": "KN",
+   "names": [
+    "Saint Kitts and Nevis",
+    "Federation of Saint Kitts and Nevis"
+   ],
+   "former_names": []
+  },
+  "KP": {
+   "alpha3": "PRK",
+   "eu_code": "KP",
+   "names": [
+    "North Korea",
+    "Democratic People’s Republic of Korea",
+    "DPRK",
+    "Democratic People's Republic of Korea"
+   ],
+   "former_names": []
+  },
+  "KR": {
+   "alpha3": "KOR",
+   "eu_code": "KR",
+   "names": [
+    "South Korea",
+    "Republic of Korea",
+    "ROK"
+   ],
+   "former_names": []
+  },
+  "KW": {
+   "alpha3": "KWT",
+   "eu_code": "KW",
+   "names": [
+    "Kuwait",
+    "State of Kuwait"
+   ],
+   "former_names": []
+  },
+  "KY": {
+   "alpha3": "CYM",
+   "eu_code": "KY",
+   "names": [
+    "Cayman Islands"
+   ],
+   "former_names": []
+  },
+  "KZ": {
+   "alpha3": "KAZ",
+   "eu_code": "KZ",
+   "names": [
+    "Kazakhstan",
+    "Republic of Kazakhstan",
+    "Kazakh"
+   ],
+   "former_names": []
+  },
+  "LA": {
+   "alpha3": "LAO",
+   "eu_code": "LA",
+   "names": [
+    "Laos",
+    "Lao People’s Democratic Republic",
+    "Lao",
+    "Laotian"
+   ],
+   "former_names": []
+  },
+  "LB": {
+   "alpha3": "LBN",
+   "eu_code": "LB",
+   "names": [
+    "Lebanon",
+    "Lebanese Republic"
+   ],
+   "former_names": []
+  },
+  "LC": {
+   "alpha3": "LCA",
+   "eu_code": "LC",
+   "names": [
+    "Saint Lucia",
+    "Sainte Lucie",
+    "St. Lucia"
+   ],
+   "former_names": []
+  },
+  "LI": {
+   "alpha3": "LIE",
+   "eu_code": "LI",
+   "names": [
+    "Liechtenstein",
+    "Principality of Liechtenstein"
+   ],
+   "former_names": []
+  },
+  "LK": {
+   "alpha3": "LKA",
+   "eu_code": "LK",
+   "names": [
+    "Sri Lanka",
+    "Democratic Socialist Republic of Sri Lanka"
+   ],
+   "former_names": []
+  },
+  "LR": {
+   "alpha3": "LBR",
+   "eu_code": "LR",
+   "names": [
+    "Liberia",
+    "Republic of Liberia"
+   ],
+   "former_names": []
+  },
+  "LS": {
+   "alpha3": "LSO",
+   "eu_code": "LS",
+   "names": [
+    "Lesotho",
+    "Kingdom of Lesotho"
+   ],
+   "former_names": []
+  },
+  "LT": {
+   "alpha3": "LTU",
+   "eu_code": "LT",
+   "names": [
+    "Lithuania",
+    "Republic of Lithuania"
+   ],
+   "former_names": []
+  },
+  "LU": {
+   "alpha3": "LUX",
+   "eu_code": "LU",
+   "names": [
+    "Luxembourg",
+    "Grand Duchy of Luxembourg"
+   ],
+   "former_names": []
+  },
+  "LV": {
+   "alpha3": "LVA",
+   "eu_code": "LV",
+   "names": [
+    "Latvia",
+    "Republic of Latvia"
+   ],
+   "former_names": []
+  },
+  "LY": {
+   "alpha3": "LBY",
+   "eu_code": "LY",
+   "names": [
+    "Libya",
+    "State of Libya",
+    "Great Socialist People's Libyan Arab Jamahiriya"
+   ],
+   "former_names": [
+    "Great Socialist People’s Libyan Arab Jamahiriya",
+    "Libyan Arab Jamahiriya"
+   ]
+  },
+  "MA": {
+   "alpha3": "MAR",
+   "eu_code": "MA",
+   "names": [
+    "Morocco",
+    "Kingdom of Morocco"
+   ],
+   "former_names": []
+  },
+  "MC": {
+   "alpha3": "MCO",
+   "eu_code": "MC",
+   "names": [
+    "Monaco",
+    "Principality of Monaco"
+   ],
+   "former_names": []
+  },
+  "MD": {
+   "alpha3": "MDA",
+   "eu_code": "MD",
+   "names": [
+    "Moldova",
+    "Republic of Moldova"
+   ],
+   "former_names": []
+  },
+  "ME": {
+   "alpha3": "MNE",
+   "eu_code": "ME",
+   "names": [
+    "Montenegro",
+    "Republic of Montenegro"
+   ],
+   "former_names": []
+  },
+  "MF": {
+   "alpha3": "MAF",
+   "eu_code": "MF",
+   "names": [
+    "Saint Martin",
+    "Collectivity of Saint Martin",
+    "Saint Martin (French part)",
+    "Saint-Martin"
+   ],
+   "former_names": []
+  },
+  "MG": {
+   "alpha3": "MDG",
+   "eu_code": "MG",
+   "names": [
+    "Madagascar",
+    "Republic of Madagascar"
+   ],
+   "former_names": []
+  },
+  "MH": {
+   "alpha3": "MHL",
+   "eu_code": "MH",
+   "names": [
+    "Marshall Islands",
+    "Republic of the Marshall Islands"
+   ],
+   "former_names": []
+  },
+  "MI": {
+   "alpha3": "MID",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Midway Islands"
+   ]
+  },
+  "MK": {
+   "alpha3": "MKD",
+   "eu_code": "MK",
+   "names": [
+    "North Macedonia",
+    "Republic of North Macedonia"
+   ],
+   "former_names": [
+    "Former Yugoslav Republic of Macedonia",
+    "The former Yugoslav Republic of Macedonia"
+   ]
+  },
+  "ML": {
+   "alpha3": "MLI",
+   "eu_code": "ML",
+   "names": [
+    "Mali",
+    "Republic of Mali"
+   ],
+   "former_names": []
+  },
+  "MM": {
+   "alpha3": "MMR",
+   "eu_code": "MM",
+   "names": [
+    "Myanmar/Burma",
+    "Myanmar",
+    "Republic of the Union of Myanmar",
+    "of Burma/Myanmar"
+   ],
+   "former_names": [
+    "Union of Myanmar",
+    "Burma",
+    "Burma/Myanmar"
+   ]
+  },
+  "MN": {
+   "alpha3": "MNG",
+   "eu_code": "MN",
+   "names": [
+    "Mongolia"
+   ],
+   "former_names": []
+  },
+  "MO": {
+   "alpha3": "MAC",
+   "eu_code": "MO",
+   "names": [
+    "Macao",
+    "Macao Special Administrative Region of the People’s Republic of China"
+   ],
+   "former_names": [
+    "Macau"
+   ]
+  },
+  "MP": {
+   "alpha3": "MNP",
+   "eu_code": "MP",
+   "names": [
+    "Northern Mariana Islands",
+    "Commonwealth of the Northern Mariana Islands",
+    "Commonwealth of the Northern Marianas"
+   ],
+   "former_names": []
+  },
+  "MQ": {
+   "alpha3": "MTQ",
+   "eu_code": "MQ",
+   "names": [
+    "Martinique",
+    "Department of Martinique"
+   ],
+   "former_names": []
+  },
+  "MR": {
+   "alpha3": "MRT",
+   "eu_code": "MR",
+   "names": [
+    "Mauritania",
+    "Islamic Republic of Mauritania"
+   ],
+   "former_names": []
+  },
+  "MS": {
+   "alpha3": "MSR",
+   "eu_code": "MS",
+   "names": [
+    "Montserrat",
+    "Emerald Isle of the Caribbean"
+   ],
+   "former_names": []
+  },
+  "MT": {
+   "alpha3": "MLT",
+   "eu_code": "MT",
+   "names": [
+    "Malta",
+    "Republic of Malta"
+   ],
+   "former_names": [
+    "State of Malta"
+   ]
+  },
+  "MU": {
+   "alpha3": "MUS",
+   "eu_code": "MU",
+   "names": [
+    "Mauritius",
+    "Republic of Mauritius"
+   ],
+   "former_names": []
+  },
+  "MV": {
+   "alpha3": "MDV",
+   "eu_code": "MV",
+   "names": [
+    "Maldives",
+    "Republic of Maldives"
+   ],
+   "former_names": []
+  },
+  "MW": {
+   "alpha3": "MWI",
+   "eu_code": "MW",
+   "names": [
+    "Malawi",
+    "Republic of Malawi"
+   ],
+   "former_names": []
+  },
+  "MX": {
+   "alpha3": "MEX",
+   "eu_code": "MX",
+   "names": [
+    "Mexico",
+    "United Mexican States"
+   ],
+   "former_names": []
+  },
+  "MY": {
+   "alpha3": "MYS",
+   "eu_code": "MY",
+   "names": [
+    "Malaysia"
+   ],
+   "former_names": []
+  },
+  "MZ": {
+   "alpha3": "MOZ",
+   "eu_code": "MZ",
+   "names": [
+    "Mozambique",
+    "Republic of Mozambique"
+   ],
+   "former_names": []
+  },
+  "NA": {
+   "alpha3": "NAM",
+   "eu_code": "NA",
+   "names": [
+    "Namibia",
+    "Republic of Namibia"
+   ],
+   "former_names": []
+  },
+  "NC": {
+   "alpha3": "NCL",
+   "eu_code": "NC",
+   "names": [
+    "New Caledonia"
+   ],
+   "former_names": [
+    "Territory of New Caledonia and Dependencies"
+   ]
+  },
+  "NE": {
+   "alpha3": "NER",
+   "eu_code": "NE",
+   "names": [
+    "Niger",
+    "Republic of Niger"
+   ],
+   "former_names": []
+  },
+  "NF": {
+   "alpha3": "NFK",
+   "eu_code": "NF",
+   "names": [
+    "Norfolk Island",
+    "Territory of Norfolk Island"
+   ],
+   "former_names": []
+  },
+  "NG": {
+   "alpha3": "NGA",
+   "eu_code": "NG",
+   "names": [
+    "Nigeria",
+    "Federal Republic of Nigeria"
+   ],
+   "former_names": []
+  },
+  "NH": {
+   "alpha3": "NHB",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "New Hebrides"
+   ]
+  },
+  "NI": {
+   "alpha3": "NIC",
+   "eu_code": "NI",
+   "names": [
+    "Nicaragua",
+    "Republic of Nicaragua"
+   ],
+   "former_names": []
+  },
+  "NL": {
+   "alpha3": "NLD",
+   "eu_code": "NL",
+   "names": [
+    "Netherlands",
+    "Kingdom of the Netherlands"
+   ],
+   "former_names": []
+  },
+  "NO": {
+   "alpha3": "NOR",
+   "eu_code": "NO",
+   "names": [
+    "Norway",
+    "Kingdom of Norway"
+   ],
+   "former_names": []
+  },
+  "NP": {
+   "alpha3": "NPL",
+   "eu_code": "NP",
+   "names": [
+    "Nepal",
+    "Kingdom of Nepal"
+   ],
+   "former_names": [
+    "Federal Democratic Republic of Nepal"
+   ]
+  },
+  "NQ": {
+   "alpha3": "ATN",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Dronning Maud Land",
+    "Queen Maud Land"
+   ]
+  },
+  "NR": {
+   "alpha3": "NRU",
+   "eu_code": "NR",
+   "names": [
+    "Naoero",
+    "Nauru",
+    "Republic of Naoero",
+    "Republic of Nauru",
+    "Pleasant Island"
+   ],
+   "former_names": []
+  },
+  "NT": {
+   "alpha3": "NTZ",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Neutral Zone"
+   ]
+  },
+  "NU": {
+   "alpha3": "NIU",
+   "eu_code": "NU",
+   "names": [
+    "Niue",
+    "Rock of Polynesia"
+   ],
+   "former_names": []
+  },
+  "NZ": {
+   "alpha3": "NZL",
+   "eu_code": "NZ",
+   "names": [
+    "New Zealand"
+   ],
+   "former_names": []
+  },
+  "OM": {
+   "alpha3": "OMN",
+   "eu_code": "OM",
+   "names": [
+    "Oman",
+    "Sultanate of Oman",
+    "Magan"
+   ],
+   "former_names": []
+  },
+  "PA": {
+   "alpha3": "PAN",
+   "eu_code": "PA",
+   "names": [
+    "Panama",
+    "Republic of Panama"
+   ],
+   "former_names": []
+  },
+  "PC": {
+   "alpha3": "PCI",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Trust Territory of the Pacific Islands",
+    "Pacific Islands"
+   ]
+  },
+  "PE": {
+   "alpha3": "PER",
+   "eu_code": "PE",
+   "names": [
+    "Peru",
+    "Republic of Peru"
+   ],
+   "former_names": []
+  },
+  "PF": {
+   "alpha3": "PYF",
+   "eu_code": "PF",
+   "names": [
+    "French Polynesia",
+    "Territory of French Polynesia"
+   ],
+   "former_names": []
+  },
+  "PG": {
+   "alpha3": "PNG",
+   "eu_code": "PG",
+   "names": [
+    "Papua New Guinea",
+    "Independent State of Papua New Guinea"
+   ],
+   "former_names": []
+  },
+  "PH": {
+   "alpha3": "PHL",
+   "eu_code": "PH",
+   "names": [
+    "Philippines",
+    "Republic of the Philippines"
+   ],
+   "former_names": []
+  },
+  "PK": {
+   "alpha3": "PAK",
+   "eu_code": "PK",
+   "names": [
+    "Pakistan",
+    "Islamic Republic of Pakistan"
+   ],
+   "former_names": []
+  },
+  "PL": {
+   "alpha3": "POL",
+   "eu_code": "PL",
+   "names": [
+    "Poland",
+    "Republic of Poland"
+   ],
+   "former_names": [
+    "People’s Republic of Poland"
+   ]
+  },
+  "PM": {
+   "alpha3": "SPM",
+   "eu_code": "PM",
+   "names": [
+    "Saint Pierre and Miquelon",
+    "Territorial Collectivity of Saint Pierre and Miquelon"
+   ],
+   "former_names": []
+  },
+  "PN": {
+   "alpha3": "PCN",
+   "eu_code": "PN",
+   "names": [
+    "Pitcairn Islands",
+    "Pitcairn, Henderson, Ducie and Oeno Islands"
+   ],
+   "former_names": []
+  },
+  "PR": {
+   "alpha3": "PRI",
+   "eu_code": "PR",
+   "names": [
+    "Puerto Rico",
+    "Commonwealth of Puerto Rico"
+   ],
+   "former_names": []
+  },
+  "PS": {
+   "alpha3": "PSE",
+   "eu_code": null,
+   "names": [
+    "Palestine*",
+    "Palestine",
+    "Palestinian territories"
+   ],
+   "former_names": []
+  },
+  "PT": {
+   "alpha3": "PRT",
+   "eu_code": "PT",
+   "names": [
+    "Portugal",
+    "Portuguese Republic"
+   ],
+   "former_names": []
+  },
+  "PU": {
+   "alpha3": "PUS",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "US Miscellaneous Pacific Islands",
+    "United States Miscellaneous Pacific Islands",
+    "Various Pacific Islands (United States)"
+   ]
+  },
+  "PW": {
+   "alpha3": "PLW",
+   "eu_code": "PW",
+   "names": [
+    "Palau",
+    "Republic of Palau"
+   ],
+   "former_names": []
+  },
+  "PY": {
+   "alpha3": "PRY",
+   "eu_code": "PY",
+   "names": [
+    "Paraguay",
+    "Republic of Paraguay"
+   ],
+   "former_names": []
+  },
+  "PZ": {
+   "alpha3": "PCZ",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Panama Canal Zone"
+   ]
+  },
+  "QA": {
+   "alpha3": "QAT",
+   "eu_code": "QA",
+   "names": [
+    "Qatar",
+    "State of Qatar"
+   ],
+   "former_names": []
+  },
+  "RE": {
+   "alpha3": "REU",
+   "eu_code": "RE",
+   "names": [
+    "Réunion",
+    "Île Bourbon",
+    "Department of Réunion"
+   ],
+   "former_names": []
+  },
+  "RH": {
+   "alpha3": "RHO",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Southern Rhodesia"
+   ]
+  },
+  "RO": {
+   "alpha3": "ROU",
+   "eu_code": "RO",
+   "names": [
+    "Romania"
+   ],
+   "former_names": [
+    "Romanian People’s Republic",
+    "Socialist Republic of Romania"
+   ]
+  },
+  "RS": {
+   "alpha3": "SRB",
+   "eu_code": "RS",
+   "names": [
+    "Serbia",
+    "Republic of Serbia"
+   ],
+   "former_names": []
+  },
+  "RU": {
+   "alpha3": "RUS",
+   "eu_code": "RU",
+   "names": [
+    "Russia",
+    "Russian Federation"
+   ],
+   "former_names": []
+  },
+  "RW": {
+   "alpha3": "RWA",
+   "eu_code": "RW",
+   "names": [
+    "Rwanda",
+    "Republic of Rwanda",
+    "Rwandan",
+    "Rwandese"
+   ],
+   "former_names": []
+  },
+  "SA": {
+   "alpha3": "SAU",
+   "eu_code": "SA",
+   "names": [
+    "Saudi Arabia",
+    "Kingdom of Saudi Arabia",
+    "KSA"
+   ],
+   "former_names": []
+  },
+  "SB": {
+   "alpha3": "SLB",
+   "eu_code": "SB",
+   "names": [
+    "Solomon Islands"
+   ],
+   "former_names": []
+  },
+  "SC": {
+   "alpha3": "SYC",
+   "eu_code": "SC",
+   "names": [
+    "Seychelles",
+    "Republic of Seychelles"
+   ],
+   "former_names": []
+  },
+  "SD": {
+   "alpha3": "SDN",
+   "eu_code": "SD",
+   "names": [
+    "Sudan",
+    "Republic of the Sudan",
+    "Republic of Sudan"
+   ],
+   "former_names": []
+  },
+  "SE": {
+   "alpha3": "SWE",
+   "eu_code": "SE",
+   "names": [
+    "Sweden",
+    "Kingdom of Sweden"
+   ],
+   "former_names": []
+  },
+  "SG": {
+   "alpha3": "SGP",
+   "eu_code": "SG",
+   "names": [
+    "Singapore",
+    "Republic of Singapore"
+   ],
+   "former_names": []
+  },
+  "SH": {
+   "alpha3": "SHN",
+   "eu_code": "SH",
+   "names": [
+    "Saint Helena, Ascension and Tristan da Cunha",
+    "Saint Helena and Dependencies",
+    "Saint Helenian",
+    "St. Helena"
+   ],
+   "former_names": [
+    "Saint Helena"
+   ]
+  },
+  "SI": {
+   "alpha3": "SVN",
+   "eu_code": "SI",
+   "names": [
+    "Slovenia",
+    "Republic of Slovenia"
+   ],
+   "former_names": []
+  },
+  "SJ": {
+   "alpha3": "SJM",
+   "eu_code": "SJ",
+   "names": [
+    "Svalbard and Jan Mayen",
+    "of Svalbard, of Jan Mayen"
+   ],
+   "former_names": []
+  },
+  "SK": {
+   "alpha3": "SVK",
+   "eu_code": "SK",
+   "names": [
+    "Slovakia",
+    "Slovak Republic",
+    "Slovak",
+    "Slovakian"
+   ],
+   "former_names": [
+    "Sikkim"
+   ]
+  },
+  "SL": {
+   "alpha3": "SLE",
+   "eu_code": "SL",
+   "names": [
+    "Sierra Leone",
+    "Republic of Sierra Leone"
+   ],
+   "former_names": []
+  },
+  "SM": {
+   "alpha3": "SMR",
+   "eu_code": "SM",
+   "names": [
+    "San Marino",
+    "Republic of San Marino"
+   ],
+   "former_names": []
+  },
+  "SN": {
+   "alpha3": "SEN",
+   "eu_code": "SN",
+   "names": [
+    "Senegal",
+    "Republic of Senegal"
+   ],
+   "former_names": []
+  },
+  "SO": {
+   "alpha3": "SOM",
+   "eu_code": "SO",
+   "names": [
+    "Somalia",
+    "Federal Republic of Somalia",
+    "Somali",
+    "Somalian"
+   ],
+   "former_names": [
+    "Somali Republic"
+   ]
+  },
+  "SR": {
+   "alpha3": "SUR",
+   "eu_code": "SR",
+   "names": [
+    "Suriname",
+    "Republic of Suriname"
+   ],
+   "former_names": []
+  },
+  "SS": {
+   "alpha3": "SSD",
+   "eu_code": "SS",
+   "names": [
+    "South Sudan",
+    "Republic of South Sudan"
+   ],
+   "former_names": []
+  },
+  "ST": {
+   "alpha3": "STP",
+   "eu_code": "ST",
+   "names": [
+    "São Tomé and Príncipe",
+    "Democratic Republic of São Tomé and Príncipe",
+    "Democratic Republic of São Tomé e Príncipe",
+    "Sao Tome and Principe"
+   ],
+   "former_names": []
+  },
+  "SU": {
+   "alpha3": "SUN",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Soviet Union",
+    "Union of Soviet Socialist Republics",
+    "USSR",
+    "Soviet"
+   ]
+  },
+  "SV": {
+   "alpha3": "SLV",
+   "eu_code": "SV",
+   "names": [
+    "El Salvador",
+    "Republic of El Salvador",
+    "Salvadorian",
+    "Salvadoran"
+   ],
+   "former_names": []
+  },
+  "SX": {
+   "alpha3": "SXM",
+   "eu_code": "SX",
+   "names": [
+    "Sint Maarten"
+   ],
+   "former_names": []
+  },
+  "SY": {
+   "alpha3": "SYR",
+   "eu_code": "SY",
+   "names": [
+    "Syria",
+    "Syrian Arab Republic"
+   ],
+   "former_names": []
+  },
+  "SZ": {
+   "alpha3": "SWZ",
+   "eu_code": "SZ",
+   "names": [
+    "Eswatini",
+    "Kingdom of Eswatini",
+    "Kingdom of Swaziland",
+    "Swaziland"
+   ],
+   "former_names": [
+    "Ngwane"
+   ]
+  },
+  "TC": {
+   "alpha3": "TCA",
+   "eu_code": "TC",
+   "names": [
+    "Turks and Caicos Islands"
+   ],
+   "former_names": []
+  },
+  "TD": {
+   "alpha3": "TCD",
+   "eu_code": "TD",
+   "names": [
+    "Chad",
+    "Republic of Chad"
+   ],
+   "former_names": []
+  },
+  "TF": {
+   "alpha3": "ATF",
+   "eu_code": "TF",
+   "names": [
+    "French Southern and Antarctic Lands"
+   ],
+   "former_names": []
+  },
+  "TG": {
+   "alpha3": "TGO",
+   "eu_code": "TG",
+   "names": [
+    "Togo",
+    "Togolese Republic",
+    "Siam"
+   ],
+   "former_names": []
+  },
+  "TH": {
+   "alpha3": "THA",
+   "eu_code": "TH",
+   "names": [
+    "Thailand",
+    "Kingdom of Thailand"
+   ],
+   "former_names": []
+  },
+  "TJ": {
+   "alpha3": "TJK",
+   "eu_code": "TJ",
+   "names": [
+    "Tajikistan",
+    "Republic of Tajikistan"
+   ],
+   "former_names": []
+  },
+  "TK": {
+   "alpha3": "TKL",
+   "eu_code": "TK",
+   "names": [
+    "Tokelau"
+   ],
+   "former_names": []
+  },
+  "TL": {
+   "alpha3": "TLS",
+   "eu_code": "TL",
+   "names": [
+    "Timor-Leste",
+    "Democratic Republic of Timor-Leste",
+    "East Timor",
+    "Democratic Republic of East Timor"
+   ],
+   "former_names": []
+  },
+  "TM": {
+   "alpha3": "TKM",
+   "eu_code": "TM",
+   "names": [
+    "Turkmenistan",
+    "Turkmenia"
+   ],
+   "former_names": []
+  },
+  "TN": {
+   "alpha3": "TUN",
+   "eu_code": "TN",
+   "names": [
+    "Tunisia",
+    "Republic of Tunisia"
+   ],
+   "former_names": []
+  },
+  "TO": {
+   "alpha3": "TON",
+   "eu_code": "TO",
+   "names": [
+    "Tonga",
+    "Kingdom of Tonga"
+   ],
+   "former_names": []
+  },
+  "TP": {
+   "alpha3": "TMP",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "East Timor"
+   ]
+  },
+  "TR": {
+   "alpha3": "TUR",
+   "eu_code": "TR",
+   "names": [
+    "Türkiye",
+    "Republic of Türkiye",
+    "Republic of Turkey",
+    "Turkey"
+   ],
+   "former_names": []
+  },
+  "TT": {
+   "alpha3": "TTO",
+   "eu_code": "TT",
+   "names": [
+    "Trinidad and Tobago",
+    "Republic of Trinidad and Tobago"
+   ],
+   "former_names": []
+  },
+  "TV": {
+   "alpha3": "TUV",
+   "eu_code": "TV",
+   "names": [
+    "Tuvalu",
+    "Ellice Islands"
+   ],
+   "former_names": []
+  },
+  "TW": {
+   "alpha3": "TWN",
+   "eu_code": "TW",
+   "names": [
+    "Taiwan",
+    "Formosa"
+   ],
+   "former_names": []
+  },
+  "TZ": {
+   "alpha3": "TZA",
+   "eu_code": "TZ",
+   "names": [
+    "Tanzania",
+    "United Republic of Tanzania"
+   ],
+   "former_names": []
+  },
+  "UA": {
+   "alpha3": "UKR",
+   "eu_code": "UA",
+   "names": [
+    "Ukraine"
+   ],
+   "former_names": []
+  },
+  "UG": {
+   "alpha3": "UGA",
+   "eu_code": "UG",
+   "names": [
+    "Uganda",
+    "Republic of Uganda"
+   ],
+   "former_names": []
+  },
+  "UM": {
+   "alpha3": "UMI",
+   "eu_code": "UM",
+   "names": [
+    "United States Minor Outlying Islands",
+    "US Minor Outlying Islands"
+   ],
+   "former_names": []
+  },
+  "US": {
+   "alpha3": "USA",
+   "eu_code": "US",
+   "names": [
+    "United States",
+    "United States of America",
+    "US",
+    "USA",
+    "American",
+    "of the United States"
+   ],
+   "former_names": []
+  },
+  "UY": {
+   "alpha3": "URY",
+   "eu_code": "UY",
+   "names": [
+    "Uruguay",
+    "Eastern Republic of Uruguay"
+   ],
+   "former_names": []
+  },
+  "UZ": {
+   "alpha3": "UZB",
+   "eu_code": "UZ",
+   "names": [
+    "Uzbekistan",
+    "Republic of Uzbekistan"
+   ],
+   "former_names": []
+  },
+  "VA": {
+   "alpha3": "VAT",
+   "eu_code": "VA",
+   "names": [
+    "Holy See",
+    "Holy See (Vatican City State)",
+    "Holy See (Vatican)",
+    "Vatican City State",
+    "of the Holy See/of the Vatican"
+   ],
+   "former_names": []
+  },
+  "VC": {
+   "alpha3": "VCT",
+   "eu_code": "VC",
+   "names": [
+    "Saint Vincent and the Grenadines",
+    "Vincentian",
+    "of Saint Vincent and the Grenadines"
+   ],
+   "former_names": []
+  },
+  "VD": {
+   "alpha3": "VDR",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Democratic Republic of Vietnam",
+    "North Vietnam"
+   ]
+  },
+  "VE": {
+   "alpha3": "VEN",
+   "eu_code": "VE",
+   "names": [
+    "Venezuela",
+    "Bolivarian Republic of Venezuela"
+   ],
+   "former_names": []
+  },
+  "VG": {
+   "alpha3": "VGB",
+   "eu_code": "VG",
+   "names": [
+    "British Virgin Islands"
+   ],
+   "former_names": []
+  },
+  "VI": {
+   "alpha3": "VIR",
+   "eu_code": "VI",
+   "names": [
+    "US Virgin Islands",
+    "Virgin Islands of the United States",
+    "United States Virgin Islands"
+   ],
+   "former_names": []
+  },
+  "VN": {
+   "alpha3": "VNM",
+   "eu_code": "VN",
+   "names": [
+    "Viet Nam",
+    "Socialist Republic of Viet Nam"
+   ],
+   "former_names": [
+    "Vietnam",
+    "Republic of Vietnam",
+    "South Vietnam"
+   ]
+  },
+  "VU": {
+   "alpha3": "VUT",
+   "eu_code": "VU",
+   "names": [
+    "Vanuatu",
+    "Republic of Vanuatu"
+   ],
+   "former_names": []
+  },
+  "WF": {
+   "alpha3": "WLF",
+   "eu_code": "WF",
+   "names": [
+    "Wallis and Futuna",
+    "Territory of the Wallis and Futuna Islands"
+   ],
+   "former_names": []
+  },
+  "WK": {
+   "alpha3": "WAK",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Wake Island",
+    "Wake Islands"
+   ]
+  },
+  "WS": {
+   "alpha3": "WSM",
+   "eu_code": "WS",
+   "names": [
+    "Samoa",
+    "Independent State of Samoa",
+    "Western Samoa"
+   ],
+   "former_names": []
+  },
+  "XK": {
+   "alpha3": null,
+   "eu_code": null,
+   "names": [
+    "Kosovo*",
+    "Kosovo",
+    "Kosovo (under UNSCR 1244/99)"
+   ],
+   "former_names": []
+  },
+  "YD": {
+   "alpha3": "YMD",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "North Yemen",
+    "Yemen Arab Republic",
+    "Yemen (Sanaa)",
+    "Yemen"
+   ]
+  },
+  "YE": {
+   "alpha3": "YEM",
+   "eu_code": "YE",
+   "names": [
+    "Yemen",
+    "Republic of Yemen"
+   ],
+   "former_names": [
+    "South Yemen",
+    "People’s Democratic Republic of Yemen",
+    "Democratic Yemen",
+    "Yemen – Aden"
+   ]
+  },
+  "YT": {
+   "alpha3": "MYT",
+   "eu_code": "YT",
+   "names": [
+    "Mayotte",
+    "Territorial Collectivity of Mayotte"
+   ],
+   "former_names": [
+    "Departmental Collectivity of Mayotte"
+   ]
+  },
+  "YU": {
+   "alpha3": "YUG",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Yugoslavia",
+    "Federal People’s Republic of Yugoslavia",
+    "Yugoslav",
+    "Socialist Federal Republic of Yugoslavia",
+    "Federal Republic of Yugoslavia"
+   ]
+  },
+  "ZA": {
+   "alpha3": "ZAF",
+   "eu_code": "ZA",
+   "names": [
+    "South Africa",
+    "Republic of South Africa"
+   ],
+   "former_names": []
+  },
+  "ZM": {
+   "alpha3": "ZMB",
+   "eu_code": "ZM",
+   "names": [
+    "Zambia",
+    "Republic of Zambia"
+   ],
+   "former_names": []
+  },
+  "ZR": {
+   "alpha3": "ZAR",
+   "eu_code": null,
+   "names": [],
+   "former_names": [
+    "Zaire",
+    "Zairean"
+   ]
+  },
+  "ZW": {
+   "alpha3": "ZWE",
+   "eu_code": "ZW",
+   "names": [
+    "Zimbabwe",
+    "Republic of Zimbabwe"
+   ],
+   "former_names": []
+  }
+ }
+}

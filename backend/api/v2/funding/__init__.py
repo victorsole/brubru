@@ -47,6 +47,7 @@ from . import international_cooperation as _international_cooperation
 from . import ft_news_events as _ft_news_events
 # Calls for funding in cascade, issued by EU-funded projects (ft_cascade_calls, 23 Oct 2026).
 from . import ft_cascade_calls as _ft_cascade_calls
+from . import partners as _partners
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -55,6 +56,7 @@ router.include_router(_funding_tenders.tenders_router)
 router.include_router(_funding_tenders.projects_router)
 router.include_router(_ted_tenders.tenders_router)
 router.include_router(_eu_funding_recipients.router)
+router.include_router(_partners.router)
 router.include_router(_agency_procurement.router)
 router.include_router(_funding_all.router)
 router.include_router(_startups.router)

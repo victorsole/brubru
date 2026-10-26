@@ -18,12 +18,11 @@ not held here. Backed by economy_items (body_code 'commission', item_type
 """
 from __future__ import annotations
 
-import re
 from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path as PathParam, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import Field
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -33,7 +32,8 @@ from api.v1._change_window import (SYNC_ORDERS, UpperBoundDatetime, any_window, 
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
-from api.v1._row_dates import row_updated
+
+from . import _fts
 
 router = APIRouter()
 
@@ -47,38 +47,14 @@ _ALL_FRAGMENTS = [v[0] for v in _PROGRAMMES.values()]
 
 _ORDERS = {"recent", "oldest", "year"}
 _ORDER_SQL = {
-    "recent": "document_date DESC NULLS LAST, id DESC",
-    "oldest": "document_date ASC NULLS LAST, id ASC",
-    "year": "document_date DESC NULLS LAST, id DESC",
+    "recent": "e.document_date DESC NULLS LAST, e.id DESC",
+    "oldest": "e.document_date ASC NULLS LAST, e.id ASC",
+    "year": "c.year DESC NULLS LAST, e.document_date DESC NULLS LAST, e.id DESC",
 }
 
 
-class _DataPoints(BaseModel):
-    public_url: Optional[str] = Field(None, description="Canonical URL (FTS).")
-    body_txt: Optional[str] = Field(None, description="Plain-text body (full on detail; null on list).")
-    body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
-    document_date: Optional[datetime] = Field(None, description="FTS record date.")
-    creation_date: Optional[datetime] = Field(None, description="When Brubru ingested it.")
-    updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
-
-
-class IntlCoopItem(_DataPoints):
-    id: int
-    beneficiary: Optional[str] = Field(None, description="Who received the money.")
-    country: Optional[str] = Field(None, description="Beneficiary country.")
-    amount_eur: Optional[float] = Field(None, description="EU commitment (total), EUR.")
-    funding_type: Optional[str] = Field(None, description="Grant | Procurement contract | Contribution agreement.")
-    programme: Optional[str] = Field(None, description="Full FTS programme string.")
+class IntlCoopItem(_fts.FtsItem):
     programme_key: Optional[str] = Field(None, description="ndici | ipa3 | humanitarian.")
-    dg: Optional[str] = Field(None, description="Responsible Commission department (DG).")
-    contract_ref: Optional[str] = Field(None, description="Legal commitment reference.")
-    year: Optional[int] = Field(None, description="FTS budget year.")
-    subject: Optional[str] = Field(None, description="What the money was for.")
-
-
-def _field(body: str, label: str) -> Optional[str]:
-    m = re.search(rf"{re.escape(label)}:\s*(.+)", body or "")
-    return m.group(1).strip() if m else None
 
 
 def _programme_key(programme: Optional[str]) -> Optional[str]:
@@ -90,48 +66,9 @@ def _programme_key(programme: Optional[str]) -> Optional[str]:
     return None
 
 
-def _parse(r, *, with_body: bool) -> IntlCoopItem:
-    body = r.body_txt or ""
-    amount = None
-    raw = _field(body, "EU commitment (total)")
-    if raw:
-        m = re.search(r"([\d.,]+)", raw.replace("EUR", "").strip())
-        if m:
-            try:
-                amount = float(m.group(1).replace(",", ""))
-            except ValueError:
-                amount = None
-    year = _field(body, "Year")
-    try:
-        year_i = int(year) if year else None
-    except ValueError:
-        year_i = None
-    programme = _field(body, "Programme")
-    return IntlCoopItem(
-        id=r.id,
-        beneficiary=_field(body, "Beneficiary"),
-        country=_field(body, "Beneficiary country"),
-        amount_eur=amount,
-        funding_type=_field(body, "Funding type"),
-        programme=programme,
-        programme_key=_programme_key(programme),
-        dg=_field(body, "Responsible department"),
-        contract_ref=_field(body, "Legal commitment ref"),
-        year=year_i,
-        subject=_field(body, "Subject"),
-        public_url=r.public_url,
-        body_txt=(r.body_txt if with_body else None),
-        body_html=(r.body_html if with_body else None),
-        document_date=r.document_date,
-        creation_date=r.creation_date,
-        updated_date=row_updated(r),
-    )
+def _item(r, *, with_body: bool) -> IntlCoopItem:
+    return _fts.to_item(r, with_body=with_body, model=IntlCoopItem, programme_key=_programme_key(r.programme))
 
-
-_BASE = ("FROM economy_items WHERE body_code='commission' AND item_type='funding_recipient'")
-# updated_at: the change signal row_updated() reads (migrations 271, 296); absent, every
-# item served updated_date = null (API audit, 16 Oct 2026).
-_COLS = "id, public_url, body_txt, body_html, document_date, creation_date, updated_at"
 
 # The page itself is an index range (8 ms), but its exact total reads every matching award's
 # heap page: 21,224 rows, 15,000 blocks, 4.6 s (20 Oct 2026). The awards change when the yearly
@@ -146,7 +83,7 @@ def _cached_total(db, clause: str, params: dict) -> int:
     hit = _TOTALS.get(key)
     if hit and time.monotonic() - hit[0] < _TOTAL_TTL_S:
         return hit[1]
-    total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+    total = db.execute(text(f"SELECT count(*) {clause}"), params).scalar() or 0
     if len(_TOTALS) > 512:
         _TOTALS.clear()
     _TOTALS[key] = (time.monotonic(), total)
@@ -215,58 +152,51 @@ async def list_intl_cooperation(
     if order not in _ORDERS and order not in SYNC_ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
-    where = [_BASE.replace("FROM economy_items WHERE ", "")]
+    where: list = []
     params: dict = {"limit": limit, "offset": (page - 1) * limit}
-    # The programme is matched on `summary` ("name | amount | programme | country"), which has a
-    # trigram index, not on body_txt: an ILIKE over 188,187 bodies made a 10-item page take 70-77 s
-    # (20 Oct 2026). Same rows: 2,732 of 20,000 sampled matched either way, none disagreed.
+    # The programme on the FTS file's own column since 26 Oct 2026 (it was matched on `summary`,
+    # whose trigram index kept a body ILIKE from taking 70-77 s, 20 Oct).
     if programme:
         if programme not in _PROGRAMMES:
             raise HTTPException(status_code=400, detail=f"programme must be one of {sorted(_PROGRAMMES)}")
-        where.append("summary ILIKE :prog")
+        where.append("c.programme ILIKE :prog")
         params["prog"] = f"%{_PROGRAMMES[programme][0]}%"
     else:
-        where.append("(" + " OR ".join(f"summary ILIKE :f{i}" for i in range(len(_ALL_FRAGMENTS))) + ")")
+        where.append("(" + " OR ".join(f"c.programme ILIKE :f{i}" for i in range(len(_ALL_FRAGMENTS))) + ")")
         for i, frag in enumerate(_ALL_FRAGMENTS):
             params[f"f{i}"] = f"%{frag}%"
-    if funding_type:
-        where.append("body_txt ILIKE :ft"); params["ft"] = f"%Funding type: %{funding_type}%"
-    if country:
-        where.append("body_txt ILIKE :ctry"); params["ctry"] = f"%Beneficiary country: %{country}%"
-    if year:
-        where.append("body_txt ILIKE :yr"); params["yr"] = f"%Year: {year}%"
+    _fts.filters(where, params, funding_type=funding_type, country=country, year=year)
     if q:
-        where.append("(title ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
+        where.append("e.search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
     # The change window, on the columns served as creation_date / updated_date.
-    sql_window(where, params, window, "creation_date", "updated_at")
-    clause = " AND ".join(where)
+    sql_window(where, params, window, "e.creation_date", _fts.UPDATED)
+    clause = _fts.FROM + "".join(f" AND {w}" for w in where)
     # A change window is counted live: a 15-minute-old total would miss what just changed.
-    total = (db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
+    total = (db.execute(text(f"SELECT count(*) {clause}"), params).scalar() or 0
              if any_window(window) else _cached_total(db, clause, params))
-    rows = db.execute(
-        # body_txt is parsed into the award fields on every item; body_html is read only when served
-        text(f"SELECT {_COLS if include_body else _COLS.replace('body_html', 'NULL::text AS body_html')} FROM economy_items WHERE {clause} "
-             f"ORDER BY {sql_order(order, 'creation_date', 'updated_at') or _ORDER_SQL[order]} LIMIT :limit OFFSET :offset"), params
-    ).fetchall()
-    return build_envelope([_parse(r, with_body=include_body) for r in rows], total, page, limit,
+    order_sql = sql_order(order, "e.creation_date", _fts.UPDATED, "e.id") or _ORDER_SQL[order]
+    rows = db.execute(text(f"SELECT {_fts.cols(include_body)} {clause} ORDER BY {order_sql} "
+                           "LIMIT :limit OFFSET :offset"), params).fetchall()
+    return build_envelope([_item(r, with_body=include_body) for r in rows], total, page, limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
 @router.get("/international-cooperation/{item_id}", response_model=IntlCoopItem, tags=["v2-funding"],
             summary="One EU international-cooperation award (full FTS record)",
             description="""**What it does**
-Returns one EU external-action award in full, including the complete FTS `body_txt` / `body_html` and all parsed fields.
+Returns one EU external-action award in full: the FTS file's own values and the complete `body_txt` / `body_html`.
 
 **Input**
 `item_id` — the Brubru item id from the list endpoint.
 
 **Try it**
 ```
-GET /api/v2/funding/international-cooperation/{item_id}
+GET /api/v2/funding/international-cooperation?programme=ipa3&limit=1
 ```
+then follow the item's `self`.
 
 **You get back**
-A single award with the structured fields + the full 5-datapoint contract.
+A single award with the FTS file's fields + the full 5-datapoint contract, or 404.
 
 **Data freshness**
 From the EU Financial Transparency System (FTS).""")
@@ -276,11 +206,7 @@ async def get_intl_cooperation(
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
 ):
-    r = db.execute(
-        text(f"SELECT {_COLS} FROM economy_items "
-             "WHERE id = :id AND body_code='commission' AND item_type='funding_recipient'"),
-        {"id": item_id},
-    ).fetchone()
+    r = db.execute(text(f"SELECT {_fts.cols(True)} {_fts.FROM} AND e.id = :id"), {"id": item_id}).fetchone()
     if r is None:
         raise HTTPException(status_code=404, detail=f"No international-cooperation award with id {item_id}")
-    return _parse(r, with_body=True)
+    return _item(r, with_body=True)

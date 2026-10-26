@@ -12,15 +12,17 @@ ships, these endpoints return honest empty (no fixtures).
 All queries filter is_test=False so any future fixture row never leaks.
 """
 
+import json
 from datetime import date, datetime, time, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, func, or_
+from sqlalchemy import and_, func, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
+from services.funding.countries import both_styles, eu_code
 from services.funding.programme_codes import named_codes
 from services.funding.project_status import VOCABULARY as PROJECT_STATUSES
 from ._change_window import UpperBoundDatetime, orm_order, orm_window, validate_window
@@ -487,6 +489,20 @@ async def get_call_for_tenders(
 projects_router = APIRouter(prefix="/ft-funded-projects", tags=["v1-funding-tenders"])
 
 
+class ProjectOrganisation(BaseModel):
+    """One organisation of a project's consortium, as CORDIS lists it (organization.csv)."""
+    pic: Optional[str] = Field(None, description="The organisation's Participant Identification Code (CORDIS organisationID): its key at the Funding & Tenders Portal.")
+    name: Optional[str] = None
+    short_name: Optional[str] = None
+    role: Optional[str] = Field(None, description="coordinator | participant | associatedPartner | thirdParty | partner | internationalPartner.")
+    country: Optional[str] = Field(None, description="ISO-2 country code.")
+    city: Optional[str] = None
+    activity_type: Optional[str] = Field(None, description="HES higher education | REC research body | PRC private company | PUB public body | OTH other.")
+    is_sme: Optional[bool] = None
+    ec_contribution: Optional[float] = Field(None, description="Its EU contribution, EUR.")
+    total_cost: Optional[float] = None
+
+
 class FtFundedProjectItem(BaseModel):
     id: str
     project_id: str
@@ -497,6 +513,8 @@ class FtFundedProjectItem(BaseModel):
     type_of_action: Optional[str] = None
     coordinator_name: Optional[str] = None
     coordinator_country: Optional[str] = None
+    coordinator_pic: Optional[str] = Field(None, description="The coordinator's Participant Identification Code, when the source gives it.")
+    organisations: List[ProjectOrganisation] = Field(default_factory=list, description="The consortium, as CORDIS lists it (Horizon Europe, Horizon 2020, FP7). Empty for the other programmes, whose source names only the coordinator (the coordinator_* fields).")
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     total_cost: Optional[float] = None
@@ -519,6 +537,60 @@ class FtFundedProjectItem(BaseModel):
     document_date: Optional[date] = Field(None, description="When the project was published on the F&T Portal (published_at); the project start date where no publication date is recorded; never a date in the future (start_date and end_date carry the project's own dates).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync (filter with updated_from / updated_to). A re-sync that finds the same content does not move it (migration 306).")
+
+
+# CORDIS's consortium roles, in the source's spelling (the filter takes any case).
+_ROLES = {r.lower(): r for r in ("coordinator", "participant", "associatedPartner", "thirdParty", "partner",
+                                 "internationalPartner")}
+# The expression of index ix_ftp_fts, so `q` uses it.
+_PROJECT_TSV = ("to_tsvector('english', coalesce(ft_funded_projects.title, '') || ' ' || "
+                "coalesce(ft_funded_projects.objective, '') || ' ' || coalesce(ft_funded_projects.keywords, ''))")
+
+
+def _consortium_clause(organisation: Optional[str], role: Optional[str], participant_country: Optional[str]):
+    """Projects where ONE organisation meets every condition given (26 Oct 2026, partner search).
+
+    CORDIS projects (Horizon Europe, Horizon 2020, FP7) are matched on their consortium; the other
+    programmes name only the coordinator, so there the coordinator_* columns answer, for the
+    coordinator role only. A PIC (digits) matches exactly, anything else part of the name."""
+    elem, coord, params, contains = [], [], {}, {}
+    if organisation:
+        org = organisation.strip()
+        if org.isdigit():
+            elem.append("o->>'pic' = :org_pic")
+            coord.append("ft_funded_projects.coordinator_pic = :org_pic")
+            params["org_pic"] = contains["pic"] = org
+        else:
+            elem.append("(o->>'name' ILIKE :org_like OR o->>'short_name' ILIKE :org_like)")
+            coord.append("ft_funded_projects.coordinator_name ILIKE :org_like")
+            params["org_like"] = f"%{org}%"
+    if role:
+        canonical = _ROLES.get(role.strip().lower())
+        if canonical is None:
+            raise HTTPException(status_code=400, detail=f"role must be one of {sorted(_ROLES.values())}")
+        elem.append("o->>'role' = :role")
+        params["role"] = contains["role"] = canonical
+        if canonical != "coordinator":
+            coord.append("false")
+    if participant_country:
+        # CORDIS writes the EU style code (EL, UK); the coordinators of the other programmes either.
+        elem.append("o->>'country' = :pc")
+        coord.append("ft_funded_projects.coordinator_country = ANY(CAST(:pcs AS text[]))")
+        params["pc"] = contains["country"] = eu_code(participant_country)
+        params["pcs"] = both_styles(participant_country)
+    if not elem:
+        return None
+    # The containment test uses the GIN index on organisations; the element test keeps all the
+    # conditions on one organisation (a Spanish participant and a French coordinator are not a
+    # Spanish coordinator).
+    cordis = ("EXISTS (SELECT 1 FROM jsonb_array_elements(ft_funded_projects.organisations) o WHERE "
+              + " AND ".join(elem) + ")")
+    if contains:
+        cordis = "ft_funded_projects.organisations @> CAST(:contains AS jsonb) AND " + cordis
+        params["contains"] = json.dumps([contains])
+    coordinator_only = ("jsonb_array_length(coalesce(ft_funded_projects.organisations, '[]'::jsonb)) = 0 AND "
+                        + " AND ".join(coord))
+    return text(f"(({cordis}) OR ({coordinator_only}))").bindparams(**params)
 
 
 def _project_date(r) -> Optional[date]:
@@ -548,6 +620,9 @@ def _project_to_item(
         project_acronym=r.project_acronym, title=r.title, objective=r.objective,
         framework_programme=r.framework_programme, type_of_action=r.type_of_action,
         coordinator_name=r.coordinator_name, coordinator_country=r.coordinator_country,
+        coordinator_pic=getattr(r, "coordinator_pic", None),
+        organisations=[ProjectOrganisation(**{k: o.get(k) for k in ProjectOrganisation.model_fields})
+                       for o in (getattr(r, "organisations", None) or []) if isinstance(o, dict)],
         start_date=r.start_date, end_date=r.end_date,
         total_cost=float(r.total_cost) if r.total_cost is not None else None,
         eu_contribution=float(r.eu_contribution) if r.eu_contribution is not None else None,
@@ -569,14 +644,16 @@ def _project_to_item(
 Returns EU-funded grant projects, planned, running and finished, across all programmes: Horizon Europe, Horizon 2020 and FP7 from CORDIS, every other programme (Digital Europe, EU4Health, LIFE, Creative Europe...) from the Funding & Tenders Portal. Each row carries the project_id (e.g. `101039426`), the title, the programme's code, the type of action, the coordinator name + country, the start/end dates, the EU contribution, the total cost, the objective summary, the status (with the source's own word beside it), and the project's own page.
 
 **When to use it**
-For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?". Combine with `/api/v1/ft-calls-for-proposals` to see the call → project pipeline.
+For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?", "which projects has this organisation (by PIC) coordinated?". For one row per organisation, matched by subject, use `/api/v2/funding/partners`. Combine with `/api/v1/ft-calls-for-proposals` to see the call → project pipeline.
 
 **Input**
 - `framework_programme` — the programme. Rows hold the source's code: `HORIZON` (Horizon Europe), `H2020` (Horizon 2020), `FP7`, and the F&T Portal's codes (`ERASMUS2027`, `CREA2027`, `LIFE2027`, `DIGITAL`...). Part of a code matches as a substring (`LIFE` finds both LIFE programmes, 2014-2020 and 2021-2027); a value that is part of no code is looked up in the programmes' names as the portal gives them (`Horizon Europe`, `Horizon 2020`, `Creative Europe`, `Erasmus+`).
 - `coordinator_country` — ISO-2 (2 chars exact).
 - `type_of_action` — substring (`RIA`, `CSA`; `IA` also matches `RIA`).
 - `status` — planned | ongoing | ended | terminated | suspended | unknown. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; each item shows that word in `source_status`.
-- `q` — substring search on title + objective.
+- `q` — words in the title, objective and keywords (full text: every word in any form; `"quoted phrase"`, `OR`, `-word`).
+- `organisation` — an organisation in the consortium: its PIC (digits, exact) or part of its name; `role` (coordinator | participant | associatedPartner | thirdParty | partner | internationalPartner) and `participant_country` (ISO-2) apply to that same organisation. Horizon Europe, Horizon 2020 and FP7 projects are matched on their whole consortium; the other programmes' sources name only the coordinator, so there only the coordinator can match.
+- `topic` — the topic code, or its start (`HORIZON-CL5-2026` finds every topic of those calls); `keyword` — part of one of the project's keywords.
 - `start_from`, `end_to` — start-date / end-date window.
 - `limit` (default 50, max 100), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
@@ -586,10 +663,12 @@ For research orgs and consultancies doing competitive intelligence on EU funding
 GET /api/v1/ft-funded-projects?framework_programme=Horizon%20Europe&coordinator_country=NL
 GET /api/v1/ft-funded-projects?framework_programme=Creative%20Europe&status=ongoing
 GET /api/v1/ft-funded-projects?q=climate&type_of_action=CSA
+GET /api/v1/ft-funded-projects?q=soil%20health&role=coordinator&participant_country=ES
+GET /api/v1/ft-funded-projects?organisation=999991722&role=coordinator
 ```
 
 **You get back**
-A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `project_acronym`, `title`, `framework_programme` (the code), `type_of_action`, `coordinator_name`, `coordinator_country`, `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_status` (the source's own word), `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the project's own page, on CORDIS or the F&T Portal).
+A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `project_acronym`, `title`, `framework_programme` (the code), `type_of_action`, `coordinator_name`, `coordinator_country`, `coordinator_pic`, `organisations` (the consortium: each organisation's `pic`, `name`, `role`, `country`, `city`, `activity_type`, `is_sme`, `ec_contribution`; empty outside Horizon Europe, Horizon 2020 and FP7), `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_status` (the source's own word), `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the project's own page, on CORDIS or the F&T Portal).
 
 **Data freshness**
 Read every Sunday from 05:00 UTC (weekly tier, from 1 Nov 2026; until then the rows were last read on 6 May for CORDIS and 15 Jun for the F&T Portal): Horizon Europe, Horizon 2020 and FP7 from the CORDIS bulk dumps (cordis.europa.eu/data), each read when CORDIS has refreshed it, which is about monthly; every other programme from the F&T Portal's projects-results index (ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results). `status` is set every day from the source's word and the project's own dates. CORDIS is also reachable via `/api/v1/discover/eurio/projects`. is_test=True seed rows are filtered out at query time.""",
@@ -600,7 +679,12 @@ async def list_funded_projects(
     coordinator_country: Optional[str] = Query(None, min_length=2, max_length=2),
     type_of_action: Optional[str] = Query(None),
     status: Optional[str] = Query(None, description="planned | ongoing | ended | terminated | suspended | unknown, set from the source and the project's own dates. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; a word in the list above (Ongoing, Ended...) means the status set here, in any case."),
-    q: Optional[str] = Query(None),
+    q: Optional[str] = Query(None, description="Words in the title, objective and keywords (full text: every word, any form; \"quoted phrase\", OR, -word)."),
+    organisation: Optional[str] = Query(None, description="An organisation in the consortium: its PIC (digits, exact) or part of its name."),
+    role: Optional[str] = Query(None, description="That organisation's role: coordinator | participant | associatedPartner | thirdParty | partner | internationalPartner."),
+    participant_country: Optional[str] = Query(None, min_length=2, max_length=2, description="That organisation's country, ISO-2."),
+    topic: Optional[str] = Query(None, description="The project's topic code, or its start (e.g. HORIZON-CL5-2026)."),
+    keyword: Optional[str] = Query(None, description="Part of one of the project's keywords."),
     start_from: Optional[date] = Query(None),
     end_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
@@ -620,7 +704,8 @@ async def list_funded_projects(
         named = named_codes(framework_programme)
         filters.append(or_(by_code, FtFundedProject.framework_programme.in_(named)) if named else by_code)
     if coordinator_country:
-        filters.append(FtFundedProject.coordinator_country == coordinator_country.upper())
+        # Either spelling of Greece (EL, GR) and the United Kingdom (UK, GB): the column holds both.
+        filters.append(FtFundedProject.coordinator_country.in_(both_styles(coordinator_country)))
     if type_of_action:
         filters.append(FtFundedProject.type_of_action.ilike(f"%{type_of_action}%"))
     if status:
@@ -631,8 +716,16 @@ async def list_funded_projects(
         else:
             filters.append(func.lower(FtFundedProject.source_status) == status.strip().lower())
     if q:
-        like = f"%{q}%"
-        filters.append((FtFundedProject.title.ilike(like)) | (FtFundedProject.objective.ilike(like)))
+        # The full-text index since 26 Oct 2026; a substring match over 109,636 objectives was slow
+        # and missed every other form of a word.
+        filters.append(text(f"{_PROJECT_TSV} @@ websearch_to_tsquery('english', :q)").bindparams(q=q))
+    consortium = _consortium_clause(organisation, role, participant_country)
+    if consortium is not None:
+        filters.append(consortium)
+    if topic:
+        filters.append(FtFundedProject.topic_code.ilike(f"{topic.strip()}%"))
+    if keyword:
+        filters.append(FtFundedProject.keywords.ilike(f"%{keyword.strip()}%"))
     if start_from:
         filters.append(FtFundedProject.start_date >= start_from)
     if end_to:

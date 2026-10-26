@@ -172,7 +172,7 @@ def test_raw_sql_list_orders_by_primary_key_last(harness, path):
     resp = client.get(path, params={"page": 2, "limit": 5})
     assert resp.status_code == 200, resp.text
     keys = _order_by_of_paged_sql(db.sql)
-    assert re.fullmatch(r"id( DESC| ASC)?", keys[-1]), f"{path} ORDER BY {keys}"
+    assert re.fullmatch(r"(\w+\.)?id( DESC| ASC)?", keys[-1]), f"{path} ORDER BY {keys}"
 
 
 @pytest.mark.parametrize("order", ["recent", "oldest", "title"])

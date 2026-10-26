@@ -225,14 +225,16 @@ async def get_call_for_tenders(
 Returns EU-funded grant projects, planned, running and finished, across all programmes: Horizon Europe, Horizon 2020 and FP7 from CORDIS, every other programme (Digital Europe, EU4Health, LIFE, Creative Europe...) from the Funding & Tenders Portal. Each row carries the project_id (e.g. `101039426`), the title, the programme's code, the type of action, the coordinator name + country, the start/end dates, the EU contribution, the total cost, the objective summary, the status (with the source's own word beside it), and the project's own page.
 
 **When to use it**
-For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?". Combine with `/api/v2/funding/ft-calls-for-proposals` to see the call → project pipeline.
+For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?", "which projects has this organisation (by PIC) coordinated?". For one row per organisation, matched by subject, use `/api/v2/funding/partners`. Combine with `/api/v2/funding/ft-calls-for-proposals` to see the call → project pipeline.
 
 **Input**
 - `framework_programme` — the programme. Rows hold the source's code: `HORIZON` (Horizon Europe), `H2020` (Horizon 2020), `FP7`, and the F&T Portal's codes (`ERASMUS2027`, `CREA2027`, `LIFE2027`, `DIGITAL`...). Part of a code matches as a substring (`LIFE` finds both LIFE programmes, 2014-2020 and 2021-2027); a value that is part of no code is looked up in the programmes' names as the portal gives them (`Horizon Europe`, `Horizon 2020`, `Creative Europe`, `Erasmus+`).
 - `coordinator_country` — ISO-2 (2 chars exact).
 - `type_of_action` — substring (`RIA`, `CSA`; `IA` also matches `RIA`).
 - `status` — planned | ongoing | ended | terminated | suspended | unknown. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; each item shows that word in `source_status`.
-- `q` — substring search on title + objective.
+- `q` — words in the title, objective and keywords (full text: every word in any form; `"quoted phrase"`, `OR`, `-word`).
+- `organisation` — an organisation in the consortium: its PIC (digits, exact) or part of its name; `role` (coordinator | participant | associatedPartner | thirdParty | partner | internationalPartner) and `participant_country` (ISO-2) apply to that same organisation. Horizon Europe, Horizon 2020 and FP7 projects are matched on their whole consortium; the other programmes' sources name only the coordinator, so there only the coordinator can match.
+- `topic` — the topic code, or its start (`HORIZON-CL5-2026` finds every topic of those calls); `keyword` — part of one of the project's keywords.
 - `start_from`, `end_to` — start-date / end-date window.
 - `limit` (default 50, max 100), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
@@ -242,10 +244,12 @@ For research orgs and consultancies doing competitive intelligence on EU funding
 GET /api/v2/funding/ft-funded-projects?framework_programme=Horizon%20Europe&coordinator_country=NL
 GET /api/v2/funding/ft-funded-projects?framework_programme=Creative%20Europe&status=ongoing
 GET /api/v2/funding/ft-funded-projects?q=climate&type_of_action=CSA
+GET /api/v2/funding/ft-funded-projects?q=soil%20health&role=coordinator&participant_country=ES
+GET /api/v2/funding/ft-funded-projects?organisation=999991722&role=coordinator
 ```
 
 **You get back**
-A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `project_acronym`, `title`, `framework_programme` (the code), `type_of_action`, `coordinator_name`, `coordinator_country`, `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_status` (the source's own word), `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the project's own page, on CORDIS or the F&T Portal).
+A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `project_acronym`, `title`, `framework_programme` (the code), `type_of_action`, `coordinator_name`, `coordinator_country`, `coordinator_pic`, `organisations` (the consortium: each organisation's `pic`, `name`, `role`, `country`, `city`, `activity_type`, `is_sme`, `ec_contribution`; empty outside Horizon Europe, Horizon 2020 and FP7), `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_status` (the source's own word), `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the project's own page, on CORDIS or the F&T Portal).
 
 **Data freshness**
 Read every Sunday from 05:00 UTC (weekly tier, from 1 Nov 2026; until then the rows were last read on 6 May for CORDIS and 15 Jun for the F&T Portal): Horizon Europe, Horizon 2020 and FP7 from the CORDIS bulk dumps (cordis.europa.eu/data), each read when CORDIS has refreshed it, which is about monthly; every other programme from the F&T Portal's projects-results index (ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results). `status` is set every day from the source's word and the project's own dates. CORDIS is also reachable via `/api/v1/discover/eurio/projects`. is_test=True seed rows are filtered out at query time.""",
@@ -256,7 +260,12 @@ async def list_funded_projects(
     coordinator_country: Optional[str] = Query(None, min_length=2, max_length=2),
     type_of_action: Optional[str] = Query(None),
     status: Optional[str] = Query(None, description="planned | ongoing | ended | terminated | suspended | unknown, set from the source and the project's own dates. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; a word in the list above (Ongoing, Ended...) means the status set here, in any case."),
-    q: Optional[str] = Query(None),
+    q: Optional[str] = Query(None, description="Words in the title, objective and keywords (full text: every word, any form; \"quoted phrase\", OR, -word)."),
+    organisation: Optional[str] = Query(None, description="An organisation in the consortium: its PIC (digits, exact) or part of its name."),
+    role: Optional[str] = Query(None, description="That organisation's role: coordinator | participant | associatedPartner | thirdParty | partner | internationalPartner."),
+    participant_country: Optional[str] = Query(None, min_length=2, max_length=2, description="That organisation's country, ISO-2."),
+    topic: Optional[str] = Query(None, description="The project's topic code, or its start (e.g. HORIZON-CL5-2026)."),
+    keyword: Optional[str] = Query(None, description="Part of one of the project's keywords."),
     start_from: Optional[date] = Query(None),
     end_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
@@ -267,7 +276,7 @@ async def list_funded_projects(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtFundedProjectItem]:
-    return await _v1.list_funded_projects(request=request, framework_programme=framework_programme, coordinator_country=coordinator_country, type_of_action=type_of_action, status=status, q=q, start_from=start_from, end_to=end_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return await _v1.list_funded_projects(request=request, framework_programme=framework_programme, coordinator_country=coordinator_country, type_of_action=type_of_action, status=status, q=q, organisation=organisation, role=role, participant_country=participant_country, topic=topic, keyword=keyword, start_from=start_from, end_to=end_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @projects_router.get(

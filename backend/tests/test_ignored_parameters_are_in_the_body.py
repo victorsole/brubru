@@ -5,6 +5,8 @@ relays the body alone. It sent `department=CNECT`, got all 188,187 rows with the
 X-Brubru-Unknown-Params, and concluded the endpoint "only filters by organisation name". The body
 now opens with `ignored_parameters` and `accepted_parameters`. These call the real auth dependency,
 the real route and the real middleware function from main.py.
+
+`department` became a real filter on 26 Oct 2026 (Phase 1, partners); `unit` stands in for an unknown one.
 """
 import pathlib
 import sys
@@ -40,6 +42,9 @@ class _Db:
                title="RAMBOLL MANAGEMENT, CONSULTING", summary="EUR 102,400",
                public_url="https://ec.europa.eu/budget/financial-transparency-system/index.html#2025-x",
                document_date=SEEN, creation_date=SEEN, source_kind="xlsx", updated_at=SEEN)
+    # The list reads the FTS file's columns beside the row since 26 Oct 2026 (migration 313).
+    from api.v2.funding._fts import FILE_COLUMNS
+    row.update(dict.fromkeys(FILE_COLUMNS), body_txt=None, body_html=None)
 
     def execute(self, stmt, params=None):
         return _Result([self.row])
@@ -67,26 +72,26 @@ def test_the_real_auth_dependency_records_the_ignored_parameter_before_anything_
     from api.v2.funding import eu_funding_recipients as fr
     route = next(r for r in fr.router.routes if r.path == "/eu-funding-recipients")
     request = Request({"type": "http", "method": "GET", "path": "/api/v2/funding/eu-funding-recipients",
-                       "query_string": b"department=CNECT&q=study", "headers": [], "route": route})
+                       "query_string": b"unit=CNECT&q=study", "headers": [], "route": route})
     request.state.api_key = SimpleNamespace(grants_scope=lambda scope: False, api_tier="free")
     with pytest.raises(HTTPException) as refused:          # the scope check comes after the guard
         import asyncio
         asyncio.run(api_user_with_rate_limit(request, user=SimpleNamespace(id=1), db=None))
     assert refused.value.status_code == 403
-    assert request.state.unknown_query_params == ["department"]
+    assert request.state.unknown_query_params == ["unit"]
     assert "q" in request.state.accepted_query_params
 
 
 def test_the_body_opens_with_what_was_not_applied():
     r = _client().get("/api/v2/funding/eu-funding-recipients",
-                      params={"department": "CNECT", "subject": "observatory", "q": "study", "include_body": "false"})
+                      params={"unit": "CNECT", "subject": "observatory", "q": "study", "include_body": "false"})
     assert r.status_code == 200, r.text
     body = r.json()
     assert list(body)[:2] == ["ignored_parameters", "accepted_parameters"]
-    assert body["ignored_parameters"] == ["department", "subject"]
+    assert body["ignored_parameters"] == ["subject", "unit"]
     assert {"q", "since", "until", "include_body", "page", "limit"} <= set(body["accepted_parameters"])
     assert body["total"] == 1 and body["data"][0]["id"] == 2214392        # the page itself is untouched
-    assert r.headers["X-Brubru-Unknown-Params"] == "department,subject"   # the header stays
+    assert r.headers["X-Brubru-Unknown-Params"] == "subject,unit"   # the header stays
     assert int(r.headers["content-length"]) == len(r.content)
 
 

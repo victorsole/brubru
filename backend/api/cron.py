@@ -414,7 +414,7 @@ _WARM_TIER_RECORDED = (
     "committee_minutes", "committee_transcripts", "auto_archive",
 )
 _WEEKLY_TIER_RECORDED = (
-    "cordis_projects", "ft_projects_nonh2020", "project_status_weekly",
+    "cordis_projects", "ft_projects_nonh2020", "project_status_weekly", "org_identities",
     "ft_participants", "fta", "trade_defence", "trade_defence_bodies", "howtheyvote_members", "gi",
     "cohesion", "cohesion_finances", "cohesion_outcomes", "eusf", "cap_payments", "commissioner_agendas",
 )
@@ -1362,6 +1362,12 @@ async def _run_commission_heavy_bg() -> None:
                 _detail = (res.get("stderr_tail") or res.get("error")
                            or res.get("reason") or f"rc={res.get('returncode')}")
                 first_fail = f"{t}: {str(_detail)[:400]}"
+        # The FTS file's own columns (migration 313) beside the rows just loaded; recorded under
+        # its own name, so a failure shows on /sync/health (26 Oct 2026).
+        fts = {"fts_commitments": await _run_script_async(
+            "fts_commitments", "scripts/sync_fts_commitments.py", ["--apply"], timeout=1800)}
+        results["fts_commitments"] = fts["fts_commitments"].get("status")
+        _record_tier_results("commission_heavy", fts, ("fts_commitments",))
         logger.info(f"[CRON] commission-heavy sync complete: {results}")
         db = SessionLocal()
         try:
@@ -1607,6 +1613,9 @@ async def cron_sync_weekly(
         "ft_projects_nonh2020", "scripts/ingest_ft_projects_nonh2020.py", ["--apply"], timeout=3600)
     results["project_status_weekly"] = await _run_script_async(
         "project_status_weekly", "scripts/refresh_project_status.py", ["--apply"], timeout=600)
+    # The VAT -> PIC pairing /funding/partners joins FTS beneficiaries with, from the consortia just read.
+    results["org_identities"] = await _run_script_async(
+        "org_identities", "scripts/refresh_org_identities.py", ["--apply"], timeout=600)
 
     # ft_participants, derived from the participant payload already stored on
     # ft_funded_projects. Weekly because its source (funded projects) moves

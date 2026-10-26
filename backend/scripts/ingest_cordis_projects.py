@@ -144,6 +144,7 @@ def load_coordinator_map(z: zipfile.ZipFile) -> Dict[str, dict]:
                     "name": (row.get("name") or "").strip(),
                     "country": (row.get("country") or "").strip(),
                     "role": role,
+                    "pic": (row.get("organisationID") or "").strip() or None,
                 }
     return out
 
@@ -184,6 +185,10 @@ def load_full_org_map(z: zipfile.ZipFile) -> Dict[str, List[Dict[str, Any]]]:
             if not pid:
                 continue
             out.setdefault(pid, []).append({
+                # organisationID is the organisation's PIC: the portal's own contact-form link on the
+                # same row is contact-form/project/<organisationID>/<projectID> (26 Oct 2026). It
+                # was not kept, so partners could only be told apart by name.
+                "pic": (row.get("organisationID") or "").strip() or None,
                 "name": (row.get("name") or "").strip() or None,
                 "short_name": (row.get("shortName") or "").strip() or None,
                 "country": (row.get("country") or "").strip() or None,
@@ -234,6 +239,7 @@ def normalise(
         "type_of_action": (row.get("fundingScheme") or "").strip() or None,  # widened to TEXT
         "coordinator_name": coord.get("name") or None,
         "coordinator_country": (coord.get("country") or "")[:2] or None,
+        "coordinator_pic": coord.get("pic") or None,
         "start_date": parse_date(row.get("startDate") or ""),
         "end_date": parse_date(row.get("endDate") or ""),
         "total_cost": parse_float(row.get("totalCost") or ""),
@@ -256,7 +262,7 @@ _UPSERT_SQL = """
         (project_id, project_acronym, title, objective, keywords, topic_code, grant_doi,
          framework_programme, type_of_action,
          coordinator_name, coordinator_country, start_date, end_date, total_cost,
-         eu_contribution, cost_currency, status, source_status, source_url, published_at,
+         eu_contribution, cost_currency, status, source_status, source_url, published_at, coordinator_pic,
          organisations, topics, euroscivoc, legal_basis_details, web_links,
          scraped_at, last_updated)
     VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s, %(keywords)s,
@@ -264,7 +270,7 @@ _UPSERT_SQL = """
             %(framework_programme)s, %(type_of_action)s, %(coordinator_name)s,
             %(coordinator_country)s, %(start_date)s, %(end_date)s, %(total_cost)s,
             %(eu_contribution)s, %(cost_currency)s, 'unknown', %(source_status)s, %(source_url)s,
-            %(published_at)s,
+            %(published_at)s, %(coordinator_pic)s,
             %(organisations)s, %(topics)s, %(euroscivoc)s,
             %(legal_basis_details)s, %(web_links)s,
             NOW(), NOW())
@@ -281,6 +287,7 @@ _UPSERT_SQL = """
         end_date = COALESCE(EXCLUDED.end_date, ft_funded_projects.end_date),
         coordinator_name = EXCLUDED.coordinator_name,
         coordinator_country = EXCLUDED.coordinator_country,
+        coordinator_pic = COALESCE(EXCLUDED.coordinator_pic, ft_funded_projects.coordinator_pic),
         total_cost = EXCLUDED.total_cost,
         eu_contribution = EXCLUDED.eu_contribution,
         organisations = EXCLUDED.organisations,

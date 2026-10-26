@@ -45,6 +45,9 @@ _ROW = dict(id=11, body_code="ecdc", item_type="tender", title="Framework contra
             summary="Open procedure", public_url="https://www.ecdc.europa.eu/en/about-us/procurement/x",
             document_date=CHANGED, creation_date=CHANGED, source_kind="html", updated_at=CHANGED,
             tender_reference="ECDC/2026/012", status="open", deadline=None)
+# The FTS lists read the file's columns beside the row (migration 313, 26 Oct 2026).
+from api.v2.funding._fts import FILE_COLUMNS  # noqa: E402
+_ROW.update(dict.fromkeys(FILE_COLUMNS))
 
 
 def _get(router, path, params):
@@ -78,7 +81,8 @@ def test_the_recipients_list_takes_the_created_window_and_the_sync_order():
     assert r.status_code == 200, r.text
     page_sql, params = db.sql[1]
     assert "creation_date >= :created_from" in page_sql
-    assert "ORDER BY updated_at ASC, id ASC" in page_sql
+    # The row's change or its FTS values' change, whichever is later (26 Oct 2026).
+    assert "ORDER BY greatest(e.updated_at, c.last_updated) ASC, e.id ASC" in page_sql
     assert "ignored_parameters" not in r.json()
 
 
@@ -165,8 +169,8 @@ def test_international_cooperation_counts_a_change_window_live():
         assert client.get("/api/v2/funding/international-cooperation",
                           params={"updated_from": "2026-10-22", "order": "updated_asc"}).status_code == 200
     counts = [sql for sql, _ in db.sql if sql.startswith("SELECT count(*)")]
-    assert len(counts) == 2 and all("updated_at >= :updated_from" in sql for sql in counts)
-    assert "ORDER BY updated_at ASC, id ASC" in db.sql[-1][0]
+    assert len(counts) == 2 and all("greatest(e.updated_at, c.last_updated) >= :updated_from" in sql for sql in counts)
+    assert "ORDER BY greatest(e.updated_at, c.last_updated) ASC, e.id ASC" in db.sql[-1][0]
 
 
 def test_funding_all_applies_the_window_to_the_whole_union():
