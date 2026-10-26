@@ -74,7 +74,28 @@ def test_persistent_failure_raises(monkeypatch):
     monkeypatch.setattr(pq.time, "sleep", lambda s: None)
     busy = _Resp(200, {"error": "pool exhausted"})
     with pytest.raises(RuntimeError):
-        pq.list_ids(_Client([busy] * 4), 2026, deadline=float("inf"))
+        pq.list_ids(_Client([busy] * 5), 2026, deadline=float("inf"))
+
+
+def test_a_burst_of_500s_on_the_list_is_waited_out(monkeypatch):
+    """26 Oct 2026: EP Open Data answered 500 on the first list page for longer than 4 attempts
+    in 12 s, so every warm run but one failed for two days and the weekly PQ digest refused."""
+    waits = []
+    monkeypatch.setattr(pq.time, "sleep", waits.append)
+    err = _Resp(500, {"path": "/api/v2/questions", "status": 500})
+    page = _Resp(200, {"data": [{"identifier": "E-10-2026-000001"}]})
+    ids = pq.list_ids(_Client([err, err, err, err, page, _Resp(204, {})]), 2026, deadline=float("inf"))
+    assert ids == ["E-10-2026-000001"] and waits == [15.0, 30.0, 45.0, 60.0]
+    assert sum(waits) < 420                                    # inside the run's --max-seconds
+
+
+def test_an_item_fetch_keeps_its_short_retries(monkeypatch):
+    waits = []
+    monkeypatch.setattr(pq.time, "sleep", waits.append)
+    err = _Resp(500, {"status": 500})
+    with pytest.raises(RuntimeError):
+        pq._get_data(_Client([err] * 4), pq.API + "/E-10-2026-000001", {})
+    assert waits == [2.0, 4.0, 6.0]
 
 
 def test_short_page_is_not_the_end(monkeypatch):

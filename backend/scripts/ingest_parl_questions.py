@@ -62,12 +62,18 @@ def reference(identifier: str) -> str:
     return f"{letter}-{num}/{year}"
 
 
-def _get_data(client: httpx.Client, url: str, params: dict, attempts: int = 4):
+def _get_data(client: httpx.Client, url: str, params: dict, attempts: int = 4,
+              server_error_wait: float = 2.0):
     """The response's `data` list, retried; None only for a genuine 404.
 
     A 200 can carry the failure in its BODY: EP Open Data answers "Pending
     acquire queue has reached its maximum size" with HTTP 200 and no `data`.
     That is transient load, so it is retried, never read as an empty answer.
+
+    `server_error_wait` paces the retries after an HTTP 5xx. EP Open Data answers 500 on
+    the first list page in bursts longer than 4 attempts in 12 s (every warm run but one
+    failed from 23 Oct 20:07 to 25 Oct 21:10; 1 run in 3 locally on 26 Oct, the other two
+    listed 3,995 questions in 6-10 s), so the list waits longer than an item fetch does.
     """
     last = ""
     for attempt in range(1, attempts + 1):
@@ -96,7 +102,7 @@ def _get_data(client: httpx.Client, url: str, params: dict, attempts: int = 4):
         else:
             last = f"HTTP {r.status_code}"
         if attempt < attempts:
-            wait = 2.0 * attempt
+            wait = (server_error_wait if r.status_code >= 500 else 2.0) * attempt
             if r.status_code == 429:
                 # Throttled: honour Retry-After, else back off harder.
                 try:
@@ -112,8 +118,10 @@ def list_ids(client: httpx.Client, year: int, deadline: float) -> list[str]:
     while True:
         if time.monotonic() > deadline:
             raise RuntimeError(f"listing {year} ran past the time budget at offset {offset}")
+        # 5 attempts, 15/30/45/60 s apart after a 500: 2.5 min, inside the 420 s run budget.
         page = _get_data(client, API, {"year": year, "format": "application/ld+json",
-                                       "offset": offset, "limit": PAGE})
+                                       "offset": offset, "limit": PAGE},
+                         attempts=5, server_error_wait=15.0)
         if page is None:
             raise RuntimeError(f"list for {year} answered 404")
         ids += [d["identifier"] for d in page if d.get("identifier")]
