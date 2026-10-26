@@ -49,7 +49,16 @@ def test_repository_file_is_valid_and_has_no_dashes():
     assert "—" not in text and "–" not in text
 
 
-def test_generator_uses_the_file_for_the_strasbourg_tuesday():
+class _OnFixtureDay(date):
+    """The generator starts from the current week, so a real clock drops 20 October out of the
+    window after 25 October 2026 (the test failed on 26 October). Pinned to the week before."""
+    @classmethod
+    def today(cls):
+        return cls(2026, 10, 14)
+
+
+def test_generator_uses_the_file_for_the_strasbourg_tuesday(monkeypatch):
+    monkeypatch.setattr(g, "date", _OnFixtureDay)
     events = g.generate_college_meetings(months_ahead=3,
                                          strasbourg_plenary_dates=[date(2026, 10, 19)])
     ev = next((e for e in events if e["start_date"] == date(2026, 10, 20)), None)
