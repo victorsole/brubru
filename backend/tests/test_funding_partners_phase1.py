@@ -312,7 +312,16 @@ def test_a_partner_id_reaches_its_own_records():
     assert params["key"] == "pic:999991722" and "organisations @> CAST(:key_contains AS jsonb)" in sql
     assert "FROM funding_org_identities WHERE pic = :key_val" in sql
     c.get("/api/v2/funding/partners/vat:es q2818002d")
-    assert db.calls[-1][1]["key"] == "vat:ESQ2818002D"
+    assert db.calls[-1][1]["key"] == "vat:ESQ2818002D"                                 # not paired in the stand-in
+
+    class _Paired(_Db):
+        def execute(self, stmt, params=None):
+            if "FROM funding_org_identities WHERE vat_key" in str(stmt):
+                return SimpleNamespace(scalar=lambda: "999991722")
+            return super().execute(stmt, params)
+    paired = _Paired()
+    _client(paired).get("/api/v2/funding/partners/vat:ESQ2818002D")
+    assert paired.calls[-1][1]["key"] == "pic:999991722"                               # a paired VAT answers as its PIC
     assert c.get("/api/v2/funding/partners/bogus").status_code == 404
 
 

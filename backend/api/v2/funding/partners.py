@@ -336,7 +336,7 @@ One organisation from `/api/v2/funding/partners`: every funded project it takes 
 After a partner search, to read one organisation's whole record.
 
 **Input**
-`id` — the organisation's key from the list: `pic:<PIC>`, `vat:<VAT number>` or `name:<country>:<name>` (each item's `self` is this route).
+`id` — the organisation's key from the list: `pic:<PIC>`, `vat:<VAT number>` or `name:<country>:<name>` (each item's `self` is this route). A `vat:` id whose VAT number is paired with a PIC answers as that PIC.
 
 **Try it**
 ```
@@ -360,6 +360,10 @@ async def get_partner(
     if kind == "vat":
         val = vat_key(val) or ""
         id = f"vat:{val}"
+        # A VAT number paired with a PIC stands under that PIC (the list gives it that id).
+        paired = db.execute(text("SELECT pic FROM funding_org_identities WHERE vat_key = :v"), {"v": val}).scalar()
+        if paired:
+            id = f"pic:{paired}"
     sql, params = _sql(q=None, name=None, role=None, programme=None, topic=None, dg=None, country=None,
                        activity_type=None, is_sme=None, since=None, source="all", min_amount_eur=None,
                        key=id, order="matches", matches_cap=MATCHES_ON_ITEM)
