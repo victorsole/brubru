@@ -15,12 +15,19 @@ insert, so nothing undoes it. A document Cellar files in no dossier keeps it emp
 
     python3.12 scripts/backfill_commission_procedure_refs.py            # dry run
     python3.12 scripts/backfill_commission_procedure_refs.py --apply
+
+Bounded (26 Oct 2026): every run from 23 Oct 18:19 was killed at the tier's 600 s timeout. Most
+batches answer in 0.3 s, but Cellar left two of the fifteen 60-document batches hanging for the
+full 150 s, every run, and a batch was allowed 120 s x 3 attempts plus waits. Now a question gets
+QUERY_TIMEOUT s and one retry, batches are 20 documents, and the run stops between batches at
+--max-seconds; batches Cellar did not answer are reported as degraded, not as a killed run.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import random
 import re
 import sys
 import time
@@ -38,6 +45,7 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 from sqlalchemy import create_engine, text  # noqa: E402
 
 SPARQL = "https://publications.europa.eu/webapi/rdf/sparql"
+QUERY_TIMEOUT = 30      # a batch Cellar answers at all answers in well under a second
 _CELEX = re.compile(r"^(?:5\d{4}(?:PC|DC|JC|SC)|3\d{4}[A-Z])\d{4}$")
 # A corrigendum (32024R1689R(03)) belongs to the procedure of the act it corrects.
 _CORRIGENDUM = re.compile(r"^(3\d{4}[A-Z]\d{4})R\(\d{2}\)$")
@@ -72,11 +80,11 @@ SELECT DISTINCT ?celex ?proc WHERE {{
   ?d cdm:procedure_code_interinstitutional_reference_procedure ?proc .
 }}"""
     data = urllib.parse.urlencode({"query": q}).encode()
-    for n in range(3):
+    for n in range(2):
         try:
             req = urllib.request.Request(SPARQL, data=data,
                                          headers={"Accept": "application/sparql-results+json"})
-            with urllib.request.urlopen(req, timeout=120) as r:
+            with urllib.request.urlopen(req, timeout=QUERY_TIMEOUT) as r:
                 rows = json.load(r)["results"]["bindings"]
             found: dict[str, set[str]] = {}
             for b in rows:
@@ -86,16 +94,18 @@ SELECT DISTINCT ?celex ?proc WHERE {{
             # A document filed in two procedures names neither: never guess between them.
             return {c: next(iter(p)) for c, p in found.items() if len(p) == 1}
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, KeyError):
-            if n == 2:
+            if n == 1:
                 raise
-            time.sleep(10 * (n + 1))
+            time.sleep(5)
     return {}
 
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--apply", action="store_true")
-    ap.add_argument("--batch", type=int, default=60)
+    ap.add_argument("--batch", type=int, default=20)
+    ap.add_argument("--max-seconds", type=int, default=480,
+                    help="Stop between batches after this long (the tier kills the job at 600 s).")
     args = ap.parse_args(argv)
     engine = create_engine(os.environ["DATABASE_URL"].replace("postgres://", "postgresql://", 1),
                            pool_pre_ping=True)
@@ -104,9 +114,19 @@ def main(argv=None) -> int:
     print(f"[INFO] {len(rows)} Commission document(s) without a procedure")
     if not rows:
         return 0
+    # A new order each run: Cellar hangs on some combinations of values (each half of a stuck
+    # batch answered on its own, 26 Oct), and a budget cut must not always leave the same tail.
+    random.shuffle(rows)
     found = written = 0
     failed_batches = 0
-    for i in range(0, len(rows), args.batch):
+    started = time.monotonic()
+    batches = range(0, len(rows), args.batch)
+    unread = 0
+    for n, i in enumerate(batches):
+        if time.monotonic() - started > args.max_seconds:
+            unread = len(batches) - n
+            print(f"[WARN] time budget of {args.max_seconds}s reached; {unread} batch(es) left for the next run")
+            break
         chunk = rows[i:i + args.batch]
         try:
             procs = query([lookup_celex(r.celex) for r in chunk])
@@ -125,12 +145,16 @@ def main(argv=None) -> int:
                 continue
             with engine.begin() as c:
                 written += c.execute(STORE, {"id": r.id, "proc": proc}).rowcount
-        time.sleep(1)
+        time.sleep(0.5)
     print(f"[DONE] Cellar names a procedure for {found}; written {written}"
           + ("" if args.apply else " (DRY RUN)"))
-    if failed_batches and failed_batches * args.batch >= len(rows):
+    asked = len(batches) - unread
+    if asked and failed_batches == asked:
         print("[ERROR] Cellar answered no batch")
         return 1
+    if failed_batches or unread:
+        print(f"[SYNC_STATUS] degraded: Cellar did not answer {failed_batches} of {asked} batch(es)"
+              + (f"; {unread} not asked (time budget)" if unread else ""))
     return 0
 
 

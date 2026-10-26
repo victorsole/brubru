@@ -597,7 +597,8 @@ async def cron_sync_hot_6h(
     # documents had none (15 Oct 2026). Cellar files each proposal and its staff working
     # documents in a dossier that carries the procedure; only empty values are written.
     results["commission_doc_procedures"] = await _run_script_async(
-        "commission_doc_procedures", "scripts/backfill_commission_procedure_refs.py", ["--apply"], timeout=600)
+        "commission_doc_procedures", "scripts/backfill_commission_procedure_refs.py",
+        ["--apply", "--max-seconds", "480"], timeout=600)
 
     # Script-based syncs (no service wrapper yet)
     # Every report and motion tabled this year, from EP Open Data, with its date and text
