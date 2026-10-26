@@ -407,11 +407,11 @@ Fetches a single EU funding opportunity by its topic_id. Returns the same shape 
 After locating an opportunity via the list endpoint, use this for the full record before drafting a bid.
 
 **Input**
-- `topic_id` (path) — the EU's topic identifier (e.g. `HORIZON-CL5-2026-D2-01-01`). The `:path` matcher accepts hyphens + dots verbatim.
+- `topic_id` (path) — the EU's topic identifier (e.g. `HORIZON-CL5-2026-11-D3-06`). The `:path` matcher accepts hyphens + dots verbatim.
 
 **Try it**
 ```
-GET /api/v1/funding-opportunities/HORIZON-CL5-2026-D2-01-01
+GET /api/v1/funding-opportunities/HORIZON-CL5-2026-11-D3-06
 ```
 
 **You get back**

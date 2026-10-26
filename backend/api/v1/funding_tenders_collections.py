@@ -131,7 +131,7 @@ def _proposal_to_item(
     response_model=PaginatedResponse[FtCallProposalItem],
     summary="EU funding calls for proposals — Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+",
     description="""**What it does**
-Returns calls for grant proposals from the EU Funding & Tenders Portal — the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (`open` / `forthcoming` / `closed` / `unknown`), the deadline, the budget, and a body composed from title + objective + scope.
+Returns calls for grant proposals from the EU Funding & Tenders Portal — the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-11-D3-06`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (`open` / `forthcoming` / `closed` / `unknown`), the deadline, the budget, and a body composed from title + objective + scope.
 
 **When to use it**
 For consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v1/ft-funded-projects` to see "what's been funded under this programme" → "what's currently open". Default ordering puts most recent deadlines first so partners land on actionable opportunities.
@@ -231,11 +231,11 @@ Fetches a single call for proposals by its EU topic identifier. Returns the same
 After locating a call via the list endpoint, use this for the full record — particularly when you want to embed call details in a bid-tracker or render the scope text in a UI.
 
 **Input**
-- `topic_id` (path) — the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`. The `:path` matcher accepts hyphens + dots verbatim, no URL-encoding needed.
+- `topic_id` (path) — the EU's identifier, e.g. `HORIZON-CL5-2026-11-D3-06`. The `:path` matcher accepts hyphens + dots verbatim, no URL-encoding needed.
 
 **Try it**
 ```
-GET /api/v1/ft-calls-for-proposals/HORIZON-CL5-2026-D2-01-01
+GET /api/v1/ft-calls-for-proposals/HORIZON-CL5-2026-11-D3-06
 ```
 
 **You get back**
@@ -566,7 +566,7 @@ def _project_to_item(
     response_model=PaginatedResponse[FtFundedProjectItem],
     summary="EU grant-funded projects — active + completed results (Horizon Europe, FP7, H2020, sectoral programmes)",
     description="""**What it does**
-Returns EU-funded grant projects, planned, running and finished, across all programmes: Horizon Europe, Horizon 2020 and FP7 from CORDIS, every other programme (Digital Europe, EU4Health, LIFE, Creative Europe...) from the Funding & Tenders Portal. Each row carries the project_id (e.g. `101082345`), the title, the programme's code, the type of action, the coordinator name + country, the start/end dates, the EU contribution, the total cost, the objective summary, the status (with the source's own word beside it), and the project's own page.
+Returns EU-funded grant projects, planned, running and finished, across all programmes: Horizon Europe, Horizon 2020 and FP7 from CORDIS, every other programme (Digital Europe, EU4Health, LIFE, Creative Europe...) from the Funding & Tenders Portal. Each row carries the project_id (e.g. `101039426`), the title, the programme's code, the type of action, the coordinator name + country, the start/end dates, the EU contribution, the total cost, the objective summary, the status (with the source's own word beside it), and the project's own page.
 
 **When to use it**
 For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?". Combine with `/api/v1/ft-calls-for-proposals` to see the call → project pipeline.
@@ -664,11 +664,11 @@ Fetches a single EU-funded project by its grant project_id. Returns the same sha
 After locating a project via the list endpoint, use this for the full record. For richer project metadata (deliverables, consortium members, publications), cross-reference via `/api/v1/discover/eurio/projects/{cordis_id}/consortium` etc.
 
 **Input**
-- `project_id` (path) — the EU grant project id (typically a numeric identifier, e.g. `101082345`).
+- `project_id` (path) — the EU grant project id (typically a numeric identifier, e.g. `101039426`).
 
 **Try it**
 ```
-GET /api/v1/ft-funded-projects/101082345
+GET /api/v1/ft-funded-projects/101039426
 ```
 
 **You get back**

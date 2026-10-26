@@ -161,3 +161,13 @@ def test_every_path_the_funding_docs_name_is_a_route():
             if not any(p.match(path) for p in patterns):
                 broken.setdefault(m, set()).add(r.path)
     assert broken == {}, broken
+
+
+def test_the_funding_examples_name_rows_that_exist():
+    """The item examples named a topic and a project Brubru does not hold (HORIZON-CL5-2026-D2-01-01,
+    101082345), so "Try it" answered 404 on 26 Oct 2026. They name held rows now; this keeps the
+    retired ones from coming back (whether a row exists is checked on production, not here)."""
+    for f in ("api/v1/funding_tenders_collections.py", "api/v1/infringements_funding.py",
+              "api/v2/funding/funding_opportunities.py", "api/v2/funding/funding_tenders.py"):
+        src = (BACKEND / f).read_text()
+        assert "HORIZON-CL5-2026-D2-01-01" not in src and "101082345" not in src, f
