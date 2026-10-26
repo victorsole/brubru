@@ -27,6 +27,7 @@ from main import app
 from models.api_key import ApiKey
 from models.user import User
 from services.api_keys.scopes import SCOPE_NAMES
+from tests.live_keys import shorten_to_one_hour
 
 
 @pytest.fixture(scope="module")
@@ -53,6 +54,10 @@ def api_client():
                           "scopes": SCOPE_NAMES, "expires_in_days": 30})
     assert r.status_code == 201, r.text
     key = r.json()["key"]
+    # One hour, not the 30 days this asked for: runs on 15 and 22 Sep 2026 stopped before the
+    # teardown and left their user and an unrevoked key in production, later counted as an outside
+    # client (register O52).
+    shorten_to_one_hour(r.json()["id"])
 
     class _Authed:
         def get(self, path):

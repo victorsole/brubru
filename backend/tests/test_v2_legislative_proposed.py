@@ -18,6 +18,7 @@ from core.database import SessionLocal
 from main import app
 from models.api_key import ApiKey
 from models.user import User
+from tests.live_keys import shorten_to_one_hour
 
 # Reads production data: runs locally, never in CI (6 Oct 2026).
 pytestmark = pytest.mark.live
@@ -65,6 +66,7 @@ def _mint(client: TestClient, token: str, scopes: list[str]) -> str:
         json={"name": f"v2 prop {uuid.uuid4().hex[:6]}", "scopes": scopes, "expires_in_days": 180},
     )
     assert r.status_code == 201, r.text
+    shorten_to_one_hour(r.json()["id"])   # tests/live_keys.py: an interrupted run leaves no usable key
     return r.json()["key"]
 
 
