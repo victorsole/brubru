@@ -177,10 +177,13 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
          WHERE jsonb_array_length(coalesce(pr.organisations, '[]'::jsonb)) = 0 AND pr.coordinator_name IS NOT NULL""")
     if use_payments:
         parts.append(f"""
-        SELECT 'payment', e.id::text, coalesce(c.subject, e.title), c.programme, c.project_start,
-               NULL, coalesce(c.vat_key, ''), c.beneficiary, NULL, c.country_code, c.city, NULL, NULL::boolean,
-               CASE WHEN c.is_coordinator THEN 'coordinator' WHEN {_GRANT_LIKE} THEN 'beneficiary' ELSE 'contractor' END,
-               NULL::numeric, c.beneficiary_amount_eur, greatest(e.updated_at, c.last_updated), e.creation_date
+        SELECT 'payment' AS kind, e.id::text AS ref, coalesce(c.subject, e.title) AS title, c.programme AS programme,
+               c.project_start AS day, NULL::text AS pic, coalesce(c.vat_key, '') AS vat, c.beneficiary AS name,
+               NULL::text AS short_name, c.country_code AS country, c.city AS city, NULL::text AS activity_type,
+               NULL::boolean AS is_sme,
+               CASE WHEN c.is_coordinator THEN 'coordinator' WHEN {_GRANT_LIKE} THEN 'beneficiary' ELSE 'contractor' END AS role,
+               NULL::numeric AS eu_contribution, c.beneficiary_amount_eur AS amount_eur,
+               greatest(e.updated_at, c.last_updated) AS changed, e.creation_date AS created
           FROM fts_commitments c JOIN economy_items e ON e.id = c.economy_item_id
          WHERE c.beneficiary_type IS DISTINCT FROM 'Private Persons'{fw}""")
     if not parts:

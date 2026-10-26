@@ -152,7 +152,7 @@ def test_recipients_filter_on_the_file_columns_and_take_the_partner_search_param
     sql, params = db.calls[-1]
     assert "LEFT JOIN fts_commitments c" in sql and "c.dg ILIKE :dg" in sql and params["dg"] == "%CNECT%"
     assert "c.is_coordinator = :coord" in sql and "c.beneficiary_amount_eur >= :min_amt" in sql
-    assert params["vat"] == "ESQ2818002D" and "body_txt ILIKE" not in sql
+    assert params["vat"] == "ESQ2818002D" and "c.vat_key = :vat" in sql and "body_txt ILIKE" not in sql
 
 
 def test_international_cooperation_reads_the_columns_not_the_text():
@@ -250,9 +250,11 @@ def test_a_project_item_carries_its_consortium():
 
 # --- B: the VAT -> PIC pairing and /funding/partners -------------------------------------------- #
 
-def test_the_pairing_leaves_ambiguous_vat_numbers_out_and_normalises_as_the_api_does():
+def test_the_pairing_takes_the_dominant_pic_and_normalises_as_the_api_does():
     roi = importlib.import_module("scripts.refresh_org_identities")
-    assert "WHERE pics = 1" in roi.UPSERT and "agg.pics = 1" in roi.STALE
+    # A VAT number goes to the PIC holding 90% of its memberships (CSIC: 2,523 of 2,524), else to none.
+    assert "(n >= 0.9 * projects) AS clear" in roi.PAIRS and "WHERE rk = 1" in roi.PAIRS
+    assert "FROM agg WHERE clear" in roi.UPSERT and "agg.clear" in roi.STALE
     assert "upper(regexp_replace(o->>'vat', '[^A-Za-z0-9]', '', 'g'))" in roi.PAIRS
 
 
@@ -280,6 +282,9 @@ def test_partners_match_subjects_not_names_and_keep_people_out():
 def test_partner_filters_that_one_source_cannot_answer_drop_that_source():
     _, (sql, _) = _partners(q="ai", dg="CNECT")
     assert "jsonb_array_elements(pr.organisations)" not in sql and "c.dg ILIKE :dg" in sql   # payments only
+    # The first SELECT of a UNION names its columns: payments alone answered 500 until they were named.
+    for col in ("'payment' AS kind", "AS ref", "AS pic", "AS vat", "AS name", "AS country", "AS role", "AS amount_eur"):
+        assert col in sql, col
     _, (sql, _) = _partners(q="ai", activity_type="REC")
     assert "fts_commitments c" not in sql and "activity_type = :at" in sql                 # projects only
 

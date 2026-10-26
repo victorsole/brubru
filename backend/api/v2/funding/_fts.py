@@ -19,6 +19,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from api.v1._row_dates import row_updated
+from services.funding.countries import vat_key
 
 FROM = ("FROM economy_items e LEFT JOIN fts_commitments c ON c.economy_item_id = e.id "
         "WHERE e.body_code = 'commission' AND e.item_type = 'funding_recipient'")
@@ -125,4 +126,6 @@ def filters(where: list, params: dict, *, dg=None, funding_type=None, programme=
     if call_id:
         where.append("c.call_id = :cid"); params["cid"] = call_id
     if vat:
-        where.append("upper(replace(c.vat_number, ' ', '')) = :vat"); params["vat"] = vat.replace(" ", "").upper()
+        # The indexed key (letters and digits, upper case), not the file's spelling: an expression on
+        # vat_number read every row and timed out on production (26 Oct 2026).
+        where.append("c.vat_key = :vat"); params["vat"] = vat_key(vat)
