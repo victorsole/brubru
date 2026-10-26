@@ -394,7 +394,7 @@ _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc",
     "carriage_status_notifications", "tris_titles", "eu_laws_in_force", "eu_laws_oj_reference",
-    "eu_laws_legal_basis",
+    "eu_laws_legal_basis", "ted_awards",
 )
 # "tbt" left this list on 17 Oct 2026: sync_dg_grow.py records its own run as wto_tbt, so every
 # night wrote two rows for one run (tests/test_sync_health_jobs.py checks no script here records).
@@ -988,6 +988,12 @@ async def cron_sync_daily(
         "tenders_country_repair",
         "scripts/repair_tender_country.py",
         ["--apply"], timeout=300,
+    )
+    # TED contract awards whose buyer is an EU institution, body or agency, with their winners
+    # (/funding/tender-awards and /funding/partners, 26 Oct 2026). The last 14 days of notices;
+    # only the ones not yet held are downloaded (~10 a day).
+    results["ted_awards"] = await _run_script_async(
+        "ted_awards", "scripts/sync_ted_awards.py", ["--apply"], timeout=1800,
     )
     # Per-programme F&T grant calls (economy_items, item_type='grant') backing
     # /api/v2/funding/justice + /innovation-fund. Pulled from SEDIA by topic-id

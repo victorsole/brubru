@@ -10,12 +10,13 @@ with its own `self`, so the reader sees why it is there.
 Activities: the CORDIS consortia of Horizon Europe, Horizon 2020 and FP7 projects (every member),
 the coordinators of the other programmes' projects (their sources name no one else), and the
 Financial Transparency System's beneficiaries (fts_commitments, migration 313; private persons left
-out: organisations only).
+out: organisations only), and the winners of TED contract awards whose buyer is an EU body
+(ted_award_winners, migration 315: each member of a joint tender, as a contractor).
 
 Identity, never a name alone across sources: the PIC where known (CORDIS organisationID, the F&T
-coordinator's PIC); an FTS beneficiary takes the PIC of the CORDIS organisation with the same VAT
-number (funding_org_identities, migration 314); else its VAT number; else its name within its
-country. Countries are the EU style codes (EL, UK) everywhere (services/funding/countries.py).
+coordinator's PIC); an FTS beneficiary or a TED winner takes the PIC of the CORDIS organisation with
+the same VAT number (funding_org_identities, migration 314; a TED company id counts as a VAT number
+only when shaped like its own country's); else its VAT number; else its name within its country. Countries are the EU style codes (EL, UK) everywhere (services/funding/countries.py).
 """
 from __future__ import annotations
 
@@ -41,7 +42,7 @@ Day = date   # PartnerActivity has a field named `date`, which would shadow the 
 PORTAL_ORG = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/{pic}"
 ROLES = ("coordinator", "participant", "beneficiary", "contractor")
 ACTIVITY_TYPES = ("HES", "REC", "PRC", "PUB", "OTH")
-SOURCES = ("all", "projects", "payments")
+SOURCES = ("all", "projects", "payments", "awards")
 ORDERS = ("matches", "amount", "name")
 MATCHES_ON_LIST = 10
 MATCHES_ON_ITEM = 50
@@ -55,18 +56,22 @@ _EU_COUNTRY = "CASE upper({c}) WHEN 'GR' THEN 'EL' WHEN 'GB' THEN 'UK' ELSE uppe
 _GRANT_LIKE = ("c.funding_type ~* '(grant|contribution|prize|subsid|membership|operational expenses of|"
                "budget support|financial instr|trust fund|shared management)'")
 _NAME_SLUG = "regexp_replace(lower({n}), '[^[:alnum:]]+', '-', 'g')"
+# The expression ted_award_notices' full-text index is built on (migration 315).
+_AWARD_TSV = "to_tsvector('english', coalesce(n.title, '') || ' ' || coalesce(n.description, ''))"
 _O_NAME, _O_COUNTRY = "o->>'name'", "o->>'country'"
 
 
 class PartnerActivity(BaseModel):
-    kind: str = Field(..., description="project (a funded project) | payment (an FTS row: a grant, contribution or contract).")
-    id: str = Field(..., description="The project_id, or the FTS row's id.")
-    title: Optional[str] = Field(None, description="The project's title, or what the payment was for.")
+    kind: str = Field(..., description="project (a funded project) | payment (an FTS row: a grant, contribution or contract) | award (a TED contract award it won).")
+    id: str = Field(..., description="The project_id, the FTS row's id, or the award notice's TED publication number.")
+    title: Optional[str] = Field(None, description="The project's title, what the payment was for, or the award notice's title (and lot).")
     role: Optional[str] = Field(None, description="coordinator | participant | beneficiary | contractor.")
     programme: Optional[str] = None
-    date: Optional[Day] = Field(None, description="The project's start.")
+    date: Optional[Day] = Field(None, description="The project's start, the payment's project start, or the award's contract signature (else its notice's publication).")
+    department: Optional[str] = Field(None, description="Who paid or bought: the FTS row's department, the award's contracting authority.")
     eu_contribution: Optional[float] = Field(None, description="Its EU contribution in the project, EUR (CORDIS).")
     amount_eur: Optional[float] = Field(None, description="What the FTS row says it received, EUR.")
+    tender_value_eur: Optional[float] = Field(None, description="An award: its tender's value when in euros, shared by a joint tender's members.")
     self: Optional[str] = Field(None, description="The activity on its own route.")
 
 
@@ -84,6 +89,7 @@ class PartnerItem(BaseModel):
     coordinated: int = Field(0, description="Of those, the ones it coordinates.")
     payments: int = Field(0, description="Matching FTS rows (grants, contributions, contracts) it received.")
     contracts: int = Field(0, description="Of those, procurement contracts.")
+    awards: int = Field(0, description="Matching TED contract awards from EU buyers it won (not in the amounts: a joint tender's value is shared).")
     eu_contribution: Optional[float] = Field(None, description="Its EU contribution over the matching projects, EUR (CORDIS).")
     amount_eur: Optional[float] = Field(None, description="What the matching FTS rows say it received, EUR.")
     matches: List[PartnerActivity] = Field(default_factory=list, description="The activities that matched, newest first (10 on the list, 50 on the item route).")
@@ -98,12 +104,16 @@ class PartnerItem(BaseModel):
 def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme, since, source,
          min_amount_eur, key, order, matches_cap):
     """The query and its parameters: activities -> one row per organisation key."""
-    p_where, f_where, a_where, having, params = [], [], [], [], {}
+    p_where, f_where, w_where, a_where, having, params = [], [], [], [], [], {}
     use_projects = source in ("all", "projects") and not dg
     use_payments = source in ("all", "payments") and activity_type is None and is_sme is None
+    # An award has no programme, topic, activity type or SME flag of its own.
+    use_awards = (source in ("all", "awards") and activity_type is None and is_sme is None
+                  and not programme and not topic)
     if q:
         p_where.append(f"{_PROJECT_TSV} @@ websearch_to_tsquery('english', :q)")
         f_where.append("to_tsvector('english', coalesce(c.subject, '')) @@ websearch_to_tsquery('english', :q)")
+        w_where.append(f"{_AWARD_TSV} @@ websearch_to_tsquery('english', :q)")
         params["q"] = q
     if programme:
         named = named_codes(programme)
@@ -116,23 +126,27 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
         p_where.append("p.topic_code ILIKE :topic_prefix"); f_where.append("c.call_id ILIKE :topic_prefix")
         params["topic_prefix"] = f"{topic.strip()}%"
     if dg:
-        f_where.append("c.dg ILIKE :dg"); params["dg"] = f"%{dg}%"
+        f_where.append("c.dg ILIKE :dg"); w_where.append("n.contracting_authority ILIKE :dg"); params["dg"] = f"%{dg}%"
     if since:
-        p_where.append("p.start_date >= :since"); f_where.append("c.project_start >= :since"); params["since"] = since
+        p_where.append("p.start_date >= :since"); f_where.append("c.project_start >= :since")
+        w_where.append("coalesce(w.contract_date, n.publication_date) >= :since"); params["since"] = since
     if key:
         kind, _, val = key.partition(":")
         if kind == "pic":
             p_where.append("(p.organisations @> CAST(:key_contains AS jsonb) OR p.coordinator_pic = :key_val)")
             params["key_contains"] = f'[{{"pic": "{val}"}}]'
             f_where.append("c.vat_key IN (SELECT vat_key FROM funding_org_identities WHERE pic = :key_val)")
+            w_where.append("w.vat_key IN (SELECT vat_key FROM funding_org_identities WHERE pic = :key_val)")
         elif kind == "vat":
             p_where.append("p.organisations @> CAST(:key_contains AS jsonb)")
             params["key_contains"] = f'[{{"vat": "{val}"}}]'
             f_where.append("c.vat_key = :key_val")
+            w_where.append("w.vat_key = :key_val")
         else:
             cc, _, slug = val.partition(":")
             params["key_cc"], params["key_slug"] = cc.upper(), slug
             f_where.append(f"c.country_code = :key_cc AND {_NAME_SLUG.format(n='c.beneficiary')} = :key_slug")
+            w_where.append(f"w.country = :key_cc AND {_NAME_SLUG.format(n='w.name')} = :key_slug")
             # Without this every consortium would be unpacked to find one name.
             p_where.append(
                 f"(EXISTS (SELECT 1 FROM jsonb_array_elements(p.organisations) o WHERE "
@@ -158,6 +172,7 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
 
     pw = "".join(f" AND {w}" for w in p_where)
     fw = "".join(f" AND {w}" for w in f_where)
+    ww = "".join(f" AND {w}" for w in w_where)
     parts = []
     if use_projects:
         parts.append(f"""
@@ -167,12 +182,14 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                nullif(o->>'city', '') AS city, nullif(o->>'activity_type', '') AS activity_type, (o->>'is_sme')::boolean AS is_sme,
                CASE WHEN o->>'role' = 'coordinator' THEN 'coordinator' ELSE 'participant' END AS role,
                (o->>'ec_contribution')::numeric AS eu_contribution, NULL::numeric AS amount_eur,
+               NULL::text AS department, NULL::numeric AS tender_value_eur,
                pr.last_updated AS changed, pr.scraped_at AS created
           FROM proj pr, jsonb_array_elements(pr.organisations) o
         UNION ALL
         SELECT 'project', pr.project_id, pr.title, pr.framework_programme, pr.start_date,
                nullif(pr.coordinator_pic, ''), '', pr.coordinator_name, NULL, {_EU_COUNTRY.format(c='pr.coordinator_country')},
-               NULL, NULL, NULL::boolean, 'coordinator', NULL::numeric, NULL::numeric, pr.last_updated, pr.scraped_at
+               NULL, NULL, NULL::boolean, 'coordinator', NULL::numeric, NULL::numeric, NULL::text, NULL::numeric,
+               pr.last_updated, pr.scraped_at
           FROM proj pr
          WHERE jsonb_array_length(coalesce(pr.organisations, '[]'::jsonb)) = 0 AND pr.coordinator_name IS NOT NULL""")
     if use_payments:
@@ -183,9 +200,22 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                NULL::boolean AS is_sme,
                CASE WHEN c.is_coordinator THEN 'coordinator' WHEN {_GRANT_LIKE} THEN 'beneficiary' ELSE 'contractor' END AS role,
                NULL::numeric AS eu_contribution, c.beneficiary_amount_eur AS amount_eur,
+               c.dg AS department, NULL::numeric AS tender_value_eur,
                greatest(e.updated_at, c.last_updated) AS changed, e.creation_date AS created
           FROM fts_commitments c JOIN economy_items e ON e.id = c.economy_item_id
          WHERE c.beneficiary_type IS DISTINCT FROM 'Private Persons'{fw}""")
+    if use_awards:
+        parts.append(f"""
+        SELECT 'award' AS kind, n.publication_number AS ref,
+               CASE WHEN n.lot_count > 1 AND w.lot_title IS NOT NULL THEN n.title || ': ' || w.lot_title ELSE n.title END AS title,
+               NULL::text AS programme, coalesce(w.contract_date, n.publication_date) AS day, NULL::text AS pic,
+               coalesce(w.vat_key, '') AS vat, w.name AS name, NULL::text AS short_name, w.country AS country,
+               w.city AS city, NULL::text AS activity_type, NULL::boolean AS is_sme, 'contractor' AS role,
+               NULL::numeric AS eu_contribution, NULL::numeric AS amount_eur, n.contracting_authority AS department,
+               CASE WHEN upper(w.tender_value_currency) = 'EUR' THEN w.tender_value END AS tender_value_eur,
+               greatest(n.last_updated, w.last_updated) AS changed, n.first_seen AS created
+          FROM ted_award_winners w JOIN ted_award_notices n ON n.publication_number = w.publication_number
+         WHERE n.superseded_by IS NULL{ww}""")
     if not parts:
         return None, params
     order_sql = {
@@ -216,10 +246,12 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
            count(DISTINCT ref) FILTER (WHERE kind = 'project' AND role = 'coordinator') AS coordinated,
            count(*) FILTER (WHERE kind = 'payment') AS payments,
            count(*) FILTER (WHERE kind = 'payment' AND role = 'contractor') AS contracts,
+           count(DISTINCT ref) FILTER (WHERE kind = 'award') AS awards,
            sum(eu_contribution) AS eu_contribution, sum(amount_eur) AS amount_eur,
            max(day) FILTER (WHERE day <= CURRENT_DATE) AS last_day, min(created) AS created, max(changed) AS changed,
            (array_agg(jsonb_build_object('kind', kind, 'id', ref, 'title', title, 'role', role, 'programme', programme,
-                                         'date', day, 'eu_contribution', eu_contribution, 'amount_eur', amount_eur)
+                                         'date', day, 'department', department, 'eu_contribution', eu_contribution,
+                                         'amount_eur', amount_eur, 'tender_value_eur', tender_value_eur)
                       ORDER BY day DESC NULLS LAST))[1:{int(matches_cap)}] AS matches,
            count(*) OVER () AS total
       FROM keyed{"".join(f" WHERE {w}" if i == 0 else f" AND {w}" for i, w in enumerate(a_where))}
@@ -232,18 +264,19 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
 def _item(r, base: str) -> PartnerItem:
     acts = []
     for m in r.matches or []:
-        route = (f"/api/v2/funding/ft-funded-projects/{m['id']}" if m["kind"] == "project"
-                 else f"/api/v2/funding/eu-funding-recipients/{m['id']}")
+        route = {"project": "/api/v2/funding/ft-funded-projects/", "payment": "/api/v2/funding/eu-funding-recipients/",
+                 "award": "/api/v2/funding/tender-awards/"}[m["kind"]] + str(m["id"])
         acts.append(PartnerActivity(**m, self=base + route))
     lines = [r.name or "", f"Country: {r.country}" if r.country else "", f"PIC: {r.pic}" if r.pic else "",
              f"Matching projects: {r.projects} (coordinated: {r.coordinated})" if r.projects else "",
-             f"Matching FTS payments: {r.payments} (contracts: {r.contracts})" if r.payments else ""]
+             f"Matching FTS payments: {r.payments} (contracts: {r.contracts})" if r.payments else "",
+             f"Matching TED contract awards won: {r.awards}" if r.awards else ""]
     lines += [f"- {a.date or ''} {a.role or ''}: {a.title or ''}".strip() for a in acts]
     lines = [l for l in lines if l]
     return PartnerItem(
         id=r.key, name=r.name, short_name=r.short_name, pic=r.pic, vat=r.vat, country=r.country, city=r.city,
         activity_type=r.activity_type, is_sme=r.is_sme, projects=r.projects, coordinated=r.coordinated,
-        payments=r.payments, contracts=r.contracts,
+        payments=r.payments, contracts=r.contracts, awards=r.awards,
         eu_contribution=float(r.eu_contribution) if r.eu_contribution is not None else None,
         amount_eur=float(r.amount_eur) if r.amount_eur is not None else None,
         matches=acts, public_url=PORTAL_ORG.format(pic=r.pic) if r.pic else None,
@@ -254,41 +287,42 @@ def _item(r, base: str) -> PartnerItem:
 
 
 _DESC = """**What it does**
-One row per organisation that took part in EU-funded projects or received EU money, found by **what it was funded or paid for**, not by its name. `q` searches the subjects of its activities: funded projects' titles, objectives and keywords (CORDIS consortia of Horizon Europe, Horizon 2020 and FP7, every member; the other programmes' coordinators) and the subjects of the payments the EU Financial Transparency System lists (grants, contributions, procurement contracts). Each organisation carries its counts and totals over the matching activities and **the activities themselves, each with its own `self`**, so you can see why it matched.
+One row per organisation that took part in EU-funded projects, received EU money or won an EU body's contract, found by **what it was funded, paid or contracted for**, not by its name. `q` searches the subjects of its activities: funded projects' titles, objectives and keywords (CORDIS consortia of Horizon Europe, Horizon 2020 and FP7, every member; the other programmes' coordinators), the subjects of the payments the EU Financial Transparency System lists (grants, contributions, procurement contracts) and the titles and descriptions of the TED contract awards of EU institutions, bodies and agencies since 2024 (`/api/v2/funding/tender-awards`: every winner, joint tenders' members included). Each organisation carries its counts and totals over the matching activities and **the activities themselves, each with its own `self`**, so you can see why it matched.
 
 **When to use it**
-Finding consortium partners and competitors: "who coordinates projects on soil health", "which companies did DG CNECT pay for studies on artificial intelligence", "which Spanish research bodies work on hydrogen storage". For one organisation's whole record, follow its `self`.
+Finding consortium partners and competitors: "who coordinates projects on soil health", "which companies did DG CNECT pay or contract for studies on artificial intelligence", "which Spanish research bodies work on hydrogen storage". For one organisation's whole record, follow its `self`.
 
 **Input**
 - `q` — the subject (full text: every word in any form; `"quoted phrase"`, `OR`, `-word`). `q` or `name` is required.
 - `name` — part of the organisation's name.
-- `role` — coordinator | participant (project roles) | beneficiary | contractor (FTS: a grant or contribution received, or a procurement contract).
-- `programme` — part of the programme's name or code (`Horizon Europe`, `LIFE`, `DIGITAL`); `topic` — a topic code or its start (`HORIZON-CL5-2026`; on payments, the FTS call ID).
-- `dg` — the paying department (`CNECT`); payments only.
+- `role` — coordinator | participant (project roles) | beneficiary | contractor (FTS: a grant or contribution received, or a procurement contract; every TED award winner is a contractor).
+- `programme` — part of the programme's name or code (`Horizon Europe`, `LIFE`, `DIGITAL`); `topic` — a topic code or its start (`HORIZON-CL5-2026`; on payments, the FTS call ID). Either leaves the awards out (an award has neither).
+- `dg` — the paying or buying department (`CNECT`): the FTS payment's department, the award's contracting authority; projects are then left out.
 - `country` — ISO-2 (EL and GR, UK and GB are the same country).
 - `activity_type` (HES higher education | REC research | PRC private company | PUB public body | OTH) and `is_sme` — as CORDIS states them; projects only.
-- `since` — activities starting on or after (YYYY-MM-DD); `min_amount_eur` — the organisation's EU contribution plus payments over the matches, at least.
-- `source` — all (default) | projects | payments. `order` — matches (default) | amount | name. `page`, `limit` (max 50).
+- `since` — activities starting on or after (YYYY-MM-DD; an award's contract signature); `min_amount_eur` — the organisation's EU contribution plus payments over the matches, at least (awards are not in the amounts: a joint tender's value is shared by its members).
+- `source` — all (default) | projects | payments | awards. `order` — matches (default) | amount | name. `page`, `limit` (max 50).
 
 **Try it**
 ```
 GET /api/v2/funding/partners?q=soil%20health&role=coordinator
 GET /api/v2/funding/partners?q=artificial%20intelligence%20study&dg=CNECT&role=contractor
 GET /api/v2/funding/partners?q=hydrogen%20storage&country=ES&activity_type=REC
+GET /api/v2/funding/partners?q=legal%20translation&source=awards
 ```
 
 **You get back**
-A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat`, `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, the totals `eu_contribution` and `amount_eur`, `matches` (up to 10: kind, id, title, role, programme, date, amounts, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
+A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat`, `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, `awards`, the totals `eu_contribution` and `amount_eur`, `matches` (up to 10: kind, id, title, role, programme, date, department, amounts, an award's `tender_value_eur`, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
 
 **Identity**
-The PIC where known; a payment's beneficiary takes the PIC of the CORDIS organisation with the same VAT number; else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons in the FTS data are left out.
+The PIC where known; a payment's beneficiary or an award's winner takes the PIC of the CORDIS organisation with the same VAT number (a TED company identifier counts as a VAT number only when shaped like its own country's); else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons in the FTS data are left out.
 
 **Data freshness**
-Funded projects read every Sunday (CORDIS, the F&T Portal); FTS files for 2024 and 2025 read every Sunday; the VAT to PIC pairing rebuilt after them."""
+Funded projects read every Sunday (CORDIS, the F&T Portal); FTS files for 2024 and 2025 read every Sunday; the VAT to PIC pairing rebuilt after them; TED award notices read every day."""
 
 
 @router.get("/partners", response_model=PaginatedResponse[PartnerItem], tags=["v2-funding"],
-            summary="Partners — organisations found by what they were funded or paid for", description=_DESC)
+            summary="Partners — organisations found by what they were funded, paid or contracted for", description=_DESC)
 async def list_partners(
     request: Request,
     db: Session = Depends(get_db),
@@ -298,13 +332,13 @@ async def list_partners(
     role: Optional[str] = Query(None, description="coordinator | participant | beneficiary | contractor."),
     programme: Optional[str] = Query(None, description="Part of the programme's name or code."),
     topic: Optional[str] = Query(None, description="A topic code or its start; on payments, the FTS call ID."),
-    dg: Optional[str] = Query(None, description="The paying department (payments only), e.g. CNECT."),
+    dg: Optional[str] = Query(None, description="The paying or buying department (payments and awards), e.g. CNECT."),
     country: Optional[str] = Query(None, min_length=2, max_length=2, description="ISO-2; EL/GR and UK/GB are the same country."),
     activity_type: Optional[str] = Query(None, description="HES | REC | PRC | PUB | OTH (projects only)."),
     is_sme: Optional[bool] = Query(None, description="SME as CORDIS states it (projects only)."),
     since: Optional[date] = Query(None, description="Activities starting on or after (YYYY-MM-DD)."),
     min_amount_eur: Optional[float] = Query(None, ge=0, description="EU contribution plus payments over the matches, at least."),
-    source: str = Query("all", description="all | projects | payments."),
+    source: str = Query("all", description="all | projects | payments | awards."),
     order: str = Query("matches", description="matches | amount | name."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=50),
@@ -328,9 +362,9 @@ async def list_partners(
 
 
 @router.get("/partners/{id:path}", response_model=PartnerItem, tags=["v2-funding"],
-            summary="One partner — an organisation's funded projects and EU payments",
+            summary="One partner — an organisation's funded projects, EU payments and contract awards",
             description="""**What it does**
-One organisation from `/api/v2/funding/partners`: every funded project it takes part in and every FTS payment it received (up to 50, newest first), with its counts and totals over all of them.
+One organisation from `/api/v2/funding/partners`: every funded project it takes part in, every FTS payment it received and every TED contract award from an EU buyer it won (up to 50, newest first), with its counts and totals over all of them.
 
 **When to use it**
 After a partner search, to read one organisation's whole record.
