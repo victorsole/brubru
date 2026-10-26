@@ -35,7 +35,10 @@ router = make_single_body_folder(
          "source": "the EISMEA calls-for-proposals listing.",
          "extra": "Open EU funding calls for proposals managed by EISMEA across the "
                   "European Innovation Council, European Innovation Ecosystems, Single "
-                  "Market Programme and I3 instrument."},
+                  "Market Programme and I3 instrument. Each carries `status`, `deadline` and "
+                  "`tender_reference` as the call's own page labels them, empty where it "
+                  "labels none.",
+         "procurement": True},
         {"item_type": "topic", "slug": "topics", "noun": "topic pages",
          "source": "a curated set of EISMEA about, programme and funding pages.",
          "extra": "Snapshots of EISMEA's about page, its programmes (European Innovation "

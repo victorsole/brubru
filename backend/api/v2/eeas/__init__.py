@@ -42,7 +42,11 @@ router = make_single_body_folder(
          "source": "the EEAS calls-for-tenders listing (ongoing procurement and grants).",
          "extra": "Ongoing EEAS calls for tenders and grants — procurement contracts "
                   "for services, supplies or works at headquarters and in the EU "
-                  "delegations worldwide."},
+                  "delegations worldwide. `deadline` is the first deadline the page labels "
+                  "(often the one to express interest); `status` follows it, and is empty "
+                  "where the page labels no deadline. EEAS pages print no common reference, "
+                  "so `tender_reference` is empty.",
+         "procurement": True},
         {"item_type": "topic", "slug": "topics", "noun": "topic pages",
          "source": "a curated set of EEAS thematic and geographic reference pages.",
          "extra": "Snapshots of the EEAS reference pages — its structure and "

@@ -133,8 +133,10 @@ register_resource(
     noun="Eurojust calls for tender", body_name="Eurojust", acronym="Eurojust", tag="v2-funding",
     source="the Eurojust procurement pages (ongoing calls for tender + low/middle-value contracts).",
     extra="Eurojust's own procurement, including the low- and middle-value contracts that are "
-          "below the EU threshold and never appear in TED. Each with reference, status and closing "
-          "date. Filter with q (e.g. a reference or a topic such as 'security').",
+          "below the EU threshold and never appear in TED. Each item carries `tender_reference`, "
+          "`status` (open only while the deadline is ahead) and `deadline`. Filter with q (e.g. a "
+          "reference or a topic such as 'security').",
+    procurement=True,
 )
 
 # --- ETF — European Training Foundation ----------------------------------- #
@@ -145,6 +147,7 @@ register_resource(
     source="the ETF procurement listing.",
     extra="The European Training Foundation's own procurement (tenders and expression-of-interest "
           "calls), each with its closing date. Filter with q.",
+    procurement=True,
 )
 
 # --- EUAA — EU Agency for Asylum ------------------------------------------ #
@@ -156,6 +159,7 @@ register_resource(
     extra="EUAA calls for expression of interest (CEIs) such as the list of external remunerated "
           "experts in asylum-related fields, with reference and closing date. Headline open tenders "
           "are mirrored on the F&T Portal. Filter with q.",
+    procurement=True,
 )
 
 # --- EUDA — EU Drugs Agency (formerly EMCDDA) ----------------------------- #
@@ -167,6 +171,7 @@ register_resource(
     extra="EUDA open procedures — drug-policy development and evaluation, monitoring infrastructure, "
           "REITOX network support — each with its TED notice, reference and closing date. Filter "
           "with q.",
+    procurement=True,
 )
 
 # --- ENISA — EU Agency for Cybersecurity ---------------------------------- #
@@ -204,7 +209,9 @@ register_resource(
     body_name="the European Union Agency for Railways", acronym="ERA", tag="v2-funding",
     source="the ERA procurement listing (open status, listing-item cards).",
     extra="ERA's own procurement — railway-engineering studies, ERTMS support, IT, translation — "
-          "each with reference (URL slug) and status. Filter with q.",
+          "each with `status` (open only while the deadline is ahead) and `deadline`. ERA's listing "
+          "prints no reference, so `tender_reference` is empty. Filter with q.",
+    procurement=True,
 )
 
 # --- ECDC — European Centre for Disease Prevention and Control ------------ #
@@ -291,6 +298,7 @@ register_resource(
     extra="FRA procurement — fundamental-rights research, multi-country surveys, FRANET country "
           "correspondent contracts. Headline FRANET appointments run on a multi-year cycle. "
           "Listing returns [] cleanly when no procedures are open. Filter with q.",
+    procurement=True,
 )
 
 # --- EEA — European Environment Agency (F&T-only) ------------------------- #
@@ -321,6 +329,7 @@ register_resource(
     extra="EU-OSHA procurement — ESENER survey field-work, sectoral occupational-safety studies, "
           "Healthy Workplaces campaign communications, IT, translation. Each call with reference "
           "and deadline. Filter with q.",
+    procurement=True,
 )
 register_resource(
     router, body_code="eu_osha", item_type="eoi_call", slug="eu-osha-calls",
@@ -329,6 +338,7 @@ register_resource(
     tag="v2-funding",
     source="the EU-OSHA calls-for-expression-of-interest listing.",
     extra="EU-OSHA calls for expression of interest (occupational-safety expert pools). Filter with q.",
+    procurement=True,
 )
 
 # --- EIB — European Investment Bank --------------------------------------- #
@@ -371,6 +381,7 @@ register_resource(
     extra="Eurofound procurement — large-scale European Working Conditions Survey (EWCS) field-work, "
           "industrial-relations correspondents network, secondary analyses, IT, translation. Filter "
           "with q.",
+    procurement=True,
 )
 register_resource(
     router, body_code="eurofound", item_type="eoi_call", slug="eurofound-calls",
@@ -379,4 +390,5 @@ register_resource(
     acronym="Eurofound", tag="v2-funding",
     source="the Eurofound expression-of-interest listing (Playwright-rendered).",
     extra="Eurofound calls for expression of interest (correspondent networks, expert pools). Filter with q.",
+    procurement=True,
 )

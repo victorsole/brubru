@@ -15,8 +15,9 @@ Schema packed into the 5 datapoints:
 
 Cedefop (30 Sep 2026) is the first body on the corrected shape: document_date =
 publication date, and tender_reference / status / deadline as their own columns
-(migration 256), carried in Item.extras. The other agencies still use the packing
-above until each is walked in the API audit.
+(migration 256), carried in Item.extras. Since 26 Oct 2026 `_build` fills the three
+columns too (status by services/funding/agency_status.py), so the packed agencies
+no longer hold them only in the text.
 """
 from __future__ import annotations
 
@@ -28,6 +29,7 @@ from urllib.parse import quote, unquote
 
 import requests
 
+from services.funding.agency_status import from_source
 from services.scrapers.economy_common import Item, clean
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -62,11 +64,17 @@ def _parse_date(s: str) -> datetime | None:
 
 def _build(*, body_code: str, item_type: str, title: str, url: str, reference: str = "",
            status: str = "", deadline: datetime | None, now: datetime,
-           source_kind: str, published: datetime | None = None) -> Item:
-    bits = [b for b in [reference, status, deadline.date().isoformat() if deadline else ""] if b]
+           source_kind: str, published: datetime | None = None,
+           published_reference: bool = True) -> Item:
+    # The listing's word (often a label we gave the whole listing, "Open") is read against the
+    # deadline; until 26 Oct 2026 it reached only the text, and an "Open" past its deadline
+    # stayed open there.
+    derived = from_source(status, deadline, now.date())
+    shown = status if derived is None or derived == (status or "").strip().lower() else derived
+    bits = [b for b in [reference, shown, deadline.date().isoformat() if deadline else ""] if b]
     lines = [title,
              f"Reference: {reference}" if reference else "",
-             f"Status: {status}" if status else "",
+             f"Status: {shown}" if shown else "",
              f"Published: {published.date()}" if published else "",
              f"Deadline: {deadline.date()}" if deadline else ""]
     lines = [l for l in lines if l]
@@ -80,7 +88,10 @@ def _build(*, body_code: str, item_type: str, title: str, url: str, reference: s
         # if published in 2029 (EUAA, Eurojust, EUDA, ETF, ERA). Victor's rule for ECDC on
         # 30 Sep: the item's published date, else NULL, never the deadline.
         document_date=published, creation_date=now, source_kind=source_kind,
-        guid=reference or url)
+        guid=reference or url,
+        # published_reference=False: `reference` is our stand-in (ERA's URL slug), not the body's.
+        extras={"tender_reference": (reference or None) if published_reference else None,
+                "status": derived, "deadline": deadline})
 
 
 def _from_item_pages(items: list[Item], *, fetch_bodies: bool = True) -> list[Item]:
@@ -898,7 +909,9 @@ def ingest_etf_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return _from_item_pages(parse_field_cards(
         _fetch(_ETF + "/en/about/procurement"), _ETF, body_code="etf", item_type="tender",
         source_kind="etf_procurement", title_substr="/en/about/procurement/",
-        ref_field="deadline", deadline_field="deadline", status="Open"), fetch_bodies=fetch_bodies)
+        # No status word: the listing also shows closed tenders ("Tender status Closed" on their
+        # pages), so "Open" for all of them was ours; the deadline decides (26 Oct 2026).
+        ref_field="deadline", deadline_field="deadline", status=""), fetch_bodies=fetch_bodies)
 
 
 # --- EUAA — Drupal Views positional table -------------------------------- #
@@ -910,7 +923,7 @@ def ingest_euaa_calls(*, fetch_bodies: bool = True, **_) -> list[Item]:
         _fetch(_EUAA + "/about-us/procurement"), _EUAA,
         body_code="euaa", item_type="eoi_call",
         source_kind="euaa_procurement",
-        title_col=1, ref_col=0, deadline_col=2, status="Open",
+        title_col=1, ref_col=0, deadline_col=2, status="",   # the deadline decides, as for ETF
     ), fetch_bodies=fetch_bodies)
 
 
@@ -922,7 +935,7 @@ def ingest_euda_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
     return _from_item_pages(parse_positional_table(
         _fetch(_EUDA + "/about/procurement_en"), _EUDA,
         body_code="euda", item_type="tender", source_kind="euda_procurement",
-        title_col=1, ref_col=0, deadline_col=3, status="Open",
+        title_col=1, ref_col=0, deadline_col=3, status="",   # the deadline decides, as for ETF
     ), fetch_bodies=fetch_bodies)
 
 
@@ -1232,7 +1245,7 @@ def _parse_era_articles(html: str, base: str) -> list[Item]:
         out.append(_build(
             body_code="era", item_type="tender", title=title, url=url,
             reference=reference, status=status, deadline=dl, now=now,
-            source_kind="era_procurement",
+            source_kind="era_procurement", published_reference=False,
         ))
     return out
 
@@ -2418,6 +2431,7 @@ def _ted_to_item(n: dict, *, body_code: str, item_type: str, source_kind: str) -
         body_code=body_code, item_type=item_type, title=title, url=ted_url,
         reference=pub_num, status=procedure or "Open",
         deadline=deadline, now=now, source_kind=source_kind, published=published,
+        published_reference=False,   # TED's notice number, not the body's own reference
     )
 
 

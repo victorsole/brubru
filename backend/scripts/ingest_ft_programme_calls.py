@@ -31,12 +31,16 @@ import datetime as dt
 import html
 import sys
 import time
+from pathlib import Path
 from typing import Any, Dict, List
 
 import psycopg2
 
 # Reuse the proven SEDIA fetch + row-normaliser.
 from ingest_funding_sedia import fetch_sedia_page, normalise_row, get_env, PORTAL_BASE
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from services.funding.agency_status import from_source  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -124,13 +128,21 @@ def summarise(name: str, row: Dict[str, Any]) -> str:
 UPSERT_SQL = """
 INSERT INTO economy_items
     (body_code, item_type, title, summary, public_url, body_txt, body_html,
-     document_date, creation_date, source_kind, guid, fetched_at)
+     document_date, creation_date, source_kind, guid, tender_reference, status, deadline, fetched_at)
 VALUES
     (%(body_code)s, 'grant', %(title)s, %(summary)s, %(public_url)s, %(body_txt)s,
-     %(body_html)s, %(document_date)s, NOW(), 'sedia', %(guid)s, NOW())
+     %(body_html)s, %(document_date)s, NOW(), 'sedia', %(guid)s, %(tender_reference)s,
+     %(status)s, %(deadline)s, NOW())
 ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
     title = EXCLUDED.title,
     summary = EXCLUDED.summary,
+    -- The procurement columns (migration 256), as on the agency lists: until 26 Oct 2026 this writer
+    -- held the topic's status and deadline and put them only into the summary and body, so the
+    -- /funding/justice and /funding/innovation-fund calls had neither. A record without them keeps
+    -- what is stored.
+    tender_reference = COALESCE(EXCLUDED.tender_reference, economy_items.tender_reference),
+    status = COALESCE(EXCLUDED.status, economy_items.status),
+    deadline = COALESCE(EXCLUDED.deadline, economy_items.deadline),
     -- The longer body wins. A listing payload carries a short description; the backfill
     -- fetches the document itself. Overwriting unconditionally undid 348 EEA articles
     -- the same day they were filled, so every scheduled writer into economy_items now
@@ -269,6 +281,11 @@ def ingest_programme(cur, slug: str, *, apply: bool) -> int:
             "body_html": body_html,
             "document_date": row.get("published_at"),
             "guid": topic_id,
+            "tender_reference": topic_id,
+            # normalise_row has read SEDIA's word against the dates; 'unknown' is no status.
+            "status": from_source(row.get("status") if row.get("status") != "unknown" else None,
+                                  row.get("deadline"), dt.date.today()),
+            "deadline": row.get("deadline"),
         }
         print(f"  [{row.get('status'):11s}] {topic_id:34s} {(row.get('title') or '')[:48]}")
         if apply:

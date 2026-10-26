@@ -25,7 +25,9 @@ router = make_single_body_folder(
          "source": "the ECCC funding-opportunities listings (calls for proposals and "
                    "calls for expressions of interest).",
          "extra": "Open ECCC funding calls under Digital Europe and Horizon Europe "
-                  "cybersecurity."},
+                  "cybersecurity. Each carries `status`, `deadline` and `tender_reference` as "
+                  "the call's own page labels them, empty where it labels none.",
+         "procurement": True},
         {"item_type": "governing_board", "slug": "governing-board", "noun": "Governing Board members",
          "source": "the ECCC Governing Board membership table.",
          "extra": "The members and alternates of the ECCC Governing Board, by Member "

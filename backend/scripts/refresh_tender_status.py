@@ -2,8 +2,10 @@
 Set the status of every TED notice from its notice type and its own deadline.
 
 Runs in the daily tier right after the TED fetch (api/cron.py, _TENDERATOR_CHAIN), which inserts
-every new notice as "open". The rule lives in services/tenders/status.py. The tier records this
-job's run; the script records none itself.
+every new notice as "open". The rule lives in services/tenders/status.py. Since 26 Oct 2026 it
+also closes the EU bodies' own procurement items (economy_items) whose deadline day has passed
+(services/funding/agency_status.py), since each writer reads only what its body still lists. The
+tier records this job's run; the script records none itself.
 
 Run: python3.12 -m scripts.refresh_tender_status [--apply]
 """
@@ -16,6 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from core.database import SessionLocal  # noqa: E402
+from services.funding.agency_status import close_passed  # noqa: E402
 from services.tenders.status import refresh  # noqa: E402
 
 
@@ -26,12 +29,15 @@ def main(argv=None) -> int:
     db = SessionLocal()
     try:
         moves = refresh(db, apply=args.apply)
+        closed = close_passed(db, apply=args.apply)
     finally:
         db.close()
     for (old, new), n in sorted(moves.items(), key=lambda kv: -kv[1]):
         print(f"  {old or '(none)'} -> {new}: {n}")
     print(f"[{'OK' if args.apply else 'DRY-RUN'}] {sum(moves.values())} notice(s) "
           f"{'set' if args.apply else 'would change'}")
+    print(f"[{'OK' if args.apply else 'DRY-RUN'}] {closed} EU body procurement item(s) past their "
+          f"deadline {'closed' if args.apply else 'would close'}")
     return 0
 
 

@@ -30,11 +30,15 @@ router = make_single_body_folder(
         {"item_type": "call", "slug": "calls", "noun": "calls for proposals",
          "source": "the HaDEA calls-for-proposals listing.",
          "extra": "Open EU funding calls for proposals managed by HaDEA across its "
-                  "programmes, with their deadlines where published."},
+                  "programmes. Each carries `status`, `deadline` and `tender_reference` as "
+                  "the call's own page labels them, empty where it labels none.",
+         "procurement": True},
         {"item_type": "tender", "slug": "tenders", "noun": "calls for tenders",
          "source": "the HaDEA calls-for-tenders listing.",
-         "extra": "HaDEA procurement calls for tenders and prior information notices, "
-                  "with their deadlines where published."},
+         "extra": "HaDEA procurement calls for tenders and prior information notices. "
+                  "Each carries `status`, `deadline` and `tender_reference` as the "
+                  "procedure's own page labels them, empty where it labels none.",
+         "procurement": True},
         {"item_type": "topic", "slug": "topics", "noun": "topic pages",
          "source": "a curated set of HaDEA about and programme pages.",
          "extra": "Snapshots of HaDEA's about, legal-base, programmes-and-funding and "

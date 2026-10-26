@@ -101,19 +101,17 @@ def test_upsert_carries_the_procurement_columns():
             assert f"economy_items.{col}" in sql, f"{col} must never regress to NULL"
 
 
-# Bodies walked in the API audit and moved onto the procurement fields. A body is
-# added here in the same commit that switches its routes to procurement=True.
-_PROCUREMENT_BODIES = ("cedefop", "ecdc", "echa", "eea", "efca", "efsa", "eib", "eige", "ema", "enisa")
-
-
-def test_only_walked_bodies_expose_the_procurement_fields():
+def test_every_agency_procurement_route_exposes_the_procurement_fields():
+    """Until 26 Oct 2026 only the bodies walked in the API audit (Cedefop, ECDC, ECHA, EEA, EFCA,
+    EFSA, EIB, EIGE, EMA, ENISA) served tender_reference, status and deadline; the other lists'
+    writers held both and wrote them only into the text. Every list now serves them
+    (services/funding/agency_status.py; tests/test_agency_procurement_status.py)."""
     os.environ.setdefault("TESTING", "1")
     from api.v2.funding.agency_procurement import router
     models = {r.path: r.response_model for r in router.routes if hasattr(r, "response_model")}
-    walked = [p for p in models if any(f"/{b}-" in p for b in _PROCUREMENT_BODIES)]
-    other = [p for p in models if p not in walked]
-    assert walked and all("tender_reference" in _fields(models[p]) for p in walked)
-    assert other and not any("tender_reference" in _fields(models[p]) for p in other)
+    lists = [p for p in models if not p.endswith("}") and "/documents" not in p]
+    assert lists and all("tender_reference" in _fields(models[p]) for p in lists), [
+        p for p in lists if "tender_reference" not in _fields(models[p])]
 
 
 def _fields(model) -> set:

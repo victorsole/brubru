@@ -439,7 +439,8 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
 def make_single_body_folder(*, body_code, prefix, body_name, acronym, tag, resources):
     """Return an APIRouter for a single-body own-folder.
 
-    resources: list of dicts with keys item_type, slug, noun, source, extra.
+    resources: list of dicts with keys item_type, slug, noun, source, extra, and procurement
+    (True for tenders and calls: the items carry tender_reference, status and deadline).
     """
     from fastapi import APIRouter
     from typing import List, Optional
@@ -487,6 +488,6 @@ def make_single_body_folder(*, body_code, prefix, body_name, acronym, tag, resou
         register_resource(
             router, body_code=body_code, item_type=r["item_type"], slug=r["slug"],
             noun=r["noun"], body_name=body_name, acronym=acronym, tag=tag,
-            source=r["source"], extra=r.get("extra", ""),
+            source=r["source"], extra=r.get("extra", ""), procurement=r.get("procurement", False),
         )
     return router

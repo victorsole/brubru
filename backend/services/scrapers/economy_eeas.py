@@ -32,6 +32,7 @@ import asyncio
 import re
 from datetime import datetime, timezone
 
+from services.funding.agency_status import deadline_in_text, from_source
 from services.scrapers.economy_common import Item, clean, extract_html, extract_item_date
 
 _BASE = "https://www.eeas.europa.eu"
@@ -196,6 +197,12 @@ async def _scrape_listing(item_type: str, path: str, *, fetch_bodies: bool,
                     it.body_txt, it.body_html = extract_html(html)
                     if item_type == "tender":
                         it.document_date, _ = extract_item_date(html)
+                        # The page's own labelled deadline ("Deadline for submission of tenders:
+                        # 27/11/2026"); until 26 Oct 2026 no EEAS tender had a deadline or status.
+                        deadline, says_closed = deadline_in_text(it.body_txt)
+                        it.extras = {"tender_reference": None, "deadline": deadline,
+                                     "status": from_source("closed" if says_closed else None,
+                                                           deadline, now.date())}
         await b.close()
     return items
 

@@ -44,5 +44,8 @@ for slug, body_code, body_name, acronym, extra in _PROGRAMMES:
         acronym=acronym,
         source=_SOURCE,
         tag="v2-funding",
-        extra=extra,
+        extra=extra + (" Each call carries `tender_reference` (the topic id), `status` (open | "
+                       "forthcoming | closed, from the portal's word and the call's dates) and "
+                       "`deadline` (the next cut-off, else the last)."),
+        procurement=True,
     )

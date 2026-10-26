@@ -853,6 +853,13 @@ def scrape_ecl_listing(body_code: str, item_type: str, listing_urls, base: str,
             it.body_txt, it.body_html = body_txt, body_html
             if kind == "pdf":
                 it.source_kind = "pdf"
+            if item_type in ("call", "tender", "eoi_call", "grant") and body_txt:
+                # The page labels its facts ("Status Upcoming", "Reference HADEA/2026/OP/0020",
+                # "Deadline date 15 October 2026"); until 26 Oct 2026 they reached only the text.
+                from services.funding.agency_status import from_source, page_facts
+                word, ref, deadline = page_facts(body_txt)
+                it.extras = {"tender_reference": ref, "deadline": deadline,
+                             "status": from_source(word, deadline, now.date())}
     return items
 
 
