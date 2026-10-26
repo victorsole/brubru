@@ -236,3 +236,40 @@ def test_the_backfill_reads_what_each_row_holds():
     era = _stored(body_code="era", source_kind="era_procurement", guid="a-url-slug",
                   summary="a-url-slug · Open · 2026-12-31", body_txt="T\nReference: a-url-slug")
     assert derive(era, TODAY)[:3] == ("open", D(2026, 12, 31), None)
+
+
+# --- one row per (body, reference) ------------------------------------------------------------ #
+
+def _it(url, ref, body="hadea", itype="call"):
+    return SimpleNamespace(body_code=body, item_type=itype, public_url=url, extras={"tender_reference": ref})
+
+
+def test_a_reference_printed_on_several_pages_goes_to_none_of_them():
+    sync = importlib.import_module("scripts.sync_economy")
+    items = [_it("https://h/space-1", "HORIZON-CL4-2026-03"), _it("https://h/space-2", "HORIZON-CL4-2026-03"),
+             _it("https://h/other", "HORIZON-CL4-2027-06"), _it("https://e/1", "HORIZON-CL4-2026-03", body="eismea")]
+    sync._shared_references_to_none(items)
+    assert [i.extras["tender_reference"] for i in items] == [None, None, "HORIZON-CL4-2027-06", "HORIZON-CL4-2026-03"]
+
+
+def test_a_reference_another_row_holds_is_not_sent_again():
+    sync = importlib.import_module("scripts.sync_economy")
+    seen = {}
+
+    class _Cur:
+        def execute(self, sql, params=None): seen["params"] = params
+        def fetchall(self): return [("hadea", "HADEA/2026/OP/0020", "tender", "https://h/notice")]
+
+    items = [_it("https://h/call", "HADEA/2026/OP/0020", itype="tender"),
+             _it("https://h/notice", "HADEA/2026/OP/0020", itype="tender"), _it("https://h/new", "HADEA/2026/OP/0099", itype="tender")]
+    sync._drop_references_held_elsewhere(SimpleNamespace(cur=_Cur()), items)
+    assert [i.extras["tender_reference"] for i in items] == [None, "HADEA/2026/OP/0020", "HADEA/2026/OP/0099"]
+    assert set(seen["params"][0]) == {("hadea", "HADEA/2026/OP/0020"), ("hadea", "HADEA/2026/OP/0099")}
+
+
+def test_the_sync_applies_both_rules_around_the_repoint():
+    import inspect
+    sync = importlib.import_module("scripts.sync_economy")
+    src = inspect.getsource(sync._run_one)
+    assert (src.index("_shared_references_to_none(") < src.index("_repoint_by_reference(")
+            < src.index("_drop_references_held_elsewhere(") < src.index("rows = ["))

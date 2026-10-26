@@ -98,12 +98,26 @@ def main(argv=None) -> int:
             tally[(r.body_code, r.item_type, status or "(none)", "deadline" if deadline else "-",
                    "ref" if ref else "-")] += 1
             if status or deadline or ref:
-                plan.append({"id": r.id, "status": status, "deadline": deadline, "ref": ref})
+                plan.append({"id": r.id, "body": r.body_code, "status": status, "deadline": deadline, "ref": ref})
+        # One row per (body, reference): the partial unique index allows no more. A reference
+        # printed on several pages (HaDEA: HORIZON-CL4-2026-03 on four Space call pages) identifies
+        # none of them alone, and one another row already holds is not given twice
+        # (scripts/sync_economy._shared_references_to_none, the writers' rule).
+        held = {(b, ref): i for i, b, ref in db.execute(text(
+            "SELECT id, body_code, tender_reference FROM economy_items WHERE tender_reference IS NOT NULL "
+            "AND body_code = ANY(CAST(:b AS text[]))"), {"b": sorted({p["body"] for p in plan})}).fetchall()}
+        counts = Counter((p["body"], p["ref"]) for p in plan if p["ref"])
+        shared = 0
+        for p in plan:
+            key = (p["body"], p["ref"])
+            if p["ref"] and (counts[key] > 1 or held.get(key, p["id"]) != p["id"]):
+                p["ref"], shared = None, shared + 1
+        plan = [p for p in plan if p["status"] or p["deadline"] or p["ref"]]
         for k, n in sorted(tally.items()):
             print(f"  {k[0]:<10} {k[1]:<9} {k[2]:<12} {k[3]:<9} {k[4]:<4} {n}")
-        print(f"[{'OK' if args.apply else 'DRY-RUN'}] {len(rows)} item(s) without a status; "
-              f"{len(plan)} {'filled' if args.apply else 'would be filled'}; "
-              f"{len(rows) - len(plan)} keep NULL (their text labels neither)")
+        print(f"[{'APPLYING' if args.apply else 'DRY-RUN'}] {len(rows)} item(s) without a status; "
+              f"{len(plan)} to fill; {len(rows) - len(plan)} keep NULL (their text labels neither); "
+              f"{shared} reference(s) not given (printed on several pages, or held by another row)")
         if args.apply and plan:
             if args.backup_dir:
                 out = Path(args.backup_dir) / f"economy_items_status_before_{datetime.now():%Y%m%d_%H%M}.csv"
@@ -119,6 +133,7 @@ def main(argv=None) -> int:
                 "deadline = COALESCE(deadline, :deadline), "
                 "tender_reference = COALESCE(tender_reference, :ref) WHERE id = :id"), plan)
             db.commit()
+            print(f"[OK] {len(plan)} item(s) filled")
     finally:
         db.close()
     return 0

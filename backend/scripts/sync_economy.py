@@ -743,6 +743,37 @@ def _repoint_by_reference(db: "ChunkedDb", items) -> None:
                                       "bc": it.body_code, "ref": ref})
 
 
+# The partial unique index on (body_code, tender_reference) allows one row per reference, and a
+# run can carry one reference on several pages: HaDEA prints HADEA/2026/OP/0020 on the prior
+# information notice and on the call, and HORIZON-CL4-2026-03 on four Space call pages (26 Oct
+# 2026). Sent twice, the batch upsert fails and the body's whole run with it. A reference printed
+# on several pages identifies none of them alone, so none of them is given it (before the repoint,
+# which would otherwise move the stored row to each page in turn); nor is an item whose reference
+# another row already holds and the repoint could not move. The rest of each item is written.
+
+def _shared_references_to_none(items) -> None:
+    from collections import Counter
+    counts = Counter((it.body_code, (it.extras or {}).get("tender_reference")) for it in items)
+    for it in items:
+        ref = (it.extras or {}).get("tender_reference")
+        if ref and counts[(it.body_code, ref)] > 1:
+            it.extras["tender_reference"] = None
+
+
+def _drop_references_held_elsewhere(db: "ChunkedDb", items) -> None:
+    todo = [it for it in items if (it.extras or {}).get("tender_reference")]
+    if not todo:
+        return
+    keys = tuple({(it.body_code, it.extras["tender_reference"]) for it in todo})
+    db.cur.execute("SELECT body_code, tender_reference, item_type, public_url FROM economy_items "
+                   "WHERE (body_code, tender_reference) IN %s", (keys,))
+    held = {(b, r): (t, u) for b, r, t, u in db.cur.fetchall()}
+    for it in todo:
+        owner = held.get((it.body_code, it.extras["tender_reference"]))
+        if owner is not None and owner != (it.item_type, it.public_url):
+            it.extras["tender_reference"] = None
+
+
 def _keep_stored_type(items) -> None:
     """A run that did not read a procedure's own page must not reclassify it.
 
@@ -832,7 +863,9 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
             _drop_furniture_bodies(it)
             by_url[(it.body_code, it.item_type, it.public_url)] = it
     _refuse_undated_new_news(by_url)
+    _shared_references_to_none(by_url.values())
     _repoint_by_reference(db, by_url.values())
+    _drop_references_held_elsewhere(db, by_url.values())
     rows = [(it.body_code, it.item_type, it.title, it.summary, it.public_url, it.body_txt,
              it.body_html, it.document_date, it.creation_date, it.source_kind, it.guid,
              (it.extras or {}).get("tender_reference"), (it.extras or {}).get("status"),
