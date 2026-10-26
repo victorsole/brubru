@@ -239,7 +239,8 @@ def normalise(
         "total_cost": parse_float(row.get("totalCost") or ""),
         "eu_contribution": parse_float(row.get("ecMaxContribution") or ""),
         "cost_currency": "EUR",
-        "status": _trunc((row.get("status") or "").lower() or "unknown", 40),
+        # The source's word, or None: "unknown" here was ours, not CORDIS's (11 FP7 rows, 26 Oct 2026).
+        "source_status": _trunc((row.get("status") or "").strip().lower(), 40) or None,
         "source_url": f"https://cordis.europa.eu/project/id/{pid}",
         "published_at": parse_date(row.get("ecSignatureDate") or ""),
         "organisations": organisations,
@@ -262,7 +263,7 @@ _UPSERT_SQL = """
             %(topic_code)s, %(grant_doi)s,
             %(framework_programme)s, %(type_of_action)s, %(coordinator_name)s,
             %(coordinator_country)s, %(start_date)s, %(end_date)s, %(total_cost)s,
-            %(eu_contribution)s, %(cost_currency)s, %(status)s, %(status)s, %(source_url)s,
+            %(eu_contribution)s, %(cost_currency)s, 'unknown', %(source_status)s, %(source_url)s,
             %(published_at)s,
             %(organisations)s, %(topics)s, %(euroscivoc)s,
             %(legal_basis_details)s, %(web_links)s,

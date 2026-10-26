@@ -37,7 +37,7 @@ projects_router = APIRouter(prefix="/ft-funded-projects", tags=["v2-funding-ft-f
 Returns calls for grant proposals from the EU Funding & Tenders Portal — the canonical entry point for Commission-managed grant programmes (Horizon Europe, Digital Europe, LIFE, EU4Health, Creative Europe, Erasmus+, EIC, AMIF, ISF, BMVI, JTM, etc.). Each row carries the topic_id (the EU's identifier, e.g. `HORIZON-CL5-2026-D2-01-01`), the framework programme, the type of action (RIA / IA / CSA / CoFund / etc.), the status (`open` / `forthcoming` / `closed` / `unknown`), the deadline, the budget, and a body composed from title + objective + scope. `indicative_budget` is the figure the portal's topic page states, in euros. Where several topics draw on one envelope (621 calls on 15 Oct 2026; the Innovation Fund 2023 topics share EUR 4 billion), it is that shared envelope, not money reserved for the one topic. Null when the portal states none (about 210 calls, mostly grants outside the topic model).
 
 **When to use it**
-For consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v1/funded-projects` to see "what's been funded under this programme" → "what's currently open". Default ordering puts most recent deadlines first so partners land on actionable opportunities.
+For consultancies, universities, research orgs, and SMEs looking for non-procurement funding. Combine with `/api/v2/funding/ft-funded-projects` to see "what's been funded under this programme" → "what's currently open". Default ordering puts most recent deadlines first so partners land on actionable opportunities.
 
 **Input**
 - `framework_programme` — substring match (e.g. `Horizon Europe`, `Digital Europe`, `LIFE`).
@@ -54,8 +54,8 @@ For consultancies, universities, research orgs, and SMEs looking for non-procure
 
 **Try it**
 ```
-GET /api/v1/calls-for-proposals?framework_programme=Horizon&status=open
-GET /api/v1/calls-for-proposals?q=AI&deadline_from=2026-06-01
+GET /api/v2/funding/ft-calls-for-proposals?framework_programme=Horizon&status=open
+GET /api/v2/funding/ft-calls-for-proposals?q=AI&deadline_from=2026-06-01
 GET /api/v2/funding/ft-calls-for-proposals?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
@@ -105,7 +105,7 @@ After locating a call via the list endpoint, use this for the full record — pa
 
 **Try it**
 ```
-GET /api/v1/calls-for-proposals/HORIZON-CL5-2026-D2-01-01
+GET /api/v2/funding/ft-calls-for-proposals/HORIZON-CL5-2026-D2-01-01
 ```
 
 **You get back**
@@ -148,8 +148,8 @@ For service providers, consultancies, and contractors bidding on EU institutiona
 
 **Try it**
 ```
-GET /api/v1/calls-for-tenders?contracting_authority=Frontex&status=open
-GET /api/v1/calls-for-tenders?q=consultancy&deadline_from=2026-06-01
+GET /api/v2/funding/ft-calls-for-tenders?contracting_authority=Frontex&status=open
+GET /api/v2/funding/ft-calls-for-tenders?q=consultancy&deadline_from=2026-06-01
 GET /api/v2/funding/ft-calls-for-tenders?updated_from=2026-09-21&order=updated_asc&limit=500
 ```
 
@@ -199,7 +199,7 @@ After locating a tender via the list endpoint, use this for the full record. The
 
 **Try it**
 ```
-GET /api/v1/calls-for-tenders/<tender_reference>
+GET /api/v2/funding/ft-calls-for-tenders/<tender_reference>
 ```
 
 **You get back**
@@ -222,16 +222,16 @@ async def get_call_for_tenders(
     response_model=PaginatedResponse[FtFundedProjectItem],
     summary="EU grant-funded projects — active + completed results (Horizon Europe, FP7, H2020, sectoral programmes)",
     description="""**What it does**
-Returns EU-funded grant projects from the Funding & Tenders Portal — both active and completed projects across all framework programmes (Horizon Europe, Horizon 2020, FP7, sectoral programmes like Digital Europe, EU4Health, LIFE, Creative Europe). Each row carries the project_id (e.g. `101082345`), the title, the framework programme, the type of action, the coordinator name + country, the consortium size, the start/end dates, the EU contribution, the total cost, the objective summary, and the project portal URL.
+Returns EU-funded grant projects, planned, running and finished, across all programmes: Horizon Europe, Horizon 2020 and FP7 from CORDIS, every other programme (Digital Europe, EU4Health, LIFE, Creative Europe...) from the Funding & Tenders Portal. Each row carries the project_id (e.g. `101082345`), the title, the programme's code, the type of action, the coordinator name + country, the start/end dates, the EU contribution, the total cost, the objective summary, the status (with the source's own word beside it), and the project's own page.
 
 **When to use it**
-For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?". Combine with `/api/v1/calls-for-proposals` to see the call → project pipeline.
+For research orgs and consultancies doing competitive intelligence on EU funding: "what has the Commission funded on AI in the last 3 years?", "which Polish coordinators have run successful Horizon projects?", "what are the typical budgets for IA actions in Cluster 5?". Combine with `/api/v2/funding/ft-calls-for-proposals` to see the call → project pipeline.
 
 **Input**
-- `framework_programme` — substring (e.g. `Horizon Europe`, `Horizon 2020`).
+- `framework_programme` — the programme. Rows hold the source's code: `HORIZON` (Horizon Europe), `H2020` (Horizon 2020), `FP7`, and the F&T Portal's codes (`ERASMUS2027`, `CREA2027`, `LIFE2027`, `DIGITAL`...). Part of a code matches as a substring (`LIFE` finds both LIFE programmes, 2014-2020 and 2021-2027); a value that is part of no code is looked up in the programmes' names as the portal gives them (`Horizon Europe`, `Horizon 2020`, `Creative Europe`, `Erasmus+`).
 - `coordinator_country` — ISO-2 (2 chars exact).
-- `type_of_action` — substring (`RIA`, `IA`, `CSA`).
-- `status` — planned | ongoing | ended | terminated | suspended | unknown. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave.
+- `type_of_action` — substring (`RIA`, `CSA`; `IA` also matches `RIA`).
+- `status` — planned | ongoing | ended | terminated | suspended | unknown. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; each item shows that word in `source_status`.
 - `q` — substring search on title + objective.
 - `start_from`, `end_to` — start-date / end-date window.
 - `limit` (default 50, max 100), `page` (1-indexed).
@@ -239,15 +239,16 @@ For research orgs and consultancies doing competitive intelligence on EU funding
 
 **Try it**
 ```
-GET /api/v1/funded-projects?framework_programme=Horizon%20Europe&coordinator_country=NL
-GET /api/v1/funded-projects?q=climate&type_of_action=IA
+GET /api/v2/funding/ft-funded-projects?framework_programme=Horizon%20Europe&coordinator_country=NL
+GET /api/v2/funding/ft-funded-projects?framework_programme=Creative%20Europe&status=ongoing
+GET /api/v2/funding/ft-funded-projects?q=climate&type_of_action=CSA
 ```
 
 **You get back**
-A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `title`, `framework_programme`, `type_of_action`, `coordinator_name`, `coordinator_country`, `consortium_size`, `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal project page).
+A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `project_acronym`, `title`, `framework_programme` (the code), `type_of_action`, `coordinator_name`, `coordinator_country`, `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_status` (the source's own word), `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the project's own page, on CORDIS or the F&T Portal).
 
 **Data freshness**
-Read every Sunday from 05:00 UTC (weekly tier, from 1 Nov 2026; until then the rows were last read on 6 May for CORDIS and 15 Jun for the F&T Portal): Horizon Europe, Horizon 2020 and FP7 from the CORDIS bulk dumps (cordis.europa.eu/data), each read when CORDIS has refreshed it, which is about monthly; every other programme from the F&T Portal's projects-results index (ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results). `status` is set every day from the source's word and the project's own dates. CORDIS is also reachable via `/api/v1/discover/eurio`. is_test=True seed rows are filtered out at query time.""",
+Read every Sunday from 05:00 UTC (weekly tier, from 1 Nov 2026; until then the rows were last read on 6 May for CORDIS and 15 Jun for the F&T Portal): Horizon Europe, Horizon 2020 and FP7 from the CORDIS bulk dumps (cordis.europa.eu/data), each read when CORDIS has refreshed it, which is about monthly; every other programme from the F&T Portal's projects-results index (ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results). `status` is set every day from the source's word and the project's own dates. CORDIS is also reachable via `/api/v1/discover/eurio/projects`. is_test=True seed rows are filtered out at query time.""",
 )
 async def list_funded_projects(
     request: Request,
@@ -284,7 +285,7 @@ After locating a project via the list endpoint, use this for the full record. Fo
 
 **Try it**
 ```
-GET /api/v1/funded-projects/101082345
+GET /api/v2/funding/ft-funded-projects/101082345
 ```
 
 **You get back**

@@ -312,7 +312,7 @@ def _funding_to_item(
 Returns EU funding opportunities (calls for proposals) from the Funding & Tenders Portal across Horizon Europe, Digital Europe, CEF, EU4Health, Erasmus+, and other Commission programmes. Each row carries the topic_id, call_id, programme, title, short summary + description, status, type of action, deadlines, budget, source URL, target audience.
 
 **When to use it**
-Same domain as `/api/v1/calls-for-proposals` but a slightly different surface — this one is broader (includes some opportunities not in the calls-for-proposals export). For most use cases, `/api/v1/calls-for-proposals` is the recommended endpoint. This one is preserved for backwards compatibility + a different filtering surface.
+Only to keep an existing integration working until 23 Oct 2027: it serves the same calls as `/api/v1/ft-calls-for-proposals`, under the older field names (`programme`, `short_summary`). Use `/api/v1/ft-calls-for-proposals` for anything new.
 
 **Input**
 - `programme` — substring (e.g. `Horizon`, `CEF`, `Digital Europe`).
@@ -325,8 +325,8 @@ Same domain as `/api/v1/calls-for-proposals` but a slightly different surface �
 
 **Try it**
 ```
-GET /api/v1/funding?programme=Horizon&status=open
-GET /api/v1/funding?q=AI&deadline_from=2026-06-01
+GET /api/v1/funding-opportunities?programme=Horizon&status=open
+GET /api/v1/funding-opportunities?q=AI&deadline_from=2026-06-01
 ```
 
 **You get back**
@@ -411,7 +411,7 @@ After locating an opportunity via the list endpoint, use this for the full recor
 
 **Try it**
 ```
-GET /api/v1/funding/HORIZON-CL5-2026-D2-01-01
+GET /api/v1/funding-opportunities/HORIZON-CL5-2026-D2-01-01
 ```
 
 **You get back**

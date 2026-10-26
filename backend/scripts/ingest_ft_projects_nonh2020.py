@@ -213,7 +213,7 @@ def normalise(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         # join to ft_participants. It used to survive only inside the truncated
         # blob; migration 212 gives it a column.
         "coordinator_pic": coordinator["pic"],
-        "status": _first(md.get("status")),
+        "source_status": _first(md.get("status")),
         "start_date": _date(md.get("startDate")),
         "end_date": _date(md.get("endDate")),
         "eu_contribution": _num(md.get("ecMaxContribution")),
@@ -231,7 +231,7 @@ INSERT INTO ft_funded_projects
      cost_currency, source_url, is_test, published_at, scraped_at, last_updated)
 VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s,
         %(framework_programme)s, %(coordinator_name)s, %(coordinator_country)s,
-        %(coordinator_pic)s, %(status)s, %(status)s, %(start_date)s,
+        %(coordinator_pic)s, 'unknown', %(source_status)s, %(start_date)s,
         %(end_date)s, %(eu_contribution)s, %(total_cost)s, 'EUR', %(source_url)s,
         false, %(published_at)s, NOW(), NOW())
 ON CONFLICT (project_id) DO UPDATE SET

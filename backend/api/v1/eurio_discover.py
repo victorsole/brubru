@@ -302,7 +302,7 @@ async def find_projects(
 Returns the CORDIS project's consortium: every participating organisation, its country, role (coordinator / participant / third-party), short name, EC contribution, and total cost. Built from `ft_funded_projects.organisations` (JSONB).
 
 **When to use it**
-After locating a project (via `/api/v1/discover/eurio/projects` or `/api/v1/funded-projects`), use this to understand who is working on it — useful for partnership-mapping, competitor analysis, or finding a research group active in your area.
+After locating a project (via `/api/v1/discover/eurio/projects` or `/api/v1/ft-funded-projects`), use this to understand who is working on it — useful for partnership-mapping, competitor analysis, or finding a research group active in your area.
 
 **How this differs from the sibling routes**
 - `/consortium` — **who** is in the project (this endpoint).
@@ -359,7 +359,7 @@ async def project_consortium(
 Returns the CORDIS-published web links for a project: project website, public reports, dissemination URLs. Sourced from CORDIS's `webLink` table inside `ft_funded_projects.web_links` (JSONB).
 
 **When to use it**
-After locating a project (via `/api/v1/discover/eurio/projects` or `/api/v1/funded-projects`), use this to find the project's public outputs — useful for citing in policy work, finding research papers / datasets / methodologies that an EU-funded consortium has published.
+After locating a project (via `/api/v1/discover/eurio/projects` or `/api/v1/ft-funded-projects`), use this to find the project's public outputs — useful for citing in policy work, finding research papers / datasets / methodologies that an EU-funded consortium has published.
 
 **Important caveat**
 CORDIS does NOT publish per-deliverable metadata in its quarterly bulk dump. The "deliverables" you get here are the **published-output web links** the consortium chose to share via the CORDIS portal — typically a handful of URLs, often empty for in-progress projects. The route's `note` field explains this when `web_links` is empty.

@@ -1,0 +1,302 @@
+{
+  "$source": "The F&T Portal's projects index (api.tech.ec.europa.eu/search-api, apiKey SEDIA_NONH2020_PROD): each programAbbreviation read with the programId its projects carry and that id's label in the index's programId facet, word for word (whitespace collapsed; the portal drops the '+' of Erasmus+ here). FP7 is not in that index: its name is the CORDIS dataset's (data.europa.eu dataset cordisfp7projects).",
+  "$read": "2026-10-26",
+  "$used_by": "services/funding/programme_codes.py (the framework_programme filter of /funding/ft-funded-projects)",
+  "codes": {
+    "1HP": {
+      "name": "1st Health Programme (1HP)",
+      "period": "2003-2007",
+      "program_id": "111109"
+    },
+    "2HP": {
+      "name": "2nd Health Programme (2HP)",
+      "period": "2007-2013",
+      "program_id": "111110"
+    },
+    "3HP": {
+      "name": "3rd Health Programme (3HP - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31061266"
+    },
+    "AGRIP": {
+      "name": "Promotion of Agricultural Products (AGRIP - 2014-2020)",
+      "period": null,
+      "program_id": "31072773"
+    },
+    "AGRIP2027": {
+      "name": "Promotion of Agricultural Products (AGRIP)",
+      "period": "2021-2027",
+      "program_id": "43298664"
+    },
+    "AMIF": {
+      "name": "Asylum, Migration and Integration Fund (AMIF - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31077795"
+    },
+    "AMIF2027": {
+      "name": "Asylum, Migration and Integration Fund (AMIF)",
+      "period": "2021-2027",
+      "program_id": "43251447"
+    },
+    "BMVI": {
+      "name": "Border Management and Visa Instrument (BMVI)",
+      "period": "2021-2027",
+      "program_id": "43251530"
+    },
+    "CCEI": {
+      "name": "Customs Control Equipment Instrument (CCEI)",
+      "period": "2021-2027",
+      "program_id": "43251534"
+    },
+    "CEF": {
+      "name": "CEF (CEF)",
+      "period": "2014-2020",
+      "program_id": "31065524"
+    },
+    "CEF2027": {
+      "name": "Connecting Europe Facility (CEF)",
+      "period": "2021-2027",
+      "program_id": "43251567"
+    },
+    "CERV": {
+      "name": "Citizens, Equality, Rights and Values programme (CERV)",
+      "period": "2021-2027",
+      "program_id": "43251589"
+    },
+    "COSME": {
+      "name": "Programme for the Competitiveness of Enterprises and small and medium-sized enterprises (COSME - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31059643"
+    },
+    "CREA2020": {
+      "name": "Creative Europe (CREA - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31059083"
+    },
+    "CREA2027": {
+      "name": "Creative Europe Programme (CREA)",
+      "period": "2021-2027",
+      "program_id": "43251814"
+    },
+    "CUST": {
+      "name": "Customs programme (CUST)",
+      "period": "2021-2027",
+      "program_id": "43253979"
+    },
+    "DIGITAL": {
+      "name": "Digital Europe Programme (DIGITAL)",
+      "period": "2021-2027",
+      "program_id": "43152860"
+    },
+    "EDF": {
+      "name": "European Defence Fund (EDF)",
+      "period": "2021-2027",
+      "program_id": "44181033"
+    },
+    "EMFAF": {
+      "name": "European Maritime, Fisheries and Aquaculture Fund (EMFAF)",
+      "period": "2021-2027",
+      "program_id": "43392145"
+    },
+    "EMFF": {
+      "name": "European Maritime and Fisheries Fund (EMFF - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31098847"
+    },
+    "EPLUS2020": {
+      "name": "Erasmus Programme (EPLUS - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31059093"
+    },
+    "ERASMUS2027": {
+      "name": "Erasmus (ERASMUS)",
+      "period": "2021-2027",
+      "program_id": "43353764"
+    },
+    "ERDFTA": {
+      "name": "Technical assistance for ERDF, CF and JTF (ERDF-TA)",
+      "period": "2021-2027",
+      "program_id": "46324255"
+    },
+    "ESC2027": {
+      "name": "European Solidarity Corps (ESC)",
+      "period": "2021-2027",
+      "program_id": "43254037"
+    },
+    "ESF": {
+      "name": "European Social Fund (ESF)",
+      "period": "2021-2027",
+      "program_id": "43254019"
+    },
+    "EU4H": {
+      "name": "EU4Health Programme (EU4H)",
+      "period": "2021-2027",
+      "program_id": "43332642"
+    },
+    "EUAF": {
+      "name": "Union Anti-Fraud Programme (EUAF)",
+      "period": "2021-2027",
+      "program_id": "43251842"
+    },
+    "EURATOM2027": {
+      "name": "Euratom Research and Training Programme (EURATOM)",
+      "period": "2021-2027",
+      "program_id": "43298916"
+    },
+    "FISC": {
+      "name": "Fiscalis Programme (FISC)",
+      "period": "2021-2027",
+      "program_id": "43253995"
+    },
+    "FP7": {
+      "name": "Seventh Framework Programme for Research and Technological Development (FP7)",
+      "period": "2007-2013",
+      "program_id": null
+    },
+    "H2020": {
+      "name": "Horizon 2020 Framework Programme (H2020 - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31045243"
+    },
+    "HERC": {
+      "name": "Hercule III (HERC - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31084392"
+    },
+    "HORIZON": {
+      "name": "Horizon Europe (HORIZON)",
+      "period": "2021-2027",
+      "program_id": "43108390"
+    },
+    "I3": {
+      "name": "Interregional Innovation Investments Instrument (I3)",
+      "period": "2021-2027",
+      "program_id": "44416173"
+    },
+    "IMCAP": {
+      "name": "Support for information measures relating to the common agricultural policy (IMCAP - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "42198993"
+    },
+    "IMCAP2027": {
+      "name": "Support for information measures relating to the common agricultural policy (IMCAP)",
+      "period": "2021-2027",
+      "program_id": "43251882"
+    },
+    "IMREG": {
+      "name": "Information Measures for the EU Cohesion policy (IMREG)",
+      "period": "2021-2027",
+      "program_id": "44773133"
+    },
+    "INNOVFUND": {
+      "name": "Innovation Fund (INNOVFUND)",
+      "period": "2014-2020, 2021-2027",
+      "program_id": "43089234"
+    },
+    "ISF": {
+      "name": "Internal Security Fund (ISF)",
+      "period": "2021-2027",
+      "program_id": "43252368"
+    },
+    "ISFB": {
+      "name": "Internal Security Fund Borders and Visa (ISFB - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31077833"
+    },
+    "ISFP": {
+      "name": "Internal Security Fund Police (ISFP - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31077817"
+    },
+    "JTM": {
+      "name": "Just Transition Mechanism (JTM)",
+      "period": "2021-2027",
+      "program_id": "44773066"
+    },
+    "JUST": {
+      "name": "Justice Programme (JUST - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31070247"
+    },
+    "JUST2027": {
+      "name": "Justice Programme (JUST)",
+      "period": "2021-2027",
+      "program_id": "43252386"
+    },
+    "LIFE": {
+      "name": "Programme for the Environment and Climate Action (LIFE - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31107710"
+    },
+    "LIFE2027": {
+      "name": "Programme for the Environment and Climate Action (LIFE)",
+      "period": "2021-2027",
+      "program_id": "43252405"
+    },
+    "NDICI": {
+      "name": "Neighbourhood, Development and International Cooperation Instrument – Global Europe (NDICI)",
+      "period": "2021-2027",
+      "program_id": "45876777"
+    },
+    "PERI": {
+      "name": "Programme for the Protection of the Euro against Counterfeiting (PERICLES IV)",
+      "period": "2021-2027",
+      "program_id": "43252433"
+    },
+    "PPPA2027": {
+      "name": "Pilot Projects & Preparation Actions (PPPA)",
+      "period": "2021-2027",
+      "program_id": "43637601"
+    },
+    "REC": {
+      "name": "Rights, Equality and Citizenship Programme (REC - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31076817"
+    },
+    "RENEWFM": {
+      "name": "Renewable Energy Financing Mechanism (RENEWFM)",
+      "period": "2021-2027",
+      "program_id": "43253967"
+    },
+    "RFCS": {
+      "name": "Research Fund for Coal & Steel (RFCS - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31061225"
+    },
+    "RFCS2027": {
+      "name": "Research Fund for Coal & Steel (RFCS)",
+      "period": "2021-2027",
+      "program_id": "43252449"
+    },
+    "SMP": {
+      "name": "Single Market Programme (SMP)",
+      "period": "2021-2027",
+      "program_id": "43252476"
+    },
+    "SOCPL": {
+      "name": "Social Prerogative and Specific Competencies Lines (SOCPL)",
+      "period": "2021-2027",
+      "program_id": "43252517"
+    },
+    "SRSP": {
+      "name": "Structural Reform Support Programme (SRSP - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "42905358"
+    },
+    "TSI": {
+      "name": "Technical Support Instrument (TSI)",
+      "period": "2021-2027",
+      "program_id": "43253706"
+    },
+    "UCPM": {
+      "name": "Union Civil Protection Mechanism (UCPM - 2014-2020)",
+      "period": "2014-2020",
+      "program_id": "31082527"
+    },
+    "UCPM2027": {
+      "name": "Union Civil Protection Mechanism (UCPM)",
+      "period": "2021-2027",
+      "program_id": "43298203"
+    }
+  }
+}
