@@ -90,22 +90,22 @@ def _cached_total(db, clause: str, params: dict) -> int:
     return total
 
 _DESC = """**What it does**
-The award (recipient) side of **EU international cooperation** — who received EU money under the three external-action instruments, parsed into structured fields:
-- **NDICI - Global Europe** (`programme=ndici`) — ~11.9k awards
-- **IPA III** pre-accession (`programme=ipa3`) — ~2.3k awards
-- **Humanitarian Aid** (`programme=humanitarian`) — ~1.3k awards
+The award (recipient) side of **EU international cooperation** — who received EU money under the three external-action instruments, with the EU Financial Transparency System file's own values (FTS files 2024 and 2025):
+- **NDICI - Global Europe** (`programme=ndici`) — 15,708 awards (11,882 in 2024, 3,826 in 2025)
+- **IPA III** pre-accession (`programme=ipa3`) — 3,115 (2,295 and 820)
+- **Humanitarian Aid** (`programme=humanitarian`) — 2,401 (1,335 and 1,066)
 
-Each item carries `beneficiary`, `country`, `amount_eur`, `funding_type` (grant / procurement contract / contribution), `programme`, `dg`, `contract_ref`, `year` and `subject`.
+Each item carries `beneficiary`, `country`, `amount_eur` (this beneficiary's contracted amount; until 26 Oct 2026 it was the whole commitment's total, now `commitment_total_eur`), `funding_type` (the FTS type of contract: Action Grant, Contribution Agreements, Budget support, or a procurement category such as Advisory: Studies), `programme`, `programme_key`, `dg`, `contract_ref`, `year`, `subject`, and the other FTS fields of `/api/v2/funding/eu-funding-recipients` (`is_coordinator`, `vat_number`, `project_id`...).
 
 **When to use it**
-Market & competitive intelligence for the EU external-action market: which organisations win EU aid money, in which countries, under which instrument, as grants or service contracts. `funding_type=Procurement contract` isolates technical-assistance service contracts; `country=Türkiye` gives the geographic view.
+Market & competitive intelligence for the EU external-action market: which organisations win EU aid money, in which countries, under which instrument, as grants or service contracts. `funding_type=Advisory` isolates the advisory service contracts (studies, evaluations, audits); `country=Türkiye` gives the geographic view.
 
 **Input**
-`programme` (ndici | ipa3 | humanitarian), `funding_type` (substring, e.g. `Grant`, `Procurement`), `country` (substring), `year`, `q` (free text), `order` (recent | oldest | year), `page`, `limit`. `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
+`programme` (ndici | ipa3 | humanitarian), `funding_type` (part of the FTS type of contract, e.g. `Grant`, `Advisory`, `Contribution`), `country` (part of the FTS country name), `year` (2024 | 2025), `q` (words in the record), `order` (recent | oldest | year), `page`, `limit`. `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
 
 **Try it**
 ```
-GET /api/v2/funding/international-cooperation?programme=ipa3&funding_type=Procurement
+GET /api/v2/funding/international-cooperation?programme=ipa3&funding_type=Advisory
 GET /api/v2/funding/international-cooperation?country=Ukraine
 ```
 
@@ -116,7 +116,7 @@ A paginated envelope. Each item carries the structured award fields + the 5 data
 This is the *awards* side (who already received funding). Open biddable tenders run through OPSYS/TED and are not held here.
 
 **Data freshness**
-From the EU Financial Transparency System (FTS) annual dataset (most recent complete year)."""
+The EU Financial Transparency System (FTS) files for 2024 and 2025, read every Sunday with their own columns (commission-heavy tier)."""
 
 
 @router.get("/international-cooperation", response_model=PaginatedResponse[IntlCoopItem],
@@ -199,7 +199,7 @@ then follow the item's `self`.
 A single award with the FTS file's fields + the full 5-datapoint contract, or 404.
 
 **Data freshness**
-From the EU Financial Transparency System (FTS).""")
+The FTS files for 2024 and 2025, read every Sunday.""")
 async def get_intl_cooperation(
     request: Request,
     item_id: int = PathParam(..., description="Brubru item id from the list endpoint."),

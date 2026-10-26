@@ -50,7 +50,10 @@ _PROJECT_TSV = ("to_tsvector('english', coalesce(p.title, '') || ' ' || coalesce
                 "|| coalesce(p.keywords, ''))")
 _EU_COUNTRY = "CASE upper({c}) WHEN 'GR' THEN 'EL' WHEN 'GB' THEN 'UK' ELSE upper({c}) END"
 # FTS grants and contributions; every other type of contract is a procurement category.
-_GRANT_LIKE = "c.funding_type ~* '(grant|contribution|prize|subsid|membership|operational expenses of)'"
+# Measured on the 2024 and 2025 files: budget support, financial instruments, trust funds and shared
+# management also go to beneficiaries, not to contractors.
+_GRANT_LIKE = ("c.funding_type ~* '(grant|contribution|prize|subsid|membership|operational expenses of|"
+               "budget support|financial instr|trust fund|shared management)'")
 _NAME_SLUG = "regexp_replace(lower({n}), '[^[:alnum:]]+', '-', 'g')"
 _O_NAME, _O_COUNTRY = "o->>'name'", "o->>'country'"
 
