@@ -72,10 +72,14 @@ FIRST_DAY = date(2024, 1, 1)
 DAILY_WINDOW = 14
 
 
+# A body's other domain, seen on TED (F4E's industry portal and e-mail; its site is fusionforenergy.europa.eu).
+HOST_ALIASES = {"f4e.europa.eu": "f4e"}
+
+
 def body_codes(cur) -> dict:
     """economy_bodies.code by the host of its website: the buyer's own web address names the body."""
     cur.execute("SELECT code, website FROM economy_bodies WHERE website IS NOT NULL")
-    by_host = {}
+    by_host = dict(HOST_ALIASES)
     for code, website in cur.fetchall():
         h = host(website)
         # The Commission's own site; its services' pages (ec.europa.eu/...) are matched below.
@@ -84,18 +88,27 @@ def body_codes(cur) -> dict:
     return by_host
 
 
+def _code_of_host(h: str, by_host: dict):
+    """The host or the nearest parent a body owns (the-secretary-general.europarl.europa.eu)."""
+    labels = h.split(".")
+    for i in range(max(len(labels) - 2, 0) + 1):
+        if ".".join(labels[i:]) in by_host:
+            return by_host[".".join(labels[i:])]
+    if h in ("ec.europa.eu", "commission.europa.eu") or h.endswith(".ec.europa.eu"):
+        return "commission"
+    return None
+
+
 def body_code_of(notice: dict, by_host: dict):
-    """The buyer's web address names the body; its e-mail domain when it gives no web address."""
-    for b in notice["buyers"]:
-        h = host(b.get("website")) or host(b.get("email"))
-        # The host or the nearest parent a body owns (the-secretary-general.europarl.europa.eu).
-        labels = h.split(".")
-        found = next((by_host[".".join(labels[i:])] for i in range(max(len(labels) - 2, 0) + 1)
-                      if ".".join(labels[i:]) in by_host), None)
-        if found:
-            return found
-        if h in ("ec.europa.eu", "commission.europa.eu") or h.endswith(".ec.europa.eu"):
-            return "commission"
+    """The lead buyer's body (the contracting authority's): its web address names it, else its e-mail
+    domain (DG COMM's web address is an e-procurement platform). A joint procurement's other buyers
+    never do: F4E led one with EFCA and EU-OSHA, and it was tagged EFCA (27 Oct 2026)."""
+    lead = notice["buyers"][0]
+    for value in (lead.get("website"), lead.get("email")):
+        h = host(value)
+        code = _code_of_host(h, by_host) if h else None
+        if code:
+            return code
     return None
 
 

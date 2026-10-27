@@ -318,6 +318,14 @@ def test_the_buyer_is_named_as_a_brubru_body_from_its_web_address():
     assert of("https://www.eib.org") == "eib" and of("https://unknown.europa.eu") is None
     assert of("https://the-secretary-general.europarl.europa.eu/x") == "parliament"
     assert sta.body_code_of({"buyers": [{"website": None, "email": "procurement@eea.europa.eu"}]}, by_host) == "eea"
+    # The lead buyer names the body, by its web address and else its e-mail; never a co-buyer.
+    joint = {"buyers": [{"website": "https://industryportal.f4e.europa.eu/", "email": "tenders@f4e.europa.eu"},
+                        {"website": None, "email": "procurement@eea.europa.eu"}]}
+    assert sta.body_code_of(joint, dict(by_host, **sta.HOST_ALIASES)) == "f4e"
+    assert sta.body_code_of({"buyers": joint["buyers"][:1] + joint["buyers"][1:]}, by_host) is None
+    platform = {"buyers": [{"website": "https://s2c.mercell.com/buyer/1", "email": "COMM-B3@ec.europa.eu"}]}
+    assert sta.body_code_of(platform, by_host) == "commission"
+    assert sta.body_codes(SimpleNamespace(execute=lambda *a: None, fetchall=lambda: []))["f4e.europa.eu"] == "f4e"
     # A later version of a notice supersedes the earlier one; the current one points nowhere.
     assert "DISTINCT ON (notice_uuid)" in sta.SUPERSEDE and "notice_version DESC" in sta.SUPERSEDE
     assert "nullif(l.publication_number, n.publication_number)" in sta.SUPERSEDE
