@@ -4,8 +4,9 @@ Phase 1 C2 of the funding standard (proposal 23 Oct 2026, §3.3, item type `part
 21 Oct Beresol's partner search for a DG CNECT tender found nothing from Brubru about organisations
 that publish their interest on the F&T Portal's Partner Search, most of which hold no EU project yet.
 ft_partner_search_announcements + ft_partner_search_orgs (migration 316, scripts/sync_ft_partner_search.py)
-hold every organisation announcement in the portal's search index (358,427 from 18,721 organisations on
-27 Oct 2026, since 2018): never a person's profile or announcement.
+hold every organisation announcement in the portal's search index since 2018 (329,855 from 16,084
+organisations on 27 Oct 2026): never a person's profile or announcement, nor a profile that may be a
+person's own registration (services/funding/organisations.py).
 
 `status` is the topic's status as Brubru holds it (ft_calls_for_proposals: open, forthcoming,
 closed), not the index's own field, which keeps the status the topic had when the announcement was
@@ -107,7 +108,7 @@ def _item(r, base: str, with_body: bool, body=None) -> PartnerAnnouncementItem:
 
 
 _DESC = f"""**What it does**
-Organisations looking for partners: every announcement an organisation published on the F&T Portal's Partner Search (since 2018), with the call topic it is for, whether it **offers** its expertise or **requests** expertise, and what it wrote. On 27 Oct 2026 Brubru held 358,427 announcements from 18,721 organisations; of the 11,539 whose portal profile carries the Partner Search flag, 6,738 had no EU project as the portal counts them, so they appear nowhere else in Brubru's funding data. Organisations only: the portal's person profiles and persons' announcements are never read, and since the portal lists some people with their own registration as organisations and says nowhere which, a self-registered profile (not validated by the Commission) typed Other, SME or private for-profit whose name carries no legal form, organisation word or digit is left out with its announcements (1,544 profiles and 23,984 announcements when measured on 27 Oct 2026; a validated profile is always kept).
+Organisations looking for partners: every announcement an organisation published on the F&T Portal's Partner Search (since 2018), with the call topic it is for, whether it **offers** its expertise or **requests** expertise, and what it wrote. On 27 Oct 2026 Brubru held 329,855 announcements from 16,084 organisations; of the 9,996 whose portal profile carries the Partner Search flag, 5,196 had no EU project as the portal counts them, so they appear nowhere else in Brubru's funding data. Organisations only: the portal's person profiles and persons' announcements are never read, and since the portal lists some people with their own registration as organisations and says nowhere which, a self-registered profile (not validated by the Commission) typed Other, SME or private for-profit whose name carries no legal form, organisation word or digit is left out with its announcements (on 27 Oct 2026 this left out 2,635 profiles, 1,544 of the 11,540 with the flag, and took Brubru from 358,431 announcements to 329,855; a validated profile is always kept).
 
 **When to use it**
 "Who is looking for partners on this topic", "which SMEs in Spain offer expertise for hydrogen calls", "who seeks a partner for an open Horizon Europe topic". For an organisation's whole record (its projects, EU payments, contract awards and announcements), follow its `partner` link to `/api/v2/funding/partners`.
