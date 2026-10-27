@@ -207,8 +207,9 @@ def _run(monkeypatch, *, profiles, ranges, argv=("--apply",), held=1):
         def profiles(self):
             return profiles
 
-        def announcements(self, a, b):
-            return ranges[(a, b)]
+        def announcement_slices(self, a, b):
+            rows, count, complete = ranges[(a, b)]
+            yield a, b, count, rows, complete
     monkeypatch.setattr(sync, "PartnerSearch", _PS)
     monkeypatch.setattr(sync, "get_env", lambda k: "postgresql://x")
     monkeypatch.setattr(sync.psycopg2, "connect", lambda url: conn)
@@ -234,12 +235,27 @@ def test_deletions_only_where_the_read_was_complete(monkeypatch):
     deletes = [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_announcements")]
     assert deletes == [(r1[0], r1[1], ["1"])]                     # the incomplete range deletes nothing
     assert [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_orgs")] == [(["9"],)]
-    rows = next(r for s, r in written if "ft_partner_search_announcements" in s)
+    rows = [r for s, batch in written if "ft_partner_search_announcements" in s for r in batch]
     assert sorted(r[0] for r in rows) == ["1", "2"] and all(r[-2] for r in rows)      # body_txt composed
+    # Each slice is written as soon as it is read, before the next is asked for.
+    assert [len(batch) for s, batch in written if "ft_partner_search_announcements" in s] == [1, 1]
     # Profiles read incompletely: no organisation is deleted.
     code, conn, _ = _run(monkeypatch, profiles=([org], 2, False), ranges={r1: ([_ann("1")], 1, True)})
     assert not [s for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_orgs")]
 
+
+def test_a_sample_or_a_dry_run_deletes_nothing(monkeypatch):
+    org = {"pic": "9", "name": "Example SL", "city": None, "country": "ES", "organisation_type": "Other",
+           "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u"}
+    r1 = (date(2026, 9, 1), date(2026, 10, 1))
+    code, conn, written = _run(monkeypatch, profiles=([org], 1, True),
+                               ranges={r1: ([_ann("1", "2026-09-05"), _ann("2", "2026-09-06")], 2, True)},
+                               argv=("--apply", "--limit", "1"))
+    assert code == 0 and not [s for s, p in conn.sql if s.startswith("DELETE")]
+    assert [len(batch) for s, batch in written if "ft_partner_search_announcements" in s] == [1]
+    code, conn, written = _run(monkeypatch, profiles=([org], 1, True), ranges={r1: ([_ann("1", "2026-09-05")], 1, True)},
+                               argv=())
+    assert code == 0 and conn.sql == [] and written == []
 
 def test_a_run_that_finds_no_profile_fails_and_touches_nothing(monkeypatch):
     rng = (date(2026, 10, 1), date(2026, 10, 2))

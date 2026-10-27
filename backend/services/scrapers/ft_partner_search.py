@@ -153,23 +153,30 @@ class PartnerSearch:
         mid = start + timedelta(days=(end - start).days // 2)
         return self.slices(start, mid) + self.slices(mid, end)
 
-    def announcements(self, start: date, end: date) -> Tuple[List[dict], int, bool]:
-        """Every organisation announcement requested in [start, end): (rows, the index's count,
-        whether every one was read)."""
-        rows, expected, complete = [], 0, True
+    def announcement_slices(self, start: date, end: date) -> Iterator[Tuple[date, date, int, List[dict], bool]]:
+        """Each slice of [start, end) under the cap, as it is read: (its first day, the day after it,
+        the index's count, its rows, whether every one was read). At most 10,000 rows in hand."""
         for a, b, n in self.slices(start, end):
-            expected += n
-            seen = 0
+            rows, complete = [], True
             for page in self._pages(_ORG_ANNOUNCEMENTS + [_requested(a, b)], ANNOUNCEMENT_FIELDS):
                 for r in page["results"]:
                     row = self.announcement(r.get("metadata") or {})
                     if row:
                         rows.append(row)
-                        seen += 1
                 if page["total"] > CAP:
                     complete = False          # a one-day slice above the cap: only its first 10,000
-            if seen < n:
+            if len(rows) < n:
                 complete = False              # the index moved under the read, or a row was unreadable
+            yield a, b, n, rows, complete
+
+    def announcements(self, start: date, end: date) -> Tuple[List[dict], int, bool]:
+        """Every organisation announcement requested in [start, end): (rows, the index's count,
+        whether every one was read)."""
+        rows, expected, complete = [], 0, True
+        for _a, _b, n, part, ok in self.announcement_slices(start, end):
+            rows += part
+            expected += n
+            complete = complete and ok
         return rows, expected, complete
 
     def profiles(self) -> Tuple[List[dict], int, bool]:

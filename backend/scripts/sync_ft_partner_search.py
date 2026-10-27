@@ -116,67 +116,85 @@ def main(argv=None) -> int:
     ps = PartnerSearch(session, sleep=args.sleep)
 
     profiles, prof_expected, prof_complete = ([], 0, False) if args.no_profiles else ps.profiles()
-    read_ranges, ann_rows, ann_expected, deletable = ranges_for(date.today(), args.full, args.since, args.until), {}, 0, []
-    for a, b in read_ranges:
-        rows, n, complete = ps.announcements(a, b)
-        ann_expected += n
-        for r in rows:
-            ann_rows[r["announcement_id"]] = r
-        if complete:
-            # The ids read in this range: the rows it holds after the upsert that are not among them are gone.
-            deletable.append((a, b, [r["announcement_id"] for r in rows]))
-        print(f"[INFO] {a} to {b}: {len(rows)} of {n} announcement(s) read{'' if complete else ' (incomplete: nothing deleted here)'}",
-              flush=True)
-    rows = list(ann_rows.values())
-    if args.limit is not None:
-        rows, deletable = rows[:args.limit], []
-    values = []
-    for r in rows:
-        txt, page = compose_body(r)
-        values.append((r["announcement_id"], *(dict(r, body_txt=txt, body_html=page)[c] for c in ANNOUNCEMENT_COLUMNS)))
-    org_values = [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in profiles]
-
-    written = orgs_written = ann_deleted = orgs_deleted = 0
-    held_back = []
     if not args.no_profiles and not profiles:
         print("[ERROR] the index gave no organisation profile: nothing written or deleted")
         return 1
-    if args.apply:
-        conn = psycopg2.connect(db.replace("postgresql+psycopg2://", "postgresql://"))
-        try:
-            orgs_written = store(conn, UPSERT_ORGS, org_values)
-            written = store(conn, UPSERT_ANNOUNCEMENTS, values)
+    org_values = [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in profiles]
+    read_ranges = ranges_for(date.today(), args.full, args.since, args.until)
+    n = dict(read=0, expected=0, written=0, deleted=0, orgs_written=0, orgs_deleted=0, slices=0, incomplete=0)
+    held_back, left = [], args.limit
+    conn = psycopg2.connect(db.replace("postgresql+psycopg2://", "postgresql://")) if args.apply else None
+    try:
+        if conn is not None:
+            n["orgs_written"] = store(conn, UPSERT_ORGS, org_values)
+        # Each slice is written as soon as it is read (at most 10,000 rows in hand), and only a slice
+        # read completely deletes: the rows it holds that the index no longer lists.
+        for a, b in read_ranges:
+            got = expected = 0
+            for sa, sb, count, rows, complete in ps.announcement_slices(a, b):
+                n["slices"] += 1
+                n["incomplete"] += not complete
+                got, expected = got + len(rows), expected + count
+                if left is not None:
+                    rows, complete = rows[:left], False          # a sample deletes nothing
+                    left -= len(rows)
+                values = [_values(r) for r in rows]
+                if conn is None:
+                    n["written"] += len(values)
+                else:
+                    n["written"] += store(conn, UPSERT_ANNOUNCEMENTS, values)
+                    if complete and rows:
+                        n["deleted"] += _delete_gone(conn, sa, sb, [r["announcement_id"] for r in rows], held_back)
+                if left == 0:
+                    break
+            n["read"] += got
+            n["expected"] += expected
+            print(f"[INFO] {a} to {b}: {got} of {expected} announcement(s) read", flush=True)
+            if left == 0:
+                break
+        # A profile read incompletely, or a sample, deletes no organisation.
+        if conn is not None and prof_complete and args.limit is None:
             with conn.cursor() as cur:
-                for a, b, ids in deletable:
-                    if not ids:
-                        continue                       # the index listed nothing here
-                    cur.execute(HELD_IN_RANGE, (a, b))
-                    held = cur.fetchone()[0]
-                    if held - len(ids) > max(20, held * MAX_DELETE_SHARE):
-                        held_back.append(f"{a} to {b}: {held} held, {len(ids)} listed")
-                        continue
-                    cur.execute(DELETE_ANNOUNCEMENTS, (a, b, ids))
-                    ann_deleted += cur.rowcount
-                # A profile read incompletely, or a run that found none, deletes nothing.
-                if prof_complete and profiles and args.limit is None:
-                    cur.execute(DELETE_ORGS, ([p["pic"] for p in profiles],))
-                    orgs_deleted = cur.rowcount
+                cur.execute(DELETE_ORGS, ([p["pic"] for p in profiles],))
+                n["orgs_deleted"] = cur.rowcount
             conn.commit()
-        finally:
+    finally:
+        if conn is not None:
             conn.close()
     verb = "written" if args.apply else "readable (dry run)"
-    print(f"[{'OK' if args.apply else 'DRY-RUN'}] profiles: {len(profiles)} of {prof_expected} read, {orgs_written if args.apply else len(org_values)} {verb}, "
-          f"{orgs_deleted} deleted; announcements: {len(rows)} of {ann_expected} read in {len(read_ranges)} range(s), "
-          f"{written if args.apply else len(values)} {verb}, {ann_deleted} deleted; {time.time() - started:.0f}s")
+    print(f"[{'OK' if args.apply else 'DRY-RUN'}] profiles: {len(profiles)} of {prof_expected} read, "
+          f"{n['orgs_written'] if args.apply else len(org_values)} {verb}, {n['orgs_deleted']} deleted; announcements: "
+          f"{n['read']} of {n['expected']} read in {n['slices']} slice(s) of {len(read_ranges)} range(s), {n['written']} {verb}, "
+          f"{n['deleted']} deleted; {time.time() - started:.0f}s")
     if held_back:
         print(f"[SYNC_STATUS] degraded: deletions held back where the index lists far fewer than held: {'; '.join(held_back[:5])}")
-    if ann_expected and not ann_rows:
+    if n["expected"] and not n["read"]:
         print("[ERROR] the index listed announcements but none was read")
         return 1
-    if (not args.no_profiles and not prof_complete) or len(deletable) < len(read_ranges):
-        print("[SYNC_STATUS] degraded: a range or the profiles were read incompletely (nothing deleted there)")
+    if (not args.no_profiles and not prof_complete) or n["incomplete"]:
+        print("[SYNC_STATUS] degraded: a slice or the profiles were read incompletely (nothing deleted there)")
     return 0
 
+
+def _values(r: dict) -> tuple:
+    txt, page = compose_body(r)
+    full = dict(r, body_txt=txt, body_html=page)
+    return (r["announcement_id"], *(full[c] for c in ANNOUNCEMENT_COLUMNS))
+
+
+def _delete_gone(conn, a: date, b: date, ids: list, held_back: list) -> int:
+    """Delete the rows of [a, b) the index no longer lists, unless that would remove more than
+    MAX_DELETE_SHARE of them (an index answering far less than it holds is broken, not emptied)."""
+    with conn.cursor() as cur:
+        cur.execute(HELD_IN_RANGE, (a, b))
+        held = cur.fetchone()[0]
+        if held - len(ids) > max(20, held * MAX_DELETE_SHARE):
+            held_back.append(f"{a} to {b}: {held} held, {len(ids)} listed")
+            return 0
+        cur.execute(DELETE_ANNOUNCEMENTS, (a, b, ids))
+        gone = cur.rowcount
+    conn.commit()
+    return gone
 
 if __name__ == "__main__":
     sys.exit(main())
