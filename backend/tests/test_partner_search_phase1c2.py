@@ -477,6 +477,9 @@ def test_partners_take_the_announcements_by_their_pic():
     assert "s.topic_id ILIKE :topic_prefix" in sql and "s.requested_date >= :since" in sql
     assert f"(s.organisation_type = '{partners._SME_TYPE}') AS is_sme" in sql and "s.expertise AS role" in sql
     assert "count(DISTINCT ref) FILTER (WHERE kind = 'announcement') AS announcements" in sql
+    # The default order counts an announcement text once, however many topics it was copied to.
+    assert "md5(coalesce(s.summary, '')) AS text_key" in sql
+    assert "ORDER BY count(*) FILTER (WHERE kind <> 'announcement') + count(DISTINCT text_key) DESC" in " ".join(sql.split())
     # No department, no CORDIS activity type: dg or activity_type leaves the announcements out.
     for extra in ({"dg": "CNECT"}, {"activity_type": "REC"}):
         db = _Db()

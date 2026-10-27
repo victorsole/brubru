@@ -217,13 +217,13 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                CASE WHEN o->>'role' = 'coordinator' THEN 'coordinator' ELSE 'participant' END AS role,
                (o->>'ec_contribution')::numeric AS eu_contribution, NULL::numeric AS amount_eur,
                NULL::text AS department, NULL::numeric AS tender_value_eur,
-               pr.last_updated AS changed, pr.scraped_at AS created
+               pr.last_updated AS changed, pr.scraped_at AS created, NULL::text AS text_key
           FROM proj pr, jsonb_array_elements(pr.organisations) o
         UNION ALL
         SELECT 'project', pr.project_id, pr.title, pr.framework_programme, pr.start_date,
                nullif(pr.coordinator_pic, ''), '', pr.coordinator_name, NULL, {_EU_COUNTRY.format(c='pr.coordinator_country')},
                NULL, NULL, NULL::boolean, 'coordinator', NULL::numeric, NULL::numeric, NULL::text, NULL::numeric,
-               pr.last_updated, pr.scraped_at
+               pr.last_updated, pr.scraped_at, NULL::text
           FROM proj pr
          WHERE jsonb_array_length(coalesce(pr.organisations, '[]'::jsonb)) = 0 AND pr.coordinator_name IS NOT NULL""")
     if use_payments:
@@ -235,7 +235,7 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                CASE WHEN c.is_coordinator THEN 'coordinator' WHEN {_GRANT_LIKE} THEN 'beneficiary' ELSE 'contractor' END AS role,
                NULL::numeric AS eu_contribution, c.beneficiary_amount_eur AS amount_eur,
                c.dg AS department, NULL::numeric AS tender_value_eur,
-               greatest(e.updated_at, c.last_updated) AS changed, e.creation_date AS created
+               greatest(e.updated_at, c.last_updated) AS changed, e.creation_date AS created, NULL::text AS text_key
           FROM fts_commitments c JOIN economy_items e ON e.id = c.economy_item_id
          WHERE c.beneficiary_type IS DISTINCT FROM 'Private Persons'{fw}""")
     if use_awards:
@@ -247,7 +247,7 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                w.city AS city, NULL::text AS activity_type, NULL::boolean AS is_sme, 'contractor' AS role,
                NULL::numeric AS eu_contribution, NULL::numeric AS amount_eur, n.contracting_authority AS department,
                CASE WHEN upper(w.tender_value_currency) = 'EUR' THEN w.tender_value END AS tender_value_eur,
-               greatest(n.last_updated, w.last_updated) AS changed, n.first_seen AS created
+               greatest(n.last_updated, w.last_updated) AS changed, n.first_seen AS created, NULL::text AS text_key
           FROM ted_award_winners w JOIN ted_award_notices n ON n.publication_number = w.publication_number
          WHERE n.superseded_by IS NULL AND {AWARD_WINNER_IS_ORGANISATION}{ww}""")
     if use_announcements:
@@ -257,13 +257,18 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                s.country AS country, o.city AS city, NULL::text AS activity_type,
                (s.organisation_type = '{_SME_TYPE}') AS is_sme, s.expertise AS role,
                NULL::numeric AS eu_contribution, NULL::numeric AS amount_eur, NULL::text AS department,
-               NULL::numeric AS tender_value_eur, s.last_updated AS changed, s.first_seen AS created
+               NULL::numeric AS tender_value_eur, s.last_updated AS changed, s.first_seen AS created,
+               md5(coalesce(s.summary, '')) AS text_key
           FROM ft_partner_search_announcements s LEFT JOIN ft_partner_search_orgs o ON o.pic = s.pic
          WHERE true{sw}""")
     if not parts:
         return None, params
     order_sql = {
-        "matches": "count(*) DESC, coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) DESC, key",
+        # An announcement copied to many topics is one activity: 456 organisations with 100 or more
+        # announcements hold 209,785 of 329,863 (one text posted to 1,166 topics), and counting each
+        # put them above every consortium (27 Oct 2026).
+        "matches": ("count(*) FILTER (WHERE kind <> 'announcement') + count(DISTINCT text_key) DESC, "
+                    "coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) DESC, key"),
         "amount": "coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) DESC, key",
         "name": "mode() WITHIN GROUP (ORDER BY name), key",
     }[order]
@@ -348,7 +353,7 @@ Finding consortium partners and competitors: "who coordinates projects on soil h
 - `country` — ISO-2 (EL and GR, UK and GB are the same country).
 - `activity_type` (HES higher education | REC research | PRC private company | PUB public body | OTH) — as CORDIS states it, projects only; `is_sme` — as CORDIS states it, and on announcements the portal's "Small or medium-size enterprise" type.
 - `since` — activities starting on or after (YYYY-MM-DD; an award's contract signature, an announcement's date); `min_amount_eur` — the organisation's EU contribution plus payments over the matches, at least (awards are not in the amounts: a joint tender's value is shared by its members).
-- `source` — all (default) | projects | payments | awards | announcements. `order` — matches (default) | amount | name. `page`, `limit` (max 50).
+- `source` — all (default) | projects | payments | awards | announcements. `order` — matches (default: the matching activities, an announcement text copied to several topics counted once) | amount | name. `page`, `limit` (max 50).
 
 **Try it**
 ```
