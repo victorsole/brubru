@@ -409,7 +409,7 @@ async def list_partners(
 
 
 @router.get("/partners/{id:path}", response_model=PartnerItem, tags=["v2-funding"],
-            summary="One partner — an organisation's funded projects, EU payments and contract awards",
+            summary="One partner — an organisation's funded projects, EU payments, contract awards and Partner Search announcements",
             description="""**What it does**
 One organisation from `/api/v2/funding/partners`: every funded project it takes part in, every FTS payment it received and every TED contract award from an EU buyer it won (up to 50, newest first), with its counts and totals over all of them.
 

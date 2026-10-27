@@ -753,7 +753,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </table>
 <p style="font-size:14px;color:var(--text-mut);">EEAS people are served through <code>/api/v2/who-is-who/officials</code> (the 352 EEAS officials are in the EU Who Is Who directory, filterable by the EEAS organisation).</p>
 
-<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">86 endpoints</span></h2>
+<h2 id="funding">Funding, grants &amp; tenders <span style="font-weight:400;color:var(--text-mut);font-size:0.6em;">88 endpoints</span></h2>
 <table class="endpoint-table">
 <thead><tr><th>Method</th><th>Endpoint</th><th>What it returns</th></tr></thead>
 <tbody>
@@ -832,8 +832,10 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/jtf/{row_id}</code></td><td>Look up one JTF allocation row in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/justice</code></td><td>Justice Programme: funding calls (newest first)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/justice/{item_id}</code></td><td>Justice Programme: one funding call (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partners</code></td><td>Partners: organisations found by what they were funded, paid or contracted for (funded projects, EU payments, EU bodies&#39; contract awards)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partners/{id}</code></td><td>One partner: an organisation&#39;s funded projects, EU payments and contract awards</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partner-announcements</code></td><td>Partner announcements: organisations looking for partners on the F&amp;T Portal (Partner Search, since 2018)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partner-announcements/{announcement_id}</code></td><td>One partner announcement: an organisation&#39;s offer or request for a topic</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partners</code></td><td>Partners: organisations found by what they were funded, paid or contracted for (funded projects, EU payments, EU bodies&#39; contract awards, Partner Search announcements)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partners/{id}</code></td><td>One partner: an organisation&#39;s funded projects, EU payments, contract awards and Partner Search announcements</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes</code></td><td>EU funding programmes directory: the EC classification + Brubru coverage</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes/{acronym}</code></td><td>Look up one EU funding programme in the classification</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/entrepreneur-instruments</code></td><td>EU financial instruments for entrepreneurs, by delivery intermediary (EIC Fund, EISMEA, EEN, EDIH)</td></tr>
