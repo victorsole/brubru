@@ -1,6 +1,13 @@
 {
   "_about": "27 Oct 2026 /news round: one natural question per language per topic; negatives must reach none of these guides.",
-  "languages": ["en", "fr", "nl", "es", "ca", "it"],
+  "languages": [
+    "en",
+    "fr",
+    "nl",
+    "es",
+    "ca",
+    "it"
+  ],
   "topics": {
     "eu_switzerland_pnr_agreement_2026#pnr": [
       "Is the PNR agreement with Switzerland in force?",
@@ -81,6 +88,14 @@
       "¿Quién ganó las elecciones en Serbia?",
       "Qui ha guanyat les eleccions a Sèrbia?",
       "Chi ha vinto le elezioni in Serbia?"
+    ],
+    "climate_resilience_framework_2026#law": [
+      "What does the European Climate Resilience Law propose?",
+      "Que prévoit la loi européenne sur la résilience climatique ?",
+      "Wat staat er in de Europese klimaatveerkrachtwet?",
+      "¿Qué propone la ley europea de resiliencia climática?",
+      "Què proposa la llei europea de resiliència climàtica?",
+      "Cosa prevede la legge europea sulla resilienza climatica?"
     ]
   },
   "negatives": [

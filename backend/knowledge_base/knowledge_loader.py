@@ -23016,6 +23016,25 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'committee of the regions global europe': ['ndici_global_europe_instrument'],
     'catarina vieira': ['public_procurement_act'],
     'rapporteur public procurement act': ['public_procurement_act'],
+    # 27 Oct 2026 climate resilience law adopted
+    'european climate resilience law': ['climate_resilience_framework_2026'],
+    'climate resilience law': ['climate_resilience_framework_2026'],
+    '2026/0336': ['climate_resilience_framework_2026'],
+    'com(2026) 730': ['climate_resilience_framework_2026'],
+    'com(2026) 720': ['climate_resilience_framework_2026'],
+    'loi sur la résilience climatique': ['climate_resilience_framework_2026'],
+    'loi européenne sur la résilience climatique': ['climate_resilience_framework_2026'],
+    'klimaatveerkrachtwet': ['climate_resilience_framework_2026'],
+    'ley de resiliencia climática': ['climate_resilience_framework_2026'],
+    'ley europea de resiliencia climática': ['climate_resilience_framework_2026'],
+    'llei de resiliència climàtica': ['climate_resilience_framework_2026'],
+    'llei europea de resiliència climàtica': ['climate_resilience_framework_2026'],
+    'legge sulla resilienza climatica': ['climate_resilience_framework_2026'],
+    'legge europea sulla resilienza climatica': ['climate_resilience_framework_2026'],
+    'reference global warming trajectory': ['climate_resilience_framework_2026'],
+    'trajectoire de référence du réchauffement': ['climate_resilience_framework_2026'],
+    'trayectoria de referencia de calentamiento': ['climate_resilience_framework_2026'],
+    "trajectòria de referència d'escalfament": ['climate_resilience_framework_2026'],
 }
 
 
