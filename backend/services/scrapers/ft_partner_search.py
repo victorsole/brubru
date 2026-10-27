@@ -23,6 +23,10 @@ What is not read, and why:
 - Country and organisation type come as codes (20000883, 31079048) or as English labels: both are
   read through the index's own facet labels at each run.
 
+Every profile is marked ORGANISATION, yet some are people's own registrations (sole traders,
+individuals with a PIC); the portal has no natural-person field. A profile that may be a person's
+is left out by the loader (services/funding/organisations.py, Victor's rule of 27 Oct 2026).
+
 E-mail addresses, ORCIDs, LinkedIn profile links and telephone numbers are removed from the texts:
 an organisation's announcement often carries its contact person's own address.
 """
@@ -49,7 +53,7 @@ FIRST_DAY = date(2018, 1, 1)     # the earliest announcement requested (measured
 ANNOUNCEMENT_FIELDS = ["announcementId", "pic", "name", "country", "organisationType", "expertise", "topics",
                        "title", "requestedDate", "announcementSummary", "es_SortDate"]
 PROFILE_FIELDS = ["pic", "name", "city", "country", "organisationType", "noOfPartnerSearch", "noOfProjects",
-                  "topics", "hasPartnerSearch"]
+                  "topics", "hasPartnerSearch", "validationStatus"]
 _ORG_ANNOUNCEMENTS = [{"terms": {"type": ["ANNOUNCEMENT"]}}, {"terms": {"announcementType": ["ORGANISATION"]}}]
 _PROFILES = [{"terms": {"type": ["ORGANISATION"]}}, {"terms": {"hasPartnerSearch": ["true"]}}]
 _EXPERTISE = {"Expertise_offer": "offer", "Expertise_request": "request"}
@@ -211,6 +215,9 @@ class PartnerSearch:
         # "Kosovo * UN resolution": the portal's label carries the EU's footnote mark and its subject.
         return country_code(self.labels("country").get(raw, raw).split(" * ")[0])
 
+    def _status(self, raw: Optional[str]) -> Optional[str]:
+        return self.labels("validationStatus").get(raw, raw) if raw else None
+
     def _type(self, raw: Optional[str]) -> Optional[str]:
         return self.labels("organisationType").get(raw, raw) if raw else None
 
@@ -253,6 +260,8 @@ class PartnerSearch:
             "country": self._country(_one(md, "country")), "organisation_type": self._type(_one(md, "organisationType")),
             "projects": _int(_one(md, "noOfProjects")), "portal_announcements": _int(_one(md, "noOfPartnerSearch")),
             "topics": [t for t in (md.get("topics") or []) if t], "public_url": PORTAL_ORG.format(pic=pic),
+            # The PIC's register status: VALIDATED (checked by the Commission), DECLARED (self-registered) ...
+            "registration_status": self._status(_one(md, "validationStatus")),
         }
 
 

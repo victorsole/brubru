@@ -292,6 +292,42 @@ def test_unflagged_announcers_are_profiled_by_pic_and_fill_what_an_announcement_
     # What the index gives is never overwritten by the profile.
     assert sync._filled(dict(old, organisation_name="Given"), {"7": ("Other", "FR", "x")})["organisation_name"] == "Given"
 
+def test_a_profile_that_may_be_a_persons_is_left_out_with_its_announcements(monkeypatch):
+    from services.funding.organisations import may_be_a_person
+    base = {"city": None, "country": "ES", "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u"}
+    person = dict(base, pic="1", name="Jane Example", organisation_type="Other", registration_status="DECLARED")
+    validated = dict(base, pic="2", name="Jane Example", organisation_type="Other", registration_status="VALIDATED")
+    company = dict(base, pic="3", name="Example Sensors SL", organisation_type="Small or medium-size enterprise",
+                   registration_status="DECLARED")
+    ngo = dict(base, pic="4", name="Jane Example", organisation_type="Non-governmental organization", registration_status="DECLARED")
+    assert [may_be_a_person(p["name"], p["organisation_type"], p["registration_status"]) for p in (person, validated, company, ngo)] == [
+        True, False, False, False]
+    assert may_be_a_person("Jane Example", "Other", "SLEEPING") is False      # only declared ones were measured
+    assert may_be_a_person("Studio 54", "Other", None) is False and may_be_a_person(None, "Other", "DECLARED") is False
+    rng = (date(2026, 9, 1), date(2026, 10, 1))
+    anns = [dict(_ann(str(i), "2026-09-05"), pic=p) for i, p in enumerate(("1", "2", "3", "4"), 1)]
+    # An organisation with no profile, judged by its announcement's own name and type, as a self-registered one.
+    anns.append(dict(_ann("5", "2026-09-06"), pic="9", organisation_name="John Example", organisation_type="Other"))
+    code, conn, written = _run(monkeypatch, profiles=([person, validated, company, ngo], 4, True), ranges={rng: (anns, 5, True)},
+                               known=[("2", "Jane Example", "ES", "Other"), ("3", "Example Sensors SL", "ES", "x"),
+                                      ("4", "Jane Example", "ES", "x")], held=3)
+    assert code == 0
+    orgs = sorted(r[0] for s, batch in written if "ft_partner_search_orgs" in s for r in batch)
+    stored = sorted(r[0] for s, batch in written if "ft_partner_search_announcements" in s for r in batch)
+    assert orgs == ["2", "3", "4"] and stored == ["2", "3", "4"]
+    deletes = [(s, p) for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_announcements WHERE pic = ANY")]
+    assert [p for s, p in deletes] == [(["1"],), (["9"],)]          # rows already stored under them go too
+    assert [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_orgs WHERE pic = ANY")] == [(["1"],), (["9"],)]
+
+
+def test_a_run_that_would_leave_out_too_many_profiles_deletes_nothing(monkeypatch):
+    base = {"city": None, "country": "ES", "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u",
+            "organisation_type": "Other", "registration_status": "DECLARED"}
+    people = [dict(base, pic=str(i), name="Jane Example") for i in range(4)]
+    code, conn, _ = _run(monkeypatch, profiles=(people + [dict(base, pic="9", name="Example SL")], 5, True),
+                         ranges={(date(2026, 9, 1), date(2026, 10, 1)): ([], 0, True)})
+    assert code == 1 and not [s for s, p in conn.sql if s.startswith("DELETE")]
+
 def test_a_run_that_finds_no_profile_fails_and_touches_nothing(monkeypatch):
     rng = (date(2026, 10, 1), date(2026, 10, 2))
     code, conn, written = _run(monkeypatch, profiles=([], 0, True), ranges={rng: ([_ann("1", "2026-10-01")], 1, True)})

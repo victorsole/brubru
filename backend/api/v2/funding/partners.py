@@ -34,6 +34,7 @@ from api.v1._envelope import PaginatedResponse, build_envelope
 from core.database import get_db
 from models.user import User
 from services.funding.countries import eu_code, vat_key
+from services.funding.organisations import ORG_FORM
 from services.funding.programme_codes import named_codes, topic_prefixes
 
 router = APIRouter()
@@ -67,14 +68,7 @@ _O_NAME, _O_COUNTRY = "o->>'name'", "o->>'country'"
 # or its name carries a legal form or an organisation word: 9,918 of 11,711 winner rows (27 Oct 2026);
 # the 1,793 left out are mostly organisations with plain names, and every individual checked.
 # Victor's rule (27 Oct): no person profiles, as for the FTS's private persons.
-AWARD_ORG_FORM = (
-    r"\m(s\.?a|s\.?l\.?u?|s\.?a\.?s|s\.?a\.?r\.?l|s\.?r\.?l|s\.?p\.?a|s\.?r\.?o|d\.?o\.?o|b\.?v|n\.?v|u\.?a|e\.?v|"
-    r"gmbh|ltd|limited|llp|llc|plc|inc|corp|ag|kg|ohg|asbl|aisbl|ivzw|vzw|oy|oyj|ab|as|a/s|aps|kft|zrt|uab|sia|ou|oü|"
-    r"ltda|eurl|gie|eeig|ike|epe|ae|ry|onlus|sp\.? ?z\.? ?o\.? ?o|zoo|sp[oó][lł]ka|co|company|group|consult\w*|"
-    r"institut\w*|universit\w*|association|foundation|stiftung|fondation|fondazione|fundacja|fundaci[oó]n|centre|"
-    r"center|agency|services?|solutions|partners|international|ministry|minist[eè]re|office|council|bank|"
-    r"cooperati\w*|coöperatief|societ[aà]|aktiengesellschaft)\M"
-)
+AWARD_ORG_FORM = ORG_FORM            # services/funding/organisations.py, shared with Partner Search
 AWARD_WINNER_IS_ORGANISATION = (
     "(w.vat_key IN (SELECT vat_key FROM funding_org_identities)"
     " OR w.vat_key IN (SELECT vat_key FROM fts_commitments"
@@ -369,7 +363,7 @@ GET /api/v2/funding/partners?q=hydrogen&topic=HORIZON-CL5&source=announcements&r
 A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat`, `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, `awards`, `announcements`, the totals `eu_contribution` and `amount_eur`, `matches` (up to 10: kind, id, title, role, programme, date, department, amounts, an award's `tender_value_eur`, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
 
 **Identity**
-The PIC where known; a payment's beneficiary or an award's winner takes the PIC of the CORDIS organisation with the same VAT number (a TED company identifier counts as a VAT number only when shaped like its own country's); else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons are left out: the FTS's own, and of TED's award winners (TED never says which is a person) those that are neither a CORDIS or FTS organisation by their VAT number nor named with a legal form or an organisation word (GmbH, SL, Ltd, Institute, University...), so an individual expert named in a notice is not a partner; the Partner Search's person profiles and persons' announcements are never read.
+The PIC where known; a payment's beneficiary or an award's winner takes the PIC of the CORDIS organisation with the same VAT number (a TED company identifier counts as a VAT number only when shaped like its own country's); else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons are left out: the FTS's own, and of TED's award winners (TED never says which is a person) those that are neither a CORDIS or FTS organisation by their VAT number nor named with a legal form or an organisation word (GmbH, SL, Ltd, Institute, University...), so an individual expert named in a notice is not a partner; the Partner Search's person profiles and persons' announcements are never read, and a self-registered Partner Search profile typed Other, SME or private for-profit whose name carries no legal form, organisation word or digit is left out with its announcements (it may be a person's own registration).
 
 **Data freshness**
 Funded projects read every Sunday (CORDIS, the F&T Portal); FTS files for 2024 and 2025 read every Sunday; the VAT to PIC pairing rebuilt after them; TED award notices read every day; Partner Search read every day (new announcements, and a seventh of the older ones in turn)."""

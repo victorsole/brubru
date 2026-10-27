@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ingest_funding_sedia import get_env  # noqa: E402
+from services.funding.organisations import may_be_a_person  # noqa: E402
 from services.scrapers.ft_partner_search import FIRST_DAY, PartnerSearch, compose_body  # noqa: E402
 
 RECENT_DAYS = 14
@@ -68,6 +69,12 @@ HELD_IN_RANGE = "SELECT count(*) FROM ft_partner_search_announcements WHERE requ
 # An index that answers nothing, or far less than Brubru holds, is broken or moved, not emptied:
 # a range loses at most this share of its rows in one run (more is reported, not deleted).
 MAX_DELETE_SHARE = 0.10
+# Victor's rule (27 Oct 2026): a profile that may be a person's is left out with its announcements
+# (services/funding/organisations.py). Measured: 1,544 of 11,539 flagged profiles. A run that would
+# leave out more than this share of the profiles it read is wrong, not careful: nothing is deleted.
+MAX_LEFT_OUT_SHARE = 0.30
+DELETE_LEFT_OUT_ANNOUNCEMENTS = "DELETE FROM ft_partner_search_announcements WHERE pic = ANY(%s)"
+DELETE_LEFT_OUT_ORGS = "DELETE FROM ft_partner_search_orgs WHERE pic = ANY(%s)"
 
 
 def months(start: date, end: date) -> list:
@@ -128,22 +135,32 @@ def main(argv=None) -> int:
     if not args.no_profiles and not profiles:
         print("[ERROR] the index gave no organisation profile: nothing written or deleted")
         return 1
+    profiles, left_out = _split(profiles)
     org_values = [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in profiles]
     read_ranges = ranges_for(date.today(), args.full, args.since, args.until)
     n = dict(read=0, expected=0, written=0, deleted=0, orgs_written=0, orgs_deleted=0, slices=0, incomplete=0)
     held_back, left = [], args.limit
     conn = psycopg2.connect(db.replace("postgresql+psycopg2://", "postgresql://")) if args.apply else None
     fallback = {p["pic"]: (p["name"], p["country"], p["organisation_type"]) for p in profiles}
-    extra = []
+    extra, late_out = [], set()
+    n["profiles_left_out"] = len(left_out)
     try:
         if conn is not None:
             n["orgs_written"] = store(conn, UPSERT_ORGS, org_values)
             # The profiles of the organisations that announced but no longer carry the flag.
-            with conn.cursor() as cur:
-                cur.execute(UNFLAGGED_PICS, ([p["pic"] for p in profiles],))
-                unflagged = [r[0] for r in cur.fetchall()]
-            extra = ps.profiles_for(unflagged)
-            n["orgs_written"] += store(conn, UPSERT_ORGS, [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in extra])
+            if not args.no_profiles:
+                with conn.cursor() as cur:
+                    cur.execute(UNFLAGGED_PICS, ([p["pic"] for p in profiles] + sorted(left_out),))
+                    unflagged = [r[0] for r in cur.fetchall()]
+                extra, extra_out = _split(ps.profiles_for(unflagged))
+                left_out |= extra_out
+                n["orgs_written"] += store(conn, UPSERT_ORGS, [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in extra])
+            n["profiles_left_out"] = len(left_out)
+            share = len(left_out) / max(1, len(profiles) + len(extra) + len(left_out))
+            if share > MAX_LEFT_OUT_SHARE:
+                print(f"[ERROR] the person rule would leave out {share:.0%} of the profiles read: nothing deleted")
+                return 1
+            n["deleted"] += _delete_left_out(conn, left_out)
             with conn.cursor() as cur:
                 cur.execute(FALLBACK)
                 fallback = {r[0]: r[1:] for r in cur.fetchall()}
@@ -158,6 +175,8 @@ def main(argv=None) -> int:
                 if left is not None:
                     rows, complete = rows[:left], False          # a sample deletes nothing
                     left -= len(rows)
+                rows, out_here = _kept(rows, left_out, fallback)
+                late_out |= out_here
                 values = [_values(_filled(r, fallback)) for r in rows]
                 if conn is None:
                     n["written"] += len(values)
@@ -172,6 +191,9 @@ def main(argv=None) -> int:
             print(f"[INFO] {a} to {b}: {got} of {expected} announcement(s) read", flush=True)
             if left == 0:
                 break
+        # Organisations with no profile whose announcements the rule left out: their stored rows go too.
+        if conn is not None and late_out - left_out:
+            n["deleted"] += _delete_left_out(conn, late_out - left_out)
         # A profile read incompletely, or a sample, deletes no organisation.
         if conn is not None and prof_complete and args.limit is None:
             with conn.cursor() as cur:
@@ -185,7 +207,8 @@ def main(argv=None) -> int:
     print(f"[{'OK' if args.apply else 'DRY-RUN'}] profiles: {len(profiles)} of {prof_expected} read, {len(extra)} more by PIC, "
           f"{n['orgs_written'] if args.apply else len(org_values)} {verb}, {n['orgs_deleted']} deleted; announcements: "
           f"{n['read']} of {n['expected']} read in {n['slices']} slice(s) of {len(read_ranges)} range(s), {n['written']} {verb}, "
-          f"{n['deleted']} deleted; {time.time() - started:.0f}s")
+          f"{n['deleted']} deleted; left out as possibly a person's: {n['profiles_left_out']} profile(s), "
+          f"{len(late_out - left_out)} more organisation(s) without a profile; {time.time() - started:.0f}s")
     if held_back:
         print(f"[SYNC_STATUS] degraded: deletions held back where the index lists far fewer than held: {'; '.join(held_back[:5])}")
     if n["expected"] and not n["read"]:
@@ -194,6 +217,37 @@ def main(argv=None) -> int:
     if (not args.no_profiles and not prof_complete) or n["incomplete"]:
         print("[SYNC_STATUS] degraded: a slice or the profiles were read incompletely (nothing deleted there)")
     return 0
+
+
+def _split(profiles: list) -> tuple:
+    """(the profiles kept, the PICs left out as possibly a person's)."""
+    out = {p["pic"] for p in profiles if may_be_a_person(p["name"], p["organisation_type"], p.get("registration_status"))}
+    return [p for p in profiles if p["pic"] not in out], out
+
+
+def _kept(rows: list, left_out: set, profiled: dict) -> tuple:
+    """The announcements kept, and the PICs left out here: an organisation with no profile is judged by
+    the announcement's own name and type, as a self-registered one."""
+    kept, out = [], set()
+    for r in rows:
+        if r["pic"] in left_out:
+            continue
+        if r["pic"] not in profiled and may_be_a_person(r["organisation_name"], r["organisation_type"], None):
+            out.add(r["pic"])
+            continue
+        kept.append(r)
+    return kept, out
+
+
+def _delete_left_out(conn, pics: set) -> int:
+    if not pics:
+        return 0
+    with conn.cursor() as cur:
+        cur.execute(DELETE_LEFT_OUT_ANNOUNCEMENTS, (sorted(pics),))
+        gone = cur.rowcount
+        cur.execute(DELETE_LEFT_OUT_ORGS, (sorted(pics),))
+    conn.commit()
+    return gone
 
 
 def _filled(r: dict, fallback: dict) -> dict:
