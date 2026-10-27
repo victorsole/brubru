@@ -27,6 +27,7 @@ from api.v1._envelope import PaginatedResponse, build_envelope
 from core.database import get_db
 from models.user import User
 from services.funding.countries import eu_code
+from services.funding.programme_codes import named_codes, topic_prefixes
 
 router = APIRouter()
 
@@ -113,7 +114,7 @@ Organisations looking for partners: every announcement an organisation published
 
 **Input**
 - `q` — words in the topic's title and the announcement's text (full text: every word in any form; `"quoted phrase"`, `OR`, `-word`).
-- `topic` — a topic code or its start (`HORIZON-CL5-2026`); `programme` — part of the topic code (`LIFE`, `ERASMUS`, `EDF`, `DIGITAL`).
+- `topic` — a topic code or its start (`HORIZON-CL5-2026`); `programme` — part of the topic code (`LIFE`, `ERASMUS`, `EDF`, `DIGITAL`) or a programme's name (`Horizon Europe`, `Connecting Europe`).
 - `status` — the topic's status as Brubru holds it: open | forthcoming | closed (announcements for topics Brubru does not hold are then left out).
 - `expertise` — offer | request. `organisation_type` — part of the portal's type (`Small or medium`, `Research`, `Higher or secondary education`, `Public`, `Non-governmental`).
 - `pic`, `organisation` (part of its name), `country` (ISO-2; EL and GR, UK and GB are the same); `without_eu_projects=true` — only organisations with no EU project yet.
@@ -179,7 +180,14 @@ async def list_partner_announcements(
     if topic:
         where.append("s.topic_id ILIKE :topic"); params["topic"] = f"{topic.strip()}%"
     if programme:
-        where.append("s.topic_id ILIKE :programme"); params["programme"] = f"%{programme.strip()}%"
+        params["programme"] = f"%{programme.strip()}%"
+        named = named_codes(programme)
+        if named:
+            # "Horizon Europe" -> HORIZON-..., "Connecting Europe" -> CEF-...: the topic carries the code.
+            params["prog_topics"] = topic_prefixes(named)
+            where.append("(s.topic_id ILIKE :programme OR s.topic_id ILIKE ANY(CAST(:prog_topics AS text[])))")
+        else:
+            where.append("s.topic_id ILIKE :programme")
     if status:
         where.append("s.topic_id IN (SELECT topic_id FROM ft_calls_for_proposals WHERE status = :status AND is_test = false)")
         params["status"] = status

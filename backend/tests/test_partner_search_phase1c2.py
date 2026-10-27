@@ -367,12 +367,22 @@ def test_partners_take_the_announcements_by_their_pic():
         db = _Db()
         _client(db).get("/api/v2/funding/partners", params={"q": "ai", **extra})
         assert "ft_partner_search_announcements" not in db.calls[-1][0], extra
-    for key, clause in (("pic:900000001", "s.pic = :key_val"),
-                        ("vat:ESB00000000", "s.pic IN (SELECT pic FROM funding_org_identities WHERE vat_key = :key_val)"),
-                        ("name:es:example-sensors-sl", "s.country = :key_cc AND regexp_replace(lower(s.organisation_name)")):
+    db = _Db()
+    _client(db).get("/api/v2/funding/partners/pic:900000001")
+    assert "s.pic = :key_val" in db.calls[-1][0]
+    # An announcement's partner is always pic:<PIC>: a vat: or name: key never reads them.
+    for key in ("vat:ESB00000000", "name:es:example-sensors-sl"):
         db = _Db()
         _client(db).get(f"/api/v2/funding/partners/{key}")
-        assert clause in db.calls[-1][0], key
+        assert "ft_partner_search_announcements" not in db.calls[-1][0], key
+    # A programme's name reaches the topics through its code.
+    db = _Db()
+    _client(db).get("/api/v2/funding/partners", params={"q": "ai", "programme": "Horizon Europe"})
+    sql, params = db.calls[-1]
+    assert "s.topic_id ILIKE ANY(CAST(:prog_topics AS text[]))" in sql and params["prog_topics"] == ["HORIZON-%"]
+    db = _Db()
+    _client(db).get("/api/v2/funding/partner-announcements", params={"programme": "Connecting Europe"})
+    assert db.calls[0][1]["prog_topics"] == ["CEF-%"]
     db = _Db()
     _client(db).get("/api/v2/funding/partners", params={"q": "ai", "source": "announcements"})
     sql = db.calls[-1][0]

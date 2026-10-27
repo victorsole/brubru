@@ -34,7 +34,7 @@ from api.v1._envelope import PaginatedResponse, build_envelope
 from core.database import get_db
 from models.user import User
 from services.funding.countries import eu_code, vat_key
-from services.funding.programme_codes import named_codes
+from services.funding.programme_codes import named_codes, topic_prefixes
 
 router = APIRouter()
 Day = date   # PartnerActivity has a field named `date`, which would shadow the type in its own annotation
@@ -136,6 +136,10 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                   and not programme and not topic)
     # An announcement has no department and no CORDIS activity type; its SME flag is the portal's type.
     use_announcements = source in ("all", "announcements") and not dg and activity_type is None
+    # An announcement always carries its PIC, so its partner is always pic:<PIC>: a vat: or name: key
+    # can never include one (and the name lookup would read every announcement to find none).
+    if key and not key.startswith("pic:"):
+        use_announcements = False
     if q:
         p_where.append(f"{_PROJECT_TSV} @@ websearch_to_tsquery('english', :q)")
         f_where.append("to_tsvector('english', coalesce(c.subject, '')) @@ websearch_to_tsquery('english', :q)")
@@ -145,10 +149,15 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
     if programme:
         named = named_codes(programme)
         p_where.append("(p.framework_programme ILIKE :prog_like" + (" OR p.framework_programme = ANY(CAST(:prog_named AS text[]))" if named else "") + ")")
-        f_where.append("c.programme ILIKE :prog_like"); s_where.append("s.topic_id ILIKE :prog_like")
+        f_where.append("c.programme ILIKE :prog_like")
         params["prog_like"] = f"%{programme}%"
         if named:
             params["prog_named"] = named
+            # A topic starts with its programme's code without the year: CEF2027 -> CEF-..., HORIZON -> HORIZON-...
+            params["prog_topics"] = topic_prefixes(named)
+            s_where.append("(s.topic_id ILIKE :prog_like OR s.topic_id ILIKE ANY(CAST(:prog_topics AS text[])))")
+        else:
+            s_where.append("s.topic_id ILIKE :prog_like")
     if topic:
         p_where.append("p.topic_code ILIKE :topic_prefix"); f_where.append("c.call_id ILIKE :topic_prefix")
         s_where.append("s.topic_id ILIKE :topic_prefix")
@@ -172,13 +181,11 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
             params["key_contains"] = f'[{{"vat": "{val}"}}]'
             f_where.append("c.vat_key = :key_val")
             w_where.append("w.vat_key = :key_val")
-            s_where.append("s.pic IN (SELECT pic FROM funding_org_identities WHERE vat_key = :key_val)")
         else:
             cc, _, slug = val.partition(":")
             params["key_cc"], params["key_slug"] = cc.upper(), slug
             f_where.append(f"c.country_code = :key_cc AND {_NAME_SLUG.format(n='c.beneficiary')} = :key_slug")
             w_where.append(f"w.country = :key_cc AND {_NAME_SLUG.format(n='w.name')} = :key_slug")
-            s_where.append(f"s.country = :key_cc AND {_NAME_SLUG.format(n='s.organisation_name')} = :key_slug")
             # Without this every consortium would be unpacked to find one name.
             p_where.append(
                 f"(EXISTS (SELECT 1 FROM jsonb_array_elements(p.organisations) o WHERE "

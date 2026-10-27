@@ -106,6 +106,8 @@ def main(argv=None) -> int:
     ap.add_argument("--limit", type=int, help="Store at most N announcements (a sample; deletes nothing).")
     ap.add_argument("--sleep", type=float, default=0.3, help="Seconds between index requests.")
     args = ap.parse_args(argv)
+    if args.until and not args.since:
+        ap.error("--until needs --since")
     db = get_env("DATABASE_URL")
     if not db:
         print("[FATAL] DATABASE_URL missing")

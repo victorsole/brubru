@@ -47,3 +47,9 @@ def unnamed(codes: Iterable[Optional[str]]) -> List[str]:
     """The stored codes the file gives no name for."""
     names = programme_names()
     return sorted({c for c in codes if c and c not in names})
+
+
+def topic_prefixes(codes: Iterable[str]) -> List[str]:
+    """The start of a call topic for each programme code, as ILIKE patterns: a topic is written with
+    the code without its year (CEF2027 -> CEF-..., AGRIP2027 -> AGRIP-..., HORIZON -> HORIZON-...)."""
+    return sorted({re.sub(r"\d{4}$", "", c) + "-%" for c in codes if c})
