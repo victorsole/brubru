@@ -50,6 +50,7 @@ from . import ft_cascade_calls as _ft_cascade_calls
 from . import partners as _partners
 # TED contract awards whose buyer is an EU body, with their winners (ted_award_notices, 26 Oct 2026).
 from . import tender_awards as _tender_awards
+from . import partner_announcements as _partner_announcements
 
 router = APIRouter(prefix="/funding")
 router.include_router(_funding_opportunities.funding_router)
@@ -60,6 +61,7 @@ router.include_router(_ted_tenders.tenders_router)
 router.include_router(_eu_funding_recipients.router)
 router.include_router(_partners.router)
 router.include_router(_tender_awards.router)
+router.include_router(_partner_announcements.router)
 router.include_router(_agency_procurement.router)
 router.include_router(_funding_all.router)
 router.include_router(_startups.router)

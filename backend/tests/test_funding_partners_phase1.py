@@ -292,7 +292,7 @@ def test_partner_filters_that_one_source_cannot_answer_drop_that_source():
 def test_a_partner_item_links_each_activity_and_its_portal_profile():
     from api.v2.funding import partners
     r = SimpleNamespace(key="pic:999991722", pic="999991722", vat="ESQ2818002D", name="CSIC", short_name="CSIC", country="ES",
-                        city="MADRID", activity_type="REC", is_sme=False, projects=1, coordinated=1, payments=1, contracts=0, awards=0,
+                        city="MADRID", activity_type="REC", is_sme=False, projects=1, coordinated=1, payments=1, contracts=0, awards=0, announcements=0,
                         eu_contribution=10.0, amount_eur=400000, last_day=date(2025, 1, 1), created=None, changed=None,
                         matches=[{"kind": "project", "id": "101112434", "title": "Soil", "role": "coordinator", "programme": "HORIZON",
                                   "date": "2025-01-01", "eu_contribution": 10.0, "amount_eur": None},

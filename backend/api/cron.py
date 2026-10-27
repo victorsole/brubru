@@ -394,7 +394,7 @@ _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc",
     "carriage_status_notifications", "tris_titles", "eu_laws_in_force", "eu_laws_oj_reference",
-    "eu_laws_legal_basis", "ted_awards",
+    "eu_laws_legal_basis", "ted_awards", "partner_search",
 )
 # "tbt" left this list on 17 Oct 2026: sync_dg_grow.py records its own run as wto_tbt, so every
 # night wrote two rows for one run (tests/test_sync_health_jobs.py checks no script here records).
@@ -994,6 +994,12 @@ async def cron_sync_daily(
     # only the ones not yet held are downloaded (~10 a day).
     results["ted_awards"] = await _run_script_async(
         "ted_awards", "scripts/sync_ted_awards.py", ["--apply"], timeout=1800,
+    )
+    # The F&T Portal's Partner Search, organisations only (/funding/partner-announcements and
+    # /funding/partners, 27 Oct 2026): every profile, the announcements of the last 14 days and a
+    # seventh of the older months in turn, so every announcement is read again each week.
+    results["partner_search"] = await _run_script_async(
+        "partner_search", "scripts/sync_ft_partner_search.py", ["--apply"], timeout=1800,
     )
     # Per-programme F&T grant calls (economy_items, item_type='grant') backing
     # /api/v2/funding/justice + /innovation-fund. Pulled from SEDIA by topic-id
