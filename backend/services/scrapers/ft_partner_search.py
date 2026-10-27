@@ -96,7 +96,14 @@ class PartnerSearch:
     def _post(self, url: str, parts: dict) -> dict:
         for attempt in range(4):
             body, ctype = self._multipart(parts)
-            r = self.session.post(url, data=body, headers={"Content-Type": ctype}, timeout=120)
+            try:
+                r = self.session.post(url, data=body, headers={"Content-Type": ctype}, timeout=120)
+            except (requests.ConnectionError, requests.Timeout):
+                # The index drops a connection now and then (27 Oct 2026, first trial load).
+                if attempt == 3:
+                    raise
+                time.sleep(5 * (attempt + 1))
+                continue
             if r.status_code in (429, 500, 502, 503, 504) and attempt < 3:
                 time.sleep(5 * (attempt + 1))
                 continue
@@ -166,23 +173,25 @@ class PartnerSearch:
         return rows, expected, complete
 
     def profiles(self) -> Tuple[List[dict], int, bool]:
-        """Every organisation profile with Partner Search, read country by country (11,537 > the cap)."""
+        """Every organisation profile with Partner Search, read country by country (11,537 > the cap).
+        Complete when each country gave as many rows as it counts, and the countries together at
+        least what the index counted before the read (a profile added meanwhile only adds)."""
+        overall = self.total(_PROFILES)
         rows, expected, complete = [], 0, True
         for cc in sorted(self.labels("country")):
             must = _PROFILES + [{"terms": {"country": [cc]}}]
-            seen = 0
+            seen, counted = 0, 0
             for page in self._pages(must, PROFILE_FIELDS):
-                if seen == 0:
-                    expected += page["total"]
-                    if page["total"] > CAP:
-                        complete = False
+                counted = page["total"]
                 for r in page["results"]:
                     row = self.profile(r.get("metadata") or {})
                     if row:
                         rows.append(row)
                         seen += 1
+            expected += counted
+            if counted > CAP or seen < counted:
+                complete = False
         # A profile without a country is in no country's slice.
-        overall = self.total(_PROFILES)
         if expected < overall:
             complete = False
         return rows, max(expected, overall), complete
@@ -201,13 +210,17 @@ class PartnerSearch:
         if not aid or not pic:
             return None
         text = _one(md, "announcementSummary")
+        # The index cuts at 500 characters counting trailing blanks, which _one strips: 3 of 200
+        # checked rows ended in tabs and were flagged whole (27 Oct 2026).
+        raw = md.get("announcementSummary")
+        raw = (raw[0] if isinstance(raw, list) and raw else raw) or ""
         topics = [t for t in (md.get("topics") or []) if t]
         return {
             "announcement_id": aid, "pic": pic, "organisation_name": _line(_one(md, "name")),
             "country": self._country(_one(md, "country")), "organisation_type": self._type(_one(md, "organisationType")),
             "expertise": _EXPERTISE.get(_one(md, "expertise") or ""), "topic_id": topics[0] if topics else None,
             "topic_ids": topics, "topic_title": _line(_one(md, "title")), "summary": redact(text),
-            "summary_cut": bool(text) and len(text) >= TEXT_LIMIT,
+            "summary_cut": len(str(raw)) >= TEXT_LIMIT,
             "requested_date": _day(_one(md, "requestedDate")), "indexed_at": _stamp(_one(md, "es_SortDate")),
             "public_url": PORTAL_ORG.format(pic=pic),
         }

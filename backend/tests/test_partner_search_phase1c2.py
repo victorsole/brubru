@@ -56,6 +56,9 @@ def test_an_announcement_is_read_with_its_codes_as_labels():
                                 expertise=["Expertise_offer"], announcementSummary=["short"]))
     assert (b["country"], b["organisation_type"], b["expertise"], b["summary_cut"]) == ("XK", "Research Organisation", "offer", False)
     assert _ps().announcement(dict(md, pic=[])) is None and _ps().announcement(dict(md, announcementId=["NA"])) is None
+    # Cut at 500 counting the blanks the index kept at the end.
+    c = _ps().announcement(dict(md, announcementSummary=["y" * 480 + "\t" * 20]))
+    assert c["summary_cut"] is True and c["summary"] == "y" * 480
 
 
 def test_only_organisations_are_asked_for():
@@ -79,6 +82,31 @@ def test_the_facet_service_answers_every_facet_and_only_the_asked_one_is_kept():
     assert ps.labels("country") == {"20000001": "Spain"}
 
 
+def test_a_dropped_connection_is_tried_again(monkeypatch):
+    import requests
+    calls = []
+
+    class _Session:
+        def post(self, url, data, headers, timeout):
+            calls.append(url)
+            if len(calls) < 3:
+                raise requests.ConnectionError("Remote end closed connection without response")
+            return SimpleNamespace(status_code=200, raise_for_status=lambda: None, json=lambda: {"ok": 1})
+    monkeypatch.setattr(fps.time, "sleep", lambda s: None)
+    ps = _ps()
+    ps.session, ps.sleep = _Session(), 0
+    assert ps._post("u", {}) == {"ok": 1} and len(calls) == 3
+
+    class _Down(_Session):
+        def post(self, url, data, headers, timeout):
+            raise requests.ConnectionError("down")
+    ps.session = _Down()
+    try:
+        ps._post("u", {})
+        raise AssertionError("a connection down four times must raise")
+    except requests.ConnectionError:
+        pass
+
 def test_a_range_above_the_cap_is_split_until_each_part_fits():
     ps = _ps()
     counts = {(date(2026, 1, 1), date(2027, 1, 1)): 25_000, (date(2026, 1, 1), date(2026, 7, 2)): 12_000,
@@ -98,6 +126,22 @@ def test_a_range_read_short_is_marked_incomplete():
     rows, n, complete = ps.announcements(date(2026, 10, 1), date(2026, 11, 1))
     assert (len(rows), n, complete) == (2, 3, False)
 
+
+def test_profiles_are_complete_only_when_every_country_gave_its_count():
+    ps = _ps()
+    md = lambda pic: {"metadata": {"pic": [pic], "hasPartnerSearch": ["true"], "country": ["20000001"]}}  # noqa: E731
+    pages = {"20000001": [{"total": 2, "results": [md("1"), md("2")]}], "20000002": [{"total": 1, "results": [md("3")]}]}
+    ps._pages = lambda must, fields: iter(pages[must[-1]["terms"]["country"][0]])
+    ps.total = lambda must: 3                    # counted before the read
+    rows, n, complete = ps.profiles()
+    assert (len(rows), n, complete) == (3, 3, True)
+    ps.total = lambda must: 2                    # a profile added during the read is not a gap
+    assert ps.profiles()[2] is True
+    pages["20000002"] = [{"total": 2, "results": [md("3")]}]                  # a country short of its count
+    assert ps.profiles()[2] is False
+    pages["20000002"] = [{"total": 1, "results": [md("3")]}]
+    ps.total = lambda must: 4                    # a profile in no country
+    assert ps.profiles()[2] is False
 
 # --- the loader ------------------------------------------------------------------------------------------ #
 def test_each_day_reads_the_recent_days_and_a_seventh_of_the_months():
