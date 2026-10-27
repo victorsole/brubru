@@ -29,6 +29,7 @@ from core.database import get_db
 from models.user import User
 from services.funding.countries import eu_code
 from services.funding.programme_codes import named_codes, topic_prefixes
+from services.scrapers.ft_partner_search import compose_body
 
 router = APIRouter()
 
@@ -92,7 +93,16 @@ class PartnerAnnouncementItem(BaseModel):
     updated_date: Optional[datetime] = None
 
 
-def _item(r, base: str, with_body: bool, body=None) -> PartnerAnnouncementItem:
+def _body(r) -> tuple:
+    """The announcement as text and HTML, composed from its columns (none is stored: migration 317)."""
+    return compose_body({"organisation_name": r.organisation_name, "pic": r.pic, "country": r.country,
+                         "organisation_type": r.organisation_type, "expertise": r.expertise, "topic_id": r.topic_id,
+                         "topic_title": r.topic_title, "summary": r.summary, "summary_cut": r.summary_cut,
+                         "requested_date": r.requested_date})
+
+
+def _item(r, base: str, with_body: bool) -> PartnerAnnouncementItem:
+    body = _body(r) if with_body else (None, None)
     org = AnnouncingOrganisation(pic=r.pic, name=r.organisation_name, country=r.country, city=r.city,
                                  organisation_type=r.organisation_type, projects=r.projects,
                                  partner=f"{base}/api/v2/funding/partners/pic:{r.pic}")
@@ -102,7 +112,7 @@ def _item(r, base: str, with_body: bool, body=None) -> PartnerAnnouncementItem:
         topic_title=r.topic_title, topic_deadline=r.topic_deadline, summary_cut=bool(r.summary_cut), pic=r.pic,
         organisation_name=r.organisation_name, country=r.country, organisation_type=r.organisation_type,
         organisations=[org], public_url=r.public_url,
-        body_txt=body[0] if with_body and body else None, body_html=body[1] if with_body and body else None,
+        body_txt=body[0], body_html=body[1],
         document_date=r.requested_date, creation_date=r.first_seen, updated_date=r.last_updated,
     )
 
@@ -214,13 +224,12 @@ async def list_partner_announcements(
     clause = "FROM ft_partner_search_announcements s WHERE true" + "".join(f" AND {w}" for w in where)
     total = db.execute(text(f"SELECT count(*) {clause}"), params).scalar() or 0
     order_sql = sql_order(order, "s.first_seen", "s.last_updated", "s.announcement_id") or _ORDER_SQL[order]
-    body_cols = ", s.body_txt, s.body_html" if include_body else ""
     rows = db.execute(text(
         f"""WITH page AS (SELECT s.announcement_id {clause} ORDER BY {order_sql} LIMIT :limit OFFSET :offset)
-            SELECT {_COLS}{body_cols} FROM page JOIN ft_partner_search_announcements s USING (announcement_id) {_JOINS}
+            SELECT {_COLS} FROM page JOIN ft_partner_search_announcements s USING (announcement_id) {_JOINS}
              ORDER BY {order_sql}"""), params).fetchall()
     base = str(request.base_url).rstrip("/")
-    items = [_item(r, base, include_body, (r.body_txt, r.body_html) if include_body else None) for r in rows]
+    items = [_item(r, base, include_body) for r in rows]
     return build_envelope(items, total, page, limit, updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -251,8 +260,7 @@ async def get_partner_announcement(
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
 ):
-    r = db.execute(text(f"SELECT {_COLS}, s.body_txt, s.body_html {_FROM} AND s.announcement_id = :a"),
-                   {"a": announcement_id.strip()}).fetchone()
+    r = db.execute(text(f"SELECT {_COLS} {_FROM} AND s.announcement_id = :a"), {"a": announcement_id.strip()}).fetchone()
     if r is None:
         raise HTTPException(status_code=404, detail=f"No partner announcement with id {announcement_id}")
-    return _item(r, str(request.base_url).rstrip("/"), True, (r.body_txt, r.body_html))
+    return _item(r, str(request.base_url).rstrip("/"), True)

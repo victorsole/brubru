@@ -33,15 +33,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from ingest_funding_sedia import get_env  # noqa: E402
 from services.funding.organisations import may_be_a_person  # noqa: E402
-from services.scrapers.ft_partner_search import FIRST_DAY, PartnerSearch, compose_body  # noqa: E402
+from services.scrapers.ft_partner_search import FIRST_DAY, PartnerSearch  # noqa: E402
 
 RECENT_DAYS = 14
 ROTATION = 7
 BATCH = 500
 ANNOUNCEMENT_COLUMNS = (
     "pic", "organisation_name", "country", "organisation_type", "expertise", "topic_id", "topic_ids",
-    "topic_title", "summary", "summary_cut", "requested_date", "indexed_at", "public_url", "body_txt", "body_html",
+    "topic_title", "summary", "summary_cut", "requested_date", "indexed_at", "public_url",
 )
+# No stored body: /api/v2/funding/partner-announcements composes it from these columns (migration 317).
 ORG_COLUMNS = ("name", "city", "country", "organisation_type", "projects", "portal_announcements", "topics", "public_url")
 
 
@@ -281,9 +282,7 @@ def _filled(r: dict, fallback: dict) -> dict:
 
 
 def _values(r: dict) -> tuple:
-    txt, page = compose_body(r)
-    full = dict(r, body_txt=txt, body_html=page)
-    return (r["announcement_id"], *(full[c] for c in ANNOUNCEMENT_COLUMNS))
+    return (r["announcement_id"], *(r[c] for c in ANNOUNCEMENT_COLUMNS))
 
 
 def _delete_gone(conn, a: date, b: date, ids: list, held_back: list) -> int:

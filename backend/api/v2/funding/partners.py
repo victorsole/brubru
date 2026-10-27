@@ -41,7 +41,7 @@ router = APIRouter()
 Day = date   # PartnerActivity has a field named `date`, which would shadow the type in its own annotation
 
 PORTAL_ORG = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/org-details/{pic}"
-ROLES = ("coordinator", "participant", "beneficiary", "contractor")
+ROLES = ("coordinator", "participant", "beneficiary", "contractor", "offer", "request")
 ACTIVITY_TYPES = ("HES", "REC", "PRC", "PUB", "OTH")
 SOURCES = ("all", "projects", "payments", "awards", "announcements")
 ORDERS = ("matches", "amount", "name")

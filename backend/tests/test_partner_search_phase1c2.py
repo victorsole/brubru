@@ -249,7 +249,9 @@ def test_deletions_only_where_the_read_was_complete(monkeypatch):
     assert deletes == [(r1[0], r1[1], ["1"])]                     # the incomplete range deletes nothing
     assert [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_orgs")] == [(["9"],)]
     rows = [r for s, batch in written if "ft_partner_search_announcements" in s for r in batch]
-    assert sorted(r[0] for r in rows) == ["1", "2"] and all(r[-2] for r in rows)      # body_txt composed
+    sync = importlib.import_module("sync_ft_partner_search")
+    assert sorted(r[0] for r in rows) == ["1", "2"] and all(len(r) == len(sync.ANNOUNCEMENT_COLUMNS) + 1 for r in rows)
+    assert "body_txt" not in sync.ANNOUNCEMENT_COLUMNS and "body_html" not in sync.ANNOUNCEMENT_COLUMNS   # composed on read
     # Each slice is written as soon as it is read, before the next is asked for.
     assert [len(batch) for s, batch in written if "ft_partner_search_announcements" in s] == [1, 1]
     # Profiles read incompletely: no organisation is deleted.
@@ -408,8 +410,7 @@ def _row(**kw):
                 organisation_type="Small or medium-size enterprise", expertise="request", topic_id="HORIZON-CL4-2026-01-01",
                 topic_ids=["HORIZON-CL4-2026-01-01"], topic_title="An example topic", summary="We seek a partner.",
                 summary_cut=False, requested_date=date(2026, 10, 20), public_url="https://example.test/org/900000001",
-                first_seen=None, last_updated=None, city="Madrid", projects=0, topic_status="open", topic_deadline=None,
-                body_txt="t", body_html="<p>t</p>")
+                first_seen=None, last_updated=None, city="Madrid", projects=0, topic_status="open", topic_deadline=None)
     base.update(kw)
     return SimpleNamespace(**base)
 
@@ -441,7 +442,11 @@ def test_the_announcement_list_filters_on_the_announcements_and_pages_before_joi
 def test_an_announcement_item_carries_its_body_and_a_missing_one_is_404():
     r = _client(_Db(_row())).get("/api/v2/funding/partner-announcements/900001")
     assert r.status_code == 200, r.text
-    assert (r.json()["body_txt"], r.json()["document_date"]) == ("t", "2026-10-20")
+    item = r.json()
+    assert item["document_date"] == "2026-10-20"
+    assert item["body_txt"].startswith("Example Sensors SL (ES, Small or medium-size enterprise) seeks expertise")
+    assert "Topic HORIZON-CL4-2026-01-01: An example topic" in item["body_txt"] and "We seek a partner." in item["body_txt"]
+    assert item["body_html"].startswith("<p>Example Sensors SL")
     assert _client(_Db()).get("/api/v2/funding/partner-announcements/1").status_code == 404
 
 
@@ -449,6 +454,9 @@ def test_the_index_expression_is_the_one_the_queries_use():
     from api.v2.funding import partner_announcements as pa
     from api.v2.funding import partners
     sql = (BACKEND / "migrations" / "316_ft_partner_search.sql").read_text()
+    m317 = (BACKEND / "migrations" / "317_ft_partner_search_bodies_and_topic_index.sql").read_text()
+    assert "DROP COLUMN IF EXISTS body_txt" in m317 and "DROP COLUMN IF EXISTS body_html" in m317
+    assert "USING gin (topic_id gin_trgm_ops)" in m317       # serves topic=... (prefix) and programme=... (substring)
     expr = "to_tsvector('english', coalesce(topic_title, '') || ' ' || coalesce(summary, ''))"
     assert expr in sql
     assert pa._TSV == partners._ANNOUNCEMENT_TSV == expr.replace("topic_title", "s.topic_title").replace("(summary", "(s.summary")
@@ -490,6 +498,11 @@ def test_partners_take_the_announcements_by_their_pic():
     db = _Db()
     _client(db).get("/api/v2/funding/partner-announcements", params={"programme": "Connecting Europe"})
     assert db.calls[0][1]["prog_topics"] == ["CEF-%"]
+    for role in ("offer", "request"):                      # the announcement roles the description documents
+        db = _Db()
+        r = _client(db).get("/api/v2/funding/partners", params={"q": "ai", "source": "announcements", "role": role})
+        assert r.status_code == 200, r.text
+        assert "role = :role" in db.calls[-1][0] and db.calls[-1][1]["role"] == role
     db = _Db()
     _client(db).get("/api/v2/funding/partners", params={"q": "ai", "source": "announcements"})
     sql = db.calls[-1][0]
