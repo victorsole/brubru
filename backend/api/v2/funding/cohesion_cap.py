@@ -23,6 +23,9 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
+from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
+from api.v1._change_window import sql_window, validate_window
+from services.funding.countries import both_styles
 
 router = APIRouter()
 
@@ -98,9 +101,14 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
     async def list_cap(  # noqa: ANN202
         request: Request,
         ms: Optional[str] = Query(None, description="Member State ISO code"),
+        country: Optional[str] = Query(None, description="The Member State, ISO-2 (EL and GR, UK and GB are the same); the same as `ms`."),
         q: Optional[str] = Query(None, description="Substring on the body"),
         updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
         updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
+        created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+        created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+        published: tuple = Depends(published_window),
+        order: Optional[str] = Query(None, description=f"amount: the largest total first (default) | {ORDERS_DOC}"),
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
         include_body: bool = Query(
@@ -115,25 +123,27 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
     ) -> PaginatedResponse[CAPPaymentItem]:
         where = ["fund = :fund"]
         params: dict = {"fund": fund_code}
-        if ms:
-            where.append("ms ILIKE :ms"); params["ms"] = ms
+        window = validate_window(created_from, created_to, updated_from, updated_to)
+        if ms or country:
+            # Both spellings: the CAP file writes Greece as EL and as GR (27 Oct 2026).
+            where.append("upper(ms) = ANY(:ms)"); params["ms"] = both_styles(country or ms)
         if q:
             where.append("body_txt ILIKE :q"); params["q"] = f"%{q}%"
-        if updated_from:
-            where.append("updated_at >= :uf"); params["uf"] = updated_from
-        if updated_to:
-            where.append("updated_at <= :ut"); params["ut"] = updated_to
+        sql_window(where, params, window, "created_at", "updated_at")
+        published_sql(where, params, published, "document_date")
         where_sql = " AND ".join(where)
+        order_sql = standard_order(order, "total_eur DESC NULLS LAST, ms, id", published="document_date",
+                                   created="created_at", updated="updated_at", amount="total_eur DESC NULLS LAST, ms, id")
         total = db.execute(text(f"SELECT COUNT(*) FROM eu_cap_payments WHERE {where_sql}"), params).scalar() or 0
         params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
         rows = db.execute(
             text(f"SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM eu_cap_payments WHERE {where_sql} "
-                 f"ORDER BY total_eur DESC NULLS LAST, ms, id LIMIT :limit OFFSET :offset"), params2,
+                 f"ORDER BY {order_sql} LIMIT :limit OFFSET :offset"), params2,
         ).mappings().all()
         items = [_row_to_item(r, with_body=include_body) for r in rows]
         return build_envelope(
             items, total=total, page=page, limit=limit,
-            updated_from=updated_from, updated_to=updated_to,
+            updated_from=window["updated_from"], updated_to=window["updated_to"],
             op_core_title=f"{fund_name} ({fund_code}) payments by Member State 2023-2027",
             op_core_type="dataset", op_core_identifier=f"cohesiondata:cap:{fund_code}",
         )

@@ -150,7 +150,8 @@ _PROCUREMENT_COLS = ", tender_reference, status, deadline"
 
 
 def _list_items(db: Session, body_code: str, item_type: str, q, since, until, order,
-                page, limit, include_body: bool = False, procurement: bool = False, window=None):
+                page, limit, include_body: bool = False, procurement: bool = False, window=None,
+                status=None, deadline_from=None, deadline_to=None):
     where = ["body_code = :bc", "item_type = :it"]
     params = {"bc": body_code, "it": item_type, "limit": limit, "offset": (page - 1) * limit}
     date_sort = _PROC_DATE_SORT if procurement else _DATE_SORT
@@ -171,6 +172,15 @@ def _list_items(db: Session, body_code: str, item_type: str, q, since, until, or
     if until:
         where.append(f"{date_sort} < CAST(:until AS date) + 1")
         params["until"] = until
+    if status:
+        where.append("status = :status")
+        params["status"] = status
+    if deadline_from:
+        where.append("deadline >= :deadline_from")
+        params["deadline_from"] = deadline_from
+    if deadline_to:
+        where.append("deadline < CAST(:deadline_to AS date) + 1")
+        params["deadline_to"] = deadline_to
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM economy_items WHERE {clause}"), params).scalar() or 0
     # Select the body columns only when asked: they dominate the row size, and
@@ -202,7 +212,7 @@ Lists {body}'s {noun}, newest first. {extra}
 Track what {acro} is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.
 
 **Input**
-`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` ({limits}), `include_body`.
+`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date{filters}, `order` (recent | oldest | title), `page`, `limit` ({limits}), `include_body`.
 <<SYNC_PARAMS>>
 
 **Try it**
@@ -281,6 +291,35 @@ GET {path}/{{item_id}}/documents/{{document_id}}
 One document with `body_txt` and `body_html` and the 5 datapoints (`public_url` is the procedure page that publishes the file)."""
 
 
+# The funding standard's filters (Phase 2, 27 Oct 2026), declared as a dependency so that only the
+# funding lists gain them: every other folder registers the empty one and keeps its parameters.
+_STATUSES = ("open", "forthcoming", "closed")
+
+
+def _no_filters() -> dict:
+    return {}
+
+
+def _funding_filters(
+    published_from: Optional[date] = Query(None, description="Published on or after (YYYY-MM-DD); `since` and `from` are aliases."),
+    published_to: Optional[date] = Query(None, description="Published on or before (YYYY-MM-DD); `until` and `to` are aliases."),
+) -> dict:
+    return {"published_from": published_from, "published_to": published_to}
+
+
+def _funding_procurement_filters(
+    published_from: Optional[date] = Query(None, description="Published on or after (YYYY-MM-DD); `since` and `from` are aliases."),
+    published_to: Optional[date] = Query(None, description="Published on or before (YYYY-MM-DD); `until` and `to` are aliases."),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed."),
+    deadline_from: Optional[date] = Query(None, description="Deadline on or after (YYYY-MM-DD)."),
+    deadline_to: Optional[date] = Query(None, description="Deadline on or before (YYYY-MM-DD)."),
+) -> dict:
+    if status is not None and status not in _STATUSES:
+        raise HTTPException(status_code=400, detail=f"status must be one of {list(_STATUSES)}")
+    return {"published_from": published_from, "published_to": published_to, "status": status,
+            "deadline_from": deadline_from, "deadline_to": deadline_to}
+
+
 def register_resource(router, *, body_code, item_type, slug, noun, body_name, acronym,
                       source, tag, extra="", procurement=False, documents=False, funding_standard=False):
     """Add list + detail GET routes for one (body, resource) onto `router`.
@@ -289,6 +328,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     funding_standard=True applies the funding standard's defaults to the list (Victor, 23 Oct 2026:
     50 items per page, at most 200, bodies included); every other body folder keeps its own."""
     limit_default, limit_max = (50, 200) if funding_standard else (20, 100)
+    filters = (_funding_procurement_filters if procurement else _funding_filters) if funding_standard else _no_filters
     noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
     path_hint = slug if slug.startswith("/") else f"/{slug}"
 
@@ -323,15 +363,18 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
                 "funding lists; false elsewhere, where bodies dominate the payload)."
             ),
         ),
+        standard: dict = Depends(filters),
     ):
         if order not in _ORDERS and order not in SYNC_ORDERS:
             raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")
-        since = since or from_
-        until = until or to
+        standard = standard if isinstance(standard, dict) else {}      # called directly, outside a request
+        since = since or from_ or standard.get("published_from")
+        until = until or to or standard.get("published_to")
         window = validate_window(created_from, created_to, updated_from, updated_to)
         items, total = _list_items(db, body_code, item_type, q, since, until, order,
                                    page, limit, include_body=include_body,
-                                   procurement=procurement, window=window)
+                                   procurement=procurement, window=window, status=standard.get("status"),
+                                   deadline_from=standard.get("deadline_from"), deadline_to=standard.get("deadline_to"))
         return build_envelope(items, total, page, limit,
                               updated_from=window["updated_from"], updated_to=window["updated_to"])
 
@@ -356,6 +399,10 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         description=_DESC_LIST.format(body=body_name, noun=noun, acro=acronym, path=path_hint,
                                       source=source, extra=extra,
                                       limits=f"default {limit_default}, max {limit_max}",
+                                      filters=("" if not funding_standard else
+                                               " (`published_from` / `published_to` are the same window)"
+                                               + (", `status` (open | forthcoming | closed), `deadline_from` / "
+                                                  "`deadline_to` (YYYY-MM-DD)" if procurement else "")),
                                       bodies=(_BODIES_ON if funding_standard else _BODIES_OFF)),
     )
     router.add_api_route(

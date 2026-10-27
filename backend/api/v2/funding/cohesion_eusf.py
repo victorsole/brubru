@@ -23,6 +23,9 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
+from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
+from api.v1._change_window import sql_window, validate_window
+from services.funding.countries import both_styles
 
 router = APIRouter()
 
@@ -107,6 +110,10 @@ async def list_eusf(
     q: Optional[str] = Query(None, description="Substring on the disaster name or body"),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    published: tuple = Depends(published_window),
+    order: Optional[str] = Query(None, description=f"amount: the largest grant paid first (default) | {ORDERS_DOC}"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
     include_body: bool = Query(
@@ -121,8 +128,9 @@ async def list_eusf(
 ) -> PaginatedResponse[EUSFCase]:
     where: list[str] = []
     params: dict = {}
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     if country:
-        where.append("applicant_country ILIKE :cc"); params["cc"] = country
+        where.append("upper(applicant_country) = ANY(:cc)"); params["cc"] = both_styles(country)
     if disaster_type:
         where.append("disaster_type ILIKE :dt"); params["dt"] = f"%{disaster_type}%"
     if status:
@@ -131,23 +139,23 @@ async def list_eusf(
         where.append("year_of_occurrence = :yr"); params["yr"] = year
     if q:
         where.append("(name_of_disaster ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
-    if updated_from:
-        where.append("updated_at >= :uf"); params["uf"] = updated_from
-    if updated_to:
-        where.append("updated_at <= :ut"); params["ut"] = updated_to
+    sql_window(where, params, window, "created_at", "updated_at")
+    published_sql(where, params, published, "document_date")
     clause = (" WHERE " + " AND ".join(where)) if where else ""
+    order_sql = standard_order(order, "eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC, id DESC", published="document_date", created="created_at",
+                               updated="updated_at", amount="eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC, id DESC")
 
     total = db.execute(text(f"SELECT COUNT(*) FROM eu_solidarity_fund{clause}"), params).scalar() or 0
     params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
     rows = db.execute(
         text(f"SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM eu_solidarity_fund{clause} "
-             f"ORDER BY eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC, id DESC LIMIT :limit OFFSET :offset"),
+             f"ORDER BY {order_sql} LIMIT :limit OFFSET :offset"),
         params2,
     ).mappings().all()
     items = [_row_to_item(r, with_body=include_body) for r in rows]
     return build_envelope(
         items, total=total, page=page, limit=limit,
-        updated_from=updated_from, updated_to=updated_to,
+        updated_from=window["updated_from"], updated_to=window["updated_to"],
         op_core_title="EU Solidarity Fund disaster cases 2002-2021",
         op_core_type="dataset", op_core_identifier="cohesiondata:7a49-av34",
     )

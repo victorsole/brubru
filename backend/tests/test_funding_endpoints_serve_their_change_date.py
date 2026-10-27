@@ -70,8 +70,9 @@ def test_cohesion_finances_serve_and_filter_their_change_date():
     assert r.status_code == 200, r.text
     assert r.json()["data"][0]["updated_date"].startswith("2026-10-17")
     sql, params = db.sql[-1]
-    assert "updated_at AS updated_date" in sql and "updated_at >= :uf" in sql and "updated_at <= :ut" in sql
-    assert params["ut"].hour == 23   # a bare date covers the whole day
+    # The shared window helper (Phase 2, 27 Oct 2026) names the parameters after the window.
+    assert "updated_at AS updated_date" in sql and "updated_at >= :updated_from" in sql and "updated_at <= :updated_to" in sql
+    assert params["updated_to"].hour == 23   # a bare date covers the whole day
 
 
 def test_the_solidarity_fund_serves_its_change_date():
@@ -85,7 +86,7 @@ def test_the_solidarity_fund_serves_its_change_date():
     r = _client(ce.router, db).get("/api/v2/funding/eusf", params={"updated_from": "2026-10-01"})
     assert r.status_code == 200, r.text
     assert r.json()["data"][0]["updated_date"].startswith("2026-10-17")
-    assert "updated_at >= :uf" in db.sql[-1][0]
+    assert "updated_at >= :updated_from" in db.sql[-1][0]
 
 
 def test_programmes_link_their_own_page_and_carry_the_lists_dates():
