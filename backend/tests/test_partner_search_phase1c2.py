@@ -343,6 +343,19 @@ def test_an_organisation_held_without_a_profile_is_judged_every_run(monkeypatch)
     assert [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_announcements WHERE pic = ANY")] == [(["7"],)]
     assert sync.PROFILELESS.startswith("SELECT DISTINCT ON (a.pic)")
 
+def test_an_organisation_not_held_is_judged_by_its_profile_not_its_announcement(monkeypatch):
+    org = {"pic": "8", "name": "Example SL", "city": None, "country": "ES", "organisation_type": "Other",
+           "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u", "registration_status": "VALIDATED"}
+    # Its announcement names it with a legal form; its profile does not, and is self-registered.
+    ann = dict(_ann("5", "2026-09-06"), pic="7", organisation_name="Jane Example SL", organisation_type="Other")
+    person_profile = dict(org, name="Jane Example", registration_status="DECLARED")
+    code, conn, written = _run(monkeypatch, profiles=([org], 1, True),
+                               ranges={(date(2026, 9, 1), date(2026, 10, 1)): ([ann], 1, True)},
+                               known=[("8", "Example SL", "ES", "Other")], extra_profile=person_profile)
+    assert code == 0
+    assert not [r for s, batch in written if "ft_partner_search_announcements" in s for r in batch]
+    assert (["7"],) in [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_announcements WHERE pic = ANY")]
+
 def test_a_run_that_would_leave_out_too_many_profiles_deletes_nothing(monkeypatch):
     base = {"city": None, "country": "ES", "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u",
             "organisation_type": "Other", "registration_status": "DECLARED"}

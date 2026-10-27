@@ -147,7 +147,7 @@ def main(argv=None) -> int:
     held_back, left = [], args.limit
     conn = psycopg2.connect(db.replace("postgresql+psycopg2://", "postgresql://")) if args.apply else None
     fallback = {p["pic"]: (p["name"], p["country"], p["organisation_type"]) for p in profiles}
-    extra, late_out = [], set()
+    extra, late_out, done_out = [], set(), set()
     n["profiles_left_out"] = len(left_out)
     try:
         if conn is not None:
@@ -166,6 +166,7 @@ def main(argv=None) -> int:
                 print(f"[ERROR] the person rule would leave out {share:.0%} of the profiles read: nothing deleted")
                 return 1
             n["deleted"] += _delete_left_out(conn, left_out)
+            done_out = set(left_out)
             with conn.cursor() as cur:
                 cur.execute(FALLBACK)
                 fallback = {r[0]: r[1:] for r in cur.fetchall()}
@@ -183,6 +184,15 @@ def main(argv=None) -> int:
                 if left is not None:
                     rows, complete = rows[:left], False          # a sample deletes nothing
                     left -= len(rows)
+                # An organisation not held is judged by its profile when the index has one, as every
+                # other run judges it (else a row the profile leaves out could come back by its own name).
+                unknown = sorted({r["pic"] for r in rows} - set(fallback) - left_out)
+                if unknown and conn is not None:
+                    found, found_out = _split(ps.profiles_for(unknown))
+                    left_out |= found_out
+                    n["orgs_written"] += store(conn, UPSERT_ORGS, [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in found])
+                    fallback.update({p["pic"]: (p["name"], p["country"], p["organisation_type"]) for p in found})
+                    extra += found
                 rows, out_here = _kept(rows, left_out, fallback)
                 late_out |= out_here
                 values = [_values(_filled(r, fallback)) for r in rows]
@@ -199,9 +209,10 @@ def main(argv=None) -> int:
             print(f"[INFO] {a} to {b}: {got} of {expected} announcement(s) read", flush=True)
             if left == 0:
                 break
-        # Organisations with no profile whose announcements the rule left out: their stored rows go too.
-        if conn is not None and late_out - left_out:
-            n["deleted"] += _delete_left_out(conn, late_out - left_out)
+        # Organisations the rule left out during the read (by their profile or, with none, by their
+        # announcement): their stored rows go too.
+        if conn is not None and (left_out | late_out) - done_out:
+            n["deleted"] += _delete_left_out(conn, (left_out | late_out) - done_out)
         # A profile read incompletely, or a sample, deletes no organisation.
         if conn is not None and prof_complete and args.limit is None:
             with conn.cursor() as cur:
@@ -216,8 +227,9 @@ def main(argv=None) -> int:
           f"{prof_expected}, {len(extra)} more kept by PIC, {n['orgs_written'] if args.apply else len(org_values)} {verb}, "
           f"{n['orgs_deleted']} deleted as gone from the index; announcements: "
           f"{n['read']} of {n['expected']} read in {n['slices']} slice(s) of {len(read_ranges)} range(s), {n['written']} {verb}, "
-          f"{n['deleted']} deleted; left out as possibly a person's: {n['profiles_left_out']} profile(s), "
+          f"{n['deleted']} deleted; left out as possibly a person's: {len(left_out)} profile(s), "
           f"{len(late_out - left_out)} more organisation(s) without a profile; {time.time() - started:.0f}s")
+    # (left_out counts every profile left out this run, flagged or read by PIC.)
     if held_back:
         print(f"[SYNC_STATUS] degraded: deletions held back where the index lists far fewer than held: {'; '.join(held_back[:5])}")
     if n["expected"] and not n["read"]:
