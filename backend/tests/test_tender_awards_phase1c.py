@@ -325,7 +325,9 @@ def test_the_buyer_is_named_as_a_brubru_body_from_its_web_address():
     assert sta.body_code_of({"buyers": joint["buyers"][:1] + joint["buyers"][1:]}, by_host) is None
     platform = {"buyers": [{"website": "https://s2c.mercell.com/buyer/1", "email": "COMM-B3@ec.europa.eu"}]}
     assert sta.body_code_of(platform, by_host) == "commission"
-    assert sta.body_codes(SimpleNamespace(execute=lambda *a: None, fetchall=lambda: []))["f4e.europa.eu"] == "f4e"
+    aliases = sta.body_codes(SimpleNamespace(execute=lambda *a: None, fetchall=lambda: []))
+    assert aliases["f4e.europa.eu"] == "f4e" and aliases["emcdda.europa.eu"] == "euda"
+    assert sta.body_code_of({"buyers": [{"website": "www.emcdda.europa.eu"}]}, aliases) == "euda"
     # A later version of a notice supersedes the earlier one; the current one points nowhere.
     assert "DISTINCT ON (notice_uuid)" in sta.SUPERSEDE and "notice_version DESC" in sta.SUPERSEDE
     assert "nullif(l.publication_number, n.publication_number)" in sta.SUPERSEDE

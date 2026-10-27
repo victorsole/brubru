@@ -72,8 +72,9 @@ FIRST_DAY = date(2024, 1, 1)
 DAILY_WINDOW = 14
 
 
-# A body's other domain, seen on TED (F4E's industry portal and e-mail; its site is fusionforenergy.europa.eu).
-HOST_ALIASES = {"f4e.europa.eu": "f4e"}
+# A body's other domain, seen on TED: F4E's industry portal and e-mail (its site is fusionforenergy.europa.eu);
+# the EMCDDA's, which became the EUDA on 2 July 2024 and kept filing under its old address.
+HOST_ALIASES = {"f4e.europa.eu": "f4e", "emcdda.europa.eu": "euda"}
 
 
 def body_codes(cur) -> dict:
