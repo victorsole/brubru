@@ -1,6 +1,7 @@
 # EU sanctions regime on Russia's destabilising activities (hybrid threats): renewed to 9 October 2027
 
 ## QUICK FACTS
+- **EPRS Briefing (26 October 2026): "Hybrid warfare"** -- finding not read: cite title and reference only. Ref: EPRS_BRI(2026)797001, https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2026)797001
 - **The regime:** restrictive measures "in view of Russia's destabilising activities", set up on **8 October 2024** by **Council Decision (CFSP) 2024/2643** (CELEX 32024D2643) and **Council Regulation (EU) 2024/2642** (CELEX 32024R2642). It targets those responsible for Russia's hybrid activities against the EU and its Member States and also against third countries and international organisations, including Foreign Information Manipulation and Interference (FIMI).
 - **Renewal on 8 October 2026:** the Council prolonged the individual measures by one year, **until 9 October 2027**, by **Decision (CFSP) 2026/2258** (CELEX 32026D2258; Article 10 date changed from 9 October 2026 to 9 October 2027; published in the Official Journal on 8 October 2026 and in force on 9 October 2026, the day after publication).
 - **Who is listed now:** **80 individuals and 20 entities** (Council press release of 8 October 2026). Listed persons face an asset freeze; EU citizens and companies may not make funds or economic resources available to them; natural persons also face a **travel ban** into or through EU territory.

@@ -2,6 +2,205 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_minors_social_media_age_limits",
+      "title": "EU Kids Act: committee referral",
+      "summary": "OEIL 22 October 2026: IMCO responsible; SANT, ITRE, CULT, JURI, LIBE opinions; BUDG.",
+      "refs": [
+        "2026/0286(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "affordable_housing_act",
+      "title": "Affordable Housing Act: committee referral",
+      "summary": "OEIL 22 October 2026: IMCO responsible; EMPL (Chaibi), TRAN, REGI opinions; BUDG.",
+      "refs": [
+        "2026/0268(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "public_procurement_act",
+      "title": "Public Procurement Act: rapporteur watch",
+      "summary": "OEIL still pending on the referral; MEP Catarina Vieira states she is INTA rapporteur (23 October, social).",
+      "refs": [
+        "2026/0265(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "ndici_global_europe_instrument",
+      "title": "Global Europe: Committee of the Regions opinion in the OJ",
+      "summary": "CoR opinion 52026IR0386 published 26 October 2026; EP report A10-0277/2026 tabled 20 October.",
+      "refs": [
+        "52026IR0386",
+        "2025/0227(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_automotive_omnibus",
+      "title": "Automotive omnibus and CO2 cars: ITRE and TRAN opinions voted 22 October",
+      "summary": "Voting lists and compromise amendments in the eMeeting store; results not yet in the minutes; ENVI lead vote pending.",
+      "refs": [
+        "2025/0420(COD)",
+        "2025/0422(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "added",
+      "guide": "eu_switzerland_pnr_agreement_2026",
+      "title": "EU-Switzerland PNR agreement concluded (Decision 2026/2360)",
+      "summary": "Council Decision (EU) 2026/2360 and the agreement text published in the OJ L of 26 October 2026; concluded, not yet in force; scope, 19 data elements, 5-year storage, 6-month masking.",
+      "refs": [
+        "32026D2360",
+        "22026A02361"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "ai_act_enforcement_ai_office_virkkunen_dublin_2026",
+      "title": "AI Act enforcement: Commission confirms first requests for information",
+      "summary": "Commission Mastodon reply of 26 October 2026 corroborates the Dublin statement; still no names or count.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_mercosur_trade_agreement",
+      "title": "Mercosur: Lula re-elected (context)",
+      "summary": "Von der Leyen's congratulations of 26 October; no change to provisional application.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "serbia_eu_accession_and_conditionality",
+      "title": "Serbia: snap election of 25 October as reported",
+      "summary": "Student List majority and SNS concession as reported by press and MEPs; von der Leyen's congratulations; no EEAS statement read.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_commission_transparency_and_college_agenda",
+      "title": "College agenda: 27 October items and 4 November moves",
+      "summary": "Table aligned with SEC(2026) 2581: border and migration package and climate resilience framework on 27 October; enlargement package, work programme and simplification report on 4 November; Circular Economy Act 18 November.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "soteu_2026_address",
+      "title": "SOTEU 2026: ECTI at a glance",
+      "summary": "ECTI_ATA(2026)795727 referenced.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "banking_union_reform",
+      "title": "Banking union: ECTI study on state intervention powers in bank M&As",
+      "summary": "ECTI_STU(2026)784069 and ECTI_BRI(2026)784065 referenced.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "pre_enlargement_policy_reviews_2026",
+      "title": "Enlargement reform: EPRS briefing",
+      "summary": "EPRS_BRI(2026)796998 referenced.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_russia_hybrid_destabilisation_sanctions_regime",
+      "title": "Hybrid threats: EPRS briefing",
+      "summary": "EPRS_BRI(2026)797001 Hybrid warfare referenced.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "european_investigation_order",
+      "title": "EIO: EPRS briefing on the recast",
+      "summary": "EPRS_BRI(2026)797003 referenced.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "Competition: Omya investigation and KKR statement of objections",
+      "summary": "Article 102 investigation into Omya (calcium carbonates, 23 October); Statement of Objections to KKR over misleading merger information (19 October).",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "dg_mena_overview",
+      "title": "DG MENA: T-MED Investment Platform launched",
+      "summary": "26 October 2026: up to EUR 4.5 billion in EFSD+ guarantee capacity for Mediterranean renewables and clean tech.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_energy_policy",
+      "title": "Energy policy: hydrogen strategy consultation and CEF PCI/PMI call",
+      "summary": "Call for evidence on a new Hydrogen Strategy open to 23 November 2026; CEF Energy 2026 PCI/PMI call received 67 applications for EUR 2.88 billion.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "dsa_enforcement",
+      "title": "DSA enforcement: Temu action plan accepted",
+      "summary": "26 October 2026: the Commission accepted Temu's five corrective measures after the EUR 200 million Article 34 fine; Board opinion of 24 September; interim risk assessment to 30 November 2026.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "added",
+      "guide": "border_migration_package_2026",
+      "title": "Border and migration package (College of 27 October 2026)",
+      "summary": "Shell: Frontex reinforcement and digitalisation of returns planned for the College of 27 October 2026; not yet published when written.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "added",
+      "guide": "climate_resilience_framework_2026",
+      "title": "Climate resilience framework (College of 27 October 2026)",
+      "summary": "Shell: planned for the College of 27 October 2026 per SEC(2026) 2581; not yet published when written.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "added",
+      "guide": "european_heritage_list_decision_2026",
+      "title": "European Heritage List proposal COM(2026) 579",
+      "summary": "Commission proposes to replace the European Heritage Label (Decision 1194/2011/EU) by a European Heritage List with a prize and extension to EEA and candidate countries; OEIL reference not yet assigned.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "added",
+      "guide": "commission_large_scale_review_civil_service_2026",
+      "title": "Commission Large-Scale Review: the Catherine Day report",
+      "summary": "High-Level Group report of 26 October 2026 with its nine recommendations; final review by Serafin by end-2026.",
+      "refs": []
+    },
+    {
       "date": "2026-10-23",
       "action": "updated",
       "guide": "methane_regulation_amendment_com_2026_569",

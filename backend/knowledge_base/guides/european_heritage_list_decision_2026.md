@@ -1,0 +1,15 @@
+# European Heritage List: proposal COM(2026) 579 to replace the European Heritage Label (23 October 2026)
+
+## QUICK FACTS
+- **Proposed Friday 23 October 2026 (IP/26/2250, updated 18:45 CEST):** the Commission proposed a **Decision establishing a Union action for the European Heritage List**, renewing and reinforcing the **European Heritage Label** created by **Decision No 1194/2011/EU** of 16 November 2011 (CELEX 32011D1194). Proposal: **COM(2026) 579 final**, https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=comnat:COM_2026_0579_FIN. **It is a proposal**: the Label's 2011 rules still apply until Parliament and Council adopt the new Decision.
+- **OEIL procedure reference: not yet assigned when this was written (27 October 2026).** Check OEIL before citing one; never derive it.
+- **What changes (press release):** (1) the name, from European Heritage **Label** to European Heritage **List**; (2) a **prize** rewarding selected and monitored sites for their impact on the ground; (3) more visibility, support and coordination for the network of sites; (4) easier participation and cooperation between sites; (5) a stronger voice for young people; (6) **clearer selection and monitoring criteria and procedures**; (7) **extension to Iceland, Liechtenstein and Norway and to candidate and potential candidate countries associated to Creative Europe** (or its successors).
+- **Today's scheme (owner: the press release):** **80 sites across more than 300 locations in 23 Member States**, supported by the Creative Europe programme; the sites (buildings, monuments, documents) are recognised for their symbolic value in Europe's history, culture and integration. Aims: citizens' understanding of European history and of the building of the Union; attractiveness and sustainable development of regions, in particular through cultural tourism.
+- **Next steps:** negotiation by the European Parliament and the Council (ordinary legislative procedure). Responsible DG: EAC (Education, Youth, Sport and Culture); Commissioner for Intergenerational Fairness, Youth, Culture and Sport, Glenn Micallef.
+- **What was NOT read:** the text of COM(2026) 579 (legal basis, selection procedure, prize rules, budget) and any SWD; only the press release and the Culture portal news item were read. Do not state a budget or a legal basis.
+- **Search words (other languages):** label du patrimoine européen, liste du patrimoine européen; Europees erfgoedlabel, Europese erfgoedlijst; sello de patrimonio europeo, lista del patrimonio europeo; segell de patrimoni europeu, llista del patrimoni europeu; marchio del patrimonio europeo, lista del patrimonio europeo.
+
+## Sources
+- Press release IP/26/2250: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_2250
+- Culture portal news: https://culture.ec.europa.eu/whats-new/news/european-commission-takes-the-european-heritage-label-to-the-next-step-of-its-evolution
+- Current sites: https://culture.ec.europa.eu/cultural-heritage/initiatives-and-success-stories/european-heritage-label/european-heritage-label-sites

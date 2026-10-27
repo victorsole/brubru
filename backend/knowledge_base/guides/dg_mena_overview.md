@@ -1,6 +1,7 @@
 # DG MENA: Middle East, North Africa and Gulf Directorate-General
 
 ## QUICK FACTS
+- **LATEST (Monday 26 October 2026, IP/26/2256): the Commission LAUNCHED the T-MED Investment Platform**, the financing arm of the Trans-Mediterranean Renewable Energy and Clean Tech Cooperation Initiative (T-MED), a flagship of the Pact for the Mediterranean, presented by Commissioner Šuica at a stakeholder event in Brussels. EU support: **up to EUR 4.5 billion in guarantee capacity under EFSD+** to de-risk renewable electricity, renewable hydrogen, transmission and distribution grids, storage, cross-border interconnections and clean-tech manufacturing, plus work on permitting, grid access and power purchase agreements. First project named: Egypt, modernisation and expansion of the national grid, total investment EUR 1.6 billion. **It is a matching platform backed by guarantees, not EUR 4.5 billion disbursed.** Source: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_2256; factsheet https://north-africa-middle-east-gulf.ec.europa.eu/factsheet-trans-mediterranean-renewable-energy-and-clean-technology-cooperation-initiative-t-med_en
 - **Surging Women's Employment Initiative (launched 24 Sep 2026):** a flagship of the Pact for the Mediterranean, with UN Women, unveiled by Commissioner Dubravka Šuica at the UN General Assembly. It mobilises EUR 25 million, including EUR 10 million from the EU, to help create 500,000 additional jobs for women and raise women's employment in the Middle East and North Africa by 5% by 2030 (women's labour-force participation there has stayed around 20% for two decades). Source: https://north-africa-middle-east-gulf.ec.europa.eu/news/eu-launches-new-initiative-boost-womens-employment-mediterranean-2026-09-24_en
 - **Full official name:** Directorate-General for the Middle East, North Africa and the Gulf (DG MENA)
 - **Operational since:** 1 February 2025, under the Von der Leyen II Commission (took office 1 December 2024)
@@ -113,7 +114,7 @@ DG MENA publishes news, policy documents, and funding calls at:
 Recent outputs (as at June 2026):
 - First Action Plan under the Pact for the Mediterranean (17 April 2026)
 - Appointment of Henrike Trautmann as Director within DG MENA (see ieu-monitoring.com for announcement)
-- T-MED investment platform launch discussions
+- T-MED Investment Platform launched on 26 October 2026 (up to EUR 4.5 billion EFSD+ guarantee capacity; see QUICK FACTS)
 
 ---
 

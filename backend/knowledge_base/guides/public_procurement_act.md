@@ -6,6 +6,7 @@
   law, provided the principles and safeguards are respected** (CURIA press release No 122/26). An
   Advocate General's opinion is a **forecast, not the ruling** — the Court usually follows but is not
   bound.
+- **Rapporteur watch (read live on OEIL, 27 October 2026): every rapporteur slot still shows "Pending final decision on the referral"; the committee responsible is not recorded.** MEP **Catarina Vieira (Greens/EFA)** wrote on Bluesky on 23 October 2026 that she has been "appointed INTA Rapporteur for the Public Procurement Act" (https://bsky.app/profile/catarina-europe.bsky.social/post/3mykkol2r422i). Treat it as her statement (INTA would be an opinion committee if IMCO leads); cite OEIL once it records the referral, never the post as the record.
 - **The Commissioner's own framing of the reform**, from Stéphane Séjourné on 9 September 2026:
   **"900 pages today, about 200 tomorrow"**, and in the same thread **three directives becoming one
   regulation, five procedures becoming three, and more than 26 sectoral texts consolidated**. Quote

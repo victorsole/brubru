@@ -1,6 +1,7 @@
 # Banking Union Reform Package (2nd Reading, March 2026)
 
 ## QUICK FACTS
+- **ECTI Study (26 October 2026): "State intervention powers in bank M&As"** (ECTI_STU(2026)784069, https://www.europarl.europa.eu/thinktank/en/document/ECTI_STU(2026)784069) and **ECTI Briefing: "State intervention powers in financial sector M&A"** (ECTI_BRI(2026)784065) -- findings not read: cite title and reference only.
 - Package: Banking Union legislative package (CMDI -- Crisis Management and Deposit Insurance)
 - Components: SRM Regulation reform, BRRD revision, DGSD revision
 - SRM: Regulation (EU) No 806/2014, CELEX 32014R0806, procedure 2023/0111(COD)

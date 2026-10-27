@@ -1,6 +1,7 @@
 # European Investigation Order (EIO)
 
 ## QUICK FACTS
+- **EPRS Briefing (26 October 2026): "Recasting the Directive regarding the European Investigation Order"** -- finding not read: cite the title and reference only; whether a recast proposal has been tabled must be checked on OEIL before saying so. Ref: EPRS_BRI(2026)797003, https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2026)797003
 - **EPRS Briefing (10 May 2026, EP Think Tank portal)**: "**European Investigation Order**" — briefing for the May plenary on the operation of Directive 2014/41/EU, implementation gaps across Member States, interactions with the e-Evidence Regulation + Digital Services Act, and pending CJEU jurisprudence on dual-criminality + fundamental-rights review obligations.
 - **Current legal instrument**: **Directive 2014/41/EU** of the European Parliament and of the Council of 3 April 2014 regarding the European Investigation Order in criminal matters (CELEX **32014L0041**)
 - **OEIL procedure**: 2010/0817(COD) — Ordinary Legislative Procedure

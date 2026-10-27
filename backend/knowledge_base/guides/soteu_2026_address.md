@@ -1,6 +1,7 @@
 # State of the Union 2026: the address
 
 ## QUICK FACTS
+- **ECTI At a Glance (26 October 2026): "From priorities to action: what does it mean in practice? State of the Union (SOTEU) 2026"** (ECTI_ATA(2026)795727, https://www.europarl.europa.eu/thinktank/en/document/ECTI_ATA(2026)795727) -- finding not read: cite title and reference only.
 - **What**: the annual State of the Union address of the President of the European Commission to the European Parliament, given by **Ursula von der Leyen** on **Wednesday 16 September 2026** in **Strasbourg**, with Canada's Prime Minister **Mark Carney** in the chamber as her guest. Published text: Commission reference SPEECH/26/1868.
 - **Framing**: "the state of our Union is the strongest it has ever been. The state of our Union can also feel as precarious as it has ever been." She named "the tipping points of our time: **climate change and AI**".
 - **AI COMPUTING CAPACITY — an INTENTION, no figure, no budget, no date. Never supply one.** She said only: *"we need to massively boost our computing capacity"* and that the Commission *"will set out our ideas for how to achieve this"*. Gigafactories and tech sovereignty were cited as ALREADY DONE, not new. **"Nothing concrete was announced on compute" is the CORRECT answer**, not a retrieval failure. (SPEECH/26/1868, checked 22 Sep 2026.)

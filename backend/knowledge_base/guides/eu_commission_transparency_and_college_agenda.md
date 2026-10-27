@@ -1,6 +1,7 @@
 # EU Commission Transparency: College Agenda, Corporate-Body Codes, Lobby Register
 
 ## QUICK FACTS
+- **College day, Tuesday 27 October 2026 (read 09:45 CET): the Border and migration package and the Climate resilience framework are the two items planned (tbc); the press corner showed NO adoption yet.** Shell guides `border_migration_package_2026` and `climate_resilience_framework_2026` hold what is known; say "planned, not yet published" until an IP number exists.
 - **LATEST (checked 22 October 2026 against SEC(2026) 2581 of Tuesday 20 October 2026, the newest tentative agenda; diff against SEC(2026) 2580 of 5 October): what moved.** The **2027 Commission work programme** and the **2026 annual overview report on simplification, implementation and enforcement** move from 20 October to **Wednesday 4 November 2026**; the **Enlargement package** moves from 28 October to **4 November**; the **Border and migration package** and the **Climate resilience framework** move from 28 October to **Tuesday 27 October 2026**; the **Circular Economy Act** moves from 11 November to **18 November 2026**; NEW on 4 November: the **European annual asylum and migration report**; GONE (adopted 20 October): the 2040 vision for fisheries and aquaculture (COM(2026) 701) and the Arctic Strategy (JOIN(2026) 100). Every date is "(tbc)" and may change. The College of 21 October 2026 therefore adopted none of these items.
 - **LATEST (checked 30 September 2026 against SEC(2026) 2579 final of Tuesday 29 September 2026): what the College plans next.** Horizon **6 October to 24 November 2026**. Every date is **(tbc)** and the document says the President may change the planning at any time; hedge as "the Commission currently plans".
 
@@ -8,16 +9,16 @@
 |---|---|---|
 | Tue 6 Oct 2026, Strasbourg | **ADOPTED 6 Oct 2026**: Pre-enlargement policy reviews, Communication "Preparing for a wider Union" (guide `pre_enlargement_policy_reviews_2026`) | President |
 | Tue 6 Oct 2026, Strasbourg | **ADOPTED 6 Oct 2026**: proposal for a new Standardisation Regulation (guide `standardisation_regulation_revision_2026`) | EVP Séjourné |
-| Tue 20 Oct 2026, Strasbourg | **2027 Commission work programme** | President |
-| Tue 20 Oct 2026, Strasbourg | 2026 annual overview report on simplification, implementation and enforcement | President |
-| Tue 20 Oct 2026, Strasbourg | Northern Neighbourhood: **New Arctic Strategy** | President |
-| Wed 28 Oct 2026 | **Enlargement package** | President |
-| Wed 28 Oct 2026 | Climate resilience framework | EVP Ribera |
-| Wed 28 Oct 2026 | **Border and migration package**: strengthening Frontex and enhancing its operations; digitalisation of the return process; European annual asylum and migration report | EVP Virkkunen |
-| Wed 28 Oct 2026 | 2040 vision for fisheries and aquaculture (moved from 30 Sep) | EVP Fitto |
+| Wed 4 Nov 2026 (moved from 20 Oct per SEC(2026) 2581) | **2027 Commission work programme** | President |
+| Wed 4 Nov 2026 (moved from 20 Oct) | 2026 annual overview report on simplification, implementation and enforcement | President |
+| Tue 20 Oct 2026, Strasbourg | **ADOPTED 20 Oct 2026**: Northern Neighbourhood, New Arctic Strategy (JOIN(2026) 100, IP/26/2203) | President |
+| Wed 4 Nov 2026 (moved from 28 Oct) | **Enlargement package** | President |
+| Tue 27 Oct 2026 (moved from 28 Oct; adoption NOT verified when this was written, see `climate_resilience_framework_2026`) | Climate resilience framework | EVP Ribera |
+| Tue 27 Oct 2026 (moved from 28 Oct; adoption NOT verified when this was written, see `border_migration_package_2026`) | **Border and migration package**: strengthening Frontex and enhancing its operations; digitalisation of the return process (the European annual asylum and migration report moved to 4 Nov) | EVP Virkkunen |
+| Tue 20 Oct 2026 | **ADOPTED 20 Oct 2026**: 2040 vision for fisheries and aquaculture (COM(2026) 701, IP/26/2200) | EVP Fitto |
 | Wed 4 Nov 2026 | Education and skills package | EVP Mînzatu |
 | Wed 4 Nov 2026 | European strategy on sustainable tourism | EVP Fitto |
-| Wed 11 Nov 2026 | **Circular Economy Act** | EVP Ribera / EVP Séjourné |
+| Wed 18 Nov 2026 (moved from 11 Nov) | **Circular Economy Act** | EVP Ribera / EVP Séjourné |
 | Wed 11 Nov 2026 | **Consumer package**: **Digital Fairness Act** + consumer enforcement initiative | EVP Virkkunen |
 | Wed 18 Nov 2026 | **Quantum Act** | EVP Virkkunen |
 | Wed 18 Nov 2026 | **Advanced Materials Act** | EVP Séjourné |
