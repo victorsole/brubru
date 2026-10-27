@@ -4,8 +4,8 @@ Phase 1 C2 of the funding standard (proposal 23 Oct 2026, §3.3, item type `part
 21 Oct Beresol's partner search for a DG CNECT tender found nothing from Brubru about organisations
 that publish their interest on the F&T Portal's Partner Search, most of which hold no EU project yet.
 ft_partner_search_announcements + ft_partner_search_orgs (migration 316, scripts/sync_ft_partner_search.py)
-hold every organisation announcement in the portal's search index (358,356 on 27 Oct 2026, since
-2018): never a person's profile or announcement.
+hold every organisation announcement in the portal's search index (358,427 from 18,721 organisations on
+27 Oct 2026, since 2018): never a person's profile or announcement.
 
 `status` is the topic's status as Brubru holds it (ft_calls_for_proposals: open, forthcoming,
 closed), not the index's own field, which keeps the status the topic had when the announcement was
@@ -107,7 +107,7 @@ def _item(r, base: str, with_body: bool, body=None) -> PartnerAnnouncementItem:
 
 
 _DESC = f"""**What it does**
-Organisations looking for partners: every announcement an organisation published on the F&T Portal's Partner Search (since 2018), with the call topic it is for, whether it **offers** its expertise or **requests** expertise, and what it wrote. 6,737 of the 11,537 organisations with Partner Search on 27 Oct 2026 had no EU project, as the portal counts them, so they appear nowhere else in Brubru's funding data. Organisations only: the portal's person profiles and persons' announcements are never read.
+Organisations looking for partners: every announcement an organisation published on the F&T Portal's Partner Search (since 2018), with the call topic it is for, whether it **offers** its expertise or **requests** expertise, and what it wrote. On 27 Oct 2026 Brubru held 358,427 announcements from 18,721 organisations; of the 11,539 whose portal profile carries the Partner Search flag, 6,738 had no EU project as the portal counts them, so they appear nowhere else in Brubru's funding data. Organisations only: the portal's person profiles and persons' announcements are never read.
 
 **When to use it**
 "Who is looking for partners on this topic", "which SMEs in Spain offer expertise for hydrogen calls", "who seeks a partner for an open Horizon Europe topic". For an organisation's whole record (its projects, EU payments, contract awards and announcements), follow its `partner` link to `/api/v2/funding/partners`.
@@ -129,7 +129,7 @@ GET /api/v2/funding/partner-announcements?programme=LIFE&without_eu_projects=tru
 ```
 
 **You get back**
-A paginated envelope. Each item: `id` (the announcement's id), `title` (the topic's title), `summary` (what the organisation wrote: its first 500 characters, as the portal's search shows them, `summary_cut` true when it stops there; e-mail addresses, ORCIDs, LinkedIn links and telephone numbers removed), `status` and `topic_deadline` (the topic as Brubru holds it), `expertise`, `topic_id`, `organisations` (the organisation: PIC, name, country, city, type, its EU projects as the portal counts them, and its `partner` link), `public_url` (its Partner Search profile on the portal; the full text and the contact form need an EU Login), `body_txt` / `body_html` (on the item route, or on the list with `include_body=true`), `document_date` (the announcement's date), `creation_date`, `updated_date`.
+A paginated envelope. Each item: `id` (the announcement's id), `title` (the topic's title), `summary` (what the organisation wrote: its first 500 characters, as the portal's search shows them, `summary_cut` true when it stops there; e-mail addresses, ORCIDs, LinkedIn links and telephone numbers removed), `status` and `topic_deadline` (the topic as Brubru holds it), `expertise`, `topic_id`, `organisations` (the organisation: PIC, name, country, city, type, its EU projects as the portal counts them, and its `partner` link; where the announcement gives no name, country or type, as 544 from 2018-2022 do, its profile's), `public_url` (its Partner Search profile on the portal; the full text and the contact form need an EU Login), `body_txt` / `body_html` (on the item route, or on the list with `include_body=true`), `document_date` (the announcement's date), `creation_date`, `updated_date`.
 
 **Data freshness**
 The portal's search index, read every day: the announcements of the last 14 days, and a seventh of the older ones in turn, so every announcement is read again each week (one no longer there is deleted)."""

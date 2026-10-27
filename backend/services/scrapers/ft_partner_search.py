@@ -6,7 +6,9 @@ key `modules.sedia.personProfileApiKey` of its public configuration (portal/asse
 sent to every visitor). The key is read from that file at each run, never stored: Victor's decision of
 27 Oct 2026. The index holds organisation profiles (type ORGANISATION, 867,602; 11,537 with Partner
 Search on 27 Oct), person profiles (type PERSON) and announcements (type ANNOUNCEMENT: 358,356 by
-organisations, 10,195 by persons). Only organisations are read: never a person's profile or a
+organisations, 10,195 by persons). The organisations that announced number more than the flagged
+profiles (18,721 after the first fill): an organisation that announced in 2018-2022 often no longer
+carries the flag, and its profile is read by PIC. Only organisations are read: never a person's profile or a
 person's announcement.
 
 What is not read, and why:
@@ -232,9 +234,19 @@ class PartnerSearch:
             "public_url": PORTAL_ORG.format(pic=pic),
         }
 
-    def profile(self, md: dict) -> Optional[dict]:
+    def profiles_for(self, pics: List[str]) -> List[dict]:
+        """The profiles of these organisations, flagged or not (an organisation that announced in
+        2018-2022 often no longer carries the Partner Search flag: 7,226 PICs on 27 Oct 2026)."""
+        rows = []
+        for i in range(0, len(pics), PAGE_SIZE):
+            d = self.search([{"terms": {"type": ["ORGANISATION"]}}, {"terms": {"pic": pics[i:i + PAGE_SIZE]}}],
+                            fields=PROFILE_FIELDS)
+            rows += [p for p in (self.profile(r.get("metadata") or {}, flagged=False) for r in d.get("results", [])) if p]
+        return rows
+
+    def profile(self, md: dict, flagged: bool = True) -> Optional[dict]:
         pic = _one(md, "pic")
-        if not pic or (_one(md, "hasPartnerSearch") or "").lower() != "true":
+        if not pic or (flagged and (_one(md, "hasPartnerSearch") or "").lower() != "true"):
             return None
         return {
             "pic": pic, "name": _line(_one(md, "name")), "city": _line(_one(md, "city")),

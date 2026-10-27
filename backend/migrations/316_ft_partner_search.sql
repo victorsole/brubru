@@ -4,8 +4,9 @@
 --
 -- Read by scripts/sync_ft_partner_search.py (services/scrapers/ft_partner_search.py) from the EC
 -- search index the portal's Partner Search page reads. Organisations only: never a person's profile
--- or a person's announcement. 11,537 organisations had Partner Search on 27 Oct 2026, 6,737 of them
--- with no EU project. An announcement's text is its first 500 characters, as the index holds it,
+-- or a person's announcement. 27 Oct 2026: 11,537 profiles carried the Partner Search flag, 6,737 of
+-- them with no EU project; after the first fill, 358,427 announcements from 18,721 organisations
+-- (the profiles of the unflagged ones are read by PIC). An announcement's text is its first 500 characters, as the index holds it,
 -- with e-mail addresses, ORCIDs, LinkedIn profile links and telephone numbers removed. Served by /api/v2/funding/partner-announcements
 -- and, as activities, by /api/v2/funding/partners.
 CREATE TABLE IF NOT EXISTS public.ft_partner_search_orgs (

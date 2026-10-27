@@ -56,7 +56,14 @@ UPSERT_ANNOUNCEMENTS = _upsert("ft_partner_search_announcements", "announcement_
 UPSERT_ORGS = _upsert("ft_partner_search_orgs", "pic", ORG_COLUMNS)
 DELETE_ANNOUNCEMENTS = ("DELETE FROM ft_partner_search_announcements WHERE requested_date >= %s AND requested_date < %s "
                         "AND NOT (announcement_id = ANY(%s))")
-DELETE_ORGS = "DELETE FROM ft_partner_search_orgs WHERE NOT (pic = ANY(%s))"
+# An organisation stays while it carries the flag or has an announcement held.
+DELETE_ORGS = ("DELETE FROM ft_partner_search_orgs o WHERE NOT (o.pic = ANY(%s)) "
+               "AND NOT EXISTS (SELECT 1 FROM ft_partner_search_announcements a WHERE a.pic = o.pic)")
+UNFLAGGED_PICS = "SELECT DISTINCT pic FROM ft_partner_search_announcements WHERE NOT (pic = ANY(%s)) ORDER BY pic"
+FALLBACK = "SELECT pic, name, country, organisation_type FROM ft_partner_search_orgs"
+# What an announcement may take from its organisation's profile when the index gives it none
+# (544 of 358,427 on 27 Oct 2026, from 2018-2022, had no name and no country).
+FALLBACK_FIELDS = ("organisation_name", "country", "organisation_type")
 HELD_IN_RANGE = "SELECT count(*) FROM ft_partner_search_announcements WHERE requested_date >= %s AND requested_date < %s"
 # An index that answers nothing, or far less than Brubru holds, is broken or moved, not emptied:
 # a range loses at most this share of its rows in one run (more is reported, not deleted).
@@ -126,9 +133,20 @@ def main(argv=None) -> int:
     n = dict(read=0, expected=0, written=0, deleted=0, orgs_written=0, orgs_deleted=0, slices=0, incomplete=0)
     held_back, left = [], args.limit
     conn = psycopg2.connect(db.replace("postgresql+psycopg2://", "postgresql://")) if args.apply else None
+    fallback = {p["pic"]: (p["name"], p["country"], p["organisation_type"]) for p in profiles}
+    extra = []
     try:
         if conn is not None:
             n["orgs_written"] = store(conn, UPSERT_ORGS, org_values)
+            # The profiles of the organisations that announced but no longer carry the flag.
+            with conn.cursor() as cur:
+                cur.execute(UNFLAGGED_PICS, ([p["pic"] for p in profiles],))
+                unflagged = [r[0] for r in cur.fetchall()]
+            extra = ps.profiles_for(unflagged)
+            n["orgs_written"] += store(conn, UPSERT_ORGS, [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in extra])
+            with conn.cursor() as cur:
+                cur.execute(FALLBACK)
+                fallback = {r[0]: r[1:] for r in cur.fetchall()}
         # Each slice is written as soon as it is read (at most 10,000 rows in hand), and only a slice
         # read completely deletes: the rows it holds that the index no longer lists.
         for a, b in read_ranges:
@@ -140,7 +158,7 @@ def main(argv=None) -> int:
                 if left is not None:
                     rows, complete = rows[:left], False          # a sample deletes nothing
                     left -= len(rows)
-                values = [_values(r) for r in rows]
+                values = [_values(_filled(r, fallback)) for r in rows]
                 if conn is None:
                     n["written"] += len(values)
                 else:
@@ -157,14 +175,14 @@ def main(argv=None) -> int:
         # A profile read incompletely, or a sample, deletes no organisation.
         if conn is not None and prof_complete and args.limit is None:
             with conn.cursor() as cur:
-                cur.execute(DELETE_ORGS, ([p["pic"] for p in profiles],))
+                cur.execute(DELETE_ORGS, ([p["pic"] for p in profiles + extra],))
                 n["orgs_deleted"] = cur.rowcount
             conn.commit()
     finally:
         if conn is not None:
             conn.close()
     verb = "written" if args.apply else "readable (dry run)"
-    print(f"[{'OK' if args.apply else 'DRY-RUN'}] profiles: {len(profiles)} of {prof_expected} read, "
+    print(f"[{'OK' if args.apply else 'DRY-RUN'}] profiles: {len(profiles)} of {prof_expected} read, {len(extra)} more by PIC, "
           f"{n['orgs_written'] if args.apply else len(org_values)} {verb}, {n['orgs_deleted']} deleted; announcements: "
           f"{n['read']} of {n['expected']} read in {n['slices']} slice(s) of {len(read_ranges)} range(s), {n['written']} {verb}, "
           f"{n['deleted']} deleted; {time.time() - started:.0f}s")
@@ -176,6 +194,15 @@ def main(argv=None) -> int:
     if (not args.no_profiles and not prof_complete) or n["incomplete"]:
         print("[SYNC_STATUS] degraded: a slice or the profiles were read incompletely (nothing deleted there)")
     return 0
+
+
+def _filled(r: dict, fallback: dict) -> dict:
+    """The announcement, with its organisation's name, country and type from the profile where the
+    index gives none: one writer for the column, the same answer every run."""
+    known = fallback.get(r["pic"])
+    if not known or all(r.get(f) for f in FALLBACK_FIELDS):
+        return r
+    return dict(r, **{f: r.get(f) or v for f, v in zip(FALLBACK_FIELDS, known)})
 
 
 def _values(r: dict) -> tuple:

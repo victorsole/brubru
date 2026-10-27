@@ -168,7 +168,7 @@ def test_a_row_is_written_only_when_the_source_changed_it():
 
 class _Conn:
     def __init__(self, held=1):
-        self.sql, self.commits, self.held = [], 0, held
+        self.sql, self.commits, self.held, self.unflagged, self.known = [], 0, held, [], []
 
     def cursor(self):
         conn = self
@@ -187,6 +187,14 @@ class _Conn:
 
             def fetchone(self):
                 return (conn.held,)
+
+            def fetchall(self):
+                last = conn.sql[-1][0]
+                if last.startswith("SELECT DISTINCT pic FROM ft_partner_search_announcements"):
+                    return [(p,) for p in conn.unflagged]
+                if last.startswith("SELECT pic, name, country, organisation_type FROM ft_partner_search_orgs"):
+                    return conn.known
+                return []
         return _Cur()
 
     def commit(self):
@@ -196,9 +204,10 @@ class _Conn:
         pass
 
 
-def _run(monkeypatch, *, profiles, ranges, argv=("--apply",), held=1):
+def _run(monkeypatch, *, profiles, ranges, argv=("--apply",), held=1, unflagged=(), known=(), extra_profile=None):
     sync = importlib.import_module("sync_ft_partner_search")
-    conn, written = _Conn(held), []
+    conn, written, fetched = _Conn(held), [], []
+    conn.unflagged, conn.known = list(unflagged), list(known)
 
     class _PS:
         def __init__(self, session, sleep):
@@ -206,6 +215,10 @@ def _run(monkeypatch, *, profiles, ranges, argv=("--apply",), held=1):
 
         def profiles(self):
             return profiles
+
+        def profiles_for(self, pics):
+            fetched.append(list(pics))
+            return [dict(extra_profile, pic=p) for p in pics] if extra_profile else []
 
         def announcement_slices(self, a, b):
             rows, count, complete = ranges[(a, b)]
@@ -256,6 +269,28 @@ def test_a_sample_or_a_dry_run_deletes_nothing(monkeypatch):
     code, conn, written = _run(monkeypatch, profiles=([org], 1, True), ranges={r1: ([_ann("1", "2026-09-05")], 1, True)},
                                argv=())
     assert code == 0 and conn.sql == [] and written == []
+
+def test_unflagged_announcers_are_profiled_by_pic_and_fill_what_an_announcement_lacks(monkeypatch):
+    org = {"pic": "9", "name": "Example SL", "city": None, "country": "ES", "organisation_type": "Other",
+           "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u"}
+    old = dict(_ann("5", "2018-03-02"), pic="7", organisation_name=None, country=None, organisation_type=None)
+    rng = (date(2018, 3, 1), date(2018, 4, 1))
+    code, conn, written = _run(monkeypatch, profiles=([org], 1, True), ranges={rng: ([old], 1, True)}, unflagged=["7"],
+                               known=[("9", "Example SL", "ES", "Other"), ("7", "Old Example GmbH", "DE", "Research Organisation")],
+                               extra_profile=dict(org, name="Old Example GmbH", country="DE"))
+    assert code == 0
+    orgs = [r for s, batch in written if "ft_partner_search_orgs" in s for r in batch]
+    assert sorted(r[0] for r in orgs) == ["7", "9"]                     # the flagged one and the one by PIC
+    ann = next(r for s, batch in written if "ft_partner_search_announcements" in s for r in batch)
+    sync = importlib.import_module("sync_ft_partner_search")
+    row = dict(zip(("announcement_id",) + sync.ANNOUNCEMENT_COLUMNS, ann))
+    assert (row["organisation_name"], row["country"], row["organisation_type"]) == ("Old Example GmbH", "DE", "Research Organisation")
+    # An organisation is deleted only when it is neither flagged nor fetched and holds no announcement.
+    delete_orgs = [(s, p) for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_orgs")]
+    assert delete_orgs and "NOT EXISTS (SELECT 1 FROM ft_partner_search_announcements a WHERE a.pic = o.pic)" in delete_orgs[0][0]
+    assert sorted(delete_orgs[0][1][0]) == ["7", "9"]
+    # What the index gives is never overwritten by the profile.
+    assert sync._filled(dict(old, organisation_name="Given"), {"7": ("Other", "FR", "x")})["organisation_name"] == "Given"
 
 def test_a_run_that_finds_no_profile_fails_and_touches_nothing(monkeypatch):
     rng = (date(2026, 10, 1), date(2026, 10, 2))
