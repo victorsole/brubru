@@ -75,6 +75,10 @@ MAX_DELETE_SHARE = 0.10
 MAX_LEFT_OUT_SHARE = 0.30
 DELETE_LEFT_OUT_ANNOUNCEMENTS = "DELETE FROM ft_partner_search_announcements WHERE pic = ANY(%s)"
 DELETE_LEFT_OUT_ORGS = "DELETE FROM ft_partner_search_orgs WHERE pic = ANY(%s)"
+# The organisations held with no profile (the index has none for them), as their latest announcement names them.
+PROFILELESS = ("SELECT DISTINCT ON (a.pic) a.pic, a.organisation_name, a.organisation_type FROM ft_partner_search_announcements a "
+               "WHERE NOT EXISTS (SELECT 1 FROM ft_partner_search_orgs o WHERE o.pic = a.pic) "
+               "ORDER BY a.pic, a.requested_date DESC NULLS LAST")
 
 
 def months(start: date, end: date) -> list:
@@ -135,6 +139,7 @@ def main(argv=None) -> int:
     if not args.no_profiles and not profiles:
         print("[ERROR] the index gave no organisation profile: nothing written or deleted")
         return 1
+    flagged_read = len(profiles)
     profiles, left_out = _split(profiles)
     org_values = [(p["pic"], *(p[c] for c in ORG_COLUMNS)) for p in profiles]
     read_ranges = ranges_for(date.today(), args.full, args.since, args.until)
@@ -164,6 +169,9 @@ def main(argv=None) -> int:
             with conn.cursor() as cur:
                 cur.execute(FALLBACK)
                 fallback = {r[0]: r[1:] for r in cur.fetchall()}
+                # Every organisation held without a profile is judged now, not only when its month is read again.
+                cur.execute(PROFILELESS)
+                late_out |= {pic for pic, name, otype in cur.fetchall() if may_be_a_person(name, otype, None)}
         # Each slice is written as soon as it is read (at most 10,000 rows in hand), and only a slice
         # read completely deletes: the rows it holds that the index no longer lists.
         for a, b in read_ranges:
@@ -204,8 +212,9 @@ def main(argv=None) -> int:
         if conn is not None:
             conn.close()
     verb = "written" if args.apply else "readable (dry run)"
-    print(f"[{'OK' if args.apply else 'DRY-RUN'}] profiles: {len(profiles)} of {prof_expected} read, {len(extra)} more by PIC, "
-          f"{n['orgs_written'] if args.apply else len(org_values)} {verb}, {n['orgs_deleted']} deleted; announcements: "
+    print(f"[{'OK' if args.apply else 'DRY-RUN'}] profiles: {flagged_read} flagged read of "
+          f"{prof_expected}, {len(extra)} more kept by PIC, {n['orgs_written'] if args.apply else len(org_values)} {verb}, "
+          f"{n['orgs_deleted']} deleted as gone from the index; announcements: "
           f"{n['read']} of {n['expected']} read in {n['slices']} slice(s) of {len(read_ranges)} range(s), {n['written']} {verb}, "
           f"{n['deleted']} deleted; left out as possibly a person's: {n['profiles_left_out']} profile(s), "
           f"{len(late_out - left_out)} more organisation(s) without a profile; {time.time() - started:.0f}s")

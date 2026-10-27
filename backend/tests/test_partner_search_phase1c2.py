@@ -320,6 +320,29 @@ def test_a_profile_that_may_be_a_persons_is_left_out_with_its_announcements(monk
     assert [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_orgs WHERE pic = ANY")] == [(["1"],), (["9"],)]
 
 
+def test_an_organisation_held_without_a_profile_is_judged_every_run(monkeypatch):
+    sync = importlib.import_module("sync_ft_partner_search")
+    org = {"pic": "8", "name": "Example SL", "city": None, "country": "ES", "organisation_type": "Other",
+           "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u", "registration_status": "VALIDATED"}
+    conn_rows = {"profileless": [("7", "Jane Example", "Other"), ("6", "Example Research Institute", "Other")]}
+    real_fetchall = _Conn.cursor
+
+    def cursor(self):
+        cur = real_fetchall(self)
+        base = cur.fetchall
+
+        def fetchall():
+            if self.sql and self.sql[-1][0].startswith("SELECT DISTINCT ON (a.pic)"):
+                return conn_rows["profileless"]
+            return base()
+        cur.fetchall = fetchall
+        return cur
+    monkeypatch.setattr(_Conn, "cursor", cursor)
+    code, conn, _ = _run(monkeypatch, profiles=([org], 1, True), ranges={(date(2026, 10, 1), date(2026, 10, 2)): ([], 0, True)})
+    assert code == 0
+    assert [p for s, p in conn.sql if s.startswith("DELETE FROM ft_partner_search_announcements WHERE pic = ANY")] == [(["7"],)]
+    assert sync.PROFILELESS.startswith("SELECT DISTINCT ON (a.pic)")
+
 def test_a_run_that_would_leave_out_too_many_profiles_deletes_nothing(monkeypatch):
     base = {"city": None, "country": "ES", "projects": 0, "portal_announcements": 1, "topics": [], "public_url": "u",
             "organisation_type": "Other", "registration_status": "DECLARED"}
