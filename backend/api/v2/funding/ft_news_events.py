@@ -19,6 +19,7 @@ register_resource(
     acronym="F&T Portal", tag="v2-funding",
     source="the EU Funding & Tenders Portal news feed (SEDIA-NEWS-PROD); refreshed daily.",
     extra="Portal announcements: new calls, info sessions, programme updates and deadlines across all EU funding programmes.",
+    funding_standard=True,
 )
 register_resource(
     router, body_code="ftportal", item_type="event",
@@ -26,4 +27,5 @@ register_resource(
     acronym="F&T Portal", tag="v2-funding",
     source="the EU Funding & Tenders Portal events feed (SEDIA-EVENTS-PROD); refreshed daily.",
     extra="Info days, webinars and programme events; `document_date` is the event start date, so order=recent surfaces the next events first.",
+    funding_standard=True,
 )

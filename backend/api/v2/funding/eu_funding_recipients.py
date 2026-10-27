@@ -51,7 +51,7 @@ Finding partners and competitors: who a DG paid, for what, how much; which organ
 - `coordinator` — `true` for coordinators only.
 - `project_id`, `call_id`, `vat` — exact.
 - `since`, `until` — the project's start date window. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
-- `order` — recent (default) | oldest | title | amount | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (max 100), `include_body`.
+- `order` — recent (default) | oldest | title | amount | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -61,7 +61,7 @@ GET /api/v2/funding/eu-funding-recipients?project_id=101191044
 ```
 
 **You get back**
-A paginated envelope. Each item carries the fields above, `self`, and the 5 datapoints (`public_url` = the FTS record; `body_txt` / `body_html` on the item route, or on the list with `include_body=true`). Rows the current FTS file no longer lists (the Commission revised their amount, and the revised row is stored beside them) carry the text only, with the fields null.
+A paginated envelope. Each item carries the fields above, `self`, and the 5 datapoints (`public_url` = the FTS record; `body_txt` / `body_html` on the list unless `include_body=false`, and on the item route). Rows the current FTS file no longer lists (the Commission revised their amount, and the revised row is stored beside them) carry the text only, with the fields null.
 
 **Data freshness**
 The FTS files for 2024 and 2025 (ec.europa.eu/budget/financial-transparency-system), read every Sunday (commission-heavy tier, 07:00 UTC); the file's columns are re-read in the same run."""
@@ -97,8 +97,8 @@ async def list_recipients(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Last changed on or before; a bare date covers the whole day."),
     order: str = Query("recent", description="recent | oldest | title | amount | updated_asc | updated_desc | created_asc | created_desc."),
     page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100),
-    include_body: bool = Query(False, description="Return body_txt / body_html on every item of the list."),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = Query(True, description="Return body_txt / body_html on every item of the list (default true)."),
 ):
     if order not in _ORDERS and order not in SYNC_ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")

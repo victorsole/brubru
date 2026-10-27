@@ -10,7 +10,7 @@ breakdown + the total EU allocation.
 
 Follows the standard v2 item contract: every item carries the 5 datapoints
 (public_url, body_txt, body_html, document_date, creation_date); body is full on
-the detail endpoint and null on the list. Built one fund at a time via the
+the detail endpoint and on the list unless include_body=false. Built one fund at a time via the
 ``register_fund`` factory.
 """
 from __future__ import annotations
@@ -35,8 +35,8 @@ router = APIRouter()
 class _DataPoints(BaseModel):
     """The 5 mandatory Brubru datapoints — present even when null."""
     public_url: Optional[str] = Field(None, description="The row's page on Cohesion Open Data: its programme's page (/programmes/<CCI>) for cohesion finances and outcomes; the fund's page for CAP payments and the Solidarity Fund, whose source publishes no page per country or case.")
-    body_txt: Optional[str] = Field(None, description="Plain-text body (full on detail; null on list).")
-    body_html: Optional[str] = Field(None, description="HTML body (full on detail; null on list).")
+    body_txt: Optional[str] = Field(None, description="Plain-text body (on the list unless include_body=false).")
+    body_html: Optional[str] = Field(None, description="HTML body (on the list unless include_body=false).")
     document_date: Optional[datetime] = Field(None, description="The programme's status / adoption date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the row.")
     # Served from 20 Oct 2026 (migration 306): updated_at moves only when a served column changes.
@@ -92,7 +92,7 @@ def register_fund(*, slug: str, fund_code: str, fund_name: str, blurb: str, tag:
         tags=[tag],
         summary=f"{fund_name} ({fund_code}) — 2021-2027 financial plan by programme",
         description=f"""**What it does**
-Lists the 2021-2027 financial allocations of the **{fund_name} ({fund_code})**, one row per operational programme (CCI) and financial-allocation category. {blurb} Each row carries the Member State, programme title and status, lead DG, the year-by-year breakdown (2021-2027) and the total EU allocation, plus the 5 datapoints (`body_txt`/`body_html` are null here — fetch the detail endpoint for the full body).
+Lists the 2021-2027 financial allocations of the **{fund_name} ({fund_code})**, one row per operational programme (CCI) and financial-allocation category. {blurb} Each row carries the Member State, programme title and status, lead DG, the year-by-year breakdown (2021-2027) and the total EU allocation, plus the 5 datapoints (`body_txt`/`body_html` on every item, unless `include_body=false`).
 
 **When to use it**
 To see how much {fund_code} money each Member State and programme is allocated and how it is profiled across the years. This is the allocation (planning) side.
@@ -110,7 +110,7 @@ GET /api/v2/funding/{slug}?ms=ES
 ```
 
 **You get back**
-A `PaginatedResponse[CohesionFinanceItem]` envelope sorted by total allocation. Each item carries `id`, `public_url`, `document_date`, `creation_date`, the structured fields (`fund`, `ms`, `cci`, `cci_title`, `y2021`..`y2027`, `total`, ...) and `body_txt`/`body_html` = null. Use the detail endpoint for the full body.
+A `PaginatedResponse[CohesionFinanceItem]` envelope sorted by total allocation. Each item carries `id`, `public_url`, `document_date`, `creation_date`, the structured fields (`fund`, `ms`, `cci`, `cci_title`, `y2021`..`y2027`, `total`, ...) and `body_txt`/`body_html` (unless `include_body=false`).
 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`, dataset 9qee-iv7c).""",
@@ -125,12 +125,10 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
         include_body: bool = Query(
-            False,
+            True,
             description=(
-                "Return `body_txt` / `body_html` on every item in the list. Off by "
-                "default because bodies dominate the payload, but without it the "
-                "only route to the text is one detail call PER ITEM, which is not "
-                "a usable way to ingest a feed."
+                "Return `body_txt` / `body_html` on every item in the list (default true, "
+                "the funding standard)."
             ),
         ),
         user: User = Depends(api_user_with_rate_limit),

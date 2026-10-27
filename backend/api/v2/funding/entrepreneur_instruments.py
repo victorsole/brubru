@@ -35,6 +35,7 @@ from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
 from api.v1._pagination import stable
 from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, orm_order, orm_window, validate_window
+from ._standard import include_body_param, without_bodies
 
 router = APIRouter()
 
@@ -138,7 +139,7 @@ For an accelerator, incubator, business angel or ecosystem builder (like KinEtix
 - `q` — free text over title / description.
 - `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`).
 - `order` — `deadline_desc` (default), or `updated_asc` to page a change window (also `updated_desc`, `created_asc`, `created_desc`).
-- `limit` (default 20, max 50), `page`.
+- `limit` (default 50, max 200), `page`, `include_body` (default true).
 
 **Try it**
 ```
@@ -175,7 +176,8 @@ async def entrepreneur_instruments(
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
     order: str = Query("deadline_desc", description="deadline_desc (default) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
-    limit: int = Query(20, ge=1, le=50),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
@@ -212,7 +214,7 @@ async def entrepreneur_instruments(
         .limit(limit)
         .all()
     )
-    return build_envelope(
+    return without_bodies(build_envelope(
         [_with_self(_to_item(r, body_threshold), str(request.base_url).rstrip("/")) for r in rows],
         total=total, page=page, limit=limit,
         updated_from=window["updated_from"], updated_to=window["updated_to"],
@@ -220,4 +222,4 @@ async def entrepreneur_instruments(
         op_core_type="EU funding instruments",
         op_core_identifier=str(request.url),
         op_core_referenced_by=["/api/v2/funding/startups", "/api/v2/funding/calls-for-proposals"],
-    )
+    ), include_body)

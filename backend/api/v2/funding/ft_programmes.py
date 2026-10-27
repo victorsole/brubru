@@ -48,4 +48,5 @@ for slug, body_code, body_name, acronym, extra in _PROGRAMMES:
                        "forthcoming | closed, from the portal's word and the call's dates) and "
                        "`deadline` (the next cut-off, else the last)."),
         procurement=True,
+        funding_standard=True,
     )

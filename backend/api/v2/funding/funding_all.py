@@ -150,14 +150,12 @@ async def funding_all(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
     order: str = Query("recent", description="recent | oldest | title | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=200),
     include_body: bool = Query(
-        False,
+        True,
         description=(
-            "Return `body_txt` / `body_html` on every item in the list. Off by "
-            "default because bodies dominate the payload, but without it the "
-            "only route to the text is one detail call PER ITEM, which is not "
-            "a usable way to ingest a feed."
+            "Return `body_txt` / `body_html` on every item in the list (default true, "
+            "the funding standard)."
         ),
     ),
 ):

@@ -22,6 +22,7 @@ from api.v1._deps import api_user_with_rate_limit  # noqa: F401
 from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import w5_endpoints as _v1
 from api.v1.w5_endpoints import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
+from ._standard import include_body_param, without_bodies
 
 
 tenders_router = APIRouter(prefix="/tenders", tags=["v2-funding-tenders"])
@@ -51,7 +52,7 @@ For consultancies / SMEs looking for EU funding opportunities — filter by `cpv
 - `deadline_from`, `deadline_to` — submission_deadline window.
 - `published_from`, `published_to` — publication date window.
 - `updated_from`, `updated_to` — incremental sync.
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `limit` (default 50, max 200), `page` (1-indexed), `include_body` (default true).
 
 **Try it**
 ```
@@ -86,12 +87,13 @@ async def list_tenders(
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TenderItem]:
-    return await _v1.list_tenders(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
+    return without_bodies(await _v1.list_tenders(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db), include_body)
 
 
 @tenders_router.get(

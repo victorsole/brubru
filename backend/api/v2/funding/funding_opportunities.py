@@ -23,6 +23,7 @@ from api.v1._date_bounds import UpperBoundDatetime  # noqa: F401
 from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import infringements_funding as _v1
 from api.v1.infringements_funding import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
+from ._standard import include_body_param, without_bodies
 
 
 funding_router = APIRouter(prefix="/funding-opportunities", tags=["v2-funding-opportunities"])
@@ -47,7 +48,7 @@ Only to keep an existing integration working until 23 Oct 2027: it serves the sa
 - `type_of_action` — substring.
 - `q` — substring on title + short_summary.
 - `deadline_from`, `deadline_to` — deadline window.
-- `limit` (default 50, max 100), `page` (1-indexed).
+- `limit` (default 50, max 200), `page` (1-indexed), `include_body` (default true).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
 **Try it**
@@ -72,13 +73,14 @@ async def list_funding_opportunities(
     deadline_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FundingItem]:
-    return await _v1.list_funding_opportunities(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return without_bodies(await _v1.list_funding_opportunities(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
 
 
 @funding_router.get(

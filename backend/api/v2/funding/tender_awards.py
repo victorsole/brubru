@@ -163,7 +163,7 @@ Who won the contracts EU institutions, bodies and agencies awarded: every contra
 - `buyer_country`, `contract_nature` (services | supplies | works), `procedure_type` (open, restricted, neg-w-call ...), `cpv_code` (a CPV code or its start: `7241` for IT consulting).
 - `published_from`, `published_to` (`since`, `until`, `from`, `to` are aliases); `min_amount_eur` — awarded value in euros at least. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
 - `include_superseded` — also the earlier versions of changed notices (default false).
-- `order` — recent (default) | oldest | amount | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (max 100), `include_body`.
+- `order` — recent (default) | oldest | amount | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -173,7 +173,7 @@ GET /api/v2/funding/tender-awards?q=translation&winner_country=ES
 ```
 
 **You get back**
-A paginated envelope. Each item: `id` (the TED publication number), `title`, `summary`, `contracting_authority`, `body_code`, `buyer_country`, `contract_nature`, `procedure_type`, `cpv_main`, `cpv_codes`, `lots` (each lot's result and tenders received), `awarded_value` and its currency (as the notice states it; `amount_eur` when in euros; for a framework agreement TED's value is usually the framework's maximum, not money paid: payments are on `/api/v2/funding/eu-funding-recipients`), `organisations` (the winners, as TED names them, role `contractor`, each organisation with its `partner` link; a winner that may be an individual has none), `public_url` (the notice on TED), `body_txt` / `body_html` (the notice as text: on the item route, or on the list with `include_body=true`), `document_date`, `creation_date`, `updated_date`. A joint tender's members are each listed, the lead flagged; a cascade framework lists every ranked contractor.
+A paginated envelope. Each item: `id` (the TED publication number), `title`, `summary`, `contracting_authority`, `body_code`, `buyer_country`, `contract_nature`, `procedure_type`, `cpv_main`, `cpv_codes`, `lots` (each lot's result and tenders received), `awarded_value` and its currency (as the notice states it; `amount_eur` when in euros; for a framework agreement TED's value is usually the framework's maximum, not money paid: payments are on `/api/v2/funding/eu-funding-recipients`), `organisations` (the winners, as TED names them, role `contractor`, each organisation with its `partner` link; a winner that may be an individual has none), `public_url` (the notice on TED), `body_txt` / `body_html` (the notice as text: on the list unless `include_body=false`, and on the item route), `document_date`, `creation_date`, `updated_date`. A joint tender's members are each listed, the lead flagged; a cascade framework lists every ranked contractor.
 
 **Data freshness**
 TED's search API and each notice's XML, read every day for the last 14 days of notices."""
@@ -209,8 +209,8 @@ async def list_tender_awards(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Last changed on or before; a bare date covers the whole day."),
     order: str = Query("recent", description="recent | oldest | amount | updated_asc | updated_desc | created_asc | created_desc."),
     page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100),
-    include_body: bool = Query(False, description="Return body_txt / body_html on every item of the list."),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = Query(True, description="Return body_txt / body_html on every item of the list (default true)."),
 ):
     if order not in _ORDERS and order not in SYNC_ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")

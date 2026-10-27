@@ -26,7 +26,7 @@ register_resource(
           "carries `tender_reference`, `status` (EFCA's own Open/Closed, open only while the deadline "
           "is ahead) and `deadline`; `document_date` is the publication date of the linked Funding & "
           "Tenders notice, null where there is none. Calls for interest are at /efca-calls. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 register_resource(
     router, body_code="efca", item_type="eoi_call", slug="efca-calls",
@@ -36,7 +36,7 @@ register_resource(
     extra="EFCA calls for expression of interest (experts, service providers). Each item carries "
           "`tender_reference`, `status` (open while the deadline is ahead) and `deadline`; "
           "`document_date` is the publication date of the linked Funding & Tenders notice. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- Cedefop -------------------------------------------------------------- #
@@ -51,7 +51,7 @@ register_resource(
           "Date. The detail body holds the description, the key dates, the TED and Funding & "
           "Tenders links and the list of the procedure's files; `/{item_id}/documents` serves "
           "those files with their extracted text. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 register_resource(
     router, body_code="cedefop", item_type="eoi_call", slug="cedefop-calls",
@@ -62,7 +62,7 @@ register_resource(
           "archive. Each item carries `tender_reference`, `status` and `deadline`; "
           "`document_date` is the Official Publication Date. The detail body lists the call's "
           "files; `/{item_id}/documents` serves them with their extracted text. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 register_resource(
     router, body_code="cedefop", item_type="grant", slug="cedefop-grants",
@@ -76,7 +76,7 @@ register_resource(
           "or, for pages that state none, the Official Journal day the page names. The detail "
           "body holds the description, the key dates and the list of the call's files; "
           "`/{item_id}/documents` serves those files with their extracted text. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- EMA — European Medicines Agency -------------------------------------- #
@@ -93,7 +93,7 @@ register_resource(
           "`document_date` is the publication date. The body names EMA's own reference "
           "(EMA/2026/OP/0015), so q finds it. `/{item_id}/documents` serves the notice's files with "
           "their extracted text. Calls for expression of interest (expert pools) are at /ema-calls.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 register_resource(
     router, body_code="ema", item_type="eoi_call", slug="ema-calls",
@@ -105,7 +105,7 @@ register_resource(
           "scientific and regulatory experts): lists valid for five years, open to applications "
           "except in their last three months. Each item carries `tender_reference`, `status` and "
           "`deadline`; `/{item_id}/documents` serves the call's files with their text.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- EFSA — European Food Safety Authority -------------------------------- #
@@ -124,7 +124,7 @@ register_resource(
           "procedure page; deadlines are converted from Parma time to UTC). The body lists "
           "each portal notice's files; `/{item_id}/documents` serves them with their extracted text "
           "(title, type, language and date from the portal). Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- Eurojust ------------------------------------------------------------- #
@@ -136,7 +136,7 @@ register_resource(
           "below the EU threshold and never appear in TED. Each item carries `tender_reference`, "
           "`status` (open only while the deadline is ahead) and `deadline`. Filter with q (e.g. a "
           "reference or a topic such as 'security').",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- ETF — European Training Foundation ----------------------------------- #
@@ -147,7 +147,7 @@ register_resource(
     source="the ETF procurement listing.",
     extra="The European Training Foundation's own procurement (tenders and expression-of-interest "
           "calls), each with its closing date. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- EUAA — EU Agency for Asylum ------------------------------------------ #
@@ -159,7 +159,7 @@ register_resource(
     extra="EUAA calls for expression of interest (CEIs) such as the list of external remunerated "
           "experts in asylum-related fields, with reference and closing date. Headline open tenders "
           "are mirrored on the F&T Portal. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- EUDA — EU Drugs Agency (formerly EMCDDA) ----------------------------- #
@@ -171,7 +171,7 @@ register_resource(
     extra="EUDA open procedures — drug-policy development and evaluation, monitoring infrastructure, "
           "REITOX network support — each with its TED notice, reference and closing date. Filter "
           "with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- ENISA — EU Agency for Cybersecurity ---------------------------------- #
@@ -189,7 +189,7 @@ register_resource(
           "for procedures without one). The body holds the description and budget; "
           "`/{item_id}/documents` serves the procedure's files with their text. Calls for "
           "expression of interest are at /enisa-calls.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 register_resource(
     router, body_code="enisa", item_type="eoi_call", slug="enisa-calls",
@@ -199,7 +199,7 @@ register_resource(
     extra="ENISA calls for expression of interest (e.g. lists of external experts), the whole "
           "archive. Each item carries `tender_reference`, `status` and `deadline`; "
           "`/{item_id}/documents` serves the call's files with their text. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- ERA — EU Agency for Railways ----------------------------------------- #
@@ -211,7 +211,7 @@ register_resource(
     extra="ERA's own procurement — railway-engineering studies, ERTMS support, IT, translation — "
           "each with `status` (open only while the deadline is ahead) and `deadline`. ERA's listing "
           "prints no reference, so `tender_reference` is empty. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- ECDC — European Centre for Disease Prevention and Control ------------ #
@@ -227,7 +227,7 @@ register_resource(
           "(open while the deadline is ahead, else closed; ECDC publishes no status) and "
           "`deadline`; `document_date` is the page's publication date. The detail body holds "
           "the description and, for calls for tender, the Funding & Tenders link. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- ECHA — European Chemicals Agency ------------------------------------- #
@@ -245,7 +245,7 @@ register_resource(
           "null where there is none (ECHA publishes no date itself). Calls for interest are "
           "at /echa-calls. The body lists the files linked from the procedure page; "
           "`/{item_id}/documents` serves them with their extracted text. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 register_resource(
     router, body_code="echa", item_type="eoi_call", slug="echa-calls",
@@ -257,7 +257,7 @@ register_resource(
           "`document_date` is the linked Funding & Tenders notice's publication date, null "
           "where there is none. `/{item_id}/documents` serves the call's files with their "
           "extracted text. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- EIGE — European Institute for Gender Equality ------------------------ #
@@ -274,7 +274,7 @@ register_resource(
           "link and any related notice (a site visit, a prior information notice); "
           "`/{item_id}/documents` serves the procedure's files with their extracted text. Calls for "
           "expression of interest are at /eige-calls. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 register_resource(
     router, body_code="eige", item_type="eoi_call", slug="eige-calls",
@@ -285,7 +285,7 @@ register_resource(
           "Experts' Database (no reference or date on its page; open while the database is valid). "
           "Each item carries `tender_reference`, `status` and `deadline`; `/{item_id}/documents` "
           "serves the call's files with their text. Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- FRA — EU Agency for Fundamental Rights ------------------------------- #
@@ -298,7 +298,7 @@ register_resource(
     extra="FRA procurement — fundamental-rights research, multi-country surveys, FRANET country "
           "correspondent contracts. Headline FRANET appointments run on a multi-year cycle. "
           "Listing returns [] cleanly when no procedures are open. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- EEA — European Environment Agency (F&T-only) ------------------------- #
@@ -316,7 +316,7 @@ register_resource(
           "`document_date` is the publication date. The body lists each notice's files; "
           "`/{item_id}/documents` serves them with their extracted text (title, type, language and "
           "date from the portal). Filter with q.",
-    procurement=True, documents=True,
+    procurement=True, documents=True, funding_standard=True,
 )
 
 # --- EU-OSHA — European Agency for Safety and Health at Work -------------- #
@@ -329,7 +329,7 @@ register_resource(
     extra="EU-OSHA procurement — ESENER survey field-work, sectoral occupational-safety studies, "
           "Healthy Workplaces campaign communications, IT, translation. Each call with reference "
           "and deadline. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 register_resource(
     router, body_code="eu_osha", item_type="eoi_call", slug="eu-osha-calls",
@@ -338,7 +338,7 @@ register_resource(
     tag="v2-funding",
     source="the EU-OSHA calls-for-expression-of-interest listing.",
     extra="EU-OSHA calls for expression of interest (occupational-safety expert pools). Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- EIB — European Investment Bank --------------------------------------- #
@@ -355,7 +355,7 @@ register_resource(
           "contract notice's date in the Official Journal). The body holds the procedure's text "
           "and every Official Journal notice (forecast, contract, modification, award) with its "
           "TED link. Calls for expression of interest are at /eib-calls. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 register_resource(
     router, body_code="eib", item_type="eoi_call", slug="eib-calls",
@@ -368,7 +368,7 @@ register_resource(
           "(the submission deadline, with its time where EIB gives one); `document_date` is the "
           "issue date of the call. The body holds the call's timetable and its Official Journal "
           "notices. Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 
 # --- Eurofound — Foundation for Living and Working Conditions ------------- #
@@ -381,7 +381,7 @@ register_resource(
     extra="Eurofound procurement — large-scale European Working Conditions Survey (EWCS) field-work, "
           "industrial-relations correspondents network, secondary analyses, IT, translation. Filter "
           "with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )
 register_resource(
     router, body_code="eurofound", item_type="eoi_call", slug="eurofound-calls",
@@ -390,5 +390,5 @@ register_resource(
     acronym="Eurofound", tag="v2-funding",
     source="the Eurofound expression-of-interest listing (Playwright-rendered).",
     extra="Eurofound calls for expression of interest (correspondent networks, expert pools). Filter with q.",
-    procurement=True,
+    procurement=True, funding_standard=True,
 )

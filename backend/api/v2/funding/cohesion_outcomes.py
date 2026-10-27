@@ -77,7 +77,7 @@ def register_fund_outcomes(*, slug: str, fund_code: str, fund_name: str, tag: st
         tags=[tag],
         summary=f"{fund_name} ({fund_code}) — 2021-2027 achievement indicators (outputs & results)",
         description=f"""**What it does**
-Lists the 2021-2027 achievement indicators of the **{fund_name} ({fund_code})** — what the fund is delivering. One row per programme indicator, carrying the indicator name, measurement unit, baseline, 2024 milestone, 2029 target, and the decided + implemented values, plus the 5 datapoints (`body_txt`/`body_html` null here; fetch the detail endpoint for the body).
+Lists the 2021-2027 achievement indicators of the **{fund_name} ({fund_code})** — what the fund is delivering. One row per programme indicator, carrying the indicator name, measurement unit, baseline, 2024 milestone, 2029 target, and the decided + implemented values, plus the 5 datapoints (`body_txt`/`body_html` on every item, unless `include_body=false`).
 
 **When to use it**
 To measure progress and targets rather than money: how many people supported, entities helped, capacity created, per programme and Member State. For the euro allocations see `/api/v2/funding/{slug}`.
@@ -95,7 +95,7 @@ GET /api/v2/funding/{slug}/outcomes?q=unemployed
 ```
 
 **You get back**
-A `PaginatedResponse[CohesionOutcomeItem]` envelope. Each item carries `id`, `public_url`, `document_date`, `creation_date`, the indicator fields (`indicator_long_name`, `measurement_unit`, `baseline_value`, `target_value_2029`, `implemented_value`, ...) and `body_txt`/`body_html` = null. Only the latest reporting cycle is served.
+A `PaginatedResponse[CohesionOutcomeItem]` envelope. Each item carries `id`, `public_url`, `document_date`, `creation_date`, the indicator fields (`indicator_long_name`, `measurement_unit`, `baseline_value`, `target_value_2029`, `implemented_value`, ...) and `body_txt`/`body_html` (unless `include_body=false`). Only the latest reporting cycle is served.
 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from `cohesiondata.ec.europa.eu`, dataset xi3a-zddk (latest TOD cycle only).""",
@@ -110,12 +110,10 @@ Synced weekly (Sunday 05:00 UTC) from `cohesiondata.ec.europa.eu`, dataset xi3a-
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
         include_body: bool = Query(
-            False,
+            True,
             description=(
-                "Return `body_txt` / `body_html` on every item in the list. Off by "
-                "default because bodies dominate the payload, but without it the "
-                "only route to the text is one detail call PER ITEM, which is not "
-                "a usable way to ingest a feed."
+                "Return `body_txt` / `body_html` on every item in the list (default true, "
+                "the funding standard)."
             ),
         ),
         user: User = Depends(api_user_with_rate_limit),

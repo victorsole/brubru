@@ -202,7 +202,7 @@ Lists {body}'s {noun}, newest first. {extra}
 Track what {acro} is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.
 
 **Input**
-`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` (max 100).
+`q` free-text search, `since` / `until` (YYYY-MM-DD) on the item date, `order` (recent | oldest | title), `page`, `limit` ({limits}), `include_body`.
 <<SYNC_PARAMS>>
 
 **Try it**
@@ -211,10 +211,14 @@ GET {path}?order=recent&limit=10
 ```
 
 **You get back**
-A paginated envelope of items. Each carries the 5 datapoints. `body_txt` / `body_html` are null on the list by default — **pass `include_body=true` to get them in bulk**, or call the detail endpoint for a single item.
+A paginated envelope of items. Each carries the 5 datapoints. {bodies}
 
 **Data freshness**
 Refreshed from {source}."""
+_BODIES_OFF = ("`body_txt` / `body_html` are null on the list by default — **pass `include_body=true` to get "
+               "them in bulk**, or call the detail endpoint for a single item.")
+_BODIES_ON = ("`body_txt` / `body_html` are on every item by default (the funding standard); pass "
+              "`include_body=false` for a lighter page.")
 # The incremental-sync parameters, worded once for every endpoint that offers them.
 _DESC_LIST = _DESC_LIST.replace("<<SYNC_PARAMS>>", SYNC_PARAMS_DOC)
 
@@ -278,10 +282,13 @@ One document with `body_txt` and `body_html` and the 5 datapoints (`public_url` 
 
 
 def register_resource(router, *, body_code, item_type, slug, noun, body_name, acronym,
-                      source, tag, extra="", procurement=False, documents=False):
+                      source, tag, extra="", procurement=False, documents=False, funding_standard=False):
     """Add list + detail GET routes for one (body, resource) onto `router`.
     documents=True (procurement routes whose files are written to procurement_documents)
-    adds {slug}/{item_id}/documents and {slug}/{item_id}/documents/{document_id}."""
+    adds {slug}/{item_id}/documents and {slug}/{item_id}/documents/{document_id}.
+    funding_standard=True applies the funding standard's defaults to the list (Victor, 23 Oct 2026:
+    50 items per page, at most 200, bodies included); every other body folder keeps its own."""
+    limit_default, limit_max = (50, 200) if funding_standard else (20, 100)
     noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
     path_hint = slug if slug.startswith("/") else f"/{slug}"
 
@@ -308,14 +315,12 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
         order: str = Query("recent", description="recent | oldest | title | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
         page: int = Query(1, ge=1),
-        limit: int = Query(20, ge=1, le=100),
+        limit: int = Query(limit_default, ge=1, le=limit_max),
         include_body: bool = Query(
-            False,
+            funding_standard,
             description=(
-                "Return `body_txt` / `body_html` on every item in the list. Off by "
-                "default because bodies dominate the payload, but without it the "
-                "only route to the text is one detail call PER ITEM, which is not "
-                "a usable way to ingest a feed."
+                "Return `body_txt` / `body_html` on every item in the list (default true on the "
+                "funding lists; false elsewhere, where bodies dominate the payload)."
             ),
         ),
     ):
@@ -349,7 +354,9 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         response_model=PaginatedResponse[ProcurementItem if procurement else EconomyItem], tags=[tag],
         summary=f"{body_name} — {noun} (newest first)",
         description=_DESC_LIST.format(body=body_name, noun=noun, acro=acronym, path=path_hint,
-                                      source=source, extra=extra),
+                                      source=source, extra=extra,
+                                      limits=f"default {limit_default}, max {limit_max}",
+                                      bodies=(_BODIES_ON if funding_standard else _BODIES_OFF)),
     )
     router.add_api_route(
         f"{path_hint}/{{item_id}}", detail_ep, methods=["GET"],

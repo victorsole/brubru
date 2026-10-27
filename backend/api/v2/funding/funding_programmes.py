@@ -139,7 +139,7 @@ The single source of truth for "every EU fund". Iterate it to know the full univ
 - `period` — the programming period, e.g. `2021-2027`.
 - `q` — substring on the programme name, acronym or body.
 - `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync on the list's own dates (every programme carries them): the whole list when it was revised in the window, nothing otherwise.
-- `limit` (default 100, max 200), `page` (1-indexed).
+- `limit` (default 50, max 200), `page` (1-indexed), `include_body` (default true).
 
 **Try it**
 ```
@@ -149,7 +149,7 @@ GET /api/v2/funding/programmes?heading=Natural Resources
 ```
 
 **You get back**
-A `PaginatedResponse[ProgrammeItem]`. Each item carries `programme`, `acronym`, `period`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`document_date` is the OJ publication of the act that established the programme; `public_url` is the programme's own page on the Commission's website; `body_txt`/`body_html` null on the list unless `include_body=true`).
+A `PaginatedResponse[ProgrammeItem]`. Each item carries `programme`, `acronym`, `period`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`document_date` is the OJ publication of the act that established the programme; `public_url` is the programme's own page on the Commission's website; `body_txt`/`body_html` on the list unless `include_body=false`).
 
 **Data freshness**
 Static reference, updated when the Commission's programme list changes (config: `funding_programmes.json`).""",
@@ -165,14 +165,12 @@ async def list_programmes(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="List compiled on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="List last revised on or after (ISO date or datetime, UTC). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="List last revised on or before; a bare date covers the whole day."),
-    limit: int = Query(100, ge=1, le=200),
+    limit: int = Query(50, ge=1, le=200),
     include_body: bool = Query(
-        False,
+        True,
         description=(
-            "Return `body_txt` / `body_html` on every item in the list. Off by "
-            "default because bodies dominate the payload, but without it the "
-            "only route to the text is one detail call PER ITEM, which is not "
-            "a usable way to ingest a feed."
+            "Return `body_txt` / `body_html` on every item in the list (default true, "
+            "the funding standard)."
         ),
     ),
     page: int = Query(1, ge=1),

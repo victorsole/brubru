@@ -82,7 +82,7 @@ class FtsItem(BaseModel):
     budget_line: Optional[str] = Field(None, description="Budget line name.")
     management_type: Optional[str] = None
     public_url: Optional[str] = Field(None, description="The FTS record's address.")
-    body_txt: Optional[str] = Field(None, description="The record as text (full on the item route; on the list with include_body=true).")
+    body_txt: Optional[str] = Field(None, description="The record as text (on the list unless include_body=false, and on the item route).")
     body_html: Optional[str] = None
     document_date: Optional[datetime] = Field(None, description="The project's start, when already passed; null otherwise.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first stored the row.")

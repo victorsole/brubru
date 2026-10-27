@@ -73,7 +73,7 @@ def register_cap_fund(*, slug: str, fund_code: str, fund_name: str, blurb: str, 
         tags=[tag],
         summary=f"{fund_name} ({fund_code}) — EU payments by Member State (2023-2027)",
         description=f"""**What it does**
-Lists the **{fund_name} ({fund_code})** EU payments by Member State for 2023-2027. {blurb} One row per Member State, with the headline EU amount and the fund-specific breakdown, plus the 5 datapoints (`body_txt`/`body_html` null on the list — fetch the detail endpoint).
+Lists the **{fund_name} ({fund_code})** EU payments by Member State for 2023-2027. {blurb} One row per Member State, with the headline EU amount and the fund-specific breakdown, plus the 5 datapoints (`body_txt`/`body_html` on every item, unless `include_body=false`).
 
 **When to use it**
 To see how much {fund_code} money each Member State receives under the Common Agricultural Policy.
@@ -90,7 +90,7 @@ GET /api/v2/funding/{slug}?ms=FR
 ```
 
 **You get back**
-A `PaginatedResponse[CAPPaymentItem]` envelope sorted by total EU amount (largest first). Each item carries `id`, `fund`, `ms`, `total_eur`, the fund-specific fields ({'annual `fy_2023`..`fy_2026`' if fund_code == 'EAGF' else '`planned_eu_amount`, `net_interim_payments`, `payment_rate`'}), `public_url`, `document_date`, `creation_date`, and `body_txt`/`body_html` = null.
+A `PaginatedResponse[CAPPaymentItem]` envelope sorted by total EU amount (largest first). Each item carries `id`, `fund`, `ms`, `total_eur`, the fund-specific fields ({'annual `fy_2023`..`fy_2026`' if fund_code == 'EAGF' else '`planned_eu_amount`, `net_interim_payments`, `payment_rate`'}), `public_url`, `document_date`, `creation_date`, and `body_txt`/`body_html` (unless `include_body=false`).
 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`).""",
@@ -104,12 +104,10 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
         include_body: bool = Query(
-            False,
+            True,
             description=(
-                "Return `body_txt` / `body_html` on every item in the list. Off by "
-                "default because bodies dominate the payload, but without it the "
-                "only route to the text is one detail call PER ITEM, which is not "
-                "a usable way to ingest a feed."
+                "Return `body_txt` / `body_html` on every item in the list (default true, "
+                "the funding standard)."
             ),
         ),
         user: User = Depends(api_user_with_rate_limit),

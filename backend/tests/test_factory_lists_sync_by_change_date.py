@@ -44,7 +44,9 @@ class _Db:
 _ROW = dict(id=11, body_code="ecdc", item_type="tender", title="Framework contract for epidemic intelligence",
             summary="Open procedure", public_url="https://www.ecdc.europa.eu/en/about-us/procurement/x",
             document_date=CHANGED, creation_date=CHANGED, source_kind="html", updated_at=CHANGED,
-            tender_reference="ECDC/2026/012", status="open", deadline=None)
+            tender_reference="ECDC/2026/012", status="open", deadline=None,
+            # A funding list carries bodies by default (the funding standard, 27 Oct 2026).
+            body_txt="Framework contract for epidemic intelligence.", body_html="<p>Framework contract.</p>")
 # The FTS lists read the file's columns beside the row (migration 313, 26 Oct 2026).
 from api.v2.funding._fts import FILE_COLUMNS  # noqa: E402
 _ROW.update(dict.fromkeys(FILE_COLUMNS))

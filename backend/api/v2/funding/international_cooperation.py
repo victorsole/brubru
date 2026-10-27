@@ -110,7 +110,7 @@ GET /api/v2/funding/international-cooperation?country=Ukraine
 ```
 
 **You get back**
-A paginated envelope. Each item carries the structured award fields + the 5 datapoints (`body_txt` / `body_html` null on the list — fetch the detail endpoint for the full FTS record).
+A paginated envelope. Each item carries the structured award fields + the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; the detail endpoint has the full FTS record).
 
 **Note**
 This is the *awards* side (who already received funding). Open biddable tenders run through OPSYS/TED and are not held here.
@@ -138,14 +138,12 @@ async def list_intl_cooperation(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
     order: str = Query("recent", description="recent | oldest | year | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=200),
     include_body: bool = Query(
-        False,
+        True,
         description=(
-            "Return `body_txt` / `body_html` on every item in the list. Off by "
-            "default because bodies dominate the payload, but without it the "
-            "only route to the text is one detail call PER ITEM, which is not "
-            "a usable way to ingest a feed."
+            "Return `body_txt` / `body_html` on every item in the list (default true, "
+            "the funding standard)."
         ),
     ),
 ):

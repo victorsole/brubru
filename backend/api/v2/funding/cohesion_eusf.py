@@ -72,7 +72,7 @@ def _row_to_item(r, *, with_body: bool) -> EUSFCase:
     tags=["v2-funding"],
     summary="EU Solidarity Fund (EUSF) — disaster cases 2002-2021",
     description="""**What it does**
-Lists the **EU Solidarity Fund** disaster cases (2002-2021): floods, forest fires, earthquakes, storms, health emergencies. One row per case, with the applicant country, disaster type, accepted total direct damage and the EUSF grant paid (amounts in EUR million), plus the 5 datapoints (`body_txt`/`body_html` null on the list — fetch the detail endpoint for the full body).
+Lists the **EU Solidarity Fund** disaster cases (2002-2021): floods, forest fires, earthquakes, storms, health emergencies. One row per case, with the applicant country, disaster type, accepted total direct damage and the EUSF grant paid (amounts in EUR million), plus the 5 datapoints (`body_txt`/`body_html` on every item, unless `include_body=false`).
 
 **When to use it**
 To see which disasters the EUSF responded to, in which countries, and how much was paid. The EUSF assists Member States and accession countries hit by major natural disasters (and, since 2020, major health emergencies).
@@ -93,7 +93,7 @@ GET /api/v2/funding/eusf?year=2021
 ```
 
 **You get back**
-A `PaginatedResponse[EUSFCase]` envelope sorted by EUSF grant paid (largest first). Each item carries `id`, `public_url`, `document_date`, `creation_date`, the case fields (`name_of_disaster`, `disaster_type`, `applicant_country`, `total_direct_damage_meur`, `eusf_grant_paid_meur`, ...) and `body_txt`/`body_html` = null. Use the detail endpoint for the full body.
+A `PaginatedResponse[EUSFCase]` envelope sorted by EUSF grant paid (largest first). Each item carries `id`, `public_url`, `document_date`, `creation_date`, the case fields (`name_of_disaster`, `disaster_type`, `applicant_country`, `total_direct_damage_meur`, `eusf_grant_paid_meur`, ...) and `body_txt`/`body_html` (unless `include_body=false`).
 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`, dataset 7a49-av34).""",
@@ -110,12 +110,10 @@ async def list_eusf(
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
     include_body: bool = Query(
-        False,
+        True,
         description=(
-            "Return `body_txt` / `body_html` on every item in the list. Off by "
-            "default because bodies dominate the payload, but without it the "
-            "only route to the text is one detail call PER ITEM, which is not "
-            "a usable way to ingest a feed."
+            "Return `body_txt` / `body_html` on every item in the list (default true, "
+            "the funding standard)."
         ),
     ),
     user: User = Depends(api_user_with_rate_limit),

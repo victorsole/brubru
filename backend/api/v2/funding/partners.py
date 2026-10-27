@@ -36,6 +36,7 @@ from models.user import User
 from services.funding.countries import eu_code, vat_key
 from services.funding.organisations import ORG_FORM
 from services.funding.programme_codes import named_codes, topic_prefixes
+from ._standard import include_body_param, without_bodies
 
 router = APIRouter()
 Day = date   # PartnerActivity has a field named `date`, which would shadow the type in its own annotation
@@ -353,7 +354,7 @@ Finding consortium partners and competitors: "who coordinates projects on soil h
 - `country` — ISO-2 (EL and GR, UK and GB are the same country).
 - `activity_type` (HES higher education | REC research | PRC private company | PUB public body | OTH) — as CORDIS states it, projects only; `is_sme` — as CORDIS states it, and on announcements the portal's "Small or medium-size enterprise" type.
 - `since` — activities starting on or after (YYYY-MM-DD; an award's contract signature, an announcement's date); `min_amount_eur` — the organisation's EU contribution plus payments over the matches, at least (awards are not in the amounts: a joint tender's value is shared by its members).
-- `source` — all (default) | projects | payments | awards | announcements. `order` — matches (default: the matching activities, an announcement text copied to several topics counted once) | amount | name. `page`, `limit` (max 50).
+- `source` — all (default) | projects | payments | awards | announcements. `order` — matches (default: the matching activities, an announcement text copied to several topics counted once) | amount | name. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -394,7 +395,8 @@ async def list_partners(
     source: str = Query("all", description="all | projects | payments | awards | announcements."),
     order: str = Query("matches", description="matches | amount | name."),
     page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=50),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = include_body_param(),
 ):
     if not (q or name):
         raise HTTPException(status_code=400, detail="Give q (the subject) or name: a partner search over every organisation at once is not served.")
@@ -411,7 +413,7 @@ async def list_partners(
     db.execute(text("SET LOCAL statement_timeout = '60s'"))
     rows = db.execute(text(sql), params).fetchall()
     base = str(request.base_url).rstrip("/")
-    return build_envelope([_item(r, base) for r in rows], rows[0].total if rows else 0, page, limit)
+    return without_bodies(build_envelope([_item(r, base) for r in rows], rows[0].total if rows else 0, page, limit), include_body)
 
 
 @router.get("/partners/{id:path}", response_model=PartnerItem, tags=["v2-funding"],

@@ -37,6 +37,7 @@ from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
 from api.v1._pagination import stable
 from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, orm_order, orm_window, validate_window
+from ._standard import include_body_param, without_bodies
 
 router = APIRouter()
 
@@ -159,7 +160,7 @@ GET /api/v2/funding/startups?instrument=equity
 ```
 
 **You get back**
-A `PaginatedResponse[StartupFundingItem]` — each item carries `topic_id` (the stable English id, e.g. `HORIZON-EIC-2026-ACCELERATOR-01`), title, `stage`, `instrument`, status, deadline, budget, description, the F&T Portal link and the 5 datapoints (`body_txt` / `body_html` null on the list — fetch `/startups/{topic_id}` for the full body). Most recent deadlines first.
+A `PaginatedResponse[StartupFundingItem]` — each item carries `topic_id` (the stable English id, e.g. `HORIZON-EIC-2026-ACCELERATOR-01`), title, `stage`, `instrument`, status, deadline, budget, description, the F&T Portal link and the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; `/startups/{topic_id}` has the full body). Most recent deadlines first.
 
 **Not yet covered**
 EaSI Microfinance (loans ≤ €25k) and InvestEU (equity / guarantees) are useful for founders but Brubru does not yet hold their data. Structural funds (ERDF, ESF+, EMFAF) are excluded here because they are Member-State allocations, not direct-apply calls.
@@ -184,7 +185,8 @@ async def funding_startups(
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
     order: str = Query("deadline_desc", description="deadline_desc (default) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
@@ -225,8 +227,8 @@ async def funding_startups(
     total = query.count()
     rows = (stable(query.order_by(*sort))
             .offset((page - 1) * limit).limit(limit).all())
-    return build_envelope([_to_item(r, body_threshold) for r in rows], total=total, page=page, limit=limit,
-                          updated_from=window["updated_from"], updated_to=window["updated_to"])
+    return without_bodies(build_envelope([_to_item(r, body_threshold) for r in rows], total=total, page=page, limit=limit,
+                                         updated_from=window["updated_from"], updated_to=window["updated_to"]), include_body)
 
 
 @router.get("/startups/{topic_id:path}", response_model=StartupFundingItem, tags=["v2-funding"],

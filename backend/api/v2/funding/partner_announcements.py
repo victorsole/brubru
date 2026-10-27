@@ -130,7 +130,7 @@ Organisations looking for partners: every announcement an organisation published
 - `expertise` — offer | request. `organisation_type` — part of the portal's type (`Small or medium`, `Research`, `Higher or secondary education`, `Public`, `Non-governmental`).
 - `pic`, `organisation` (part of its name), `country` (ISO-2; EL and GR, UK and GB are the same); `without_eu_projects=true` — only organisations with no EU project yet.
 - `requested_from`, `requested_to` (`since`, `until`, `from`, `to` are aliases). {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
-- `order` — recent (default) | oldest | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (max 100), `include_body`.
+- `order` — recent (default) | oldest | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -140,7 +140,7 @@ GET /api/v2/funding/partner-announcements?programme=LIFE&without_eu_projects=tru
 ```
 
 **You get back**
-A paginated envelope. Each item: `id` (the announcement's id), `title` (the topic's title), `summary` (what the organisation wrote: its first 500 characters, as the portal's search shows them, `summary_cut` true when it stops there; e-mail addresses, ORCIDs, LinkedIn links and telephone numbers removed), `status` and `topic_deadline` (the topic as Brubru holds it), `expertise`, `topic_id`, `organisations` (the organisation: PIC, name, country, city, type, its EU projects as the portal counts them, and its `partner` link; where the announcement gives no name, country or type, as 544 from 2018-2022 do, its profile's), `public_url` (its Partner Search profile on the portal; the full text and the contact form need an EU Login), `body_txt` / `body_html` (on the item route, or on the list with `include_body=true`), `document_date` (the announcement's date), `creation_date`, `updated_date`.
+A paginated envelope. Each item: `id` (the announcement's id), `title` (the topic's title), `summary` (what the organisation wrote: its first 500 characters, as the portal's search shows them, `summary_cut` true when it stops there; e-mail addresses, ORCIDs, LinkedIn links and telephone numbers removed), `status` and `topic_deadline` (the topic as Brubru holds it), `expertise`, `topic_id`, `organisations` (the organisation: PIC, name, country, city, type, its EU projects as the portal counts them, and its `partner` link; where the announcement gives no name, country or type, as 544 from 2018-2022 do, its profile's), `public_url` (its Partner Search profile on the portal; the full text and the contact form need an EU Login), `body_txt` / `body_html` (on the list unless `include_body=false`, and on the item route), `document_date` (the announcement's date), `creation_date`, `updated_date`.
 
 **Data freshness**
 The portal's search index, read every day: the announcements of the last 14 days, and a seventh of the older ones in turn, so every announcement is read again each week (one no longer there is deleted)."""
@@ -175,8 +175,8 @@ async def list_partner_announcements(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Last changed on or before; a bare date covers the whole day."),
     order: str = Query("recent", description="recent | oldest | updated_asc | updated_desc | created_asc | created_desc."),
     page: int = Query(1, ge=1),
-    limit: int = Query(20, ge=1, le=100),
-    include_body: bool = Query(False, description="Return body_txt / body_html on every item of the list."),
+    limit: int = Query(50, ge=1, le=200),
+    include_body: bool = Query(True, description="Return body_txt / body_html on every item of the list (default true)."),
 ):
     if order not in _ORDERS and order not in SYNC_ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")
