@@ -55,7 +55,8 @@ class AnnouncingOrganisation(BaseModel):
     city: Optional[str] = None
     organisation_type: Optional[str] = Field(None, description="As the portal states it: Small or medium-size enterprise, "
                                              "Research Organisation, Higher or secondary education establishment ...")
-    projects: Optional[int] = Field(None, description="Its EU projects, as the portal counts them (0: none yet).")
+    projects: Optional[int] = Field(None, description="Its EU projects, as the portal counts them (0: none yet); none when "
+                                    "Brubru does not hold its profile yet (the index can list a new announcement first).")
     role: str = Field("partner", description="Always partner: the organisation that published the announcement.")
     partner: str = Field(..., description="This organisation on /api/v2/funding/partners.")
 
