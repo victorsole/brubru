@@ -206,9 +206,10 @@ def parse_award(xml_text: str, publication_number: str) -> Optional[dict]:
         return None
     orgs = _organisations(root)
 
-    buyers = []
+    buyers, buyer_refs = [], set()
     for party in root.findall("cac:ContractingParty", NS):
         ref = _t(party, "cac:Party/cac:PartyIdentification/cbc:ID")
+        buyer_refs.add(ref)
         org = orgs.get(ref or "", {})
         legal = next((c.text.strip() for c in party.findall("cac:ContractingPartyType/cbc:PartyTypeCode", NS)
                       if c.get("listName") == "buyer-legal-type" and c.text), None)
@@ -235,6 +236,7 @@ def parse_award(xml_text: str, publication_number: str) -> Optional[dict]:
         tenders = {_t(t, "cbc:ID"): t for t in result.findall("efac:LotTender", NS) if _t(t, "cbc:ID")}
         parties = {_t(p, "cbc:ID"): p for p in result.findall("efac:TenderingParty", NS) if _t(p, "cbc:ID")}
         contracts_of: Dict[str, List[ET.Element]] = {}
+        read: set = set()
         for c in result.findall("efac:SettledContract", NS):
             for ref in _all(c, "efac:LotTender/cbc:ID"):
                 contracts_of.setdefault(ref, []).append(c)
@@ -255,25 +257,39 @@ def parse_award(xml_text: str, publication_number: str) -> Optional[dict]:
             won = [r for r in refs if r in contracts_of] or refs
             for ref in won:
                 tender = tenders.get(ref)
-                if tender is None:
+                # A lot's result written twice lists its tenders twice (609960-2024): each is read once.
+                if tender is None or ref in read:
                     continue
+                read.add(ref)
                 value, cur = _amount(tender, "cac:LegalMonetaryTotal/cbc:PayableAmount")
                 rank = _t(tender, "cbc:RankCode")
                 contract = (contracts_of.get(ref) or [None])[0]
                 party = parties.get(_t(tender, "efac:TenderingParty/cbc:ID") or "")
-                members = party.findall("efac:Tenderer", NS) if party is not None else []
-                for m in members:
-                    org = orgs.get(_t(m, "cbc:ID") or "", {})
+                members = [(_t(m, "cbc:ID"), (_t(m, "efbc:GroupLeadIndicator") or "").lower() == "true")
+                           for m in (party.findall("efac:Tenderer", NS) if party is not None else [])]
+                if party is not None and not members:
+                    # A party named without its organisation (F4E's notices, 2024): the notice's own
+                    # organisation of that name, never a buyer (EUFOR named its procurement office).
+                    named = (_line(_t(party, "cbc:Name")) or "").casefold()
+                    members = [(r, False) for r, o in orgs.items()
+                               if named and r not in buyer_refs and (o["name"] or "").casefold() == named][:1]
+                # A member listed twice in its party (491058-2024) is one member.
+                lead_of: Dict[str, bool] = {}
+                for org_ref, is_lead in members:
+                    lead_of[org_ref] = lead_of.get(org_ref, False) or is_lead
+                members = list(lead_of.items())
+                for org_ref, is_lead in members:
+                    org = orgs.get(org_ref or "", {})
                     if not org.get("name"):
                         continue
                     winners.append({
                         "lot_id": lot_id or _t(tender, "efac:TenderLot/cbc:ID"), "tender_id": ref,
-                        "org_ref": _t(m, "cbc:ID"),
+                        "org_ref": org_ref,
                         "rank": int(rank) if rank and rank.isdigit() else None,
                         "name": org["name"], "country": org.get("country"), "city": org.get("city"),
                         "company_id": org.get("company_id"),
                         "vat_key": vat_number(org.get("company_id"), org.get("country")), "size": org.get("size"),
-                        "is_group_lead": (_t(m, "efbc:GroupLeadIndicator") or "").lower() == "true",
+                        "is_group_lead": is_lead,
                         "group_size": len(members), "tender_value": value, "tender_value_currency": cur,
                         "contract_id": _t(contract, "cbc:ID"),
                         "contract_reference": _t(contract, "efac:ContractReference/cbc:ID"),

@@ -172,6 +172,29 @@ def test_the_winners_are_the_organisations_of_the_tenders_a_contract_was_conclud
         ("ES", "ESB12345678"), ("DE", "DE123456789"), ("EL", "EL094000001"), ("DK", "DK29200000")]
 
 
+def test_a_party_named_without_its_organisation_is_the_notices_organisation_of_that_name():
+    xml = _notice().replace(
+        "<efac:TenderingParty><cbc:ID>TPA-0002</cbc:ID><efac:Tenderer><cbc:ID>ORG-0005</cbc:ID></efac:Tenderer></efac:TenderingParty>",
+        "<efac:TenderingParty><cbc:ID>TPA-0002</cbc:ID><cbc:Name>GAMMA\n Analytics</cbc:Name></efac:TenderingParty>").replace(
+        "<efac:TenderingParty><cbc:ID>TPA-0003</cbc:ID><efac:Tenderer><cbc:ID>ORG-0006</cbc:ID></efac:Tenderer></efac:TenderingParty>",
+        "<efac:TenderingParty><cbc:ID>TPA-0003</cbc:ID><cbc:Name>European Commission, DG EXAMPLE - Example Policy</cbc:Name></efac:TenderingParty>")
+    rows = [(w["tender_id"], w["org_ref"], w["name"], w["is_group_lead"], w["group_size"], w["vat_key"])
+            for w in ted_awards.parse_award(xml, "999999-2025")["winners"] if w["lot_id"] == "LOT-0002"]
+    # Gamma by its name; the buyer's own name never makes it a winner.
+    assert rows == [("TEN-0002", "ORG-0005", "Gamma Analytics", False, 1, "EL094000001")]
+
+def test_a_result_written_twice_or_a_member_listed_twice_gives_each_winner_once():
+    base = ted_awards.parse_award(_notice(), "999999-2025")["winners"]
+    twice = _lot_result("RES-0001", "selec-w", "LOT-0001", ["TEN-0001"], received=3)
+    xml = _notice().replace(twice, twice + twice.replace("RES-0001", "RES-0004")).replace(
+        "<efac:Tenderer><cbc:ID>ORG-0005</cbc:ID></efac:Tenderer>",
+        "<efac:Tenderer><cbc:ID>ORG-0005</cbc:ID></efac:Tenderer><efac:Tenderer><cbc:ID>ORG-0005</cbc:ID>"
+        "<efbc:GroupLeadIndicator>true</efbc:GroupLeadIndicator></efac:Tenderer>")
+    winners = ted_awards.parse_award(xml, "999999-2025")["winners"]
+    key = lambda w: (w["tender_id"], w["org_ref"], w["is_group_lead"], w["group_size"])  # noqa: E731
+    assert [key(w) for w in winners] == [key(w) if w["org_ref"] != "ORG-0005" else ("TEN-0002", "ORG-0005", True, 1)
+                                         for w in base]
+
 def test_the_notice_carries_the_standards_tender_fields():
     n = ted_awards.parse_award(_notice(), "999999-2025")
     assert n["contracting_authority"] == "European Commission, DG EXAMPLE - Example Policy"
