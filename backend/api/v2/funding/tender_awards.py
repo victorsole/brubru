@@ -25,6 +25,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from core.database import get_db
 from models.user import User
+from api.v2.funding.partners import AWARD_WINNER_IS_ORGANISATION
 from services.funding.countries import eu_code
 
 router = APIRouter()
@@ -64,7 +65,8 @@ class AwardedOrganisation(BaseModel):
     contract_title: Optional[str] = None
     contract_date: Optional[date] = Field(None, description="The contract's signature.")
     award_date: Optional[date] = None
-    partner: Optional[str] = Field(None, description="This organisation on /api/v2/funding/partners.")
+    partner: Optional[str] = Field(None, description="This organisation on /api/v2/funding/partners; none for a winner "
+                                   "that may be an individual (see that route's Identity section).")
 
 
 class TenderAwardItem(BaseModel):
@@ -110,7 +112,7 @@ def _winners(db: Session, pubs: List[str], base: str) -> dict:
     if not pubs:
         return {}
     rows = db.execute(text(
-        f"""SELECT w.*, m.pic, {_SLUG.format(n='w.name')} AS slug
+        f"""SELECT w.*, m.pic, {_SLUG.format(n='w.name')} AS slug, {AWARD_WINNER_IS_ORGANISATION} AS is_partner
               FROM ted_award_winners w LEFT JOIN funding_org_identities m ON m.vat_key = w.vat_key
              WHERE w.publication_number = ANY(:pubs)
              ORDER BY w.publication_number, w.lot_id NULLS LAST, w.rank NULLS LAST, w.tender_id, w.is_group_lead DESC, w.org_ref"""),
@@ -126,7 +128,7 @@ def _winners(db: Session, pubs: List[str], base: str) -> dict:
             tender_value=float(w["tender_value"]) if w["tender_value"] is not None else None,
             tender_value_currency=w["tender_value_currency"], contract_reference=w["contract_reference"],
             contract_title=w["contract_title"], contract_date=w["contract_date"], award_date=w["award_date"],
-            partner=f"{base}/api/v2/funding/partners/{key}"))
+            partner=f"{base}/api/v2/funding/partners/{key}" if w["is_partner"] else None))
     return out
 
 
@@ -171,7 +173,7 @@ GET /api/v2/funding/tender-awards?q=translation&winner_country=ES
 ```
 
 **You get back**
-A paginated envelope. Each item: `id` (the TED publication number), `title`, `summary`, `contracting_authority`, `body_code`, `buyer_country`, `contract_nature`, `procedure_type`, `cpv_main`, `cpv_codes`, `lots` (each lot's result and tenders received), `awarded_value` and its currency (as the notice states it; `amount_eur` when in euros), `organisations` (the winners, role `contractor`, each with its `partner` link), `public_url` (the notice on TED), `body_txt` / `body_html` (the notice as text: on the item route, or on the list with `include_body=true`), `document_date`, `creation_date`, `updated_date`. A joint tender's members are each listed, the lead flagged; a cascade framework lists every ranked contractor.
+A paginated envelope. Each item: `id` (the TED publication number), `title`, `summary`, `contracting_authority`, `body_code`, `buyer_country`, `contract_nature`, `procedure_type`, `cpv_main`, `cpv_codes`, `lots` (each lot's result and tenders received), `awarded_value` and its currency (as the notice states it; `amount_eur` when in euros; for a framework agreement TED's value is usually the framework's maximum, not money paid: payments are on `/api/v2/funding/eu-funding-recipients`), `organisations` (the winners, as TED names them, role `contractor`, each organisation with its `partner` link; a winner that may be an individual has none), `public_url` (the notice on TED), `body_txt` / `body_html` (the notice as text: on the item route, or on the list with `include_body=true`), `document_date`, `creation_date`, `updated_date`. A joint tender's members are each listed, the lead flagged; a cascade framework lists every ranked contractor.
 
 **Data freshness**
 TED's search API and each notice's XML, read every day for the last 14 days of notices."""

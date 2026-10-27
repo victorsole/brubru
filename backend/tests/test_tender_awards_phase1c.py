@@ -13,6 +13,7 @@ a lot closed without a winner.
 """
 import importlib
 import pathlib
+import re
 import sys
 from datetime import date
 from types import SimpleNamespace
@@ -370,12 +371,18 @@ class _Db:
                      "company_id": "29200000", "vat_key": "DK29200000", "size": "micro", "lot_id": "LOT-0002",
                      "lot_title": "Lot two", "rank": 2, "is_group_lead": False, "group_size": 1, "tender_value": 0,
                      "tender_value_currency": "EUR", "contract_reference": "EX/2025/002-2", "contract_title": None,
-                     "contract_date": date(2025, 3, 21), "award_date": None, "pic": None, "slug": "delta-consult"},
+                     "contract_date": date(2025, 3, 21), "award_date": None, "pic": None, "slug": "delta-consult",
+                     "is_partner": True},
                     {"publication_number": "999999-2025", "name": "Gamma Analytics", "country": "EL", "city": "Town",
                      "company_id": None, "vat_key": None, "size": None, "lot_id": "LOT-0002", "lot_title": None,
                      "rank": 1, "is_group_lead": False, "group_size": 1, "tender_value": None, "tender_value_currency": None,
                      "contract_reference": None, "contract_title": None, "contract_date": None, "award_date": None,
-                     "pic": None, "slug": "gamma-analytics"}]
+                     "pic": None, "slug": "gamma-analytics", "is_partner": True},
+                    {"publication_number": "999999-2025", "name": "DOE Jane", "country": "BE", "city": "Town",
+                     "company_id": None, "vat_key": None, "size": "micro", "lot_id": "LOT-0002", "lot_title": None,
+                     "rank": 1, "is_group_lead": False, "group_size": 2, "tender_value": None, "tender_value_currency": None,
+                     "contract_reference": None, "contract_title": None, "contract_date": None, "award_date": None,
+                     "pic": None, "slug": "doe-jane", "is_partner": False}]
             return SimpleNamespace(mappings=lambda: SimpleNamespace(all=lambda: rows))
         return SimpleNamespace(scalar=lambda: 0, fetchall=lambda: [], fetchone=lambda: self.notice)
 
@@ -420,7 +427,9 @@ def test_an_award_item_lists_its_winners_with_their_partner_link():
     assert r.status_code == 200, r.text
     item = r.json()
     assert (item["id"], item["item_type"], item["form_type"], item["amount_eur"]) == ("999999-2025", "tender_award", "result", 900000.0)
-    assert [o["partner"].split("/partners/")[1] for o in item["organisations"]] == ["vat:DK29200000", "name:el:gamma-analytics"]
+    # A winner that may be an individual is listed as TED names it, with no partner link.
+    assert [(o["partner"] or "").split("/partners/")[-1] for o in item["organisations"]] == [
+        "vat:DK29200000", "name:el:gamma-analytics", ""]
     assert item["organisations"][0]["role"] == "contractor" and item["body_txt"] == "t"
     assert _client(_Db()).get("/api/v2/funding/tender-awards/1-2025").status_code == 404
 
@@ -432,6 +441,7 @@ def test_partners_take_the_awards_as_contractor_activities():
     assert r.status_code == 200, r.text
     sql, params = db.calls[-1]
     assert "FROM ted_award_winners w JOIN ted_award_notices n" in sql and "n.superseded_by IS NULL" in sql
+    assert f"n.superseded_by IS NULL AND {partners.AWARD_WINNER_IS_ORGANISATION}" in sql   # no person profiles
     assert "n.contracting_authority ILIKE :dg" in sql and "coalesce(w.contract_date, n.publication_date) >= :since" in sql
     assert "'award' AS kind" in sql and "count(DISTINCT ref) FILTER (WHERE kind = 'award') AS awards" in sql
     # An award has no programme, topic, activity type or SME flag: asking for one leaves the awards out.
@@ -442,7 +452,7 @@ def test_partners_take_the_awards_as_contractor_activities():
     db = _Db()
     _client(db).get("/api/v2/funding/partners", params={"q": "ai", "source": "awards"})
     sql = db.calls[-1][0]
-    assert "ted_award_winners" in sql and "fts_commitments" not in sql and "jsonb_array_elements(pr.organisations)" not in sql
+    assert "ted_award_winners" in sql and "FROM fts_commitments c" not in sql and "jsonb_array_elements(pr.organisations)" not in sql
     # The item route reaches an organisation's awards by its PIC, VAT number or name.
     db = _Db()
     _client(db).get("/api/v2/funding/partners/name:dk:delta-consult")
@@ -468,3 +478,19 @@ def test_the_award_sync_runs_daily_and_is_recorded_by_the_tier():
     from api import cron
     assert "ted_awards" in cron._DAILY_TIER_RECORDED
     assert '"ted_awards", "scripts/sync_ted_awards.py", ["--apply"]' in pathlib.Path(cron.__file__).read_text()
+
+
+def test_an_award_winner_is_a_partner_by_its_vat_number_or_its_legal_form():
+    from api.v2.funding import partners
+    from api.v2.funding import tender_awards
+    rule = partners.AWARD_WINNER_IS_ORGANISATION
+    assert "w.vat_key IN (SELECT vat_key FROM funding_org_identities)" in rule
+    assert "beneficiary_type IS DISTINCT FROM 'Private Persons'" in rule
+    assert tender_awards.AWARD_WINNER_IS_ORGANISATION is rule                     # one rule for both routes
+    # The pattern is PostgreSQL's (\m, \M: a word's start and end); read here with Python's \b.
+    form = re.compile(partners.AWARD_ORG_FORM.replace(r"\m", r"\b").replace(r"\M", r"\b"), re.I)
+    organisations = ["Alpha Studies SL", "Beta Research GmbH", "Delta Consult", "Epsilon S.r.l.", "Zeta Institute",
+                     "Eta Sp. z o.o.", "Theta B.V.", "Iota A/S", "Kappa University", "Lambda Foundation"]
+    people = ["DOE Jane", "Jane Doe", "Maria Example Person", "SMITH JOHN ROBERT"]
+    assert [n for n in organisations if not form.search(n)] == []
+    assert [n for n in people if form.search(n)] == []

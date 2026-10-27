@@ -59,6 +59,25 @@ _NAME_SLUG = "regexp_replace(lower({n}), '[^[:alnum:]]+', '-', 'g')"
 # The expression ted_award_notices' full-text index is built on (migration 315).
 _AWARD_TSV = "to_tsvector('english', coalesce(n.title, '') || ' ' || coalesce(n.description, ''))"
 _O_NAME, _O_COUNTRY = "o->>'name'", "o->>'country'"
+# TED never marks a winner as a person or an organisation, and names individual experts beside
+# companies (351840-2025). A winner is a partner when its VAT number is a CORDIS or FTS organisation's,
+# or its name carries a legal form or an organisation word: 9,918 of 11,711 winner rows (27 Oct 2026);
+# the 1,793 left out are mostly organisations with plain names, and every individual checked.
+# Victor's rule (27 Oct): no person profiles, as for the FTS's private persons.
+AWARD_ORG_FORM = (
+    r"\m(s\.?a|s\.?l\.?u?|s\.?a\.?s|s\.?a\.?r\.?l|s\.?r\.?l|s\.?p\.?a|s\.?r\.?o|d\.?o\.?o|b\.?v|n\.?v|u\.?a|e\.?v|"
+    r"gmbh|ltd|limited|llp|llc|plc|inc|corp|ag|kg|ohg|asbl|aisbl|ivzw|vzw|oy|oyj|ab|as|a/s|aps|kft|zrt|uab|sia|ou|oü|"
+    r"ltda|eurl|gie|eeig|ike|epe|ae|ry|onlus|sp\.? ?z\.? ?o\.? ?o|zoo|sp[oó][lł]ka|co|company|group|consult\w*|"
+    r"institut\w*|universit\w*|association|foundation|stiftung|fondation|fondazione|fundacja|fundaci[oó]n|centre|"
+    r"center|agency|services?|solutions|partners|international|ministry|minist[eè]re|office|council|bank|"
+    r"cooperati\w*|coöperatief|societ[aà]|aktiengesellschaft)\M"
+)
+AWARD_WINNER_IS_ORGANISATION = (
+    "(w.vat_key IN (SELECT vat_key FROM funding_org_identities)"
+    " OR w.vat_key IN (SELECT vat_key FROM fts_commitments"
+    " WHERE vat_key IS NOT NULL AND beneficiary_type IS DISTINCT FROM 'Private Persons')"
+    f" OR w.name ~* '{AWARD_ORG_FORM}')"
+)
 
 
 class PartnerActivity(BaseModel):
@@ -71,7 +90,8 @@ class PartnerActivity(BaseModel):
     department: Optional[str] = Field(None, description="Who paid or bought: the FTS row's department, the award's contracting authority.")
     eu_contribution: Optional[float] = Field(None, description="Its EU contribution in the project, EUR (CORDIS).")
     amount_eur: Optional[float] = Field(None, description="What the FTS row says it received, EUR.")
-    tender_value_eur: Optional[float] = Field(None, description="An award: its tender's value when in euros, shared by a joint tender's members.")
+    tender_value_eur: Optional[float] = Field(None, description="An award: its tender's value when in euros, shared by a joint tender's members; "
+                                            "for a framework agreement usually the framework's maximum, not money paid.")
     self: Optional[str] = Field(None, description="The activity on its own route.")
 
 
@@ -215,7 +235,7 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                CASE WHEN upper(w.tender_value_currency) = 'EUR' THEN w.tender_value END AS tender_value_eur,
                greatest(n.last_updated, w.last_updated) AS changed, n.first_seen AS created
           FROM ted_award_winners w JOIN ted_award_notices n ON n.publication_number = w.publication_number
-         WHERE n.superseded_by IS NULL{ww}""")
+         WHERE n.superseded_by IS NULL AND {AWARD_WINNER_IS_ORGANISATION}{ww}""")
     if not parts:
         return None, params
     order_sql = {
@@ -315,7 +335,7 @@ GET /api/v2/funding/partners?q=legal%20translation&source=awards
 A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat`, `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, `awards`, the totals `eu_contribution` and `amount_eur`, `matches` (up to 10: kind, id, title, role, programme, date, department, amounts, an award's `tender_value_eur`, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
 
 **Identity**
-The PIC where known; a payment's beneficiary or an award's winner takes the PIC of the CORDIS organisation with the same VAT number (a TED company identifier counts as a VAT number only when shaped like its own country's); else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons in the FTS data are left out.
+The PIC where known; a payment's beneficiary or an award's winner takes the PIC of the CORDIS organisation with the same VAT number (a TED company identifier counts as a VAT number only when shaped like its own country's); else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons are left out: the FTS's own, and of TED's award winners (TED never says which is a person) those that are neither a CORDIS or FTS organisation by their VAT number nor named with a legal form or an organisation word (GmbH, SL, Ltd, Institute, University...), so an individual expert named in a notice is not a partner.
 
 **Data freshness**
 Funded projects read every Sunday (CORDIS, the F&T Portal); FTS files for 2024 and 2025 read every Sunday; the VAT to PIC pairing rebuilt after them; TED award notices read every day."""
