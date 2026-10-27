@@ -4,6 +4,14 @@
     {
       "date": "2026-10-27",
       "action": "updated",
+      "guide": "eu_baltic_sea_strategy",
+      "title": "EU Strategy for the Baltic Sea Region",
+      "summary": "Species names in ES, CA, FR, IT and NL added to the 2027 TAC bullet after a Catalan production answer rendered herring as a clam and plaice as hake.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
       "guide": "european_climate_law",
       "title": "European Climate Law",
       "summary": "Pointer to the proposed European Climate Resilience Law COM(2026) 730 (2026/0336(COD)) and the single national strategic plan it would create.",
