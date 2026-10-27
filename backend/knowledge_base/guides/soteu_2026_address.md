@@ -1,6 +1,7 @@
 # State of the Union 2026: the address
 
 ## QUICK FACTS
+- **Follow-up (27 October 2026)**: the European Heatwave Plan, the Climate Insurance Alliance and the European Water initiative announced in the address were restated as coming follow-ups in the **EU Climate Resilience Framework** (COM(2026) 720), presented with a proposed **Climate Resilience Law** (COM(2026) 730, 2026/0336(COD)); still no text or date for the three. See `climate_resilience_framework_2026`.
 - **ECTI At a Glance (26 October 2026): "From priorities to action: what does it mean in practice? State of the Union (SOTEU) 2026"** (ECTI_ATA(2026)795727, https://www.europarl.europa.eu/thinktank/en/document/ECTI_ATA(2026)795727) -- finding not read: cite title and reference only.
 - **What**: the annual State of the Union address of the President of the European Commission to the European Parliament, given by **Ursula von der Leyen** on **Wednesday 16 September 2026** in **Strasbourg**, with Canada's Prime Minister **Mark Carney** in the chamber as her guest. Published text: Commission reference SPEECH/26/1868.
 - **Framing**: "the state of our Union is the strongest it has ever been. The state of our Union can also feel as precarious as it has ever been." She named "the tipping points of our time: **climate change and AI**".

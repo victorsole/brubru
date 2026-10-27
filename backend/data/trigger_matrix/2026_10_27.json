@@ -1,125 +1,173 @@
 {
-  "_about": "27 Oct 2026 /news round: one natural question per language per topic; negatives must reach none of these guides.",
-  "languages": [
-    "en",
-    "fr",
-    "nl",
-    "es",
-    "ca",
-    "it"
+ "_about": "27 Oct 2026 /news round: one natural question per language per topic; negatives must reach none of these guides.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "eu_switzerland_pnr_agreement_2026#pnr": [
+   "Is the PNR agreement with Switzerland in force?",
+   "L'accord PNR avec la Suisse est-il en vigueur ?",
+   "Is de PNR-overeenkomst met Zwitserland al in werking?",
+   "¿Está en vigor el acuerdo PNR con Suiza?",
+   "L'acord PNR amb Suïssa ja és en vigor?",
+   "L'accordo PNR con la Svizzera è in vigore?"
   ],
-  "topics": {
-    "eu_switzerland_pnr_agreement_2026#pnr": [
-      "Is the PNR agreement with Switzerland in force?",
-      "L'accord PNR avec la Suisse est-il en vigueur ?",
-      "Is de PNR-overeenkomst met Zwitserland al in werking?",
-      "¿Está en vigor el acuerdo PNR con Suiza?",
-      "L'acord PNR amb Suïssa ja és en vigor?",
-      "L'accordo PNR con la Svizzera è in vigore?"
-    ],
-    "commission_large_scale_review_civil_service_2026#review": [
-      "What does the Catherine Day report on the Commission's civil service recommend?",
-      "Que recommande le rapport Catherine Day sur la fonction publique de la Commission ?",
-      "Wat staat er in de grootschalige evaluatie van de Commissie?",
-      "¿Qué recomienda la revisión a gran escala de la Comisión?",
-      "Què recomana la revisió a gran escala de la Comissió?",
-      "Cosa raccomanda la revisione su larga scala della Commissione?"
-    ],
-    "european_heritage_list_decision_2026#heritage": [
-      "What is the Commission proposing for the European Heritage Label?",
-      "Que propose la Commission pour le label du patrimoine européen ?",
-      "Wat verandert er aan het Europees erfgoedlabel?",
-      "¿Qué cambia en el sello de patrimonio europeo?",
-      "Què canvia en el segell de patrimoni europeu?",
-      "Cosa cambia per il marchio del patrimonio europeo?"
-    ],
-    "climate_resilience_framework_2026#resilience": [
-      "Has the Commission adopted the climate resilience framework?",
-      "La Commission a-t-elle adopté le cadre de résilience climatique ?",
-      "Heeft de Commissie het klimaatveerkrachtkader al aangenomen?",
-      "¿Ha adoptado la Comisión el marco de resiliencia climática?",
-      "La Comissió ha adoptat el marc de resiliència climàtica?",
-      "La Commissione ha adottato il quadro di resilienza climatica?"
-    ],
-    "border_migration_package_2026#border": [
-      "What is in the border and migration package of 27 October?",
-      "Que contient le paquet frontières et migration du 27 octobre ?",
-      "Wat zit er in het grens- en migratiepakket van 27 oktober?",
-      "¿Qué contiene el paquete de fronteras y migración del 27 de octubre?",
-      "Què conté el paquet de fronteres i migració del 27 d'octubre?",
-      "Cosa contiene il pacchetto frontiere e migrazione del 27 ottobre?"
-    ],
-    "dsa_enforcement#temu": [
-      "Did the Commission accept Temu's action plan under the DSA?",
-      "La Commission a-t-elle accepté le plan d'action de Temu ?",
-      "Heeft de Commissie het actieplan van Temu goedgekeurd?",
-      "¿Ha aceptado la Comisión el plan de acción de Temu?",
-      "La Comissió ha acceptat el pla d'acció de Temu?",
-      "La Commissione ha accettato il piano d'azione di Temu?"
-    ],
-    "competition_law_enforcement#omya": [
-      "Why is the Commission investigating Omya?",
-      "Pourquoi la Commission enquête-t-elle sur Omya ?",
-      "Waarom onderzoekt de Commissie Omya?",
-      "¿Por qué investiga la Comisión a Omya?",
-      "Per què investiga la Comissió Omya?",
-      "Perché la Commissione indaga su Omya?"
-    ],
-    "dg_mena_overview#tmed": [
-      "What is the T-MED investment platform?",
-      "Qu'est-ce que la plateforme d'investissement T-MED ?",
-      "Wat is het T-MED investeringsplatform?",
-      "¿Qué es la plataforma de inversión T-MED?",
-      "Què és la plataforma d'inversió T-MED?",
-      "Cos'è la piattaforma di investimento T-MED?"
-    ],
-    "eu_energy_policy#hydrogen": [
-      "Is there a consultation on the new hydrogen strategy?",
-      "Y a-t-il une consultation sur la nouvelle stratégie hydrogène ?",
-      "Loopt er een raadpleging over de nieuwe waterstofstrategie?",
-      "¿Hay una consulta sobre la nueva estrategia del hidrógeno?",
-      "Hi ha una consulta sobre la nova estratègia de l'hidrogen?",
-      "C'è una consultazione sulla nuova strategia per l'idrogeno?"
-    ],
-    "serbia_eu_accession_and_conditionality#election": [
-      "Who won the elections in Serbia?",
-      "Qui a gagné les élections en Serbie ?",
-      "Wie heeft de verkiezingen in Servië gewonnen?",
-      "¿Quién ganó las elecciones en Serbia?",
-      "Qui ha guanyat les eleccions a Sèrbia?",
-      "Chi ha vinto le elezioni in Serbia?"
-    ],
-    "climate_resilience_framework_2026#law": [
-      "What does the European Climate Resilience Law propose?",
-      "Que prévoit la loi européenne sur la résilience climatique ?",
-      "Wat staat er in de Europese klimaatveerkrachtwet?",
-      "¿Qué propone la ley europea de resiliencia climática?",
-      "Què proposa la llei europea de resiliència climàtica?",
-      "Cosa prevede la legge europea sulla resilienza climatica?"
-    ],
-    "eu_commission_transparency_and_college_agenda#adopted_today": [
-      "What did the Commission adopt on 27 October 2026?",
-      "Qu'a adopté la Commission le 27 octobre 2026 ?",
-      "Wat heeft de Commissie op 27 oktober 2026 aangenomen?",
-      "¿Qué adoptó la Comisión el 27 de octubre de 2026?",
-      "Què va adoptar la Comissió el 27 d'octubre de 2026?",
-      "Cosa ha adottato la Commissione il 27 ottobre 2026?"
-    ],
-    "border_migration_package_2026#frontex": [
-      "What does the Frontex recast proposal of 27 October 2026 change?",
-      "Que change la refonte du règlement Frontex du 27 octobre 2026 ?",
-      "Wat verandert de herschikking van de Frontex-verordening van 27 oktober 2026?",
-      "¿Qué cambia la refundición del Reglamento Frontex del 27 de octubre de 2026?",
-      "Què canvia la refosa del Reglament Frontex del 27 d'octubre de 2026?",
-      "Cosa cambia la rifusione del regolamento Frontex del 27 ottobre 2026?"
-    ]
-  },
-  "negatives": [
-    "What is the VAT rate on books in Spain?",
-    "Qui est le rapporteur du Chips Act 2 ?",
-    "Hoe registreer ik een BOB-kaas?",
-    "¿Cuántos habitantes tiene Andorra?",
-    "Quant costa un cafè a Roma?",
-    "Quando scade il bando Erasmus+?"
+  "commission_large_scale_review_civil_service_2026#review": [
+   "What does the Catherine Day report on the Commission's civil service recommend?",
+   "Que recommande le rapport Catherine Day sur la fonction publique de la Commission ?",
+   "Wat staat er in de grootschalige evaluatie van de Commissie?",
+   "¿Qué recomienda la revisión a gran escala de la Comisión?",
+   "Què recomana la revisió a gran escala de la Comissió?",
+   "Cosa raccomanda la revisione su larga scala della Commissione?"
+  ],
+  "european_heritage_list_decision_2026#heritage": [
+   "What is the Commission proposing for the European Heritage Label?",
+   "Que propose la Commission pour le label du patrimoine européen ?",
+   "Wat verandert er aan het Europees erfgoedlabel?",
+   "¿Qué cambia en el sello de patrimonio europeo?",
+   "Què canvia en el segell de patrimoni europeu?",
+   "Cosa cambia per il marchio del patrimonio europeo?"
+  ],
+  "climate_resilience_framework_2026#resilience": [
+   "Has the Commission adopted the climate resilience framework?",
+   "La Commission a-t-elle adopté le cadre de résilience climatique ?",
+   "Heeft de Commissie het klimaatveerkrachtkader al aangenomen?",
+   "¿Ha adoptado la Comisión el marco de resiliencia climática?",
+   "La Comissió ha adoptat el marc de resiliència climàtica?",
+   "La Commissione ha adottato il quadro di resilienza climatica?"
+  ],
+  "border_migration_package_2026#border": [
+   "What is in the border and migration package of 27 October?",
+   "Que contient le paquet frontières et migration du 27 octobre ?",
+   "Wat zit er in het grens- en migratiepakket van 27 oktober?",
+   "¿Qué contiene el paquete de fronteras y migración del 27 de octubre?",
+   "Què conté el paquet de fronteres i migració del 27 d'octubre?",
+   "Cosa contiene il pacchetto frontiere e migrazione del 27 ottobre?"
+  ],
+  "dsa_enforcement#temu": [
+   "Did the Commission accept Temu's action plan under the DSA?",
+   "La Commission a-t-elle accepté le plan d'action de Temu ?",
+   "Heeft de Commissie het actieplan van Temu goedgekeurd?",
+   "¿Ha aceptado la Comisión el plan de acción de Temu?",
+   "La Comissió ha acceptat el pla d'acció de Temu?",
+   "La Commissione ha accettato il piano d'azione di Temu?"
+  ],
+  "competition_law_enforcement#omya": [
+   "Why is the Commission investigating Omya?",
+   "Pourquoi la Commission enquête-t-elle sur Omya ?",
+   "Waarom onderzoekt de Commissie Omya?",
+   "¿Por qué investiga la Comisión a Omya?",
+   "Per què investiga la Comissió Omya?",
+   "Perché la Commissione indaga su Omya?"
+  ],
+  "dg_mena_overview#tmed": [
+   "What is the T-MED investment platform?",
+   "Qu'est-ce que la plateforme d'investissement T-MED ?",
+   "Wat is het T-MED investeringsplatform?",
+   "¿Qué es la plataforma de inversión T-MED?",
+   "Què és la plataforma d'inversió T-MED?",
+   "Cos'è la piattaforma di investimento T-MED?"
+  ],
+  "eu_energy_policy#hydrogen": [
+   "Is there a consultation on the new hydrogen strategy?",
+   "Y a-t-il une consultation sur la nouvelle stratégie hydrogène ?",
+   "Loopt er een raadpleging over de nieuwe waterstofstrategie?",
+   "¿Hay una consulta sobre la nueva estrategia del hidrógeno?",
+   "Hi ha una consulta sobre la nova estratègia de l'hidrogen?",
+   "C'è una consultazione sulla nuova strategia per l'idrogeno?"
+  ],
+  "serbia_eu_accession_and_conditionality#election": [
+   "Who won the elections in Serbia?",
+   "Qui a gagné les élections en Serbie ?",
+   "Wie heeft de verkiezingen in Servië gewonnen?",
+   "¿Quién ganó las elecciones en Serbia?",
+   "Qui ha guanyat les eleccions a Sèrbia?",
+   "Chi ha vinto le elezioni in Serbia?"
+  ],
+  "climate_resilience_framework_2026#law": [
+   "What does the European Climate Resilience Law propose?",
+   "Que prévoit la loi européenne sur la résilience climatique ?",
+   "Wat staat er in de Europese klimaatveerkrachtwet?",
+   "¿Qué propone la ley europea de resiliencia climática?",
+   "Què proposa la llei europea de resiliència climàtica?",
+   "Cosa prevede la legge europea sulla resilienza climatica?"
+  ],
+  "eu_commission_transparency_and_college_agenda#adopted_today": [
+   "What did the Commission adopt on 27 October 2026?",
+   "Qu'a adopté la Commission le 27 octobre 2026 ?",
+   "Wat heeft de Commissie op 27 oktober 2026 aangenomen?",
+   "¿Qué adoptó la Comisión el 27 de octubre de 2026?",
+   "Què va adoptar la Comissió el 27 d'octubre de 2026?",
+   "Cosa ha adottato la Commissione il 27 ottobre 2026?"
+  ],
+  "border_migration_package_2026#frontex": [
+   "What does the Frontex recast proposal of 27 October 2026 change?",
+   "Que change la refonte du règlement Frontex du 27 octobre 2026 ?",
+   "Wat verandert de herschikking van de Frontex-verordening van 27 oktober 2026?",
+   "¿Qué cambia la refundición del Reglamento Frontex del 27 de octubre de 2026?",
+   "Què canvia la refosa del Reglament Frontex del 27 d'octubre de 2026?",
+   "Cosa cambia la rifusione del regolamento Frontex del 27 ottobre 2026?"
+  ],
+  "social_security_coordination_revision#socsec": [
+   "When does the new regulation on the coordination of social security systems enter into force?",
+   "Quand le nouveau règlement sur la coordination de la sécurité sociale entre-t-il en vigueur ?",
+   "Wanneer treedt de nieuwe verordening over de coördinatie van de sociale zekerheid in werking?",
+   "¿Cuándo entra en vigor el nuevo reglamento sobre la coordinación de la seguridad social?",
+   "Quan entra en vigor el nou reglament sobre la coordinació de la seguretat social?",
+   "Quando entra in vigore il nuovo regolamento sul coordinamento della sicurezza sociale?"
+  ],
+  "common_agricultural_policy#cap_council": [
+   "What is the Council's negotiating position on the post-2027 CAP?",
+   "Quelle est la position de négociation du Conseil sur la PAC après 2027 ?",
+   "Wat is het onderhandelingsstandpunt van de Raad over het GLB na 2027?",
+   "¿Cuál es la posición negociadora del Consejo sobre la PAC posterior a 2027?",
+   "Quina és la posició negociadora del Consell sobre la PAC posterior a 2027?",
+   "Qual è la posizione negoziale del Consiglio sulla PAC post-2027?"
+  ],
+  "eu_sanctions_implementation_framework#isil": [
+   "Were the ISIL and Al-Qaeda sanctions renewed?",
+   "Les sanctions ISIL et Al-Qaida ont-elles été renouvelées ?",
+   "Zijn de ISIL-sancties verlengd?",
+   "¿Se renovaron las sanciones ISIL y Al Qaeda?",
+   "S'han renovat les sancions ISIL i Al-Qaida?",
+   "Sono state rinnovate le sanzioni ISIL e Al-Qaeda?"
+  ],
+  "european_peace_facility#epf_ukraine": [
+   "What did the Council mobilise for Ukraine under the European Peace Facility on 26 October?",
+   "Qu'a mobilisé le Conseil pour l'Ukraine au titre de la facilité européenne pour la paix le 26 octobre ?",
+   "Wat heeft de Raad op 26 oktober voor Oekraïne vrijgemaakt onder de Europese Vredesfaciliteit?",
+   "¿Qué movilizó el Consejo para Ucrania bajo el Fondo Europeo de Apoyo a la Paz el 26 de octubre?",
+   "Què va mobilitzar el Consell per a Ucraïna sota el Fons Europeu de Suport a la Pau el 26 d'octubre?",
+   "Cosa ha mobilitato il Consiglio per l'Ucraina nell'ambito dello strumento europeo per la pace il 26 ottobre?"
+  ],
+  "eu_baltic_sea_strategy#tac": [
+   "What are the Baltic Sea fishing opportunities for 2027?",
+   "Quelles sont les possibilités de pêche en mer Baltique pour 2027 ?",
+   "Wat zijn de vangstmogelijkheden in de Oostzee voor 2027?",
+   "¿Cuáles son las posibilidades de pesca en el Báltico para 2027?",
+   "Quines són les possibilitats de pesca al Bàltic per al 2027?",
+   "Quali sono le possibilità di pesca nel Baltico per il 2027?"
+  ],
+  "eu_canada_relations#summit": [
+   "When is the EU-Canada summit in Montreal?",
+   "Quand a lieu le sommet UE-Canada à Montréal ?",
+   "Wanneer is de EU-Canada-top in Montreal?",
+   "¿Cuándo es la cumbre UE-Canadá en Montreal?",
+   "Quan és la cimera UE-Canadà a Mont-real?",
+   "Quando si tiene il vertice UE-Canada a Montreal?"
   ]
+ },
+ "negatives": [
+  "What is the VAT rate on books in Spain?",
+  "Qui est le rapporteur du Chips Act 2 ?",
+  "Hoe registreer ik een BOB-kaas?",
+  "¿Cuántos habitantes tiene Andorra?",
+  "Quant costa un cafè a Roma?",
+  "Quando scade il bando Erasmus+?"
+ ]
 }

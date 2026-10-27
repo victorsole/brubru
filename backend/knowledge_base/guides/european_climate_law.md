@@ -1,6 +1,7 @@
 # European Climate Law
 
 ## QUICK FACTS
+- **LATEST (Tuesday 27 October 2026): the Commission PROPOSED a European Climate Resilience Law (COM(2026) 730, procedure 2026/0336(COD)) with an EU Climate Resilience Framework communication (COM(2026) 720)**: a proposal, NOT law. It would let Member States meet their planning duties under this Regulation, the Governance Regulation and the new Law through **one single national strategic plan**, against a common reference warming trajectory (1.5 C by 2030, 2 C by 2050, 3 C by 2100). Detail: `climate_resilience_framework_2026`.
 - **LATEST (10 September 2026 — observed temperature).** Commissioner **Wopke Hoekstra**, citing the
   **Copernicus C3S Climate Bulletin**: **August 2026 was the warmest August on record globally**, with
   a global average surface air temperature of **16.96 degrees Celsius**. Cite C3S as the source, not

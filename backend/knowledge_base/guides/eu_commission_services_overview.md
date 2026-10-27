@@ -1,6 +1,7 @@
 # EU Commission — Functional DGs, Service Departments & Offices
 
 ## QUICK FACTS
+- **LATEST (26 October 2026)**: the High-Level Group chaired by Catherine Day handed its report 'The Future of the Commission's Civil Service' to President von der Leyen and Commissioner Serafin as input to the **Large-Scale Review** of the Commission's organisation (IP/26/2253); the final review report is due by the end of 2026 and nothing is decided. Detail: `commission_large_scale_review_civil_service_2026`.
 - **What this is**: the Commission bodies **beyond the 25 policy DGs** — the **functional/horizontal Directorates-General**, the **4 genuine service departments**, and the **offices/interinstitutional bodies**. Verified body-by-body (31 May 2026).
 - **Correction to a common error**: many of these are **Directorates-General**, NOT "services" — Translation (DGT), Interpretation (SCIC), Human Resources (HR), Digital Services (DIGIT), Communication (COMM), Eurostat (ESTAT), the Joint Research Centre (JRC), Civil Protection & Humanitarian Aid (ECHO), the Anti-Fraud Office (OLAF) and the Health Emergency Authority (HERA) are all **DGs**.
 - **The only genuine service departments** are **DPO, EC Library, FPI and the Historical Archives Service**.

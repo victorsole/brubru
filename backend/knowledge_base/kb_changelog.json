@@ -4,6 +4,98 @@
     {
       "date": "2026-10-27",
       "action": "updated",
+      "guide": "european_climate_law",
+      "title": "European Climate Law",
+      "summary": "Pointer to the proposed European Climate Resilience Law COM(2026) 730 (2026/0336(COD)) and the single national strategic plan it would create.",
+      "refs": [
+        "2026/0336(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "frontex_agency_overview",
+      "title": "Frontex: European Border and Coast Guard Agency",
+      "summary": "27 October 2026: the Frontex recast COM(2026) 1030 and the return-digitalisation proposal COM(2026) 1037 as pointers to border_migration_package_2026; EPRS implementation briefing of 22 October.",
+      "refs": [
+        "COM(2026)1030",
+        "COM(2026)1037"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_canada_relations",
+      "title": "EU-Canada Relations",
+      "summary": "21st EU-Canada summit in Montreal on 29-30 October 2026 (Costa, von der Leyen, Carney); the associate-member label still disputed per press.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_chips_act",
+      "title": "EU Chips Act",
+      "summary": "Commission approved EUR 319 million Austrian State aid for Infineon's 300 mm power GaN fab in Villach (27 October 2026), assessed under Article 107(3)(c) TFEU and the Chips Act principles.",
+      "refs": [
+        "32023R1781"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_baltic_sea_strategy",
+      "title": "EU Strategy for the Baltic Sea Region",
+      "summary": "Council agreement on 2027 Baltic Sea fishing opportunities (26 October 2026): every TAC against 2026 and the Commission proposal, from the DG MARE note.",
+      "refs": []
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "common_agricultural_policy",
+      "title": "Common Agricultural Policy",
+      "summary": "Council partial negotiating position on the post-2027 CAP (26 October 2026): single CAP fund inside the national and regional partnership plans, about EUR 300 billion ring-fence; EP CASP study on the new CAP architecture.",
+      "refs": [
+        "CASP_STU(2026)783511"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "european_peace_facility",
+      "title": "European Peace Facility",
+      "summary": "OJ L of 27 October 2026: Decision 2026/2362 rewrites the annual ceilings (2026: 5,079; 2027: 6,274 million EUR), Decisions 2026/2363-2369 amend the Ukraine measures (Council: EUR 4.9 billion), Mauritania raised to EUR 28 million; the EUR 2.86 billion Ukraine Support Loan disbursement distinguished from the EPF.",
+      "refs": [
+        "32026D2362",
+        "32026D2375"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "OJ L of 27 October 2026: ISIL/Al-Qaeda measures extended to 31 October 2027 (Decision 2026/2378), Transnistria to 31 October 2027 (2026/2397), DRC criteria aligned with UNSCR 2667 and 2825 (Decision 2026/2372, Regulation 2026/2374).",
+      "refs": [
+        "32026D2378",
+        "32026D2397",
+        "32026D2372",
+        "32026R2374"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
+      "guide": "social_security_coordination_revision",
+      "title": "Revision of EU Social Security Coordination: Regulation (EU) 2026/2359, published 27 October 2026, in force 1 November 2026",
+      "summary": "Published in OJ L of 27 October 2026 as Regulation (EU) 2026/2359; Article 3 puts entry into force on 1 November 2026; staggered application read from the amended Articles 91 (883/2004) and 97 (987/2009): blocks from 1 November 2026 and 2 November 2028, Article 64 of 987/2009 from 1 January 2027, Luxembourg transition to 2031; Commission statements C/2026/5549 and 5553.",
+      "refs": [
+        "32026R2359",
+        "2016/0397(COD)"
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "action": "updated",
       "guide": "border_migration_package_2026",
       "title": "Border and migration package of 27 October 2026: Frontex recast COM(2026) 1030 and return digitalisation COM(2026) 1037",
       "summary": "Filled after the College adoption (IP/26/2260, 12:34 CET): Frontex recast COM(2026) 1030 (text not reachable today, press-release content labelled as such) and the return-digitalisation proposal COM(2026) 1037, 2026/0340(COD), read from its PDF (RECAMAS, iRCMS, RIAT, communication portal, four-year start of operations).",
