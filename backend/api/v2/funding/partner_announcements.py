@@ -129,7 +129,7 @@ Organisations looking for partners: every announcement an organisation published
 - `status` — the topic's status as Brubru holds it: open | forthcoming | closed (announcements for topics Brubru does not hold are then left out).
 - `expertise` — offer | request. `organisation_type` — part of the portal's type (`Small or medium`, `Research`, `Higher or secondary education`, `Public`, `Non-governmental`).
 - `pic`, `organisation` (part of its name), `country` (ISO-2; EL and GR, UK and GB are the same); `without_eu_projects=true` — only organisations with no EU project yet.
-- `requested_from`, `requested_to` (`since`, `until`, `from`, `to` are aliases). {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
+- `requested_from`, `requested_to` (`published_from`, `published_to`, `since`, `until`, `from`, `to` are aliases). {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
 - `order` — recent (default) | oldest | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
@@ -165,6 +165,8 @@ async def list_partner_announcements(
     without_eu_projects: bool = Query(False, description="Only organisations with no EU project yet (as the portal counts them)."),
     requested_from: Optional[date] = Query(None, description="Announced on or after (YYYY-MM-DD)."),
     requested_to: Optional[date] = Query(None, description="Announced on or before (YYYY-MM-DD)."),
+    published_from: Optional[date] = Query(None, description="The same as `requested_from` (the funding standard's name)."),
+    published_to: Optional[date] = Query(None, description="The same as `requested_to`."),
     since: Optional[date] = Query(None, include_in_schema=False),
     until: Optional[date] = Query(None, include_in_schema=False),
     from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
@@ -214,7 +216,7 @@ async def list_partner_announcements(
         where.append("s.country = :cc"); params["cc"] = eu_code(country)
     if without_eu_projects:
         where.append("s.pic IN (SELECT pic FROM ft_partner_search_orgs WHERE projects = 0)")
-    start, end = requested_from or since or from_, requested_to or until or to
+    start, end = requested_from or published_from or since or from_, requested_to or published_to or until or to
     if start:
         where.append("s.requested_date >= :start"); params["start"] = start
     if end:

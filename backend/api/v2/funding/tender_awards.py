@@ -161,7 +161,7 @@ Who won the contracts EU institutions, bodies and agencies awarded: every contra
 - `contracting_authority` — part of the buyer's name (`CNECT`, `Environment Agency`); `body` — the buyer as a Brubru body code (`commission`, `eea`, `frontex`).
 - `winner` — part of a winner's name; `winner_country` — a winner's country (ISO-2; EL and GR, UK and GB are the same).
 - `buyer_country`, `contract_nature` (services | supplies | works), `procedure_type` (open, restricted, neg-w-call ...), `cpv_code` (a CPV code or its start: `7241` for IT consulting).
-- `published_from`, `published_to` (`since`, `until`, `from`, `to` are aliases); `min_amount_eur` — awarded value in euros at least. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
+- `published_from`, `published_to` (`since`, `until`, `from`, `to` are aliases); `min_amount_eur`, `max_amount_eur` — awarded value in euros, at least / at most. `country` is the same as `buyer_country`. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
 - `include_superseded` — also the earlier versions of changed notices (default false).
 - `order` — recent (default) | oldest | amount | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
@@ -192,6 +192,7 @@ async def list_tender_awards(
     winner: Optional[str] = Query(None, description="Part of a winner's name."),
     winner_country: Optional[str] = Query(None, min_length=2, max_length=2, description="A winner's country, ISO-2."),
     buyer_country: Optional[str] = Query(None, min_length=2, max_length=2, description="The buyer's country, ISO-2."),
+    country: Optional[str] = Query(None, min_length=2, max_length=2, description="The same as `buyer_country` (the funding standard's name)."),
     contract_nature: Optional[str] = Query(None, description="services | supplies | works."),
     procedure_type: Optional[str] = Query(None, description="eForms procedure code: open, restricted, neg-w-call ..."),
     cpv_code: Optional[str] = Query(None, description="A CPV code or its start, matched on any of the notice's codes."),
@@ -202,6 +203,7 @@ async def list_tender_awards(
     from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
     to: Optional[date] = Query(None, include_in_schema=False),
     min_amount_eur: Optional[float] = Query(None, ge=0, description="Awarded value in euros at least."),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description="Awarded value in euros at most."),
     include_superseded: bool = Query(False, description="Also the earlier versions of changed notices."),
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
@@ -233,8 +235,8 @@ async def list_tender_awards(
             w_where.append("w.country = :wc"); params["wc"] = eu_code(winner_country)
         where.append("EXISTS (SELECT 1 FROM ted_award_winners w WHERE w.publication_number = n.publication_number AND "
                      + " AND ".join(w_where) + ")")
-    if buyer_country:
-        where.append("n.buyer_country = :bc"); params["bc"] = eu_code(buyer_country)
+    if buyer_country or country:
+        where.append("n.buyer_country = :bc"); params["bc"] = eu_code(buyer_country or country)
     if contract_nature:
         where.append("n.contract_nature = :nature"); params["nature"] = contract_nature.strip().lower()
     if procedure_type:
@@ -248,6 +250,8 @@ async def list_tender_awards(
         where.append("n.publication_date <= :end"); params["end"] = end
     if min_amount_eur is not None:
         where.append("upper(n.awarded_value_currency) = 'EUR' AND n.awarded_value >= :min_eur"); params["min_eur"] = min_amount_eur
+    if max_amount_eur is not None:
+        where.append("upper(n.awarded_value_currency) = 'EUR' AND n.awarded_value <= :max_eur"); params["max_eur"] = max_amount_eur
     sql_window(where, params, window, "n.first_seen", "n.last_updated")
     clause = _FROM + "".join(f" AND {w}" for w in where)
     total = db.execute(text(f"SELECT count(*) {clause}"), params).scalar() or 0

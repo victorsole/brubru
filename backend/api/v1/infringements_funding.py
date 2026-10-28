@@ -30,6 +30,7 @@ from ._body import (
 from ._date_bounds import UpperBoundDatetime
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from api.v1._change_window import orm_order
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
 
@@ -301,6 +302,88 @@ def _funding_to_item(
     )
 
 
+def _opportunity_order(model, order: Optional[str]):
+    """The list's order: the latest deadline first (default) | recent | oldest (the publication date) |
+    a sync order (first recorded, content changed)."""
+    sync = orm_order(order, model.first_seen_at, model.content_updated_at, model.id) if order else None
+    if sync:
+        return sync
+    return {
+        "recent": (model.published_at.desc().nullslast(), model.id.desc()),
+        "oldest": (model.published_at.asc().nullslast(), model.id.asc()),
+    }.get(order, (model.deadline.desc().nullslast(), model.id.desc()))
+
+
+async def funding_opportunities_page(
+    request: Request,
+    programme: Optional[str] = Query(None, description="Programme name (Horizon, CEF, Digital Europe, ...)"),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
+    type_of_action: Optional[str] = Query(None),
+    q: Optional[str] = Query(None, description="Substring match on title/short_summary"),
+    deadline_from: Optional[date] = Query(None),
+    deadline_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
+    limit: int = Query(50, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+    created_from: Optional[datetime] = None,
+    created_to: Optional[datetime] = None,
+    published_from: Optional[date] = None,
+    published_to: Optional[date] = None,
+    order: Optional[str] = None,
+) -> PaginatedResponse[FundingItem]:
+    model = FtCallForProposals
+    query = db.query(model).filter(model.is_test == False)  # noqa: E712
+    filters = []
+    if programme:
+        filters.append(model.framework_programme.ilike(f"%{programme}%"))
+    if status:
+        filters.append(model.status == status.lower())
+    if type_of_action:
+        filters.append(model.type_of_action.ilike(f"%{type_of_action}%"))
+    if q:
+        like = f"%{q}%"
+        filters.append((model.title.ilike(like)) | (model.description.ilike(like)))
+    if deadline_from:
+        filters.append(model.deadline >= deadline_from)
+    if deadline_to:
+        filters.append(model.deadline <= datetime.combine(deadline_to, time.max))
+    if updated_from:
+        filters.append(model.content_updated_at >= updated_from)
+    if updated_to:
+        filters.append(model.content_updated_at <= updated_to)
+    if created_from:
+        filters.append(model.first_seen_at >= created_from)
+    if created_to:
+        filters.append(model.first_seen_at <= created_to)
+    if published_from:
+        filters.append(model.published_at >= published_from)
+    if published_to:
+        filters.append(model.published_at <= datetime.combine(published_to, time.max))
+    if filters:
+        query = query.filter(and_(*filters))
+
+    total = query.count()
+    rows = (
+        # Default: most recent deadlines first (2025-2026 before decade-old
+        # closed calls). Partners hit the endpoint to find opportunities they
+        # can still apply to, not historic data.
+        stable(query.order_by(*_opportunity_order(model, order)))
+        .offset((page - 1) * limit)
+        .limit(limit)
+        .all()
+    )
+    return build_envelope(
+        [_funding_to_item(r, body_threshold=body_threshold) for r in rows],
+        total=total, page=page, limit=limit,
+    )
+
+
+# The route: v1's parameters; its query is funding_opportunities_page, which
+# /api/v2/funding/funding-opportunities also calls with the funding standard's filters (28 Oct 2026).
 @funding_router.get(
     "",
     response_model=PaginatedResponse[FundingItem],
@@ -351,46 +434,7 @@ async def list_funding_opportunities(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FundingItem]:
-    model = FtCallForProposals
-    query = db.query(model).filter(model.is_test == False)  # noqa: E712
-    filters = []
-    if programme:
-        filters.append(model.framework_programme.ilike(f"%{programme}%"))
-    if status:
-        filters.append(model.status == status.lower())
-    if type_of_action:
-        filters.append(model.type_of_action.ilike(f"%{type_of_action}%"))
-    if q:
-        like = f"%{q}%"
-        filters.append((model.title.ilike(like)) | (model.description.ilike(like)))
-    if deadline_from:
-        filters.append(model.deadline >= deadline_from)
-    if deadline_to:
-        filters.append(model.deadline <= datetime.combine(deadline_to, time.max))
-    if updated_from:
-        filters.append(model.content_updated_at >= updated_from)
-    if updated_to:
-        filters.append(model.content_updated_at <= updated_to)
-    if filters:
-        query = query.filter(and_(*filters))
-
-    total = query.count()
-    rows = (
-        # Default: most recent deadlines first (2025-2026 before decade-old
-        # closed calls). Partners hit the endpoint to find opportunities they
-        # can still apply to, not historic data.
-        stable(query.order_by(
-            model.deadline.desc().nullslast(),
-            model.id.desc(),
-        ))
-        .offset((page - 1) * limit)
-        .limit(limit)
-        .all()
-    )
-    return build_envelope(
-        [_funding_to_item(r, body_threshold=body_threshold) for r in rows],
-        total=total, page=page, limit=limit,
-    )
+    return await funding_opportunities_page(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @funding_router.get(

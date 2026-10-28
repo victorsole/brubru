@@ -224,3 +224,37 @@ def test_the_calls_for_proposals_take_programme_as_framework_programme():
     r, sql = _orm_get("/api/v2/funding/ft-calls-for-proposals", {"programme": "HORIZON"})
     assert r.status_code == 200, r.text
     assert "ft_calls_for_proposals.framework_programme" in sql[0]
+
+
+def test_the_funding_opportunities_take_the_windows_and_the_orders():
+    r, sql = _orm_get("/api/v2/funding/funding-opportunities", {"created_from": "2026-10-01", "published_from": "2026-01-01",
+                                                                  "until": "2026-06-30", "order": "recent"})
+    assert r.status_code == 200, r.text
+    count_sql, page_sql = sql
+    assert "ft_calls_for_proposals.first_seen_at >= " in count_sql
+    assert "ft_calls_for_proposals.published_at >= " in count_sql and "ft_calls_for_proposals.published_at <= " in count_sql
+    assert "ORDER BY ft_calls_for_proposals.published_at DESC NULLS LAST, ft_calls_for_proposals.id DESC" in page_sql
+    r, sql = _orm_get("/api/v2/funding/funding-opportunities", {"order": "created_asc"})
+    assert "ORDER BY ft_calls_for_proposals.first_seen_at ASC, ft_calls_for_proposals.id ASC" in sql[1]
+    r, sql = _orm_get("/api/v2/funding/funding-opportunities", {})
+    assert "ORDER BY ft_calls_for_proposals.deadline DESC NULLS LAST, ft_calls_for_proposals.id DESC" in sql[1]   # unchanged default
+    assert _orm_get("/api/v2/funding/funding-opportunities", {"order": "amount"})[0].status_code == 400
+
+
+def test_the_tender_awards_take_country_and_the_amount_range():
+    from api.v2.funding import router as funding
+    db = _Db()
+    r = _client(funding, db).get("/api/v2/funding/tender-awards", params={"country": "lu", "min_amount_eur": 1000, "max_amount_eur": 50000})
+    assert r.status_code == 200, r.text
+    sql, params = db.sql[0]
+    assert "n.buyer_country = :bc" in sql and params["bc"] == "LU"
+    assert "n.awarded_value >= :min_eur" in sql and "n.awarded_value <= :max_eur" in sql and params["max_eur"] == 50000
+
+
+def test_the_partner_announcements_take_the_published_window():
+    from api.v2.funding import router as funding
+    db = _Db()
+    r = _client(funding, db).get("/api/v2/funding/partner-announcements", params={"published_from": "2026-09-01", "published_to": "2026-09-30"})
+    assert r.status_code == 200, r.text
+    sql, params = db.sql[0]
+    assert "s.requested_date >= :start" in sql and str(params["start"]) == "2026-09-01" and str(params["end"]) == "2026-09-30"
