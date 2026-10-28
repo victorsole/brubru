@@ -50,8 +50,9 @@ def published_window(
 
 
 def published_sql(where: list, params: dict, window: Tuple[Optional[date], Optional[date]], column: str) -> None:
-    """The publication window on `column` (a date or timestamp: the whole last day counts)."""
-    start, end = window
+    """The publication window on `column` (a date or timestamp: the whole last day counts). A handler
+    called directly (not through FastAPI) passes None for the dependency."""
+    start, end = window or (None, None)
     if start:
         where.append(f"{column} >= :published_from")
         params["published_from"] = start

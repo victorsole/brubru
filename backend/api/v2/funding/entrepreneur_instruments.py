@@ -35,7 +35,7 @@ from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
 from api.v1._pagination import stable
 from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, orm_order, orm_window, validate_window
-from ._standard import include_body_param, without_bodies
+from ._standard import include_body_param, published_window, without_bodies
 
 router = APIRouter()
 
@@ -135,10 +135,11 @@ For an accelerator, incubator, business angel or ecosystem builder (like KinEtix
 **Input**
 - `status` — comma list, default `open,forthcoming` (also `closed`, `unknown`; `all` for every status). There is no `under-evaluation` value in the data; `unknown` is the one to add if you want rows whose source feed stated no status.
 - `programme` — one of the coarse labels (e.g. `HORIZON (EIC)`, `Digital Europe`, `Single Market Programme`).
-- `deadline_before` — only calls closing on/before this date.
+- `deadline_from`, `deadline_to` — the deadline window (`deadline_before` is the same as `deadline_to`).
+- `published_from`, `published_to` — the publication window (`since`, `until`, `from`, `to` are aliases). The publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first.
 - `q` — free text over title / description.
 - `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`).
-- `order` — `deadline_desc` (default), or `updated_asc` to page a change window (also `updated_desc`, `created_asc`, `created_desc`).
+- `order` — `deadline_desc` (default), `recent` / `oldest` (the publication date), or `updated_asc` to page a change window (also `updated_desc`, `created_asc`, `created_desc`).
 - `limit` (default 50, max 200), `page`, `include_body` (default true).
 
 **Try it**
@@ -170,12 +171,15 @@ async def entrepreneur_instruments(
     status: str = Query("open,forthcoming", description="Comma list: open,forthcoming (default) | closed | unknown | all. No `under-evaluation` value exists in the data."),
     programme: Optional[str] = Query(None, description="Coarse programme label, e.g. 'HORIZON (EIC)', 'Digital Europe', 'Single Market Programme'"),
     deadline_before: Optional[date] = Query(None, description="Only calls closing on/before this date (YYYY-MM-DD)"),
+    deadline_from: Optional[date] = Query(None, description="Only calls closing on/after this date (YYYY-MM-DD)."),
+    deadline_to: Optional[date] = Query(None, description="The same as `deadline_before` (the funding standard's name)."),
+    published: tuple = Depends(published_window),
     q: Optional[str] = Query(None, description="Substring match on title / description"),
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", description="deadline_desc (default) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
+    order: str = Query("deadline_desc", description="deadline_desc (default) | recent | oldest (the publication date) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
@@ -193,19 +197,28 @@ async def entrepreneur_instruments(
 
     if programme:
         filters.append(_programme_condition(programme))
-    if deadline_before:
-        filters.append(FtCallForProposals.deadline <= datetime.combine(deadline_before, time.max))
+    if deadline_before or deadline_to:
+        filters.append(FtCallForProposals.deadline <= datetime.combine(deadline_before or deadline_to, time.max))
+    if deadline_from:
+        filters.append(FtCallForProposals.deadline >= deadline_from)
+    published_start, published_end = published or (None, None)
+    if published_start:
+        filters.append(FtCallForProposals.published_at >= published_start)
+    if published_end:
+        filters.append(FtCallForProposals.published_at <= datetime.combine(published_end, time.max))
     if q:
         like = f"%{q}%"
         filters.append((FtCallForProposals.title.ilike(like)) | (FtCallForProposals.description.ilike(like)))
 
-    if order != "deadline_desc" and order not in SYNC_ORDERS:
-        raise HTTPException(status_code=400, detail=f"order must be one of {['deadline_desc'] + list(SYNC_ORDERS)}")
+    if order not in ("deadline_desc", "recent", "oldest") and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {['deadline_desc', 'recent', 'oldest'] + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
     query = db.query(FtCallForProposals).filter(and_(*filters))
     query = orm_window(query, window, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at)
     # Same columns as /ft-calls-for-proposals, which serves them as creation_date / updated_date.
     sort = (orm_order(order, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at, FtCallForProposals.id)
+            or {"recent": (FtCallForProposals.published_at.desc().nullslast(), FtCallForProposals.id.desc()),
+                "oldest": (FtCallForProposals.published_at.asc().nullslast(), FtCallForProposals.id.asc())}.get(order)
             or (FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc()))
     total = query.count()
     rows = (

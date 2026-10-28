@@ -258,3 +258,55 @@ def test_the_partner_announcements_take_the_published_window():
     assert r.status_code == 200, r.text
     sql, params = db.sql[0]
     assert "s.requested_date >= :start" in sql and str(params["start"]) == "2026-09-01" and str(params["end"]) == "2026-09-30"
+
+
+def test_the_startup_and_entrepreneur_lists_take_the_publication_window_and_the_orders():
+    r, sql = _orm_get("/api/v2/funding/startups", {"programme": "HORIZON", "published_from": "2026-01-01", "order": "recent"})
+    assert r.status_code == 200, r.text
+    assert "ft_calls_for_proposals.framework_programme ILIKE" in sql[0] and "ft_calls_for_proposals.published_at >= " in sql[0]
+    assert "ORDER BY ft_calls_for_proposals.published_at DESC NULLS LAST" in sql[1]
+    assert "ORDER BY ft_calls_for_proposals.deadline DESC NULLS LAST" in _orm_get("/api/v2/funding/startups", {})[1][1]
+    r, sql = _orm_get("/api/v2/funding/entrepreneur-instruments", {"deadline_from": "2026-11-01", "deadline_to": "2026-12-31",
+                                                                     "until": "2026-06-30", "order": "oldest"})
+    assert r.status_code == 200, r.text
+    assert "ft_calls_for_proposals.deadline >= " in sql[0] and "ft_calls_for_proposals.deadline <= " in sql[0]
+    assert "ft_calls_for_proposals.published_at <= " in sql[0]
+    assert "ORDER BY ft_calls_for_proposals.published_at ASC NULLS LAST" in sql[1]
+    for path in ("/api/v2/funding/startups", "/api/v2/funding/entrepreneur-instruments"):
+        assert _orm_get(path, {"order": "amount"})[0].status_code == 400, path
+
+
+def test_the_fts_lists_take_a_country_code_the_amount_range_and_the_publication_window():
+    from api.v2.funding import router as funding
+    db = _Db()
+    r = _client(funding, db).get("/api/v2/funding/eu-funding-recipients", params={
+        "country": "gr", "min_amount_eur": 10, "max_amount_eur": 500, "published_from": "2025-01-01", "to": "2025-12-31"})
+    assert r.status_code == 200, r.text
+    sql, params = db.sql[0]
+    assert "c.country_code = :ctry" in sql and params["ctry"] == "EL"          # a code, never a substring of a name
+    assert "c.beneficiary_amount_eur <= :max_amt" in sql and params["max_amt"] == 500
+    assert "coalesce(e.document_date, e.creation_date) >= :since" in sql and str(params["until"]) == "2025-12-31"
+    db = _Db()
+    _client(funding, db).get("/api/v2/funding/eu-funding-recipients", params={"country": "Spain"})
+    assert "c.country ILIKE :ctry" in db.sql[0][0] and db.sql[0][1]["ctry"] == "%Spain%"
+    db = _Db()
+    r = _client(funding, db).get("/api/v2/funding/international-cooperation", params={
+        "country": "UA", "max_amount_eur": 1000000, "published_from": "2025-01-01"})
+    assert r.status_code == 200, r.text
+    sql, params = db.sql[0]
+    assert "c.country_code = :ctry" in sql and params["ctry"] == "UA" and "c.beneficiary_amount_eur <= :max_amt" in sql
+    assert "coalesce(e.document_date, e.creation_date) >= :published_from" in sql
+
+
+def test_partners_take_max_amount_and_all_takes_the_publication_window():
+    from api.v2.funding import router as funding
+    db = _Db()
+    r = _client(funding, db).get("/api/v2/funding/partners", params={"q": "battery", "max_amount_eur": 250000})
+    assert r.status_code == 200, r.text
+    assert any("sum(amount_eur) IS NOT NULL) AND " in sql and "<= :max_amt" in sql and params.get("max_amt") == 250000
+               for sql, params in db.sql)         # an organisation with no known amount is not "at most"
+    db = _Db()
+    r = _client(funding, db).get("/api/v2/funding/all", params={"published_from": "2026-10-01", "published_to": "2026-10-28"})
+    assert r.status_code == 200, r.text
+    sql, params = db.sql[0]
+    assert "document_date >= :since" in sql and str(params["since"]) == "2026-10-01" and str(params["until"]) == "2026-10-28"

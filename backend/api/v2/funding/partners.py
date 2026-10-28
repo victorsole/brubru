@@ -121,7 +121,7 @@ class PartnerItem(BaseModel):
 
 
 def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme, since, source,
-         min_amount_eur, key, order, matches_cap):
+         min_amount_eur, key, order, matches_cap, max_amount_eur=None):
     """The query and its parameters: activities -> one row per organisation key."""
     p_where, f_where, w_where, s_where, a_where, having, params = [], [], [], [], [], [], {}
     use_projects = source in ("all", "projects") and not dg
@@ -203,6 +203,11 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
     if min_amount_eur is not None:
         having.append("coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) >= :min_amt")
         params["min_amt"] = min_amount_eur
+    if max_amount_eur is not None:
+        # At most: an organisation whose matches carry no amount at all is not known to be under it.
+        having.append("(sum(eu_contribution) IS NOT NULL OR sum(amount_eur) IS NOT NULL) AND "
+                      "coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) <= :max_amt")
+        params["max_amt"] = max_amount_eur
 
     pw = "".join(f" AND {w}" for w in p_where)
     fw = "".join(f" AND {w}" for w in f_where)
@@ -353,7 +358,7 @@ Finding consortium partners and competitors: "who coordinates projects on soil h
 - `dg` — the paying or buying department (`CNECT`): the FTS payment's department, the award's contracting authority; projects and announcements are then left out.
 - `country` — ISO-2 (EL and GR, UK and GB are the same country).
 - `activity_type` (HES higher education | REC research | PRC private company | PUB public body | OTH) — as CORDIS states it, projects only; `is_sme` — as CORDIS states it, and on announcements the portal's "Small or medium-size enterprise" type.
-- `since` — activities starting on or after (YYYY-MM-DD; an award's contract signature, an announcement's date); `min_amount_eur` — the organisation's EU contribution plus payments over the matches, at least (awards are not in the amounts: a joint tender's value is shared by its members).
+- `since` — activities starting on or after (YYYY-MM-DD; an award's contract signature, an announcement's date); `min_amount_eur`, `max_amount_eur` — the organisation's EU contribution plus payments over the matches, at least / at most (awards are not in the amounts: a joint tender's value is shared by its members).
 - `source` — all (default) | projects | payments | awards | announcements. `order` — matches (default: the matching activities, an announcement text copied to several topics counted once) | amount | name. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
@@ -392,6 +397,7 @@ async def list_partners(
     is_sme: Optional[bool] = Query(None, description="SME as CORDIS states it (projects only)."),
     since: Optional[date] = Query(None, description="Activities starting on or after (YYYY-MM-DD)."),
     min_amount_eur: Optional[float] = Query(None, ge=0, description="EU contribution plus payments over the matches, at least."),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description="EU contribution plus payments over the matches, at most."),
     source: str = Query("all", description="all | projects | payments | awards | announcements."),
     order: str = Query("matches", description="matches | amount | name."),
     page: int = Query(1, ge=1),
@@ -406,7 +412,8 @@ async def list_partners(
             raise HTTPException(status_code=400, detail=f"{label} must be one of {list(allowed)}")
     sql, params = _sql(q=q, name=name, role=role, programme=programme, topic=topic, dg=dg, country=country,
                        activity_type=activity_type, is_sme=is_sme, since=since, source=source,
-                       min_amount_eur=min_amount_eur, key=None, order=order, matches_cap=MATCHES_ON_LIST)
+                       min_amount_eur=min_amount_eur, max_amount_eur=max_amount_eur, key=None, order=order,
+                       matches_cap=MATCHES_ON_LIST)
     if sql is None:
         return build_envelope([], 0, page, limit)
     params.update(limit=limit, offset=(page - 1) * limit)

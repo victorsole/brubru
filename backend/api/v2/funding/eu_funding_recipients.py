@@ -45,12 +45,12 @@ Finding partners and competitors: who a DG paid, for what, how much; which organ
 - `q` — words in the record (beneficiary, subject, programme, department).
 - `dg` — the paying department, part of its name (`CNECT`, `CINEA`); `department` and `responsible_department` are the same filter.
 - `funding_type` — part of the FTS type of contract (`Action Grant`, `Advisory`, `Contribution`).
-- `programme`, `country` — part of the FTS name (`Horizon Europe`, `Belgium`).
+- `programme` — part of the FTS name (`Horizon Europe`). `country` — an ISO-2 code (`ES`; EL and GR, UK and GB are the same) or part of the English name FTS writes (`Spain`); 712 of 187,761 records (28 Oct 2026) carry a name cut short in the file (`Republ`) and are found by name only.
 - `year` — the FTS file's year (2024, 2025 held).
-- `min_amount_eur` — this beneficiary's amount at least.
+- `min_amount_eur`, `max_amount_eur` — this beneficiary's amount at least / at most.
 - `coordinator` — `true` for coordinators only.
 - `project_id`, `call_id`, `vat` — exact.
-- `since`, `until` — the project's start date window. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
+- `published_from`, `published_to` — the record's date (`document_date`: the project start where FTS gives one); `since`, `until`, `from`, `to` are aliases. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
 - `order` — recent (default) | oldest | title | amount | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
@@ -80,13 +80,16 @@ async def list_recipients(
     responsible_department: Optional[str] = Query(None, description="Same as dg."),
     funding_type: Optional[str] = Query(None, description="Part of the FTS type of contract, e.g. Action Grant, Advisory."),
     programme: Optional[str] = Query(None, description="Part of the FTS programme name."),
-    country: Optional[str] = Query(None, description="Part of the beneficiary country, as FTS names it (e.g. Belgium)."),
+    country: Optional[str] = Query(None, description="The beneficiary's country: an ISO-2 code (BE; EL and GR, UK and GB are the same), or part of its English name as FTS writes it (Belgium)."),
     year: Optional[int] = Query(None, description="The FTS file's year."),
     min_amount_eur: Optional[float] = Query(None, ge=0, description="This beneficiary's amount at least, EUR."),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description="This beneficiary's amount at most, EUR."),
     coordinator: Optional[bool] = Query(None, description="true: coordinators only; false: the other beneficiaries."),
     project_id: Optional[str] = Query(None, description="Grant agreement number, exact."),
     call_id: Optional[str] = Query(None, description="Call identifier, exact."),
     vat: Optional[str] = Query(None, description="VAT number, exact (spaces ignored)."),
+    published_from: Optional[date] = Query(None, description="The record's date (`document_date`: the project start where FTS gives one) on or after (YYYY-MM-DD); `since` and `from` are aliases."),
+    published_to: Optional[date] = Query(None, description="The record's date on or before (YYYY-MM-DD); `until` and `to` are aliases."),
     since: Optional[date] = Query(None, description="Project start on/after (YYYY-MM-DD). `from` is accepted as an alias."),
     until: Optional[date] = Query(None, description="Project start on/before (YYYY-MM-DD). `to` is accepted as an alias."),
     from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
@@ -106,11 +109,11 @@ async def list_recipients(
     where: list = []
     params: dict = {"limit": limit, "offset": (page - 1) * limit}
     _fts.filters(where, params, dg=dg or department or responsible_department, funding_type=funding_type,
-                 programme=programme, country=country, year=year, min_amount_eur=min_amount_eur,
+                 programme=programme, country=country, year=year, min_amount_eur=min_amount_eur, max_amount_eur=max_amount_eur,
                  coordinator=coordinator, project_id=project_id, call_id=call_id, vat=vat)
     if q:
         where.append("e.search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
-    since, until = since or from_, until or to
+    since, until = published_from or since or from_, published_to or until or to
     if since:
         where.append(f"{_fts.DATE_SORT} >= :since"); params["since"] = since
     if until:

@@ -50,7 +50,7 @@ Only to keep an existing integration working until 23 Oct 2027: it serves the sa
 - `type_of_action` — substring.
 - `q` — substring on title + short_summary.
 - `deadline_from`, `deadline_to` — deadline window.
-- `published_from`, `published_to` — publication window (`since`, `until`, `from`, `to` are aliases); `created_from`, `created_to` — first recorded by Brubru; `updated_from`, `updated_to` — content changed.
+- `published_from`, `published_to` — publication window (`since`, `until`, `from`, `to` are aliases); `created_from`, `created_to` — first recorded by Brubru; `updated_from`, `updated_to` — content changed. The publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first.
 - `order` — the latest deadline first (default) | recent | oldest (the publication date) | updated_asc | updated_desc | created_asc | created_desc.
 - `limit` (default 50, max 200), `page` (1-indexed), `include_body` (default true).
 - `body_threshold` — minimum body chars for `has_body=true`.
@@ -91,7 +91,7 @@ async def list_funding_opportunities(
     if order is not None and order not in ("recent", "oldest") and order not in SYNC_ORDERS:
         raise HTTPException(status_code=400, detail=f"order must be one of {['recent', 'oldest'] + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
-    return without_bodies(await _v1.funding_opportunities_page(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db, created_from=window["created_from"], created_to=window["created_to"], published_from=published[0], published_to=published[1], order=order), include_body)
+    return without_bodies(await _v1.funding_opportunities_page(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db, created_from=window["created_from"], created_to=window["created_to"], published_from=(published or (None, None))[0], published_to=(published or (None, None))[1], order=order), include_body)
 
 
 @funding_router.get(

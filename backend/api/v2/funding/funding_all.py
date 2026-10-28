@@ -112,10 +112,10 @@ _DESC = """**What it does**
 One feed of **every EU fund** Brubru covers — the decentralised agency funding items (calls for **tender**, **grants** and calls for **expression of interest**), the per-programme grant calls ingested for their own endpoints (Justice `body=just`, Innovation Fund `body=innovfund`), AND the per-fund cohesion / structural-fund allocations (ERDF, ESF+, Cohesion Fund, JTF, Interreg, EMFAF, AMIF, ISF), the EU Solidarity Fund and the CAP funds (EAGF, EAFRD) — across every body, in one call.
 
 **When to use it**
-"Show me everything across EU funding", whether an agency tender, a Justice/Innovation-Fund grant call, or a Member State's cohesion-fund allocation. Filter by `type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`, `just`, `innovfund`), `status`, `q` (free text), and `since`/`until` on the date.
+"Show me everything across EU funding", whether an agency tender, a Justice/Innovation-Fund grant call, or a Member State's cohesion-fund allocation. Filter by `type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`, `just`, `innovfund`), `status`, `q` (free text), and `published_from`/`published_to` on the item's date.
 
 **Input**
-`type`, `body`, `status`, `q` (free text), `since`/`until` (date range), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `order` (page a change window with `updated_asc`), `page`, `limit`.
+`type`, `body`, `status`, `q` (free text), `published_from`/`published_to` (the item's `document_date`; `since`, `until`, `from`, `to` are aliases), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `order` (page a change window with `updated_asc`), `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -142,8 +142,12 @@ async def funding_all(
     body: Optional[str] = Query(None, description="Agency code or fund code, e.g. efca, ema, erdf, esf, jtf."),
     status: Optional[str] = Query(None, description="Match on status in the summary (e.g. open, closed)."),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
-    since: Optional[date] = Query(None, description="Deadline on/after this date (YYYY-MM-DD)."),
-    until: Optional[date] = Query(None, description="Deadline on/before this date (YYYY-MM-DD)."),
+    published_from: Optional[date] = Query(None, description="The item's date (`document_date`) on or after (YYYY-MM-DD); `since` and `from` are aliases."),
+    published_to: Optional[date] = Query(None, description="The item's date (`document_date`) on or before (YYYY-MM-DD); `until` and `to` are aliases."),
+    since: Optional[date] = Query(None, description="The same as `published_from` (it was described as a deadline until 28 Oct 2026, but always read `document_date`)."),
+    until: Optional[date] = Query(None, description="The same as `published_to`."),
+    from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
+    to: Optional[date] = Query(None, include_in_schema=False),
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
@@ -174,6 +178,7 @@ async def funding_all(
         where.append("summary ILIKE :st"); params["st"] = f"%{status}%"
     if q:
         where.append("(title ILIKE :q OR summary ILIKE :q)"); params["q"] = f"%{q}%"
+    since, until = published_from or since or from_, published_to or until or to
     if since:
         where.append("document_date >= :since"); params["since"] = since
     if until:

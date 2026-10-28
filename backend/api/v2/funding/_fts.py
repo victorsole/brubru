@@ -19,7 +19,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from api.v1._row_dates import row_updated
-from services.funding.countries import vat_key
+from services.funding.countries import eu_code, vat_key
 
 FROM = ("FROM economy_items e LEFT JOIN fts_commitments c ON c.economy_item_id = e.id "
         "WHERE e.body_code = 'commission' AND e.item_type = 'funding_recipient'")
@@ -108,17 +108,26 @@ def to_item(r, *, with_body: bool, model=FtsItem, **extra):
 
 
 def filters(where: list, params: dict, *, dg=None, funding_type=None, programme=None, country=None,
-            year=None, min_amount_eur=None, coordinator=None, project_id=None, call_id=None, vat=None) -> None:
+            year=None, min_amount_eur=None, max_amount_eur=None, coordinator=None, project_id=None,
+            call_id=None, vat=None) -> None:
     """The field filters, on the file's columns."""
     for col, val, key in (("c.dg", dg, "dg"), ("c.funding_type", funding_type, "ft"),
-                          ("c.programme", programme, "prog"), ("c.country", country, "ctry")):
+                          ("c.programme", programme, "prog")):
         if val:
             where.append(f"{col} ILIKE :{key}")
             params[key] = f"%{val}%"
+    # A two-letter country is a code, matched on the code read from the file's English name (EL and
+    # GR, UK and GB are one country); a substring of "BE" would also match Uzbekistan. Longer: the name.
+    if country and len(country.strip()) == 2:
+        where.append("c.country_code = :ctry"); params["ctry"] = eu_code(country)
+    elif country:
+        where.append("c.country ILIKE :ctry"); params["ctry"] = f"%{country}%"
     if year:
         where.append("c.year = :year"); params["year"] = year
     if min_amount_eur is not None:
         where.append("c.beneficiary_amount_eur >= :min_amt"); params["min_amt"] = min_amount_eur
+    if max_amount_eur is not None:
+        where.append("c.beneficiary_amount_eur <= :max_amt"); params["max_amt"] = max_amount_eur
     if coordinator is not None:
         where.append("c.is_coordinator = :coord"); params["coord"] = coordinator
     if project_id:

@@ -34,6 +34,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 
 from . import _fts
+from ._standard import published_sql, published_window
 
 router = APIRouter()
 
@@ -101,7 +102,7 @@ Each item carries `beneficiary`, `country`, `amount_eur` (this beneficiary's con
 Market & competitive intelligence for the EU external-action market: which organisations win EU aid money, in which countries, under which instrument, as grants or service contracts. `funding_type=Advisory` isolates the advisory service contracts (studies, evaluations, audits); `country=Türkiye` gives the geographic view.
 
 **Input**
-`programme` (ndici | ipa3 | humanitarian), `funding_type` (part of the FTS type of contract, e.g. `Grant`, `Advisory`, `Contribution`), `country` (part of the FTS country name), `year` (2024 | 2025), `q` (words in the record), `order` (recent | oldest | year), `page`, `limit`. `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
+`programme` (ndici | ipa3 | humanitarian), `funding_type` (part of the FTS type of contract, e.g. `Grant`, `Advisory`, `Contribution`), `country` (an ISO-2 code, `UA`, or part of the English name FTS writes, `Ukraine`), `min_amount_eur` / `max_amount_eur` (this beneficiary's amount), `published_from` / `published_to` (the record's date, the project start where FTS gives one; `since`, `until`, `from`, `to` are aliases), `year` (2024 | 2025), `q` (words in the record), `order` (recent | oldest | year), `page`, `limit` (default 50, max 200), `include_body` (default true). `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
 
 **Try it**
 ```
@@ -129,7 +130,10 @@ async def list_intl_cooperation(
     user: User = Depends(api_user_with_rate_limit),
     programme: Optional[str] = Query(None, description="ndici | ipa3 | humanitarian"),
     funding_type: Optional[str] = Query(None, description="Substring, e.g. Grant | Procurement | Contribution."),
-    country: Optional[str] = Query(None, description="Beneficiary country substring."),
+    country: Optional[str] = Query(None, description="The beneficiary's country: an ISO-2 code (UA; EL and GR, UK and GB are the same), or part of its English name as FTS writes it (Ukraine)."),
+    min_amount_eur: Optional[float] = Query(None, ge=0, description="This beneficiary's amount at least, EUR."),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description="This beneficiary's amount at most, EUR."),
+    published: tuple = Depends(published_window),
     year: Optional[int] = Query(None, description="FTS budget year, e.g. 2024."),
     q: Optional[str] = Query(None, description="Free text over beneficiary, subject, programme."),
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
@@ -163,7 +167,9 @@ async def list_intl_cooperation(
         where.append("(" + " OR ".join(f"c.programme ILIKE :f{i}" for i in range(len(_ALL_FRAGMENTS))) + ")")
         for i, frag in enumerate(_ALL_FRAGMENTS):
             params[f"f{i}"] = f"%{frag}%"
-    _fts.filters(where, params, funding_type=funding_type, country=country, year=year)
+    _fts.filters(where, params, funding_type=funding_type, country=country, year=year,
+                 min_amount_eur=min_amount_eur, max_amount_eur=max_amount_eur)
+    published_sql(where, params, published, _fts.DATE_SORT)
     if q:
         where.append("e.search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
     # The change window, on the columns served as creation_date / updated_date.
