@@ -1,6 +1,7 @@
 # Digital Europe Programme (DIGITAL) 2021-2027
 
 ## QUICK FACTS
+- **JRC report listed on 28 October 2026 (JRC Publications Repository): 'European Digital Innovation Hubs Network: activities and AI skills development', JRC144497, EUR 40891.** The listing gives the year 2026 only; the publication date and findings were NOT read. https://publications.jrc.ec.europa.eu/repository/handle/JRC144497
 - Legal basis: Regulation (EU) 2021/694 of the European Parliament and of the Council of 29 April 2021 establishing the Digital Europe Programme (CELEX 32021R0694)
 - Budget: EUR 7.588 billion in the original 2021 financial envelope, topped up to roughly EUR 8.2 billion for 2021-2027 through MFF adjustments and the STEP top-up for critical technologies
 - Five specific objectives (Article 3(2), "distinct but interdependent"):

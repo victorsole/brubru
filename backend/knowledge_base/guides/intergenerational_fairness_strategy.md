@@ -1,6 +1,7 @@
 # Intergenerational Fairness Strategy
 
 ## QUICK FACTS
+- **LATEST (Wednesday 28 October 2026, IP/26/2274): Flash Eurobarometer 'Youth and Democracy' published** (fieldwork 19 June to 1 July 2026, 26,806 respondents aged 15 to 30 in the 27 Member States, online interviews). Figures as the press release states them: 75% took part in the activities of at least one organisation in the last 12 months (64% in 2024); 55% took part in an initiative for societal change (48% in 2024); 60% took part in activities in another EU country (17 points more than in 2024); 75% say EU action affects their daily life; what they expect the EU to deliver: preserving peace 33%, fighting poverty and inequality 32%, job opportunities 31%; youth policy should focus first on real issues such as jobs and the cost of living (40%); most effective ways to be heard: voting 33%, social media 32%. It feeds the post-2027 EU Youth Strategy and the 'Protect What Matters: Our Democracy' campaign (a European Citizens' Panel, one third aged 16 to 29, is preparing recommendations). The survey report itself was NOT read. Source: https://ec.europa.eu/commission/presscorner/detail/en/ip_26_2274
 - Full name: Strategy on Intergenerational Fairness
 - Adopted: 5 March 2026
 - Type: Communication (non-legislative)

@@ -1,6 +1,7 @@
 # European Court of Auditors, annual reports on the 2025 financial year (published 8 October 2026)
 
 ## QUICK FACTS
+- **Agencies (OJ C of 28 October 2026, C/2026/5415, CELEX 52026TA05415): the ECA publishes its annual report on EU agencies for the 2025 financial year, with the agencies' replies, on 29 October 2026** at https://www.eca.europa.eu/en/publications/SAR-AGENCIES-2025 . The OJ notice only announces the publication: the report's findings were NOT read; give no agency-level opinion until it is.
 - **What:** the ECA's annual reports on the **2025 financial year**, published **8 October 2026** (President **Tony Murphy**). Opinions: **clean** on the 2025 accounts (with a warning that the Commission's new financial IT system caused accounting errors needing manual fixes) and on revenue; **adverse on EU budget spending** (the key-facts sheet says for the 7th consecutive year); **qualified, separately, on spending under the Recovery and Resilience Facility (RRF)**.
 - **Money in 2025:** EU payments **EUR 216.4 billion** = **EUR 176.3 billion from the EU budget** + **EUR 40.1 billion from the RRF**. The audit population for budget expenditure was EUR 130.8 billion. (RRF expenditure in the accounts is EUR 45.4 billion: a different measure.)
 - **Estimated error rate, EU budget spending: 3.8% in 2025** (range 2.7% to 4.9%, above the 2% materiality threshold); 3.6% in 2024; 5.6% in 2023; 4.2% in 2022; 3.0% in 2021.

@@ -1,6 +1,7 @@
 # Public Access to Documents: Regulation (EC) 1049/2001
 
 ## QUICK FACTS
+- **Signal (report of 26 October 2026, read 28 October): the High-Level Reflection Group on the Commission's civil service (Catherine Day report, Recommendation 5, pp. 21-22) recommends that the Commission propose a revision of this Regulation towards publication by default (proactive, information-centric transparency, with exceptions for personal data, security and other legitimate interests).** A recommendation only: **no Commission proposal exists as of 28 October 2026**, and the 2011/0073(COD) file stays dormant. See `commission_large_scale_review_civil_service_2026`.
 - **Current law:** Regulation (EC) No 1049/2001 of 30 May 2001 regarding public access to European Parliament, Council and Commission documents
 - **CELEX:** 32001R1049
 - **EUR-Lex:** https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32001R1049
