@@ -655,3 +655,45 @@ def test_the_portal_ingest_never_overwrites_the_status_or_deadline_of_a_ted_noti
     for col in ("status", "deadline"):
         assert re.match(rf"CASE WHEN ft_calls_for_tenders\.source_url LIKE '%%ted\.europa\.eu%%'.*?THEN ft_calls_for_tenders\.{col}\b",
                         sets[col], re.S), sets[col]
+
+
+def test_a_ted_deadline_is_read_back_from_the_notices_own_xml():
+    # O98: 163 open notices held their deadline in the stored XML and none in the column.
+    import importlib
+    from datetime import datetime, timezone
+    from pathlib import Path
+    from types import SimpleNamespace
+    repair = importlib.import_module("scripts.repair_tender_deadline")
+    xml = (Path(__file__).parent / "fixtures" / "ted" / "sek_local_726269-2026.xml").read_text()
+
+    class Db:
+        def __init__(self):
+            self.sets, self.commits = [], 0
+
+        def execute(self, stmt, params=None):
+            sql = str(stmt)
+            if sql.startswith("SELECT id, publication_number"):
+                assert "submission_deadline IS NULL" in sql and "TenderSubmissionDeadlinePeriod" in sql
+                return _Rows([SimpleNamespace(id=1, publication_number="726269-2026", status="open"),
+                              SimpleNamespace(id=2, publication_number="1-2026", status="open")])
+            if sql.startswith("SELECT id, xml_content"):
+                return _Rows([SimpleNamespace(id=1, xml_content=xml), SimpleNamespace(id=2, xml_content="<x/>")])
+            self.sets.append((sql, params))
+            return _Rows([])
+
+        def commit(self):
+            self.commits += 1
+    db = Db()
+    assert repair.repair(db, apply=False) == (1, 1) and not db.sets
+    db = Db()
+    assert repair.repair(db, apply=True) == (1, 1)
+    (sql, params), = db.sets
+    assert sql.startswith("UPDATE tenders SET submission_deadline = :d") and "submission_deadline IS NULL" in sql
+    assert params == {"d": datetime(2026, 11, 18, 22, 59, 59, tzinfo=timezone.utc), "id": 1} and db.commits == 1
+
+
+def test_a_call_for_competition_whose_notice_states_no_deadline_is_unknown():
+    # O98, Victor 28 Oct: `unknown`, never a kept "open"; a prior information notice stays forthcoming.
+    from services.tenders.status import STATUS_SQL
+    assert "WHEN form_type = 'planning' THEN 'forthcoming'" in STATUS_SQL
+    assert "WHEN form_type IN ('competition', 'legacy') THEN 'unknown' ELSE status END" in STATUS_SQL

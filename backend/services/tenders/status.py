@@ -6,7 +6,9 @@ growing every day), and all 104 contract-award notices said "open" though an awa
 competition. One rule, as for the F&T calls: the dates decide.
 
     award (result) and contract-modification notices  -> closed
-    no deadline: prior information (planning)          -> forthcoming; any other type keeps its status
+    no deadline: prior information (planning)          -> forthcoming; a call for competition (eForms
+                                                          or a legacy form) -> unknown (28 Oct 2026,
+                                                          O98: 10 state none); any other keeps its status
     deadline passed                                    -> closed
     deadline ahead                                     -> open (a prior information notice with a
                                                           deadline is used as the call itself)
@@ -23,7 +25,8 @@ from sqlalchemy import text
 STATUS_SQL = """CASE
     WHEN form_type IN ('result', 'cont-modif') THEN 'closed'
     WHEN submission_deadline IS NULL THEN
-        CASE WHEN form_type = 'planning' THEN 'forthcoming' ELSE status END
+        CASE WHEN form_type = 'planning' THEN 'forthcoming'
+             WHEN form_type IN ('competition', 'legacy') THEN 'unknown' ELSE status END
     WHEN submission_deadline < now() THEN 'closed'
     ELSE 'open'
 END"""

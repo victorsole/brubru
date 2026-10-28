@@ -26,7 +26,7 @@ from ._standard import include_body_param, without_bodies
 from api.v1._change_window import SYNC_ORDERS, validate_window
 
 # The tender vocabulary of the funding standard; stored today: open, closed, forthcoming (28 Oct 2026).
-_STATUSES = ("forthcoming", "open", "closed", "cancelled")
+_STATUSES = ("forthcoming", "open", "closed", "unknown", "cancelled")
 _ORDERS = ("recent", "oldest", "deadline")
 
 
@@ -76,7 +76,7 @@ async def list_tenders(
     q: Optional[str] = Query(None, description="Substring on title + description + summary + official_name (the contracting authority, so you can search by buyer)."),
     buyer_country: Optional[str] = Query(None, description="ISO 3166-1 alpha-2"),
     country: Optional[str] = Query(None, description="The buyer's country, ISO-2: the same as `buyer_country` (the funding standard's name)."),
-    status: Optional[str] = Query(None, description="forthcoming | open | closed | cancelled (the notice's status, from its dates)."),
+    status: Optional[str] = Query(None, description="forthcoming | open | closed | unknown (the notice's status, from its type and deadline; unknown: a call for competition whose notice states no deadline)."),
     procedure_type: Optional[str] = Query(None),
     contract_nature: Optional[str] = Query(None, description="works | supplies | services"),
     cpv_main: Optional[str] = Query(None),

@@ -375,7 +375,7 @@ def _kill_process_group(proc, name: str) -> None:
 
 
 _TENDERATOR_CHAIN = (
-    "tenders_fetch", "tender_status", "tenders", "tenders_country_repair",
+    "tenders_fetch", "tender_deadline_repair", "tender_status", "tenders", "tenders_country_repair",
     "ft_programme_calls", "ft_news_events", "ft_funding_opportunities", "ft_cascade_calls", "project_status",
     "ft_call_budgets",
     "ft_tenders_bridge",
@@ -972,6 +972,11 @@ async def cron_sync_daily(
     # TED publishes no status: the fetch stores every new notice as "open". This sets each one
     # from its notice type and deadline (services/tenders/status.py): until 23 Oct 2026 nothing
     # did, and 28,032 notices said "open" after their deadline.
+    # A deadline the fetch dropped is read back from the notice's own stored XML first (28 Oct
+    # 2026, O98: 163 notices held one, 97 of them passed and served as open).
+    results["tender_deadline_repair"] = await _run_script_async(
+        "tender_deadline_repair", "scripts/repair_tender_deadline.py", ["--apply"], timeout=300,
+    )
     results["tender_status"] = await _run_script_async(
         "tender_status", "scripts/refresh_tender_status.py", ["--apply"], timeout=600,
     )

@@ -454,9 +454,10 @@ class TenderItem(BaseModel):
     amount_eur: Optional[float] = Field(None, description="estimated_value when the notice states it in euros; null for another currency or none (euro conversion comes later).")
     sme_suitability_score: Optional[float] = None
     status: Optional[str] = Field(None, description=(
-        "open | closed | forthcoming. TED publishes none: it is set daily from the notice type and its own "
-        "deadline (award and modification notices closed, a passed deadline closed, a prior information "
-        "notice without a deadline forthcoming)."))
+        "open | closed | forthcoming | unknown. TED publishes none: it is set daily from the notice type and "
+        "its own deadline (award and modification notices closed, a passed deadline closed, a prior "
+        "information notice without a deadline forthcoming, a call for competition whose notice states no "
+        "deadline unknown)."))
     last_synced_at: Optional[datetime] = Field(None, **legacy("updated_date", note="not the same value: when Brubru last re-read the notice, whether or not it changed; null on notices not re-read since the field was added"))
     updated_at: Optional[datetime] = Field(None, **legacy("updated_date"))
     # The contracted datapoints. Until 1 October 2026 this model carried none of

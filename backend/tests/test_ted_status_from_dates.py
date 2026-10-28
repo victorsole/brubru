@@ -22,11 +22,14 @@ from core.database import get_db  # noqa: E402
 from services.tenders import status as ted_status  # noqa: E402
 
 
-def test_the_rule_closes_awards_and_passed_deadlines_and_keeps_undated_notices():
+def test_the_rule_closes_awards_and_passed_deadlines_and_dates_undated_notices_by_type():
     sql = " ".join(ted_status.STATUS_SQL.split())
     assert "WHEN form_type IN ('result', 'cont-modif') THEN 'closed'" in sql
     assert "WHEN submission_deadline < now() THEN 'closed'" in sql
-    assert "CASE WHEN form_type = 'planning' THEN 'forthcoming' ELSE status END" in sql
+    # 28 Oct 2026 (O98, Victor): a call for competition whose notice states no deadline is unknown,
+    # no longer kept "open"; a prior information notice stays forthcoming; any other type keeps its status.
+    assert ("CASE WHEN form_type = 'planning' THEN 'forthcoming' "
+            "WHEN form_type IN ('competition', 'legacy') THEN 'unknown' ELSE status END") in sql
     assert sql.index("form_type IN ('result'") < sql.index("submission_deadline IS NULL") < sql.index("submission_deadline < now()")
 
 
