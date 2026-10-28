@@ -16,10 +16,11 @@ from __future__ import annotations
 from datetime import date, datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from api.v1._row_dates import row_updated
 from services.funding.countries import eu_code, vat_key
+from services.funding.shared_fields import legacy
 
 FROM = ("FROM economy_items e LEFT JOIN fts_commitments c ON c.economy_item_id = e.id "
         "WHERE e.body_code = 'commission' AND e.item_type = 'funding_recipient'")
@@ -79,8 +80,10 @@ class FtsItem(BaseModel):
     call_id: Optional[str] = Field(None, description="The call the grant came from, when the FTS file names one.")
     project_id: Optional[str] = Field(None, description="Grant agreement number: the project at /api/v2/funding/ft-funded-projects/{project_id} when Brubru holds it.")
     project_acronym: Optional[str] = None
-    project_start: Optional[date] = None
-    project_end: Optional[date] = None
+    start_date: Optional[date] = Field(None, description="The project's start, where the FTS file gives one (the name on /ft-funded-projects).")
+    end_date: Optional[date] = Field(None, description="The project's end, where the FTS file gives one.")
+    project_start: Optional[date] = Field(None, **legacy("start_date"))
+    project_end: Optional[date] = Field(None, **legacy("end_date"))
     budget_line: Optional[str] = Field(None, description="Budget line name.")
     management_type: Optional[str] = None
     public_url: Optional[str] = Field(None, description="The FTS record's address.")
@@ -89,6 +92,13 @@ class FtsItem(BaseModel):
     document_date: Optional[datetime] = Field(None, description="The project's start, when already passed; null otherwise.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first stored the row.")
     updated_date: Optional[datetime] = Field(None, description="When the row or its FTS values last changed, for incremental sync.")
+
+    @model_validator(mode="after")
+    def _standard_names(self):
+        # One name per concept (Phase 2 step 4, 28 Oct 2026): the project's dates as on /ft-funded-projects.
+        self.start_date = self.start_date or self.project_start
+        self.end_date = self.end_date or self.project_end
+        return self
 
 
 def to_item(r, *, with_body: bool, model=FtsItem, **extra):

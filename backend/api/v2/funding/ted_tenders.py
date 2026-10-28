@@ -66,7 +66,7 @@ GET /api/v2/funding/tenders?buyer_country=BE&contract_nature=services
 ```
 
 **You get back**
-A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `official_name`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.
+A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `contracting_authority`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `deadline`, `documents_url`, `has_lots`, `lot_count`, `summary`, `sme_suitability_score`, `status`, plus `public_url`, `document_date` and `updated_date`. The older names stay beside them, marked legacy in the schema: `official_name` (= `contracting_authority`), `submission_deadline` (= `deadline`), `publication_date` (= `document_date`), `ted_url` (= `public_url`), `updated_at` (= `updated_date`) and `last_synced_at` (when Brubru last re-read the notice).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publishes daily by definition (the "Daily" in the name). Backed by `backend/scripts/backfill_tenders_description.py`.""",

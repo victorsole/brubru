@@ -13,7 +13,7 @@ from datetime import date, datetime, time
 from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import and_, func
 from sqlalchemy.orm import Session
 
@@ -33,7 +33,7 @@ from ._envelope import PaginatedResponse, build_envelope
 from api.v1._change_window import orm_order
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
-from services.funding.shared_fields import cut_summary, eur, with_body_names
+from services.funding.shared_fields import cut_summary, eur, legacy, with_body_names
 
 
 # ============================================================================
@@ -224,9 +224,10 @@ class FundingItem(BaseModel):
     id: str
     topic_id: str
     call_id: Optional[str] = None
-    programme: Optional[str] = None
+    framework_programme: Optional[str] = Field(None, description="The funding programme, as the Funding & Tenders Portal names it (the name on /ft-calls-for-proposals).")
+    programme: Optional[str] = Field(None, **legacy("framework_programme"))
     title: str
-    short_summary: Optional[str] = None
+    short_summary: Optional[str] = Field(None, **legacy("summary", note="a longer cut of the same description"))
     description: Optional[str] = None
     status: Optional[str] = None
     type_of_action: Optional[str] = None
@@ -234,12 +235,12 @@ class FundingItem(BaseModel):
     deadline_secondary: Optional[datetime] = None
     indicative_budget: Optional[float] = None
     budget_currency: Optional[str] = "EUR"
-    source_url: str
+    source_url: str = Field(..., **legacy("public_url"))
     documents_url: Optional[str] = None
     keywords: List[str] = Field(default_factory=list)
     target_audience: List[str] = Field(default_factory=list)
-    published_at: Optional[datetime] = None
-    last_updated: Optional[datetime] = None
+    published_at: Optional[datetime] = Field(None, **legacy("document_date", note="the same date, with a time"))
+    last_updated: Optional[datetime] = Field(None, **legacy("updated_date"))
     # Body fields composed from short_summary + description (call objective +
     # scope text, ~4k chars typical). Source is HTML-page-derived but we
     # don't store the raw HTML, so body_html is composed semantic markup.
@@ -257,6 +258,12 @@ class FundingItem(BaseModel):
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync (filter with updated_from / updated_to). A re-sync that finds the same content does not move it (migration 306).")
+
+    @model_validator(mode="after")
+    def _standard_names(self):
+        # One name per concept (Phase 2 step 4, 28 Oct 2026), as on /ft-calls-for-proposals.
+        self.framework_programme = self.framework_programme or self.programme
+        return self
 
 
 def _short_summary(description: Optional[str]) -> Optional[str]:
@@ -421,7 +428,7 @@ GET /api/v1/funding-opportunities?q=AI&deadline_from=2026-06-01
 ```
 
 **You get back**
-A `PaginatedResponse[FundingItem]` envelope. Each item carries `topic_id`, `call_id`, `programme`, `title`, `short_summary`, `description`, `status`, `type_of_action`, `deadline`, `deadline_secondary`, `indicative_budget`, `budget_currency`, `source_url`, `documents_url`, `keywords`, `target_audience`, `published_at`, `last_updated`, body fields + the 5 envelope-level datapoints.
+A `PaginatedResponse[FundingItem]` envelope. Each item carries `topic_id`, `call_id`, `framework_programme`, `title`, `description`, `status`, `type_of_action`, `deadline`, `deadline_secondary`, `indicative_budget`, `budget_currency`, `documents_url`, `keywords`, `target_audience`, body fields + the 5 envelope-level datapoints. The older names stay beside them, marked legacy in the schema: `programme` (= `framework_programme`), `short_summary` (a longer cut than `summary`), `source_url` (= `public_url`), `published_at` (= `document_date`) and `last_updated` (= `updated_date`).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal. is_test=True fixture rows are filtered out at query time.""",

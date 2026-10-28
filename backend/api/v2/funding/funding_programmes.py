@@ -64,6 +64,7 @@ def _compose_body(p: dict) -> tuple[str, str]:
 
 
 class ProgrammeItem(_DataPoints):
+    id: str = Field(..., description="The programme's key: its acronym, which the item route takes (every funding item carries an id, 28 Oct 2026).")
     # Its own descriptions, not the cohesion lists' it inherited ("the programme's status /
     # adoption date", "the row's page on Cohesion Open Data"), which described nothing here.
     public_url: Optional[str] = Field(None, description="The programme's own page on the Commission's website (its funding or application page).")
@@ -116,7 +117,7 @@ def _to_item(p: dict, *, with_body: bool) -> ProgrammeItem:
     bt, bh = _compose_body(p)
     created, updated = _config_dates()
     return ProgrammeItem(
-        title=p["programme"], summary=cut_summary(bt),
+        id=p["acronym"], title=p["programme"], summary=cut_summary(bt),
         programme=p["programme"], acronym=p["acronym"], heading=p["heading"],
         cluster=p["cluster"], coverage=p["coverage"], via=p.get("via"), period=p.get("period"),
         endpoint=p.get("endpoint"), source=p["source"],
@@ -159,7 +160,7 @@ GET /api/v2/funding/programmes?heading=Natural Resources
 ```
 
 **You get back**
-A `PaginatedResponse[ProgrammeItem]`. Each item carries `programme`, `acronym`, `period`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`document_date` is the OJ publication of the act that established the programme; `public_url` is the programme's own page on the Commission's website; `body_txt`/`body_html` on the list unless `include_body=false`).
+A `PaginatedResponse[ProgrammeItem]`. Each item carries `id` (the acronym, the key the item route takes), `programme`, `acronym`, `period`, `heading`, `cluster`, `coverage`, `via`, `endpoint` (the Brubru path when covered by a dedicated endpoint), `source`, plus the 5 datapoints (`document_date` is the OJ publication of the act that established the programme; `public_url` is the programme's own page on the Commission's website; `body_txt`/`body_html` on the list unless `include_body=false`).
 
 **Data freshness**
 Static reference, updated when the Commission's programme list changes (config: `funding_programmes.json`).""",

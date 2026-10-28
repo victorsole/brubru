@@ -36,6 +36,7 @@ from models.user import User
 from services.funding.countries import eu_code, vat_key
 from services.funding.organisations import ORG_FORM
 from services.funding.programme_codes import named_codes, topic_prefixes
+from services.funding.shared_fields import legacy
 from ._standard import include_body_param, without_bodies
 
 router = APIRouter()
@@ -106,7 +107,8 @@ class PartnerItem(BaseModel):
     name: Optional[str] = None
     short_name: Optional[str] = None
     pic: Optional[str] = Field(None, description="Participant Identification Code, when known.")
-    vat: Optional[str] = Field(None, description="VAT number (letters and digits), when known.")
+    vat_number: Optional[str] = Field(None, description="VAT number (letters and digits), when known (the name on the FTS lists).")
+    vat: Optional[str] = Field(None, **legacy("vat_number"))
     country: Optional[str] = Field(None, description="EU style code (EL Greece, UK United Kingdom, else ISO 3166 alpha-2).")
     city: Optional[str] = None
     activity_type: Optional[str] = Field(None, description="HES higher education | REC research body | PRC private company | PUB public body | OTH other (CORDIS).")
@@ -345,7 +347,7 @@ def _item(r, base: str) -> PartnerItem:
     summary = " · ".join(([r.country] if r.country else []) + [t for n, t in counts if n]) or None
     return PartnerItem(
         title=r.name, summary=summary,
-        id=r.key, name=r.name, short_name=r.short_name, pic=r.pic, vat=r.vat, country=r.country, city=r.city,
+        id=r.key, name=r.name, short_name=r.short_name, pic=r.pic, vat_number=r.vat, vat=r.vat, country=r.country, city=r.city,
         activity_type=r.activity_type, is_sme=r.is_sme, projects=r.projects, coordinated=r.coordinated,
         payments=r.payments, contracts=r.contracts, awards=r.awards, announcements=r.announcements,
         eu_contribution=float(r.eu_contribution) if r.eu_contribution is not None else None,
@@ -384,7 +386,7 @@ GET /api/v2/funding/partners?q=hydrogen&topic=HORIZON-CL5&source=announcements&r
 ```
 
 **You get back**
-A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat`, `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, `awards`, `announcements`, the totals `eu_contribution` and `amount_eur`, `matches` (up to 10: kind, id, title, role, programme, date, department, amounts, an award's `tender_value_eur`, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
+A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat_number` (`vat` is its legacy name), `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, `awards`, `announcements`, the totals `eu_contribution` and `amount_eur`, `matches` (up to 10: kind, id, title, role, programme, date, department, amounts, an award's `tender_value_eur`, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
 
 **Identity**
 The PIC where known; a payment's beneficiary or an award's winner takes the PIC of the CORDIS organisation with the same VAT number (a TED company identifier counts as a VAT number only when shaped like its own country's); else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons are left out: the FTS's own, and of TED's award winners (TED never says which is a person) those that are neither a CORDIS or FTS organisation by their VAT number nor named with a legal form or an organisation word (GmbH, SL, Ltd, Institute, University...), so an individual expert named in a notice is not a partner; the Partner Search's person profiles and persons' announcements are never read, and a self-registered Partner Search profile typed Other, SME or private for-profit whose name carries no legal form, organisation word or digit is left out with its announcements (it may be a person's own registration).

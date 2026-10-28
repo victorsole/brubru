@@ -151,7 +151,7 @@ GET /api/v2/funding/entrepreneur-instruments?status=all&q=accelerator
 ```
 
 **You get back**
-A `PaginatedResponse[EntrepreneurInstrumentItem]` — each item carries `topic_id` (stable English id, e.g. `HORIZON-EIC-2026-ACCELERATOR-01`), `programme`, `instrument_family`, **`intermediary`**, `title`, `status`, `deadline`, `indicative_budget`, `source_url` and the 5 datapoints. Most recent deadlines first.
+A `PaginatedResponse[EntrepreneurInstrumentItem]` — each item carries `topic_id` (stable English id, e.g. `HORIZON-EIC-2026-ACCELERATOR-01`), `programme`, `instrument_family`, **`intermediary`**, `title`, `status`, `deadline`, `indicative_budget` and the 5 datapoints (`programme` is this list's own label of the programme; `framework_programme` is the portal's). The older names stay beside them, marked legacy in the schema: `source_url` (= `public_url`), `published_at` (= `document_date`) and `last_updated` (= `updated_date`). Most recent deadlines first.
 
 **Coverage note**
 `ESF+ / EaSI` and `Erasmus for Young Entrepreneurs` families are wired but Brubru currently holds few or no open rows for them (they appear once the F&T Portal publishes calls). `Digital Europe` is matched on the whole `DIGITAL-` prefix, which is broader than EDIH alone.

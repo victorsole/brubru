@@ -119,15 +119,15 @@ _DESC = """**What it does**
 One feed of **every EU fund** Brubru covers — the decentralised agency funding items (calls for **tender**, **grants** and calls for **expression of interest**), the per-programme grant calls ingested for their own endpoints (Justice `body=just`, Innovation Fund `body=innovfund`), AND the per-fund cohesion / structural-fund allocations (ERDF, ESF+, Cohesion Fund, JTF, Interreg, EMFAF, AMIF, ISF), the EU Solidarity Fund and the CAP funds (EAGF, EAFRD) — across every body, in one call.
 
 **When to use it**
-"Show me everything across EU funding", whether an agency tender, a Justice/Innovation-Fund grant call, or a Member State's cohesion-fund allocation. Filter by `type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`, `just`, `innovfund`), `status`, `q` (free text), and `published_from`/`published_to` on the item's date.
+"Show me everything across EU funding", whether an agency tender, a Justice/Innovation-Fund grant call, or a Member State's cohesion-fund allocation. Filter by `item_type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`, `just`, `innovfund`), `status`, `q` (free text), and `published_from`/`published_to` on the item's date.
 
 **Input**
-`type`, `body`, `status`, `q` (free text), `published_from`/`published_to` (the item's `document_date`; `since`, `until`, `from`, `to` are aliases), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `order` (page a change window with `updated_asc`), `page`, `limit` (default 50, max 200), `include_body` (default true).
+`item_type` (`type` is its legacy name), `body`, `status`, `q` (free text), `published_from`/`published_to` (the item's `document_date`; `since`, `until`, `from`, `to` are aliases), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `order` (page a change window with `updated_asc`), `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
-GET /api/v2/funding/all?type=cohesion_allocation&body=erdf
-GET /api/v2/funding/all?type=tender&order=recent
+GET /api/v2/funding/all?item_type=cohesion_allocation&body=erdf
+GET /api/v2/funding/all?item_type=tender&order=recent
 GET /api/v2/funding/all?q=transport
 ```
 
@@ -145,7 +145,8 @@ async def funding_all(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
-    type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding | cohesion_allocation | solidarity_case | cap_payment"),
+    item_type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding | cohesion_allocation | solidarity_case | cap_payment"),
+    type: Optional[str] = Query(None, description="Legacy name of item_type."),
     body: Optional[str] = Query(None, description="Agency code or fund code, e.g. efca, ema, erdf, esf, jtf."),
     status: Optional[str] = Query(None, description="Match on status in the summary (e.g. open, closed)."),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
@@ -175,9 +176,10 @@ async def funding_all(
     window = validate_window(created_from, created_to, updated_from, updated_to)
     params = {"ftypes": list(_FUNDING_TYPES), "limit": limit, "offset": (page - 1) * limit}
     where: list[str] = []
+    type = item_type or type
     if type:
         if type not in _ALL_TYPES:
-            raise HTTPException(status_code=400, detail=f"type must be one of {list(_ALL_TYPES)}")
+            raise HTTPException(status_code=400, detail=f"item_type must be one of {list(_ALL_TYPES)}")
         where.append("item_type = :it"); params["it"] = type
     if body:
         where.append("body_code = :bc"); params["bc"] = body

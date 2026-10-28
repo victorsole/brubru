@@ -17,7 +17,7 @@ from datetime import date, datetime, time, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import and_, case, func, or_, text
 from sqlalchemy.orm import Session
 
@@ -42,7 +42,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
-from services.funding.shared_fields import cut_summary, eur, with_body_names
+from services.funding.shared_fields import cut_summary, eur, legacy, with_body_names
 
 
 # ============================================================================
@@ -64,12 +64,12 @@ class FtCallProposalItem(BaseModel):
     deadline_secondary: Optional[datetime] = None
     indicative_budget: Optional[float] = None
     budget_currency: Optional[str] = "EUR"
-    source_url: str
+    source_url: str = Field(..., **legacy("public_url"))
     documents_url: Optional[str] = None
     keywords: List[str] = Field(default_factory=list)
     target_audience: List[str] = Field(default_factory=list)
-    published_at: Optional[datetime] = None
-    last_updated: Optional[datetime] = None
+    published_at: Optional[datetime] = Field(None, **legacy("document_date", note="the same date, with a time"))
+    last_updated: Optional[datetime] = Field(None, **legacy("updated_date"))
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
@@ -91,8 +91,10 @@ def _call_order(model, order: str):
     sync = orm_order(order, model.first_seen_at, model.content_updated_at, model.id)
     if sync:
         return sync
-    if order == "published_desc":
+    if order in ("recent", "published_desc"):
         return (model.published_at.desc().nullslast(), model.id.desc())
+    if order == "oldest":
+        return (model.published_at.asc().nullslast(), model.id.asc())
     return (model.deadline.desc().nullslast(), model.id.desc())
 
 
@@ -155,7 +157,7 @@ For consultancies, universities, research orgs, and SMEs looking for non-procure
 - `published_from`, `published_to`: date the call was published on the portal.
 - `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
 - `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
-- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `updated_desc`, `created_asc`, `created_desc`.
 - `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -167,7 +169,7 @@ GET /api/v1/ft-calls-for-proposals?updated_from=2026-09-21&order=updated_asc&lim
 ```
 
 **You get back**
-A `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
+A `PaginatedResponse[FtCallProposalItem]` envelope. Each item carries `topic_id`, `title`, `framework_programme`, `type_of_action`, `status`, `deadline`, `budget`, `description`, `objective`, `scope`, `expected_outcome`, `participation_eligibility`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal opportunity page). The older names stay beside them, marked legacy in the schema: `source_url` (= `public_url`), `published_at` (= `document_date`) and `last_updated` (= `updated_date`). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. New calls open / close throughout the day; daily sync catches them. is_test=True seed rows are filtered out at query time.""",
@@ -186,8 +188,8 @@ async def list_calls_for_proposals(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", pattern="^(deadline_desc|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
-                       description="deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
     limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -283,16 +285,18 @@ class FtCallTenderItem(BaseModel):
     contracting_authority: Optional[str] = None
     title: str
     description: Optional[str] = None
-    contract_type: Optional[str] = None
+    contract_nature: Optional[str] = Field(None, description="services | supplies | works: the funding standard's name and values, as on TED and the award notices.")
+    contract_type: Optional[str] = Field(None, **legacy("contract_nature", note="the same word as the portal writes it, often capitalised"))
     status: Optional[str] = None
     estimated_value: Optional[float] = None
-    value_currency: Optional[str] = "EUR"
+    estimated_value_currency: Optional[str] = Field("EUR", description="The currency of estimated_value (the funding standard's name, as on TED).")
+    value_currency: Optional[str] = Field("EUR", **legacy("estimated_value_currency"))
     deadline: Optional[datetime] = None
-    source_url: str
+    source_url: str = Field(..., **legacy("public_url"))
     documents_url: Optional[str] = None
     cpv_codes: List[str] = Field(default_factory=list)
-    published_at: Optional[datetime] = None
-    last_updated: Optional[datetime] = None
+    published_at: Optional[datetime] = Field(None, **legacy("document_date", note="the same date, with a time"))
+    last_updated: Optional[datetime] = Field(None, **legacy("updated_date"))
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
@@ -307,6 +311,14 @@ class FtCallTenderItem(BaseModel):
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded this row.")
     updated_date: Optional[datetime] = Field(None, description="When this row's content last changed in Brubru (a re-sync that finds the same content does not move it).")
+
+    @model_validator(mode="after")
+    def _standard_names(self):
+        # One name per concept (Phase 2 step 4, 28 Oct 2026): TED's names and values for the same things.
+        self.contract_nature = self.contract_nature or (self.contract_type.lower() if self.contract_type else None)
+        if "estimated_value_currency" not in self.model_fields_set:
+            self.estimated_value_currency = self.value_currency
+        return self
 
 
 def _tender_to_item(
@@ -375,13 +387,13 @@ For service providers, consultancies, and contractors bidding on EU institutiona
 **Input**
 - `contracting_authority` — substring (e.g. `European Commission`, `Frontex`, `EMA`).
 - `status` — F&T tender status enum.
-- `contract_type` — substring (e.g. `services`, `supplies`, `works`).
+- `contract_nature` — `services`, `supplies` or `works`, in any case; `contract_type` is its legacy name.
 - `q` — substring search on title + description.
 - `deadline_from`, `deadline_to` — submission window.
 - `published_from`, `published_to`: date the call was published on the portal.
 - `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
 - `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
-- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `published_desc`, `updated_desc`, `created_asc`, `created_desc`.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `updated_desc`, `created_asc`, `created_desc`.
 - `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -393,7 +405,7 @@ GET /api/v1/ft-calls-for-tenders?updated_from=2026-09-21&order=updated_asc&limit
 ```
 
 **You get back**
-A `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_type`, `status`, `deadline`, `budget`, `description`, `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
+A `PaginatedResponse[FtCallTenderItem]` envelope. Each item carries `tender_reference`, `title`, `contracting_authority`, `contract_nature` (services, supplies or works, as on TED), `status`, `deadline`, `estimated_value` + `estimated_value_currency`, `cpv_codes`, `documents_url`, `description`, body fields + the 5 envelope-level datapoints (`public_url` = the F&T Portal tender page). The older names stay beside them, marked legacy in the schema: `contract_type` (= `contract_nature`, as the portal writes it), `value_currency` (= `estimated_value_currency`), `source_url` (= `public_url`), `published_at` (= `document_date`) and `last_updated` (= `updated_date`). Every item carries `creation_date` (when Brubru first recorded it) and `updated_date` (when its content last changed). `last_updated` is the same change time (until 22 Sep 2026 it was the time of the last sync, whether or not anything changed).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal/. is_test=True seed rows are filtered out at query time.""",
@@ -412,8 +424,8 @@ async def list_calls_for_tenders(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", pattern="^(deadline_desc|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
-                       description="deadline_desc (default) | published_desc | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
     limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -433,7 +445,9 @@ async def list_calls_for_tenders(
     if status:
         filters.append(FtCallForTenders.status == status.lower())
     if contract_type:
-        filters.append(FtCallForTenders.contract_type == contract_type.lower())
+        # The portal writes Services, Supplies, Works (1,792 rows) and 15 rows in lower case: an exact
+        # match on the lower-cased value found 14 of 1,473 service tenders (O93, 28 Oct 2026).
+        filters.append(func.lower(FtCallForTenders.contract_type) == contract_type.strip().lower())
     if q:
         like = f"%{q}%"
         filters.append((FtCallForTenders.title.ilike(like)) | (FtCallForTenders.description.ilike(like)))
@@ -537,9 +551,9 @@ class FtFundedProjectItem(BaseModel):
     cost_currency: Optional[str] = "EUR"
     status: Optional[str] = Field(None, description="planned | ongoing | ended | terminated | suspended | unknown: one vocabulary for every programme, from the source and the project's own dates (23 Oct 2026).")
     source_status: Optional[str] = Field(None, description="The status word the source gave, which `status` is set from: CORDIS signed, closed or terminated (written in lower case), the F&T Portal Ongoing, Ended, Forthcoming or Suspended. Null when the source gave none.")
-    source_url: str
-    published_at: Optional[datetime] = None
-    last_updated: Optional[datetime] = None
+    source_url: str = Field(..., **legacy("public_url"))
+    published_at: Optional[datetime] = Field(None, **legacy("document_date", note="the publication date as stored; document_date also falls back to the start date and is never in the future"))
+    last_updated: Optional[datetime] = Field(None, **legacy("updated_date"))
     # Body fields composed from objective + keywords — same pattern as the
     # `/discover/eurio/projects` listing on the same backing table, kept in
     # sync so partners get a consistent shape regardless of which surface
@@ -798,7 +812,7 @@ GET /api/v1/ft-funded-projects?organisation=999991722&role=coordinator
 ```
 
 **You get back**
-A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `project_acronym`, `title`, `framework_programme` (the code), `type_of_action`, `coordinator_name`, `coordinator_country`, `coordinator_pic`, `organisations` (the consortium: each organisation's `pic`, `name`, `role`, `country`, `city`, `activity_type`, `is_sme`, `ec_contribution`; empty outside Horizon Europe, Horizon 2020 and FP7), `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_status` (the source's own word), `source_url`, `last_updated`, body fields + the 5 envelope-level datapoints (`public_url` = the project's own page, on CORDIS or the F&T Portal).
+A `PaginatedResponse[FtFundedProjectItem]` envelope. Each item carries `project_id`, `project_acronym`, `title`, `framework_programme` (the code), `type_of_action`, `coordinator_name`, `coordinator_country`, `coordinator_pic`, `organisations` (the consortium: each organisation's `pic`, `name`, `role`, `country`, `city`, `activity_type`, `is_sme`, `ec_contribution`; empty outside Horizon Europe, Horizon 2020 and FP7), `start_date`, `end_date`, `eu_contribution`, `total_cost`, `objective`, `status`, `source_status` (the source's own word), body fields + the 5 envelope-level datapoints (`public_url` = the project's own page, on CORDIS or the F&T Portal). The older names stay beside them, marked legacy in the schema: `source_url` (= `public_url`), `published_at` (the stored publication date behind `document_date`) and `last_updated` (= `updated_date`).
 
 **Data freshness**
 Read every Sunday from 05:00 UTC (weekly tier, from 1 Nov 2026; until then the rows were last read on 6 May for CORDIS and 15 Jun for the F&T Portal): Horizon Europe, Horizon 2020 and FP7 from the CORDIS bulk dumps (cordis.europa.eu/data), each read when CORDIS has refreshed it, which is about monthly; every other programme from the F&T Portal's projects-results index (ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/projects-results). `status` is set every day from the source's word and the project's own dates. CORDIS is also reachable via `/api/v1/discover/eurio/projects`. is_test=True seed rows are filtered out at query time.""",

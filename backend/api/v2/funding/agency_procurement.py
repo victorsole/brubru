@@ -71,12 +71,12 @@ register_resource(
            "type is Call for proposals) and each call's own page.",
     extra="Cedefop's calls for proposals (grants: the ReferNet framework partnerships and the DG "
           "Education and Culture calls Cedefop published for the Commission), the whole archive "
-          "from 2005. Each item carries `tender_reference`, `status` (open | closed; open only while "
-          "the deadline is ahead) and `deadline`; `document_date` is the Official Publication Date "
+          "from 2005. Each item carries `call_id` (the call's reference; `tender_reference` is its legacy "
+          "name), `status` (open | closed; open only while the deadline is ahead) and `deadline`; `document_date` is the Official Publication Date "
           "or, for pages that state none, the Official Journal day the page names. The detail "
           "body holds the description, the key dates and the list of the call's files; "
           "`/{item_id}/documents` serves those files with their extracted text. Filter with q.",
-    procurement=True, documents=True, funding_standard=True,
+    procurement=True, documents=True, funding_standard=True, reference_name="call_id",
 )
 
 # --- EMA — European Medicines Agency -------------------------------------- #

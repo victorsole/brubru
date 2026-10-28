@@ -83,3 +83,12 @@ def eur(amount, currency: Optional[str]) -> Optional[float]:
     if amount is None or (currency or "").strip().upper() != "EUR":
         return None
     return float(amount)
+
+
+def legacy(*standard: str, note: str = "the same value") -> dict:
+    """Field arguments for an older name kept beside the standard one (Phase 2 step 4, 28 Oct 2026:
+    one name per concept; the old names stay until the date Victor sets). The schema marks the field
+    deprecated; its description names the field (or fields) to read instead."""
+    names = " or ".join(f"`{s}`" for s in standard)
+    return {"description": f"Legacy name, kept for existing integrations: read {names} ({note}).",
+            "json_schema_extra": {"deprecated": True}}

@@ -62,7 +62,7 @@ GET /api/v2/funding/funding-opportunities?q=AI&deadline_from=2026-06-01
 ```
 
 **You get back**
-A `PaginatedResponse[FundingItem]` envelope. Each item carries `topic_id`, `call_id`, `programme`, `title`, `short_summary`, `description`, `status`, `type_of_action`, `deadline`, `deadline_secondary`, `indicative_budget`, `budget_currency`, `source_url`, `documents_url`, `keywords`, `target_audience`, `published_at`, `last_updated`, body fields + the 5 envelope-level datapoints.
+A `PaginatedResponse[FundingItem]` envelope. Each item carries `topic_id`, `call_id`, `framework_programme`, `title`, `description`, `status`, `type_of_action`, `deadline`, `deadline_secondary`, `indicative_budget`, `budget_currency`, `documents_url`, `keywords`, `target_audience`, body fields + the 5 envelope-level datapoints. The older names stay beside them, marked legacy in the schema: `programme` (= `framework_programme`), `short_summary` (a longer cut than `summary`), `source_url` (= `public_url`), `published_at` (= `document_date`) and `last_updated` (= `updated_date`).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-tenders/opportunities/portal. is_test=True fixture rows are filtered out at query time.""",

@@ -21,7 +21,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1._row_dates import row_updated
-from services.funding.shared_fields import with_body_names
+from services.funding.shared_fields import legacy, with_body_names
 from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order,
                                    sql_window, validate_window)
 
@@ -106,8 +106,21 @@ class FundingProcurementItem(ProcurementItem):
     amount_eur: Optional[float] = Field(None, description=_AMOUNT_EUR_DOC)
 
 
-def _as_funding(db: Session, items: list, procurement: bool) -> list:
-    """The factory's items with the funding standard's shared fields (body_name from body_code)."""
+class FundingGrantItem(FundingProcurementItem):
+    """A call for proposals on a funding list: its reference under the calls' own name (Phase 2 step 4,
+    28 Oct 2026, one name per concept): `topic_id` for a Funding & Tenders Portal topic, `call_id` for
+    a call an agency publishes itself. tender_reference keeps the same value as the legacy name."""
+    topic_id: Optional[str] = Field(None, description="The call's topic id on the Funding & Tenders Portal (as on /ft-calls-for-proposals); null for a call published outside the portal.")
+    call_id: Optional[str] = Field(None, description="The call's reference as its publisher gives it, for a call published outside the Funding & Tenders Portal; null for a portal topic.")
+    tender_reference: Optional[str] = Field(None, **legacy("topic_id", "call_id"))
+
+
+def _as_funding(db: Session, items: list, procurement: bool, reference_name: Optional[str] = None) -> list:
+    """The factory's items with the funding standard's shared fields (body_name from body_code); a
+    grant list's reference also under its call name."""
+    if reference_name:
+        return with_body_names(db, [FundingGrantItem(**i.model_dump(), **{reference_name: i.tender_reference})
+                                    for i in items])
     cls = FundingProcurementItem if procurement else FundingEconomyItem
     return with_body_names(db, [cls(**i.model_dump()) for i in items])
 
@@ -347,18 +360,20 @@ def _funding_procurement_filters(
 
 
 def register_resource(router, *, body_code, item_type, slug, noun, body_name, acronym,
-                      source, tag, extra="", procurement=False, documents=False, funding_standard=False):
+                      source, tag, extra="", procurement=False, documents=False, funding_standard=False,
+                      reference_name=None):
     """Add list + detail GET routes for one (body, resource) onto `router`.
     documents=True (procurement routes whose files are written to procurement_documents)
     adds {slug}/{item_id}/documents and {slug}/{item_id}/documents/{document_id}.
     funding_standard=True applies the funding standard's defaults to the list (Victor, 23 Oct 2026:
-    50 items per page, at most 200, bodies included); every other body folder keeps its own."""
+    50 items per page, at most 200, bodies included); every other body folder keeps its own.
+    reference_name ('topic_id' | 'call_id') names a grant list's reference as the calls do."""
     limit_default, limit_max = (50, 200) if funding_standard else (20, 100)
     filters = (_funding_procurement_filters if procurement else _funding_filters) if funding_standard else _no_filters
     noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
     path_hint = slug if slug.startswith("/") else f"/{slug}"
     if funding_standard:
-        item_model = FundingProcurementItem if procurement else FundingEconomyItem
+        item_model = FundingGrantItem if reference_name else FundingProcurementItem if procurement else FundingEconomyItem
     else:
         item_model = ProcurementItem if procurement else EconomyItem
 
@@ -406,7 +421,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
                                    procurement=procurement, window=window, status=standard.get("status"),
                                    deadline_from=standard.get("deadline_from"), deadline_to=standard.get("deadline_to"))
         if funding_standard:
-            items = _as_funding(db, items, procurement)
+            items = _as_funding(db, items, procurement, reference_name)
         return build_envelope(items, total, page, limit,
                               updated_from=window["updated_from"], updated_to=window["updated_to"])
 
@@ -419,7 +434,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         item = _get_item(db, body_code, item_type, item_id, procurement=procurement)
         if item is None:
             raise HTTPException(status_code=404, detail=f"No {body_name} {noun_singular} with id {item_id}")
-        return _as_funding(db, [item], procurement)[0] if funding_standard else item
+        return _as_funding(db, [item], procurement, reference_name)[0] if funding_standard else item
     # What this item route serves, so an aggregate (/funding/all) can point each of its rows at
     # its own route without a second copy of the slug table (core.self_links.item_route_for).
     detail_ep.brubru_item_key = (body_code, item_type)

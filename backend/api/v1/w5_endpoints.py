@@ -13,7 +13,7 @@ from datetime import date, datetime, time
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session, defer
 
@@ -26,7 +26,7 @@ from models.user import User
 from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
-from services.funding.shared_fields import cut_summary, eur
+from services.funding.shared_fields import cut_summary, eur, legacy
 from ._search import text_match
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
@@ -428,7 +428,8 @@ class TenderItem(BaseModel):
     notice_subtype: Optional[str] = Field(None, description="The eForms notice type: pin-only, pin-rtl, cn-standard, cn-social, can-standard ...")
     title: str
     description: Optional[str] = None
-    official_name: Optional[str] = None
+    contracting_authority: Optional[str] = Field(None, description="The buyer, as the notice names it (the funding standard's name, also on the F&T Portal tenders and the award notices).")
+    official_name: Optional[str] = Field(None, **legacy("contracting_authority"))
     buyer_country: Optional[str] = None
     buyer_legal_type: Optional[str] = Field(None, description="The buyer's eForms legal type (BT-11): la (local authority), ra (regional authority), cga (central government authority), eu-ins-bod-ag (EU institution, body or agency), body-pl-la (body governed by public law controlled by a local authority) ...")
     buyer_level: Optional[str] = Field(None, description="local | regional | national | eu | international, from buyer_legal_type; null when the notice's legal type does not say (a plain body governed by public law, public undertaking, defence contractor...).")
@@ -438,11 +439,13 @@ class TenderItem(BaseModel):
     contract_nature: Optional[str] = None
     estimated_value: Optional[float] = None
     estimated_value_currency: str = "EUR"
-    publication_date: Optional[datetime] = None
-    submission_deadline: Optional[datetime] = None
+    deadline: Optional[datetime] = Field(None, description="The submission deadline (the funding standard's name, as on every other tender and call list).")
+    documents_url: Optional[str] = Field(None, description="The procurement documents' page, where the notice gives one (held for the notices Brubru reads from the Funding & Tenders Portal).")
+    publication_date: Optional[datetime] = Field(None, **legacy("document_date"))
+    submission_deadline: Optional[datetime] = Field(None, **legacy("deadline"))
     has_lots: bool = False
     lot_count: Optional[int] = None
-    ted_url: Optional[str] = None
+    ted_url: Optional[str] = Field(None, **legacy("public_url"))
     summary: Optional[str] = Field(None, description="The start of the notice's description, cut at a word end near 300 characters (TED's own summary is empty on every notice).")
     # The funding standard's shared fields (28 Oct 2026)
     item_type: str = Field("tender", description="Always tender: a TED notice.")
@@ -454,8 +457,8 @@ class TenderItem(BaseModel):
         "open | closed | forthcoming. TED publishes none: it is set daily from the notice type and its own "
         "deadline (award and modification notices closed, a passed deadline closed, a prior information "
         "notice without a deadline forthcoming)."))
-    last_synced_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    last_synced_at: Optional[datetime] = Field(None, **legacy("updated_date", note="not the same value: when Brubru last re-read the notice, whether or not it changed; null on notices not re-read since the field was added"))
+    updated_at: Optional[datetime] = Field(None, **legacy("updated_date"))
     # The contracted datapoints. Until 1 October 2026 this model carried none of
     # them, so /api/v2/funding/tenders returned public_url and document_date null
     # on EVERY row while the TED notice link and the publication date sat on the
@@ -471,6 +474,13 @@ class TenderItem(BaseModel):
     # the notice's own text sat in description/summary but no body field carried it.
     body_txt: Optional[str] = Field(None, description="The notice's text: its description and summary as published on TED, with buyer, procedure and value.")
     body_html: Optional[str] = Field(None, description="The same text as HTML.")
+
+    @model_validator(mode="after")
+    def _standard_names(self):
+        # One name per concept (Phase 2 step 4, 28 Oct 2026): the standard fields carry the legacy ones' values.
+        self.contracting_authority = self.contracting_authority or self.official_name
+        self.deadline = self.deadline or self.submission_deadline
+        return self
 
 
 def _tender_body(r) -> tuple:
@@ -618,7 +628,7 @@ async def tenders_page(
             cpv_main=r.cpv_main, contract_nature=r.contract_nature,
             estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
             publication_date=r.publication_date, submission_deadline=r.submission_deadline,
-            has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
+            has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url, documents_url=r.documents_url,
             summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
             amount_eur=eur(r.estimated_value, r.estimated_value_currency),
             status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
@@ -669,7 +679,7 @@ GET /api/v1/tenders?buyer_country=BE&contract_nature=services
 ```
 
 **You get back**
-A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `official_name`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `publication_date`, `submission_deadline`, `has_lots`, `lot_count`, `ted_url`, `summary`, `sme_suitability_score`, `status`, `last_synced_at`, `updated_at`.
+A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `contracting_authority`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `deadline`, `documents_url`, `has_lots`, `lot_count`, `summary`, `sme_suitability_score`, `status`, plus `public_url`, `document_date` and `updated_date`. The older names stay beside them, marked legacy in the schema: `official_name` (= `contracting_authority`), `submission_deadline` (= `deadline`), `publication_date` (= `document_date`), `ted_url` (= `public_url`), `updated_at` (= `updated_date`) and `last_synced_at` (when Brubru last re-read the notice).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publishes daily by definition (the "Daily" in the name). Backed by `backend/scripts/backfill_tenders_description.py`.""",
@@ -749,7 +759,7 @@ async def get_tender_detail(
         cpv_main=r.cpv_main, contract_nature=r.contract_nature,
         estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
         publication_date=r.publication_date, submission_deadline=r.submission_deadline,
-        has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
+        has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url, documents_url=r.documents_url,
         summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
         amount_eur=eur(r.estimated_value, r.estimated_value_currency),
         status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,

@@ -83,6 +83,7 @@ class _Rows:
     def __init__(self, rows): self.rows = rows
     def scalar(self): return len(self.rows)
     def fetchall(self): return self.rows
+    def fetchone(self): return self.rows[0] if self.rows else None
     def mappings(self): return self
     def all(self): return self.rows
 
@@ -437,3 +438,158 @@ def test_a_partner_summary_keeps_its_counts_after_its_country():
     it = _item(r, "https://x")
     assert (it.item_type, it.title) == ("organisation", "CNRS")
     assert it.summary == "FR · 3 projects (1 coordinated) · 2 payments (0 contracts)"
+
+
+# --- step 4: one name per concept, the older names kept beside --------------------------------------- #
+# Each list's legacy names (28 Oct 2026). A name dropped, or a legacy mark lost, fails here.
+LEGACY = {
+    "tenders": {"official_name", "submission_deadline", "publication_date", "ted_url", "updated_at", "last_synced_at"},
+    "ft-calls-for-tenders": {"contract_type", "value_currency", "source_url", "published_at", "last_updated"},
+    "ft-calls-for-proposals": {"source_url", "published_at", "last_updated"},
+    "startups": {"source_url", "published_at", "last_updated"},
+    "entrepreneur-instruments": {"source_url", "published_at", "last_updated"},
+    "ft-funded-projects": {"source_url", "published_at", "last_updated"},
+    "funding-opportunities": {"programme", "short_summary", "source_url", "published_at", "last_updated"},
+    "eu-funding-recipients": {"project_start", "project_end"},
+    "international-cooperation": {"project_start", "project_end"},
+    "partners": {"vat"},
+    "justice": {"tender_reference"}, "innovation-fund": {"tender_reference"}, "cedefop-grants": {"tender_reference"},
+}
+
+
+def test_every_legacy_name_points_at_a_standard_field_the_same_item_carries():
+    import re
+    from api.v2.funding import router
+    spec = _spec(router)
+    routes = {p: m["get"] for p, m in spec["paths"].items() if p.startswith(FUNDING) and "get" in m and "/documents" not in p}
+    seen = {}
+    for path, op in routes.items():
+        props = _item_properties(spec, op)
+        old = {k for k, v in props.items() if v.get("deprecated")}
+        for k in old:
+            standard = re.findall(r"`(\w+)`", props[k].get("description", "").split("read ", 1)[-1])
+            assert standard and all(s in props and not props[s].get("deprecated") for s in standard), (path, k, standard)
+        if not path.endswith("}"):
+            seen[path[len(FUNDING):]] = old
+    assert {p: o for p, o in seen.items() if o} == LEGACY
+
+
+def _ted_row(**kw):
+    from types import SimpleNamespace
+    from models.tender import Tender
+    row = {c.name: None for c in Tender.__table__.columns}
+    row.update(id=5, publication_number="620225-2026", title="T", has_lots=False, cpv_codes=[], **kw)
+    return SimpleNamespace(**row)
+
+
+class _RowsQuery(_CapturingQuery):
+    ROWS = []
+
+    def count(self):
+        return len(self.ROWS)
+
+    def all(self):
+        return list(self.ROWS)
+
+    def first(self):
+        return self.ROWS[0] if self.ROWS else None
+
+
+class _RowsDb(_Db):
+    def query(self, *entities):
+        return _RowsQuery(list(entities))
+
+
+def test_a_ted_notice_carries_the_standard_names_on_the_list_and_the_item_route():
+    from datetime import datetime
+    from api.v2.funding import router as funding
+    _RowsQuery.ROWS = [_ted_row(official_name="Agence X", submission_deadline=datetime(2026, 12, 1, 12),
+                                publication_date=datetime(2026, 10, 1), ted_url="https://ted.europa.eu/x",
+                                documents_url="https://ec.europa.eu/info/funding-tenders/x", estimated_value_currency="EUR")]
+    client = _client(funding, _RowsDb())
+    for path in ("/api/v2/funding/tenders", "/api/v2/funding/tenders/5"):
+        r = client.get(path)
+        assert r.status_code == 200, (path, r.text)
+        it = r.json()["data"][0] if path.endswith("tenders") else r.json()
+        assert (it["contracting_authority"], it["official_name"]) == ("Agence X", "Agence X"), path
+        assert it["deadline"] == it["submission_deadline"] == "2026-12-01T12:00:00", path
+        assert it["documents_url"] == "https://ec.europa.eu/info/funding-tenders/x", path
+
+
+def test_the_ft_portal_tenders_name_the_contract_nature_as_ted_and_match_it_in_any_case():
+    from types import SimpleNamespace
+    from api.v1.funding_tenders_collections import _tender_to_item
+    base = dict(id=1, tender_reference="R", contracting_authority="eu-LISA", title="T", description=None, status="open",
+                estimated_value=5.0, deadline=None, source_url="https://x.eu", documents_url=None, cpv_codes=[],
+                published_at=None, content_updated_at=None, last_updated=None, first_seen_at=None)
+    it = _tender_to_item(SimpleNamespace(**base, contract_type="Services", value_currency="GBP"))
+    assert (it.contract_nature, it.contract_type) == ("services", "Services")
+    assert (it.estimated_value_currency, it.value_currency) == ("GBP", "GBP")
+    assert _tender_to_item(SimpleNamespace(**base, contract_type=None, value_currency=None)).contract_nature is None
+    # O93: the portal writes Services; an exact match on the lower-cased word found 14 of 1,473.
+    for params in ({"contract_nature": "Services"}, {"contract_type": "services"}):
+        r, sql = _orm_get("/api/v2/funding/ft-calls-for-tenders", params)
+        assert r.status_code == 200, r.text
+        assert "lower(ft_calls_for_tenders.contract_type) = " in sql[0], params
+
+
+def test_the_ft_call_lists_order_by_recent_and_oldest_beside_their_legacy_names():
+    for path, table in (("/api/v2/funding/ft-calls-for-proposals", "ft_calls_for_proposals"),
+                        ("/api/v2/funding/ft-calls-for-tenders", "ft_calls_for_tenders")):
+        for order, expected in (("recent", "published_at DESC NULLS LAST"), ("published_desc", "published_at DESC NULLS LAST"),
+                                ("oldest", "published_at ASC NULLS LAST"), (None, "deadline DESC NULLS LAST")):
+            r, sql = _orm_get(path, {"order": order} if order else {})
+            assert r.status_code == 200, (path, order, r.text)
+            assert f"ORDER BY {table}.{expected}" in sql[1], (path, order)
+
+
+def test_the_other_lists_carry_the_standard_names_with_the_same_values():
+    from datetime import date
+    from types import SimpleNamespace
+    from api.v1.infringements_funding import FundingItem
+    from api.v2.funding import router as funding
+    from api.v2.funding._fts import FtsItem
+    from api.v2.funding.partners import _item
+    fts = FtsItem(id=1, title="B", project_start=date(2025, 1, 1), project_end=date(2027, 12, 31))
+    assert (fts.start_date, fts.end_date) == (date(2025, 1, 1), date(2027, 12, 31))
+    call = FundingItem(id="x", topic_id="T", title="t", source_url="https://x.eu", programme="Horizon Europe (HORIZON)")
+    assert call.framework_programme == "Horizon Europe (HORIZON)"
+    r = SimpleNamespace(key="vat:BE0123", name="X", short_name=None, pic=None, vat="BE0123", country="BE", city=None,
+                        activity_type=None, is_sme=None, projects=0, coordinated=0, payments=1, contracts=0, awards=0,
+                        announcements=0, eu_contribution=None, amount_eur=None, matches=[], last_day=None, created=None,
+                        changed=None)
+    assert (_item(r, "https://x").vat_number, _item(r, "https://x").vat) == ("BE0123", "BE0123")
+    _fresh_body_names()
+    items = _client(funding, _Db()).get("/api/v2/funding/programmes", params={"limit": 200}).json()["data"]
+    assert len(items) > 50 and all(i["id"] == i["acronym"] for i in items)
+
+
+def test_a_grant_list_names_its_reference_as_the_calls_do():
+    from datetime import datetime
+    from types import SimpleNamespace
+    from api.v2.funding import router as funding
+    for path, body, ref, name in (("justice", "just", "JUST-2027-JTRA", "topic_id"),
+                                  ("innovation-fund", "innovfund", "INNOVFUND-2025-NZT-PILOTS", "topic_id"),
+                                  ("cedefop-grants", "cedefop", "GP/DVQ/ReferNet_FPA/001/26", "call_id")):
+        _fresh_body_names()
+        row = SimpleNamespace(id=7, body_code=body, item_type="grant", title="T", summary="S", source_kind="api",
+                              public_url="https://x.eu/7", body_txt="b", body_html="<p>b</p>", document_date=None,
+                              creation_date=datetime(2026, 1, 1), updated_at=datetime(2026, 1, 2),
+                              tender_reference=ref, status="open", deadline=None, code=body, name="N")
+        client = _client(funding, _Db([row]))
+        for it in (client.get(f"/api/v2/funding/{path}").json()["data"][0], client.get(f"/api/v2/funding/{path}/7").json()):
+            other = {"topic_id": "call_id", "call_id": "topic_id"}[name]
+            assert (it[name], it["tender_reference"], it[other]) == (ref, ref, None), path
+    # A tender list keeps tender_reference as its own name.
+    spec = _spec(funding)
+    assert "topic_id" not in _item_properties(spec, spec["paths"]["/api/v2/funding/ecdc-tenders"]["get"])
+
+
+def test_all_filters_item_type_beside_its_legacy_name_type():
+    from api.v2.funding import router as funding
+    for params in ({"item_type": "cap_payment"}, {"type": "cap_payment"}):
+        db = _Db()
+        r = _client(funding, db).get("/api/v2/funding/all", params=params)
+        assert r.status_code == 200, r.text
+        assert any("item_type = :it" in sql and p.get("it") == "cap_payment" for sql, p in db.sql), params
+    assert _client(funding, _Db()).get("/api/v2/funding/all", params={"item_type": "x"}).status_code == 400

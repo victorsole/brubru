@@ -161,7 +161,7 @@ GET /api/v2/funding/startups?instrument=equity
 ```
 
 **You get back**
-A `PaginatedResponse[StartupFundingItem]` — each item carries `topic_id` (the stable English id, e.g. `HORIZON-EIC-2026-ACCELERATOR-01`), title, `stage`, `instrument`, status, deadline, budget, description, the F&T Portal link and the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; `/startups/{topic_id}` has the full body). Most recent deadlines first.
+A `PaginatedResponse[StartupFundingItem]` — each item carries `topic_id` (the stable English id, e.g. `HORIZON-EIC-2026-ACCELERATOR-01`), title, `stage`, `instrument`, status, deadline, budget, description, the F&T Portal link and the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; `/startups/{topic_id}` has the full body). The older names stay beside them, marked legacy in the schema: `source_url` (= `public_url`), `published_at` (= `document_date`) and `last_updated` (= `updated_date`). Most recent deadlines first.
 
 **Not yet covered**
 EaSI Microfinance (loans ≤ €25k) and InvestEU (equity / guarantees) are useful for founders but Brubru does not yet hold their data. Structural funds (ERDF, ESF+, EMFAF) are excluded here because they are Member-State allocations, not direct-apply calls.

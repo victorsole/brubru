@@ -112,7 +112,7 @@ GET /api/v2/funding/international-cooperation?country=Ukraine
 ```
 
 **You get back**
-A paginated envelope. Each item carries the structured award fields + the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; the detail endpoint has the full FTS record).
+A paginated envelope. Each item carries the structured award fields + the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; the detail endpoint has the full FTS record). The project's dates are `start_date` and `end_date`; `project_start` and `project_end` stay beside them as legacy names.
 
 **Note**
 This is the *awards* side (who already received funding). Open biddable tenders run through OPSYS/TED and are not held here.
