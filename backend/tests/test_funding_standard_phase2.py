@@ -154,3 +154,73 @@ def test_a_cohesion_list_takes_country_in_both_spellings_the_windows_and_the_ord
     _client(funding, db).get("/api/v2/funding/eagf")
     assert "ORDER BY total_eur DESC NULLS LAST, ms, id" in db.sql[-1][0]                # the list's own default
     assert _client(funding, _Db()).get("/api/v2/funding/eagf", params={"order": "title"}).status_code == 400
+
+
+# The ORM-built lists (TED, funded projects, calls): the real query compiled for PostgreSQL.
+from sqlalchemy.dialects import postgresql  # noqa: E402
+from sqlalchemy.orm import Query  # noqa: E402
+
+COMPILED = []
+
+
+class _CapturingQuery(Query):
+    def _record(self):
+        COMPILED.append(str(self.statement.compile(dialect=postgresql.dialect())))
+
+    def count(self):
+        self._record()
+        return 0
+
+    def all(self):
+        self._record()
+        return []
+
+
+class _OrmDb(_Db):
+    def query(self, *entities):
+        return _CapturingQuery(list(entities))
+
+
+def _orm_get(path, params):
+    from api.v2.funding import router as funding
+    COMPILED.clear()
+    r = _client(funding, _OrmDb()).get(path, params=params)
+    return r, list(COMPILED)
+
+
+def test_the_ted_list_takes_country_status_the_created_window_and_the_orders():
+    r, sql = _orm_get("/api/v2/funding/tenders", {"country": "be", "status": "open", "created_from": "2026-10-01",
+                                                    "since": "2026-01-01", "order": "deadline"})
+    assert r.status_code == 200, r.text
+    count_sql, page_sql = sql
+    assert "tenders.buyer_country = " in count_sql and "tenders.status = " in count_sql
+    assert "tenders.created_at >= " in count_sql and "tenders.publication_date >= " in count_sql   # since = published_from
+    assert "ORDER BY tenders.submission_deadline ASC NULLS LAST" in page_sql
+    r, sql = _orm_get("/api/v2/funding/tenders", {"order": "updated_asc"})
+    assert "ORDER BY tenders.updated_at ASC, tenders.id ASC" in sql[1]
+    r, sql = _orm_get("/api/v2/funding/tenders", {})
+    assert "ORDER BY tenders.publication_date DESC NULLS LAST, tenders.id DESC" in sql[1]          # unchanged default
+    for bad in ({"status": "awarded"}, {"order": "title"}):
+        assert _orm_get("/api/v2/funding/tenders", bad)[0].status_code == 400, bad
+
+
+def test_the_funded_projects_list_takes_programme_country_the_windows_and_the_orders():
+    r, sql = _orm_get("/api/v2/funding/ft-funded-projects", {"programme": "LIFE", "country": "GR", "created_from": "2026-10-01",
+                                                               "published_from": "2025-01-01", "order": "recent"})
+    assert r.status_code == 200, r.text
+    count_sql, page_sql = sql
+    assert "ft_funded_projects.framework_programme ILIKE" in count_sql
+    assert "ft_funded_projects.coordinator_country IN" in count_sql
+    assert "ft_funded_projects.scraped_at >= " in count_sql
+    # The publication window reads the document date the item shows: the publication date, else a past start.
+    assert "CASE WHEN (CURRENT_DATE >= date(ft_funded_projects.published_at))" in count_sql
+    assert "ORDER BY CASE WHEN (CURRENT_DATE >= date(ft_funded_projects.published_at))" in page_sql and "DESC NULLS LAST" in page_sql
+    r, sql = _orm_get("/api/v2/funding/ft-funded-projects", {})
+    assert "ORDER BY ft_funded_projects.start_date DESC NULLS LAST, ft_funded_projects.id ASC" in sql[1]   # unchanged default
+    assert _orm_get("/api/v2/funding/ft-funded-projects", {"order": "amount"})[0].status_code == 400
+
+
+def test_the_calls_for_proposals_take_programme_as_framework_programme():
+    r, sql = _orm_get("/api/v2/funding/ft-calls-for-proposals", {"programme": "HORIZON"})
+    assert r.status_code == 200, r.text
+    assert "ft_calls_for_proposals.framework_programme" in sql[0]

@@ -23,6 +23,8 @@ from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import funding_tenders_collections as _v1
 from api.v1.funding_tenders_collections import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
 from ._standard import include_body_param, without_bodies
+from ._standard import published_window
+from api.v1._change_window import SYNC_ORDERS, validate_window
 
 
 calls_router = APIRouter(prefix="/ft-calls-for-proposals", tags=["v2-funding-ft-calls-for-proposals"])
@@ -69,6 +71,7 @@ Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-ten
 async def list_calls_for_proposals(
     request: Request,
     framework_programme: Optional[str] = Query(None),
+    programme: Optional[str] = Query(None, description="The same as `framework_programme` (the funding standard's name)."),
     status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
     type_of_action: Optional[str] = Query(None),
     q: Optional[str] = Query(None, description="Substring match on title/description"),
@@ -89,7 +92,7 @@ async def list_calls_for_proposals(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallProposalItem]:
-    return without_bodies(await _v1.list_calls_for_proposals(request=request, framework_programme=framework_programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
+    return without_bodies(await _v1.list_calls_for_proposals(request=request, framework_programme=framework_programme or programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
 
 
 @calls_router.get(
@@ -260,7 +263,9 @@ Read every Sunday from 05:00 UTC (weekly tier, from 1 Nov 2026; until then the r
 async def list_funded_projects(
     request: Request,
     framework_programme: Optional[str] = Query(None),
+    programme: Optional[str] = Query(None, description="The same as `framework_programme` (the funding standard's name): part of the programme's code or name."),
     coordinator_country: Optional[str] = Query(None, min_length=2, max_length=2),
+    country: Optional[str] = Query(None, min_length=2, max_length=2, description="The coordinator's country, ISO-2: the same as `coordinator_country`."),
     type_of_action: Optional[str] = Query(None),
     status: Optional[str] = Query(None, description="planned | ongoing | ended | terminated | suspended | unknown, set from the source and the project's own dates. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; a word in the list above (Ongoing, Ended...) means the status set here, in any case."),
     q: Optional[str] = Query(None, description="Words in the title, objective and keywords (full text: every word, any form; \"quoted phrase\", OR, -word)."),
@@ -273,6 +278,10 @@ async def list_funded_projects(
     end_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    published: tuple = Depends(published_window),
+    order: Optional[str] = Query(None, description="the start date, newest first (default) | recent | oldest (the document date) | updated_asc | updated_desc | created_asc | created_desc."),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
@@ -280,7 +289,10 @@ async def list_funded_projects(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtFundedProjectItem]:
-    return without_bodies(await _v1.list_funded_projects(request=request, framework_programme=framework_programme, coordinator_country=coordinator_country, type_of_action=type_of_action, status=status, q=q, organisation=organisation, role=role, participant_country=participant_country, topic=topic, keyword=keyword, start_from=start_from, end_to=end_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
+    if order is not None and order not in ("recent", "oldest") and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {['recent', 'oldest'] + list(SYNC_ORDERS)}")
+    window = validate_window(created_from, created_to, updated_from, updated_to)
+    return without_bodies(await _v1.funded_projects_page(request=request, framework_programme=framework_programme or programme, coordinator_country=coordinator_country or country, type_of_action=type_of_action, status=status, q=q, organisation=organisation, role=role, participant_country=participant_country, topic=topic, keyword=keyword, start_from=start_from, end_to=end_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db, created_from=window["created_from"], created_to=window["created_to"], published_from=published[0], published_to=published[1], order=order), include_body)
 
 
 @projects_router.get(

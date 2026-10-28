@@ -23,6 +23,11 @@ from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import w5_endpoints as _v1
 from api.v1.w5_endpoints import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
 from ._standard import include_body_param, without_bodies
+from api.v1._change_window import SYNC_ORDERS, validate_window
+
+# The tender vocabulary of the funding standard; stored today: open, closed, forthcoming (28 Oct 2026).
+_STATUSES = ("forthcoming", "open", "closed", "cancelled")
+_ORDERS = ("recent", "oldest", "deadline")
 
 
 tenders_router = APIRouter(prefix="/tenders", tags=["v2-funding-tenders"])
@@ -70,6 +75,8 @@ async def list_tenders(
     request: Request,
     q: Optional[str] = Query(None, description="Substring on title + description + summary + official_name (the contracting authority, so you can search by buyer)."),
     buyer_country: Optional[str] = Query(None, description="ISO 3166-1 alpha-2"),
+    country: Optional[str] = Query(None, description="The buyer's country, ISO-2: the same as `buyer_country` (the funding standard's name)."),
+    status: Optional[str] = Query(None, description="forthcoming | open | closed | cancelled (the notice's status, from its dates)."),
     procedure_type: Optional[str] = Query(None),
     contract_nature: Optional[str] = Query(None, description="works | supplies | services"),
     cpv_main: Optional[str] = Query(None),
@@ -87,13 +94,26 @@ async def list_tenders(
     published_to: Optional[date] = Query(None),
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
+    created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
+    order: Optional[str] = Query(None, description="recent (default) | oldest | deadline (the nearest first) | updated_asc | updated_desc | created_asc | created_desc."),
+    since: Optional[date] = Query(None, include_in_schema=False),
+    until: Optional[date] = Query(None, include_in_schema=False),
+    from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
+    to: Optional[date] = Query(None, include_in_schema=False),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TenderItem]:
-    return without_bodies(await _v1.list_tenders(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db), include_body)
+    if status is not None and status not in _STATUSES:
+        raise HTTPException(status_code=400, detail=f"status must be one of {list(_STATUSES)}")
+    if order is not None and order not in _ORDERS and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {list(_ORDERS) + list(SYNC_ORDERS)}")
+    window = validate_window(created_from, created_to, updated_from, updated_to)
+    published_from, published_to = published_from or since or from_, published_to or until or to
+    return without_bodies(await _v1.tenders_page(request=request, q=q, buyer_country=buyer_country or country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, user=user, db=db, status=status, created_from=window["created_from"], created_to=window["created_to"], order=order), include_body)
 
 
 @tenders_router.get(

@@ -29,6 +29,7 @@ from ._envelope import PaginatedResponse, build_envelope
 from ._search import text_match
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
+from api.v1._change_window import orm_order
 
 logger = logging.getLogger(__name__)
 
@@ -486,6 +487,148 @@ def _tender_body(r) -> tuple:
     return txt, html
 
 
+def _tender_order(order: Optional[str]):
+    """The list's order: recent (default) | oldest | deadline (the nearest first), or a sync order."""
+    sync = orm_order(order, Tender.created_at, Tender.updated_at, Tender.id) if order else None
+    if sync:
+        return sync
+    return {
+        "oldest": (Tender.publication_date.asc().nullslast(), Tender.id.asc()),
+        "deadline": (Tender.submission_deadline.asc().nullslast(), Tender.id.asc()),
+    }.get(order or "recent", (Tender.publication_date.desc().nullslast(), Tender.id.desc()))
+
+
+async def tenders_page(
+    request: Request,
+    q: Optional[str] = Query(None, description="Substring on title + description + summary + official_name (the contracting authority, so you can search by buyer)."),
+    buyer_country: Optional[str] = Query(None, description="ISO 3166-1 alpha-2"),
+    procedure_type: Optional[str] = Query(None),
+    contract_nature: Optional[str] = Query(None, description="works | supplies | services"),
+    cpv_main: Optional[str] = Query(None),
+    cpv_code: Optional[str] = Query(None, description="Match any CPV in cpv_codes"),
+    form_type: Optional[str] = Query(None, description="planning | competition | result | cont-modif | legacy ..."),
+    notice_subtype: Optional[str] = Query(None, description="eForms notice type, e.g. pin-only, cn-standard"),
+    buyer_level: Optional[str] = Query(None, description="local | regional | national | eu | international"),
+    buyer_legal_type: Optional[str] = Query(None, description="eForms buyer legal type code, e.g. la, ra, cga, eu-ins-bod-ag"),
+    currency: Optional[str] = Query(None, description="ISO 4217 code of estimated_value, e.g. EUR"),
+    min_value: Optional[float] = Query(None, description="estimated_value >= value, in the notice's own currency"),
+    max_value: Optional[float] = Query(None, description="estimated_value <= value, in the notice's own currency"),
+    deadline_from: Optional[date] = Query(None, description="submission_deadline >= value"),
+    deadline_to: Optional[date] = Query(None),
+    published_from: Optional[date] = Query(None, description="publication_date >= value"),
+    published_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
+    limit: int = Query(50, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+    status: Optional[str] = None,
+    created_from: Optional[datetime] = None,
+    created_to: Optional[datetime] = None,
+    order: Optional[str] = None,
+) -> PaginatedResponse[TenderItem]:
+    # The stored eForms XML (57 KB a notice on average) and its parsed copies are never served by
+    # the list; loading them sent ~6 MB a page out of the database for nothing (23 Oct 2026).
+    query = db.query(Tender).options(
+        defer(Tender.xml_content), defer(Tender.raw_json), defer(Tender.lots), defer(Tender.sme_analysis),
+        defer(Tender.award_criteria), defer(Tender.selection_criteria), defer(Tender.exclusion_grounds),
+        defer(Tender.minimum_requirements),
+    )
+    filters = []
+    if buyer_country:
+        filters.append(Tender.buyer_country == buyer_country.upper())
+    if procedure_type:
+        filters.append(Tender.procedure_type == procedure_type)
+    if contract_nature:
+        filters.append(Tender.contract_nature == contract_nature.lower())
+    if cpv_main:
+        filters.append(Tender.cpv_main == cpv_main)
+    if cpv_code:
+        filters.append(Tender.cpv_codes.any(cpv_code))
+    if form_type:
+        filters.append(Tender.form_type == form_type)
+    if notice_subtype:
+        filters.append(Tender.notice_subtype == notice_subtype)
+    if buyer_level:
+        filters.append(Tender.buyer_level == buyer_level.lower())
+    if buyer_legal_type:
+        filters.append(Tender.buyer_legal_type == buyer_legal_type.lower())
+    if currency:
+        filters.append(Tender.estimated_value_currency == currency.upper())
+    if min_value is not None:
+        filters.append(Tender.estimated_value >= min_value)
+    if max_value is not None:
+        filters.append(Tender.estimated_value <= max_value)
+    if deadline_from:
+        filters.append(Tender.submission_deadline >= deadline_from)
+    if deadline_to:
+        filters.append(Tender.submission_deadline <= datetime.combine(deadline_to, time.max))
+    if published_from:
+        filters.append(Tender.publication_date >= published_from)
+    if published_to:
+        filters.append(Tender.publication_date <= datetime.combine(published_to, time.max))
+    if updated_from:
+        filters.append(Tender.updated_at >= updated_from)
+    if updated_to:
+        filters.append(Tender.updated_at <= updated_to)
+    if status:
+        filters.append(Tender.status == status)
+    if created_from:
+        filters.append(Tender.created_at >= created_from)
+    if created_to:
+        filters.append(Tender.created_at <= created_to)
+    if q:
+        # official_name is the CONTRACTING AUTHORITY, and profiling by organisation is
+        # the commonest thing a caller does with a tender API. It was returned in every
+        # response but not searchable, so q="High-Performance Computing Joint
+        # Undertaking" found 0 while both of that body's notices sat in the corpus.
+        #
+        # text_match adds the other half: accent-folding (4,158 of 9,146 buyer names
+        # carry diacritics, so an unaccented spelling found nothing) and word
+        # boundaries for short terms (q=CAD returned 280 ACCORD-CADRE and Fassade
+        # hits, none of them about CAD). See api/v1/_search.py.
+        cond = text_match(q, Tender.title, Tender.description, Tender.summary,
+                          Tender.official_name)
+        if cond is not None:
+            filters.append(cond)
+    if filters:
+        query = query.filter(and_(*filters))
+
+    total = query.count()
+    rows = (
+        # id breaks ties. TED stamps a whole day with one publication_date, so
+        # without it OFFSET pages overlapped: a 2,014-row harvest held 1,446 ids.
+        stable(query.order_by(*_tender_order(order)))
+        .offset((page - 1) * limit).limit(limit).all()
+    )
+    data = [
+        TenderItem(
+            id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
+            form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
+            official_name=r.official_name, buyer_country=r.buyer_country,
+            buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
+            procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
+            cpv_main=r.cpv_main, contract_nature=r.contract_nature,
+            estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
+            publication_date=r.publication_date, submission_deadline=r.submission_deadline,
+            has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
+            summary=r.summary, sme_suitability_score=r.sme_suitability_score,
+            status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
+            public_url=r.ted_url, document_date=r.publication_date,
+            creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
+            updated_date=row_updated(r),
+            **dict(zip(("body_txt", "body_html"), _tender_body(r))),
+        )
+        for r in rows
+    ]
+    return build_envelope(data, total=total, page=page, limit=limit,
+                          published_from=published_from, published_to=published_to,
+                          updated_from=updated_from, updated_to=updated_to)
+
+
+# The route: v1's parameters; its query is tenders_page, which /api/v2/funding/tenders also calls
+# with the funding standard's filters (28 Oct 2026).
 @tenders_router.get(
     "",
     response_model=PaginatedResponse[TenderItem],
@@ -550,97 +693,7 @@ async def list_tenders(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TenderItem]:
-    # The stored eForms XML (57 KB a notice on average) and its parsed copies are never served by
-    # the list; loading them sent ~6 MB a page out of the database for nothing (23 Oct 2026).
-    query = db.query(Tender).options(
-        defer(Tender.xml_content), defer(Tender.raw_json), defer(Tender.lots), defer(Tender.sme_analysis),
-        defer(Tender.award_criteria), defer(Tender.selection_criteria), defer(Tender.exclusion_grounds),
-        defer(Tender.minimum_requirements),
-    )
-    filters = []
-    if buyer_country:
-        filters.append(Tender.buyer_country == buyer_country.upper())
-    if procedure_type:
-        filters.append(Tender.procedure_type == procedure_type)
-    if contract_nature:
-        filters.append(Tender.contract_nature == contract_nature.lower())
-    if cpv_main:
-        filters.append(Tender.cpv_main == cpv_main)
-    if cpv_code:
-        filters.append(Tender.cpv_codes.any(cpv_code))
-    if form_type:
-        filters.append(Tender.form_type == form_type)
-    if notice_subtype:
-        filters.append(Tender.notice_subtype == notice_subtype)
-    if buyer_level:
-        filters.append(Tender.buyer_level == buyer_level.lower())
-    if buyer_legal_type:
-        filters.append(Tender.buyer_legal_type == buyer_legal_type.lower())
-    if currency:
-        filters.append(Tender.estimated_value_currency == currency.upper())
-    if min_value is not None:
-        filters.append(Tender.estimated_value >= min_value)
-    if max_value is not None:
-        filters.append(Tender.estimated_value <= max_value)
-    if deadline_from:
-        filters.append(Tender.submission_deadline >= deadline_from)
-    if deadline_to:
-        filters.append(Tender.submission_deadline <= datetime.combine(deadline_to, time.max))
-    if published_from:
-        filters.append(Tender.publication_date >= published_from)
-    if published_to:
-        filters.append(Tender.publication_date <= datetime.combine(published_to, time.max))
-    if updated_from:
-        filters.append(Tender.updated_at >= updated_from)
-    if updated_to:
-        filters.append(Tender.updated_at <= updated_to)
-    if q:
-        # official_name is the CONTRACTING AUTHORITY, and profiling by organisation is
-        # the commonest thing a caller does with a tender API. It was returned in every
-        # response but not searchable, so q="High-Performance Computing Joint
-        # Undertaking" found 0 while both of that body's notices sat in the corpus.
-        #
-        # text_match adds the other half: accent-folding (4,158 of 9,146 buyer names
-        # carry diacritics, so an unaccented spelling found nothing) and word
-        # boundaries for short terms (q=CAD returned 280 ACCORD-CADRE and Fassade
-        # hits, none of them about CAD). See api/v1/_search.py.
-        cond = text_match(q, Tender.title, Tender.description, Tender.summary,
-                          Tender.official_name)
-        if cond is not None:
-            filters.append(cond)
-    if filters:
-        query = query.filter(and_(*filters))
-
-    total = query.count()
-    rows = (
-        # id breaks ties. TED stamps a whole day with one publication_date, so
-        # without it OFFSET pages overlapped: a 2,014-row harvest held 1,446 ids.
-        stable(query.order_by(Tender.publication_date.desc().nullslast(), Tender.id.desc()))
-        .offset((page - 1) * limit).limit(limit).all()
-    )
-    data = [
-        TenderItem(
-            id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
-            form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
-            official_name=r.official_name, buyer_country=r.buyer_country,
-            buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
-            procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
-            cpv_main=r.cpv_main, contract_nature=r.contract_nature,
-            estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
-            publication_date=r.publication_date, submission_deadline=r.submission_deadline,
-            has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
-            summary=r.summary, sme_suitability_score=r.sme_suitability_score,
-            status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
-            public_url=r.ted_url, document_date=r.publication_date,
-            creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
-            updated_date=row_updated(r),
-            **dict(zip(("body_txt", "body_html"), _tender_body(r))),
-        )
-        for r in rows
-    ]
-    return build_envelope(data, total=total, page=page, limit=limit,
-                          published_from=published_from, published_to=published_to,
-                          updated_from=updated_from, updated_to=updated_to)
+    return await tenders_page(request=request, q=q, buyer_country=buyer_country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, user=user, db=db)
 
 
 @tenders_router.get(

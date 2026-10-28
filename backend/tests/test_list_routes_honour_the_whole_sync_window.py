@@ -21,7 +21,7 @@ HANDLERS = [
     (ep_entities, ("list_amendments", "list_votes", "list_ep_documents")),
     (transcripts, ("list_committee_transcripts",)),
     (committee_agendas, ("list_committee_agendas",)),
-    (w5_endpoints, ("list_tenders",)),
+    (w5_endpoints, ("tenders_page",)),          # list_tenders' query since 28 Oct 2026 (v2 calls it too)
 ]
 
 

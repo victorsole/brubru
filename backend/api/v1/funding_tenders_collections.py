@@ -18,7 +18,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, func, or_, text
+from sqlalchemy import and_, case, func, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -636,6 +636,114 @@ def _project_to_item(
     )
 
 
+# The project's document_date (_project_date) in SQL: its publication date, else a start date already
+# passed; the publication window and order=recent / oldest read this, as the item shows it.
+_PROJECT_DATE_SQL = case(
+    (func.date(FtFundedProject.published_at) <= func.current_date(), func.date(FtFundedProject.published_at)),
+    (FtFundedProject.start_date <= func.current_date(), FtFundedProject.start_date),
+)
+
+
+def _project_order(order: Optional[str]):
+    """The list's order: the start date, newest first (default) | recent | oldest (the document date) |
+    a sync order (first recorded, last changed)."""
+    sync = orm_order(order, FtFundedProject.scraped_at, FtFundedProject.last_updated, FtFundedProject.id) if order else None
+    if sync:
+        return sync
+    return {
+        "recent": (_PROJECT_DATE_SQL.desc().nullslast(), FtFundedProject.id.desc()),
+        "oldest": (_PROJECT_DATE_SQL.asc().nullslast(), FtFundedProject.id.asc()),
+    }.get(order, (FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc()))
+
+
+async def funded_projects_page(
+    request: Request,
+    framework_programme: Optional[str] = Query(None),
+    coordinator_country: Optional[str] = Query(None, min_length=2, max_length=2),
+    type_of_action: Optional[str] = Query(None),
+    status: Optional[str] = Query(None, description="planned | ongoing | ended | terminated | suspended | unknown, set from the source and the project's own dates. The sources' other words (signed, closed, Forthcoming) still filter, on the word the source gave; a word in the list above (Ongoing, Ended...) means the status set here, in any case."),
+    q: Optional[str] = Query(None, description="Words in the title, objective and keywords (full text: every word, any form; \"quoted phrase\", OR, -word)."),
+    organisation: Optional[str] = Query(None, description="An organisation in the consortium: its PIC (digits, exact) or part of its name."),
+    role: Optional[str] = Query(None, description="That organisation's role: coordinator | participant | associatedPartner | thirdParty | partner | internationalPartner."),
+    participant_country: Optional[str] = Query(None, min_length=2, max_length=2, description="That organisation's country, ISO-2."),
+    topic: Optional[str] = Query(None, description="The project's topic code, or its start (e.g. HORIZON-CL5-2026)."),
+    keyword: Optional[str] = Query(None, description="Part of one of the project's keywords."),
+    start_from: Optional[date] = Query(None),
+    end_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
+    limit: int = Query(50, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+    created_from: Optional[datetime] = None,
+    created_to: Optional[datetime] = None,
+    published_from: Optional[date] = None,
+    published_to: Optional[date] = None,
+    order: Optional[str] = None,
+) -> PaginatedResponse[FtFundedProjectItem]:
+    query = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
+    filters = []
+    if framework_programme:
+        # The column holds the source's code (HORIZON, H2020, ERASMUS2027); a name that is part of no
+        # code (`Horizon Europe`) also finds the codes it names (26 Oct 2026).
+        by_code = FtFundedProject.framework_programme.ilike(f"%{framework_programme}%")
+        named = named_codes(framework_programme)
+        filters.append(or_(by_code, FtFundedProject.framework_programme.in_(named)) if named else by_code)
+    if coordinator_country:
+        # Either spelling of Greece (EL, GR) and the United Kingdom (UK, GB): the column holds both.
+        filters.append(FtFundedProject.coordinator_country.in_(both_styles(coordinator_country)))
+    if type_of_action:
+        filters.append(FtFundedProject.type_of_action.ilike(f"%{type_of_action}%"))
+    if status:
+        # One vocabulary since 23 Oct 2026; a source word (signed, Ongoing...) filters on the word the
+        # source gave. Lowering the value used to make the F&T words ("Ongoing") unmatchable.
+        if status.strip().lower() in PROJECT_STATUSES:
+            filters.append(FtFundedProject.status == status.strip().lower())
+        else:
+            filters.append(func.lower(FtFundedProject.source_status) == status.strip().lower())
+    if q:
+        # The full-text index since 26 Oct 2026; a substring match over 109,636 objectives was slow
+        # and missed every other form of a word.
+        filters.append(text(f"{_PROJECT_TSV} @@ websearch_to_tsquery('english', :q)").bindparams(q=q))
+    consortium = _consortium_clause(organisation, role, participant_country)
+    if consortium is not None:
+        filters.append(consortium)
+    if topic:
+        filters.append(FtFundedProject.topic_code.ilike(f"{topic.strip()}%"))
+    if keyword:
+        filters.append(FtFundedProject.keywords.ilike(f"%{keyword.strip()}%"))
+    if start_from:
+        filters.append(FtFundedProject.start_date >= start_from)
+    if end_to:
+        filters.append(FtFundedProject.end_date <= end_to)
+    if updated_from:
+        filters.append(FtFundedProject.last_updated >= updated_from)
+    if updated_to:
+        filters.append(FtFundedProject.last_updated <= updated_to)
+    if created_from:
+        filters.append(FtFundedProject.scraped_at >= created_from)
+    if created_to:
+        filters.append(FtFundedProject.scraped_at <= created_to)
+    if published_from:
+        filters.append(_PROJECT_DATE_SQL >= published_from)
+    if published_to:
+        filters.append(_PROJECT_DATE_SQL <= published_to)
+    if filters:
+        query = query.filter(and_(*filters))
+
+    total = query.count()
+    rows = (
+        stable(query.order_by(*_project_order(order)))
+        .offset((page - 1) * limit).limit(limit).all()
+    )
+    return build_envelope([_project_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
+                          updated_from=updated_from, updated_to=updated_to)
+
+
+# The route: v1's parameters; its query is funded_projects_page, which /api/v2/funding/ft-funded-projects
+# also calls with the funding standard's filters (28 Oct 2026).
 @projects_router.get(
     "",
     response_model=PaginatedResponse[FtFundedProjectItem],
@@ -695,55 +803,7 @@ async def list_funded_projects(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtFundedProjectItem]:
-    query = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
-    filters = []
-    if framework_programme:
-        # The column holds the source's code (HORIZON, H2020, ERASMUS2027); a name that is part of no
-        # code (`Horizon Europe`) also finds the codes it names (26 Oct 2026).
-        by_code = FtFundedProject.framework_programme.ilike(f"%{framework_programme}%")
-        named = named_codes(framework_programme)
-        filters.append(or_(by_code, FtFundedProject.framework_programme.in_(named)) if named else by_code)
-    if coordinator_country:
-        # Either spelling of Greece (EL, GR) and the United Kingdom (UK, GB): the column holds both.
-        filters.append(FtFundedProject.coordinator_country.in_(both_styles(coordinator_country)))
-    if type_of_action:
-        filters.append(FtFundedProject.type_of_action.ilike(f"%{type_of_action}%"))
-    if status:
-        # One vocabulary since 23 Oct 2026; a source word (signed, Ongoing...) filters on the word the
-        # source gave. Lowering the value used to make the F&T words ("Ongoing") unmatchable.
-        if status.strip().lower() in PROJECT_STATUSES:
-            filters.append(FtFundedProject.status == status.strip().lower())
-        else:
-            filters.append(func.lower(FtFundedProject.source_status) == status.strip().lower())
-    if q:
-        # The full-text index since 26 Oct 2026; a substring match over 109,636 objectives was slow
-        # and missed every other form of a word.
-        filters.append(text(f"{_PROJECT_TSV} @@ websearch_to_tsquery('english', :q)").bindparams(q=q))
-    consortium = _consortium_clause(organisation, role, participant_country)
-    if consortium is not None:
-        filters.append(consortium)
-    if topic:
-        filters.append(FtFundedProject.topic_code.ilike(f"{topic.strip()}%"))
-    if keyword:
-        filters.append(FtFundedProject.keywords.ilike(f"%{keyword.strip()}%"))
-    if start_from:
-        filters.append(FtFundedProject.start_date >= start_from)
-    if end_to:
-        filters.append(FtFundedProject.end_date <= end_to)
-    if updated_from:
-        filters.append(FtFundedProject.last_updated >= updated_from)
-    if updated_to:
-        filters.append(FtFundedProject.last_updated <= updated_to)
-    if filters:
-        query = query.filter(and_(*filters))
-
-    total = query.count()
-    rows = (
-        stable(query.order_by(FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc()))
-        .offset((page - 1) * limit).limit(limit).all()
-    )
-    return build_envelope([_project_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
-                          updated_from=updated_from, updated_to=updated_to)
+    return await funded_projects_page(request=request, framework_programme=framework_programme, coordinator_country=coordinator_country, type_of_action=type_of_action, status=status, q=q, organisation=organisation, role=role, participant_country=participant_country, topic=topic, keyword=keyword, start_from=start_from, end_to=end_to, updated_from=updated_from, updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
 
 
 @projects_router.get(
