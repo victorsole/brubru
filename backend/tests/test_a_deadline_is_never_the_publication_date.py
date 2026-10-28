@@ -102,14 +102,15 @@ def test_an_fts_row_starting_in_the_future_keeps_its_start_in_the_body(monkeypat
     assert "Funding type: Action Grant" in past.body_txt
 
 
-def test_a_cancelled_topic_is_closed_whatever_the_portal_status():
-    # 20 Oct 2026: "Startup Europe - CANCELLED" still carried status forthcoming (31094501).
+def test_a_cancelled_topic_is_cancelled_whatever_the_portal_status():
+    # 20 Oct 2026: "Startup Europe - CANCELLED" still carried status forthcoming (31094501). Stored
+    # `closed` until 28 Oct 2026, now the funding standard's `cancelled` (O88).
     sedia = importlib.import_module("scripts.ingest_funding_sedia")
     result = {"metadata": {"identifier": ["HORIZON-EIE-2027-01-CONNECT-01-CANCELLED"],
                            "title": ["Startup Europe - CANCELLED"], "status": ["31094501"],
                            "startDate": ["2027-06-01T00:00:00.000+0000"],
                            "deadlineDate": ["2027-09-15T00:00:00.000+0000"]}}
-    assert sedia.normalise_row(result, today=date(2026, 10, 20))["status"] == "closed"
+    assert sedia.normalise_row(result, today=date(2026, 10, 20))["status"] == "cancelled"
     result["metadata"]["identifier"], result["metadata"]["title"] = ["HORIZON-EIE-2027-01-CONNECT-01"], ["Startup Europe"]
     assert sedia.normalise_row(result, today=date(2026, 10, 20))["status"] == "forthcoming"
     assert not sedia.is_cancelled("X-2", "Cancellation of contracts study")

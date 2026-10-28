@@ -46,7 +46,7 @@ Only to keep an existing integration working until 23 Oct 2027: it serves the sa
 
 **Input**
 - `programme` — substring (e.g. `Horizon`, `CEF`, `Digital Europe`).
-- `status` — `open` / `forthcoming` / `closed` / `unknown`. There is no `under-evaluation` value: it was documented here but has never existed in the data. `unknown` is the absence of a status from the source feed, not a state of the call, and it is a large share of the corpus — read it as "not stated", never as "closed".
+- `status` — `open` / `forthcoming` / `closed` / `cancelled` / `unknown`. There is no `under-evaluation` value: it was documented here but has never existed in the data. `unknown` is the absence of a status from the source feed, not a state of the call, and it is a large share of the corpus — read it as "not stated", never as "closed".
 - `type_of_action` — substring.
 - `q` — substring on title + short_summary.
 - `deadline_from`, `deadline_to` — deadline window.
@@ -70,7 +70,7 @@ Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-ten
 async def list_funding_opportunities(
     request: Request,
     programme: Optional[str] = Query(None, description="Programme name (Horizon, CEF, Digital Europe, ...)"),
-    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed | cancelled | unknown. `cancelled`: the portal withdrew the topic (its identifier or title ends CANCELLED). No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
     type_of_action: Optional[str] = Query(None),
     q: Optional[str] = Query(None, description="Substring match on title/short_summary"),
     deadline_from: Optional[date] = Query(None),

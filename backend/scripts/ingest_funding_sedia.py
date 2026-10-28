@@ -378,7 +378,8 @@ def is_cancelled(topic_id: Optional[str], title: Optional[str]) -> bool:
     """The portal withdraws a topic by renaming it, not by changing its status: on 20 Oct 2026
     "Startup Europe - CANCELLED" (HORIZON-EIE-2027-01-CONNECT-01-CANCELLED) still carried status
     forthcoming (31094501) and opening and deadline dates in 2027, so it was served as
-    forthcoming. A cancelled topic accepts no proposals: closed, with the word in its title."""
+    forthcoming. A cancelled topic accepts no proposals: `cancelled`, the funding standard's word
+    (stored `closed` from 20 to 28 Oct 2026, O88), with the word in its title."""
     return bool(_CANCELLED.search(str(topic_id or "")) or _CANCELLED.search(str(title or "")))
 
 
@@ -558,7 +559,7 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
     published = parse_iso_date(first_or_none(md.get("startDate"))) or parse_iso_date(first_or_none(md.get("es_SortDate")))
     status = derive_status(sedia_status, published, final_deadline, today)
     if is_cancelled(topic_id, title):
-        status = "closed"
+        status = "cancelled"
     types = md.get("typesOfAction") or []
     type_of_action = types[0] if types else None
 
@@ -679,9 +680,15 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
             -- backfill (backfill_ft_call_descriptions.py) read from the portal's own
             -- topic page, on the very next nightly run.
             description = CASE WHEN length(coalesce(EXCLUDED.description,'')) >= length(coalesce(ft_calls_for_tenders.description,'')) THEN EXCLUDED.description ELSE ft_calls_for_tenders.description END,
-            status = CASE WHEN EXCLUDED.status IS NULL OR EXCLUDED.status = 'unknown'
+            -- A TED notice the portal lists (its link points at TED) takes its status and deadline
+            -- from the same notice in the TED table (services/tenders/status.py, daily, O96):
+            -- the portal's record carries no deadline, and its flag kept 205 closed notices open.
+            status = CASE WHEN ft_calls_for_tenders.source_url LIKE '%%ted.europa.eu%%'
+                               OR EXCLUDED.status IS NULL OR EXCLUDED.status = 'unknown'
                           THEN ft_calls_for_tenders.status ELSE EXCLUDED.status END,
-            deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_tenders.deadline),
+            deadline = CASE WHEN ft_calls_for_tenders.source_url LIKE '%%ted.europa.eu%%'
+                            THEN ft_calls_for_tenders.deadline
+                            ELSE COALESCE(EXCLUDED.deadline, ft_calls_for_tenders.deadline) END,
             contracting_authority = COALESCE(EXCLUDED.contracting_authority,
                 CASE WHEN ft_calls_for_tenders.contracting_authority ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
                      THEN NULL ELSE ft_calls_for_tenders.contracting_authority END),

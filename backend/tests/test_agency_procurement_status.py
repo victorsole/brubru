@@ -200,10 +200,15 @@ def test_the_tender_status_job_runs_the_pass(monkeypatch):
     monkeypatch.setattr(mod, "SessionLocal", lambda: SimpleNamespace(close=lambda: None))
     monkeypatch.setattr(mod, "refresh", lambda db, apply: {})
     monkeypatch.setattr(mod, "close_passed", lambda db, apply: 4)
+    # and, since 28 Oct 2026, the TED notices in ft_calls_for_tenders from their TED row (O96)
+    from collections import Counter
+    monkeypatch.setattr(mod, "sync_ft_copies", lambda db, apply: Counter({("open", "closed"): 205}))
     out = io.StringIO()
     with redirect_stdout(out):
         assert mod.main(["--apply"]) == 0
     assert "4 EU body procurement item(s) past their deadline closed" in out.getvalue()
+    assert "open -> closed: 205" in out.getvalue()
+    assert "205 TED notice(s) in ft_calls_for_tenders set from the TED row" in out.getvalue()
 
 
 # --- the backfill ----------------------------------------------------------------------------- #

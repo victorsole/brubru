@@ -151,7 +151,7 @@ Each item is tagged with a derived **`stage`** (idea / seed / growth / scale-up 
 For a founder, scale-up or SME (or an advisor / accelerator) who wants the EU money they can apply to, in one call, instead of digging through the whole portal. Combine `stage=growth&status=open` to find, say, the open Accelerator round.
 
 **Input**
-`stage` (idea | seed | growth | scale-up | sme), `instrument` (grant | blended | equity | prize), `status` (open | forthcoming | closed | unknown), `q` (free text), `programme` (part of the programme's code or name), `deadline_from` / `deadline_to`, `published_from` / `published_to` (`since`, `until`, `from`, `to` are aliases; the publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first), `order` (deadline_desc default | recent | oldest | a sync order), `page`, `limit` (default 50, max 200), `include_body` (default true). `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
+`stage` (idea | seed | growth | scale-up | sme), `instrument` (grant | blended | equity | prize), `status` (open | forthcoming | closed | cancelled | unknown), `q` (free text), `programme` (part of the programme's code or name), `deadline_from` / `deadline_to`, `published_from` / `published_to` (`since`, `until`, `from`, `to` are aliases; the publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first), `order` (deadline_desc default | recent | oldest | a sync order), `page`, `limit` (default 50, max 200), `include_body` (default true). `created_from` / `created_to` and `updated_from` / `updated_to` for incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`), paged with `order=updated_asc`.
 
 **Try it**
 ```
@@ -177,7 +177,7 @@ async def funding_startups(
     request: Request,
     stage: Optional[str] = Query(None, description="idea | seed | growth | scale-up | sme"),
     instrument: Optional[str] = Query(None, description="grant | blended | equity | prize"),
-    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown. No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed | cancelled | unknown. `cancelled`: the portal withdrew the topic (its identifier or title ends CANCELLED). No `under-evaluation` value exists in the data. `unknown` means the source feed gave no status, not that the call is closed."),
     q: Optional[str] = Query(None, description="Substring match on title/description."),
     programme: Optional[str] = Query(None, description="Part of the programme's code or name (`HORIZON`, `SMP`, `INNOVFUND`)."),
     deadline_from: Optional[date] = Query(None),

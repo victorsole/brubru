@@ -148,7 +148,7 @@ async def funding_all(
     item_type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding | cohesion_allocation | solidarity_case | cap_payment"),
     type: Optional[str] = Query(None, description="Legacy name of item_type."),
     body: Optional[str] = Query(None, description="Agency code or fund code, e.g. efca, ema, erdf, esf, jtf."),
-    status: Optional[str] = Query(None, description="Match on status in the summary (e.g. open, closed)."),
+    status: Optional[str] = Query(None, description="The item's `status`, in any case: open | forthcoming | closed for tenders, grants and calls; the fund's own word for a cohesion programme (e.g. `Adopted by EC`) or a Solidarity Fund case (e.g. `Accepted`). Until 28 Oct 2026 it matched the word anywhere in the summary."),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
     published_from: Optional[date] = Query(None, description="The item's date (`document_date`) on or after (YYYY-MM-DD); `since` and `from` are aliases."),
     published_to: Optional[date] = Query(None, description="The item's date (`document_date`) on or before (YYYY-MM-DD); `until` and `to` are aliases."),
@@ -184,7 +184,7 @@ async def funding_all(
     if body:
         where.append("body_code = :bc"); params["bc"] = body
     if status:
-        where.append("summary ILIKE :st"); params["st"] = f"%{status}%"
+        where.append("lower(status) = lower(:st)"); params["st"] = status.strip()
     if q:
         where.append("(title ILIKE :q OR summary ILIKE :q)"); params["q"] = f"%{q}%"
     since, until = published_from or since or from_, published_to or until or to

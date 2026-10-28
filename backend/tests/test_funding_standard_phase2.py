@@ -593,3 +593,65 @@ def test_all_filters_item_type_beside_its_legacy_name_type():
         assert r.status_code == 200, r.text
         assert any("item_type = :it" in sql and p.get("it") == "cap_payment" for sql, p in db.sql), params
     assert _client(funding, _Db()).get("/api/v2/funding/all", params={"item_type": "x"}).status_code == 400
+
+
+# Step 5 (28 Oct 2026): status from dates.
+
+def test_all_filters_status_on_the_items_status_not_on_its_summary():
+    # O90: `status=open` matched "open" anywhere in the summary, and never a cohesion row.
+    from api.v2.funding import router as funding
+    db = _Db()
+    r = _client(funding, db).get("/api/v2/funding/all", params={"status": "Open "})
+    assert r.status_code == 200, r.text
+    counted = [(sql, p) for sql, p in db.sql if "count(*)" in sql]
+    assert counted and all("lower(status) = lower(:st)" in sql and "summary ILIKE :st" not in sql
+                           and p["st"] == "Open" for sql, p in counted)
+
+
+def test_the_ted_notices_in_the_ft_tenders_table_take_the_ted_rows_deadline_and_status():
+    # O96: 386 TED notices in ft_calls_for_tenders all said "open", 205 closed on TED.
+    from collections import Counter
+    from types import SimpleNamespace
+    from services.tenders.status import sync_ft_copies
+
+    class Db(_Db):
+        committed = 0
+
+        def commit(self):
+            self.committed += 1
+    rows = [SimpleNamespace(id=1, old="open", new="closed"), SimpleNamespace(id=2, old="open", new="closed"),
+            SimpleNamespace(id=3, old="open", new="open")]
+    db = Db(rows)
+    assert sync_ft_copies(db, apply=False) == Counter({("open", "closed"): 2, ("open", "open"): 1})
+    assert len(db.sql) == 1 and not db.committed
+    db = Db(rows)
+    sync_ft_copies(db, apply=True)
+    (select, _), (update, _) = db.sql
+    # one FROM clause each (a first version read "FROM ft_calls_for_tenders f FROM tenders t")
+    assert select.replace("DISTINCT FROM", "").count("FROM") == 1 and "FROM ft_calls_for_tenders f, tenders t WHERE" in select
+    assert update.replace("DISTINCT FROM", "").count("FROM") == 1 and "FROM tenders t WHERE" in update
+    for sql in (select, update):
+        assert "t.publication_number = f.tender_reference" in sql and "f.source_url LIKE '%ted.europa.eu%'" in sql
+        assert "f.deadline IS DISTINCT FROM (t.submission_deadline AT TIME ZONE 'UTC')" in sql
+    assert "SET status = t.status, deadline = (t.submission_deadline AT TIME ZONE 'UTC')" in update
+    assert db.committed == 1
+
+
+
+def test_the_portal_ingest_never_overwrites_the_status_or_deadline_of_a_ted_notice():
+    # O96: the TED row owns them (services/tenders/status.py); the portal's flag kept 205 closed open.
+    import importlib
+    import re
+    sedia = importlib.import_module("scripts.ingest_funding_sedia")
+
+    class Cur:
+        sql = None
+
+        def execute(self, sql, params=None):
+            Cur.sql = sql
+    sedia.upsert_ft_tenders(Cur(), {"topic_id": "411624-2016", "status": "open", "deadline": None})
+    sets = dict(re.findall(r"\n\s+(status|deadline) = (CASE .*?END),", Cur.sql, re.S))
+    assert set(sets) == {"status", "deadline"}
+    for col in ("status", "deadline"):
+        assert re.match(rf"CASE WHEN ft_calls_for_tenders\.source_url LIKE '%%ted\.europa\.eu%%'.*?THEN ft_calls_for_tenders\.{col}\b",
+                        sets[col], re.S), sets[col]
