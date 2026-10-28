@@ -24,6 +24,7 @@ from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
 from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
+from services.funding.shared_fields import FUND_NAMES
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -32,6 +33,13 @@ router = APIRouter()
 
 class CAPPaymentItem(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
+    item_type: str = Field("cap_payment", description="Always cap_payment (as on /funding/all).")
+    title: Optional[str] = Field(None, description="Fund · Member State.")
+    summary: Optional[str] = Field(None, description="Member State · total EUR.")
+    status: Optional[str] = Field(None, description="Always null: a payment row has no status.")
+    body_code: Optional[str] = Field(None, description="The fund: eagf or eafrd (body= on /funding/all).")
+    body_name: Optional[str] = Field(None, description="The fund's name.")
+    amount_eur: Optional[float] = Field(None, description="`total_eur`: net payments to date (EAFRD) or the total paid (EAGF).")
     fund: str
     document_date: Optional[datetime] = Field(None, description=(
         "The day the Commission states these figures as of, written in its EU-total row "
@@ -55,12 +63,17 @@ class CAPPaymentItem(_DataPoints):
 
 _STRUCT = ("id, fund, ms, planned_eu_amount, net_pre_financing, net_interim_payments, "
            "total_eur, payment_rate, fy_2023, fy_2024, fy_2025, fy_2026, fy_2027")
-_LIST_COLS = f"{_STRUCT}, public_url, document_date, created_at AS creation_date, updated_at AS updated_date"
-_DETAIL_COLS = f"{_STRUCT}, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date"
+# The shared fields of a payment row, composed once: this list and /funding/all serve the same words.
+SHARED_SQL = ("'cap_payment' AS item_type, concat_ws(' · ', upper(fund), nullif(ms, '')) AS title, "
+              "concat_ws(' · ', nullif(ms, ''), 'total EUR ' || round(total_eur)::text) AS summary, "
+              "lower(fund) AS body_code, total_eur AS amount_eur")
+_LIST_COLS = f"{_STRUCT}, {SHARED_SQL}, public_url, document_date, created_at AS creation_date, updated_at AS updated_date"
+_DETAIL_COLS = f"{_STRUCT}, {SHARED_SQL}, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date"
 
 
 def _row_to_item(r, *, with_body: bool) -> CAPPaymentItem:
     d = dict(r)
+    d["body_name"] = FUND_NAMES.get(d.get("body_code"))
     if not with_body:
         d["body_txt"] = None
         d["body_html"] = None

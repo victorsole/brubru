@@ -27,6 +27,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1._change_window import UpperBoundDatetime, validate_window
 from .cohesion_finances import _DataPoints
+from services.funding.shared_fields import cut_summary, with_body_names
 
 router = APIRouter()
 
@@ -72,6 +73,14 @@ class ProgrammeItem(_DataPoints):
         "the body. Null only for the Common Foreign and Security Policy, which no act establishes."))
     creation_date: Optional[datetime] = Field(None, description="When Brubru compiled the directory: the list's own date, the same on every programme.")
     updated_date: Optional[datetime] = Field(None, description="When the directory was last revised, the same on every programme (filter with updated_from / updated_to).")
+    # The funding standard's shared fields (28 Oct 2026): a programme has no status, and Brubru holds no budget for it.
+    item_type: str = Field("programme", description="Always programme.")
+    title: Optional[str] = Field(None, description="The programme's name (as programme).")
+    summary: Optional[str] = Field(None, description="The start of the body, cut at a word end near 300 characters.")
+    status: Optional[str] = Field(None, description="Always null.")
+    body_code: str = Field("commission", description="commission: the European Commission's classification and pages.")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    amount_eur: Optional[float] = Field(None, description="Always null: Brubru holds no budget per programme.")
     programme: str
     acronym: str
     period: Optional[str] = Field(None, description="The programming period, as the Funding & Tenders Portal groups programmes (e.g. 2021-2027).")
@@ -107,6 +116,7 @@ def _to_item(p: dict, *, with_body: bool) -> ProgrammeItem:
     bt, bh = _compose_body(p)
     created, updated = _config_dates()
     return ProgrammeItem(
+        title=p["programme"], summary=cut_summary(bt),
         programme=p["programme"], acronym=p["acronym"], heading=p["heading"],
         cluster=p["cluster"], coverage=p["coverage"], via=p.get("via"), period=p.get("period"),
         endpoint=p.get("endpoint"), source=p["source"],
@@ -199,7 +209,7 @@ async def list_programmes(
             progs = []
     total = len(progs)
     page_rows = progs[(page - 1) * limit: (page - 1) * limit + limit]
-    items = [_to_item(p, with_body=include_body) for p in page_rows]
+    items = with_body_names(db, [_to_item(p, with_body=include_body) for p in page_rows])
     return build_envelope(
         items, total=total, page=page, limit=limit,
         updated_from=w["updated_from"], updated_to=w["updated_to"],
@@ -234,5 +244,5 @@ async def get_programme(
 ) -> ProgrammeItem:
     for p in _load():
         if p["acronym"].lower() == acronym.lower():
-            return _to_item(p, with_body=True)
+            return with_body_names(db, [_to_item(p, with_body=True)])[0]
     raise HTTPException(status_code=404, detail={"reason_code": "not_found", "message": f"No programme with acronym {acronym}"})

@@ -24,7 +24,11 @@ CHANGED = datetime(2026, 10, 22, 9, 30, tzinfo=timezone.utc)
 
 
 class _Row(dict):
-    __getattr__ = dict.__getitem__
+    def __getattr__(self, name):            # as a database row: a missing column is an AttributeError
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name) from None
 
 
 class _Result:
@@ -50,6 +54,8 @@ _ROW = dict(id=11, body_code="ecdc", item_type="tender", title="Framework contra
 # The FTS lists read the file's columns beside the row (migration 313, 26 Oct 2026).
 from api.v2.funding._fts import FILE_COLUMNS  # noqa: E402
 _ROW.update(dict.fromkeys(FILE_COLUMNS))
+# /funding/all projects each side's amount in euros (the funding standard's shared fields, 28 Oct 2026).
+_ROW["amount_eur"] = None
 
 
 def _get(router, path, params):

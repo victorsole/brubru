@@ -83,3 +83,23 @@ def standard_order(order: Optional[str], default_sql: str, *, published: str, cr
         allowed = list(ORDERS) + (["amount"] if amount else []) + list(SYNC_ORDERS)
         raise HTTPException(status_code=400, detail=f"order must be one of {allowed}")
     return sync
+
+
+
+SHARED_FIELDS_DOC = (
+    "Every item also carries the funding standard's shared fields: `item_type`, `title`, `summary`, "
+    "`status`, `body_code`, `body_name` and `amount_eur` (the item's main figure in euros; null for "
+    "another currency until euro conversion is added). Each is null where the item has no such thing: "
+    "no status on news, payments or indicators, no amount on an agency's notice.")
+
+
+def with_shared_fields_doc(description: Optional[str]) -> str:
+    """A list's description with SHARED_FIELDS_DOC closing its "You get back" section (or the end)."""
+    description = description or ""
+    if SHARED_FIELDS_DOC in description:
+        return description
+    head = description.find("**You get back**")
+    end = description.find("\n\n**", head + 1) if head >= 0 else -1
+    if end < 0:
+        return description.rstrip() + "\n\n" + SHARED_FIELDS_DOC
+    return description[:end].rstrip() + "\n\n" + SHARED_FIELDS_DOC + description[end:]

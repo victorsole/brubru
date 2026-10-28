@@ -24,6 +24,7 @@ from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
 from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
+from services.funding.shared_fields import FUND_NAMES
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -32,6 +33,12 @@ router = APIRouter()
 
 class EUSFCase(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
+    item_type: str = Field("solidarity_case", description="Always solidarity_case (as on /funding/all).")
+    title: Optional[str] = Field(None, description="The disaster's name (`name_of_disaster`).")
+    summary: Optional[str] = Field(None, description="Country · year · disaster type · EUSF paid, EUR million.")
+    body_code: str = Field("eusf", description="Always eusf (body= on /funding/all).")
+    body_name: Optional[str] = Field(None, description="The fund's name.")
+    amount_eur: Optional[float] = Field(None, description="The grant paid in euros (`eusf_grant_paid_meur` x 1,000,000, to the euro).")
     year_of_occurrence: Optional[int] = None
     cci_number: Optional[str] = None
     applicant_country: Optional[str] = None
@@ -57,12 +64,18 @@ _STRUCT = (
     "damage_pct, eusf_grant_paid_meur, public_url, document_date, created_at AS creation_date, "
     "updated_at AS updated_date"
 )
-_LIST_COLS = _STRUCT
-_DETAIL_COLS = _STRUCT + ", body_txt, body_html"
+# The shared fields of a case, composed once: this list and /funding/all serve the same words.
+SHARED_SQL = ("'solidarity_case' AS item_type, name_of_disaster AS title, "
+              "concat_ws(' · ', nullif(applicant_country, ''), year_of_occurrence::text, nullif(disaster_type, ''), "
+              "'EUSF paid EUR ' || round(eusf_grant_paid_meur)::text || 'm') AS summary, "
+              "'eusf' AS body_code, round(eusf_grant_paid_meur * 1000000) AS amount_eur")
+_LIST_COLS = f"{_STRUCT}, {SHARED_SQL}"
+_DETAIL_COLS = f"{_STRUCT}, {SHARED_SQL}, body_txt, body_html"
 
 
 def _row_to_item(r, *, with_body: bool) -> EUSFCase:
     d = dict(r)
+    d["body_name"] = FUND_NAMES["eusf"]
     if not with_body:
         d["body_txt"] = None
         d["body_html"] = None

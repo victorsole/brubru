@@ -32,6 +32,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._body import body_threshold_param
 from api.v1._envelope import PaginatedResponse, build_envelope
+from services.funding.shared_fields import with_body_names
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
 from api.v1._pagination import stable
 from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, orm_order, orm_window, validate_window
@@ -228,7 +229,7 @@ async def entrepreneur_instruments(
         .all()
     )
     return without_bodies(build_envelope(
-        [_with_self(_to_item(r, body_threshold), str(request.base_url).rstrip("/")) for r in rows],
+        with_body_names(db, [_with_self(_to_item(r, body_threshold), str(request.base_url).rstrip("/")) for r in rows]),
         total=total, page=page, limit=limit,
         updated_from=window["updated_from"], updated_to=window["updated_to"],
         op_core_title="EU entrepreneur financial instruments (intermediated)",

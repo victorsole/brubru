@@ -95,6 +95,14 @@ class PartnerActivity(BaseModel):
 
 class PartnerItem(BaseModel):
     id: str = Field(..., description="The organisation's key here: pic:<PIC>, vat:<VAT number> or name:<country>:<name>.")
+    # The funding standard's shared fields (28 Oct 2026): an organisation has no status, and no single
+    # publishing body (its activities come from CORDIS, FTS, TED and the F&T Portal).
+    item_type: str = Field("organisation", description="Always organisation.")
+    title: Optional[str] = Field(None, description="The organisation's name (as name).")
+    summary: Optional[str] = Field(None, description="Country and the counts of its matching activities.")
+    status: Optional[str] = Field(None, description="Always null.")
+    body_code: Optional[str] = Field(None, description="Always null: its activities come from several sources.")
+    body_name: Optional[str] = Field(None, description="Always null, as body_code.")
     name: Optional[str] = None
     short_name: Optional[str] = None
     pic: Optional[str] = Field(None, description="Participant Identification Code, when known.")
@@ -331,7 +339,12 @@ def _item(r, base: str) -> PartnerItem:
              f"Matching Partner Search announcements: {r.announcements}" if r.announcements else ""]
     lines += [f"- {a.date or ''} {a.role or ''}: {a.title or ''}".strip() for a in acts]
     lines = [l for l in lines if l]
+    counts = [(r.projects, f"{r.projects} projects ({r.coordinated} coordinated)"),
+              (r.payments, f"{r.payments} payments ({r.contracts} contracts)"),
+              (r.awards, f"{r.awards} contract awards"), (r.announcements, f"{r.announcements} announcements")]
+    summary = " · ".join(([r.country] if r.country else []) + [t for n, t in counts if n]) or None
     return PartnerItem(
+        title=r.name, summary=summary,
         id=r.key, name=r.name, short_name=r.short_name, pic=r.pic, vat=r.vat, country=r.country, city=r.city,
         activity_type=r.activity_type, is_sme=r.is_sme, projects=r.projects, coordinated=r.coordinated,
         payments=r.payments, contracts=r.contracts, awards=r.awards, announcements=r.announcements,

@@ -17,6 +17,7 @@ descriptions). LIVE endpoints delegate to the v1 handlers. Scope: read:commissio
 
 from fastapi import APIRouter
 
+from ._standard import with_shared_fields_doc
 from . import funding_opportunities as _funding_opportunities
 from . import funding_tenders as _funding_tenders
 from . import ted_tenders as _ted_tenders
@@ -80,3 +81,10 @@ router.include_router(_ft_programmes.router)
 router.include_router(_international_cooperation.router)
 router.include_router(_ft_news_events.router)
 router.include_router(_ft_cascade_calls.router)
+
+# Every funding list says, in the same words, what the funding standard's shared fields hold (Phase 2
+# step 3, 28 Oct 2026): one paragraph closing its "You get back" section. Item routes and a procedure's
+# files are left as they are.
+for _route in router.routes:
+    if "GET" in (getattr(_route, "methods", None) or ()) and not _route.path.endswith("}") and "/documents" not in _route.path:
+        _route.description = with_shared_fields_doc(_route.description)

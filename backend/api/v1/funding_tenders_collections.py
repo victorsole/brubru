@@ -42,6 +42,7 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
+from services.funding.shared_fields import cut_summary, eur, with_body_names
 
 
 # ============================================================================
@@ -72,6 +73,12 @@ class FtCallProposalItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The funding standard's shared fields (28 Oct 2026)
+    item_type: str = Field("grant", description="Always grant: a call for proposals (as the Justice, Innovation Fund and agency grant lists).")
+    summary: Optional[str] = Field(None, description="The start of the call's description, cut at a word end near 300 characters.")
+    body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal publishes it.")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    amount_eur: Optional[float] = Field(None, description="indicative_budget, in euros (every call's budget is in euros).")
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
@@ -125,6 +132,7 @@ def _proposal_to_item(
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=r.first_seen_at,
         updated_date=r.content_updated_at,
+        summary=cut_summary(r.description), amount_eur=eur(r.indicative_budget, r.budget_currency),
     )
 
 
@@ -218,7 +226,7 @@ async def list_calls_for_proposals(
         stable(query.order_by(*_call_order(FtCallForProposals, order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_proposal_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
+    return build_envelope(with_body_names(db, [_proposal_to_item(r, body_threshold=body_threshold) for r in rows]), total=total, page=page, limit=limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -260,7 +268,7 @@ async def get_call_for_proposals(
             detail={"error": f"Call {topic_id} not found", "reason_code": "not_found",
                     "resource": "ft_call_for_proposals", "id": topic_id},
         )
-    return _proposal_to_item(r, body_threshold=body_threshold)
+    return with_body_names(db, [_proposal_to_item(r, body_threshold=body_threshold)])[0]
 
 
 # ============================================================================
@@ -288,6 +296,12 @@ class FtCallTenderItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The funding standard's shared fields (28 Oct 2026)
+    item_type: str = Field("tender", description="Always tender: a call for tenders.")
+    summary: Optional[str] = Field(None, description="The start of the tender's description, cut at a word end near 300 characters.")
+    body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal publishes it.")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    amount_eur: Optional[float] = Field(None, description="estimated_value when it is in euros; null for another currency (euro conversion comes later).")
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
@@ -343,6 +357,7 @@ def _tender_to_item(
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=r.first_seen_at,
+        summary=cut_summary(r.description), amount_eur=eur(r.estimated_value, r.value_currency),
         updated_date=r.content_updated_at,
     )
 
@@ -436,7 +451,7 @@ async def list_calls_for_tenders(
         stable(query.order_by(*_call_order(FtCallForTenders, order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_tender_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
+    return build_envelope(with_body_names(db, [_tender_to_item(r, body_threshold=body_threshold) for r in rows]), total=total, page=page, limit=limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -480,7 +495,7 @@ async def get_call_for_tenders(
                     "reason_code": "not_found",
                     "resource": "ft_call_for_tenders", "id": tender_reference},
         )
-    return _tender_to_item(r, body_threshold=body_threshold)
+    return with_body_names(db, [_tender_to_item(r, body_threshold=body_threshold)])[0]
 
 
 # ============================================================================
@@ -532,6 +547,12 @@ class FtFundedProjectItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The funding standard's shared fields (28 Oct 2026)
+    item_type: str = Field("funded_project", description="Always funded_project.")
+    summary: Optional[str] = Field(None, description="The start of the project's objective, cut at a word end near 300 characters.")
+    body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal publishes it.")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    amount_eur: Optional[float] = Field(None, description="eu_contribution, in euros.")
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="The project's own page (alias of source_url): CORDIS for Horizon Europe, Horizon 2020 and FP7, the F&T Portal for every other programme.")
     document_date: Optional[date] = Field(None, description="When the project was published on the F&T Portal (published_at); the project start date where no publication date is recorded; never a date in the future (start_date and end_date carry the project's own dates).")
@@ -633,6 +654,7 @@ def _project_to_item(
         document_date=_project_date(r),
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
         updated_date=r.last_updated,
+        summary=cut_summary(r.objective), amount_eur=eur(r.eu_contribution, r.cost_currency),
     )
 
 
@@ -738,7 +760,7 @@ async def funded_projects_page(
         stable(query.order_by(*_project_order(order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_project_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit,
+    return build_envelope(with_body_names(db, [_project_to_item(r, body_threshold=body_threshold) for r in rows]), total=total, page=page, limit=limit,
                           updated_from=updated_from, updated_to=updated_to)
 
 
@@ -844,4 +866,4 @@ async def get_funded_project(
             detail={"error": f"Project {project_id} not found", "reason_code": "not_found",
                     "resource": "ft_funded_project", "id": project_id},
         )
-    return _project_to_item(r, body_threshold=body_threshold)
+    return with_body_names(db, [_project_to_item(r, body_threshold=body_threshold)])[0]

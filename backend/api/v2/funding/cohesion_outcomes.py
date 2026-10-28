@@ -25,6 +25,7 @@ from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
 from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
+from services.funding.shared_fields import FUND_NAMES
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -33,6 +34,13 @@ router = APIRouter()
 
 class CohesionOutcomeItem(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
+    item_type: str = Field("cohesion_indicator", description="Always cohesion_indicator.")
+    title: Optional[str] = Field(None, description="The indicator's name (the programme's short title).")
+    summary: Optional[str] = Field(None, description="Indicator code · Member State · objective · the 2029 target and its unit.")
+    status: Optional[str] = Field(None, description="Always null: an indicator has no status.")
+    body_code: Optional[str] = Field(None, description="The fund, as on its finances list and /funding/all: erdf, esf, cf, jtf, interreg, emfaf, amif or isf.")
+    body_name: Optional[str] = Field(None, description="The fund's name.")
+    amount_eur: Optional[float] = Field(None, description="Always null: an indicator counts outputs and results, not money.")
     fund: str
     ms: Optional[str] = None
     ms_name: Optional[str] = None
@@ -63,8 +71,27 @@ _LIST_COLS = f"id, public_url, document_date, created_at AS creation_date, updat
 _DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date, {_STRUCT}"
 
 
+# The outcome tables spell two funds unlike the finance tables (ESF+, Interreg Funds): one code per fund.
+_FUND_CODES = {"ESF+": "esf", "Interreg Funds": "interreg"}
+
+
+def _number(v) -> str:
+    v = float(v)
+    return str(int(v)) if v.is_integer() else f"{v:.2f}".rstrip("0").rstrip(".")
+
+
 def _row_to_item(r, *, with_body: bool) -> CohesionOutcomeItem:
     d = dict(r)
+    fund = d.get("fund") or ""
+    d["body_code"] = _FUND_CODES.get(fund, fund.lower()) or None
+    d["body_name"] = FUND_NAMES.get(d["body_code"])
+    name, prog = d.get("indicator_long_name") or d.get("indicator_short_name"), d.get("programme_short_title")
+    d["title"] = f"{name} ({prog})" if name and prog else (name or prog)
+    target = d.get("target_value_2029")
+    d["summary"] = " · ".join(x for x in (
+        d.get("ind_code"), d.get("ms"), d.get("specific_objective_name") or d.get("policy_objective_name"),
+        (f"target 2029: {_number(target)} {d.get('measurement_unit') or ''}".strip() if target is not None else None),
+    ) if x) or None
     if not with_body:
         d["body_txt"] = None
         d["body_html"] = None

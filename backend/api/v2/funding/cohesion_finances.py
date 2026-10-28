@@ -29,6 +29,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
+from services.funding.shared_fields import FUND_NAMES
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -48,6 +49,12 @@ class _DataPoints(BaseModel):
 
 class CohesionFinanceItem(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
+    item_type: str = Field("cohesion_allocation", description="Always cohesion_allocation (as on /funding/all).")
+    title: Optional[str] = Field(None, description="The programme's title (cci_title).")
+    summary: Optional[str] = Field(None, description="Fund · Member State · allocation category · total EUR.")
+    body_code: Optional[str] = Field(None, description="The fund: erdf, esf, cf, jtf, interreg, emfaf, amif or isf (body= on /funding/all).")
+    body_name: Optional[str] = Field(None, description="The fund's name.")
+    amount_eur: Optional[float] = Field(None, description="The total EU allocation in euros (`total`).")
     fund: str
     ms: Optional[str] = None
     cci: Optional[str] = None
@@ -74,12 +81,18 @@ _STRUCT = (
     "y2021, y2022, y2023, y2024, y2025, y2026, y2027, "
     "total_non_flexible_amount, total_flexible_amount, total, share_of_fa_in_total"
 )
-_LIST_COLS = f"id, public_url, document_date, created_at AS creation_date, updated_at AS updated_date, {_STRUCT}"
-_DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date, {_STRUCT}"
+# The shared fields of an allocation row, composed once: this list and /funding/all serve the same words.
+SHARED_SQL = ("'cohesion_allocation' AS item_type, cci_title AS title, "
+              "concat_ws(' · ', upper(fund), nullif(ms, ''), nullif(financial_allocation_category, ''), "
+              "'total EUR ' || round(total)::text) AS summary, "
+              "lower(fund) AS body_code, total AS amount_eur")
+_LIST_COLS = f"id, public_url, document_date, created_at AS creation_date, updated_at AS updated_date, {SHARED_SQL}, {_STRUCT}"
+_DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at AS creation_date, updated_at AS updated_date, {SHARED_SQL}, {_STRUCT}"
 
 
 def _row_to_item(r, *, with_body: bool) -> CohesionFinanceItem:
     d = dict(r)
+    d["body_name"] = FUND_NAMES.get(d.get("body_code"))
     if not with_body:
         d["body_txt"] = None
         d["body_html"] = None

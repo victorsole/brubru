@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session
 from api.v1._change_window import SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, sql_window, validate_window
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from services.funding.shared_fields import with_body_names
 from core.database import get_db
 from models.user import User
 
@@ -124,7 +125,7 @@ async def list_recipients(
     order_sql = sql_order(order, "e.creation_date", _fts.UPDATED, "e.id") or _ORDER_SQL[order]
     rows = db.execute(text(f"SELECT {_fts.cols(include_body)} {clause} ORDER BY {order_sql} "
                            "LIMIT :limit OFFSET :offset"), params).fetchall()
-    return build_envelope([_fts.to_item(r, with_body=include_body) for r in rows], total, page, limit,
+    return build_envelope(with_body_names(db, [_fts.to_item(r, with_body=include_body) for r in rows]), total, page, limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -159,7 +160,7 @@ async def get_recipient(
     r = db.execute(text(f"SELECT {_fts.cols(True)} {_fts.FROM} AND e.id = :id"), {"id": item_id}).fetchone()
     if r is None:
         raise HTTPException(status_code=404, detail=f"No EU funding recipient with id {item_id}")
-    return _fts.to_item(r, with_body=True)
+    return with_body_names(db, [_fts.to_item(r, with_body=True)])[0]
 
 
 # /funding/all points each FTS row at this route (api/v2/funding/funding_all.py).

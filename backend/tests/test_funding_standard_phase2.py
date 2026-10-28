@@ -310,3 +310,130 @@ def test_partners_take_max_amount_and_all_takes_the_publication_window():
     assert r.status_code == 200, r.text
     sql, params = db.sql[0]
     assert "document_date >= :since" in sql and str(params["since"]) == "2026-10-01" and str(params["until"]) == "2026-10-28"
+
+
+# --- step 3: the shared fields ------------------------------------------------------------------------ #
+SHARED = ("item_type", "title", "summary", "status", "body_code", "body_name", "amount_eur")
+
+
+def _item_properties(spec, op):
+    comps = spec["components"]["schemas"]
+    name = op["responses"]["200"]["content"]["application/json"]["schema"]["$ref"].split("/")[-1]
+    data = comps[name].get("properties", {}).get("data")
+    if data:
+        name = data["items"]["$ref"].split("/")[-1]
+    return comps[name]["properties"]
+
+
+def test_every_funding_list_and_item_route_declares_the_seven_shared_fields():
+    from api.v2.funding import router
+    spec = _spec(router)
+    routes = {p: m["get"] for p, m in spec["paths"].items() if p.startswith(FUNDING) and "get" in m and "/documents" not in p}
+    assert len(routes) >= 130, len(routes)          # 66 lists and 64 item routes on 28 Oct 2026
+    missing = {p: [f for f in SHARED if f not in _item_properties(spec, op)] for p, op in routes.items()}
+    assert {p: m for p, m in missing.items() if m} == {}
+    from api.v2.funding._standard import SHARED_FIELDS_DOC
+    lists = [p for p in routes if not p.endswith("}")]
+    assert len(lists) >= 66 and [p for p in lists if SHARED_FIELDS_DOC not in routes[p].get("description", "")] == []
+
+
+def test_the_summary_is_the_items_own_text_cut_at_a_word_end_and_amounts_are_euros_only():
+    from services.funding.shared_fields import cut_summary, eur
+    assert cut_summary(None) is None and cut_summary("  \n ") is None
+    assert cut_summary("Expected  Outcome:\n\nshort") == "Expected Outcome: short"
+    assert cut_summary("<p>Baulos 1.1<br />Hauptbaulos &amp; R&D</p>") == "Baulos 1.1 Hauptbaulos & R&D"
+    s = cut_summary("abcdefg " * 50)                 # 400 characters: character 300 falls inside a word
+    assert len(s) <= 301 and s.endswith("…") and s[:-1].split(" ")[-1] == "abcdefg"
+    assert eur(100, "EUR") == 100.0 and eur(100, " eur ") == 100.0
+    assert eur(100, None) is None and eur(100, "GBP") is None and eur(None, "EUR") is None
+
+
+def _fresh_body_names():
+    import services.funding.shared_fields as sf
+    sf._BODY_NAMES.clear()
+    sf._BODY_NAMES_READ_AT = None
+    return sf
+
+
+def test_body_names_read_the_directory_once_and_the_funds_from_their_own_list():
+    from types import SimpleNamespace
+    sf = _fresh_body_names()
+    db = _Db([SimpleNamespace(code="ema", name="European Medicines Agency")])
+    assert sf.body_names(db, ["ema", "erdf", None]) == {"ema": "European Medicines Agency",
+                                                        "erdf": "European Regional Development Fund"}
+    assert sf.body_names(db, ["ema"]) == {"ema": "European Medicines Agency"}
+    assert sf.body_names(db, ["nobody"]) == {"nobody": None}           # not read again within 15 minutes
+    assert len(db.sql) == 1 and "FROM economy_bodies" in db.sql[0][0]
+
+
+def test_an_agency_list_names_its_body_and_states_no_amount():
+    from datetime import datetime
+    from types import SimpleNamespace
+    from api.v2.funding import router as funding
+    _fresh_body_names()
+    row = SimpleNamespace(id=7, body_code="ecdc", item_type="tender", title="T", summary="S", source_kind="html",
+                          public_url="https://x.eu/7", body_txt="b", body_html="<p>b</p>", document_date=None,
+                          creation_date=datetime(2026, 1, 1), updated_at=datetime(2026, 1, 2),
+                          tender_reference="ECDC/2026/OP/0012", status="open", deadline=None,
+                          code="ecdc", name="European Centre for Disease Prevention and Control")
+    r = _client(funding, _Db([row])).get("/api/v2/funding/ecdc-tenders")
+    assert r.status_code == 200, r.text
+    it = r.json()["data"][0]
+    assert {f: it[f] for f in SHARED} == {"item_type": "tender", "title": "T", "summary": "S", "status": "open",
+                                          "body_code": "ecdc", "amount_eur": None,
+                                          "body_name": "European Centre for Disease Prevention and Control"}
+
+
+def test_the_cohesion_rows_carry_the_compositions_all_serves():
+    from api.v2.funding import funding_all
+    from api.v2.funding.cohesion_cap import SHARED_SQL as payment
+    from api.v2.funding.cohesion_eusf import SHARED_SQL as solidarity
+    from api.v2.funding.cohesion_finances import SHARED_SQL as allocation
+    cte = funding_all._union_cte(False)
+    assert allocation in cte and solidarity in cte and payment in cte
+    assert "—" not in cte and "coalesce(round(" not in cte      # no em-dash; an unknown total is not "EUR 0"
+    assert "round(eusf_grant_paid_meur * 1000000) AS amount_eur" in solidarity
+
+
+def test_an_outcome_names_its_indicator_and_its_fund_as_the_finances_list_does():
+    from api.v2.funding.cohesion_outcomes import _row_to_item
+    row = dict(id=1, public_url=None, document_date=None, creation_date=None, updated_date=None, ms="FR", ms_name="France",
+               cci=None, programme_short_title="France - ESF+", policy_objective_name="Social Europe",
+               specific_objective_name=None, category_of_region=None, indicator_type_output_result=None, ind_code="EECO01",
+               indicator_short_name="Participants", indicator_long_name="Number of participants", measurement_unit="persons",
+               baseline_value=None, milestone_value_2024=None, target_value_2029=1200000.0, decided_value=None,
+               implemented_value=None, body_txt=None, body_html=None, fund="ESF+")
+    it = _row_to_item(row, with_body=False)
+    assert (it.item_type, it.body_code, it.body_name) == ("cohesion_indicator", "esf", "European Social Fund Plus")
+    assert it.title == "Number of participants (France - ESF+)"
+    assert it.summary == "EECO01 · FR · Social Europe · target 2029: 1200000 persons"
+    assert it.status is None and it.amount_eur is None
+    assert _row_to_item({**row, "fund": "Interreg Funds"}, with_body=False).body_code == "interreg"
+
+
+def test_the_ft_portal_items_summarise_their_own_text_and_keep_other_currencies_out_of_amount_eur():
+    from types import SimpleNamespace
+    from api.v1.funding_tenders_collections import _tender_to_item
+    from api.v2.funding.ft_cascade_calls import _item
+    base = dict(id=1, tender_reference="R", contracting_authority="eu-LISA", title="T", description="Lot 1:  hosting\nservices",
+                contract_type="services", status="open", estimated_value=5.0, deadline=None, source_url="https://x.eu",
+                documents_url=None, cpv_codes=[], published_at=None, content_updated_at=None, last_updated=None,
+                first_seen_at=None)
+    it = _tender_to_item(SimpleNamespace(**base, value_currency="EUR"))
+    assert (it.item_type, it.summary, it.body_code, it.amount_eur) == ("tender", "Lot 1: hosting services", "ftportal", 5.0)
+    assert _tender_to_item(SimpleNamespace(**base, value_currency="GBP")).amount_eur is None
+    call = _item(dict(id=2, call_id="16842", title="C", summary_src="Task description\nWe fund  pilots.",
+                      indicative_budget=60000.0, budget_currency="EUR", body_txt="x", body_html="x"), with_body=False)
+    assert (call.summary, call.amount_eur, call.body_code) == ("We fund pilots.", 60000.0, "ftportal")
+
+
+def test_a_partner_summary_keeps_its_counts_after_its_country():
+    from types import SimpleNamespace
+    from api.v2.funding.partners import _item
+    r = SimpleNamespace(key="pic:1", name="CNRS", short_name=None, pic="1", vat=None, country="FR", city=None,
+                        activity_type=None, is_sme=None, projects=3, coordinated=1, payments=2, contracts=0, awards=0,
+                        announcements=0, eu_contribution=None, amount_eur=None, matches=[], last_day=None, created=None,
+                        changed=None)
+    it = _item(r, "https://x")
+    assert (it.item_type, it.title) == ("organisation", "CNRS")
+    assert it.summary == "FR · 3 projects (1 coordinated) · 2 payments (0 contracts)"

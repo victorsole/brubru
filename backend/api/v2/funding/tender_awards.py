@@ -27,6 +27,7 @@ from core.database import get_db
 from models.user import User
 from api.v2.funding.partners import AWARD_WINNER_IS_ORGANISATION
 from services.funding.countries import eu_code
+from services.funding.shared_fields import cut_summary
 
 router = APIRouter()
 
@@ -73,7 +74,7 @@ class TenderAwardItem(BaseModel):
     id: str = Field(..., description="The TED publication number, e.g. 351840-2025.")
     item_type: str = "tender_award"
     title: Optional[str] = None
-    summary: Optional[str] = Field(None, description="The start of the notice's description.")
+    summary: Optional[str] = Field(None, description="The start of the notice's description, cut at a word end near 300 characters.")
     status: str = Field("closed", description="Always closed: an award notice ends the competition; each lot's result is in `lots`.")
     publication_number: str
     notice_id: Optional[str] = Field(None, description="eForms notice identifier; a change notice keeps it with a higher version.")
@@ -135,7 +136,7 @@ def _winners(db: Session, pubs: List[str], base: str) -> dict:
 def _item(r, winners: list, with_body: bool, body=None) -> TenderAwardItem:
     value = float(r.awarded_value) if r.awarded_value is not None else None
     return TenderAwardItem(
-        id=r.publication_number, title=r.title, summary=(r.description or "")[:500] or None,
+        id=r.publication_number, title=r.title, summary=cut_summary(r.description),
         publication_number=r.publication_number, notice_id=r.notice_uuid, notice_version=r.notice_version,
         procedure_id=r.procedure_uuid, notice_subtype=r.notice_subtype, superseded_by=r.superseded_by,
         body_code=r.body_code, body_name=r.body_name, contracting_authority=r.contracting_authority,

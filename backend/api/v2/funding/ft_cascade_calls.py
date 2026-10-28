@@ -26,6 +26,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, sql_window,
                                    validate_window)
 from api.v1._envelope import PaginatedResponse, build_envelope
+from services.funding.shared_fields import cut_summary, eur, with_body_names
 
 router = APIRouter()
 
@@ -48,6 +49,11 @@ class CascadeCallItem(BaseModel):
     duration: Optional[str] = Field(None, description="Expected duration of participation, as the portal states it.")
     indicative_budget: Optional[float] = Field(None, description="Total funding available.")
     budget_currency: Optional[str] = None
+    # The funding standard's shared fields (28 Oct 2026)
+    summary: Optional[str] = Field(None, description="The start of the call's own text (after its first heading), cut at a word end near 300 characters.")
+    body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal publishes it.")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    amount_eur: Optional[float] = Field(None, description="indicative_budget when it is in euros; null for another currency (euro conversion comes later).")
     public_url: Optional[str] = Field(None, description="The portal's page for this cascade call.")
     body_txt: Optional[str] = Field(None, description="The page's text: task description, submission and evaluation process, further information.")
     body_html: Optional[str] = Field(None, description="The same sections as HTML.")
@@ -59,8 +65,10 @@ class CascadeCallItem(BaseModel):
 _COLS = ("id, call_id, title, topic_id, topic_title, project_id, project_acronym, project_name, "
          "framework_programme, status, deadline_model, deadline, deadline_secondary, duration, "
          "indicative_budget, budget_currency, source_url AS public_url, published_at AS document_date, "
-         "first_seen AS creation_date, last_updated AS updated_date")
+         "first_seen AS creation_date, last_updated AS updated_date, left(description, 1500) AS summary_src")
 _BODY = ", description AS body_txt, description_html AS body_html"
+# The portal's sections, one of which opens the text: the summary starts after it.
+_SECTIONS = ("Task description", "Submission & evaluation process", "Further information")
 _ORDERS = {
     "recent": "published_at DESC NULLS LAST, id DESC",
     "oldest": "published_at ASC NULLS LAST, id ASC",
@@ -70,6 +78,10 @@ _ORDERS = {
 
 def _item(r, *, with_body: bool) -> CascadeCallItem:
     d = dict(r)
+    src = d.pop("summary_src", None) or ""
+    first, _, rest = src.partition("\n")
+    d["summary"] = cut_summary(rest if first.strip() in _SECTIONS else src)
+    d["amount_eur"] = eur(d.get("indicative_budget"), d.get("budget_currency"))
     if not with_body:
         d["body_txt"] = d["body_html"] = None
     return CascadeCallItem(**d)
@@ -173,7 +185,7 @@ async def list_cascade_calls(
         text(f"SELECT {_COLS}{_BODY if include_body else ''} FROM ft_cascade_calls WHERE {clause} "
              f"ORDER BY {order_sql} LIMIT :limit OFFSET :offset"), params,
     ).mappings().all()
-    return build_envelope([_item(r, with_body=include_body) for r in rows], total=total, page=page, limit=limit,
+    return build_envelope(with_body_names(db, [_item(r, with_body=include_body) for r in rows]), total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
@@ -206,5 +218,5 @@ async def get_cascade_call(
                    {"id": item_id}).mappings().fetchone()
     if not r:
         raise HTTPException(status_code=404, detail={"reason_code": "not_found", "message": f"No cascade call with id {item_id}"})
-    return _item(r, with_body=True)
+    return with_body_names(db, [_item(r, with_body=True)])[0]
 

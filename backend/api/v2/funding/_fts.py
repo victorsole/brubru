@@ -52,6 +52,8 @@ def cols(with_body: bool) -> str:
 class FtsItem(BaseModel):
     id: int = Field(..., description="Stable Brubru item id (use it on the item route).")
     body_code: str = Field("commission", description="Always 'commission' (FTS is a Commission system).")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    status: Optional[str] = Field(None, description="Always null: a payment record has no status (the funding standard's shared field).")
     item_type: str = Field("funding_recipient", description="Always 'funding_recipient'.")
     title: str = Field(..., description="The beneficiary's name.")
     summary: Optional[str] = None

@@ -33,6 +33,7 @@ from ._envelope import PaginatedResponse, build_envelope
 from api.v1._change_window import orm_order
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
+from services.funding.shared_fields import cut_summary, eur, with_body_names
 
 
 # ============================================================================
@@ -245,6 +246,12 @@ class FundingItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The funding standard's shared fields (28 Oct 2026), as on /ft-calls-for-proposals for the same call
+    item_type: str = Field("grant", description="Always grant: a call for proposals.")
+    summary: Optional[str] = Field(None, description="The start of the call's description, cut at a word end near 300 characters (short_summary is the older, longer cut).")
+    body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal publishes it.")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    amount_eur: Optional[float] = Field(None, description="indicative_budget, in euros (every call's budget is in euros).")
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal topic page).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
@@ -299,6 +306,7 @@ def _funding_to_item(
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=r.first_seen_at,
         updated_date=r.content_updated_at,
+        summary=cut_summary(r.description), amount_eur=eur(r.indicative_budget, r.budget_currency),
     )
 
 
@@ -377,7 +385,7 @@ async def funding_opportunities_page(
         .all()
     )
     return build_envelope(
-        [_funding_to_item(r, body_threshold=body_threshold) for r in rows],
+        with_body_names(db, [_funding_to_item(r, body_threshold=body_threshold) for r in rows]),
         total=total, page=page, limit=limit,
     )
 
@@ -483,4 +491,4 @@ async def get_funding_opportunity(
                 "id": topic_id,
             },
         )
-    return _funding_to_item(r, body_threshold=body_threshold)
+    return with_body_names(db, [_funding_to_item(r, body_threshold=body_threshold)])[0]

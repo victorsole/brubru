@@ -21,15 +21,19 @@ from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
-from ..economy_endpoints import (EconomyItem, _row_to_item, _LIST_COLS, _DETAIL_COLS, _ORDER_SQL,
+from ..economy_endpoints import (EconomyItem, FundingEconomyItem, _row_to_item, _LIST_COLS, _DETAIL_COLS, _ORDER_SQL,
                                   _ORDERS, build_envelope)
+from services.funding.shared_fields import with_body_names
+from .cohesion_cap import SHARED_SQL as PAYMENT_SQL
+from .cohesion_eusf import SHARED_SQL as SOLIDARITY_SQL
+from .cohesion_finances import SHARED_SQL as ALLOCATION_SQL
 from api.v1._change_window import (SYNC_ORDERS, UpperBoundDatetime, sql_order, sql_window,
                                    validate_window)
 
 router = APIRouter()
 
 
-class FundingAllItem(EconomyItem):
+class FundingAllItem(FundingEconomyItem):
     self: Optional[str] = Field(None, description="This item on its own endpoint (e.g. /api/v2/funding/euaa-calls/123).")
 
 
@@ -57,6 +61,13 @@ def _with_self(item: EconomyItem, base: str, routes: dict) -> FundingAllItem:
         link = base + path.replace("{item_id}", str(item.id)).replace("{row_id}", str(item.id))
     return FundingAllItem(**item.model_dump(), self=link)
 
+
+def _funding_item(r, include_body: bool) -> FundingEconomyItem:
+    """A row of the union with the shared fields the factory's EconomyItem lacks (status, amount_eur)."""
+    return FundingEconomyItem(**_row_to_item(r, with_body=include_body).model_dump(),
+                              status=r.status, amount_eur=r.amount_eur)
+
+
 _FUNDING_TYPES = ("tender", "grant", "eoi_call", "startup_funding")
 # Plus the cohesion / structural-fund allocations (eu_cohesion_finances), unioned in.
 _ALL_TYPES = _FUNDING_TYPES + ("cohesion_allocation", "solidarity_case", "cap_payment")
@@ -71,41 +82,37 @@ _ALL_TYPES = _FUNDING_TYPES + ("cohesion_allocation", "solidarity_case", "cap_pa
 _UNION_CTE_TMPL = """
 WITH all_funding AS (
     SELECT id, body_code, item_type, title, summary, public_url,
-           {b}document_date, creation_date, source_kind, updated_at
+           {b}document_date, creation_date, source_kind, updated_at, status, NULL::numeric AS amount_eur
     FROM economy_items
     WHERE item_type = ANY(:ftypes)
     UNION ALL
-    SELECT id, lower(fund) AS body_code, 'cohesion_allocation' AS item_type,
-           cci_title AS title,
-           (upper(fund) || ' · ' || coalesce(ms, '') || ' · '
-             || coalesce(financial_allocation_category, '')
-             || ' · total EUR ' || coalesce(round(total)::text, '0')) AS summary,
+    SELECT id, body_code, item_type, title, summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           updated_at
-    FROM eu_cohesion_finances
+           updated_at, status, amount_eur
+    FROM (SELECT *, <<ALLOCATION>> FROM eu_cohesion_finances) f
     UNION ALL
-    SELECT id, 'eusf' AS body_code, 'solidarity_case' AS item_type,
-           name_of_disaster AS title,
-           (coalesce(applicant_country, '') || ' · ' || coalesce(year_of_occurrence::text, '')
-             || ' · ' || coalesce(disaster_type, '')
-             || ' · EUSF paid EUR ' || coalesce(round(eusf_grant_paid_meur)::text, '0') || 'm') AS summary,
+    SELECT id, body_code, item_type, title, summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           updated_at
-    FROM eu_solidarity_fund
+           updated_at, status, amount_eur
+    FROM (SELECT *, <<SOLIDARITY>> FROM eu_solidarity_fund) s
     UNION ALL
-    SELECT id, lower(fund) AS body_code, 'cap_payment' AS item_type,
-           (upper(fund) || ' — ' || coalesce(ms, '')) AS title,
-           (coalesce(ms, '') || ' · total EUR ' || coalesce(round(total_eur)::text, '0')) AS summary,
+    SELECT id, body_code, item_type, title, summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           updated_at
-    FROM eu_cap_payments
+           updated_at, NULL AS status, amount_eur
+    FROM (SELECT *, <<PAYMENT>> FROM eu_cap_payments) c
 )
 """
 
 
+# The cohesion, Solidarity Fund and CAP rows carry the shared fields their own lists compose (one
+# composition each, 28 Oct 2026: the CAP title read "EAGF — EL" here and nothing on /eagf).
+_UNION_CTE_TMPL = (_UNION_CTE_TMPL.replace("<<ALLOCATION>>", ALLOCATION_SQL)
+                   .replace("<<SOLIDARITY>>", SOLIDARITY_SQL).replace("<<PAYMENT>>", PAYMENT_SQL))
+
+
 def _union_cte(include_body: bool) -> str:
     """The body columns are projected only when the caller wants them."""
-    return _UNION_CTE_TMPL.format(b="body_txt, body_html, " if include_body else "")
+    return _UNION_CTE_TMPL.replace("{b}", "body_txt, body_html, " if include_body else "")
 
 
 _DESC = """**What it does**
@@ -193,11 +200,12 @@ async def funding_all(
     # `id` alone is not unique across the UNION (the four tables' id ranges
     # overlap), so item_type completes the key and OFFSET pages cannot overlap.
     rows = db.execute(
-        text(f"{_union_cte(include_body)} SELECT {_DETAIL_COLS if include_body else _LIST_COLS} FROM all_funding{clause} "
+        text(f"{_union_cte(include_body)} SELECT {_DETAIL_COLS if include_body else _LIST_COLS}, status, amount_eur "
+             f"FROM all_funding{clause} "
              f"ORDER BY {sql_order(order, 'creation_date', 'updated_at') or _ORDER_SQL[order]}, item_type "
              f"LIMIT :limit OFFSET :offset"), params
     ).fetchall()
     base, routes = str(request.base_url).rstrip("/"), _item_routes(request.app)
-    return build_envelope([_with_self(_row_to_item(r, with_body=include_body), base, routes) for r in rows],
-                          total, page, limit,
+    items = with_body_names(db, [_with_self(_funding_item(r, include_body), base, routes) for r in rows])
+    return build_envelope(items, total, page, limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])

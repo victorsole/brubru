@@ -25,6 +25,7 @@ from sqlalchemy.orm import Session
 from api.v1._change_window import SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, sql_window, validate_window
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from services.funding.shared_fields import with_body_names
 from core.database import get_db
 from models.user import User
 from services.funding.countries import eu_code
@@ -73,6 +74,10 @@ class PartnerAnnouncementItem(BaseModel):
                                    "telephone numbers.")
     status: Optional[str] = Field(None, description="The topic's status as Brubru holds it: open | forthcoming | closed; "
                                   "none when Brubru does not hold the topic.")
+    # The funding standard's shared fields (28 Oct 2026)
+    body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal's Partner Search publishes it.")
+    body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
+    amount_eur: Optional[float] = Field(None, description="Always null: an announcement states no amount.")
     announcement_id: str
     expertise: Optional[str] = Field(None, description="offer (it offers its expertise) | request (it seeks expertise).")
     topic_id: Optional[str] = Field(None, description="The call topic, e.g. HORIZON-CL5-2024-D4-02-05.")
@@ -231,7 +236,7 @@ async def list_partner_announcements(
             SELECT {_COLS} FROM page JOIN ft_partner_search_announcements s USING (announcement_id) {_JOINS}
              ORDER BY {order_sql}"""), params).fetchall()
     base = str(request.base_url).rstrip("/")
-    items = [_item(r, base, include_body) for r in rows]
+    items = with_body_names(db, [_item(r, base, include_body) for r in rows])
     return build_envelope(items, total, page, limit, updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -265,4 +270,4 @@ async def get_partner_announcement(
     r = db.execute(text(f"SELECT {_COLS} {_FROM} AND s.announcement_id = :a"), {"a": announcement_id.strip()}).fetchone()
     if r is None:
         raise HTTPException(status_code=404, detail=f"No partner announcement with id {announcement_id}")
-    return _item(r, str(request.base_url).rstrip("/"), True)
+    return with_body_names(db, [_item(r, str(request.base_url).rstrip("/"), True)])[0]

@@ -21,6 +21,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1._row_dates import row_updated
+from services.funding.shared_fields import with_body_names
 from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order,
                                    sql_window, validate_window)
 
@@ -84,6 +85,31 @@ class ProcurementItem(EconomyItem):
     tender_reference: Optional[str] = Field(None, description="The procedure's reference as published by the body, e.g. CEDEFOP/2026/OP/0012.")
     status: Optional[str] = Field(None, description="open | forthcoming | closed, as on the Funding & Tenders routes. 'open' only while the deadline is ahead.")
     deadline: Optional[datetime] = Field(None, description="Submission deadline; the extended closing date when the body extended it.")
+
+
+_BODY_NAME_DOC = "The body's name, as Brubru's directory of EU bodies gives it for body_code."
+_AMOUNT_EUR_DOC = "The item's main figure in euros; null where the item states none."
+
+
+class FundingEconomyItem(EconomyItem):
+    """An item of a funding list (the funding standard's shared fields, 28 Oct 2026). A news item or
+    event has no status and no amount: both stay null."""
+    status: Optional[str] = Field(None, description="open | forthcoming | closed for a call or tender; on /funding/all the source's own word for a cohesion programme or Solidarity Fund case; null for news, events and payments.")
+    body_name: Optional[str] = Field(None, description=_BODY_NAME_DOC)
+    amount_eur: Optional[float] = Field(None, description=_AMOUNT_EUR_DOC)
+
+
+class FundingProcurementItem(ProcurementItem):
+    """A procurement procedure on a funding list, with the funding standard's shared fields. The
+    agencies' pages state no value Brubru reads, so amount_eur stays null."""
+    body_name: Optional[str] = Field(None, description=_BODY_NAME_DOC)
+    amount_eur: Optional[float] = Field(None, description=_AMOUNT_EUR_DOC)
+
+
+def _as_funding(db: Session, items: list, procurement: bool) -> list:
+    """The factory's items with the funding standard's shared fields (body_name from body_code)."""
+    cls = FundingProcurementItem if procurement else FundingEconomyItem
+    return with_body_names(db, [cls(**i.model_dump()) for i in items])
 
 
 class ProcurementDocument(_DataPoints):
@@ -331,6 +357,10 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     filters = (_funding_procurement_filters if procurement else _funding_filters) if funding_standard else _no_filters
     noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
     path_hint = slug if slug.startswith("/") else f"/{slug}"
+    if funding_standard:
+        item_model = FundingProcurementItem if procurement else FundingEconomyItem
+    else:
+        item_model = ProcurementItem if procurement else EconomyItem
 
     async def list_ep(
         request: Request,
@@ -375,6 +405,8 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
                                    page, limit, include_body=include_body,
                                    procurement=procurement, window=window, status=standard.get("status"),
                                    deadline_from=standard.get("deadline_from"), deadline_to=standard.get("deadline_to"))
+        if funding_standard:
+            items = _as_funding(db, items, procurement)
         return build_envelope(items, total, page, limit,
                               updated_from=window["updated_from"], updated_to=window["updated_to"])
 
@@ -387,14 +419,14 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         item = _get_item(db, body_code, item_type, item_id, procurement=procurement)
         if item is None:
             raise HTTPException(status_code=404, detail=f"No {body_name} {noun_singular} with id {item_id}")
-        return item
+        return _as_funding(db, [item], procurement)[0] if funding_standard else item
     # What this item route serves, so an aggregate (/funding/all) can point each of its rows at
     # its own route without a second copy of the slug table (core.self_links.item_route_for).
     detail_ep.brubru_item_key = (body_code, item_type)
 
     router.add_api_route(
         path_hint, list_ep, methods=["GET"],
-        response_model=PaginatedResponse[ProcurementItem if procurement else EconomyItem], tags=[tag],
+        response_model=PaginatedResponse[item_model], tags=[tag],
         summary=f"{body_name} — {noun} (newest first)",
         description=_DESC_LIST.format(body=body_name, noun=noun, acro=acronym, path=path_hint,
                                       source=source, extra=extra,
@@ -407,7 +439,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     )
     router.add_api_route(
         f"{path_hint}/{{item_id}}", detail_ep, methods=["GET"],
-        response_model=ProcurementItem if procurement else EconomyItem, tags=[tag],
+        response_model=item_model, tags=[tag],
         summary=f"{body_name} — one {noun_singular} (full body)",
         description=_DESC_DETAIL.format(body=body_name, noun_singular=noun_singular, path=path_hint,
                                         source=source),

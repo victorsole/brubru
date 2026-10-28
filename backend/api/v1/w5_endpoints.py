@@ -26,6 +26,7 @@ from models.user import User
 from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+from services.funding.shared_fields import cut_summary, eur
 from ._search import text_match
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
@@ -442,7 +443,12 @@ class TenderItem(BaseModel):
     has_lots: bool = False
     lot_count: Optional[int] = None
     ted_url: Optional[str] = None
-    summary: Optional[str] = None
+    summary: Optional[str] = Field(None, description="The start of the notice's description, cut at a word end near 300 characters (TED's own summary is empty on every notice).")
+    # The funding standard's shared fields (28 Oct 2026)
+    item_type: str = Field("tender", description="Always tender: a TED notice.")
+    body_code: Optional[str] = Field(None, description="Null: TED notices come from buyers across Europe, not from one EU body; the buyer is official_name.")
+    body_name: Optional[str] = Field(None, description="Null, as body_code.")
+    amount_eur: Optional[float] = Field(None, description="estimated_value when the notice states it in euros; null for another currency or none (euro conversion comes later).")
     sme_suitability_score: Optional[float] = None
     status: Optional[str] = Field(None, description=(
         "open | closed | forthcoming. TED publishes none: it is set daily from the notice type and its own "
@@ -613,7 +619,8 @@ async def tenders_page(
             estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
             publication_date=r.publication_date, submission_deadline=r.submission_deadline,
             has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
-            summary=r.summary, sme_suitability_score=r.sme_suitability_score,
+            summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
+            amount_eur=eur(r.estimated_value, r.estimated_value_currency),
             status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
             public_url=r.ted_url, document_date=r.publication_date,
             creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
@@ -743,7 +750,8 @@ async def get_tender_detail(
         estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
         publication_date=r.publication_date, submission_deadline=r.submission_deadline,
         has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url,
-        summary=r.summary, sme_suitability_score=r.sme_suitability_score,
+        summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
+        amount_eur=eur(r.estimated_value, r.estimated_value_currency),
         status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
         public_url=r.ted_url, document_date=r.publication_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
