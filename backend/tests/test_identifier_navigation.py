@@ -245,6 +245,9 @@ def test_the_route_map_is_built_from_the_live_route_table():
     assert m["/api/v2/commission/commissioners"][1] == "slug"
     # An aggregator's items belong to the item route one level up.
     assert m["/api/v2/news/all"][0] == "/api/v2/news/{item_id}"
+    # /all with one body: the same item routes (29 Oct 2026: null on the first deploy)
+    assert m["/api/v2/news/ft-portal"] == m["/api/v2/news/all"]
+    assert m["/api/v2/events/ft-portal"] == m["/api/v2/events/all"]
     # FastAPI's `:path` converter must not leak into the field name.
     assert not [f for _, f in m.values() if ":" in f]
 

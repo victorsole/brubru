@@ -45,8 +45,9 @@ from urllib.parse import quote
 
 # Collections whose items belong to an item route that is NOT `<collection>/{x}`.
 # `/api/v2/news/all` is a cross-body aggregator; its items are fetched from
-# `/api/v2/news/{item_id}`, one segment up.
-_AGGREGATOR_PARENTS = ("/all",)
+# `/api/v2/news/{item_id}`, one segment up. `/news/ft-portal` and `/events/ft-portal`
+# are /all with one body (29 Oct 2026): their items printed `self: null` on the first deploy.
+_AGGREGATOR_PARENTS = ("/all", "/ft-portal")
 
 _PARAM_RE = re.compile(r"^\{([^}]+)\}$")
 
