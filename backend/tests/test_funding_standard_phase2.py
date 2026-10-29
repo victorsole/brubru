@@ -836,3 +836,53 @@ def test_a_sql_list_filters_on_its_own_amount_in_euros(path, expr, order):
 def test_a_negative_amount_bound_is_refused():
     from api.v2.funding import router as funding
     assert _client(funding, _Db()).get("/api/v2/funding/erdf", params={"min_amount_eur": -1}).status_code == 422
+
+
+# Step 7 (29 Oct 2026): every list, called in process with every standard parameter it declares,
+# answers 200 and sends each value into its query: a parameter declared but not wired, or a wrapper that
+# drops one (the Query-default trap of step 6b: a v1 route called without an argument binds its FastAPI
+# default), shows as a value missing from the bound parameters.
+_STANDARD_VALUES = {
+    "q": "water", "page": 2, "limit": 5, "include_body": "false",
+    "updated_from": "2026-10-01", "updated_to": "2026-10-28", "created_from": "2026-01-02", "created_to": "2026-10-27",
+    "published_from": "2025-01-03", "published_to": "2026-10-26", "min_amount_eur": 1234, "max_amount_eur": 9876543,
+    "country": "BE", "deadline_from": "2026-11-04", "deadline_to": "2027-06-30",
+}
+_NOT_BOUND = {"page", "limit", "include_body"}       # paging and projection, not filters
+# A list that reads a parameter in Python, not in a query: why.
+_READ_IN_PYTHON = {
+    # the EC's programme taxonomy is a config file (config/funding_programmes.json), filtered in Python
+    "/api/v2/funding/programmes": {"q", "updated_from", "updated_to", "created_from", "created_to"},
+}
+
+
+def test_every_funding_list_sends_every_standard_parameter_it_declares_into_its_query():
+    from api.v2.funding import router as funding
+    spec = _spec(funding)
+    items, _files = _lists(spec)
+    failures = []
+    for path in items:
+        names = {p["name"] for p in spec["paths"][path]["get"].get("parameters", [])}
+        params = {k: v for k, v in _STANDARD_VALUES.items() if k in names}
+        if path.endswith("/partners"):
+            params.setdefault("q", "water")
+        db = _OrmDb()
+        COMPILED.clear(); COMPILED_PARAMS.clear()
+        r = _client(funding, db).get(path, params=params)
+        if r.status_code != 200:
+            failures.append((path, r.status_code, r.text[:160]))
+            continue
+        bound = " | ".join(str(v) for ps in [p for _, p in db.sql] + COMPILED_PARAMS for v in ps.values())
+        for name, value in params.items():
+            if name in _NOT_BOUND or name in _READ_IN_PYTHON.get(path, ()):
+                continue
+            if str(value) not in bound:
+                failures.append((path, name, "not in the query"))
+    assert failures == [], "\n".join(map(str, failures))
+    # ... and the programmes list does filter on them
+    client = _client(funding, _OrmDb())
+    every = client.get("/api/v2/funding/programmes", params={"limit": 200}).json()
+    life = client.get("/api/v2/funding/programmes", params={"q": "life", "limit": 200}).json()
+    assert 0 < life["total"] < every["total"]
+    assert all("life" in (i["title"] + " " + (i.get("acronym") or "")).lower() or "life" in str(i).lower() for i in life["data"])
+    assert client.get("/api/v2/funding/programmes", params={"updated_from": "2099-01-01"}).json()["total"] == 0
