@@ -95,7 +95,14 @@ class _Db:
         self.rows, self.sql = list(rows), []
 
     def execute(self, stmt, params=None):
-        self.sql.append((str(stmt), dict(params or {})))
+        from sqlalchemy.dialects import postgresql
+        from sqlalchemy.sql.elements import ClauseElement, TextClause
+        if isinstance(stmt, ClauseElement) and not isinstance(stmt, TextClause):
+            # a Core statement (/funding/opportunities) carries its values inside: compile it as PostgreSQL
+            compiled = stmt.compile(dialect=postgresql.dialect())
+            self.sql.append((str(compiled), {**dict(compiled.params), **dict(params or {})}))
+        else:
+            self.sql.append((str(stmt), dict(params or {})))
         return _Rows(self.rows)
 
 

@@ -953,19 +953,20 @@ def _write(cur, row: Dict[str, Any], write_ft: bool) -> None:
 
 
 def iter_structured(query: Dict[str, Any], page_size: int = 100, max_pages: int = 60,
-                    pause: float = 0.4):
+                    pause: float = 0.4, sort: Optional[Dict[str, Any]] = None):
     """Every record of a filtered SEDIA query, English only, page by page.
 
     Yields (page_number, results). Stops on an empty page, a short page, or a
     failed fetch; a failed fetch yields (page, None) so the caller can count it.
+    `sort` (e.g. {"field": "startDate", "order": "ASC"}) fixes the order across pages.
     """
     for page in range(1, max_pages + 1):
-        data = fetch_sedia_page(page, page_size=page_size, query=query)
+        data = fetch_sedia_page(page, page_size=page_size, query=query, sort=sort)
         if not data:
             # One retry: under load SEDIA times out on the odd page, and a lost
             # page silently drops up to 100 calls.
             time.sleep(5)
-            data = fetch_sedia_page(page, page_size=page_size, query=query)
+            data = fetch_sedia_page(page, page_size=page_size, query=query, sort=sort)
         if not data:
             yield page, None
             return
@@ -974,6 +975,58 @@ def iter_structured(query: Dict[str, Any], page_size: int = 100, max_pages: int 
         if len(results) < page_size:
             return
         time.sleep(pause)
+
+
+def closed_windows(types: List[str], closed_code: str, start: dt.date, end: dt.date, counts: Dict[str, int],
+                   page_size: int = 100, pause: float = 0.3):
+    """The CLOSED records of `types` with a start day in [start, end), window by window: a window whose total
+    fits in one page is read in that page; a larger one is halved by date. A single day still over one page
+    is paged in start-date order and counted in counts['paged_days']. Yields each window's results, or None
+    for a failed fetch. counts gains windows, expected (the totals SEDIA states), records (what it sent)
+    and short (windows that sent fewer records than their total)."""
+    def query(a: dt.date, b: dt.date) -> Dict[str, Any]:
+        return {"bool": {"must": [{"terms": {"type": types}}, {"terms": {"status": [closed_code]}},
+                                  {"range": {"startDate": {"gte": f"{a}T00:00:00.000+0000",
+                                                           "lt": f"{b}T00:00:00.000+0000"}}}]}}
+
+    def fetch(page: int, size: int, a: dt.date, b: dt.date):
+        data = fetch_sedia_page(page, page_size=size, query=query(a, b))
+        if not data:
+            time.sleep(5)
+            data = fetch_sedia_page(page, page_size=size, query=query(a, b))
+        time.sleep(pause)
+        return data
+
+    stack = [(start, end)]
+    while stack:
+        a, b = stack.pop()
+        if a >= b:
+            continue
+        first = fetch(1, page_size, a, b)
+        if not first:
+            yield None
+            continue
+        total = int(first.get("totalResults") or 0)
+        days = (b - a).days
+        if total > page_size and days > 1:
+            mid = a + dt.timedelta(days=days // 2)
+            stack.extend([(mid, b), (a, mid)])
+            continue
+        counts["windows"] += 1
+        counts["expected"] += total
+        results = list(first.get("results") or [])
+        if total > page_size:                       # one day over one page: page it, sorted
+            counts["paged_days"] += 1
+            for page, more in iter_structured(query(a, b), page_size=page_size, max_pages=50, pause=pause,
+                                              sort={"field": "startDate", "order": "ASC"}):
+                if page == 1:
+                    results = []
+                if more is None:
+                    break
+                results.extend(more)
+        counts["records"] += len(results)
+        counts["short"] += len(results) < total
+        yield results
 
 
 def prefer(existing: Optional[Dict[str, Any]], row: Dict[str, Any]) -> Dict[str, Any]:
@@ -1037,6 +1090,11 @@ def main():
                     help="Write the normalised rows to this JSON file (for verification).")
     ap.add_argument("--skip-refresh", action="store_true",
                     help="Skip re-reading every stored topic by identifier.")
+    ap.add_argument("--closed-since", type=dt.date.fromisoformat, default=None,
+                    help="Also read every CLOSED record that started on or after this day (YYYY-MM-DD) and "
+                         "add the identifiers not yet stored (O84 backfill; held rows are left as they are).")
+    ap.add_argument("--only-closed-since", action="store_true",
+                    help="With --closed-since: skip passes 1-3, so the run reads and writes the backfill alone.")
     args = ap.parse_args()
 
     db = get_env("DATABASE_URL")
@@ -1071,7 +1129,7 @@ def main():
     # a 500-row budget shared with 19 full-text prefix queries.
     for label, types, allow_tenders in (("grants", GRANT_TYPES + EXTERNAL_ACTION_TYPES, False),
                                         ("tenders", TENDER_TYPES, True)):
-        if label == "tenders" and not args.write_ft:
+        if (label == "tenders" and not args.write_ft) or args.only_closed_since:
             continue
         q = {"bool": {"must": [{"terms": {"type": types}},
                                {"terms": {"status": OPEN_STATUS_CODES}}]}}
@@ -1087,7 +1145,7 @@ def main():
     # Pass 2: re-read every topic we already store, by identifier, so titles,
     # programme, dates and status of CLOSED and historical rows get corrected too
     # (the rows pass 1 cannot see). ~20 requests for ~2,000 topics.
-    if not args.skip_refresh:
+    if not args.skip_refresh and not args.only_closed_since:
         # Short-lived connection: the SEDIA passes take minutes and the Supabase
         # session pooler is shared with production, so no connection is held
         # across network work.
@@ -1134,6 +1192,8 @@ def main():
     # Opt-in: pass 1 already sees every call while it is forthcoming or open, so a
     # new call can no longer be missed without it, and SEDIA answers ~10 s a page.
     queries = [args.text] if args.text else (DEFAULT_QUERIES if args.discover else [])
+    if args.only_closed_since:
+        queries = []
     discovered = 0
     for query in queries:
         if discovered >= args.limit:
@@ -1154,6 +1214,42 @@ def main():
                 break
             time.sleep(0.4)
     print(f"[PASS 3] prefix discovery: {discovered} new identifiers")
+
+    # Pass 4 (O84, Victor 29 Oct 2026): the CLOSED records that started since --closed-since and were
+    # never stored. Passes 1 and 2 read only open/forthcoming records and rows already held, and until
+    # 15 Sep 2026 pass 1 stopped at 500 records a run, so a call that closed before it was read was never
+    # stored (measured 29 Oct: every open or forthcoming portal record is held; 19 of 25 sampled missing
+    # topics were closed portal topics). New identifiers only: a held row keeps its repairs.
+    # Read in date windows that fit in ONE page (SEDIA serves at most 100 records a page): paging a
+    # sorted query is not stable when records share a start day, and the first run of this pass (29 Oct)
+    # missed 75 identifiers its dry run had seen. Each window's records are checked against its total.
+    if args.closed_since:
+        conn = psycopg2.connect(db)
+        try:
+            cur = conn.cursor()
+            cur.execute("SELECT topic_id FROM ft_calls_for_proposals UNION SELECT tender_reference FROM ft_calls_for_tenders")
+            held = {r[0] for r in cur.fetchall()}
+        finally:
+            conn.close()
+        closed = next(k for k, v in STATUS_MAP.items() if v == "closed")
+        groups = [GRANT_TYPES + EXTERNAL_ACTION_TYPES] + ([TENDER_TYPES] if args.write_ft else [])
+        for types in groups:
+            for year in range(args.closed_since.year, dt.date.today().year + 1):
+                counts = {"windows": 0, "expected": 0, "records": 0, "short": 0, "paged_days": 0}
+                before, new = len(rows), 0
+                for results in closed_windows(types, closed, max(args.closed_since, dt.date(year, 1, 1)),
+                                              dt.date(year + 1, 1, 1), counts):
+                    if results is None:
+                        stats["fetch_failures"] += 1
+                        continue
+                    fresh = [r for r in results if first_or_none((r.get("metadata") or {}).get("identifier")) not in held]
+                    new += collect(fresh, allow_tenders=args.write_ft)
+                if counts["records"] != counts["expected"]:
+                    stats["fetch_failures"] += 1
+                print(f"[PASS 4] types {','.join(types)} {year}: {counts['windows']} windows, {counts['records']} of "
+                      f"{counts['expected']} records read ({counts['short']} short windows, {counts['paged_days']} days "
+                      f"over one page), {new} not stored, {len(rows) - before} new identifiers")
+                stats["fetched"] += new
 
     # Tenders whose record names no deadline: the one already stored, else their TED notice's.
     if args.write_ft:

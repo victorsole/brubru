@@ -527,6 +527,37 @@ def _tender_order(order: Optional[str]):
     }.get(order or "recent", (Tender.publication_date.desc().nullslast(), Tender.id.desc()))
 
 
+def ted_list_deferred() -> tuple:
+    """The columns a TED list never serves, left in the database: the stored eForms XML (57 KB a notice
+    on average) and its parsed copies sent ~6 MB a page out of the database for nothing (23 Oct 2026)."""
+    return (defer(Tender.xml_content), defer(Tender.raw_json), defer(Tender.lots), defer(Tender.sme_analysis),
+            defer(Tender.award_criteria), defer(Tender.selection_criteria), defer(Tender.exclusion_grounds),
+            defer(Tender.minimum_requirements))
+
+
+def tender_item(r, converted: dict) -> TenderItem:
+    """One TED notice as the list serves it (also built by /funding/opportunities, Phase 3b).
+    `converted`: the page's euro figures from page_amounts_eur(db, rows, **_TED_AMOUNT)."""
+    return TenderItem(
+        id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
+        form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
+        official_name=r.official_name, buyer_country=r.buyer_country,
+        buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
+        procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
+        cpv_main=r.cpv_main, contract_nature=r.contract_nature,
+        estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
+        publication_date=r.publication_date, submission_deadline=r.submission_deadline,
+        has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url, documents_url=r.documents_url,
+        summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
+        amount_eur=item_amount_eur(r.estimated_value, r.estimated_value_currency, converted, r.id),
+        status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
+        public_url=r.ted_url, document_date=r.publication_date,
+        creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
+        updated_date=row_updated(r),
+        **dict(zip(("body_txt", "body_html"), _tender_body(r))),
+    )
+
+
 async def tenders_page(
     request: Request,
     q: Optional[str] = Query(None, description="Substring on title + description + summary + official_name (the contracting authority, so you can search by buyer)."),
@@ -561,11 +592,7 @@ async def tenders_page(
 ) -> PaginatedResponse[TenderItem]:
     # The stored eForms XML (57 KB a notice on average) and its parsed copies are never served by
     # the list; loading them sent ~6 MB a page out of the database for nothing (23 Oct 2026).
-    query = db.query(Tender).options(
-        defer(Tender.xml_content), defer(Tender.raw_json), defer(Tender.lots), defer(Tender.sme_analysis),
-        defer(Tender.award_criteria), defer(Tender.selection_criteria), defer(Tender.exclusion_grounds),
-        defer(Tender.minimum_requirements),
-    )
+    query = db.query(Tender).options(*ted_list_deferred())
     filters = []
     if buyer_country:
         filters.append(Tender.buyer_country == buyer_country.upper())
@@ -635,27 +662,7 @@ async def tenders_page(
         .offset((page - 1) * limit).limit(limit).all()
     )
     converted = page_amounts_eur(db, rows, **_TED_AMOUNT)
-    data = [
-        TenderItem(
-            id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
-            form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
-            official_name=r.official_name, buyer_country=r.buyer_country,
-            buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
-            procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
-            cpv_main=r.cpv_main, contract_nature=r.contract_nature,
-            estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
-            publication_date=r.publication_date, submission_deadline=r.submission_deadline,
-            has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url, documents_url=r.documents_url,
-            summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
-            amount_eur=item_amount_eur(r.estimated_value, r.estimated_value_currency, converted, r.id),
-            status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
-            public_url=r.ted_url, document_date=r.publication_date,
-            creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
-            updated_date=row_updated(r),
-            **dict(zip(("body_txt", "body_html"), _tender_body(r))),
-        )
-        for r in rows
-    ]
+    data = [tender_item(r, converted) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from, updated_to=updated_to)

@@ -359,6 +359,11 @@ def _funding_procurement_filters(
             "deadline_from": deadline_from, "deadline_to": deadline_to}
 
 
+# (body_code, item_type) -> how its funding list builds an item, recorded by register_resource so
+# /funding/opportunities builds an agency item exactly as the agency's own list does (Phase 3b).
+FUNDING_LISTS: dict = {}
+
+
 def register_resource(router, *, body_code, item_type, slug, noun, body_name, acronym,
                       source, tag, extra="", procurement=False, documents=False, funding_standard=False,
                       reference_name=None, deprecated=False):
@@ -370,6 +375,8 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     reference_name ('topic_id' | 'call_id') names a grant list's reference as the calls do.
     deprecated=True marks both routes deprecated in the schema: a legacy route that still answers."""
     limit_default, limit_max = (50, 200) if funding_standard else (20, 100)
+    if funding_standard:
+        FUNDING_LISTS[(body_code, item_type)] = {"procurement": procurement, "reference_name": reference_name}
     filters = (_funding_procurement_filters if procurement else _funding_filters) if funding_standard else _no_filters
     noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
     path_hint = slug if slug.startswith("/") else f"/{slug}"

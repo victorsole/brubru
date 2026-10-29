@@ -222,3 +222,60 @@ def test_erasmus_charter_is_not_erasmus_for_young_entrepreneurs():
 @pytest.mark.parametrize("topic_id", ["COS-EYE-2019-4-01", "SMP-COSME-2026-EYE-01"])
 def test_eye_topics_classify_as_eye(topic_id):
     assert _family(topic_id)[1] == "Erasmus for Young Entrepreneurs"
+
+
+def test_the_closed_backfill_reads_every_record_in_one_page_windows_and_adds_only_new_ones(monkeypatch, capsys):
+    """O84 (Victor 29 Oct 2026): --closed-since reads the portal's CLOSED records in date windows that fit
+    one page (SEDIA serves at most 100), halving any larger window, so no record is skipped by unstable
+    paging (the first run missed 75); a single day over one page is paged. Only identifiers Brubru does not
+    hold are kept; --only-closed-since skips the other passes. Dry run: nothing is written."""
+    store = []                       # (start day, identifier): 150 on one busy day, 1 every day otherwise
+    day = dt.date(2025, 6, 1)
+    while day < dt.date(2026, 10, 29):
+        store.append((day, f"T-{day}"))
+        day += dt.timedelta(days=1)
+    store += [(dt.date(2025, 9, 16), f"BUSY-{n:03}") for n in range(150)]
+    asked = []
+
+    def fake_fetch(page, page_size=100, status_filter=None, text="***", *, query=None, languages=("en",), sort=None):
+        must = query["bool"]["must"]
+        assert must[1] == {"terms": {"status": ["31094503"]}}
+        rng = must[2]["range"]["startDate"]
+        a, b = dt.date.fromisoformat(rng["gte"][:10]), dt.date.fromisoformat(rng["lt"][:10])
+        hits = sorted((d, i) for d, i in store if a <= d < b)
+        size = min(page_size, 100)
+        asked.append((a, b, page))
+        chunk = hits[(page - 1) * size: page * size]
+        return {"totalResults": len(hits), "results": [_grant(identifier=[i], status=["31094503"],
+                startDate=[f"{d}T00:00:00.000+0000"], deadlineDate=[f"{d}T00:00:00.000+0000"]) for d, i in chunk]}
+
+    class Cur:
+        def execute(self, sql, *a):
+            assert "ft_calls_for_proposals" in sql and "ft_calls_for_tenders" in sql
+        def fetchall(self):
+            return [("T-2025-06-02",), ("BUSY-007",)]
+
+    class Conn:
+        def cursor(self):
+            return Cur()
+        def close(self):
+            pass
+
+    monkeypatch.setattr(sedia, "fetch_sedia_page", fake_fetch)
+    monkeypatch.setattr(sedia.time, "sleep", lambda s: None)
+    monkeypatch.setattr(sedia, "load_programme_labels", lambda: 0)
+    monkeypatch.setattr(sedia, "get_env", lambda k: "postgresql://fake")
+    monkeypatch.setattr(sedia.psycopg2, "connect", lambda url: Conn())
+    monkeypatch.setattr(sedia.dt, "date", type("D", (dt.date,), {"today": classmethod(lambda c: dt.date(2026, 10, 29))}))
+    monkeypatch.setattr(sys, "argv", ["x", "--closed-since", "2025-06-01", "--only-closed-since"])
+    sedia.main()
+    out = capsys.readouterr().out
+    # the busy day was paged on its own, every other window fitted one page
+    assert sum(1 for a, b, page in asked if (a, b) == (dt.date(2025, 9, 16), dt.date(2025, 9, 17)) and page == 2) == 1
+    assert all((b - a).days == 1 or page == 1 for a, b, page in asked)
+    n2025 = sum(1 for d, _ in store if d.year == 2025)
+    assert f"{n2025} of {n2025} records read (0 short windows, 1 days over one page), {n2025 - 2} not stored" in out
+    n2026 = sum(1 for d, _ in store if d.year == 2026)
+    assert f"{n2026} of {n2026} records read" in out
+    assert f"identifiers={len(store) - 2} " in out and "apply=False" in out and "fetch_failures=0" in out
+
