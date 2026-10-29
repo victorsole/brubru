@@ -404,6 +404,49 @@ async def list_events(
     )
 
 
+@router.get("/ft-portal", response_model=PaginatedResponse[EventItem], tags=["v2-events"],
+            summary="EU Funding & Tenders Portal events",
+            description=(
+                "**What it does**\nThe events the EU Funding & Tenders Portal lists (info days, brokerage events, "
+                "webinars, trainings): `/api/v2/events/all` with `body=ftportal`, in the same shape as every other "
+                "event, each typed (`event_type`: conference, webinar, workshop, training) by Brubru's calendar.\n\n"
+                "**When to use it**\nTo see the portal's coming info days and webinars beside the other EU events, "
+                "without knowing its body code. Until 29 Oct 2026 these were served at `/api/v2/funding/ft-events` "
+                "only (a funding list's shape, untyped, other ids); that route still answers, as a legacy route.\n\n"
+                "**Input**\n`when` (upcoming | past | all), `from` / `to` (YYYY-MM-DD on the event date), `days` "
+                "(the next N days with when=upcoming, otherwise the last N), `q` (free text), `source` (economy | "
+                "calendar | all), `order` (recent | oldest | title | soonest), `page`, `limit` (default 20, max 100), "
+                "`include_body` (default true).\n\n"
+                "**Try it**\n```\nGET /api/v2/events/ft-portal?when=upcoming&order=soonest\n```\n\n"
+                "**You get back**\nA paginated envelope of EventItem: the 5 datapoints, `body_code` (`ftportal`), "
+                "`body_name`, `families` (`funding`), `source`, `event_type`. `venue` is null: the portal's event "
+                "index states none (read 29 Oct 2026: its records carry title, dates, programmes, audiences, the "
+                "details and recording links, no place).\n\n**Data freshness**\nDaily, from the portal's events "
+                "index (SEDIA-EVENTS), typed in Brubru's calendar."))
+async def list_ft_portal_events(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(api_user_with_rate_limit),
+    when: str = Query("all", description="upcoming | past | all."),
+    from_: Optional[date] = Query(None, alias="from", description="Only events on/after this date (YYYY-MM-DD)."),
+    to: Optional[date] = Query(None, description="Only events on/before this date (YYYY-MM-DD)."),
+    days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand window: with when=upcoming, the next N days; otherwise the last N days."),
+    q: Optional[str] = Query(None, description="Free-text search over title and summary."),
+    source: str = Query("all", description="economy | calendar | all."),
+    include_body: bool = Query(True, description="Serve body_txt and body_html on every item (default)."),
+    order: str = Query("recent", description="recent | oldest | title | soonest."),
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    since: Optional[date] = Query(None, alias="since", include_in_schema=False),
+    until: Optional[date] = Query(None, alias="until", include_in_schema=False),
+):
+    """/events/all with body=ftportal (Phase 3, proposal of 23 Oct 2026 §2). Every argument is passed: a
+    route function called directly binds its Query default for any argument left out."""
+    return await list_events(request=request, db=db, user=user, body="ftportal", family=None, when=when,
+                             from_=from_, to=to, days=days, q=q, source=source, include_body=include_body,
+                             order=order, page=page, limit=limit, since=since, until=until)
+
+
 @router.get("/bodies", response_model=dict, tags=["v2-events"],
             summary="Pick-list: bodies and policy families with event counts",
             description=(

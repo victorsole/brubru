@@ -361,13 +361,14 @@ def _funding_procurement_filters(
 
 def register_resource(router, *, body_code, item_type, slug, noun, body_name, acronym,
                       source, tag, extra="", procurement=False, documents=False, funding_standard=False,
-                      reference_name=None):
+                      reference_name=None, deprecated=False):
     """Add list + detail GET routes for one (body, resource) onto `router`.
     documents=True (procurement routes whose files are written to procurement_documents)
     adds {slug}/{item_id}/documents and {slug}/{item_id}/documents/{document_id}.
     funding_standard=True applies the funding standard's defaults to the list (Victor, 23 Oct 2026:
     50 items per page, at most 200, bodies included); every other body folder keeps its own.
-    reference_name ('topic_id' | 'call_id') names a grant list's reference as the calls do."""
+    reference_name ('topic_id' | 'call_id') names a grant list's reference as the calls do.
+    deprecated=True marks both routes deprecated in the schema: a legacy route that still answers."""
     limit_default, limit_max = (50, 200) if funding_standard else (20, 100)
     filters = (_funding_procurement_filters if procurement else _funding_filters) if funding_standard else _no_filters
     noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
@@ -441,7 +442,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
 
     router.add_api_route(
         path_hint, list_ep, methods=["GET"],
-        response_model=PaginatedResponse[item_model], tags=[tag],
+        response_model=PaginatedResponse[item_model], tags=[tag], deprecated=deprecated or None,
         summary=f"{body_name} — {noun} (newest first)",
         description=_DESC_LIST.format(body=body_name, noun=noun, acro=acronym, path=path_hint,
                                       source=source, extra=extra,
@@ -454,7 +455,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     )
     router.add_api_route(
         f"{path_hint}/{{item_id}}", detail_ep, methods=["GET"],
-        response_model=item_model, tags=[tag],
+        response_model=item_model, tags=[tag], deprecated=deprecated or None,
         summary=f"{body_name} — one {noun_singular} (full body)",
         description=_DESC_DETAIL.format(body=body_name, noun_singular=noun_singular, path=path_hint,
                                         source=source),

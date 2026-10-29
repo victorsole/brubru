@@ -663,6 +663,51 @@ async def list_news(
     )
 
 
+@router.get("/ft-portal", response_model=PaginatedResponse[NewsItem], tags=["v2-news"],
+            summary="EU Funding & Tenders Portal news",
+            description=(
+                "**What it does**\nThe news the EU Funding & Tenders Portal publishes (calls opening, programme "
+                "updates, info days, results), read daily from the portal's own news index: `/api/v2/news/all` "
+                "with `body=ftportal`, in the same shape as every other news item. News, not calls: an item "
+                "carries no deadline or status (the calls themselves are at `/api/v2/funding/ft-calls-for-proposals`).\n\n"
+                "**When to use it**\nTo follow what the portal announces, beside the other EU newsrooms, without "
+                "knowing its body code. Until 29 Oct 2026 these items were served at `/api/v2/funding/ft-news` only "
+                "(a funding list's shape); that route still answers, as a legacy route.\n\n"
+                "**Input**\n`kind` (news | press_release | publication | all), `from` / `to` (YYYY-MM-DD), `days` "
+                "(the last N days), `q` (free text), `updated_from` / `updated_to` (incremental sync), `order` "
+                "(recent | oldest | title), `page`, `limit` (default 20, max 100), `include_body` (default true).\n\n"
+                "**Try it**\n```\nGET /api/v2/news/ft-portal?days=30\nGET /api/v2/news/ft-portal?q=info%20day\n```\n\n"
+                "**You get back**\nA paginated envelope of NewsItem: `id`, `self` (`/api/v2/news/{id}`), `body_code` "
+                "(`ftportal`), `body_name`, `families` (`funding`), `kind`, `title`, `summary`, `public_url` (the "
+                "article on the portal), `body_txt` / `body_html` (the article), `document_date`, `creation_date`, "
+                "`updated_date`.\n\n**Data freshness**\nDaily, from the portal's news index (SEDIA-NEWS)."))
+async def list_ft_portal_news(
+    request: Request,
+    db: Session = Depends(get_db),
+    user: User = Depends(api_user_with_rate_limit),
+    kind: str = Query("all", description="news | press_release | publication | all."),
+    from_: Optional[date] = Query(None, alias="from", description="Only items on/after this date (YYYY-MM-DD)."),
+    to: Optional[date] = Query(None, description="Only items on/before this date (YYYY-MM-DD)."),
+    days: Optional[int] = Query(None, ge=1, le=3650, description="Shorthand for a recent window: only items from the last N days. Ignored if `from` is given."),
+    since: Optional[date] = Query(None, alias="since", include_in_schema=False),
+    until: Optional[date] = Query(None, alias="until", include_in_schema=False),
+    q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
+    updated_from: Optional[datetime] = Query(None, description="Only items whose record changed on/after this timestamp (incremental sync)."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Only items whose record changed on/before this timestamp."),
+    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to.", include_in_schema=False),
+    order: str = Query("recent", description="recent | oldest | title."),
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item (default true)."),
+):
+    """/news/all with body=ftportal (Phase 3, proposal of 23 Oct 2026 §2). Every argument is passed: a
+    route function called directly binds its Query default for any argument left out."""
+    return await list_news(request=request, db=db, user=user, body="ftportal", family=None, kind=kind,
+                           from_=from_, to=to, days=days, since=since, until=until, q=q,
+                           updated_from=updated_from, updated_to=updated_to, updated_end=updated_end,
+                           order=order, page=page, limit=limit, include_body=include_body)
+
+
 _FULL_NEWSROOMS_FROM = date(2026, 5, 26)
 _COVERAGE_NOTE = (
     "The Commission's press corner is held in full from 15 July 2024. Parliament, Council, "
