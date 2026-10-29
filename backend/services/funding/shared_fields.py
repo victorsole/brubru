@@ -79,10 +79,85 @@ def with_body_names(db, items: list) -> list:
 
 
 def eur(amount, currency: Optional[str]) -> Optional[float]:
-    """amount_eur until step 6 (ECB rates): the amount when it is already in euros, else null."""
+    """The amount when it is already in euros, else null. A list whose items may be in another
+    currency reads amount_eur from page_amounts_eur() instead (Phase 2 step 6)."""
     if amount is None or (currency or "").strip().upper() != "EUR":
         return None
     return float(amount)
+
+
+# An amount in euros (Phase 2 step 6, 29 Oct 2026; standard §6, decision 4): the item's own figure at
+# the ECB reference rate of the item's own day (ecb_reference_rates, migration 318), or of the last
+# earlier day the ECB published one (weekends and TARGET holidays: Christmas leaves a 5-day gap),
+# at most RATE_DAYS_BACK days before; a converted amount is rounded to the cent, one in euros is kept
+# as stated. The lev at 1.95583 lev per euro, its
+# conversion rate (Council Regulation (EU) 2025/1409; the ECB's BGN series ends 31 Dec 2025). A
+# currency the ECB does not publish (MDL, MKD, UAH, RSD, TZS, PAB, AMD, BAM ... in our notices), an
+# amount with no currency or no date: null, never a guess.
+RATE_DAYS_BACK = 7
+BGN_PER_EUR = "1.95583"
+AMOUNT_EUR_RULE = (
+    "as stated when the figure is in euros; otherwise converted at the ECB reference rate of the item's "
+    "publication day (or of the last earlier day the ECB published one, at most 7 days before), to the "
+    "cent; null when the ECB publishes no rate for the currency (MDL, MKD, UAH, RSD and a few others)")
+
+
+# The rate is read in a subquery over ecb_reference_rates, where an unqualified name resolves to that
+# table first: a caller's column called `currency` would compare the rates table with itself.
+_RATE_COLUMNS = re.compile(r"(?<![.\w])(currency|rate_date|rate|series_key|source_url|first_seen|last_updated|scraped_at)(?!\w)")
+
+
+def amount_eur_sql(amount: str, currency: str, day: str) -> str:
+    """The amount in euros as an SQL expression, over the columns (or expressions) `amount`,
+    `currency` and `day` (a date: the item's own day, in Brussels). The one rule for amount_eur,
+    its filters and its order. A column named like one of the rates table's must be qualified."""
+    for expr in (amount, currency, day):
+        clash = _RATE_COLUMNS.search(re.sub(r"'[^']*'", "''", expr))
+        if clash:
+            raise ValueError(f"qualify {clash.group(1)!r} in {expr!r}: the rates table has a column of that name")
+    cur = f"upper(btrim({currency}))"
+    rate = (f"(SELECT r.rate FROM ecb_reference_rates r WHERE r.currency = {cur} "
+            f"AND r.rate_date <= ({day}) AND r.rate_date >= ({day}) - {RATE_DAYS_BACK} "
+            f"ORDER BY r.rate_date DESC LIMIT 1)")
+    return (f"(CASE WHEN {amount} IS NULL THEN NULL "
+            f"WHEN {cur} = 'EUR' THEN ({amount})::numeric "
+            f"WHEN {cur} = 'BGN' THEN round(({amount})::numeric / {BGN_PER_EUR}, 2) "
+            f"ELSE round(({amount})::numeric / {rate}, 2) END)")
+
+
+def brussels_day(column: str, kind: str) -> str:
+    """The Brussels calendar day of a date column: `date`, `timestamptz`, or `utc_timestamp` (a
+    timestamp without time zone that holds UTC)."""
+    if kind == "date":
+        return column
+    if kind == "timestamptz":
+        return f"(({column}) AT TIME ZONE 'Europe/Brussels')::date"
+    if kind == "utc_timestamp":
+        return f"((({column}) AT TIME ZONE 'UTC') AT TIME ZONE 'Europe/Brussels')::date"
+    raise ValueError(kind)
+
+
+def page_amounts_eur(db, rows, *, table: str, key: str, amount: str, currency: str, day: str,
+                     key_of=None, currency_of=None) -> Dict:
+    """key -> amount_eur for the rows of one page whose currency is not the euro, converted in SQL by
+    amount_eur_sql (so an item shows the figure its filters compare). A page in euros needs no query."""
+    key_of = key_of or (lambda r: getattr(r, key))
+    currency_of = currency_of or (lambda r: getattr(r, currency))
+    keys = [key_of(r) for r in rows if (currency_of(r) or "").strip().upper() not in ("", "EUR")]
+    if not keys:
+        return {}
+    got = db.execute(text(f"SELECT {key} AS k, {amount_eur_sql(amount, currency, day)} AS eur "
+                          f"FROM {table} WHERE {key} = ANY(:keys)"), {"keys": keys}).fetchall()
+    return {r.k: (float(r.eur) if r.eur is not None else None) for r in got}
+
+
+def item_amount_eur(amount, currency: Optional[str], converted: Dict, item_key) -> Optional[float]:
+    """An item's amount_eur: its amount when in euros, else what page_amounts_eur() read for it."""
+    if amount is None:
+        return None
+    if (currency or "").strip().upper() == "EUR":
+        return float(amount)
+    return converted.get(item_key)
 
 
 def legacy(*standard: str, note: str = "the same value") -> dict:

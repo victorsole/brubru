@@ -88,8 +88,9 @@ def standard_order(order: Optional[str], default_sql: str, *, published: str, cr
 
 SHARED_FIELDS_DOC = (
     "Every item also carries the funding standard's shared fields: `item_type`, `title`, `summary`, "
-    "`status`, `body_code`, `body_name` and `amount_eur` (the item's main figure in euros; null for "
-    "another currency until euro conversion is added). Each is null where the item has no such thing: "
+    "`status`, `body_code`, `body_name` and `amount_eur` (the item's main figure in euros: as stated when "
+    "in euros, otherwise at the ECB reference rate of the item's publication day; null when the ECB "
+    "publishes no rate for its currency). Each is null where the item has no such thing: "
     "no status on news, payments or indicators, no amount on an agency's notice.")
 
 

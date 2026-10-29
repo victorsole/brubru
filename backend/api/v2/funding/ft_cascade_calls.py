@@ -26,7 +26,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, sql_window,
                                    validate_window)
 from api.v1._envelope import PaginatedResponse, build_envelope
-from services.funding.shared_fields import cut_summary, eur, with_body_names
+from services.funding.shared_fields import AMOUNT_EUR_RULE, amount_eur_sql, brussels_day, cut_summary, with_body_names
 
 router = APIRouter()
 
@@ -53,7 +53,7 @@ class CascadeCallItem(BaseModel):
     summary: Optional[str] = Field(None, description="The start of the call's own text (after its first heading), cut at a word end near 300 characters.")
     body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal publishes it.")
     body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
-    amount_eur: Optional[float] = Field(None, description="indicative_budget when it is in euros; null for another currency (euro conversion comes later).")
+    amount_eur: Optional[float] = Field(None, description=f"indicative_budget in euros: {AMOUNT_EUR_RULE}.")
     public_url: Optional[str] = Field(None, description="The portal's page for this cascade call.")
     body_txt: Optional[str] = Field(None, description="The page's text: task description, submission and evaluation process, further information.")
     body_html: Optional[str] = Field(None, description="The same sections as HTML.")
@@ -65,7 +65,10 @@ class CascadeCallItem(BaseModel):
 _COLS = ("id, call_id, title, topic_id, topic_title, project_id, project_acronym, project_name, "
          "framework_programme, status, deadline_model, deadline, deadline_secondary, duration, "
          "indicative_budget, budget_currency, source_url AS public_url, published_at AS document_date, "
-         "first_seen AS creation_date, last_updated AS updated_date, left(description, 1500) AS summary_src")
+         "first_seen AS creation_date, last_updated AS updated_date, left(description, 1500) AS summary_src, "
+         # the budget in euros, at the ECB reference rate of the publication day (Phase 2 step 6)
+         + amount_eur_sql("indicative_budget", "budget_currency", brussels_day("published_at", "timestamptz"))
+         + " AS amount_eur")
 _BODY = ", description AS body_txt, description_html AS body_html"
 # The portal's sections, one of which opens the text: the summary starts after it.
 _SECTIONS = ("Task description", "Submission & evaluation process", "Further information")
@@ -81,7 +84,7 @@ def _item(r, *, with_body: bool) -> CascadeCallItem:
     src = d.pop("summary_src", None) or ""
     first, _, rest = src.partition("\n")
     d["summary"] = cut_summary(rest if first.strip() in _SECTIONS else src)
-    d["amount_eur"] = eur(d.get("indicative_budget"), d.get("budget_currency"))
+    d["amount_eur"] = float(d["amount_eur"]) if d.get("amount_eur") is not None else None
     if not with_body:
         d["body_txt"] = d["body_html"] = None
     return CascadeCallItem(**d)

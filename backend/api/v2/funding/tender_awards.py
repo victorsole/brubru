@@ -27,15 +27,19 @@ from core.database import get_db
 from models.user import User
 from api.v2.funding.partners import AWARD_WINNER_IS_ORGANISATION
 from services.funding.countries import eu_code
-from services.funding.shared_fields import cut_summary
+from services.funding.shared_fields import AMOUNT_EUR_RULE, amount_eur_sql, cut_summary
 
 router = APIRouter()
 
+# The awarded value in euros (amount_eur): at the ECB reference rate of the publication day (Phase 2
+# step 6). Its filters and the amount order read it too: until 29 Oct 2026 they read awarded_value in
+# its own currency, so a value in another currency than the euro was ranked by its raw figure.
+_AMOUNT_EUR = amount_eur_sql("n.awarded_value", "n.awarded_value_currency", "n.publication_date")
 _ORDERS = {"recent", "oldest", "amount"}
 _ORDER_SQL = {
     "recent": "n.publication_date DESC NULLS LAST, n.publication_number DESC",
     "oldest": "n.publication_date ASC NULLS LAST, n.publication_number ASC",
-    "amount": "n.awarded_value DESC NULLS LAST, n.publication_number DESC",
+    "amount": f"{_AMOUNT_EUR} DESC NULLS LAST, n.publication_number DESC",
 }
 _TSV = "to_tsvector('english', coalesce(n.title, '') || ' ' || coalesce(n.description, ''))"
 _SLUG = "regexp_replace(lower({n}), '[^[:alnum:]]+', '-', 'g')"
@@ -43,7 +47,7 @@ _COLS = ("n.publication_number, n.notice_uuid, n.notice_version, n.procedure_uui
          "n.publication_date, n.title, n.description, n.contract_nature, n.procedure_type, n.cpv_main, n.cpv_codes, "
          "n.body_code, b.name AS body_name, n.contracting_authority, n.buyer_country, n.buyer_legal_type, "
          "n.awarded_value, n.awarded_value_currency, n.lots, n.lot_count, n.winner_count, n.public_url, "
-         "n.first_seen, n.last_updated")
+         f"n.first_seen, n.last_updated, {_AMOUNT_EUR} AS amount_eur")
 _FROM = "FROM ted_award_notices n LEFT JOIN economy_bodies b ON b.code = n.body_code WHERE true"
 
 
@@ -98,7 +102,7 @@ class TenderAwardItem(BaseModel):
     lots: list = Field(default_factory=list, description="lot_id, title, description, result, tenders_received.")
     awarded_value: Optional[float] = Field(None, description="The notice's total value as stated (BT-161), in awarded_value_currency.")
     awarded_value_currency: Optional[str] = None
-    amount_eur: Optional[float] = Field(None, description="awarded_value when it is in euros.")
+    amount_eur: Optional[float] = Field(None, description=f"awarded_value in euros: {AMOUNT_EUR_RULE}.")
     winner_count: int = 0
     organisations: List[AwardedOrganisation] = Field(default_factory=list, description="The winners, role contractor.")
     public_url: str
@@ -144,7 +148,7 @@ def _item(r, winners: list, with_body: bool, body=None) -> TenderAwardItem:
         procedure_type=r.procedure_type, cpv_main=r.cpv_main, cpv_codes=list(r.cpv_codes or []),
         has_lots=(r.lot_count or 0) > 0, lot_count=r.lot_count or 0, lots=r.lots or [],
         awarded_value=value, awarded_value_currency=r.awarded_value_currency,
-        amount_eur=value if (r.awarded_value_currency or "").upper() == "EUR" else None,
+        amount_eur=float(r.amount_eur) if r.amount_eur is not None else None,
         winner_count=r.winner_count or 0, organisations=winners, public_url=r.public_url,
         body_txt=body[0] if with_body and body else None, body_html=body[1] if with_body and body else None,
         document_date=r.publication_date, creation_date=r.first_seen, updated_date=r.last_updated,
@@ -162,7 +166,7 @@ Who won the contracts EU institutions, bodies and agencies awarded: every contra
 - `contracting_authority` — part of the buyer's name (`CNECT`, `Environment Agency`); `body` — the buyer as a Brubru body code (`commission`, `eea`, `frontex`).
 - `winner` — part of a winner's name; `winner_country` — a winner's country (ISO-2; EL and GR, UK and GB are the same).
 - `buyer_country`, `contract_nature` (services | supplies | works), `procedure_type` (open, restricted, neg-w-call ...), `cpv_code` (a CPV code or its start: `7241` for IT consulting).
-- `published_from`, `published_to` (`since`, `until`, `from`, `to` are aliases); `min_amount_eur`, `max_amount_eur` — awarded value in euros, at least / at most. `country` is the same as `buyer_country`. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
+- `published_from`, `published_to` (`since`, `until`, `from`, `to` are aliases); `min_amount_eur`, `max_amount_eur` — awarded value in euros (`amount_eur`), at least / at most; `order=amount` ranks on it too. `country` is the same as `buyer_country`. {SYNC_PARAMS_DOC.replace(chr(10), ' ')}
 - `include_superseded` — also the earlier versions of changed notices (default false).
 - `order` — recent (default) | oldest | amount | updated_asc | updated_desc | created_asc | created_desc. `page`, `limit` (default 50, max 200), `include_body` (default true).
 
@@ -174,7 +178,7 @@ GET /api/v2/funding/tender-awards?q=translation&winner_country=ES
 ```
 
 **You get back**
-A paginated envelope. Each item: `id` (the TED publication number), `title`, `summary`, `contracting_authority`, `body_code`, `buyer_country`, `contract_nature`, `procedure_type`, `cpv_main`, `cpv_codes`, `lots` (each lot's result and tenders received), `awarded_value` and its currency (as the notice states it; `amount_eur` when in euros; for a framework agreement TED's value is usually the framework's maximum, not money paid: payments are on `/api/v2/funding/eu-funding-recipients`), `organisations` (the winners, as TED names them, role `contractor`, each organisation with its `partner` link; a winner that may be an individual has none), `public_url` (the notice on TED), `body_txt` / `body_html` (the notice as text: on the list unless `include_body=false`, and on the item route), `document_date`, `creation_date`, `updated_date`. A joint tender's members are each listed, the lead flagged; a cascade framework lists every ranked contractor.
+A paginated envelope. Each item: `id` (the TED publication number), `title`, `summary`, `contracting_authority`, `body_code`, `buyer_country`, `contract_nature`, `procedure_type`, `cpv_main`, `cpv_codes`, `lots` (each lot's result and tenders received), `awarded_value` and its currency (as the notice states it; `amount_eur` in euros: {AMOUNT_EUR_RULE}; for a framework agreement TED's value is usually the framework's maximum, not money paid: payments are on `/api/v2/funding/eu-funding-recipients`), `organisations` (the winners, as TED names them, role `contractor`, each organisation with its `partner` link; a winner that may be an individual has none), `public_url` (the notice on TED), `body_txt` / `body_html` (the notice as text: on the list unless `include_body=false`, and on the item route), `document_date`, `creation_date`, `updated_date`. A joint tender's members are each listed, the lead flagged; a cascade framework lists every ranked contractor.
 
 **Data freshness**
 TED's search API and each notice's XML, read every day for the last 14 days of notices."""
@@ -203,8 +207,8 @@ async def list_tender_awards(
     until: Optional[date] = Query(None, include_in_schema=False),
     from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
     to: Optional[date] = Query(None, include_in_schema=False),
-    min_amount_eur: Optional[float] = Query(None, ge=0, description="Awarded value in euros at least."),
-    max_amount_eur: Optional[float] = Query(None, ge=0, description="Awarded value in euros at most."),
+    min_amount_eur: Optional[float] = Query(None, ge=0, description="Awarded value in euros (amount_eur) at least; a notice whose value has no euro figure is left out."),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description="Awarded value in euros (amount_eur) at most; a notice whose value has no euro figure is left out."),
     include_superseded: bool = Query(False, description="Also the earlier versions of changed notices."),
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
@@ -250,9 +254,9 @@ async def list_tender_awards(
     if end:
         where.append("n.publication_date <= :end"); params["end"] = end
     if min_amount_eur is not None:
-        where.append("upper(n.awarded_value_currency) = 'EUR' AND n.awarded_value >= :min_eur"); params["min_eur"] = min_amount_eur
+        where.append(f"{_AMOUNT_EUR} >= :min_eur"); params["min_eur"] = min_amount_eur
     if max_amount_eur is not None:
-        where.append("upper(n.awarded_value_currency) = 'EUR' AND n.awarded_value <= :max_eur"); params["max_eur"] = max_amount_eur
+        where.append(f"{_AMOUNT_EUR} <= :max_eur"); params["max_eur"] = max_amount_eur
     sql_window(where, params, window, "n.first_seen", "n.last_updated")
     clause = _FROM + "".join(f" AND {w}" for w in where)
     total = db.execute(text(f"SELECT count(*) {clause}"), params).scalar() or 0

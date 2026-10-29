@@ -407,7 +407,8 @@ def test_the_award_list_filters_on_the_notice_and_its_winners():
     assert "to_tsvector('english', coalesce(n.title, '') || ' ' || coalesce(n.description, ''))" in sql   # the index's expression
     assert params["ca"] == "%CNECT%" and params["winner"] == "%Delta%" and params["wc"] == "EL"
     assert params["cpv"] == "7931%" and params["start"] == date(2025, 1, 1) and params["body"] == "commission"
-    assert "upper(n.awarded_value_currency) = 'EUR'" in sql
+    # the amount range reads the value in euros, converted at the ECB rate (Phase 2 step 6, 29 Oct 2026)
+    assert "END) >= :min_eur" in sql and "FROM ecb_reference_rates r" in sql
     assert _client(_Db()).get("/api/v2/funding/tender-awards", params={"order": "random"}).status_code == 400
     db = _Db()
     _client(db).get("/api/v2/funding/tender-awards", params={"include_superseded": "true"})
@@ -421,6 +422,7 @@ def test_an_award_item_lists_its_winners_with_their_partner_link():
                           cpv_main="79311000", cpv_codes=["79311000"], body_code="commission", body_name="European Commission",
                           contracting_authority="European Commission, DG EXAMPLE", buyer_country="BE",
                           buyer_legal_type="eu-ins-bod-ag", awarded_value=900000, awarded_value_currency="EUR",
+                          amount_eur=900000,   # the SQL rule's column (tests/test_funding_amount_eur.py)
                           lots=[{"lot_id": "LOT-0002"}], lot_count=1, winner_count=2, public_url="https://ted.europa.eu/x",
                           first_seen=None, last_updated=None, body_txt="t", body_html="<p>t</p>")
     r = _client(_Db(notice=row)).get("/api/v2/funding/tender-awards/999999-2025")

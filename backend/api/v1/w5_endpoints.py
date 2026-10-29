@@ -26,7 +26,9 @@ from models.user import User
 from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
-from services.funding.shared_fields import cut_summary, eur, legacy
+from services.funding.shared_fields import (
+    AMOUNT_EUR_RULE, brussels_day, cut_summary, item_amount_eur, legacy, page_amounts_eur,
+)
 from ._search import text_match
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._pagination import stable
@@ -451,7 +453,7 @@ class TenderItem(BaseModel):
     item_type: str = Field("tender", description="Always tender: a TED notice.")
     body_code: Optional[str] = Field(None, description="Null: TED notices come from buyers across Europe, not from one EU body; the buyer is official_name.")
     body_name: Optional[str] = Field(None, description="Null, as body_code.")
-    amount_eur: Optional[float] = Field(None, description="estimated_value when the notice states it in euros; null for another currency or none (euro conversion comes later).")
+    amount_eur: Optional[float] = Field(None, description=f"estimated_value in euros: {AMOUNT_EUR_RULE}.")
     sme_suitability_score: Optional[float] = None
     status: Optional[str] = Field(None, description=(
         "open | closed | forthcoming | unknown. TED publishes none: it is set daily from the notice type and "
@@ -502,6 +504,11 @@ def _tender_body(r) -> tuple:
     if txt and r.title:
         txt = f"{r.title}\n\n{txt}"
     return txt, html
+
+
+# A notice's value in euros (amount_eur): at the ECB reference rate of its publication day (Phase 2 step 6).
+_TED_AMOUNT = dict(table="tenders", key="id", amount="estimated_value", currency="estimated_value_currency",
+                   day=brussels_day("publication_date", "timestamptz"))
 
 
 def _tender_order(order: Optional[str]):
@@ -619,6 +626,7 @@ async def tenders_page(
         stable(query.order_by(*_tender_order(order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
+    converted = page_amounts_eur(db, rows, **_TED_AMOUNT)
     data = [
         TenderItem(
             id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
@@ -631,7 +639,7 @@ async def tenders_page(
             publication_date=r.publication_date, submission_deadline=r.submission_deadline,
             has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url, documents_url=r.documents_url,
             summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
-            amount_eur=eur(r.estimated_value, r.estimated_value_currency),
+            amount_eur=item_amount_eur(r.estimated_value, r.estimated_value_currency, converted, r.id),
             status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
             public_url=r.ted_url, document_date=r.publication_date,
             creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
@@ -751,6 +759,7 @@ async def get_tender_detail(
             "resource": "tender",
             "id": str(tender_id),
         })
+    converted = page_amounts_eur(db, [r], **_TED_AMOUNT)
     return TenderItem(
         id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
         form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
@@ -762,7 +771,7 @@ async def get_tender_detail(
         publication_date=r.publication_date, submission_deadline=r.submission_deadline,
         has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url, documents_url=r.documents_url,
         summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
-        amount_eur=eur(r.estimated_value, r.estimated_value_currency),
+        amount_eur=item_amount_eur(r.estimated_value, r.estimated_value_currency, converted, r.id),
         status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
         public_url=r.ted_url, document_date=r.publication_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),

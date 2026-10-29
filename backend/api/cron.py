@@ -394,7 +394,7 @@ _DAILY_TIER_RECORDED = (
     "consultations", "have_your_say", "consultation_dates", "comitology", "sanctions", "infringements",
     "transparency_register", "cor", "eesc", "jrc",
     "carriage_status_notifications", "tris_titles", "eu_laws_in_force", "eu_laws_oj_reference",
-    "eu_laws_legal_basis", "ted_awards", "partner_search",
+    "eu_laws_legal_basis", "ted_awards", "partner_search", "ecb_reference_rates",
 )
 # "tbt" left this list on 17 Oct 2026: sync_dg_grow.py records its own run as wto_tbt, so every
 # night wrote two rows for one run (tests/test_sync_health_jobs.py checks no script here records).
@@ -999,6 +999,12 @@ async def cron_sync_daily(
     # only the ones not yet held are downloaded (~10 a day).
     results["ted_awards"] = await _run_script_async(
         "ted_awards", "scripts/sync_ted_awards.py", ["--apply"], timeout=1800,
+    )
+    # The ECB's euro reference rates (ecb_reference_rates, 29 Oct 2026): the funding lists give a
+    # value in another currency in euros at the rate of the item's day (amount_eur). The last 10
+    # days, two requests to the ECB Data Portal; a run that reads no rate fails.
+    results["ecb_reference_rates"] = await _run_script_async(
+        "ecb_reference_rates", "scripts/sync_ecb_reference_rates.py", ["--apply"], timeout=300,
     )
     # The F&T Portal's Partner Search, organisations only (/funding/partner-announcements and
     # /funding/partners, 27 Oct 2026): every profile, the announcements of the last 14 days and a

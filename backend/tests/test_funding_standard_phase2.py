@@ -249,7 +249,8 @@ def test_the_tender_awards_take_country_and_the_amount_range():
     assert r.status_code == 200, r.text
     sql, params = db.sql[0]
     assert "n.buyer_country = :bc" in sql and params["bc"] == "LU"
-    assert "n.awarded_value >= :min_eur" in sql and "n.awarded_value <= :max_eur" in sql and params["max_eur"] == 50000
+    # the value in euros (Phase 2 step 6: converted at the ECB rate, tests/test_funding_amount_eur.py)
+    assert "END) >= :min_eur" in sql and "END) <= :max_eur" in sql and params["max_eur"] == 50000
 
 
 def test_the_partner_announcements_take_the_published_window():
@@ -412,7 +413,7 @@ def test_an_outcome_names_its_indicator_and_its_fund_as_the_finances_list_does()
     assert _row_to_item({**row, "fund": "Interreg Funds"}, with_body=False).body_code == "interreg"
 
 
-def test_the_ft_portal_items_summarise_their_own_text_and_keep_other_currencies_out_of_amount_eur():
+def test_the_ft_portal_items_summarise_their_own_text_and_take_amount_eur_from_euros_or_a_conversion():
     from types import SimpleNamespace
     from api.v1.funding_tenders_collections import _tender_to_item
     from api.v2.funding.ft_cascade_calls import _item
@@ -422,9 +423,11 @@ def test_the_ft_portal_items_summarise_their_own_text_and_keep_other_currencies_
                 first_seen_at=None)
     it = _tender_to_item(SimpleNamespace(**base, value_currency="EUR"))
     assert (it.item_type, it.summary, it.body_code, it.amount_eur) == ("tender", "Lot 1: hosting services", "ftportal", 5.0)
-    assert _tender_to_item(SimpleNamespace(**base, value_currency="GBP")).amount_eur is None
+    assert _tender_to_item(SimpleNamespace(**base, value_currency="GBP")).amount_eur is None     # no conversion read
+    # amount_eur is the SQL rule's column (tests/test_funding_amount_eur.py)
     call = _item(dict(id=2, call_id="16842", title="C", summary_src="Task description\nWe fund  pilots.",
-                      indicative_budget=60000.0, budget_currency="EUR", body_txt="x", body_html="x"), with_body=False)
+                      indicative_budget=60000.0, budget_currency="EUR", amount_eur=60000.0, body_txt="x", body_html="x"),
+                 with_body=False)
     assert (call.summary, call.amount_eur, call.body_code) == ("We fund pilots.", 60000.0, "ftportal")
 
 

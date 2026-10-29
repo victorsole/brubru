@@ -42,7 +42,9 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
-from services.funding.shared_fields import cut_summary, eur, legacy, with_body_names
+from services.funding.shared_fields import (
+    AMOUNT_EUR_RULE, brussels_day, cut_summary, eur, item_amount_eur, legacy, page_amounts_eur, with_body_names,
+)
 
 
 # ============================================================================
@@ -305,7 +307,7 @@ class FtCallTenderItem(BaseModel):
     summary: Optional[str] = Field(None, description="The start of the tender's description, cut at a word end near 300 characters.")
     body_code: str = Field("ftportal", description="ftportal: the EU Funding & Tenders Portal publishes it.")
     body_name: Optional[str] = Field(None, description="The body's name, as Brubru's directory of EU bodies gives it for body_code.")
-    amount_eur: Optional[float] = Field(None, description="estimated_value when it is in euros; null for another currency (euro conversion comes later).")
+    amount_eur: Optional[float] = Field(None, description=f"estimated_value in euros: {AMOUNT_EUR_RULE}.")
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
@@ -321,9 +323,16 @@ class FtCallTenderItem(BaseModel):
         return self
 
 
+# A tender's value in euros (amount_eur): at the ECB reference rate of its publication day (Phase 2
+# step 6). published_at is a timestamp without time zone holding UTC.
+_FT_TENDER_AMOUNT = dict(table="ft_calls_for_tenders", key="tender_reference", amount="estimated_value",
+                         currency="value_currency", day=brussels_day("published_at", "utc_timestamp"))
+
+
 def _tender_to_item(
     r: FtCallForTenders,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+    converted: Optional[dict] = None,
 ) -> FtCallTenderItem:
     body_html, body_text, has_body = compose_html_from_sections([
         ("Description", r.description),
@@ -369,7 +378,8 @@ def _tender_to_item(
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=r.first_seen_at,
-        summary=cut_summary(r.description), amount_eur=eur(r.estimated_value, r.value_currency),
+        summary=cut_summary(r.description),
+        amount_eur=item_amount_eur(r.estimated_value, r.value_currency, converted or {}, r.tender_reference),
         updated_date=r.content_updated_at,
     )
 
@@ -465,7 +475,8 @@ async def list_calls_for_tenders(
         stable(query.order_by(*_call_order(FtCallForTenders, order)))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope(with_body_names(db, [_tender_to_item(r, body_threshold=body_threshold) for r in rows]), total=total, page=page, limit=limit,
+    converted = page_amounts_eur(db, rows, **_FT_TENDER_AMOUNT)
+    return build_envelope(with_body_names(db, [_tender_to_item(r, body_threshold=body_threshold, converted=converted) for r in rows]), total=total, page=page, limit=limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -509,7 +520,8 @@ async def get_call_for_tenders(
                     "reason_code": "not_found",
                     "resource": "ft_call_for_tenders", "id": tender_reference},
         )
-    return with_body_names(db, [_tender_to_item(r, body_threshold=body_threshold)])[0]
+    converted = page_amounts_eur(db, [r], **_FT_TENDER_AMOUNT)
+    return with_body_names(db, [_tender_to_item(r, body_threshold=body_threshold, converted=converted)])[0]
 
 
 # ============================================================================
