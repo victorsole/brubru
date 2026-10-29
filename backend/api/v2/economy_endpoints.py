@@ -94,7 +94,7 @@ _AMOUNT_EUR_DOC = "The item's main figure in euros; null where the item states n
 class FundingEconomyItem(EconomyItem):
     """An item of a funding list (the funding standard's shared fields, 28 Oct 2026). A news item or
     event has no status and no amount: both stay null."""
-    status: Optional[str] = Field(None, description="open | forthcoming | closed for a call or tender; on /funding/all the source's own word for a cohesion programme or Solidarity Fund case; null for news, events and payments.")
+    status: Optional[str] = Field(None, description="open | forthcoming | closed for a call or tender; on /funding/all adopted for a cohesion programme and accepted | rejected | withdrawn | under_assessment for a Solidarity Fund case; null for news, events and payments.")
     body_name: Optional[str] = Field(None, description=_BODY_NAME_DOC)
     amount_eur: Optional[float] = Field(None, description=_AMOUNT_EUR_DOC)
 

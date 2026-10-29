@@ -697,3 +697,55 @@ def test_a_call_for_competition_whose_notice_states_no_deadline_is_unknown():
     from services.tenders.status import STATUS_SQL
     assert "WHEN form_type = 'planning' THEN 'forthcoming'" in STATUS_SQL
     assert "WHEN form_type IN ('competition', 'legacy') THEN 'unknown' ELSE status END" in STATUS_SQL
+
+
+def test_a_budget_items_own_word_maps_to_one_vocabulary():
+    # 5d (29 Oct 2026): the words Cohesion Open Data and the Solidarity Fund use, read that day.
+    from services.funding.shared_fields import budget_status
+    for word, std in (("Adopted by EC", "adopted"), ("Adopted by MS", "adopted"),
+                      ("Adopted by EC (TF Accepted)", "adopted"), ("Adopted by EC (TF Proposed)", "adopted"),
+                      ("Accepted", "accepted"), ("Rejected", "rejected"), ("Withdrawn", "withdrawn"),
+                      ("Under assessment", "under_assessment"), ("under_assessment", "under_assessment"),
+                      (None, None), ("", None), ("Something new", None)):
+        assert budget_status(word) == std, word
+
+
+def test_the_cohesion_and_solidarity_lists_serve_the_standard_status_beside_the_sources():
+    from api.v2.funding import router as funding
+    alloc = {"id": 7, "fund": "ERDF", "status": "Adopted by MS", "body_code": "erdf", "item_type": "cohesion_allocation"}
+    case = {"id": 9, "status": "Under assessment", "item_type": "solidarity_case", "body_code": "eusf"}
+    for path, row, std in (("/api/v2/funding/erdf", alloc, "adopted"), ("/api/v2/funding/eusf", case, "under_assessment")):
+        r = _client(funding, _Db([row])).get(path, params={"include_body": "false"})
+        assert r.status_code == 200, (path, r.text)
+        it = r.json()["data"][0]
+        assert (it["status"], it["source_status"]) == (std, row["status"]), path
+
+
+def test_a_budget_status_filter_takes_the_standard_word_and_still_the_sources():
+    from api.v2.funding import router as funding
+    for path in ("/api/v2/funding/erdf", "/api/v2/funding/eusf"):
+        db = _Db()
+        assert _client(funding, db).get(path, params={"status": "by MS"}).status_code == 200
+        assert _client(funding, db).get(path, params={"status": "accepted"}).status_code == 200
+        counted = [(sql, p) for sql, p in db.sql if "COUNT(*)" in sql.upper()]
+        legacy, std = counted[0], counted[1]
+        assert "status ILIKE :status_src" in legacy[0] and legacy[1]["status_src"] == "%by MS%"
+        assert "= :status_std" in std[0] and "THEN 'adopted'" in std[0] and std[1]["status_std"] == "accepted"
+
+
+def test_all_serves_the_cohesion_and_solidarity_status_in_the_standard_words():
+    from api.v2.funding.funding_all import _union_cte
+    union = _union_cte(False)
+    assert union.count("WHEN lower(btrim(status)) LIKE 'adopted%' THEN 'adopted'") == 2
+    assert "<<BUDGET_STATUS>>" not in union
+
+
+def test_the_sql_budget_status_has_a_branch_for_every_word_the_python_one_maps():
+    # The filters and /funding/all read budget_status_sql(); the items read budget_status(). Both must
+    # give the same word, or a filter would miss items it serves.
+    from services.funding.shared_fields import BUDGET_STATUSES, budget_status_sql
+    sql = budget_status_sql("status")
+    assert "LIKE 'adopted%' THEN 'adopted'" in sql and "LIKE 'proposed%' THEN 'proposed'" in sql
+    assert "IN ('accepted', 'rejected', 'withdrawn') THEN lower(btrim(status))" in sql
+    assert "IN ('under assessment', 'under_assessment') THEN 'under_assessment'" in sql
+    assert all(f"'{w}'" in sql for w in BUDGET_STATUSES)

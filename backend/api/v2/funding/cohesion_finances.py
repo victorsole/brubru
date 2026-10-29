@@ -29,7 +29,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
-from services.funding.shared_fields import FUND_NAMES
+from services.funding.shared_fields import FUND_NAMES, budget_status, budget_status_filter
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -60,7 +60,8 @@ class CohesionFinanceItem(_DataPoints):
     cci: Optional[str] = None
     cci_title: Optional[str] = None
     dg: Optional[str] = None
-    status: Optional[str] = None
+    status: Optional[str] = Field(None, description="adopted: the programme version is in force, whether the Commission adopted it or the Member State made the amendment itself (a transfer that needs no Commission decision, Article 24(5) of Regulation (EU) 2021/1060). Null when the source states none (Interreg).")
+    source_status: Optional[str] = Field(None, description="The status word Cohesion Open Data gives (`Adopted by EC`, `Adopted by MS`, `Adopted by EC (TF Accepted)`, `Adopted by EC (TF Proposed)`; TF: the AMIF and ISF thematic facility), which `status` is set from.")
     status_date: Optional[date] = None
     financial_allocation_category: Optional[str] = None
     y2021: Optional[float] = None
@@ -93,6 +94,8 @@ _DETAIL_COLS = f"id, public_url, body_txt, body_html, document_date, created_at 
 def _row_to_item(r, *, with_body: bool) -> CohesionFinanceItem:
     d = dict(r)
     d["body_name"] = FUND_NAMES.get(d.get("body_code"))
+    d["source_status"] = d.get("status")
+    d["status"] = budget_status(d.get("status"))
     if not with_body:
         d["body_txt"] = None
         d["body_html"] = None
@@ -115,7 +118,7 @@ To see how much {fund_code} money each Member State and programme is allocated a
 
 **Input**
 - `ms` — Member State ISO code (e.g. `PL`, `ES`, `DE`).
-- `status` — programme status substring (e.g. `Adopted`).
+- `status` — `adopted`, the standard word; the source's own words (e.g. `Adopted by MS`) still filter, as a substring of `source_status`.
 - `q` — substring on the programme title or the composed body.
 - `limit` (default 50, max 200), `page` (1-indexed).
 
@@ -126,7 +129,7 @@ GET /api/v2/funding/{slug}?ms=ES
 ```
 
 **You get back**
-A `PaginatedResponse[CohesionFinanceItem]` envelope sorted by total allocation. Each item carries `id`, `public_url`, `document_date`, `creation_date`, the structured fields (`fund`, `ms`, `cci`, `cci_title`, `y2021`..`y2027`, `total`, ...) and `body_txt`/`body_html` (unless `include_body=false`).
+A `PaginatedResponse[CohesionFinanceItem]` envelope sorted by total allocation. Each item carries `id`, `public_url`, `document_date`, `creation_date`, the structured fields (`fund`, `ms`, `cci`, `cci_title`, `y2021`..`y2027`, `total`, ...) and `body_txt`/`body_html` (unless `include_body=false`). `status` is the standard word (`adopted`), the source's own beside it as `source_status` (until 29 Oct 2026 `status` held the source's word).
 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`, dataset 9qee-iv7c).""",
@@ -135,7 +138,7 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         request: Request,
         ms: Optional[str] = Query(None, description="Member State ISO code"),
         country: Optional[str] = Query(None, description="The Member State, ISO-2 (EL and GR, UK and GB are the same); the same as `ms`."),
-        status: Optional[str] = Query(None, description="Programme status substring"),
+        status: Optional[str] = Query(None, description="adopted (the standard status); any other text matches the source's own word (`source_status`) as a substring, e.g. `Adopted by MS`."),
         q: Optional[str] = Query(None, description="Substring on the programme title or body"),
         updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
         updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window; a bare date covers the whole day."),
@@ -162,7 +165,7 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
             # Both spellings: the CAP file writes Greece as EL and as GR (27 Oct 2026).
             where.append("upper(ms) = ANY(:ms)"); params["ms"] = both_styles(country or ms)
         if status:
-            where.append("status ILIKE :status"); params["status"] = f"%{status}%"
+            budget_status_filter(where, params, status)
         if q:
             where.append("(cci_title ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
         sql_window(where, params, window, "created_at", "updated_at")

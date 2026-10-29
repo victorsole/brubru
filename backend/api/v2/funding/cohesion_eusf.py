@@ -24,7 +24,7 @@ from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
 from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
-from services.funding.shared_fields import FUND_NAMES
+from services.funding.shared_fields import FUND_NAMES, budget_status, budget_status_filter
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -44,7 +44,8 @@ class EUSFCase(_DataPoints):
     applicant_country: Optional[str] = None
     name_of_disaster: Optional[str] = None
     disaster_type: Optional[str] = None
-    status: Optional[str] = None
+    status: Optional[str] = Field(None, description="accepted | rejected | withdrawn | under_assessment: the application's outcome, the standard words for the source's own.")
+    source_status: Optional[str] = Field(None, description="The status word the source gives (Accepted, Rejected, Withdrawn, Under assessment), which `status` is set from.")
     category: Optional[str] = None
     # No damage date (23 Oct 2026, Victor): the source's own is unreliable, 13 of 197 cases dated
     # after their own application (day and month swapped: Storm Gudrun, Lorca, Lesbos), and it is
@@ -76,6 +77,8 @@ _DETAIL_COLS = f"{_STRUCT}, {SHARED_SQL}, body_txt, body_html"
 def _row_to_item(r, *, with_body: bool) -> EUSFCase:
     d = dict(r)
     d["body_name"] = FUND_NAMES["eusf"]
+    d["source_status"] = d.get("status")
+    d["status"] = budget_status(d.get("status"))
     if not with_body:
         d["body_txt"] = None
         d["body_html"] = None
@@ -96,7 +99,7 @@ To see which disasters the EUSF responded to, in which countries, and how much w
 **Input**
 - `country` — applicant country ISO code (e.g. `DE`, `IT`).
 - `disaster_type` — substring (e.g. `Floods`, `Earthquake`, `Health`).
-- `status` — substring (e.g. `Accepted`).
+- `status` — `accepted`, `rejected`, `withdrawn` or `under_assessment`; any other text matches the source's own word (`source_status`) as a substring.
 - `year` — year of occurrence.
 - `q` — substring on the disaster name or body.
 - `limit` (default 50, max 200), `page` (1-indexed).
@@ -109,7 +112,7 @@ GET /api/v2/funding/eusf?year=2021
 ```
 
 **You get back**
-A `PaginatedResponse[EUSFCase]` envelope sorted by EUSF grant paid (largest first). Each item carries `id`, `public_url`, `document_date`, `creation_date`, the case fields (`name_of_disaster`, `disaster_type`, `applicant_country`, `total_direct_damage_meur`, `eusf_grant_paid_meur`, ...) and `body_txt`/`body_html` (unless `include_body=false`).
+A `PaginatedResponse[EUSFCase]` envelope sorted by EUSF grant paid (largest first). Each item carries `id`, `public_url`, `document_date`, `creation_date`, the case fields (`name_of_disaster`, `disaster_type`, `applicant_country`, `total_direct_damage_meur`, `eusf_grant_paid_meur`, ...) and `body_txt`/`body_html` (unless `include_body=false`). `status` is the standard word (`accepted`, `rejected`, `withdrawn`, `under_assessment`), the source's own beside it as `source_status` (until 29 Oct 2026 `status` held the source's word).
 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`, dataset 7a49-av34).""",
@@ -118,7 +121,7 @@ async def list_eusf(
     request: Request,
     country: Optional[str] = Query(None, description="Applicant country ISO code"),
     disaster_type: Optional[str] = Query(None, description="Disaster type substring"),
-    status: Optional[str] = Query(None, description="Status substring"),
+    status: Optional[str] = Query(None, description="accepted | rejected | withdrawn | under_assessment (the standard status); any other text matches the source's own word (`source_status`) as a substring."),
     year: Optional[int] = Query(None, description="Year of occurrence"),
     q: Optional[str] = Query(None, description="Substring on the disaster name or body"),
     updated_from: Optional[datetime] = Query(None, description="Incremental sync: rows whose content changed at or after this time (updated_date)."),
@@ -147,7 +150,7 @@ async def list_eusf(
     if disaster_type:
         where.append("disaster_type ILIKE :dt"); params["dt"] = f"%{disaster_type}%"
     if status:
-        where.append("status ILIKE :st"); params["st"] = f"%{status}%"
+        budget_status_filter(where, params, status)
     if year:
         where.append("year_of_occurrence = :yr"); params["yr"] = year
     if q:

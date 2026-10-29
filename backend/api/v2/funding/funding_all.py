@@ -23,7 +23,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
 from ..economy_endpoints import (EconomyItem, FundingEconomyItem, _row_to_item, _LIST_COLS, _DETAIL_COLS, _ORDER_SQL,
                                   _ORDERS, build_envelope)
-from services.funding.shared_fields import with_body_names
+from services.funding.shared_fields import budget_status_sql, with_body_names
 from .cohesion_cap import SHARED_SQL as PAYMENT_SQL
 from .cohesion_eusf import SHARED_SQL as SOLIDARITY_SQL
 from .cohesion_finances import SHARED_SQL as ALLOCATION_SQL
@@ -88,12 +88,12 @@ WITH all_funding AS (
     UNION ALL
     SELECT id, body_code, item_type, title, summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           updated_at, status, amount_eur
+           updated_at, <<BUDGET_STATUS>> AS status, amount_eur
     FROM (SELECT *, <<ALLOCATION>> FROM eu_cohesion_finances) f
     UNION ALL
     SELECT id, body_code, item_type, title, summary,
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
-           updated_at, status, amount_eur
+           updated_at, <<BUDGET_STATUS>> AS status, amount_eur
     FROM (SELECT *, <<SOLIDARITY>> FROM eu_solidarity_fund) s
     UNION ALL
     SELECT id, body_code, item_type, title, summary,
@@ -107,7 +107,8 @@ WITH all_funding AS (
 # The cohesion, Solidarity Fund and CAP rows carry the shared fields their own lists compose (one
 # composition each, 28 Oct 2026: the CAP title read "EAGF — EL" here and nothing on /eagf).
 _UNION_CTE_TMPL = (_UNION_CTE_TMPL.replace("<<ALLOCATION>>", ALLOCATION_SQL)
-                   .replace("<<SOLIDARITY>>", SOLIDARITY_SQL).replace("<<PAYMENT>>", PAYMENT_SQL))
+                   .replace("<<SOLIDARITY>>", SOLIDARITY_SQL).replace("<<PAYMENT>>", PAYMENT_SQL)
+                   .replace("<<BUDGET_STATUS>>", budget_status_sql("status")))
 
 
 def _union_cte(include_body: bool) -> str:
@@ -148,7 +149,7 @@ async def funding_all(
     item_type: Optional[str] = Query(None, description="tender | grant | eoi_call | startup_funding | cohesion_allocation | solidarity_case | cap_payment"),
     type: Optional[str] = Query(None, description="Legacy name of item_type."),
     body: Optional[str] = Query(None, description="Agency code or fund code, e.g. efca, ema, erdf, esf, jtf."),
-    status: Optional[str] = Query(None, description="The item's `status`, in any case: open | forthcoming | closed for tenders, grants and calls; the fund's own word for a cohesion programme (e.g. `Adopted by EC`) or a Solidarity Fund case (e.g. `Accepted`). Until 28 Oct 2026 it matched the word anywhere in the summary."),
+    status: Optional[str] = Query(None, description="The item's `status`, in any case: open | forthcoming | closed for tenders, grants and calls; adopted for a cohesion programme; accepted | rejected | withdrawn | under_assessment for a Solidarity Fund case (the standard words since 29 Oct 2026; the funds' own words are on their lists, as `source_status`). Until 28 Oct 2026 it matched the word anywhere in the summary."),
     q: Optional[str] = Query(None, description="Free-text search over title, summary and body."),
     published_from: Optional[date] = Query(None, description="The item's date (`document_date`) on or after (YYYY-MM-DD); `since` and `from` are aliases."),
     published_to: Optional[date] = Query(None, description="The item's date (`document_date`) on or before (YYYY-MM-DD); `until` and `to` are aliases."),

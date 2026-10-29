@@ -92,3 +92,47 @@ def legacy(*standard: str, note: str = "the same value") -> dict:
     names = " or ".join(f"`{s}`" for s in standard)
     return {"description": f"Legacy name, kept for existing integrations: read {names} ({note}).",
             "json_schema_extra": {"deprecated": True}}
+
+
+# A budget item's status, one vocabulary (Phase 2 step 5d, 29 Oct 2026; standard §6): adopted,
+# proposed, accepted, rejected, withdrawn, under_assessment. The source's own word is served beside
+# it as `source_status`, and stays in the body. Read at the sources that day:
+#   Cohesion Open Data 9qee-iv7c, "Adoption status of programme": "Adopted by EC" (a Commission
+#     decision), "Adopted by MS" (only on amended versions 2-7: a transfer the Member State makes
+#     itself, which under Article 24(5) of Regulation (EU) 2021/1060 "shall not require a decision
+#     of the Commission"), "Adopted by EC (TF Accepted)" / "(TF Proposed)" (AMIF and ISF only,
+#     sub-versions such as 6.1: the funds' thematic facility; the programme version is adopted).
+#     All four are `adopted`. The 96 Interreg rows carry none: null.
+#   EU Solidarity Fund cases: Accepted, Rejected, Withdrawn, Under assessment.
+BUDGET_STATUSES = ("adopted", "proposed", "accepted", "rejected", "withdrawn", "under_assessment")
+
+
+def budget_status(word: Optional[str]) -> Optional[str]:
+    """The standard status for a cohesion programme's or a Solidarity Fund case's own word, or None."""
+    w = " ".join((word or "").lower().replace("_", " ").split())
+    if not w:
+        return None
+    if w.startswith("adopted"):
+        return "adopted"
+    if w.startswith("proposed"):
+        return "proposed"
+    w = w.replace(" ", "_")
+    return w if w in BUDGET_STATUSES else None
+
+
+def budget_status_sql(column: str = "status") -> str:
+    """budget_status() in SQL, for the lists' filters and /funding/all."""
+    w = f"lower(btrim({column}))"
+    return (f"CASE WHEN {w} LIKE 'adopted%' THEN 'adopted' WHEN {w} LIKE 'proposed%' THEN 'proposed' "
+            f"WHEN {w} IN ('accepted', 'rejected', 'withdrawn') THEN {w} "
+            f"WHEN {w} IN ('under assessment', 'under_assessment') THEN 'under_assessment' END")
+
+
+def budget_status_filter(where: list, params: dict, value: str, column: str = "status") -> None:
+    """`status=`: a standard word matches the standard status; any other text, as before 29 Oct 2026,
+    is a substring of the source's own word."""
+    v = value.strip()
+    if v.lower() in BUDGET_STATUSES:
+        where.append(f"({budget_status_sql(column)}) = :status_std"); params["status_std"] = v.lower()
+    else:
+        where.append(f"{column} ILIKE :status_src"); params["status_src"] = f"%{v}%"
