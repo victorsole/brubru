@@ -144,7 +144,7 @@ def test_a_ted_notice_in_zloty_shows_its_value_in_euros_on_the_list_and_the_item
     listed = _client(db).get("/api/v2/funding/tenders")
     assert listed.status_code == 200, listed.text
     assert [i["amount_eur"] for i in listed.json()["data"]] == [1000.0, 99.5]
-    sql, params = db.sql[-1]
+    sql, params = next((q, p) for q, p in db.sql if "keys" in p)      # the conversion (same_as is asked after it)
     assert params == {"keys": [5]} and "FROM tenders WHERE id = ANY(:keys)" in sql
     assert "((publication_date) AT TIME ZONE 'Europe/Brussels')::date" in sql
     item = _client(db).get("/api/v2/funding/tenders/5")

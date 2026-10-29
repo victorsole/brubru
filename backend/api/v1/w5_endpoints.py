@@ -10,7 +10,7 @@ W5 P2 endpoints: /research-publications (unified), /officials, /tenders.
 
 import logging
 from datetime import date, datetime, time
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field, model_validator
@@ -456,6 +456,13 @@ class TenderItem(BaseModel):
     body_name: Optional[str] = Field(None, description="Null, as body_code.")
     amount_eur: Optional[float] = Field(None, description=f"estimated_value in euros: {AMOUNT_EUR_RULE}.")
     sme_suitability_score: Optional[float] = None
+    source: Optional[str] = Field(None, description=(
+        "ted: a TED notice. ft_portal: an EU institution's notice from the Funding & Tenders Portal, copied into "
+        "this list for the Tenderator on 29 Sep 2026; the same notice is on /ft-calls-for-tenders (see same_as) "
+        "and leaves this list on the legacy date (Phase 4)."))
+    same_as: List[str] = Field(default_factory=list, description=(
+        "The same notice on another Brubru list (its item URL): the F&T Portal's copy of a TED notice, or the "
+        "portal notice an ft_portal item copies. Empty when Brubru holds it once."))
     status: Optional[str] = Field(None, description=(
         "open | closed | forthcoming | unknown. TED publishes none: it is set daily from the notice type and "
         "its own deadline (award and modification notices closed, a passed deadline closed, a prior "
@@ -535,10 +542,13 @@ def ted_list_deferred() -> tuple:
             defer(Tender.minimum_requirements))
 
 
-def tender_item(r, converted: dict) -> TenderItem:
+def tender_item(r, converted: dict, same_as: Optional[dict] = None) -> TenderItem:
     """One TED notice as the list serves it (also built by /funding/opportunities, Phase 3b).
-    `converted`: the page's euro figures from page_amounts_eur(db, rows, **_TED_AMOUNT)."""
+    `converted`: the page's euro figures from page_amounts_eur(db, rows, **_TED_AMOUNT); `same_as`: the
+    page's copies from ted_same_as()."""
     return TenderItem(
+        source="ft_portal" if getattr(r, "source", None) == "ft_portal" else "ted",
+        same_as=(same_as or {}).get(r.id, []),
         id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
         form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
         official_name=r.official_name, buyer_country=r.buyer_country,
@@ -556,6 +566,23 @@ def tender_item(r, converted: dict) -> TenderItem:
         updated_date=row_updated(r),
         **dict(zip(("body_txt", "body_html"), _tender_body(r))),
     )
+
+
+def ted_same_as(db: Session, rows, base: str) -> dict:
+    """TED row id -> the same notice's item on /ft-calls-for-tenders (O104, exact keys): the portal's
+    re-listing of a TED notice under its TED number, or the portal notice an ft_portal row copies
+    (publication_number 'FT-<reference>'). One query a page."""
+    ids = [r.id for r in rows]
+    if not ids:
+        return {}
+    out: dict = {}
+    for tid, fid in db.execute(text(
+            "SELECT t.id, x.id FROM tenders t JOIN ft_calls_for_tenders x ON NOT x.is_test AND "
+            "((x.tender_reference = t.publication_number AND x.source_url LIKE '%ted.europa.eu%') OR "
+            "(t.source = 'ft_portal' AND t.publication_number = 'FT-' || x.tender_reference)) "
+            "WHERE t.id = ANY(:ids)"), {"ids": ids}).fetchall():
+        out.setdefault(tid, []).append(f"{base.rstrip('/')}/api/v2/funding/ft-calls-for-tenders/{fid}")
+    return out
 
 
 async def tenders_page(
@@ -662,7 +689,8 @@ async def tenders_page(
         .offset((page - 1) * limit).limit(limit).all()
     )
     converted = page_amounts_eur(db, rows, **_TED_AMOUNT)
-    data = [tender_item(r, converted) for r in rows]
+    same = ted_same_as(db, rows, str(request.base_url))
+    data = [tender_item(r, converted, same) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from, updated_to=updated_to)
@@ -703,7 +731,7 @@ GET /api/v1/tenders?buyer_country=BE&contract_nature=services
 ```
 
 **You get back**
-A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `contracting_authority`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `deadline`, `documents_url`, `has_lots`, `lot_count`, `summary`, `sme_suitability_score`, `status`, plus `public_url`, `document_date` and `updated_date`. The older names stay beside them, marked legacy in the schema: `official_name` (= `contracting_authority`), `submission_deadline` (= `deadline`), `publication_date` (= `document_date`), `ted_url` (= `public_url`), `updated_at` (= `updated_date`) and `last_synced_at` (when Brubru last re-read the notice).
+A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `contracting_authority`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `deadline`, `documents_url`, `has_lots`, `lot_count`, `summary`, `sme_suitability_score`, `status`, plus `public_url`, `document_date` and `updated_date`. `source` is `ted` for a TED notice and `ft_portal` for an EU institution's Funding & Tenders Portal notice copied into this list for the Tenderator (306 on 29 Oct 2026; they leave this list on the legacy date); `same_as` links the same notice on `/api/v2/funding/ft-calls-for-tenders`, so a client reading both lists can keep one. The older names stay beside them, marked legacy in the schema: `official_name` (= `contracting_authority`), `submission_deadline` (= `deadline`), `publication_date` (= `document_date`), `ted_url` (= `public_url`), `updated_at` (= `updated_date`) and `last_synced_at` (when Brubru last re-read the notice).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publishes daily by definition (the "Daily" in the name). Backed by `backend/scripts/backfill_tenders_description.py`.""",
@@ -762,6 +790,7 @@ A single `TenderItem` (same shape as the list endpoint's `data[i]`), or HTTP 404
 Same as the list endpoint — daily 04:00 UTC sync from ted.europa.eu.""",
 )
 async def get_tender_detail(
+    request: Request,
     tender_id: int,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -775,21 +804,4 @@ async def get_tender_detail(
             "id": str(tender_id),
         })
     converted = page_amounts_eur(db, [r], **_TED_AMOUNT)
-    return TenderItem(
-        id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
-        form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
-        official_name=r.official_name, buyer_country=r.buyer_country,
-        buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
-        procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
-        cpv_main=r.cpv_main, contract_nature=r.contract_nature,
-        estimated_value=r.estimated_value, estimated_value_currency=r.estimated_value_currency or "EUR",
-        publication_date=r.publication_date, submission_deadline=r.submission_deadline,
-        has_lots=bool(r.has_lots), lot_count=r.lot_count, ted_url=r.ted_url, documents_url=r.documents_url,
-        summary=r.summary or cut_summary(r.description), sme_suitability_score=r.sme_suitability_score,
-        amount_eur=item_amount_eur(r.estimated_value, r.estimated_value_currency, converted, r.id),
-        status=r.status, last_synced_at=r.last_synced_at, updated_at=r.updated_at,
-        public_url=r.ted_url, document_date=r.publication_date,
-        creation_date=getattr(r, "first_seen", None) or getattr(r, "created_at", None),
-        updated_date=row_updated(r),
-        **dict(zip(("body_txt", "body_html"), _tender_body(r))),
-    )
+    return tender_item(r, converted, ted_same_as(db, [r], str(request.base_url)))

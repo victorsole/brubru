@@ -19,6 +19,7 @@ same item, field for field, as on its own list, and `self` opens it there.
 from __future__ import annotations
 
 from datetime import date, datetime, time
+from types import SimpleNamespace
 from typing import Any, Dict, List, Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -228,11 +229,9 @@ def _same_as(db: Session, rows, base: str, routes: dict) -> Dict[tuple, List[str
     ted_ids = [int(r.rid) for r in rows if r.src == "ted"]
     ft_ids = [r.rid for r in rows if r.src == "ft_tender"]
     call_ids = [r.rid for r in rows if r.src == "ft_call"]
-    if ted_ids:
-        for tid, fid in db.execute(text(
-                "SELECT t.id, x.id FROM tenders t JOIN ft_calls_for_tenders x ON x.tender_reference = t.publication_number "
-                "AND x.source_url LIKE '%ted.europa.eu%' WHERE t.id = ANY(:ids)"), {"ids": ted_ids}).fetchall():
-            out.setdefault(("ted", str(tid)), []).append(base + _ITEM_PATHS["ft_tender"].format(fid))
+    if ted_ids:      # the TED list's own lookup (/tenders carries the same same_as)
+        for tid, urls in ted.ted_same_as(db, [SimpleNamespace(id=i) for i in ted_ids], base).items():
+            out[("ted", str(tid))] = urls
     if ft_ids:
         for fid, tid in db.execute(text(
                 "SELECT x.id, t.id FROM ft_calls_for_tenders x JOIN tenders t ON t.publication_number = 'FT-' || x.tender_reference "

@@ -67,7 +67,7 @@ GET /api/v2/funding/tenders?buyer_country=BE&contract_nature=services
 ```
 
 **You get back**
-A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `contracting_authority`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `deadline`, `documents_url`, `has_lots`, `lot_count`, `summary`, `sme_suitability_score`, `status`, plus `public_url`, `document_date` and `updated_date`. The older names stay beside them, marked legacy in the schema: `official_name` (= `contracting_authority`), `submission_deadline` (= `deadline`), `publication_date` (= `document_date`), `ted_url` (= `public_url`), `updated_at` (= `updated_date`) and `last_synced_at` (when Brubru last re-read the notice).
+A `PaginatedResponse[TenderItem]` envelope. Each item carries `publication_number`, `notice_id`, `form_type`, `notice_subtype`, `title`, `description`, `contracting_authority`, `buyer_country`, `buyer_legal_type`, `buyer_level`, `procedure_type`, `cpv_codes`, `cpv_main`, `contract_nature`, `estimated_value` + `estimated_value_currency`, `deadline`, `documents_url`, `has_lots`, `lot_count`, `summary`, `sme_suitability_score`, `status`, plus `public_url`, `document_date` and `updated_date`. `source` is `ted` for a TED notice and `ft_portal` for an EU institution's Funding & Tenders Portal notice copied into this list for the Tenderator (306 on 29 Oct 2026; they leave this list on the legacy date); `same_as` links the same notice on `/api/v2/funding/ft-calls-for-tenders`, so a client reading both lists can keep one. The older names stay beside them, marked legacy in the schema: `official_name` (= `contracting_authority`), `submission_deadline` (= `deadline`), `publication_date` (= `document_date`), `ted_url` (= `public_url`), `updated_at` (= `updated_date`) and `last_synced_at` (when Brubru last re-read the notice).
 
 **Data freshness**
 Synced once per day at 04:00 UTC (daily tier) from ted.europa.eu — TED publishes daily by definition (the "Daily" in the name). Backed by `backend/scripts/backfill_tenders_description.py`.""",
@@ -143,8 +143,9 @@ A single `TenderItem` (same shape as the list endpoint's `data[i]`), or HTTP 404
 Same as the list endpoint — daily 04:00 UTC sync from ted.europa.eu.""",
 )
 async def get_tender_detail(
+    request: Request,
     tender_id: int,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> TenderItem:
-    return await _v1.get_tender_detail(tender_id=tender_id, user=user, db=db)
+    return await _v1.get_tender_detail(request=request, tender_id=tender_id, user=user, db=db)

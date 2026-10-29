@@ -88,3 +88,38 @@ def test_self_points_at_each_sources_own_list():
         alt = {route, tpl.replace("{}", "{tender_reference:path}"), tpl.replace("{}", "{topic_id:path}"),
                tpl.replace("{}", "{publication_number}"), tpl.replace("{}", "{tender_id}")}
         assert alt & paths, (src, tpl)
+
+
+def test_a_ted_item_says_its_source_and_links_its_copy_on_the_list_and_the_item_route():
+    """O104 (a), Victor 29 Oct 2026: /tenders stays additive until the legacy date: each item says `source`
+    (ted, or ft_portal for a portal notice copied in for the Tenderator) and `same_as` links the copy."""
+    from sqlalchemy.orm import Query
+    from models.tender import Tender
+
+    def row(**kw):
+        r = {c.name: None for c in Tender.__table__.columns}
+        r.update(has_lots=False, cpv_codes=[], title="T", **kw)
+        return SimpleNamespace(**r)
+    rows = [row(id=7, publication_number="FT-abc-CN", source="ft_portal"), row(id=8, publication_number="9-2026", source="ted_api")]
+
+    class Q(Query):
+        def count(self): return len(rows)
+        def all(self): return rows
+        def first(self): return rows[0]
+
+    class Db:
+        def __init__(self): self.sql = []
+        def query(self, *entities): return Q(list(entities))
+        def execute(self, stmt, params=None):
+            self.sql.append((str(stmt), dict(params or {})))
+            pairs = [(7, "0f0e-uuid")] if "ft_calls_for_tenders x" in str(stmt) else []
+            return SimpleNamespace(fetchall=lambda: pairs, all=lambda: [], scalar=lambda: 0)
+    db = Db()
+    listed = _client(db).get("/api/v2/funding/tenders").json()["data"]
+    assert [(i["source"], i["same_as"]) for i in listed] == [
+        ("ft_portal", ["http://testserver/api/v2/funding/ft-calls-for-tenders/0f0e-uuid"]), ("ted", [])]
+    sql = next(q for q, p in db.sql if "ft_calls_for_tenders x" in q)
+    assert "x.tender_reference = t.publication_number AND x.source_url LIKE '%ted.europa.eu%'" in sql
+    assert "t.publication_number = 'FT-' || x.tender_reference" in sql
+    item = _client(db).get("/api/v2/funding/tenders/7").json()
+    assert (item["source"], item["same_as"]) == ("ft_portal", ["http://testserver/api/v2/funding/ft-calls-for-tenders/0f0e-uuid"])
