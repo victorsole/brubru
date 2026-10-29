@@ -12,6 +12,7 @@ from typing import Optional, Tuple
 from fastapi import HTTPException, Query
 
 from api.v1._change_window import SYNC_ORDERS, sql_order
+from services.funding.shared_fields import MAX_AMOUNT_DOC, MIN_AMOUNT_DOC
 
 INCLUDE_BODY_DOC = "Return body_txt / body_html on every item of the list (default true)."
 
@@ -59,6 +60,14 @@ def published_sql(where: list, params: dict, window: Tuple[Optional[date], Optio
     if end:
         where.append(f"{column} < CAST(:published_to AS date) + 1")
         params["published_to"] = end
+
+
+def amount_range(
+    min_amount_eur: Optional[float] = Query(None, ge=0, description=MIN_AMOUNT_DOC),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description=MAX_AMOUNT_DOC),
+) -> Tuple[Optional[float], Optional[float]]:
+    """The amount range every funding list with an amount takes (a FastAPI dependency; Phase 2 step 6b)."""
+    return min_amount_eur, max_amount_eur
 
 
 ORDERS = ("recent", "oldest")

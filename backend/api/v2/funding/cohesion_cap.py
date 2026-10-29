@@ -23,8 +23,8 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
-from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
-from services.funding.shared_fields import FUND_NAMES
+from ._standard import ORDERS_DOC, amount_range, published_sql, published_window, standard_order
+from services.funding.shared_fields import FUND_NAMES, amount_range_sql
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -97,6 +97,7 @@ To see how much {fund_code} money each Member State receives under the Common Ag
 **Input**
 - `ms` — Member State ISO code (e.g. `FR`, `ES`, `PL`).
 - `q` — substring on the body.
+- `min_amount_eur`, `max_amount_eur` — the total paid in euros (`amount_eur`) at least / at most; `order=amount` (the default) lists the largest first.
 - `limit` (default 50, max 200), `page` (1-indexed).
 
 **Try it**
@@ -121,6 +122,7 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
         created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
         published: tuple = Depends(published_window),
+        amounts: tuple = Depends(amount_range),
         order: Optional[str] = Query(None, description=f"amount: the largest total first (default) | {ORDERS_DOC}"),
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
@@ -144,6 +146,7 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
             where.append("body_txt ILIKE :q"); params["q"] = f"%{q}%"
         sql_window(where, params, window, "created_at", "updated_at")
         published_sql(where, params, published, "document_date")
+        amount_range_sql(where, params, amounts[0], amounts[1], "total_eur")   # amount_eur (step 6b)
         where_sql = " AND ".join(where)
         order_sql = standard_order(order, "total_eur DESC NULLS LAST, ms, id", published="document_date",
                                    created="created_at", updated="updated_at", amount="total_eur DESC NULLS LAST, ms, id")

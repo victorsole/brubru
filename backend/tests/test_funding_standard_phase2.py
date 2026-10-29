@@ -3,8 +3,10 @@
 Read from the app's own route table (the OpenAPI it serves), so a list added later is checked too.
 """
 import pathlib
+import re
 import sys
 
+import pytest
 from fastapi import FastAPI
 
 BACKEND = pathlib.Path(__file__).resolve().parents[1]
@@ -162,11 +164,14 @@ from sqlalchemy.dialects import postgresql  # noqa: E402
 from sqlalchemy.orm import Query  # noqa: E402
 
 COMPILED = []
+COMPILED_PARAMS = []   # the bound values of each statement in COMPILED, in the same order
 
 
 class _CapturingQuery(Query):
     def _record(self):
-        COMPILED.append(str(self.statement.compile(dialect=postgresql.dialect())))
+        compiled = self.statement.compile(dialect=postgresql.dialect())
+        COMPILED.append(str(compiled))
+        COMPILED_PARAMS.append(dict(compiled.params))
 
     def count(self):
         self._record()
@@ -185,6 +190,7 @@ class _OrmDb(_Db):
 def _orm_get(path, params):
     from api.v2.funding import router as funding
     COMPILED.clear()
+    COMPILED_PARAMS.clear()
     r = _client(funding, _OrmDb()).get(path, params=params)
     return r, list(COMPILED)
 
@@ -218,7 +224,10 @@ def test_the_funded_projects_list_takes_programme_country_the_windows_and_the_or
     assert "ORDER BY CASE WHEN (CURRENT_DATE >= date(ft_funded_projects.published_at))" in page_sql and "DESC NULLS LAST" in page_sql
     r, sql = _orm_get("/api/v2/funding/ft-funded-projects", {})
     assert "ORDER BY ft_funded_projects.start_date DESC NULLS LAST, ft_funded_projects.id ASC" in sql[1]   # unchanged default
-    assert _orm_get("/api/v2/funding/ft-funded-projects", {"order": "amount"})[0].status_code == 400
+    # order=amount since step 6b (the largest EU contribution first); another order is still refused
+    r, sql = _orm_get("/api/v2/funding/ft-funded-projects", {"order": "amount"})
+    assert r.status_code == 200 and "ORDER BY (CASE WHEN upper(btrim(cost_currency)) = 'EUR' THEN (eu_contribution)::numeric END) DESC NULLS LAST" in sql[1]
+    assert _orm_get("/api/v2/funding/ft-funded-projects", {"order": "title"})[0].status_code == 400
 
 
 def test_the_calls_for_proposals_take_programme_as_framework_programme():
@@ -239,7 +248,9 @@ def test_the_funding_opportunities_take_the_windows_and_the_orders():
     assert "ORDER BY ft_calls_for_proposals.first_seen_at ASC, ft_calls_for_proposals.id ASC" in sql[1]
     r, sql = _orm_get("/api/v2/funding/funding-opportunities", {})
     assert "ORDER BY ft_calls_for_proposals.deadline DESC NULLS LAST, ft_calls_for_proposals.id DESC" in sql[1]   # unchanged default
-    assert _orm_get("/api/v2/funding/funding-opportunities", {"order": "amount"})[0].status_code == 400
+    r, sql = _orm_get("/api/v2/funding/funding-opportunities", {"order": "amount"})     # step 6b
+    assert r.status_code == 200 and "ORDER BY (CASE WHEN upper(btrim(budget_currency)) = 'EUR' THEN (indicative_budget)::numeric END) DESC NULLS LAST" in sql[1]
+    assert _orm_get("/api/v2/funding/funding-opportunities", {"order": "title"})[0].status_code == 400
 
 
 def test_the_tender_awards_take_country_and_the_amount_range():
@@ -275,7 +286,9 @@ def test_the_startup_and_entrepreneur_lists_take_the_publication_window_and_the_
     assert "ft_calls_for_proposals.published_at <= " in sql[0]
     assert "ORDER BY ft_calls_for_proposals.published_at ASC NULLS LAST" in sql[1]
     for path in ("/api/v2/funding/startups", "/api/v2/funding/entrepreneur-instruments"):
-        assert _orm_get(path, {"order": "amount"})[0].status_code == 400, path
+        r, sql = _orm_get(path, {"order": "amount"})                                   # step 6b
+        assert r.status_code == 200 and "THEN (indicative_budget)::numeric END) DESC NULLS LAST" in sql[1], path
+        assert _orm_get(path, {"order": "title"})[0].status_code == 400, path
 
 
 def test_the_fts_lists_take_a_country_code_the_amount_range_and_the_publication_window():
@@ -752,3 +765,74 @@ def test_the_sql_budget_status_has_a_branch_for_every_word_the_python_one_maps()
     assert "IN ('accepted', 'rejected', 'withdrawn') THEN lower(btrim(status))" in sql
     assert "IN ('under assessment', 'under_assessment') THEN 'under_assessment'" in sql
     assert all(f"'{w}'" in sql for w in BUDGET_STATUSES)
+
+
+# Step 6b (29 Oct 2026): min_amount_eur / max_amount_eur on every list with an amount, on the figure the
+# list serves as amount_eur (converted at the ECB rate where its items hold other currencies).
+_NO_AMOUNT = re.compile(r"/(\w[\w-]*-(tenders|calls|grants)|ft-news|ft-events|programmes|partner-announcements|"
+                        r"innovation-fund|justice|[\w-]+/outcomes)$")
+
+
+def test_every_funding_list_with_an_amount_takes_the_euro_range_and_no_other_does_without_a_reason():
+    from api.v2.funding import router
+    spec = _spec(router)
+    items, _files = _lists(spec)
+    without = []
+    for path in items:
+        names = {p["name"] for p in spec["paths"][path]["get"].get("parameters", [])}
+        assert ("min_amount_eur" in names) == ("max_amount_eur" in names), path
+        if "min_amount_eur" not in names:
+            without.append(path)
+    # agency notices, news, events, indicators, the programme taxonomy and announcements state no amount
+    assert [p for p in without if not _NO_AMOUNT.search(p)] == []
+    for path in ("/api/v2/funding/tenders", "/api/v2/funding/ft-calls-for-tenders", "/api/v2/funding/ft-calls-for-proposals",
+                 "/api/v2/funding/funding-opportunities", "/api/v2/funding/startups", "/api/v2/funding/entrepreneur-instruments",
+                 "/api/v2/funding/ft-funded-projects", "/api/v2/funding/ft-cascade-calls", "/api/v2/funding/erdf",
+                 "/api/v2/funding/eagf", "/api/v2/funding/eusf", "/api/v2/funding/all", "/api/v2/funding/tender-awards"):
+        assert path in items and path not in without, path
+
+
+@pytest.mark.parametrize("path, fragment", [
+    ("/api/v2/funding/tenders", "AT TIME ZONE 'Europe/Brussels')::date) - 7 ORDER BY r.rate_date DESC LIMIT 1), 2) END) >= "),
+    ("/api/v2/funding/ft-calls-for-tenders", "AT TIME ZONE 'UTC') AT TIME ZONE 'Europe/Brussels')::date) - 7 ORDER BY r.rate_date DESC LIMIT 1), 2) END) >= "),
+    ("/api/v2/funding/ft-calls-for-proposals", "(CASE WHEN upper(btrim(budget_currency)) = 'EUR' THEN (indicative_budget)::numeric END) >= "),
+    ("/api/v2/funding/funding-opportunities", "(CASE WHEN upper(btrim(budget_currency)) = 'EUR' THEN (indicative_budget)::numeric END) >= "),
+    ("/api/v2/funding/startups", "(CASE WHEN upper(btrim(budget_currency)) = 'EUR' THEN (indicative_budget)::numeric END) >= "),
+    ("/api/v2/funding/entrepreneur-instruments", "(CASE WHEN upper(btrim(budget_currency)) = 'EUR' THEN (indicative_budget)::numeric END) >= "),
+    ("/api/v2/funding/ft-funded-projects", "(CASE WHEN upper(btrim(cost_currency)) = 'EUR' THEN (eu_contribution)::numeric END) >= "),
+])
+def test_an_orm_list_filters_and_orders_on_its_own_amount_in_euros(path, fragment):
+    r, sql = _orm_get(path, {"min_amount_eur": 1000, "max_amount_eur": 5000, "order": "amount"})
+    assert r.status_code == 200, r.text
+    count_sql, page_sql = sql
+    assert fragment in count_sql and fragment.replace(">= ", "<= ") in count_sql, path
+    # the values the caller sent reach the query (a v1 route called without them binds its Query default)
+    assert (COMPILED_PARAMS[0].get("min_amount_eur"), COMPILED_PARAMS[0].get("max_amount_eur")) == (1000, 5000), path
+    r, sql = _orm_get(path, {})
+    assert "min_amount_eur" not in sql[0] and "max_amount_eur" not in sql[0], path
+    table = re.search(r"FROM (\w+)", page_sql).group(1)
+    assert re.search(rf"ORDER BY \(CASE WHEN .* END\) DESC NULLS LAST, {table}\.id DESC", page_sql), path
+
+
+@pytest.mark.parametrize("path, expr, order", [
+    ("/api/v2/funding/erdf", "total", "ORDER BY total DESC NULLS LAST, cci, id"),
+    ("/api/v2/funding/eagf", "total_eur", "ORDER BY total_eur DESC NULLS LAST, ms, id"),
+    ("/api/v2/funding/eusf", "round(eusf_grant_paid_meur * 1000000)", "ORDER BY eusf_grant_paid_meur DESC NULLS LAST"),
+    ("/api/v2/funding/all", "amount_eur", "ORDER BY amount_eur DESC NULLS LAST, id DESC, item_type"),
+    ("/api/v2/funding/ft-cascade-calls", "2) END)", "2) END) DESC NULLS LAST, id DESC LIMIT"),
+])
+def test_a_sql_list_filters_on_its_own_amount_in_euros(path, expr, order):
+    from api.v2.funding import router as funding
+    db = _Db()
+    r = _client(funding, db).get(path, params={"min_amount_eur": 1000, "max_amount_eur": 5000, "order": "amount"})
+    assert r.status_code == 200, r.text
+    sql, params = db.sql[0]
+    assert f"{expr} >= :min_amount_eur" in sql and f"{expr} <= :max_amount_eur" in sql, path
+    assert (params["min_amount_eur"], params["max_amount_eur"]) == (1000, 5000)
+    page_sql = next(s for s, _ in db.sql if "LIMIT :limit" in s)
+    assert order in page_sql, (path, page_sql[-200:])
+
+
+def test_a_negative_amount_bound_is_refused():
+    from api.v2.funding import router as funding
+    assert _client(funding, _Db()).get("/api/v2/funding/erdf", params={"min_amount_eur": -1}).status_code == 422

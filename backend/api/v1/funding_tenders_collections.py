@@ -43,7 +43,8 @@ from ._envelope import PaginatedResponse, build_envelope
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
 from services.funding.shared_fields import (
-    AMOUNT_EUR_RULE, brussels_day, cut_summary, eur, item_amount_eur, legacy, page_amounts_eur, with_body_names,
+    AMOUNT_EUR_RULE, MAX_AMOUNT_DOC, MIN_AMOUNT_DOC, amount_eur_sql, amount_range_orm, brussels_day, cut_summary, eur,
+    eur_sql, item_amount_eur, legacy, page_amounts_eur, with_body_names,
 )
 
 
@@ -88,11 +89,21 @@ class FtCallProposalItem(BaseModel):
     updated_date: Optional[datetime] = Field(None, description="When this row's content last changed in Brubru (a re-sync that finds the same content does not move it).")
 
 
-def _call_order(model, order: str):
-    """ORDER BY for the calls lists: a sync order, publication, or (default) deadline."""
+# Each list's amount_eur in SQL, for min_amount_eur / max_amount_eur and order=amount (Phase 2 step 6b):
+# a call's budget and a project's contribution as eur() shows them (all in euros), a tender's value
+# converted at the ECB rate (_FT_TENDER_AMOUNT below).
+_CALL_EUR = eur_sql("indicative_budget", "budget_currency")
+_PROJECT_EUR = eur_sql("eu_contribution", "cost_currency")
+
+
+def _call_order(model, order: str, amount_sql: Optional[str] = None):
+    """ORDER BY for the calls lists: a sync order, publication, amount (the largest first), or (default)
+    deadline."""
     sync = orm_order(order, model.first_seen_at, model.content_updated_at, model.id)
     if sync:
         return sync
+    if order == "amount" and amount_sql:
+        return (text(f"{amount_sql} DESC NULLS LAST"), model.id.desc())
     if order in ("recent", "published_desc"):
         return (model.published_at.desc().nullslast(), model.id.desc())
     if order == "oldest":
@@ -159,7 +170,8 @@ For consultancies, universities, research orgs, and SMEs looking for non-procure
 - `published_from`, `published_to`: date the call was published on the portal.
 - `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
 - `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
-- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `updated_desc`, `created_asc`, `created_desc`.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `amount`, `updated_desc`, `created_asc`, `created_desc`.
+- `min_amount_eur`, `max_amount_eur` — `amount_eur` at least / at most, in euros (an item with no euro figure is left out); `order=amount` lists the largest first.
 - `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -190,8 +202,10 @@ async def list_calls_for_proposals(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
-                       description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|amount|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | amount (the largest amount_eur first) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    min_amount_eur: Optional[float] = Query(None, ge=0, description=MIN_AMOUNT_DOC),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description=MAX_AMOUNT_DOC),
     limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -221,13 +235,14 @@ async def list_calls_for_proposals(
         filters.append(FtCallForProposals.deadline <= datetime.combine(deadline_to, time.max))
     if filters:
         query = query.filter(and_(*filters))
+    query = amount_range_orm(query, min_amount_eur, max_amount_eur, _CALL_EUR)
 
     total = query.count()
     rows = (
         # Default: most recent deadlines first (2026 + open calls surface before
         # historic closed calls). Partners exploring the endpoint should land
         # on current opportunities, not on calls that closed a decade ago.
-        stable(query.order_by(*_call_order(FtCallForProposals, order)))
+        stable(query.order_by(*_call_order(FtCallForProposals, order, _CALL_EUR)))
         .offset((page - 1) * limit).limit(limit).all()
     )
     return build_envelope(with_body_names(db, [_proposal_to_item(r, body_threshold=body_threshold) for r in rows]), total=total, page=page, limit=limit,
@@ -327,6 +342,7 @@ class FtCallTenderItem(BaseModel):
 # step 6). published_at is a timestamp without time zone holding UTC.
 _FT_TENDER_AMOUNT = dict(table="ft_calls_for_tenders", key="tender_reference", amount="estimated_value",
                          currency="value_currency", day=brussels_day("published_at", "utc_timestamp"))
+_FT_TENDER_EUR = amount_eur_sql(_FT_TENDER_AMOUNT["amount"], _FT_TENDER_AMOUNT["currency"], _FT_TENDER_AMOUNT["day"])
 
 
 def _tender_to_item(
@@ -403,7 +419,8 @@ For service providers, consultancies, and contractors bidding on EU institutiona
 - `published_from`, `published_to`: date the call was published on the portal.
 - `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
 - `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
-- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `updated_desc`, `created_asc`, `created_desc`.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `amount`, `updated_desc`, `created_asc`, `created_desc`.
+- `min_amount_eur`, `max_amount_eur` — `amount_eur` at least / at most, in euros (an item with no euro figure is left out); `order=amount` lists the largest first.
 - `limit` (default 100, max 500), `page` (1-indexed).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -434,8 +451,10 @@ async def list_calls_for_tenders(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
-                       description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|amount|updated_asc|updated_desc|created_asc|created_desc)$",
+                       description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | amount (the largest amount_eur first) | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    min_amount_eur: Optional[float] = Query(None, ge=0, description=MIN_AMOUNT_DOC),
+    max_amount_eur: Optional[float] = Query(None, ge=0, description=MAX_AMOUNT_DOC),
     limit: int = Query(100, ge=1, le=500, description="Items per page (default 100, max 500)."),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
@@ -467,12 +486,13 @@ async def list_calls_for_tenders(
         filters.append(FtCallForTenders.deadline <= datetime.combine(deadline_to, time.max))
     if filters:
         query = query.filter(and_(*filters))
+    query = amount_range_orm(query, min_amount_eur, max_amount_eur, _FT_TENDER_EUR)
 
     total = query.count()
     rows = (
         # Default: most recent deadlines first (2025-2026 published-at lines
         # up well; partners want active tenders, not historic ones).
-        stable(query.order_by(*_call_order(FtCallForTenders, order)))
+        stable(query.order_by(*_call_order(FtCallForTenders, order, _FT_TENDER_EUR)))
         .offset((page - 1) * limit).limit(limit).all()
     )
     converted = page_amounts_eur(db, rows, **_FT_TENDER_AMOUNT)
@@ -694,13 +714,14 @@ _PROJECT_DATE_SQL = case(
 
 def _project_order(order: Optional[str]):
     """The list's order: the start date, newest first (default) | recent | oldest (the document date) |
-    a sync order (first recorded, last changed)."""
+    amount (the largest EU contribution first) | a sync order (first recorded, last changed)."""
     sync = orm_order(order, FtFundedProject.scraped_at, FtFundedProject.last_updated, FtFundedProject.id) if order else None
     if sync:
         return sync
     return {
         "recent": (_PROJECT_DATE_SQL.desc().nullslast(), FtFundedProject.id.desc()),
         "oldest": (_PROJECT_DATE_SQL.asc().nullslast(), FtFundedProject.id.asc()),
+        "amount": (text(f"{_PROJECT_EUR} DESC NULLS LAST"), FtFundedProject.id.desc()),
     }.get(order, (FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc()))
 
 
@@ -730,6 +751,8 @@ async def funded_projects_page(
     published_from: Optional[date] = None,
     published_to: Optional[date] = None,
     order: Optional[str] = None,
+    min_amount_eur: Optional[float] = None,
+    max_amount_eur: Optional[float] = None,
 ) -> PaginatedResponse[FtFundedProjectItem]:
     query = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
     filters = []
@@ -780,6 +803,7 @@ async def funded_projects_page(
         filters.append(_PROJECT_DATE_SQL <= published_to)
     if filters:
         query = query.filter(and_(*filters))
+    query = amount_range_orm(query, min_amount_eur, max_amount_eur, _PROJECT_EUR)
 
     total = query.count()
     rows = (

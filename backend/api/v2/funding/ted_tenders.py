@@ -22,12 +22,12 @@ from api.v1._deps import api_user_with_rate_limit  # noqa: F401
 from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import w5_endpoints as _v1
 from api.v1.w5_endpoints import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
-from ._standard import include_body_param, without_bodies
+from ._standard import amount_range, include_body_param, without_bodies
 from api.v1._change_window import SYNC_ORDERS, validate_window
 
 # The tender vocabulary of the funding standard; stored today: open, closed, forthcoming (28 Oct 2026).
 _STATUSES = ("forthcoming", "open", "closed", "unknown", "cancelled")
-_ORDERS = ("recent", "oldest", "deadline")
+_ORDERS = ("recent", "oldest", "deadline", "amount")
 
 
 tenders_router = APIRouter(prefix="/tenders", tags=["v2-funding-tenders"])
@@ -54,6 +54,7 @@ For consultancies / SMEs looking for EU funding opportunities — filter by `cpv
 - `buyer_level` — `local` / `regional` / `national` / `eu` / `international`; `buyer_legal_type` — the eForms code itself (`la`, `ra`, `cga`, `eu-ins-bod-ag` ...).
 - `currency` — ISO 4217 code of the estimated value; `min_value` / `max_value` compare in the notice's own currency, so add `currency=EUR` to compare euros with euros.
 - `min_value`, `max_value` — estimated-value range, in the notice's own currency.
+- `min_amount_eur`, `max_amount_eur` — the value in euros (`amount_eur`, converted at the ECB reference rate of the publication day), at least / at most, across every currency; a notice with no euro figure is left out. `order=amount` lists the largest first.
 - `deadline_from`, `deadline_to` — submission_deadline window.
 - `published_from`, `published_to` — publication date window.
 - `updated_from`, `updated_to` — incremental sync.
@@ -96,7 +97,8 @@ async def list_tenders(
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Upper bound of the incremental-sync window, on the same change date as updated_from. A bare date covers that whole day."),
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
-    order: Optional[str] = Query(None, description="recent (default) | oldest | deadline (the nearest first) | updated_asc | updated_desc | created_asc | created_desc."),
+    order: Optional[str] = Query(None, description="recent (default) | oldest | deadline (the nearest first) | amount (the largest value in euros first) | updated_asc | updated_desc | created_asc | created_desc."),
+    amounts: tuple = Depends(amount_range),
     since: Optional[date] = Query(None, include_in_schema=False),
     until: Optional[date] = Query(None, include_in_schema=False),
     from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
@@ -113,7 +115,7 @@ async def list_tenders(
         raise HTTPException(status_code=400, detail=f"order must be one of {list(_ORDERS) + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
     published_from, published_to = published_from or since or from_, published_to or until or to
-    return without_bodies(await _v1.tenders_page(request=request, q=q, buyer_country=buyer_country or country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, user=user, db=db, status=status, created_from=window["created_from"], created_to=window["created_to"], order=order), include_body)
+    return without_bodies(await _v1.tenders_page(request=request, q=q, buyer_country=buyer_country or country, procedure_type=procedure_type, contract_nature=contract_nature, cpv_main=cpv_main, cpv_code=cpv_code, form_type=form_type, notice_subtype=notice_subtype, buyer_level=buyer_level, buyer_legal_type=buyer_legal_type, currency=currency, min_value=min_value, max_value=max_value, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, user=user, db=db, status=status, created_from=window["created_from"], created_to=window["created_to"], order=order, min_amount_eur=amounts[0], max_amount_eur=amounts[1]), include_body)
 
 
 @tenders_router.get(

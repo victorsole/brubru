@@ -23,7 +23,8 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
 from ..economy_endpoints import (EconomyItem, FundingEconomyItem, _row_to_item, _LIST_COLS, _DETAIL_COLS, _ORDER_SQL,
                                   _ORDERS, build_envelope)
-from services.funding.shared_fields import budget_status_sql, with_body_names
+from services.funding.shared_fields import amount_range_sql, budget_status_sql, with_body_names
+from ._standard import amount_range
 from .cohesion_cap import SHARED_SQL as PAYMENT_SQL
 from .cohesion_eusf import SHARED_SQL as SOLIDARITY_SQL
 from .cohesion_finances import SHARED_SQL as ALLOCATION_SQL
@@ -67,6 +68,10 @@ def _funding_item(r, include_body: bool) -> FundingEconomyItem:
     return FundingEconomyItem(**_row_to_item(r, with_body=include_body).model_dump(),
                               status=r.status, amount_eur=r.amount_eur)
 
+
+# The economy folders' orders plus amount (the largest amount_eur first; Phase 2 step 6b).
+_ALL_ORDERS = set(_ORDERS) | {"amount"}
+_ALL_ORDER_SQL = {**_ORDER_SQL, "amount": "amount_eur DESC NULLS LAST, id DESC"}
 
 _FUNDING_TYPES = ("tender", "grant", "eoi_call", "startup_funding")
 # Plus the cohesion / structural-fund allocations (eu_cohesion_finances), unioned in.
@@ -123,7 +128,7 @@ One feed of **every EU fund** Brubru covers — the decentralised agency funding
 "Show me everything across EU funding", whether an agency tender, a Justice/Innovation-Fund grant call, or a Member State's cohesion-fund allocation. Filter by `item_type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`, `just`, `innovfund`), `status`, `q` (free text), and `published_from`/`published_to` on the item's date.
 
 **Input**
-`item_type` (`type` is its legacy name), `body`, `status`, `q` (free text), `published_from`/`published_to` (the item's `document_date`; `since`, `until`, `from`, `to` are aliases), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `order` (page a change window with `updated_asc`), `page`, `limit` (default 50, max 200), `include_body` (default true).
+`item_type` (`type` is its legacy name), `body`, `status`, `q` (free text), `published_from`/`published_to` (the item's `document_date`; `since`, `until`, `from`, `to` are aliases), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `min_amount_eur`/`max_amount_eur` (`amount_eur` at least / at most, in euros; an item with no euro figure, such as an agency's notice, is left out), `order` (`amount` lists the largest first; page a change window with `updated_asc`), `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -161,7 +166,8 @@ async def funding_all(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("recent", description="recent | oldest | title | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
+    order: str = Query("recent", description="recent | oldest | title | amount (the largest amount_eur first) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
+    amounts: tuple = Depends(amount_range),
     page: int = Query(1, ge=1),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = Query(
@@ -172,8 +178,8 @@ async def funding_all(
         ),
     ),
 ):
-    if order not in _ORDERS and order not in SYNC_ORDERS:
-        raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ORDERS) + list(SYNC_ORDERS)}")
+    if order not in _ALL_ORDERS and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {sorted(_ALL_ORDERS) + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
     params = {"ftypes": list(_FUNDING_TYPES), "limit": limit, "offset": (page - 1) * limit}
     where: list[str] = []
@@ -193,6 +199,7 @@ async def funding_all(
         where.append("document_date >= :since"); params["since"] = since
     if until:
         where.append("document_date < CAST(:until AS date) + 1"); params["until"] = until
+    amount_range_sql(where, params, amounts[0], amounts[1], "amount_eur")
     # Every side of the union projects its table's own creation_date and updated_at (filled on
     # all 982 + 203 + 56 cohesion, Solidarity Fund and CAP rows and on every economy_items row).
     sql_window(where, params, window, "creation_date", "updated_at")
@@ -205,7 +212,7 @@ async def funding_all(
     rows = db.execute(
         text(f"{_union_cte(include_body)} SELECT {_DETAIL_COLS if include_body else _LIST_COLS}, status, amount_eur "
              f"FROM all_funding{clause} "
-             f"ORDER BY {sql_order(order, 'creation_date', 'updated_at') or _ORDER_SQL[order]}, item_type "
+             f"ORDER BY {sql_order(order, 'creation_date', 'updated_at') or _ALL_ORDER_SQL[order]}, item_type "
              f"LIMIT :limit OFFSET :offset"), params
     ).fetchall()
     base, routes = str(request.base_url).rstrip("/"), _item_routes(request.app)

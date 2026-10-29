@@ -14,7 +14,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field, model_validator
-from sqlalchemy import and_, func, or_
+from sqlalchemy import and_, func, or_, text
 from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
@@ -27,7 +27,8 @@ from ._row_dates import row_updated
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 from services.funding.shared_fields import (
-    AMOUNT_EUR_RULE, brussels_day, cut_summary, item_amount_eur, legacy, page_amounts_eur,
+    AMOUNT_EUR_RULE, amount_eur_sql, amount_range_orm, brussels_day, cut_summary, item_amount_eur, legacy,
+    page_amounts_eur,
 )
 from ._search import text_match
 from api.v1._date_bounds import UpperBoundDatetime
@@ -509,16 +510,20 @@ def _tender_body(r) -> tuple:
 # A notice's value in euros (amount_eur): at the ECB reference rate of its publication day (Phase 2 step 6).
 _TED_AMOUNT = dict(table="tenders", key="id", amount="estimated_value", currency="estimated_value_currency",
                    day=brussels_day("publication_date", "timestamptz"))
+# The same figure in the query, for min_amount_eur / max_amount_eur and order=amount (step 6b).
+_TED_EUR = amount_eur_sql(_TED_AMOUNT["amount"], _TED_AMOUNT["currency"], _TED_AMOUNT["day"])
 
 
 def _tender_order(order: Optional[str]):
-    """The list's order: recent (default) | oldest | deadline (the nearest first), or a sync order."""
+    """The list's order: recent (default) | oldest | deadline (the nearest first) | amount (the largest
+    value in euros first), or a sync order."""
     sync = orm_order(order, Tender.created_at, Tender.updated_at, Tender.id) if order else None
     if sync:
         return sync
     return {
         "oldest": (Tender.publication_date.asc().nullslast(), Tender.id.asc()),
         "deadline": (Tender.submission_deadline.asc().nullslast(), Tender.id.asc()),
+        "amount": (text(f"{_TED_EUR} DESC NULLS LAST"), Tender.id.desc()),
     }.get(order or "recent", (Tender.publication_date.desc().nullslast(), Tender.id.desc()))
 
 
@@ -551,6 +556,8 @@ async def tenders_page(
     created_from: Optional[datetime] = None,
     created_to: Optional[datetime] = None,
     order: Optional[str] = None,
+    min_amount_eur: Optional[float] = None,
+    max_amount_eur: Optional[float] = None,
 ) -> PaginatedResponse[TenderItem]:
     # The stored eForms XML (57 KB a notice on average) and its parsed copies are never served by
     # the list; loading them sent ~6 MB a page out of the database for nothing (23 Oct 2026).
@@ -618,6 +625,7 @@ async def tenders_page(
             filters.append(cond)
     if filters:
         query = query.filter(and_(*filters))
+    query = amount_range_orm(query, min_amount_eur, max_amount_eur, _TED_EUR)
 
     total = query.count()
     rows = (

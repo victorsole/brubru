@@ -14,7 +14,7 @@ from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field, model_validator
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -33,7 +33,7 @@ from ._envelope import PaginatedResponse, build_envelope
 from api.v1._change_window import orm_order
 from core.identifiers import resolve_row
 from api.v1._pagination import stable
-from services.funding.shared_fields import cut_summary, eur, legacy, with_body_names
+from services.funding.shared_fields import amount_range_orm, cut_summary, eur, eur_sql, legacy, with_body_names
 
 
 # ============================================================================
@@ -317,15 +317,20 @@ def _funding_to_item(
     )
 
 
+# A call's budget as eur() shows it, for min_amount_eur / max_amount_eur and order=amount (step 6b).
+_CALL_EUR = eur_sql("indicative_budget", "budget_currency")
+
+
 def _opportunity_order(model, order: Optional[str]):
     """The list's order: the latest deadline first (default) | recent | oldest (the publication date) |
-    a sync order (first recorded, content changed)."""
+    amount (the largest budget first) | a sync order (first recorded, content changed)."""
     sync = orm_order(order, model.first_seen_at, model.content_updated_at, model.id) if order else None
     if sync:
         return sync
     return {
         "recent": (model.published_at.desc().nullslast(), model.id.desc()),
         "oldest": (model.published_at.asc().nullslast(), model.id.asc()),
+        "amount": (text(f"{_CALL_EUR} DESC NULLS LAST"), model.id.desc()),
     }.get(order, (model.deadline.desc().nullslast(), model.id.desc()))
 
 
@@ -349,6 +354,8 @@ async def funding_opportunities_page(
     published_from: Optional[date] = None,
     published_to: Optional[date] = None,
     order: Optional[str] = None,
+    min_amount_eur: Optional[float] = None,
+    max_amount_eur: Optional[float] = None,
 ) -> PaginatedResponse[FundingItem]:
     model = FtCallForProposals
     query = db.query(model).filter(model.is_test == False)  # noqa: E712
@@ -380,6 +387,7 @@ async def funding_opportunities_page(
         filters.append(model.published_at <= datetime.combine(published_to, time.max))
     if filters:
         query = query.filter(and_(*filters))
+    query = amount_range_orm(query, min_amount_eur, max_amount_eur, _CALL_EUR)
 
     total = query.count()
     rows = (

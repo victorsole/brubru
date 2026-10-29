@@ -151,6 +151,37 @@ def page_amounts_eur(db, rows, *, table: str, key: str, amount: str, currency: s
     return {r.k: (float(r.eur) if r.eur is not None else None) for r in got}
 
 
+def eur_sql(amount: str, currency: str) -> str:
+    """eur() in SQL, for a list whose items show eur(): the amount when its currency is the euro, else
+    null. Its amount filters then compare the figure the item shows."""
+    return f"(CASE WHEN upper(btrim({currency})) = 'EUR' THEN ({amount})::numeric END)"
+
+
+# The amount range every list with an amount takes (Phase 2 step 6b, standard §6), on the expression
+# that gives the list's own amount_eur.
+MIN_AMOUNT_DOC = "amount_eur at least (euros). An item with no euro figure is left out."
+MAX_AMOUNT_DOC = "amount_eur at most (euros). An item with no euro figure is left out."
+AMOUNT_RANGE_DOC = ("`min_amount_eur`, `max_amount_eur`: `amount_eur` at least / at most, in euros (an item with no "
+                    "euro figure is left out); `order=amount` lists the largest first")
+
+
+def amount_range_sql(where: list, params: dict, min_eur, max_eur, expr: str) -> None:
+    """min_amount_eur / max_amount_eur on `expr` for a list written in SQL."""
+    if min_eur is not None:
+        where.append(f"{expr} >= :min_amount_eur"); params["min_amount_eur"] = min_eur
+    if max_eur is not None:
+        where.append(f"{expr} <= :max_amount_eur"); params["max_amount_eur"] = max_eur
+
+
+def amount_range_orm(query, min_eur, max_eur, expr: str):
+    """min_amount_eur / max_amount_eur on `expr` for an ORM query."""
+    if min_eur is not None:
+        query = query.filter(text(f"{expr} >= :min_amount_eur").bindparams(min_amount_eur=min_eur))
+    if max_eur is not None:
+        query = query.filter(text(f"{expr} <= :max_amount_eur").bindparams(max_amount_eur=max_eur))
+    return query
+
+
 def item_amount_eur(amount, currency: Optional[str], converted: Dict, item_key) -> Optional[float]:
     """An item's amount_eur: its amount when in euros, else what page_amounts_eur() read for it."""
     if amount is None:

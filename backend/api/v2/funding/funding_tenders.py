@@ -22,7 +22,7 @@ from api.v1._deps import api_user_with_rate_limit  # noqa: F401
 from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import funding_tenders_collections as _v1
 from api.v1.funding_tenders_collections import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
-from ._standard import include_body_param, without_bodies
+from ._standard import amount_range, include_body_param, without_bodies
 from ._standard import published_window
 from api.v1._change_window import SYNC_ORDERS, validate_window
 
@@ -51,7 +51,8 @@ For consultancies, universities, research orgs, and SMEs looking for non-procure
 - `published_from`, `published_to`: date the call was published on the portal.
 - `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
 - `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
-- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `updated_desc`, `created_asc`, `created_desc`.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `amount`, `updated_desc`, `created_asc`, `created_desc`.
+- `min_amount_eur`, `max_amount_eur` — `amount_eur` at least / at most, in euros (an item with no euro figure is left out); `order=amount` lists the largest first.
 - `limit` (default 50, max 500), `page` (1-indexed), `include_body` (default true).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -83,8 +84,9 @@ async def list_calls_for_proposals(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|amount|updated_asc|updated_desc|created_asc|created_desc)$",
                        description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    amounts: tuple = Depends(amount_range),
     limit: int = Query(50, ge=1, le=500, description="Items per page (default 50; max 500, kept from before the funding standard's 200)."),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
@@ -92,7 +94,7 @@ async def list_calls_for_proposals(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallProposalItem]:
-    return without_bodies(await _v1.list_calls_for_proposals(request=request, framework_programme=framework_programme or programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
+    return without_bodies(await _v1.list_calls_for_proposals(request=request, framework_programme=framework_programme or programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, min_amount_eur=amounts[0], max_amount_eur=amounts[1], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
 
 
 @calls_router.get(
@@ -147,7 +149,8 @@ For service providers, consultancies, and contractors bidding on EU institutiona
 - `published_from`, `published_to`: date the call was published on the portal.
 - `created_from`, `created_to`: when Brubru first recorded the item (ISO date or datetime; a bare date as `_to` covers the whole day).
 - `updated_from`, `updated_to`: when the item's content last changed. A daily re-sync that finds the same content does not move this date, so `updated_from=<yesterday>` returns only what really changed.
-- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `updated_desc`, `created_asc`, `created_desc`.
+- `order=updated_asc` is the order to page an incremental window in (ties broken by `id`). The other orders: `deadline_desc` (default), `recent` (the newest publication first; `published_desc` is its legacy name), `oldest`, `amount`, `updated_desc`, `created_asc`, `created_desc`.
+- `min_amount_eur`, `max_amount_eur` — `amount_eur` at least / at most, in euros (an item with no euro figure is left out); `order=amount` lists the largest first.
 - `limit` (default 50, max 500), `page` (1-indexed), `include_body` (default true).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -179,8 +182,9 @@ async def list_calls_for_tenders(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|updated_asc|updated_desc|created_asc|created_desc)$",
+    order: str = Query("deadline_desc", pattern="^(deadline_desc|recent|oldest|published_desc|amount|updated_asc|updated_desc|created_asc|created_desc)$",
                        description="deadline_desc (default) | recent (the newest publication first; published_desc is its legacy name) | oldest | updated_asc (use for incremental sync) | updated_desc | created_asc | created_desc."),
+    amounts: tuple = Depends(amount_range),
     limit: int = Query(50, ge=1, le=500, description="Items per page (default 50; max 500, kept from before the funding standard's 200)."),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
@@ -188,7 +192,7 @@ async def list_calls_for_tenders(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallTenderItem]:
-    return without_bodies(await _v1.list_calls_for_tenders(request=request, contracting_authority=contracting_authority, status=status, contract_type=contract_nature or contract_type, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
+    return without_bodies(await _v1.list_calls_for_tenders(request=request, contracting_authority=contracting_authority, status=status, contract_type=contract_nature or contract_type, q=q, deadline_from=deadline_from, deadline_to=deadline_to, published_from=published_from, published_to=published_to, created_from=created_from, created_to=created_to, updated_from=updated_from, updated_to=updated_to, order=order, min_amount_eur=amounts[0], max_amount_eur=amounts[1], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db), include_body)
 
 
 @tenders_router.get(
@@ -243,6 +247,7 @@ For research orgs and consultancies doing competitive intelligence on EU funding
 - `organisation` — an organisation in the consortium: its PIC (digits, exact) or part of its name; `role` (coordinator | participant | associatedPartner | thirdParty | partner | internationalPartner) and `participant_country` (ISO-2) apply to that same organisation. Horizon Europe, Horizon 2020 and FP7 projects are matched on their whole consortium; the other programmes' sources name only the coordinator, so there only the coordinator can match.
 - `topic` — the topic code, or its start (`HORIZON-CL5-2026` finds every topic of those calls); `keyword` — part of one of the project's keywords.
 - `start_from`, `end_to` — start-date / end-date window.
+- `min_amount_eur`, `max_amount_eur` — the EU contribution (`amount_eur`) at least / at most, in euros (a project with no euro figure is left out); `order=amount` lists the largest first.
 - `limit` (default 50, max 200), `page` (1-indexed), `include_body` (default true).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -282,7 +287,8 @@ async def list_funded_projects(
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     published: tuple = Depends(published_window),
-    order: Optional[str] = Query(None, description="the start date, newest first (default) | recent | oldest (the document date) | updated_asc | updated_desc | created_asc | created_desc."),
+    order: Optional[str] = Query(None, description="the start date, newest first (default) | recent | oldest (the document date) | amount (the largest EU contribution first) | updated_asc | updated_desc | created_asc | created_desc."),
+    amounts: tuple = Depends(amount_range),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
@@ -290,10 +296,10 @@ async def list_funded_projects(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtFundedProjectItem]:
-    if order is not None and order not in ("recent", "oldest") and order not in SYNC_ORDERS:
-        raise HTTPException(status_code=400, detail=f"order must be one of {['recent', 'oldest'] + list(SYNC_ORDERS)}")
+    if order is not None and order not in ("recent", "oldest", "amount") and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {['recent', 'oldest', 'amount'] + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
-    return without_bodies(await _v1.funded_projects_page(request=request, framework_programme=framework_programme or programme, coordinator_country=coordinator_country or country, type_of_action=type_of_action, status=status, q=q, organisation=organisation, role=role, participant_country=participant_country, topic=topic, keyword=keyword, start_from=start_from, end_to=end_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db, created_from=window["created_from"], created_to=window["created_to"], published_from=published[0], published_to=published[1], order=order), include_body)
+    return without_bodies(await _v1.funded_projects_page(request=request, framework_programme=framework_programme or programme, coordinator_country=coordinator_country or country, type_of_action=type_of_action, status=status, q=q, organisation=organisation, role=role, participant_country=participant_country, topic=topic, keyword=keyword, start_from=start_from, end_to=end_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db, created_from=window["created_from"], created_to=window["created_to"], published_from=published[0], published_to=published[1], order=order, min_amount_eur=amounts[0], max_amount_eur=amounts[1]), include_body)
 
 
 @projects_router.get(

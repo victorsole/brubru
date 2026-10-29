@@ -23,7 +23,7 @@ from api.v1._date_bounds import UpperBoundDatetime  # noqa: F401
 from api.v1._envelope import PaginatedResponse, build_envelope  # noqa: F401
 from api.v1 import infringements_funding as _v1
 from api.v1.infringements_funding import *  # noqa: F401,F403 - reproduce v1's exact namespace for get_type_hints
-from ._standard import include_body_param, without_bodies
+from ._standard import amount_range, include_body_param, without_bodies
 from ._standard import published_window
 from api.v1._change_window import SYNC_ORDERS, validate_window
 
@@ -51,7 +51,8 @@ Only to keep an existing integration working until 23 Oct 2027: it serves the sa
 - `q` — substring on title + short_summary.
 - `deadline_from`, `deadline_to` — deadline window.
 - `published_from`, `published_to` — publication window (`since`, `until`, `from`, `to` are aliases); `created_from`, `created_to` — first recorded by Brubru; `updated_from`, `updated_to` — content changed. The publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first.
-- `order` — the latest deadline first (default) | recent | oldest (the publication date) | updated_asc | updated_desc | created_asc | created_desc.
+- `order` — the latest deadline first (default) | recent | oldest (the publication date) | amount (the largest budget first) | updated_asc | updated_desc | created_asc | created_desc.
+- `min_amount_eur`, `max_amount_eur` — the budget in euros (`amount_eur`) at least / at most (a call with no euro figure is left out).
 - `limit` (default 50, max 200), `page` (1-indexed), `include_body` (default true).
 - `body_threshold` — minimum body chars for `has_body=true`.
 
@@ -80,7 +81,8 @@ async def list_funding_opportunities(
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     published: tuple = Depends(published_window),
-    order: Optional[str] = Query(None, description="the latest deadline first (default) | recent | oldest (the publication date) | updated_asc | updated_desc | created_asc | created_desc."),
+    order: Optional[str] = Query(None, description="the latest deadline first (default) | recent | oldest (the publication date) | amount (the largest budget first) | updated_asc | updated_desc | created_asc | created_desc."),
+    amounts: tuple = Depends(amount_range),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
@@ -88,10 +90,10 @@ async def list_funding_opportunities(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FundingItem]:
-    if order is not None and order not in ("recent", "oldest") and order not in SYNC_ORDERS:
-        raise HTTPException(status_code=400, detail=f"order must be one of {['recent', 'oldest'] + list(SYNC_ORDERS)}")
+    if order is not None and order not in ("recent", "oldest", "amount") and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {['recent', 'oldest', 'amount'] + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
-    return without_bodies(await _v1.funding_opportunities_page(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db, created_from=window["created_from"], created_to=window["created_to"], published_from=(published or (None, None))[0], published_to=(published or (None, None))[1], order=order), include_body)
+    return without_bodies(await _v1.funding_opportunities_page(request=request, programme=programme, status=status, type_of_action=type_of_action, q=q, deadline_from=deadline_from, deadline_to=deadline_to, updated_from=window["updated_from"], updated_to=window["updated_to"], limit=limit, page=page, body_threshold=body_threshold, user=user, db=db, created_from=window["created_from"], created_to=window["created_to"], published_from=(published or (None, None))[0], published_to=(published or (None, None))[1], order=order, min_amount_eur=amounts[0], max_amount_eur=amounts[1]), include_body)
 
 
 @funding_router.get(

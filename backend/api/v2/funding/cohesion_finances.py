@@ -28,8 +28,8 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
-from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
-from services.funding.shared_fields import FUND_NAMES, budget_status, budget_status_filter
+from ._standard import ORDERS_DOC, amount_range, published_sql, published_window, standard_order
+from services.funding.shared_fields import FUND_NAMES, budget_status, budget_status_filter, amount_range_sql
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -120,6 +120,7 @@ To see how much {fund_code} money each Member State and programme is allocated a
 - `ms` — Member State ISO code (e.g. `PL`, `ES`, `DE`).
 - `status` — `adopted`, the standard word; the source's own words (e.g. `Adopted by MS`) still filter, as a substring of `source_status`.
 - `q` — substring on the programme title or the composed body.
+- `min_amount_eur`, `max_amount_eur` — the total EU allocation in euros (`amount_eur`) at least / at most; `order=amount` (the default) lists the largest first.
 - `limit` (default 50, max 200), `page` (1-indexed).
 
 **Try it**
@@ -145,6 +146,7 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
         created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
         published: tuple = Depends(published_window),
+        amounts: tuple = Depends(amount_range),
         order: Optional[str] = Query(None, description=f"amount: the largest allocation first (default) | {ORDERS_DOC}"),
         limit: int = Query(50, ge=1, le=200),
         page: int = Query(1, ge=1),
@@ -170,6 +172,7 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
             where.append("(cci_title ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
         sql_window(where, params, window, "created_at", "updated_at")
         published_sql(where, params, published, "document_date")
+        amount_range_sql(where, params, amounts[0], amounts[1], "total")   # amount_eur (step 6b)
         where_sql = " AND ".join(where)
         order_sql = standard_order(order, "total DESC NULLS LAST, cci, id", published="document_date",
                                    created="created_at", updated="updated_at", amount="total DESC NULLS LAST, cci, id")

@@ -23,7 +23,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import Field
-from sqlalchemy import and_, false, or_
+from sqlalchemy import and_, false, or_, text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -32,11 +32,15 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._body import body_threshold_param
 from api.v1._envelope import PaginatedResponse, build_envelope
-from services.funding.shared_fields import with_body_names
+from services.funding.shared_fields import amount_range_orm, eur_sql, with_body_names
 from api.v1.funding_tenders_collections import FtCallProposalItem, _proposal_to_item
 from api.v1._pagination import stable
 from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, orm_order, orm_window, validate_window
-from ._standard import include_body_param, published_window, without_bodies
+from ._standard import amount_range, include_body_param, published_window, without_bodies
+
+
+# A call's budget as eur() shows it, for min_amount_eur / max_amount_eur and order=amount (step 6b).
+_CALL_EUR = eur_sql("indicative_budget", "budget_currency")
 
 router = APIRouter()
 
@@ -140,7 +144,8 @@ For an accelerator, incubator, business angel or ecosystem builder (like KinEtix
 - `published_from`, `published_to` — the publication window (`since`, `until`, `from`, `to` are aliases). The publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first.
 - `q` — free text over title / description.
 - `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`).
-- `order` — `deadline_desc` (default), `recent` / `oldest` (the publication date), or `updated_asc` to page a change window (also `updated_desc`, `created_asc`, `created_desc`).
+- `order` — `deadline_desc` (default), `recent` / `oldest` (the publication date), `amount` (the largest budget first), or `updated_asc` to page a change window (also `updated_desc`, `created_asc`, `created_desc`).
+- `min_amount_eur`, `max_amount_eur` — the budget in euros (`amount_eur`) at least / at most (a call with no euro figure is left out).
 - `limit` (default 50, max 200), `page`, `include_body` (default true).
 
 **Try it**
@@ -180,7 +185,8 @@ async def entrepreneur_instruments(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("deadline_desc", description="deadline_desc (default) | recent | oldest (the publication date) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
+    order: str = Query("deadline_desc", description="deadline_desc (default) | recent | oldest (the publication date) | amount (the largest budget first) | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
+    amounts: tuple = Depends(amount_range),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = include_body_param(),
     page: int = Query(1, ge=1),
@@ -211,15 +217,17 @@ async def entrepreneur_instruments(
         like = f"%{q}%"
         filters.append((FtCallForProposals.title.ilike(like)) | (FtCallForProposals.description.ilike(like)))
 
-    if order not in ("deadline_desc", "recent", "oldest") and order not in SYNC_ORDERS:
-        raise HTTPException(status_code=400, detail=f"order must be one of {['deadline_desc', 'recent', 'oldest'] + list(SYNC_ORDERS)}")
+    if order not in ("deadline_desc", "recent", "oldest", "amount") and order not in SYNC_ORDERS:
+        raise HTTPException(status_code=400, detail=f"order must be one of {['deadline_desc', 'recent', 'oldest', 'amount'] + list(SYNC_ORDERS)}")
     window = validate_window(created_from, created_to, updated_from, updated_to)
     query = db.query(FtCallForProposals).filter(and_(*filters))
     query = orm_window(query, window, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at)
+    query = amount_range_orm(query, amounts[0], amounts[1], _CALL_EUR)
     # Same columns as /ft-calls-for-proposals, which serves them as creation_date / updated_date.
     sort = (orm_order(order, FtCallForProposals.first_seen_at, FtCallForProposals.content_updated_at, FtCallForProposals.id)
             or {"recent": (FtCallForProposals.published_at.desc().nullslast(), FtCallForProposals.id.desc()),
-                "oldest": (FtCallForProposals.published_at.asc().nullslast(), FtCallForProposals.id.asc())}.get(order)
+                "oldest": (FtCallForProposals.published_at.asc().nullslast(), FtCallForProposals.id.asc()),
+                "amount": (text(f"{_CALL_EUR} DESC NULLS LAST"), FtCallForProposals.id.desc())}.get(order)
             or (FtCallForProposals.deadline.desc().nullslast(), FtCallForProposals.id.desc()))
     total = query.count()
     rows = (

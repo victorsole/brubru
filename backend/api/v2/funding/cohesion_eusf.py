@@ -23,8 +23,8 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._envelope import PaginatedResponse, build_envelope
 from .cohesion_finances import _DataPoints
-from ._standard import ORDERS_DOC, published_sql, published_window, standard_order
-from services.funding.shared_fields import FUND_NAMES, budget_status, budget_status_filter
+from ._standard import ORDERS_DOC, amount_range, published_sql, published_window, standard_order
+from services.funding.shared_fields import FUND_NAMES, budget_status, budget_status_filter, amount_range_sql
 from api.v1._change_window import sql_window, validate_window
 from services.funding.countries import both_styles
 
@@ -102,6 +102,7 @@ To see which disasters the EUSF responded to, in which countries, and how much w
 - `status` — `accepted`, `rejected`, `withdrawn` or `under_assessment`; any other text matches the source's own word (`source_status`) as a substring.
 - `year` — year of occurrence.
 - `q` — substring on the disaster name or body.
+- `min_amount_eur`, `max_amount_eur` — the grant paid in euros (`amount_eur`) at least / at most; `order=amount` (the default) lists the largest first.
 - `limit` (default 50, max 200), `page` (1-indexed).
 
 **Try it**
@@ -129,6 +130,7 @@ async def list_eusf(
     created_from: Optional[datetime] = Query(None, description="First recorded by Brubru on or after (ISO date or datetime, UTC)."),
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     published: tuple = Depends(published_window),
+    amounts: tuple = Depends(amount_range),
     order: Optional[str] = Query(None, description=f"amount: the largest grant paid first (default) | {ORDERS_DOC}"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
@@ -157,6 +159,7 @@ async def list_eusf(
         where.append("(name_of_disaster ILIKE :q OR body_txt ILIKE :q)"); params["q"] = f"%{q}%"
     sql_window(where, params, window, "created_at", "updated_at")
     published_sql(where, params, published, "document_date")
+    amount_range_sql(where, params, amounts[0], amounts[1], "round(eusf_grant_paid_meur * 1000000)")   # amount_eur (step 6b)
     clause = (" WHERE " + " AND ".join(where)) if where else ""
     order_sql = standard_order(order, "eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC, id DESC", published="document_date", created="created_at",
                                updated="updated_at", amount="eusf_grant_paid_meur DESC NULLS LAST, year_of_occurrence DESC, id DESC")

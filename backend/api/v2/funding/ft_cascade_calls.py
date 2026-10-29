@@ -26,7 +26,10 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, sql_window,
                                    validate_window)
 from api.v1._envelope import PaginatedResponse, build_envelope
-from services.funding.shared_fields import AMOUNT_EUR_RULE, amount_eur_sql, brussels_day, cut_summary, with_body_names
+from services.funding.shared_fields import (
+    AMOUNT_EUR_RULE, amount_eur_sql, amount_range_sql, brussels_day, cut_summary, with_body_names,
+)
+from ._standard import amount_range
 
 router = APIRouter()
 
@@ -62,13 +65,14 @@ class CascadeCallItem(BaseModel):
     updated_date: Optional[datetime] = Field(None, description="When the call's content last changed in Brubru; a daily re-read that finds the same call does not move it.")
 
 
+# The budget in euros, at the ECB reference rate of the publication day (Phase 2 step 6): served as
+# amount_eur, filtered by min/max_amount_eur and ordered by order=amount.
+_CASCADE_EUR = amount_eur_sql("indicative_budget", "budget_currency", brussels_day("published_at", "timestamptz"))
 _COLS = ("id, call_id, title, topic_id, topic_title, project_id, project_acronym, project_name, "
          "framework_programme, status, deadline_model, deadline, deadline_secondary, duration, "
          "indicative_budget, budget_currency, source_url AS public_url, published_at AS document_date, "
          "first_seen AS creation_date, last_updated AS updated_date, left(description, 1500) AS summary_src, "
-         # the budget in euros, at the ECB reference rate of the publication day (Phase 2 step 6)
-         + amount_eur_sql("indicative_budget", "budget_currency", brussels_day("published_at", "timestamptz"))
-         + " AS amount_eur")
+         + _CASCADE_EUR + " AS amount_eur")
 _BODY = ", description AS body_txt, description_html AS body_html"
 # The portal's sections, one of which opens the text: the summary starts after it.
 _SECTIONS = ("Task description", "Submission & evaluation process", "Further information")
@@ -76,6 +80,7 @@ _ORDERS = {
     "recent": "published_at DESC NULLS LAST, id DESC",
     "oldest": "published_at ASC NULLS LAST, id ASC",
     "deadline": "deadline ASC NULLS LAST, id ASC",
+    "amount": f"{_CASCADE_EUR} DESC NULLS LAST, id DESC",
 }
 
 
@@ -112,7 +117,8 @@ every call one project has issued.
   (substring); `topic_id`; `project_id`; `call_id`.
 - `published_from` / `published_to` on the opening/publication date (`since`/`until` accepted);
   `deadline_from` / `deadline_to`.
-- `order` (recent default | oldest | deadline | updated_asc | updated_desc | created_asc | created_desc).
+- `order` (recent default | oldest | deadline | amount | updated_asc | updated_desc | created_asc | created_desc).
+- `min_amount_eur`, `max_amount_eur` — the budget in euros (`amount_eur`) at least / at most (a call with no euro figure is left out); `order=amount` lists the largest first.
 - `include_body` (default true), `limit` (default 50, max 200), `page`.
 {SYNC_PARAMS_DOC}
 
@@ -149,7 +155,8 @@ async def list_cascade_calls(
     created_to: Optional[UpperBoundDatetime] = Query(None, description="First recorded by Brubru on or before; a bare date covers the whole day."),
     updated_from: Optional[datetime] = Query(None, description="Content last changed on or after (ISO date or datetime, UTC). The incremental-sync filter."),
     updated_to: Optional[UpperBoundDatetime] = Query(None, description="Content last changed on or before; a bare date covers the whole day."),
-    order: str = Query("recent", description="recent | oldest | deadline | updated_asc | updated_desc | created_asc | created_desc."),
+    order: str = Query("recent", description="recent | oldest | deadline | amount (the largest budget in euros first) | updated_asc | updated_desc | created_asc | created_desc."),
+    amounts: tuple = Depends(amount_range),
     include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item (default true)."),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
@@ -180,6 +187,7 @@ async def list_cascade_calls(
         where.append("deadline >= :df"); params["df"] = deadline_from
     if deadline_to:
         where.append("deadline < CAST(:dt AS date) + 1"); params["dt"] = deadline_to
+    amount_range_sql(where, params, amounts[0], amounts[1], _CASCADE_EUR)
     sql_window(where, params, window, "first_seen", "last_updated")
     clause = " AND ".join(where)
     total = db.execute(text(f"SELECT count(*) FROM ft_cascade_calls WHERE {clause}"), params).scalar() or 0
