@@ -130,10 +130,16 @@ def test_multi_cutoff_topic_takes_next_deadline_not_the_first():
     assert row["status"] == "open"
 
 
-def test_prior_information_notice_without_deadline_stays_forthcoming():
+def test_prior_information_notice_without_any_date_is_unknown_never_open():
+    # Its publication date alone never makes it open. Since 29 Oct 2026 (O97, Victor: `unknown`
+    # where nothing dates it) the portal's "forthcoming" no longer stands on its own; a planned
+    # date decides (tests/test_ft_tender_status_from_dates.py).
     row = sedia.normalise_row(_tender(identifier=["538149d7-ac8e-46f4-88ec-22b5318e2c90-PIN"],
                                       status=["31094501"], deadlineDate=[]), today=TODAY)
-    assert row["is_tender"] and row["status"] == "forthcoming"
+    assert row["is_tender"] and row["status"] == "unknown"
+    planned = sedia.normalise_row(_tender(identifier=["538149d7-ac8e-46f4-88ec-22b5318e2c90-PIN"],
+                                          status=["31094501"], deadlineDate=[], cftPlannedDate=["30/12/2099"]), today=TODAY)
+    assert planned["status"] == "forthcoming"
 
 
 def test_no_status_and_no_dates_stays_unknown():

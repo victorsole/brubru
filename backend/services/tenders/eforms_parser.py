@@ -504,6 +504,18 @@ class EFormsParser:
         if tender_deadline_time is not None and tender_deadline_time.text:
             result["submission_deadline_time"] = tender_deadline_time.text
 
+        # A prior information notice used as a call for competition (the EU institutions'
+        # vendors' lists and calls for expressions of interest) states no tender deadline: its
+        # deadline is the end of the period for expressions of interest. 10 of 10 such notices
+        # read on 29 Oct 2026 (the F&T Portal's undated "-CN" tenders) carried only this.
+        if "submission_deadline_date" not in result:
+            eoi_date = root.find(".//efac:InterestExpressionReceptionPeriod/cbc:EndDate", EFORMS_NS)
+            if eoi_date is not None and eoi_date.text:
+                result["submission_deadline_date"] = eoi_date.text
+                eoi_time = root.find(".//efac:InterestExpressionReceptionPeriod/cbc:EndTime", EFORMS_NS)
+                if eoi_time is not None and eoi_time.text:
+                    result["submission_deadline_time"] = eoi_time.text
+
         # Combine date and time
         if "submission_deadline_date" in result:
             result["submission_deadline"] = _combine_eforms_datetime(

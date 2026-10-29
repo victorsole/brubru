@@ -7,7 +7,8 @@ the legacy forms' date for receipt of tenders): 97 had passed, so those calls fo
 served as open after they closed. Most predate the 7 Aug 2026 fix of the eForms date parser, which
 dropped every deadline whose date carried an offset; two were published after it (17 Sep, 13 Oct)
 and lost theirs too, cause not yet found. The repair parses the stored XML with today's parser:
-no network, no guessing. A notice whose XML states no deadline is left alone, and the status rule
+no network, no guessing (since 29 Oct 2026 a call for expressions of interest's own deadline too:
+the end of its period for expressions of interest). A notice whose XML states no deadline is left alone, and the status rule
 (services/tenders/status.py) serves it as `unknown`.
 
 Runs in the daily tier before the status job, so a deadline the fetch drops is filled the next day.
@@ -35,7 +36,7 @@ from services.tenders.eforms_parser import EFormsParser  # noqa: E402
 _TODO = text("""SELECT id, publication_number, status FROM tenders
     WHERE submission_deadline IS NULL AND xml_content IS NOT NULL
       AND (xml_content LIKE '%TenderSubmissionDeadlinePeriod%' OR xml_content LIKE '%DT_DATE_FOR_SUBMISSION%'
-           OR xml_content LIKE '%DATE_RECEIPT_TENDERS%')
+           OR xml_content LIKE '%DATE_RECEIPT_TENDERS%' OR xml_content LIKE '%InterestExpressionReceptionPeriod%')
     ORDER BY id""")
 _XML = text("SELECT id, xml_content FROM tenders WHERE id = ANY(:ids)")
 _SET = text("UPDATE tenders SET submission_deadline = :d WHERE id = :id AND submission_deadline IS NULL")

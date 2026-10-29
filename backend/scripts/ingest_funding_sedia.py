@@ -371,6 +371,58 @@ def derive_status(sedia_status: Optional[str], opening: Optional[dt.datetime],
     return sedia_status or "unknown"
 
 
+_PORTAL_DAY = re.compile(r"^\s*(?:(\d{4})-(\d{2})-(\d{2})|(\d{2})/(\d{2})/(\d{4}))")
+
+
+def parse_portal_day(value: Optional[str]) -> Optional[dt.datetime]:
+    """A day written in a tender's own portal fields: '2024-12-08+01:00 Europe/Brussels' (an ex-ante
+    notice's registration deadline, a planned date) or '22/09/2025' (a planned date). The day at
+    00:00 UTC, as SEDIA stores its deadlines (a deadline day still counts as open)."""
+    m = _PORTAL_DAY.match(value or "")
+    if not m:
+        return None
+    y, mo, d = (m.group(1), m.group(2), m.group(3)) if m.group(1) else (m.group(6), m.group(5), m.group(4))
+    try:
+        return dt.datetime(int(y), int(mo), int(d), tzinfo=dt.timezone.utc)
+    except ValueError:
+        return None
+
+
+def ted_notice_number(md: Dict[str, Any]) -> Optional[str]:
+    """The TED number of the notice a portal tender was published as (`cftContractNoticeLink`:
+    '["253106-2024","84/2024","2024-04-29"]'), or None."""
+    raw = first_or_none(md.get("cftContractNoticeLink"))
+    try:
+        link = json.loads(raw) if raw else None
+    except ValueError:
+        return None
+    first = link[0] if isinstance(link, list) and link else None
+    return first if isinstance(first, str) and re.fullmatch(r"\d{1,8}-\d{4}", first) else None
+
+
+def tender_status(sedia_status: Optional[str], published: Optional[dt.datetime],
+                  final_deadline: Optional[dt.datetime], planned: Optional[dt.datetime],
+                  today: dt.date) -> str:
+    """A portal tender's status: its dates decide, never the portal's flag on its own (29 Oct 2026,
+    O97, Victor: "read their dates", `unknown` only where nothing dates it).
+
+    Measured that day on the 689 tenders without a deadline: the flag kept 48 ex-ante notices
+    "forthcoming" after their registration deadline (one since 8 Dec 2024), and a 2023 tender
+    "open". It goes stale one way only, open or forthcoming after closing, so a "closed" flag is
+    kept when nothing else dates the tender.
+
+        a deadline (the portal's, an ex-ante registration deadline, or its TED notice's)
+                                                     -> derive_status: the dates decide
+        a prior information notice's planned date    -> forthcoming until that day, then closed
+        nothing                                      -> closed if the portal says so, else unknown
+    """
+    if final_deadline is not None:
+        return derive_status(sedia_status, published, final_deadline, today)
+    if planned is not None:
+        return "forthcoming" if planned.date() >= today else "closed"
+    return "closed" if sedia_status == "closed" else "unknown"
+
+
 _CANCELLED = re.compile(r"(?:^|[\s(\-–])CANCEL+ED\)?\s*$", re.I)
 
 
@@ -617,7 +669,74 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
             "indicative_budget": _to_number(first_or_none(md.get("cftEstimatedOverallContractAmount"))),
             "budget_currency": first_or_none(md.get("cftEstimatedOverallContractCurrency")) or "EUR",
         })
+        # A tender's record carries no `deadlineDate` unless the portal holds one (689 of 2,178
+        # had none on 29 Oct 2026): an ex-ante notice's deadline is its registration deadline, a
+        # prior information notice only plans a date, and a contract notice's deadline sits on its
+        # TED notice (`ted_notice`, read by fill_tender_deadlines_from_ted before the write).
+        planned = None
+        if final_deadline is None:
+            registration = parse_portal_day(first_or_none(md.get("cftEXARegistrationDeadline")))
+            if registration is not None:
+                row["deadline"] = deadline = final_deadline = registration
+            else:
+                planned = parse_portal_day(first_or_none(md.get("cftPlannedDate")))
+        row["status"] = ("cancelled" if is_cancelled(topic_id, title)
+                         else tender_status(sedia_status, published, final_deadline, planned, today))
+        row.update({"ted_notice": ted_notice_number(md), "_sedia_status": sedia_status, "_planned": planned})
     return row
+
+
+_TED_NOTICE_XML = "https://ted.europa.eu/en/notice/{number}/xml"
+
+
+def _ted_notice_xml(number: str) -> Optional[str]:
+    req = urllib_request.Request(_TED_NOTICE_XML.format(number=number), headers={"User-Agent": USER_AGENT})
+    try:
+        with urllib_request.urlopen(req, timeout=60) as r:
+            return r.read().decode("utf-8", "replace") if r.status == 200 else None
+    except (urllib_error.URLError, OSError, ValueError):
+        return None
+
+
+def fill_tender_deadlines_from_ted(rows: Dict[str, Dict[str, Any]], stored: Dict[str, dt.datetime],
+                                   today: dt.date, fetch=_ted_notice_xml, pause: float = 1.0,
+                                   limit: int = 400) -> Dict[str, int]:
+    """Date the tenders whose record names no deadline: the deadline already stored (read from TED
+    on an earlier run), else the one on the tender's TED notice, read once with today's eForms
+    parser (a contract notice's tender deadline, or a call for expressions of interest's end of
+    its period for expressions of interest). The status is then set again from that date. One
+    request at a time, `pause` seconds apart, at most `limit` notices a run.
+
+    A prior information notice is not read on TED: 10 of 10 sampled on 29 Oct 2026 were plain
+    prior information there ("pin-only", no deadline), so each would be read again every night
+    for nothing; its planned date decides (tender_status)."""
+    from services.tenders.eforms_parser import EFormsParser
+    parser, counts = EFormsParser(), {"stored": 0, "ted_read": 0, "ted_dated": 0, "ted_undated": 0}
+    for tid, row in rows.items():
+        if (not row.get("is_tender") or row.get("deadline") is not None or row.get("_planned") is not None
+                or row.get("status") == "cancelled"):
+            continue
+        deadline = stored.get(tid)
+        if deadline is not None:
+            counts["stored"] += 1
+        elif row.get("ted_notice") and counts["ted_read"] < limit:
+            counts["ted_read"] += 1
+            xml = fetch(row["ted_notice"])
+            time.sleep(pause)
+            try:
+                deadline = parser.parse(xml).get("submission_deadline") if xml else None
+            except Exception:  # noqa: BLE001 - one unreadable notice leaves its tender undated
+                deadline = None
+            if isinstance(deadline, str):
+                deadline = parse_iso_date(deadline)
+            counts["ted_dated" if deadline else "ted_undated"] += 1
+        if deadline is None:
+            continue
+        if deadline.tzinfo is None:
+            deadline = deadline.replace(tzinfo=dt.timezone.utc)
+        row["deadline"] = deadline
+        row["status"] = tender_status(row.get("_sedia_status"), row.get("published_at"), deadline, None, today)
+    return counts
 
 
 def is_call_for_tenders(row: Dict[str, Any]) -> bool:
@@ -683,8 +802,10 @@ def upsert_ft_tenders(cur, row: Dict[str, Any]) -> None:
             -- A TED notice the portal lists (its link points at TED) takes its status and deadline
             -- from the same notice in the TED table (services/tenders/status.py, daily, O96):
             -- the portal's record carries no deadline, and its flag kept 205 closed notices open.
+            -- A tender's `unknown` is a verdict (tender_status: nothing dates it), not a record
+            -- without a status, so it replaces a stale "open" (29 Oct 2026, O97).
             status = CASE WHEN ft_calls_for_tenders.source_url LIKE '%%ted.europa.eu%%'
-                               OR EXCLUDED.status IS NULL OR EXCLUDED.status = 'unknown'
+                               OR EXCLUDED.status IS NULL
                           THEN ft_calls_for_tenders.status ELSE EXCLUDED.status END,
             deadline = CASE WHEN ft_calls_for_tenders.source_url LIKE '%%ted.europa.eu%%'
                             THEN ft_calls_for_tenders.deadline
@@ -983,7 +1104,11 @@ def main():
                        OR framework_programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
                        OR COALESCE(detected_lang, 'en') <> 'en')
                 UNION SELECT tender_reference FROM ft_calls_for_tenders
-                 WHERE tender_reference ~ '-(CN|PIN)$'
+                 -- every portal tender, not only -CN/-PIN: an ex-ante notice (-EXA) or one
+                 -- without a suffix was never read again once the portal stopped listing it
+                 -- as open (29 Oct 2026, O97: 61 statuses the portal had since changed).
+                 -- TED notices (TED links) take theirs from the TED row.
+                 WHERE source_url NOT LIKE '%ted.europa.eu%'
                    AND (status IS DISTINCT FROM 'closed'
                         OR contracting_authority ~ '^ *[0-9]{4} *- *[0-9]{4} *$')""")
             stored = sorted({r[0] for r in cur.fetchall()} - set(rows))
@@ -1029,6 +1154,21 @@ def main():
                 break
             time.sleep(0.4)
     print(f"[PASS 3] prefix discovery: {discovered} new identifiers")
+
+    # Tenders whose record names no deadline: the one already stored, else their TED notice's.
+    if args.write_ft:
+        undated = [tid for tid, r in rows.items() if r.get("is_tender") and r.get("deadline") is None]
+        stored_deadlines: Dict[str, dt.datetime] = {}
+        if undated:
+            conn = psycopg2.connect(db)
+            try:
+                cur = conn.cursor()
+                cur.execute("SELECT tender_reference, deadline FROM ft_calls_for_tenders "
+                            "WHERE deadline IS NOT NULL AND tender_reference = ANY(%s)", (undated,))
+                stored_deadlines = dict(cur.fetchall())
+            finally:
+                conn.close()
+        print(f"[TED] tender deadlines: {fill_tender_deadlines_from_ted(rows, stored_deadlines, dt.date.today())}")
 
     if args.dump_json:
         with open(args.dump_json, "w") as fh:

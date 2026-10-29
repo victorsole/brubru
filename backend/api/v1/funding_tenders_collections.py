@@ -386,7 +386,7 @@ For service providers, consultancies, and contractors bidding on EU institutiona
 
 **Input**
 - `contracting_authority` — substring (e.g. `European Commission`, `Frontex`, `EMA`).
-- `status` — F&T tender status enum.
+- `status` — `open` / `forthcoming` / `closed` / `unknown`, from the tender's own dates (see the parameter).
 - `contract_nature` — `services`, `supplies` or `works`, in any case; `contract_type` is its legacy name.
 - `q` — substring search on title + description.
 - `deadline_from`, `deadline_to` — submission window.
@@ -413,7 +413,7 @@ Synced once per day at 04:00 UTC (daily tier) from ec.europa.eu/info/funding-ten
 async def list_calls_for_tenders(
     request: Request,
     contracting_authority: Optional[str] = Query(None),
-    status: Optional[str] = Query(None, description="open | forthcoming | closed, the portal's status checked against the deadline; a TED notice the portal also lists (TED number, TED link) takes its deadline and status from the TED notice."),
+    status: Optional[str] = Query(None, description="open | forthcoming | closed | unknown, from the tender's own dates: its deadline (the portal's, an ex-ante notice's registration deadline, or its TED notice's, which for a call for expressions of interest is the end of that period); a prior information notice is forthcoming until its planned date, then closed; unknown when nothing dates it. A TED notice the portal also lists (TED number, TED link) takes its deadline and status from the TED notice."),
     contract_type: Optional[str] = Query(None),
     q: Optional[str] = Query(None),
     deadline_from: Optional[date] = Query(None),

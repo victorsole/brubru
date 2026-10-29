@@ -2170,7 +2170,10 @@ def _ft_buyer_notices(*, body_code: str, buyer_id: str, source_kind: str, now: d
         seen.add(row["topic_id"])
         deadline = _iso(str(row["deadline"])) if row.get("deadline") else None
         published = _iso(str(row["published_at"])) if row.get("published_at") else None
-        status = _SEDIA_STATUS.get((row.get("status") or "").lower(), "closed")
+        # The portal reader's `unknown` (nothing dates the notice, 29 Oct 2026) is "not stated"
+        # here, as in services/funding/agency_status.py; any other word it does not know is closed.
+        raw = (row.get("status") or "").lower()
+        status = None if raw == "unknown" else _SEDIA_STATUS.get(raw, "closed")
         if status == "open" and deadline is not None and deadline < now:
             status = "closed"
         kind = _FT_KIND_BY_SUFFIX.get(row["topic_id"].rsplit("-", 1)[-1], "call for tender")

@@ -51,7 +51,10 @@ def test_a_prior_notice_is_closed_once_its_contract_notice_exists(monkeypatch):
     items = {i.extras["tender_reference"]: i.extras["status"] for i in
              ap._ft_buyer_notices(body_code="efsa", buyer_id="47352394", source_kind="efsa_ft_notice", now=NOW)}
     assert items["53fb5f38-b55a-46eb-b90b-d77951370687-PIN"] == "closed"
-    assert items["11111111-1111-1111-1111-111111111111-PIN"] == "forthcoming"   # SEDIA's label kept
+    # Since 29 Oct 2026 (O97) a notice's own dates decide, not the portal's label: a prior notice
+    # with no planned date and no deadline is not stated (None), never "forthcoming" for ever
+    # and never closed by default.
+    assert items["11111111-1111-1111-1111-111111111111-PIN"] is None
 
 
 # --- Part B (30 Sep 2026): each archive procedure's own page ------------------------ #
