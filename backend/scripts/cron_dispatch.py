@@ -60,6 +60,7 @@ Usage:
 """
 
 import datetime
+import http.client
 import json
 import os
 import sys
@@ -161,6 +162,12 @@ def _fire(endpoint_path: str, timeout: int = 1800) -> dict:
     except TimeoutError as e:
         print(f"[WAIT] {endpoint_path} → read timed out; the tier runs on", flush=True)
         return {"status": DETACHED, "error": str(e)}
+    # The edge cut the connection while the response was being read: `getresponse()` and `read()`
+    # raise outside urlopen's URLError wrapping, so this used to fall into `failed` (27 Oct 2026:
+    # precompute-journeys, RemoteDisconnected at 09:03:40; the backend finished it at 09:09:54).
+    except (ConnectionResetError, ConnectionAbortedError, http.client.IncompleteRead) as e:
+        print(f"[WAIT] {endpoint_path} → connection cut while reading ({type(e).__name__}); the tier runs on", flush=True)
+        return {"status": DETACHED, "error": f"{type(e).__name__}: {e}"}
     except Exception as e:
         print(f"[ERR]  {endpoint_path} → {type(e).__name__}: {e}", flush=True)
         return {"status": "failed", "error": str(e)}

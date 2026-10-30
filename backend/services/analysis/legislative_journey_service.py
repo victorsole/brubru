@@ -25,6 +25,7 @@ import hashlib
 import json
 import logging
 import re
+import time
 from typing import List, Optional
 
 from sqlalchemy import text
@@ -46,6 +47,11 @@ _HF_MODEL = "Qwen/Qwen3-30B-A3B-Instruct-2507:featherless-ai"
 # max-min allocation. The GPT-4o fallback gets the bigger budget for the few
 # giant files where HF declines.
 _HF_CHAR_CAP = 180_000
+# HF answered 402 (no credits since 25 Sep 2026) three times per dossier, with 5 s and 10 s pauses,
+# before every fallback (27 Oct 2026: 9 minutes for one analysis). A 402 is not a passing fault:
+# HF is skipped for this long, in this process, after the first one.
+_HF_SKIP_SECONDS = 6 * 3600
+_HF_SKIP_UNTIL = 0.0
 _TOTAL_CHAR_CAP = 350_000
 
 # Legislative procedure suffixes (these carry a Commission proposal).
@@ -174,30 +180,40 @@ async def _call_llm(procedure_ref: str, is_legislative: bool, layers: List[dict]
     per engine so each gets as much text as its window allows. Returns
     (parsed_json, engine, model, last_error); last_error is set only on failure,
     so the caller can say WHY a regeneration failed instead of failing silently."""
+    global _HF_SKIP_UNTIL
     last_err = None
 
     # 1. HF Qwen (open-source, cheap, long context) - the sanctioned OSS path.
     # featherless 429s intermittently on capacity, so retry a couple of times
-    # before giving up to the paid fallback.
-    try:
-        from services.ai.huggingface_service import get_huggingface_service
-        system_prompt, messages = _build_messages(procedure_ref, is_legislative, layers, _HF_CHAR_CAP)
-        hf = get_huggingface_service()
-        hf_messages = [{"role": "system", "content": system_prompt}] + messages
-        for attempt in range(3):
-            raw = await hf.chat_completion(
-                model=_HF_MODEL, messages=hf_messages, max_tokens=2600, temperature=0.2,
-            )
-            parsed = _parse_json(raw or "")
-            if parsed is not None:
-                return parsed, "HuggingFace", _HF_MODEL, None
-            if attempt < 2:
-                await asyncio.sleep(5 * (attempt + 1))  # 5s, 10s backoff
-        last_err = ValueError("HF Qwen returned no parseable JSON after 3 attempts")
-        logger.warning("[journey] HF Qwen exhausted retries, falling back")
-    except Exception as e:
-        last_err = e
-        logger.warning("[journey] HF Qwen failed: %s", e)
+    # before giving up to the paid fallback; a 402 (no credits) is not retried.
+    if time.monotonic() < _HF_SKIP_UNTIL:
+        last_err = RuntimeError("HF Qwen skipped: it answered 402 (no credits) in this run")
+    else:
+        try:
+            from services.ai.huggingface_service import get_huggingface_service
+            system_prompt, messages = _build_messages(procedure_ref, is_legislative, layers, _HF_CHAR_CAP)
+            hf = get_huggingface_service()
+            hf_messages = [{"role": "system", "content": system_prompt}] + messages
+            for attempt in range(3):
+                raw = await hf.chat_completion(
+                    model=_HF_MODEL, messages=hf_messages, max_tokens=2600, temperature=0.2,
+                )
+                parsed = _parse_json(raw or "")
+                if parsed is not None:
+                    return parsed, "HuggingFace", _HF_MODEL, None
+                if getattr(hf, "last_status", None) == 402:
+                    _HF_SKIP_UNTIL = time.monotonic() + _HF_SKIP_SECONDS
+                    logger.warning("[journey] HF Qwen answered 402 (no credits): skipped for %d h", _HF_SKIP_SECONDS // 3600)
+                    break
+                if attempt < 2:
+                    await asyncio.sleep(5 * (attempt + 1))  # 5s, 10s backoff
+            else:
+                logger.warning("[journey] HF Qwen exhausted retries, falling back")
+            last_err = ValueError("HF Qwen answered 402 (no credits)" if time.monotonic() < _HF_SKIP_UNTIL
+                                  else "HF Qwen returned no parseable JSON after 3 attempts")
+        except Exception as e:
+            last_err = e
+            logger.warning("[journey] HF Qwen failed: %s", e)
 
     # 2/3. GPT-4o then Mistral (smaller window -> smaller source budget).
     from services.ai.multi_provider_service import (CerebrasProvider, GeminiProvider, MistralProvider,

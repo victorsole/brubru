@@ -401,3 +401,20 @@ def test_a_background_batch_is_served_apart_from_in_flight_until_its_task_ends(m
     assert seen["during"]["background"] == ["/api/cron/sync/economy?batch=2"]
     assert "/api/cron/sync/economy?batch=2" not in seen["during"]["in_flight"]
     assert seen["after"]["background"] == []
+
+
+def test_a_connection_cut_while_reading_is_detached_not_failed(monkeypatch):
+    """27 Oct 2026: the edge closed the connection to /precompute-journeys without a response
+    (RemoteDisconnected, raised by getresponse() outside urlopen's URLError); the dispatcher read it
+    as a failed tier and the run went red, while the backend finished the job six minutes later."""
+    import http.client
+    for exc in (http.client.RemoteDisconnected("Remote end closed connection without response"),
+                ConnectionResetError(54, "Connection reset by peer"), http.client.IncompleteRead(b"{")):
+        def boom(*a, _e=exc, **k):
+            raise _e
+        monkeypatch.setattr(cd.urllib.request, "urlopen", boom)
+        assert cd._fire("/api/cron/precompute-journeys?limit=8")["status"] == cd.DETACHED, type(exc).__name__
+    def other(*a, **k):
+        raise ValueError("a bug of ours")
+    monkeypatch.setattr(cd.urllib.request, "urlopen", other)
+    assert cd._fire("/api/cron/precompute-journeys?limit=8")["status"] == "failed"

@@ -486,6 +486,8 @@ class HuggingFaceService:
 
         NO Anthropic — this is the sanctioned path for non-chat OSS generation.
         """
+        # The last call's HTTP status, so a caller can tell "no credits" (402) from a passing fault.
+        self.last_status = None
         try:
             resp = await self.client.post(
                 self.ROUTER_CHAT_URL,
@@ -497,6 +499,7 @@ class HuggingFaceService:
                 },
                 timeout=timeout,
             )
+            self.last_status = resp.status_code
             if resp.status_code != 200:
                 logger.error("[HF-chat] %s -> HTTP %s: %s", model, resp.status_code, resp.text[:200])
                 return None
