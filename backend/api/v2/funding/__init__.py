@@ -27,6 +27,7 @@ from . import agency_procurement as _agency_procurement
 from . import funding_all as _funding_all
 from . import opportunities as _opportunities
 from . import awards as _awards
+from . import budgets as _budgets
 from . import startups as _startups
 from . import entrepreneur_instruments as _entrepreneur_instruments
 # Per-fund cohesion / structural-fund finance endpoints (DB-backed,
@@ -69,6 +70,7 @@ router.include_router(_agency_procurement.router)
 router.include_router(_funding_all.router)
 router.include_router(_opportunities.router)
 router.include_router(_awards.router)
+router.include_router(_budgets.router)
 router.include_router(_startups.router)
 router.include_router(_entrepreneur_instruments.router)
 # Outcomes FIRST: it registers the literal `/{fund}/outcomes`, while finances
