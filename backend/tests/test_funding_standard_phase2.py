@@ -456,7 +456,7 @@ def test_a_partner_summary_keeps_its_counts_after_its_country():
     from api.v2.funding.partners import _item
     r = SimpleNamespace(key="pic:1", name="CNRS", short_name=None, pic="1", vat=None, country="FR", city=None,
                         activity_type=None, is_sme=None, projects=3, coordinated=1, payments=2, contracts=0, awards=0,
-                        announcements=0, eu_contribution=None, amount_eur=None, matches=[], last_day=None, created=None,
+                        announcements=0, eu_contribution=None, payments_eur=None, amount_eur=None, matches=[], last_day=None, created=None,
                         changed=None)
     it = _item(r, "https://x")
     assert (it.item_type, it.title) == ("organisation", "CNRS")
@@ -579,7 +579,7 @@ def test_the_other_lists_carry_the_standard_names_with_the_same_values():
     assert call.framework_programme == "Horizon Europe (HORIZON)"
     r = SimpleNamespace(key="vat:BE0123", name="X", short_name=None, pic=None, vat="BE0123", country="BE", city=None,
                         activity_type=None, is_sme=None, projects=0, coordinated=0, payments=1, contracts=0, awards=0,
-                        announcements=0, eu_contribution=None, amount_eur=None, matches=[], last_day=None, created=None,
+                        announcements=0, eu_contribution=None, payments_eur=None, amount_eur=None, matches=[], last_day=None, created=None,
                         changed=None)
     assert (_item(r, "https://x").vat_number, _item(r, "https://x").vat) == ("BE0123", "BE0123")
     _fresh_body_names()

@@ -516,7 +516,7 @@ def test_an_announcement_match_links_to_its_own_route():
     from api.v2.funding import partners
     r = SimpleNamespace(key="pic:9", name="Example SL", short_name=None, pic="9", vat=None, country="ES", city=None,
                         activity_type=None, is_sme=True, projects=0, coordinated=0, payments=0, contracts=0, awards=0,
-                        announcements=1, eu_contribution=None, amount_eur=None, last_day=None, created=None, changed=None,
+                        announcements=1, eu_contribution=None, payments_eur=None, amount_eur=None, last_day=None, created=None, changed=None,
                         matches=[{"kind": "announcement", "id": "900001", "title": "A topic", "role": "request",
                                   "programme": "T-1", "date": "2026-10-20", "department": None, "eu_contribution": None,
                                   "amount_eur": None, "tender_value_eur": None}])

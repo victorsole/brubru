@@ -467,7 +467,7 @@ def test_partners_take_the_awards_as_contractor_activities():
     assert "w.vat_key IN (SELECT vat_key FROM funding_org_identities WHERE pic = :key_val)" in db.calls[-1][0]
     r = SimpleNamespace(key="vat:DK29200000", pic=None, vat="DK29200000", name="Delta Consult", short_name=None, country="DK",
                         city="Town", activity_type=None, is_sme=None, projects=0, coordinated=0, payments=0, contracts=0,
-                        awards=1, announcements=0, eu_contribution=None, amount_eur=None, last_day=None, created=None, changed=None,
+                        awards=1, announcements=0, eu_contribution=None, payments_eur=None, amount_eur=None, last_day=None, created=None, changed=None,
                         matches=[{"kind": "award", "id": "999999-2025", "title": "Study: Lot two", "role": "contractor",
                                   "programme": None, "date": "2025-03-21", "department": "European Commission, DG EXAMPLE",
                                   "eu_contribution": None, "amount_eur": None, "tender_value_eur": 0}])

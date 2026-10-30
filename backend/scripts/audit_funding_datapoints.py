@@ -49,7 +49,7 @@ MOJIBAKE = re.compile("�|Ã[\u0080-¿]|â€")
 TAG = re.compile(r"<[^>]+>")
 # Findings an open register item explains (they print as KNOWN, not FAIL): (list slug or "*", code) -> id.
 _CALLS = ("ft-calls-for-proposals", "funding-opportunities", "opportunities", "startups")
-KNOWN = {("*", "naive_datetime"): "O106", ("partners", "self"): "O103",
+KNOWN = {("*", "naive_datetime"): "O106",
          **{(s, "document_date_in_future"): "O95" for s in _CALLS},
          **{("euda-tenders", c): "O99" for c in ("public_url_home_page", "body_txt_stub_under_200", "document_date_missing")}}
 # Findings that are what the list says it serves (documented in its description): (slug, code) -> why.
@@ -64,6 +64,7 @@ BY_DESIGN = {
     ("interreg", "document_date_missing"): "the source states no date for Interreg programmes (O40)",
     ("ft-events", "document_date_in_future"): "an event is dated by its start (documented)",
     ("programmes", "public_url_home_page"): "a programme's own site",
+    ("partners", "self"): "a list row is the organisation over the matching activities, its item over all (O114)",
 }
 
 
@@ -240,7 +241,7 @@ def main() -> int:
         empty = empty_fields(items)
         lo, med, hi = body_lengths(items)
         open_ = {c: n for c, n in found.items() if not _ref(KNOWN, slug, c) and not _ref(BY_DESIGN, slug, c)}
-        selfs_open = [x for x in selfs if not _ref(KNOWN, slug, "self")]
+        selfs_open = [x for x in selfs if not _ref(KNOWN, slug, "self") and not _ref(BY_DESIGN, slug, "self")]
         tag = "FAIL" if (open_ or selfs_open) else "KNOWN" if (found or selfs) else "OK"
         failing += tag == "FAIL"
         known += tag == "KNOWN"
@@ -250,7 +251,8 @@ def main() -> int:
             ref = f"  [known: {known_ref}]" if known_ref else f"  [by design: {why}]" if why else ""
             print(f"       {code}: {n} of {len(items)} (e.g. {', '.join(examples[code])}){ref}")
         for line in selfs:
-            print(f"       {line}" + (f"  [known: {_ref(KNOWN, slug, 'self')}]" if _ref(KNOWN, slug, "self") else ""))
+            k, why = _ref(KNOWN, slug, "self"), _ref(BY_DESIGN, slug, "self")
+            print(f"       {line}" + (f"  [known: {k}]" if k else f"  [by design: {why}]" if why else ""))
         if empty:
             print(f"       empty on every item read: {', '.join(empty)}")
         report[slug] = {"total": total, "read": len(items), "findings": dict(found), "examples": examples,

@@ -29,6 +29,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from api.v1._change_window import SYNC_ORDERS, UpperBoundDatetime, validate_window
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from core.database import get_db
@@ -46,7 +47,8 @@ PORTAL_ORG = "https://ec.europa.eu/info/funding-tenders/opportunities/portal/scr
 ROLES = ("coordinator", "participant", "beneficiary", "contractor", "offer", "request")
 ACTIVITY_TYPES = ("HES", "REC", "PRC", "PUB", "OTH")
 SOURCES = ("all", "projects", "payments", "awards", "announcements")
-ORDERS = ("matches", "amount", "name")
+# The sync orders page an incremental window by the organisation's own change date (O103, 30 Oct 2026).
+ORDERS = ("matches", "amount", "name") + tuple(SYNC_ORDERS)
 MATCHES_ON_LIST = 10
 MATCHES_ON_ITEM = 50
 
@@ -120,7 +122,8 @@ class PartnerItem(BaseModel):
     awards: int = Field(0, description="Matching TED contract awards from EU buyers it won (not in the amounts: a joint tender's value is shared).")
     announcements: int = Field(0, description="Matching F&T Portal Partner Search announcements it published (offering or seeking expertise for a topic).")
     eu_contribution: Optional[float] = Field(None, description="Its EU contribution over the matching projects, EUR (CORDIS).")
-    amount_eur: Optional[float] = Field(None, description="What the matching FTS rows say it received, EUR.")
+    amount_eur: Optional[float] = Field(None, description="Its EU contribution plus its payments over the matching activities, EUR: the figure min_amount_eur and max_amount_eur compare (until 30 Oct 2026 the payments alone, now `payments_eur`). Null when neither is known.")
+    payments_eur: Optional[float] = Field(None, description="What the matching FTS rows say it received, EUR.")
     matches: List[PartnerActivity] = Field(default_factory=list, description="The activities that matched, newest first (10 on the list, 50 on the item route).")
     public_url: Optional[str] = Field(None, description="Its F&T Portal profile (Partner search) when the PIC is known.")
     body_txt: Optional[str] = None
@@ -131,7 +134,7 @@ class PartnerItem(BaseModel):
 
 
 def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme, since, source,
-         min_amount_eur, key, order, matches_cap, max_amount_eur=None):
+         min_amount_eur, key, order, matches_cap, max_amount_eur=None, until=None, window=None):
     """The query and its parameters: activities -> one row per organisation key."""
     p_where, f_where, w_where, s_where, a_where, having, params = [], [], [], [], [], [], {}
     use_projects = source in ("all", "projects") and not dg
@@ -173,6 +176,15 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
         p_where.append("p.start_date >= :since"); f_where.append("c.project_start >= :since")
         w_where.append("coalesce(w.contract_date, n.publication_date) >= :since"); params["since"] = since
         s_where.append("s.requested_date >= :since")
+    if until:   # a bare date covers the whole day
+        p_where.append("p.start_date < CAST(:until AS date) + 1"); f_where.append("c.project_start < CAST(:until AS date) + 1")
+        w_where.append("coalesce(w.contract_date, n.publication_date) < CAST(:until AS date) + 1")
+        s_where.append("s.requested_date < CAST(:until AS date) + 1"); params["until"] = until
+    # The organisation's own dates (its creation_date and updated_date), as every funding list filters.
+    for wkey, agg, op in (("created_from", "min(created)", ">="), ("created_to", "min(created)", "<="),
+                          ("updated_from", "max(changed)", ">="), ("updated_to", "max(changed)", "<=")):
+        if (window or {}).get(wkey) is not None:
+            having.append(f"{agg} {op} :{wkey}"); params[wkey] = window[wkey]
     if key:
         kind, _, val = key.partition(":")
         if kind == "pic":
@@ -287,6 +299,8 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                     "coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) DESC, key"),
         "amount": "coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) DESC, key",
         "name": "mode() WITHIN GROUP (ORDER BY name), key",
+        "updated_asc": "max(changed) ASC, key ASC", "updated_desc": "max(changed) DESC, key DESC",
+        "created_asc": "min(created) ASC, key ASC", "created_desc": "min(created) DESC, key DESC",
     }[order]
     slug_n = _NAME_SLUG.format(n="a.name")
     sql = f"""
@@ -313,7 +327,9 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
            count(*) FILTER (WHERE kind = 'payment' AND role = 'contractor') AS contracts,
            count(DISTINCT ref) FILTER (WHERE kind = 'award') AS awards,
            count(DISTINCT ref) FILTER (WHERE kind = 'announcement') AS announcements,
-           sum(eu_contribution) AS eu_contribution, sum(amount_eur) AS amount_eur,
+           sum(eu_contribution) AS eu_contribution, sum(amount_eur) AS payments_eur,
+           CASE WHEN sum(eu_contribution) IS NULL AND sum(amount_eur) IS NULL THEN NULL
+                ELSE coalesce(sum(eu_contribution), 0) + coalesce(sum(amount_eur), 0) END AS amount_eur,
            max(day) FILTER (WHERE day <= CURRENT_DATE) AS last_day, min(created) AS created, max(changed) AS changed,
            (array_agg(jsonb_build_object('kind', kind, 'id', ref, 'title', title, 'role', role, 'programme', programme,
                                          'date', day, 'department', department, 'eu_contribution', eu_contribution,
@@ -352,6 +368,7 @@ def _item(r, base: str) -> PartnerItem:
         payments=r.payments, contracts=r.contracts, awards=r.awards, announcements=r.announcements,
         eu_contribution=float(r.eu_contribution) if r.eu_contribution is not None else None,
         amount_eur=float(r.amount_eur) if r.amount_eur is not None else None,
+        payments_eur=float(r.payments_eur) if r.payments_eur is not None else None,
         matches=acts, public_url=PORTAL_ORG.format(pic=r.pic) if r.pic else None,
         body_txt="\n".join(lines),
         body_html="<ul>" + "".join(f"<li>{html.escape(l)}</li>" for l in lines) + "</ul>",
@@ -373,8 +390,8 @@ Finding consortium partners and competitors: "who coordinates projects on soil h
 - `dg` — the paying or buying department (`CNECT`): the FTS payment's department, the award's contracting authority; projects and announcements are then left out.
 - `country` — ISO-2 (EL and GR, UK and GB are the same country).
 - `activity_type` (HES higher education | REC research | PRC private company | PUB public body | OTH) — as CORDIS states it, projects only; `is_sme` — as CORDIS states it, and on announcements the portal's "Small or medium-size enterprise" type.
-- `since` — activities starting on or after (YYYY-MM-DD; an award's contract signature, an announcement's date); `min_amount_eur`, `max_amount_eur` — the organisation's EU contribution plus payments over the matches, at least / at most (awards are not in the amounts: a joint tender's value is shared by its members).
-- `source` — all (default) | projects | payments | awards | announcements. `order` — matches (default: the matching activities, an announcement text copied to several topics counted once) | amount | name. `page`, `limit` (default 50, max 200), `include_body` (default true).
+- `published_from`, `published_to` — activities dated on or after / on or before (YYYY-MM-DD: a project's start, an award's contract signature, an announcement's date; `since`, `until`, `from`, `to` are aliases); `created_from`, `created_to` and `updated_from`, `updated_to` — the organisation's own `creation_date` and `updated_date` (incremental sync; a bare date as `_to` covers the whole day); `min_amount_eur`, `max_amount_eur` — its `amount_eur`, the EU contribution plus payments over the matches, at least / at most (awards are not in the amounts: a joint tender's value is shared by its members).
+- `source` — all (default) | projects | payments | awards | announcements. `order` — matches (default: the matching activities, an announcement text copied to several topics counted once) | amount | name | updated_asc | updated_desc | created_asc | created_desc (page an incremental window with updated_asc). `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -386,7 +403,7 @@ GET /api/v2/funding/partners?q=hydrogen&topic=HORIZON-CL5&source=announcements&r
 ```
 
 **You get back**
-A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat_number` (`vat` is its legacy name), `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, `awards`, `announcements`, the totals `eu_contribution` and `amount_eur`, `matches` (up to 10: kind, id, title, role, programme, date, department, amounts, an award's `tender_value_eur`, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
+A paginated envelope of organisations: `id` (pic:<PIC>, vat:<VAT number> or name:<country>:<name>), `name`, `short_name`, `pic`, `vat_number` (`vat` is its legacy name), `country`, `city`, `activity_type`, `is_sme`, the counts `projects`, `coordinated`, `payments`, `contracts`, `awards`, `announcements`, the totals `eu_contribution`, `payments_eur` and `amount_eur` (their sum: until 30 Oct 2026 `amount_eur` was the payments alone), `matches` (up to 10: kind, id, title, role, programme, date, department, amounts, an award's `tender_value_eur`, `self`), `public_url` (its F&T Portal profile when the PIC is known), `body_txt` / `body_html` (the same, as text), `document_date`, `creation_date`, `updated_date`.
 
 **Identity**
 The PIC where known; a payment's beneficiary or an award's winner takes the PIC of the CORDIS organisation with the same VAT number (a TED company identifier counts as a VAT number only when shaped like its own country's); else the VAT number; else the name within its country. A name alone never joins two records, so one organisation can appear twice (for instance under its PIC and, for payments with no VAT number, under its name). Private persons are left out: the FTS's own, and of TED's award winners (TED never says which is a person) those that are neither a CORDIS or FTS organisation by their VAT number nor named with a legal form or an organisation word (GmbH, SL, Ltd, Institute, University...), so an individual expert named in a notice is not a partner; the Partner Search's person profiles and persons' announcements are never read, and a self-registered Partner Search profile typed Other, SME or private for-profit whose name carries no legal form, organisation word or digit is left out with its announcements (it may be a person's own registration).
@@ -410,11 +427,20 @@ async def list_partners(
     country: Optional[str] = Query(None, min_length=2, max_length=2, description="ISO-2; EL/GR and UK/GB are the same country."),
     activity_type: Optional[str] = Query(None, description="HES | REC | PRC | PUB | OTH (projects only)."),
     is_sme: Optional[bool] = Query(None, description="SME as CORDIS states it (projects only)."),
-    since: Optional[date] = Query(None, description="Activities starting on or after (YYYY-MM-DD)."),
+    published_from: Optional[date] = Query(None, description="Activities dated on or after (YYYY-MM-DD: a project's start, a payment's project start, an award's contract signature, an announcement's date); `since` and `from` are aliases."),
+    published_to: Optional[date] = Query(None, description="Activities dated on or before (YYYY-MM-DD); `until` and `to` are aliases."),
+    since: Optional[date] = Query(None, description="The same as `published_from`."),
+    until: Optional[date] = Query(None, description="The same as `published_to`."),
+    from_: Optional[date] = Query(None, alias="from", include_in_schema=False),
+    to: Optional[date] = Query(None, include_in_schema=False),
+    created_from: Optional[datetime] = Query(None, description="The organisation first recorded by Brubru (its `creation_date`) on or after (ISO date or datetime, UTC)."),
+    created_to: Optional[UpperBoundDatetime] = Query(None, description="Its `creation_date` on or before; a bare date covers the whole day."),
+    updated_from: Optional[datetime] = Query(None, description="Its `updated_date` (its most recently changed matching activity) on or after. The incremental-sync filter."),
+    updated_to: Optional[UpperBoundDatetime] = Query(None, description="Its `updated_date` on or before; a bare date covers the whole day."),
     min_amount_eur: Optional[float] = Query(None, ge=0, description="EU contribution plus payments over the matches, at least."),
     max_amount_eur: Optional[float] = Query(None, ge=0, description="EU contribution plus payments over the matches, at most."),
     source: str = Query("all", description="all | projects | payments | awards | announcements."),
-    order: str = Query("matches", description="matches | amount | name."),
+    order: str = Query("matches", description="matches | amount | name | updated_asc | updated_desc | created_asc | created_desc. Page an incremental window with updated_asc."),
     page: int = Query(1, ge=1),
     limit: int = Query(50, ge=1, le=200),
     include_body: bool = include_body_param(),
@@ -425,23 +451,25 @@ async def list_partners(
                                 (source, SOURCES, "source"), (order, ORDERS, "order")):
         if val is not None and val not in allowed:
             raise HTTPException(status_code=400, detail=f"{label} must be one of {list(allowed)}")
+    window = validate_window(created_from, created_to, updated_from, updated_to)
     sql, params = _sql(q=q, name=name, role=role, programme=programme, topic=topic, dg=dg, country=country,
-                       activity_type=activity_type, is_sme=is_sme, since=since, source=source,
+                       activity_type=activity_type, is_sme=is_sme, since=published_from or since or from_, source=source,
                        min_amount_eur=min_amount_eur, max_amount_eur=max_amount_eur, key=None, order=order,
-                       matches_cap=MATCHES_ON_LIST)
+                       matches_cap=MATCHES_ON_LIST, until=published_to or until or to, window=window)
     if sql is None:
         return build_envelope([], 0, page, limit)
     params.update(limit=limit, offset=(page - 1) * limit)
     db.execute(text("SET LOCAL statement_timeout = '60s'"))
     rows = db.execute(text(sql), params).fetchall()
     base = str(request.base_url).rstrip("/")
-    return without_bodies(build_envelope([_item(r, base) for r in rows], rows[0].total if rows else 0, page, limit), include_body)
+    return without_bodies(build_envelope([_item(r, base) for r in rows], rows[0].total if rows else 0, page, limit,
+                                         updated_from=window["updated_from"], updated_to=window["updated_to"]), include_body)
 
 
 @router.get("/partners/{id:path}", response_model=PartnerItem, tags=["v2-funding"],
             summary="One partner — an organisation's funded projects, EU payments, contract awards and Partner Search announcements",
             description="""**What it does**
-One organisation from `/api/v2/funding/partners`: every funded project it takes part in, every FTS payment it received and every TED contract award from an EU buyer it won (up to 50, newest first), with its counts and totals over all of them.
+One organisation from `/api/v2/funding/partners`, over ALL its activities (a list row counts only the activities that matched the search, so its counts, totals and dates can differ from this item): every funded project it takes part in, every FTS payment it received and every TED contract award from an EU buyer it won (up to 50, newest first), with its counts and totals over all of them.
 
 **When to use it**
 After a partner search, to read one organisation's whole record.

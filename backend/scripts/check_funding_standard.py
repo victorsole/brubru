@@ -60,13 +60,9 @@ STATUSES = {
 }
 # Open register items (docs/data_quality/problem_register.md): their failures print as KNOWN, not FAIL,
 # until Victor decides. list slug -> (register id, the rules it covers).
-KNOWN = {"partners": ("O103", {"every list"})}
+KNOWN: dict = {}   # O103 (/partners) fixed 30 Oct 2026
 # The figure a list's amount range compares, where it is not the item's amount_eur (as its description says).
-AMOUNT_OF = {
-    # the organisation's EU contribution plus its payments over the matches (O103: amount_eur is the payments alone)
-    "partners": lambda i: (None if i.get("eu_contribution") is None and i.get("amount_eur") is None
-                           else (i.get("eu_contribution") or 0) + (i.get("amount_eur") or 0)),
-}
+AMOUNT_OF: dict = {}   # /partners' amount_eur is the figure its range compares since 30 Oct 2026 (O103)
 # Lists that need a parameter to answer at all: every call to them carries it.
 REQUIRED = {"partners": {"q": "hydrogen"}}   # a partner search over every organisation is not served
 # Lists that keep a larger maximum page until the legacy date (GovClipping's endpoints, §8).
