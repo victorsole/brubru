@@ -72,15 +72,43 @@ def test_the_same_file_printed_in_both_forms_is_read_once(monkeypatch):
     assert refs.count("2013/0403(COD)") == 1
 
 
-def test_a_refused_page_fails_the_job_instead_of_reporting_nothing_to_do(monkeypatch):
+class _ReadOnlyDb:
+    def close(self):
+        pass
+
+
+def test_a_refused_page_is_degraded_for_72_hours_after_the_last_good_run_then_fails(monkeypatch, capsys):
+    """30 Oct 2026 (Victor): epthinktank.eu would not serve the page from 29 Oct, and the job made
+    the cron red twice a day. A refusal is the site's state: degraded while the last good run is
+    under 72 h old, failed after; it is never read as nothing to do, and nothing is written."""
+    from datetime import datetime, timedelta, timezone
+    import services.sync.freshness as freshness
+
     assert _scrape(monkeypatch, 403, "Forbidden") == []
     monkeypatch.setattr(scraper_mod.aiohttp, "ClientSession", lambda *a, **kw: _Session(403, "Forbidden"))
     opened = []
-    monkeypatch.setattr(job, "SessionLocal", lambda: opened.append(1))
+    monkeypatch.setattr(job, "SessionLocal", lambda: opened.append(1) or _ReadOnlyDb())
     for dry_run in (True, False):
         stats = asyncio.run(job.sync_legislation_in_progress(dry_run=dry_run))
         assert stats["total_scraped"] == 0 and stats["created"] == 0
-        assert stats["errors"] and "listed no procedure" in stats["errors"][0]
-    assert opened == []  # nothing is written from an empty page
+        assert stats["refused"] and "HTTP 403" in stats["errors"][0]
+    assert opened == []  # nothing is written from a refused page
+    monkeypatch.setattr(job.sys, "argv", ["sync_eprs_legislation_in_progress.py"])
+    now = datetime.now(timezone.utc)
+    monkeypatch.setattr(freshness, "last_success_at", lambda db, key: now - timedelta(hours=10))
+    assert job.main() == 0
+    assert "[SYNC_STATUS] degraded: source unreachable" in capsys.readouterr().out
+    monkeypatch.setattr(freshness, "last_success_at", lambda db, key: now - timedelta(hours=80))
+    assert job.main() == 1
+    monkeypatch.setattr(freshness, "last_success_at", lambda db, key: None)
+    assert job.main() == 1
+
+
+def test_a_page_that_answers_but_lists_nothing_fails_at_once(monkeypatch):
+    """A changed layout is a fault of ours, never a refusal."""
+    monkeypatch.setattr(scraper_mod.aiohttp, "ClientSession",
+                        lambda *a, **kw: _Session(200, "<html><body>New layout</body></html>"))
+    stats = asyncio.run(job.sync_legislation_in_progress(dry_run=True))
+    assert stats["refused"] is None and "listed no procedure" in stats["errors"][0]
     monkeypatch.setattr(job.sys, "argv", ["sync_eprs_legislation_in_progress.py"])
     assert job.main() == 1

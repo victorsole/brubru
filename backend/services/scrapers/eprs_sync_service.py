@@ -235,6 +235,13 @@ class SourceReport:
     fetched: int = 0               # items fetched inside the window
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
+    # The errors where the site would not serve us (a timeout, a refused connection, a WAF page, an
+    # HTTP error status), also in `errors`: the site's state, not a broken parser (30 Oct 2026).
+    refused: List[str] = field(default_factory=list)
+
+    def refuse(self, message: str) -> None:
+        self.errors.append(message)
+        self.refused.append(message)
 
 
 def is_waf_response(status: Optional[int], body: str) -> bool:
@@ -446,14 +453,14 @@ class ThinkTankPortalSource:
             try:
                 status, body = await self._http_get(THINKTANK_RSS_URL, params)
             except Exception as exc:
-                report.errors.append(f"Think Tank RSS page {page}: {type(exc).__name__}: {exc}")
+                report.refuse(f"Think Tank RSS page {page}: {type(exc).__name__}: {exc}")
                 return None
             if is_waf_response(status, body):
-                report.errors.append(
+                report.refuse(
                     f"Think Tank RSS page {page}: WAF signature (HTTP {status}, {len(body or '')} bytes)")
                 return None
             if status != 200:
-                report.errors.append(f"Think Tank RSS page {page}: HTTP {status}")
+                report.refuse(f"Think Tank RSS page {page}: HTTP {status}")
                 return None
             try:
                 page_items = parse_thinktank_rss(body)
@@ -478,10 +485,10 @@ class ThinkTankPortalSource:
             try:
                 status, body = await self._http_get(THINKTANK_LISTING_URL, params)
             except Exception as exc:
-                report.errors.append(f"Think Tank listing page {page}: {type(exc).__name__}: {exc}")
+                report.refuse(f"Think Tank listing page {page}: {type(exc).__name__}: {exc}")
                 return None
             if is_waf_response(status, body) or status != 200:
-                report.errors.append(
+                report.refuse(
                     f"Think Tank listing page {page}: WAF signature or HTTP {status} ({len(body or '')} bytes)")
                 return None
             try:
@@ -580,12 +587,12 @@ class EPRSBlogFeedSource:
             try:
                 status, body = await self._http_get(BLOG_FEED_URL, params)
             except Exception as exc:
-                report.errors.append(f"Blog feed page {page}: {type(exc).__name__}: {exc}")
+                report.refuse(f"Blog feed page {page}: {type(exc).__name__}: {exc}")
                 break
             if page > 1 and status == 404:
                 break  # WordPress answers 404 past the last page
             if is_waf_response(status, body) or status != 200:
-                report.errors.append(
+                report.refuse(
                     f"Blog feed page {page}: WAF signature or HTTP {status} ({len(body or '')} bytes)")
                 break
             parsed = feedparser.parse(body)
@@ -707,6 +714,9 @@ class EPRSSyncService:
             'by_type': {},
             'added_rows': [],
             'nothing_fetched': False,
+            # The errors where a site would not serve us (SourceReport.refused), with their text.
+            'refused': 0,
+            'refused_details': [],
         }
 
         batches: List[Tuple[str, List[Dict[str, Any]]]] = []
@@ -725,6 +735,8 @@ class EPRSSyncService:
                 stats['errors'] += 1
                 stats['error_details'].append(f"{report.name}: {err}")
                 logger.error(f"[ERROR] EPRS source {report.name}: {err}")
+            stats['refused'] += len(report.refused)
+            stats['refused_details'].extend(f"{report.name}: {r}" for r in report.refused)
             stats['warnings'].extend(f"{report.name}: {w}" for w in report.warnings)
             if len(items) > limit:
                 stats['warnings'].append(
@@ -743,6 +755,8 @@ class EPRSSyncService:
             stats['nothing_fetched'] = True
             stats['errors'] += 1
             stats['error_details'].append("No source could be fetched; nothing was synced")
+            if stats['refused'] == stats['errors'] - 1:   # every source refused us: the sites, not the job
+                stats['refused'] += 1
 
         seen_ids = set()
         for source_name, items in batches:

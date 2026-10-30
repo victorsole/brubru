@@ -19,6 +19,7 @@ This scraper extracts all procedure references and can sync them
 to the database as carriages with source='oeil_direct'.
 """
 
+import asyncio
 import logging
 import re
 import aiohttp
@@ -134,6 +135,10 @@ class LegislationInProgressScraper:
         self._cache_time: Optional[datetime] = None
         self._cache_ttl = timedelta(seconds=cache_ttl_seconds)
         self._timeout = timeout
+        # Why the last fetch gave no page: the site would not serve us (a timeout, a refused
+        # connection, an HTTP error status). None when the page came back, even if it listed
+        # nothing: that is a layout change, a fault of ours (30 Oct 2026).
+        self.refused: Optional[str] = None
 
         logger.info("Initialized LegislationInProgressScraper")
 
@@ -377,18 +382,27 @@ class LegislationInProgressScraper:
         entries: List[LegislationInProgressEntry] = []
         seen_procedures: Set[str] = set()
 
+        self.refused = None
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(
                     self.PAGE_URL,
                     timeout=aiohttp.ClientTimeout(total=self._timeout)
                 ) as response:
-                    if response.status != 200:
-                        logger.error(f"Failed to fetch page: HTTP {response.status}")
-                        return entries
-
                     html = await response.text()
+                    if response.status != 200:
+                        self.refused = f"{self.PAGE_URL}: HTTP {response.status} ({len(html or '')} bytes)"
+                        logger.error(f"Failed to fetch page: {self.refused}")
+                        return entries
+        except (aiohttp.ClientError, asyncio.TimeoutError, OSError) as e:
+            self.refused = f"{self.PAGE_URL}: {type(e).__name__}: {e}"
+            logger.error(f"Failed to fetch page: {self.refused}")
+            return entries
+        except Exception as e:      # anything else is ours (as before: nothing listed, not a refusal)
+            logger.error(f"Scraping failed: {str(e)}")
+            return entries
 
+        try:
             soup = BeautifulSoup(html, 'html.parser')
 
             # The page structure has tables with policy areas

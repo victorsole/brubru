@@ -60,7 +60,9 @@ async def sync_legislation_in_progress(
         'created': 0,
         'skipped_existing': 0,
         'skipped_no_ref': 0,
-        'errors': []
+        'errors': [],
+        # Set when the site would not serve the page at all (freshness.unreachable_exit decides).
+        'refused': None,
     }
 
     # Initialize scraper
@@ -73,10 +75,14 @@ async def sync_legislation_in_progress(
         stats['total_scraped'] = len(procedures)
         logger.info(f"Found {len(procedures)} procedures")
 
+        if not procedures and scraper.refused:
+            stats['refused'] = scraper.refused
+            stats['errors'].append(f"the EPRS page could not be read: {scraper.refused}")
+            return stats
         if not procedures:
-            # The scraper returns an empty list for a refused or changed page (HTTP 403 gave
-            # "scraped 0" and exit 0). The page lists some 200 files, so none is never a result.
-            stats['errors'].append("the EPRS page listed no procedure: it was refused, or its layout changed")
+            # The page came back and lists nothing (a refusal is handled above): the page lists
+            # some 200 files, so none is never a result. It fails at once.
+            stats['errors'].append("the EPRS page answered but listed no procedure: its layout changed")
             return stats
 
         if dry_run:
@@ -210,6 +216,13 @@ def main():
         if len(stats['errors']) > 10:
             logger.info(f"  ... and {len(stats['errors']) - 10} more")
 
+    if stats['refused'] and len(stats['errors']) == 1:
+        from services.sync.freshness import last_success_at, unreachable_exit
+        db = SessionLocal()
+        try:
+            return unreachable_exit([stats['refused']], last_success_at(db, 'eprs_legislation'))
+        finally:
+            db.close()
     return 0 if not stats['errors'] else 1
 
 

@@ -58,10 +58,14 @@ from services.scrapers.eprs_sync_service import EPRSSyncService
 EXIT_OK = 0
 EXIT_ERRORS = 1
 EXIT_NOTHING_FETCHED = 2
+# Every error was a site refusing us: decided by the job's last success (freshness.unreachable_exit).
+EXIT_UNREACHABLE = -1
 
 
 def exit_code_for(stats: dict) -> int:
     """A walled source must never exit 0. 'Skipped' is not evidence of health."""
+    if stats.get('errors') and stats.get('refused', 0) == stats['errors']:
+        return EXIT_UNREACHABLE
     if stats.get('nothing_fetched'):
         return EXIT_NOTHING_FETCHED
     if stats.get('errors'):
@@ -170,7 +174,15 @@ async def main():
                 until=args.until,
             )
         code = exit_code_for(result)
-        if code == EXIT_NOTHING_FETCHED:
+        if code == EXIT_UNREACHABLE:
+            from core.database import SessionLocal
+            from services.sync.freshness import last_success_at, unreachable_exit
+            db = SessionLocal()
+            try:
+                code = unreachable_exit(result['refused_details'], last_success_at(db, 'eprs_publications'))
+            finally:
+                db.close()
+        elif code == EXIT_NOTHING_FETCHED:
             print("\n[ERROR] Nothing could be fetched from any EPRS source; the table was not updated.")
         elif code == EXIT_ERRORS:
             print(f"\n[ERROR] EPRS sync finished with {result['errors']} error(s); see details above.")

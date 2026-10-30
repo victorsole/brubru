@@ -25,6 +25,45 @@ logger = logging.getLogger(__name__)
 # never finishes inside its budget must not sit quietly in `degraded` for ever.
 BUDGET_STOP = "time budget reached"
 
+# A site that will not serve us (a timeout, a refused connection, a WAF page, an HTTP error
+# status) is the site's state, not a broken job (Victor, 30 Oct 2026: epthinktank.eu has been
+# unreachable since 29 Oct, and its two EPRS jobs made the cron red twice a day). Such a run is
+# recorded `degraded`, with the reason, while the job's last success is less than
+# UNREACHABLE_GRACE_HOURS old; after that it fails as before, and two failures in a row are red.
+# A page that answers but no longer parses is never this: it fails at once.
+UNREACHABLE = "source unreachable"
+UNREACHABLE_GRACE_HOURS = 72
+
+
+def unreachable_exit(reasons: List[str], last_success: Optional[datetime],
+                     now: Optional[datetime] = None) -> int:
+    """The exit code of a job whose only errors are refusals: 0 with a `[SYNC_STATUS] degraded:`
+    line (the cron runner records it degraded) inside the grace, 1 after it or with no success on
+    record. Prints the line itself."""
+    now = now or datetime.now(timezone.utc)
+    why = "; ".join(reasons)[:600]
+    if last_success is not None:
+        if last_success.tzinfo is None:
+            last_success = last_success.replace(tzinfo=timezone.utc)
+        hours = (now - last_success).total_seconds() / 3600
+        if hours < UNREACHABLE_GRACE_HOURS:
+            print(f"[SYNC_STATUS] degraded: {UNREACHABLE} ({why}); last good run "
+                  f"{last_success:%d %b %H:%M} UTC, {hours:.0f}h ago; it fails after {UNREACHABLE_GRACE_HOURS}h",
+                  flush=True)
+            return 0
+        print(f"[ERROR] {UNREACHABLE} for {hours:.0f}h, over {UNREACHABLE_GRACE_HOURS}h ({why})", flush=True)
+        return 1
+    print(f"[ERROR] {UNREACHABLE}, and no good run on record ({why})", flush=True)
+    return 1
+
+
+def last_success_at(db: Session, source_key: str) -> Optional[datetime]:
+    """When the source last finished with `success` on a deployed runner (a laptop's runs are not
+    the production verdict)."""
+    return db.execute(text(
+        "SELECT max(finished_at) FROM sync_runs WHERE source_key = :k AND status = 'success' "
+        "AND runner IS DISTINCT FROM 'local'"), {"k": source_key}).scalar()
+
 
 def current_runner() -> str:
     """Where this process runs. sync_runs is shared, so a laptop run used to be
