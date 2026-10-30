@@ -49,11 +49,11 @@ for attempt in {1..60}; do
   # 7 Oct 2026, pushed at 10:58 "idle", deployed 11:05, journey_precompute cut mid-run and
   # the cron reported "Deploy crashed". Idle NOW is not idle when the deploy lands.
   MIN=$((10#$(date -u +%M)))
-  # In the economy hours (Brussels 05-07 and 11-13) the dispatch starts a batch as late as
-  # :07 (05:06 UTC on 30 Oct): wait until :10, when it shows in `background`.
-  LAST=3
-  case "$(TZ=Europe/Brussels date +%H)" in 05|06|07|11|12|13) LAST=10 ;; esac
-  if (( MIN >= 48 || MIN < LAST )); then
+  # The dispatch starts the hour's tiers and economy batch as late as :07 (05:06 UTC on 30 Oct),
+  # so until :10 an idle answer can be the moment before they start: 30 Oct, pushed 14:03:08
+  # "idle", the 14:04:38 dispatch fired the fast and warm tiers, the deploy landed about 14:11
+  # and cut both. From :10 they show in `in_flight` or `background`.
+  if (( MIN >= 48 || MIN < 10 )); then
     print "the deploy would land on the hourly dispatch (minute $MIN); waiting"
     [ "$WAIT" = 1 ] || exit 1
     sleep 60
