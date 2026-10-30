@@ -43,8 +43,10 @@ _RE_META = re.compile(r"([.^$*+?()\[\]{}|\\])")
 
 
 def _folded(col: Any):
-    """The column, lowercased and stripped of diacritics."""
-    return func.unaccent(func.lower(col))
+    """The column, lowercased and stripped of diacritics: brubru_fold(x) is unaccent(lower(x)) with its
+    dictionary named, so IMMUTABLE and indexable (migration 320: trigram indexes on the TED notices'
+    four columns took a count from 3.7 s to 0.11 s, 30 Oct 2026)."""
+    return func.brubru_fold(col)
 
 
 def text_match(q: Optional[str], *cols: Any):
