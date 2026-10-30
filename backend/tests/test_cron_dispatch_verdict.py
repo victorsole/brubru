@@ -373,3 +373,31 @@ def test_the_heartbeat_records_the_verdict_mark_at_the_given_instant(monkeypatch
     from fastapi import HTTPException
     with pytest.raises(HTTPException):
         asyncio.run(cron.cron_heartbeat(authorization="x", judged_at="yesterday"))
+
+
+def test_a_background_batch_is_served_apart_from_in_flight_until_its_task_ends(monkeypatch):
+    """30 Oct 2026: economy batch 2 ran as a background task with nothing in flight, so the push
+    guard saw an idle cron and a deploy cut the batch after 7 of 26 bodies. It is listed in
+    `background` (the guard waits for it), never in `in_flight` (the dispatcher waits for that)."""
+    import asyncio
+    import datetime as dt
+    import api.cron as cron
+    monkeypatch.setattr(cron, "SessionLocal", lambda: _FakeDB(dt.datetime(2026, 10, 30, 12, 30, tzinfo=dt.timezone.utc)))
+    monkeypatch.setattr(cron, "_verify_cron_secret", lambda a: None)
+    monkeypatch.setattr(cron, "_BACKGROUND", {})
+    seen = {}
+
+    async def scenario():
+        release = asyncio.Event()
+        task = asyncio.create_task(release.wait())
+        cron._track_background(task, "/api/cron/sync/economy?batch=2")
+        seen["during"] = await cron.cron_runs_since(minutes=60, authorization="x")
+        release.set()
+        await task
+        await asyncio.sleep(0)            # the done callback runs on the next loop turn
+        seen["after"] = await cron.cron_runs_since(minutes=60, authorization="x")
+
+    asyncio.run(scenario())
+    assert seen["during"]["background"] == ["/api/cron/sync/economy?batch=2"]
+    assert "/api/cron/sync/economy?batch=2" not in seen["during"]["in_flight"]
+    assert seen["after"]["background"] == []

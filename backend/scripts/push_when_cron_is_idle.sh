@@ -36,7 +36,9 @@ except Exception:
     print("UNREADABLE"); raise SystemExit
 if "in_flight" not in data:
     print("UNREADABLE"); raise SystemExit
-running = data.get("in_flight") or []
+# An economy batch runs as a background task after its request has returned, so it is in
+# `background`, not `in_flight` (30 Oct 2026: a push cut economy batch 2 after 7 of 26 bodies).
+running = (data.get("in_flight") or []) + (data.get("background") or [])
 print("BUSY:" + ",".join(running) if running else "IDLE")
 ' 2>/dev/null || print "UNREADABLE"
 }
@@ -47,7 +49,11 @@ for attempt in {1..60}; do
   # 7 Oct 2026, pushed at 10:58 "idle", deployed 11:05, journey_precompute cut mid-run and
   # the cron reported "Deploy crashed". Idle NOW is not idle when the deploy lands.
   MIN=$((10#$(date -u +%M)))
-  if (( MIN >= 48 || MIN < 3 )); then
+  # In the economy hours (Brussels 05-07 and 11-13) the dispatch starts a batch as late as
+  # :07 (05:06 UTC on 30 Oct): wait until :10, when it shows in `background`.
+  LAST=3
+  case "$(TZ=Europe/Brussels date +%H)" in 05|06|07|11|12|13) LAST=10 ;; esac
+  if (( MIN >= 48 || MIN < LAST )); then
     print "the deploy would land on the hourly dispatch (minute $MIN); waiting"
     [ "$WAIT" = 1 ] || exit 1
     sleep 60

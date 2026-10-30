@@ -33,12 +33,36 @@ sleep 2
 sed 's|https://brubru-production.up.railway.app|http://127.0.0.1:8788|' \
     scripts/push_when_cron_is_idle.sh > scripts/_guard_busy.sh
 set +e
-out=$(zsh scripts/_guard_busy.sh 2>&1); rc=$?
+out=$(zsh scripts/_guard_busy.sh --dry-run 2>&1); rc=$?   # a broken guard must not push from a test
 set -e
 rm -f scripts/_guard_busy.sh
 kill $stub 2>/dev/null || true
 [[ $rc -eq 1 ]] || { print "FAIL: busy fleet exited $rc, expected 1"; fail=1 }
 [[ "$out" == *"sync/tier/fast"* ]] || { print "FAIL: busy fleet did not name the tier"; fail=1 }
 
-[[ $fail -eq 0 ]] && print "push guard: 3 states OK (idle verified against production separately)"
+# 3. An economy batch runs in the background with nothing in flight (30 Oct 2026: a push cut
+#    batch 2 after 7 of 26 bodies). It is busy too.
+python3 - <<'PY' >/dev/null 2>&1 &
+import http.server, json
+class H(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        b = json.dumps({"in_flight": [], "background": ["/api/cron/sync/economy?batch=2"], "runs": []}).encode()
+        self.send_response(200); self.send_header("Content-Length", str(len(b))); self.end_headers()
+        self.wfile.write(b)
+    def log_message(self, *a): pass
+http.server.HTTPServer(("127.0.0.1", 8789), H).serve_forever()
+PY
+stub=$!
+sleep 2
+sed 's|https://brubru-production.up.railway.app|http://127.0.0.1:8789|' \
+    scripts/push_when_cron_is_idle.sh > scripts/_guard_background.sh
+set +e
+out=$(zsh scripts/_guard_background.sh --dry-run 2>&1); rc=$?   # a broken guard must not push from a test
+set -e
+rm -f scripts/_guard_background.sh
+kill $stub 2>/dev/null || true
+[[ $rc -eq 1 ]] || { print "FAIL: a background batch exited $rc, expected 1"; fail=1 }
+[[ "$out" == *"economy?batch=2"* ]] || { print "FAIL: a background batch was not named"; fail=1 }
+
+[[ $fail -eq 0 ]] && print "push guard: 4 cases OK (idle verified against production separately)"
 exit $fail

@@ -31,6 +31,17 @@ _IN_FLIGHT: dict = {}
 # of 23 Sep died after 6 of 28 sources when another session pushed), and without this a
 # dispatcher that saw nothing in flight would call a truncated run green.
 _COMPLETED: dict = {}
+# Work an endpoint started as a background task and answered "started" for (economy batches, the
+# Commission heavy tier): path -> start time, until the task ends. `_IN_FLIGHT` cannot see it, since
+# its request has already returned, so the push guard saw nothing in flight while economy batch 2
+# ran and a deploy cut it after 7 of 26 bodies (30 Oct 2026). Served apart from `in_flight` on
+# /runs-since: the dispatcher waits while anything is in flight, and must not wait for these.
+_BACKGROUND: dict = {}
+
+
+def _track_background(task, path: str) -> None:
+    _BACKGROUND[path] = _time.time()
+    task.add_done_callback(lambda _t: _BACKGROUND.pop(path, None))
 
 
 async def _track_cron_activity(request: Request):
@@ -1335,6 +1346,7 @@ async def cron_sync_economy(
     _economy_running.add(batch)
     task = asyncio.create_task(_run_economy_batch_bg(batch, bodies))
     _economy_tasks.add(task)
+    _track_background(task, f"/api/cron/sync/economy?batch={batch}")
     task.add_done_callback(_economy_tasks.discard)
     return {"status": "started", "tier": f"economy_b{batch}", "bodies": len(bodies)}
 
@@ -1442,6 +1454,7 @@ async def cron_sync_commission_heavy(authorization: str = Header(...)):
     _commission_heavy_running.add(0)
     task = asyncio.create_task(_run_commission_heavy_bg())
     _commission_heavy_tasks.add(task)
+    _track_background(task, "/api/cron/sync/commission-heavy")
     task.add_done_callback(_commission_heavy_tasks.discard)
     return {"status": "started", "tier": "commission_heavy", "types": len(_COMMISSION_HEAVY_TYPES)}
 
@@ -1903,6 +1916,10 @@ async def cron_runs_since(
         # What is still working right now. An empty list is the only honest way for the
         # dispatcher to know a detached tier has ended.
         "in_flight": sorted(k.split("#")[0] for k in _IN_FLIGHT),
+        # Background work still running (an economy batch): what a push would cut. The
+        # dispatcher does not wait for it; the push guard does.
+        "background": sorted(_BACKGROUND),
+        "background_seconds": {p: round(_time.time() - t0, 1) for p, t0 in _BACKGROUND.items()},
         # ...and which calls reached their end IN THIS PROCESS, so "nothing in flight"
         # after a container replacement cannot pass as "the tier finished".
         "completed": {p: {"seconds_ago": round(_time.time() - v["at"], 1), "ok": v["ok"]}
