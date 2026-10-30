@@ -461,8 +461,12 @@ class TenderItem(BaseModel):
         "this list for the Tenderator on 29 Sep 2026; the same notice is on /ft-calls-for-tenders (see same_as) "
         "and leaves this list on the legacy date (Phase 4)."))
     same_as: List[str] = Field(default_factory=list, description=(
-        "The same notice on another Brubru list (its item URL): the F&T Portal's copy of a TED notice, or the "
-        "portal notice an ft_portal item copies. Empty when Brubru holds it once."))
+        "The same notice on another Brubru list (its item URL): the F&T Portal's copy of a TED notice, the "
+        "portal notice an ft_portal item copies, or the portal's tender of the procedure the notice states "
+        "(`contract_folder_id`, since 30 Oct 2026). Empty when Brubru holds it once."))
+    contract_folder_id: Optional[str] = Field(None, description=(
+        "The procedure id the notice states (eForms ContractFolderID); an EU institution's F&T Portal tender is "
+        "this id with -CN, -PIN ... (since 30 Oct 2026)."))
     status: Optional[str] = Field(None, description=(
         "open | closed | forthcoming | unknown. TED publishes none: it is set daily from the notice type and "
         "its own deadline (award and modification notices closed, a passed deadline closed, a prior "
@@ -550,7 +554,8 @@ def tender_item(r, converted: dict, same_as: Optional[dict] = None) -> TenderIte
         source="ft_portal" if getattr(r, "source", None) == "ft_portal" else "ted",
         same_as=(same_as or {}).get(r.id, []),
         id=r.id, publication_number=r.publication_number, notice_id=r.notice_id,
-        form_type=r.form_type, notice_subtype=r.notice_subtype, title=r.title, description=r.description,
+        form_type=r.form_type, notice_subtype=r.notice_subtype, contract_folder_id=getattr(r, "contract_folder_id", None),
+        title=r.title, description=r.description,
         official_name=r.official_name, buyer_country=r.buyer_country,
         buyer_legal_type=r.buyer_legal_type, buyer_level=r.buyer_level,
         procedure_type=r.procedure_type, cpv_codes=list(r.cpv_codes or []),
@@ -579,7 +584,9 @@ def ted_same_as(db: Session, rows, base: str) -> dict:
     for tid, fid in db.execute(text(
             "SELECT t.id, x.id FROM tenders t JOIN ft_calls_for_tenders x ON NOT x.is_test AND "
             "((x.tender_reference = t.publication_number AND x.source_url LIKE '%ted.europa.eu%') OR "
-            "(t.source = 'ft_portal' AND t.publication_number = 'FT-' || x.tender_reference)) "
+            "(t.source = 'ft_portal' AND t.publication_number = 'FT-' || x.tender_reference) OR "
+            # the portal's tender of the procedure the notice states (ContractFolderID, O104 c)
+            "(t.contract_folder_id IS NOT NULL AND regexp_replace(x.tender_reference, '-[A-Z]+$', '') = t.contract_folder_id)) "
             "WHERE t.id = ANY(:ids)"), {"ids": ids}).fetchall():
         out.setdefault(tid, []).append(f"{base.rstrip('/')}/api/v2/funding/ft-calls-for-tenders/{fid}")
     return out

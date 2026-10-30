@@ -70,9 +70,15 @@ _e = table("economy_items", *map(column, (
     "creation_date", "updated_at", "deadline", "status")))
 
 # Each source without the copies another source serves (O104), matched on an exact key.
+# The portal reference without its notice suffix (-CN, -PIN, -EXA): the procedure id (migration 322 indexes it).
+FT_PROCEDURE = "regexp_replace(x.tender_reference, '-[A-Z]+$', '')"
 _TED_NOT_FT_COPY = text(
     "NOT (coalesce(tenders.source, '') = 'ft_portal' AND EXISTS (SELECT 1 FROM ft_calls_for_tenders x "
-    "WHERE NOT x.is_test AND 'FT-' || x.tender_reference = tenders.publication_number))")
+    "WHERE NOT x.is_test AND 'FT-' || x.tender_reference = tenders.publication_number)) "
+    # A TED notice of a procedure the portal lists (the procedure id it states): the portal's tender is
+    # the item, as for every EU institution's tender (O104 c, 30 Oct 2026).
+    f"AND NOT (tenders.contract_folder_id IS NOT NULL AND EXISTS (SELECT 1 FROM ft_calls_for_tenders x "
+    f"WHERE NOT x.is_test AND {FT_PROCEDURE} = tenders.contract_folder_id))")
 _FT_NOT_TED_NOTICE = text(
     "NOT (ft_calls_for_tenders.source_url LIKE '%ted.europa.eu%' AND EXISTS (SELECT 1 FROM tenders x "
     "WHERE x.publication_number = ft_calls_for_tenders.tender_reference))")
@@ -237,6 +243,11 @@ def _same_as(db: Session, rows, base: str, routes: dict) -> Dict[tuple, List[str
                 "SELECT x.id, t.id FROM ft_calls_for_tenders x JOIN tenders t ON t.publication_number = 'FT-' || x.tender_reference "
                 "AND t.source = 'ft_portal' WHERE x.id = ANY(CAST(:ids AS uuid[]))"), {"ids": ft_ids}).fetchall():
             out.setdefault(("ft_tender", str(fid)), []).append(base + _ITEM_PATHS["ted"].format(tid))
+        # the TED notices of the same procedure (the procedure id they state, O104 c)
+        for fid, tid in db.execute(text(
+                f"SELECT x.id, t.id FROM ft_calls_for_tenders x JOIN tenders t ON t.contract_folder_id = {FT_PROCEDURE} "
+                "AND coalesce(t.source, '') <> 'ft_portal' WHERE x.id = ANY(CAST(:ids AS uuid[]))"), {"ids": ft_ids}).fetchall():
+            out.setdefault(("ft_tender", str(fid)), []).append(base + _ITEM_PATHS["ted"].format(tid))
     for src, ids, sql in (
             ("ft_tender", ft_ids, "SELECT x.id, economy_items.id, economy_items.body_code, economy_items.item_type "
                                   f"FROM ft_calls_for_tenders x JOIN economy_items ON {_AGENCY_FT_TENDER} = x.tender_reference "
@@ -271,7 +282,7 @@ GET /api/v2/funding/opportunities?updated_from=2026-10-29&order=updated_asc
 ```
 
 **You get back**
-A paginated list. Each item is the item of its own list, field for field (a TED notice carries the TED fields, a call its topic and programme), with `self` (that list's item) and `same_as`: the other lists' items for the same procedure. A procedure Brubru stores twice is served once: a TED notice the portal re-lists under its TED number is the TED item; a portal tender (copied into the TED table for the Tenderator) and an agency's page that links to a portal tender or topic are the portal's item. Two copies Brubru cannot yet match on an exact key are both served: a TED notice and a portal tender that share only the procedure's internal id.
+A paginated list. Each item is the item of its own list, field for field (a TED notice carries the TED fields, a call its topic and programme), with `self` (that list's item) and `same_as`: the other lists' items for the same procedure. A procedure Brubru stores twice is served once: a TED notice the portal re-lists under its TED number is the TED item; a portal tender (copied into the TED table for the Tenderator), a TED notice of a procedure the portal lists (the procedure id, `ContractFolderID`, it states: 224 on 30 Oct 2026) and an agency's page that links to a portal tender or topic are the portal's item.
 
 **Data freshness**
 As each source: TED and the F&T Portal daily; the agencies' pages as they are re-read. The F&T Portal's calls and tenders are complete from those that started on 1 January 2021 (the closed ones read back from the portal on 29 October 2026); earlier ones are held only where Brubru read them while they were open. TED notices are those `/tenders` holds."""

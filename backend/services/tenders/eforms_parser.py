@@ -370,6 +370,9 @@ class EFormsParser:
             "issue_time": self._find_text(root, ".//cbc:IssueTime"),
             "notice_type_code": self._find_text(root, ".//cbc:NoticeTypeCode"),
             "regulatory_domain": self._find_text(root, ".//cbc:RegulatoryDomain"),
+            # The procedure id (BT-04): the root's own cbc:ContractFolderID. An EU institution's tender
+            # is <it>-CN, -PIN ... on the F&T Portal, the only key the two share (O104 c, 30 Oct 2026).
+            "contract_folder_id": self._find_text(root, "cbc:ContractFolderID"),
         }
 
     def _extract_buyer(self, root: ET.Element) -> Dict[str, Any]:
@@ -814,11 +817,8 @@ class EFormsParser:
                     elif doc_type.text == "submissions":
                         result["submission_url"] = url
 
-        # Contract folder ID (for constructing TED URL)
-        folder_id = root.find(".//cac:AdditionalDocumentReference/cbc:ID", EFORMS_NS)
-        if folder_id is not None:
-            result["contract_folder_id"] = folder_id.text
-
+        # The procedure id is read with the identifiers: this read the first additional document's
+        # cbc:ID under that name (30 Oct 2026), overwriting it.
         return result
 
     def parse_to_tender_dict(self, xml_content: str, publication_number: str) -> Dict[str, Any]:
@@ -840,6 +840,7 @@ class EFormsParser:
             "notice_id": parsed.get("uuid") or parsed.get("notice_id"),
             "form_type": parsed.get("notice_type"),
             "notice_subtype": parsed.get("notice_type_code"),
+            "contract_folder_id": parsed.get("contract_folder_id"),
             "title": parsed.get("title", ""),
             "description": parsed.get("description"),
             "official_name": parsed.get("official_name"),

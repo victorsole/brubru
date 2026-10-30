@@ -42,6 +42,9 @@ class Tender(Base):
     title = Column(Text, nullable=False)
     description = Column(Text)
     official_name = Column(String(500))  # Contracting authority
+    # The procedure id the notice states (eForms cbc:ContractFolderID): the F&T Portal lists an EU
+    # institution's tender as <it>-CN, -PIN ... (migration 322, O104 c)
+    contract_folder_id = Column(Text)
     # eForms buyer-legal-type (BT-11: la, ra, cga, eu-ins-bod-ag, body-pl-la ...) and the level
     # of government it names (local, regional, national, eu, international; NULL when the code
     # does not say). Migration 305, 20 Oct 2026.

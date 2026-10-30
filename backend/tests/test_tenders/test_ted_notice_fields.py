@@ -73,3 +73,16 @@ def test_the_api_serves_and_filters_them():
     params = inspect.signature(w5.list_tenders).parameters
     for name in ("notice_subtype", "buyer_level", "buyer_legal_type", "currency"):
         assert name in params
+
+
+def test_the_procedure_id_is_the_notices_own_contract_folder_id():
+    """O104 c (30 Oct 2026): an EU institution's tender is <procedure id>-CN on the F&T Portal, and the TED
+    notice states that id as its root cbc:ContractFolderID. The parser read an additional document's cbc:ID
+    under that name instead (overwriting the right one), and nothing stored it."""
+    parser = EFormsParser()
+    assert parser.parse_to_tender_dict(SEK, "726269-2026")["contract_folder_id"] == "d579276a-226e-4b91-a9c8-fd0795867c36"
+    marker = "<cbc:ContractFolderID>d579276a-226e-4b91-a9c8-fd0795867c36</cbc:ContractFolderID>"
+    assert marker in SEK
+    with_doc = SEK.replace(marker, marker + "<cac:AdditionalDocumentReference><cbc:ID>DOC-0001</cbc:ID>"
+                                            "</cac:AdditionalDocumentReference>", 1)
+    assert parser.parse_to_tender_dict(with_doc, "726269-2026")["contract_folder_id"] == "d579276a-226e-4b91-a9c8-fd0795867c36"

@@ -468,6 +468,7 @@ class TenderFetcher:
             # Read by the parser and never stored until 20 Oct 2026 (56,526 of 57,135 empty).
             form_type=parsed_data.get("form_type"),
             notice_subtype=parsed_data.get("notice_subtype"),
+            contract_folder_id=parsed_data.get("contract_folder_id"),
             buyer_legal_type=parsed_data.get("buyer_legal_type"),
             buyer_level=parsed_data.get("buyer_level"),
             publication_date=self._parse_date(notice.get("PD") or notice.get("publicationDate")),

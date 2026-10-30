@@ -123,3 +123,17 @@ def test_a_ted_item_says_its_source_and_links_its_copy_on_the_list_and_the_item_
     assert "t.publication_number = 'FT-' || x.tender_reference" in sql
     item = _client(db).get("/api/v2/funding/tenders/7").json()
     assert (item["source"], item["same_as"]) == ("ft_portal", ["http://testserver/api/v2/funding/ft-calls-for-tenders/0f0e-uuid"])
+
+
+def test_a_ted_notice_of_a_procedure_the_portal_lists_is_the_portals_item():
+    """O104 c (30 Oct 2026): the procedure id a TED notice states (contract_folder_id, migration 322) is the
+    portal reference without its -CN/-PIN suffix; the portal's tender is the item and each names the other."""
+    import inspect
+    from api.v1 import w5_endpoints as ted
+    from api.v2.funding import opportunities as op
+    rule = str(op._TED_NOT_FT_COPY)
+    assert "tenders.contract_folder_id IS NOT NULL AND EXISTS (SELECT 1 FROM ft_calls_for_tenders x" in rule
+    assert "regexp_replace(x.tender_reference, '-[A-Z]+$', '') = tenders.contract_folder_id" in rule
+    assert op.FT_PROCEDURE == "regexp_replace(x.tender_reference, '-[A-Z]+$', '')"
+    assert "JOIN tenders t ON t.contract_folder_id = {FT_PROCEDURE}" in inspect.getsource(op._same_as)
+    assert "regexp_replace(x.tender_reference, '-[A-Z]+$', '') = t.contract_folder_id" in inspect.getsource(ted.ted_same_as)
