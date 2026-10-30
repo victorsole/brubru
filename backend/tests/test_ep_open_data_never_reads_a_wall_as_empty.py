@@ -108,3 +108,49 @@ def test_a_429_is_retried_and_then_raises_rather_than_reading_as_empty():
         mod.asyncio.sleep = original
     assert fake.calls == 3, "a throttle deserves retries before giving up"
     assert slept and all(s >= 5 for s in slept), "Retry-After must be honoured, with a floor"
+
+
+class _NoContent(_Resp):
+    """EP's 204 past the last page: no body at all, so json() fails as it does on httpx."""
+
+    def __init__(self):
+        super().__init__(None, status_code=204)
+
+    def json(self):
+        import json
+        return json.loads("")
+
+
+def test_a_204_past_the_last_full_page_ends_the_list():
+    """30 Oct 2026: committee-documents held exactly 3,200 items; the page at 3,200 answered 204
+    and the nightly amendment sync failed on 29 and 30 Oct with a JSONDecodeError."""
+    import services.api_clients.ep_open_data_client as mod
+
+    class Pages(_Client):
+        async def get(self, url, params=None):
+            self.calls += 1
+            if params["offset"] >= 200:
+                return _NoContent()
+            return _Resp({"data": [{"identifier": f"AFCO-PR-{params['offset'] + i}",
+                                    "work_type": "def/ep-document-types/REPORT_DRAFT"} for i in range(100)]})
+
+    c = EPOpenDataClient()
+    fake = Pages()
+    c._get_client = lambda: _done(fake)
+    old, mod.EPOpenDataClient.RATE_LIMIT_DELAY = mod.EPOpenDataClient.RATE_LIMIT_DELAY, 0
+    try:
+        stubs = asyncio.run(c._paginate_endpoint("committee-documents"))
+    finally:
+        mod.EPOpenDataClient.RATE_LIMIT_DELAY = old
+    assert len(stubs) == 200 and fake.calls == 3
+
+
+def test_a_204_on_the_first_page_is_a_fault_not_an_empty_list():
+    class Nothing(_Client):
+        async def get(self, url, params=None):
+            return _NoContent()
+
+    c = EPOpenDataClient()
+    c._get_client = lambda: _done(Nothing())
+    with pytest.raises(EPOpenDataUpstreamError):
+        asyncio.run(c._list_endpoint("committee-documents", offset=0, limit=100))

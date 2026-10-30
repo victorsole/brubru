@@ -168,6 +168,14 @@ class EPOpenDataClient:
                     continue
                 raise EPOpenDataUpstreamError(
                     f"{endpoint} offset={offset}: {last_error}, still refused after 3 tries")
+            # EP answers 204 with no body past the last page (30 Oct 2026: committee-documents held
+            # exactly 3,200 items, so offset 3,200 was a 204 and its empty body failed as JSON on
+            # 29 and 30 Oct). Past the first page that is the end of the list; at offset 0 it would
+            # say the whole list is empty, which is never true, so there it stays an upstream fault.
+            if response.status_code == 204:
+                if offset > 0:
+                    return []
+                raise EPOpenDataUpstreamError(f"{endpoint} offset=0: HTTP 204, no list at all")
             response.raise_for_status()
             data = response.json()
             # A 200 can carry the failure in its body. "data" absent plus "error"
