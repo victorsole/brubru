@@ -80,6 +80,10 @@ class FtsItem(BaseModel):
     call_id: Optional[str] = Field(None, description="The call the grant came from, when the FTS file names one.")
     project_id: Optional[str] = Field(None, description="Grant agreement number: the project at /api/v2/funding/ft-funded-projects/{project_id} when Brubru holds it.")
     project_acronym: Optional[str] = None
+    project: Optional[str] = Field(None, description=(
+        "The project this commitment funds, on /api/v2/funding/ft-funded-projects, when Brubru holds it "
+        "(30 Oct 2026: 46,200 of 46,476 lines with a project_id). The project's eu_contribution and its "
+        "beneficiaries' amounts are the same money: do not add them."))
     start_date: Optional[date] = Field(None, description="The project's start, where the FTS file gives one (the name on /ft-funded-projects).")
     end_date: Optional[date] = Field(None, description="The project's end, where the FTS file gives one.")
     project_start: Optional[date] = Field(None, **legacy("start_date"))
@@ -99,6 +103,20 @@ class FtsItem(BaseModel):
         self.start_date = self.start_date or self.project_start
         self.end_date = self.end_date or self.project_end
         return self
+
+
+def with_projects(db, items: list, base: str) -> list:
+    """Each item's `project`: the funded project's item when Brubru holds its grant agreement (one query a page)."""
+    ids = sorted({i.project_id for i in items if getattr(i, "project_id", None)})
+    if ids:
+        from urllib.parse import quote
+        from sqlalchemy import text
+        held = {r.project_id for r in db.execute(text(
+            "SELECT project_id FROM ft_funded_projects WHERE NOT is_test AND project_id = ANY(:ids)"), {"ids": ids}).fetchall()}
+        for i in items:
+            if i.project_id in held:
+                i.project = f"{base.rstrip('/')}/api/v2/funding/ft-funded-projects/{quote(str(i.project_id), safe='')}"
+    return items
 
 
 def to_item(r, *, with_body: bool, model=FtsItem, **extra):

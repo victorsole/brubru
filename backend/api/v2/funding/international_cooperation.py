@@ -112,7 +112,7 @@ GET /api/v2/funding/international-cooperation?country=Ukraine
 ```
 
 **You get back**
-A paginated envelope. Each item carries the structured award fields + the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; the detail endpoint has the full FTS record). The project's dates are `start_date` and `end_date`; `project_start` and `project_end` stay beside them as legacy names.
+A paginated envelope. Each item carries the structured award fields + the 5 datapoints (`body_txt` / `body_html` on every item unless `include_body=false`; the detail endpoint has the full FTS record). The project's dates are `start_date` and `end_date`; `project_start` and `project_end` stay beside them as legacy names. `project` links the funded project at `/api/v2/funding/ft-funded-projects/{project_id}` when Brubru holds it (its amount and the beneficiaries' are the same money).
 
 **Note**
 This is the *awards* side (who already received funding). Open biddable tenders run through OPSYS/TED and are not held here.
@@ -182,7 +182,8 @@ async def list_intl_cooperation(
     order_sql = sql_order(order, "e.creation_date", _fts.UPDATED, "e.id") or _ORDER_SQL[order]
     rows = db.execute(text(f"SELECT {_fts.cols(include_body)} {clause} ORDER BY {order_sql} "
                            "LIMIT :limit OFFSET :offset"), params).fetchall()
-    return build_envelope(with_body_names(db, [_item(r, with_body=include_body) for r in rows]), total, page, limit,
+    return build_envelope(_fts.with_projects(db, with_body_names(db, [_item(r, with_body=include_body) for r in rows]),
+                                             str(request.base_url)), total, page, limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -214,4 +215,4 @@ async def get_intl_cooperation(
     r = db.execute(text(f"SELECT {_fts.cols(True)} {_fts.FROM} AND e.id = :id"), {"id": item_id}).fetchone()
     if r is None:
         raise HTTPException(status_code=404, detail=f"No international-cooperation award with id {item_id}")
-    return with_body_names(db, [_item(r, with_body=True)])[0]
+    return _fts.with_projects(db, with_body_names(db, [_item(r, with_body=True)]), str(request.base_url))[0]

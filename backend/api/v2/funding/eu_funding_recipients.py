@@ -37,7 +37,7 @@ _ORDER_SQL = {
 }
 
 _DESC = f"""**What it does**
-Who received EU money under direct management, from the EU Financial Transparency System (FTS): one item per beneficiary of a legal commitment (a grant, a procurement contract, a contribution...). Each item carries the FTS file's own values: `beneficiary`, `country`, `city`, `amount_eur` (this beneficiary's contracted amount) and `commitment_total_eur` (the whole commitment's, shared by its beneficiaries), `funding_type`, `programme`, `dg` (the department that pays), `subject`, `is_coordinator`, `beneficiary_type`, `registration_number`, `vat_number`, `call_id`, `project_id` (the grant agreement: the project at `/api/v2/funding/ft-funded-projects/{{project_id}}` when Brubru holds it), `start_date` and `end_date` (the project's, where FTS gives them; `project_start` and `project_end` are their legacy names), `contract_ref`, `year`.
+Who received EU money under direct management, from the EU Financial Transparency System (FTS): one item per beneficiary of a legal commitment (a grant, a procurement contract, a contribution...). Each item carries the FTS file's own values: `beneficiary`, `country`, `city`, `amount_eur` (this beneficiary's contracted amount) and `commitment_total_eur` (the whole commitment's, shared by its beneficiaries), `funding_type`, `programme`, `dg` (the department that pays), `subject`, `is_coordinator`, `beneficiary_type`, `registration_number`, `vat_number`, `call_id`, `project_id` (the grant agreement) and `project` (its item at `/api/v2/funding/ft-funded-projects/{{project_id}}`, when Brubru holds it; the project's `eu_contribution` and its beneficiaries' amounts are the same money), `start_date` and `end_date` (the project's, where FTS gives them; `project_start` and `project_end` are their legacy names), `contract_ref`, `year`.
 
 **When to use it**
 Finding partners and competitors: who a DG paid, for what, how much; which organisations coordinate grants under a programme; what one organisation received (by VAT number). For one row per organisation, matched by subject, use `/api/v2/funding/partners`.
@@ -125,7 +125,8 @@ async def list_recipients(
     order_sql = sql_order(order, "e.creation_date", _fts.UPDATED, "e.id") or _ORDER_SQL[order]
     rows = db.execute(text(f"SELECT {_fts.cols(include_body)} {clause} ORDER BY {order_sql} "
                            "LIMIT :limit OFFSET :offset"), params).fetchall()
-    return build_envelope(with_body_names(db, [_fts.to_item(r, with_body=include_body) for r in rows]), total, page, limit,
+    return build_envelope(_fts.with_projects(db, with_body_names(db, [_fts.to_item(r, with_body=include_body) for r in rows]),
+                                             str(request.base_url)), total, page, limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])
 
 
@@ -160,7 +161,7 @@ async def get_recipient(
     r = db.execute(text(f"SELECT {_fts.cols(True)} {_fts.FROM} AND e.id = :id"), {"id": item_id}).fetchone()
     if r is None:
         raise HTTPException(status_code=404, detail=f"No EU funding recipient with id {item_id}")
-    return with_body_names(db, [_fts.to_item(r, with_body=True)])[0]
+    return _fts.with_projects(db, with_body_names(db, [_fts.to_item(r, with_body=True)]), str(request.base_url))[0]
 
 
 # /funding/all points each FTS row at this route (api/v2/funding/funding_all.py).
