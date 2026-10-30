@@ -49,10 +49,10 @@ class _DataPoints(BaseModel):
 
 class CohesionFinanceItem(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
-    item_type: str = Field("cohesion_allocation", description="Always cohesion_allocation (as on /funding/all).")
+    item_type: str = Field("cohesion_allocation", description="Always cohesion_allocation (as on /funding/budgets and /funding/all).")
     title: Optional[str] = Field(None, description="The programme's title (cci_title).")
     summary: Optional[str] = Field(None, description="Fund · Member State · allocation category · total EUR.")
-    body_code: Optional[str] = Field(None, description="The fund: erdf, esf, cf, jtf, interreg, emfaf, amif or isf (body= on /funding/all).")
+    body_code: Optional[str] = Field(None, description="The fund: erdf, esf, cf, jtf, interreg, emfaf, amif or isf (body= on /funding/budgets and /funding/all).")
     body_name: Optional[str] = Field(None, description="The fund's name.")
     amount_eur: Optional[float] = Field(None, description="The total EU allocation in euros (`total`).")
     fund: str
@@ -82,7 +82,7 @@ _STRUCT = (
     "y2021, y2022, y2023, y2024, y2025, y2026, y2027, "
     "total_non_flexible_amount, total_flexible_amount, total, share_of_fa_in_total"
 )
-# The shared fields of an allocation row, composed once: this list and /funding/all serve the same words.
+# The shared fields of an allocation row, composed once: this list, /funding/budgets and /funding/all serve the same words.
 SHARED_SQL = ("'cohesion_allocation' AS item_type, cci_title AS title, "
               "concat_ws(' · ', upper(fund), nullif(ms, ''), nullif(financial_allocation_category, ''), "
               "'total EUR ' || round(total)::text) AS summary, "

@@ -38,7 +38,7 @@ class CohesionOutcomeItem(_DataPoints):
     title: Optional[str] = Field(None, description="The indicator's name (the programme's short title).")
     summary: Optional[str] = Field(None, description="Indicator code · Member State · objective · the 2029 target and its unit.")
     status: Optional[str] = Field(None, description="Always null: an indicator has no status.")
-    body_code: Optional[str] = Field(None, description="The fund, as on its finances list and /funding/all: erdf, esf, cf, jtf, interreg, emfaf, amif or isf.")
+    body_code: Optional[str] = Field(None, description="The fund, as on its finances list and /funding/budgets: erdf, esf, cf, jtf, interreg, emfaf, amif or isf.")
     body_name: Optional[str] = Field(None, description="The fund's name.")
     amount_eur: Optional[float] = Field(None, description="Always null: an indicator counts outputs and results, not money.")
     fund: str

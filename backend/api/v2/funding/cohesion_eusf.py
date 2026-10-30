@@ -33,10 +33,10 @@ router = APIRouter()
 
 class EUSFCase(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
-    item_type: str = Field("solidarity_case", description="Always solidarity_case (as on /funding/all).")
+    item_type: str = Field("solidarity_case", description="Always solidarity_case (as on /funding/budgets and /funding/all).")
     title: Optional[str] = Field(None, description="The disaster's name (`name_of_disaster`).")
     summary: Optional[str] = Field(None, description="Country · year · disaster type · EUSF paid, EUR million.")
-    body_code: str = Field("eusf", description="Always eusf (body= on /funding/all).")
+    body_code: str = Field("eusf", description="Always eusf (body= on /funding/budgets and /funding/all).")
     body_name: Optional[str] = Field(None, description="The fund's name.")
     amount_eur: Optional[float] = Field(None, description="The grant paid in euros (`eusf_grant_paid_meur` x 1,000,000, to the euro).")
     year_of_occurrence: Optional[int] = None
@@ -65,7 +65,7 @@ _STRUCT = (
     "damage_pct, eusf_grant_paid_meur, public_url, document_date, created_at AS creation_date, "
     "updated_at AS updated_date"
 )
-# The shared fields of a case, composed once: this list and /funding/all serve the same words.
+# The shared fields of a case, composed once: this list, /funding/budgets and /funding/all serve the same words.
 SHARED_SQL = ("'solidarity_case' AS item_type, name_of_disaster AS title, "
               "concat_ws(' · ', nullif(applicant_country, ''), year_of_occurrence::text, nullif(disaster_type, ''), "
               "'EUSF paid EUR ' || round(eusf_grant_paid_meur)::text || 'm') AS summary, "

@@ -121,8 +121,10 @@ def _union_cte(include_body: bool) -> str:
     return _UNION_CTE_TMPL.replace("{b}", "body_txt, body_html, " if include_body else "")
 
 
-_DESC = """**What it does**
-One feed of **every EU fund** Brubru covers — the decentralised agency funding items (calls for **tender**, **grants** and calls for **expression of interest**), the per-programme grant calls ingested for their own endpoints (Justice `body=just`, Innovation Fund `body=innovfund`), AND the per-fund cohesion / structural-fund allocations (ERDF, ESF+, Cohesion Fund, JTF, Interreg, EMFAF, AMIF, ISF), the EU Solidarity Fund and the CAP funds (EAGF, EAFRD) — across every body, in one call.
+_DESC = """**Successors (30 Oct 2026).** The calls and tenders of every source (TED, the Funding & Tenders Portal and the EU agencies) are on `/api/v2/funding/opportunities`, each procedure once; the funds' budget money (cohesion allocations, Solidarity Fund cases, CAP payments) is on `/api/v2/funding/budgets`, without the CAP files' two EU-total rows. This route answers as before: it reads the EU agencies' own pages and the funds' tables, not TED or the Funding & Tenders Portal's lists.
+
+**What it does**
+One feed of the decentralised agency funding items (calls for **tender**, **grants** and calls for **expression of interest**), the per-programme grant calls ingested for their own endpoints (Justice `body=just`, Innovation Fund `body=innovfund`), AND the per-fund cohesion / structural-fund allocations (ERDF, ESF+, Cohesion Fund, JTF, Interreg, EMFAF, AMIF, ISF), the EU Solidarity Fund and the CAP funds (EAGF, EAFRD) — across every body, in one call.
 
 **When to use it**
 "Show me everything across EU funding", whether an agency tender, a Justice/Innovation-Fund grant call, or a Member State's cohesion-fund allocation. Filter by `item_type` (tender/grant/eoi_call/startup_funding/cohesion_allocation/solidarity_case/cap_payment), `body` (agency code or fund code, e.g. `efca`, `erdf`, `just`, `innovfund`), `status`, `q` (free text), and `published_from`/`published_to` on the item's date.

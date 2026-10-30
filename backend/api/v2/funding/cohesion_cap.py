@@ -33,11 +33,11 @@ router = APIRouter()
 
 class CAPPaymentItem(_DataPoints):
     id: int = Field(..., description="Stable Brubru row id (use it on the detail endpoint).")
-    item_type: str = Field("cap_payment", description="Always cap_payment (as on /funding/all).")
+    item_type: str = Field("cap_payment", description="Always cap_payment (as on /funding/budgets and /funding/all).")
     title: Optional[str] = Field(None, description="Fund · Member State.")
     summary: Optional[str] = Field(None, description="Member State · total EUR.")
     status: Optional[str] = Field(None, description="Always null: a payment row has no status.")
-    body_code: Optional[str] = Field(None, description="The fund: eagf or eafrd (body= on /funding/all).")
+    body_code: Optional[str] = Field(None, description="The fund: eagf or eafrd (body= on /funding/budgets and /funding/all).")
     body_name: Optional[str] = Field(None, description="The fund's name.")
     amount_eur: Optional[float] = Field(None, description="`total_eur`: net payments to date (EAFRD) or the total paid (EAGF).")
     fund: str
@@ -63,7 +63,7 @@ class CAPPaymentItem(_DataPoints):
 
 _STRUCT = ("id, fund, ms, planned_eu_amount, net_pre_financing, net_interim_payments, "
            "total_eur, payment_rate, fy_2023, fy_2024, fy_2025, fy_2026, fy_2027")
-# The shared fields of a payment row, composed once: this list and /funding/all serve the same words.
+# The shared fields of a payment row, composed once: this list, /funding/budgets and /funding/all serve the same words.
 SHARED_SQL = ("'cap_payment' AS item_type, concat_ws(' · ', upper(fund), nullif(ms, '')) AS title, "
               "concat_ws(' · ', nullif(ms, ''), 'total EUR ' || round(total_eur)::text) AS summary, "
               "lower(fund) AS body_code, total_eur AS amount_eur")
