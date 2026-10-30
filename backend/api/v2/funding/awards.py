@@ -80,8 +80,10 @@ _Q = {"project": f" AND {ft._PROJECT_TSV} @@ websearch_to_tsquery('english', :q)
 _SIDES = (("project", _PROJECT_SIDE), ("fts", _FTS_SIDE), ("ted_award", _TED_SIDE))
 
 
-def _side(src: str, q: bool) -> str:
-    return dict(_SIDES)[src].replace("{q}", _Q[src] if q else "")
+def _side(src: str, q: bool, changed: bool = False) -> str:
+    """One source's SELECT; `changed` (an updated_from window) adds the FTS lines' indexed way in (O105)."""
+    extra = (_Q[src] if q else "") + (f" AND {_fts.CHANGED_SINCE}" if changed and src == "fts" else "")
+    return dict(_SIDES)[src].replace("{q}", extra)
 
 
 def _order_sql(order: str) -> str:
@@ -95,18 +97,18 @@ def _order_sql(order: str) -> str:
             "amount": "amount_eur DESC NULLS LAST, src DESC, rid DESC"}[order]
 
 
-def _page_sql(order: str, clause: str, q: bool) -> str:
+def _page_sql(order: str, clause: str, q: bool, changed: bool = False) -> str:
     """The page: each source filtered, ordered and cut at offset + limit on its own (so a source's index
     serves its order: the FTS lines' date order is an index range), then the three merged in the same
     total order. Sorting the whole union instead read every FTS row (60-90 s, 30 Oct 2026)."""
     o = _order_sql(order)
-    sides = " UNION ALL ".join(f"(SELECT * FROM ({_side(src, q)}) s{clause} ORDER BY {o} LIMIT :side_limit)"
+    sides = " UNION ALL ".join(f"(SELECT * FROM ({_side(src, q, changed)}) s{clause} ORDER BY {o} LIMIT :side_limit)"
                                for src, _ in _SIDES)
     return f"SELECT src, rid FROM ({sides}) aw ORDER BY {o} LIMIT :limit OFFSET :offset"
 
 
-def _count_sql(clause: str, q: bool) -> str:
-    return "SELECT " + " + ".join(f"(SELECT count(*) FROM ({_side(src, q)}) s{clause})" for src, _ in _SIDES)
+def _count_sql(clause: str, q: bool, changed: bool = False) -> str:
+    return "SELECT " + " + ".join(f"(SELECT count(*) FROM ({_side(src, q, changed)}) s{clause})" for src, _ in _SIDES)
 
 
 class AwardItem(BaseModel):
@@ -256,8 +258,9 @@ async def list_awards(
         where.append("amount_eur <= :max_amount_eur"); params["max_amount_eur"] = amounts[1]
     clause = (" WHERE " + " AND ".join(where)) if where else ""
     params["side_limit"] = params["offset"] + limit
-    rows = db.execute(text(_page_sql(order, clause, "q" in params)), params).fetchall()
-    total = db.execute(text(_count_sql(clause, "q" in params)), params).scalar() or 0
+    changed = window["updated_from"] is not None and _fts.changed_is_narrow(db, window["updated_from"])
+    rows = db.execute(text(_page_sql(order, clause, "q" in params, changed)), params).fetchall()
+    total = db.execute(text(_count_sql(clause, "q" in params, changed)), params).scalar() or 0
     data = _build(db, rows, include_body, str(request.base_url).rstrip("/"))
     return build_envelope(data, total, page, limit,
                           updated_from=window["updated_from"], updated_to=window["updated_to"])

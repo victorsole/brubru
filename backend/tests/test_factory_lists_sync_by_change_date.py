@@ -176,7 +176,8 @@ def test_international_cooperation_counts_a_change_window_live():
     for _ in range(2):                                   # the cached total would skip the second count
         assert client.get("/api/v2/funding/international-cooperation",
                           params={"updated_from": "2026-10-22", "order": "updated_asc"}).status_code == 200
-    counts = [sql for sql, _ in db.sql if sql.startswith("SELECT count(*)")]
+    # the list's own counts, not the window's narrowness count (api/v2/funding/_fts.changed_is_narrow, O105)
+    counts = [sql for sql, _ in db.sql if sql.startswith("SELECT count(*)") and "updated_at >= :s " not in sql]
     assert len(counts) == 2 and all("greatest(e.updated_at, c.last_updated) >= :updated_from" in sql for sql in counts)
     assert "ORDER BY greatest(e.updated_at, c.last_updated) ASC, e.id ASC" in db.sql[-1][0]
 

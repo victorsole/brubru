@@ -26,6 +26,37 @@ FROM = ("FROM economy_items e LEFT JOIN fts_commitments c ON c.economy_item_id =
         "WHERE e.body_code = 'commission' AND e.item_type = 'funding_recipient'")
 # A change to the file's values is a change to the item: updated_date is the later of the two.
 UPDATED = "greatest(e.updated_at, c.last_updated)"
+# No index serves UPDATED, so an updated_from window read every FTS line (34.4 s a count, O105). "The
+# later of the two is on or after X" is "either is on or after X": the lines are found through the two
+# stamps' own indexes (idx_economy_items_updated_at, migration 321's ix_fts_commitments_last_updated)
+# and the exact rule stays beside it (0.29 s, 30 Oct 2026).
+CHANGED_SINCE = ("e.id IN (SELECT id FROM economy_items WHERE updated_at >= :updated_from "
+                 "UNION SELECT economy_item_id FROM fts_commitments WHERE last_updated >= :updated_from)")
+
+
+# The indexed way pays for a narrow window only: since 26 Oct 16:20 (104,320 lines) it took 108 s where
+# reading every line took 68 s, against 2.7 s instead of 128 s since the day before (30 Oct 2026).
+NARROW_WINDOW = 20_000
+
+
+def changed_is_narrow(db, since) -> bool:
+    """Whether few enough rows changed since `since` for the indexed way: a count over the same two
+    indexes (economy items of every kind, an upper bound)."""
+    from sqlalchemy import text
+    n = db.execute(text(
+        "SELECT count(*) FROM (SELECT id FROM economy_items WHERE updated_at >= :s "
+        "UNION SELECT economy_item_id FROM fts_commitments WHERE last_updated >= :s) x"), {"s": since}).scalar()
+    return (n or 0) <= NARROW_WINDOW
+
+
+def window_sql(where: list, params: dict, window: dict, db=None) -> None:
+    """The change window on an FTS list: the shared rule, plus the indexed way to the lines of a narrow
+    updated_from window."""
+    from api.v1._change_window import sql_window
+    sql_window(where, params, window, "e.creation_date", UPDATED)
+    since = window.get("updated_from")
+    if since is not None and (db is None or changed_is_narrow(db, since)):
+        where.append(CHANGED_SINCE)
 DATE_SORT = "coalesce(e.document_date, e.creation_date)"
 _COLS = (
     "e.id, e.title, e.summary, e.source_kind, e.public_url, e.document_date, e.creation_date, "

@@ -17,7 +17,7 @@ from fastapi import APIRouter, Depends, HTTPException, Path as PathParam, Query,
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from api.v1._change_window import SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, sql_window, validate_window
+from api.v1._change_window import SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order, validate_window
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from services.funding.shared_fields import with_body_names
@@ -119,7 +119,7 @@ async def list_recipients(
         where.append(f"{_fts.DATE_SORT} >= :since"); params["since"] = since
     if until:
         where.append(f"{_fts.DATE_SORT} < CAST(:until AS date) + 1"); params["until"] = until
-    sql_window(where, params, window, "e.creation_date", _fts.UPDATED)
+    _fts.window_sql(where, params, window, db)
     clause = _fts.FROM + "".join(f" AND {w}" for w in where)
     total = db.execute(text(f"SELECT count(*) {clause}"), params).scalar() or 0
     order_sql = sql_order(order, "e.creation_date", _fts.UPDATED, "e.id") or _ORDER_SQL[order]

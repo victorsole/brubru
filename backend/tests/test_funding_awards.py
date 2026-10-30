@@ -60,7 +60,7 @@ def test_the_filters_reach_the_query_and_bad_values_are_refused():
         "item_type": "funding_recipient", "status": "Ended", "body": "Commission", "country": "gr", "programme": "Horizon Europe",
         "published_from": "2025-01-01", "updated_from": "2026-10-01", "min_amount_eur": 5000, "order": "amount"})
     assert r.status_code == 200, r.text
-    sql, params = db.sql[0]
+    sql, params = next(x for x in db.sql if "LIMIT :limit OFFSET :offset" in x[0])   # after the window's narrowness count
     assert (params["item_type"], params["status"], params["body"]) == ("funding_recipient", "ended", "commission")
     assert set(params["countries"]) == {"EL", "GR"} and params["programme"] == "%Horizon Europe%"
     assert params["min_amount_eur"] == 5000 and "ORDER BY amount_eur DESC NULLS LAST, src DESC, rid DESC" in sql

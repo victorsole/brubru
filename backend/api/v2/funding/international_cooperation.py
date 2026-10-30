@@ -27,7 +27,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from api.v1._change_window import (SYNC_ORDERS, UpperBoundDatetime, any_window, sql_order, sql_window,
+from api.v1._change_window import (SYNC_ORDERS, UpperBoundDatetime, any_window, sql_order,
                                    validate_window)
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
@@ -174,7 +174,7 @@ async def list_intl_cooperation(
     if q:
         where.append("e.search_vector @@ plainto_tsquery('english', :q)"); params["q"] = q
     # The change window, on the columns served as creation_date / updated_date.
-    sql_window(where, params, window, "e.creation_date", _fts.UPDATED)
+    _fts.window_sql(where, params, window, db)
     clause = _fts.FROM + "".join(f" AND {w}" for w in where)
     # A change window is counted live: a 15-minute-old total would miss what just changed.
     total = (db.execute(text(f"SELECT count(*) {clause}"), params).scalar() or 0

@@ -1,0 +1,12 @@
+-- 321: an index on fts_commitments.last_updated, for the FTS lists' change window (30 Oct 2026, Victor's
+-- go; problem register O105).
+--
+-- An FTS line's updated_date is the later of its item's and its file values' stamps
+-- (greatest(economy_items.updated_at, fts_commitments.last_updated)), which no index serves: an
+-- updated_from window read every FTS line, 34.4 s for one count and 68-125 s a page, even when nothing
+-- had changed. "The later of the two is on or after X" is "either is on or after X", so the lists now
+-- find the lines through the two stamps (economy_items has idx_economy_items_updated_at; this is the
+-- other) and keep the exact rule beside it.
+--
+-- Run on its own, outside a transaction: CREATE INDEX CONCURRENTLY does not lock writes.
+CREATE INDEX CONCURRENTLY IF NOT EXISTS ix_fts_commitments_last_updated ON public.fts_commitments (last_updated, economy_item_id);
