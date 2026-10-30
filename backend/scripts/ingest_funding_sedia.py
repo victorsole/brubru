@@ -655,6 +655,13 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
         "target_audience": None,
         "published_at": published,
     }
+    if not is_tender:
+        # A call's date is the earlier of the portal's first publication of the record and its opening
+        # (Victor, 30 Oct 2026): `startDate` is the opening, a date ahead for every forthcoming call, and
+        # `esDA_FirstIngestDate` is a re-indexing stamp on older records (22 Nov 2024 on 2021-2024 calls).
+        first = parse_iso_date(first_or_none(md.get("esDA_FirstIngestDate")))
+        row["opening_date"] = published
+        row["published_at"] = min(first, published) if first and published else (published or first)
     if is_external:
         row.update(external_action_fields(md, topic_id, title, published, deadline, row["programme"]))
     if is_tender:
@@ -833,18 +840,19 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
     payload = dict(row)
     payload["framework_programme"] = payload.pop("programme", None)
     payload.pop("short_summary", None)
+    payload.setdefault("opening_date", None)
     cur.execute(
         """
         INSERT INTO ft_calls_for_proposals
             (topic_id, call_id, framework_programme, title, description, status,
              type_of_action, deadline, deadline_secondary, indicative_budget,
              budget_currency, source_url, documents_url, keywords, target_audience,
-             published_at, scraped_at, last_updated)
+             published_at, opening_date, scraped_at, last_updated)
         VALUES (%(topic_id)s, %(call_id)s, %(framework_programme)s, %(title)s,
                 %(description)s, %(status)s, %(type_of_action)s, %(deadline)s,
                 %(deadline_secondary)s, %(indicative_budget)s, %(budget_currency)s,
                 %(source_url)s, %(documents_url)s, %(keywords)s, %(target_audience)s,
-                %(published_at)s, NOW(), NOW())
+                %(published_at)s, %(opening_date)s, NOW(), NOW())
         ON CONFLICT (topic_id) DO UPDATE SET
             call_id = EXCLUDED.call_id,
             title = EXCLUDED.title,
@@ -875,7 +883,9 @@ def upsert_ft_calls(cur, row: Dict[str, Any]) -> None:
             framework_programme = COALESCE(EXCLUDED.framework_programme,
                 CASE WHEN ft_calls_for_proposals.framework_programme ~ '^ *[0-9]{4} *- *[0-9]{4} *$'
                      THEN NULL ELSE ft_calls_for_proposals.framework_programme END),
-            published_at = COALESCE(EXCLUDED.published_at, ft_calls_for_proposals.published_at),
+            -- A first publication never moves later: the earliest date read is kept (30 Oct 2026).
+            published_at = LEAST(EXCLUDED.published_at, ft_calls_for_proposals.published_at),
+            opening_date = COALESCE(EXCLUDED.opening_date, ft_calls_for_proposals.opening_date),
             deadline_secondary = COALESCE(EXCLUDED.deadline_secondary, ft_calls_for_proposals.deadline_secondary),
             deadline = COALESCE(EXCLUDED.deadline, ft_calls_for_proposals.deadline),
             -- The links and the budget were set on the first insert only (23 Oct 2026): 11 EU

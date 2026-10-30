@@ -893,3 +893,18 @@ def test_every_funding_list_sends_every_standard_parameter_it_declares_into_its_
     assert 0 < life["total"] < every["total"]
     assert all("life" in (i["title"] + " " + (i.get("acronym") or "")).lower() or "life" in str(i).lower() for i in life["data"])
     assert client.get("/api/v2/funding/programmes", params={"updated_from": "2099-01-01"}).json()["total"] == 0
+
+
+def test_a_call_item_serves_its_opening_apart_from_its_date():
+    """Migration 319 (30 Oct 2026): a row not re-read since still holds its opening in published_at."""
+    from datetime import datetime
+    from types import SimpleNamespace
+    from api.v1.funding_tenders_collections import _proposal_to_item
+    base = dict(id=1, topic_id="T", call_id=None, framework_programme="Horizon Europe (HORIZON)", title="t", description="d" * 50,
+                status="forthcoming", type_of_action=None, deadline=None, deadline_secondary=None, indicative_budget=None,
+                budget_currency="EUR", source_url="https://x", documents_url=None, keywords=[], target_audience=[],
+                last_updated=None, content_updated_at=None, first_seen_at=None)
+    reread = _proposal_to_item(SimpleNamespace(**base, published_at=datetime(2025, 12, 11, 23, 8), opening_date=datetime(2027, 10, 7)))
+    assert (str(reread.document_date), reread.opening_date.date().isoformat()) == ("2025-12-11", "2027-10-07")
+    old = _proposal_to_item(SimpleNamespace(**base, published_at=datetime(2027, 10, 7), opening_date=None))
+    assert old.opening_date == datetime(2027, 10, 7) and str(old.document_date) == "2027-10-07"

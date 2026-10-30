@@ -141,7 +141,7 @@ For an accelerator, incubator, business angel or ecosystem builder (like KinEtix
 - `status` — comma list, default `open,forthcoming` (also `closed`, `unknown`; `all` for every status). There is no `under-evaluation` value in the data; `unknown` is the one to add if you want rows whose source feed stated no status.
 - `programme` — one of the coarse labels (e.g. `HORIZON (EIC)`, `Digital Europe`, `Single Market Programme`).
 - `deadline_from`, `deadline_to` — the deadline window (`deadline_before` is the same as `deadline_to`).
-- `published_from`, `published_to` — the publication window (`since`, `until`, `from`, `to` are aliases). The publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first.
+- `published_from`, `published_to` — the publication window (`since`, `until`, `from`, `to` are aliases). The publication date is the earlier of the portal's first publication of the call and its opening (since 30 Oct 2026; until then the opening, so forthcoming calls carried a future date); the opening is `opening_date`.
 - `q` — free text over title / description.
 - `created_from` / `created_to`, `updated_from` / `updated_to` — incremental sync (a bare date as `_to` covers the whole day; a daily re-read that finds the same content does not move `updated_date`).
 - `order` — `deadline_desc` (default), `recent` / `oldest` (the publication date), `amount` (the largest budget first), or `updated_asc` to page a change window (also `updated_desc`, `created_asc`, `created_desc`).

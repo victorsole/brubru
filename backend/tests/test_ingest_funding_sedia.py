@@ -279,3 +279,30 @@ def test_the_closed_backfill_reads_every_record_in_one_page_windows_and_adds_onl
     assert f"{n2026} of {n2026} records read" in out
     assert f"identifiers={len(store) - 2} " in out and "apply=False" in out and "fetch_failures=0" in out
 
+
+
+def test_a_call_is_dated_by_the_earlier_of_its_first_publication_and_its_opening():
+    """30 Oct 2026 (Victor's decision, O95): startDate is the opening, ahead for every forthcoming call;
+    esDA_FirstIngestDate is when the portal first published the record, but a re-indexing stamp on
+    older records (22 Nov 2024 on ERC-2025-STG, after its own deadline). The earlier of the two."""
+    forthcoming = sedia.normalise_row(_grant(startDate=["2027-10-07T00:00:00.000+0000"],
+                                             esDA_FirstIngestDate=["2025-12-12T00:08:17.775+0100"]), today=TODAY)
+    assert forthcoming["published_at"].astimezone(dt.timezone.utc).date() == dt.date(2025, 12, 11)   # 00:08 CET = 23:08 UTC the day before
+    assert forthcoming["opening_date"].date() == dt.date(2027, 10, 7)
+    reindexed = sedia.normalise_row(_grant(startDate=["2024-07-10T00:00:00.000+0000"],
+                                           esDA_FirstIngestDate=["2024-11-22T10:00:00.000+0100"]), today=TODAY)
+    assert reindexed["published_at"].date() == dt.date(2024, 7, 10) == reindexed["opening_date"].date()
+    none = sedia.normalise_row(_grant(), today=TODAY)
+    assert none["published_at"] == none["opening_date"] and none["published_at"].date() == dt.date(2025, 11, 6)
+    tender = sedia.normalise_row(_tender(esDA_FirstIngestDate=["2026-09-01T00:00:00.000+0000"]), today=TODAY)
+    assert "opening_date" not in tender and tender["published_at"].date() == dt.date(2026, 9, 15)   # tenders unchanged
+
+
+def test_both_call_writers_keep_the_earliest_date_and_the_opening_apart():
+    import inspect
+    import ingest_ft_programme_calls as programme
+    src = inspect.getsource(sedia.upsert_ft_calls)
+    for text in (src, programme.UPSERT_FT_SQL):
+        assert "published_at = LEAST(EXCLUDED.published_at, ft_calls_for_proposals.published_at)" in text
+        assert "opening_date = COALESCE(EXCLUDED.opening_date, ft_calls_for_proposals.opening_date)" in text
+        assert "%(opening_date)s" in text

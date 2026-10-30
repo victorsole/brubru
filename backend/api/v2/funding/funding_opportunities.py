@@ -50,7 +50,7 @@ Only to keep an existing integration working until 23 Oct 2027: it serves the sa
 - `type_of_action` — substring.
 - `q` — substring on title + short_summary.
 - `deadline_from`, `deadline_to` — deadline window.
-- `published_from`, `published_to` — publication window (`since`, `until`, `from`, `to` are aliases); `created_from`, `created_to` — first recorded by Brubru; `updated_from`, `updated_to` — content changed. The publication date is the portal's opening date (`startDate`): a forthcoming call's lies ahead (all 264 forthcoming calls on 28 Oct 2026), so `order=recent` lists the latest planned openings first.
+- `published_from`, `published_to` — publication window (`since`, `until`, `from`, `to` are aliases); `created_from`, `created_to` — first recorded by Brubru; `updated_from`, `updated_to` — content changed. The publication date is the earlier of the portal's first publication of the call and its opening (since 30 Oct 2026; until then the opening, so forthcoming calls carried a future date); the opening is `opening_date`.
 - `order` — the latest deadline first (default) | recent | oldest (the publication date) | amount (the largest budget first) | updated_asc | updated_desc | created_asc | created_desc.
 - `min_amount_eur`, `max_amount_eur` — the budget in euros (`amount_eur`) at least / at most (a call with no euro figure is left out).
 - `limit` (default 50, max 200), `page` (1-indexed), `include_body` (default true).

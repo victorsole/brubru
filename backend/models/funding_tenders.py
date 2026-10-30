@@ -45,6 +45,8 @@ class FtCallForProposals(Base):
     target_audience = Column(ARRAY(Text), default=list)
     is_test = Column(Boolean, nullable=False, default=False)
     published_at = Column(DateTime)
+    # The portal's startDate; published_at is the earlier of the first publication and it (migration 319).
+    opening_date = Column(DateTime)
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     scraped_at = Column(DateTime, server_default=func.now())
     detected_lang = Column(String(8))  # ISO-639-1; feeds the translation overlay

@@ -164,13 +164,17 @@ INSERT INTO ft_calls_for_proposals
     (topic_id, call_id, framework_programme, title, description, status,
      type_of_action, deadline, deadline_secondary, indicative_budget,
      budget_currency, source_url, documents_url, keywords, target_audience,
-     published_at, scraped_at, last_updated)
+     published_at, opening_date, scraped_at, last_updated)
 VALUES
     (%(topic_id)s, %(call_id)s, %(framework_programme)s, %(title)s, %(description)s,
      %(status)s, %(type_of_action)s, %(deadline)s, %(deadline_secondary)s,
      %(indicative_budget)s, %(budget_currency)s, %(source_url)s, %(documents_url)s,
-     %(keywords)s, %(target_audience)s, %(published_at)s, NOW(), NOW())
+     %(keywords)s, %(target_audience)s, %(published_at)s, %(opening_date)s, NOW(), NOW())
 ON CONFLICT (topic_id) DO UPDATE SET
+    -- The earlier of the first publication and the opening, never moving later; the opening apart
+    -- (migration 319, 30 Oct 2026).
+    published_at = LEAST(EXCLUDED.published_at, ft_calls_for_proposals.published_at),
+    opening_date = COALESCE(EXCLUDED.opening_date, ft_calls_for_proposals.opening_date),
     -- SEDIA returns the SAME topic as several records -- one per language, and in
     -- more than one record type -- and this script upserts them one at a time in a
     -- loop, so the LAST record to arrive used to win regardless of quality. A record
@@ -230,6 +234,7 @@ def _ft_payload(name: str, row: Dict[str, Any]) -> Dict[str, Any]:
         "keywords": row.get("keywords") or [],
         "target_audience": row.get("target_audience"),
         "published_at": row.get("published_at"),
+        "opening_date": row.get("opening_date"),
     }
 
 

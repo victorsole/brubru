@@ -72,6 +72,7 @@ class FtCallProposalItem(BaseModel):
     keywords: List[str] = Field(default_factory=list)
     target_audience: List[str] = Field(default_factory=list)
     published_at: Optional[datetime] = Field(None, **legacy("document_date", note="the same date, with a time"))
+    opening_date: Optional[datetime] = Field(None, description="When the call opens for submissions (the portal's startDate, UTC); ahead for a forthcoming call.")
     last_updated: Optional[datetime] = Field(None, **legacy("updated_date"))
     has_body: bool = False
     body_html: Optional[str] = None
@@ -84,7 +85,7 @@ class FtCallProposalItem(BaseModel):
     amount_eur: Optional[float] = Field(None, description="indicative_budget, in euros (every call's budget is in euros).")
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
-    document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
+    document_date: Optional[date] = Field(None, description="Publication date: the earlier of the portal's first publication of the call and its opening (since 30 Oct 2026; the opening alone before, so forthcoming calls carried a future date). The opening is `opening_date`.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded this row.")
     updated_date: Optional[datetime] = Field(None, description="When this row's content last changed in Brubru (a re-sync that finds the same content does not move it).")
 
@@ -142,6 +143,8 @@ def _proposal_to_item(
         documents_url=r.documents_url,
         keywords=list(r.keywords or []), target_audience=list(r.target_audience or []),
         published_at=r.published_at, last_updated=r.content_updated_at or r.last_updated,
+        # A row the ingest has not re-read since migration 319 still holds its opening in published_at.
+        opening_date=getattr(r, "opening_date", None) or r.published_at,
         has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
