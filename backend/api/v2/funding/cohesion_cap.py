@@ -48,7 +48,7 @@ class CAPPaymentItem(_DataPoints):
     # Each fund's source file carries its own columns (read 20 Oct 2026): EAFRD the plan, pre-
     # financing, interim payments and payment rate, with no year split; EAGF the payments by
     # financial year only. A column the fund's file does not carry is null on every row of it.
-    ms: Optional[str] = Field(None, description="Member State code; TOTAL for the source's EU-wide total row.")
+    ms: Optional[str] = Field(None, description="Member State code. The source's EU-wide total row (TOTAL) is not listed (since 30 Oct 2026); it answers at its item route.")
     planned_eu_amount: Optional[float] = Field(None, description="EAFRD only: the EU amount of the adopted CAP plan.")
     net_pre_financing: Optional[float] = Field(None, description="EAFRD only.")
     net_interim_payments: Optional[float] = Field(None, description="EAFRD only.")
@@ -107,7 +107,7 @@ GET /api/v2/funding/{slug}?ms=FR
 ```
 
 **You get back**
-A `PaginatedResponse[CAPPaymentItem]` envelope sorted by total EU amount (largest first). Each item carries `id`, `fund`, `ms`, `total_eur`, the fund-specific fields ({'annual `fy_2023`..`fy_2026`' if fund_code == 'EAGF' else '`planned_eu_amount`, `net_interim_payments`, `payment_rate`'}), `public_url`, `document_date`, `creation_date`, and `body_txt`/`body_html` (unless `include_body=false`).
+A `PaginatedResponse[CAPPaymentItem]` envelope sorted by total EU amount (largest first), one row per Member State: the file's EU-total row (`ms` TOTAL) is not listed, so a sum over the list counts each euro once. Each item carries `id`, `fund`, `ms`, `total_eur`, the fund-specific fields ({'annual `fy_2023`..`fy_2026`' if fund_code == 'EAGF' else '`planned_eu_amount`, `net_interim_payments`, `payment_rate`'}), `public_url`, `document_date`, `creation_date`, and `body_txt`/`body_html` (unless `include_body=false`).
 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`).""",
@@ -136,7 +136,10 @@ Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (
         user: User = Depends(api_user_with_rate_limit),
         db: Session = Depends(get_db),
     ) -> PaginatedResponse[CAPPaymentItem]:
-        where = ["fund = :fund"]
+        # The file's EU-total row (ms TOTAL, the sum of the 27 Member States) is not an item: listed, it came
+        # first by amount and a sum over the list counted the money twice (O102, Victor 30 Oct 2026). It
+        # stays stored (its label dates every row, O56) and answers at its item route.
+        where = ["fund = :fund", "ms IS DISTINCT FROM 'TOTAL'"]
         params: dict = {"fund": fund_code}
         window = validate_window(created_from, created_to, updated_from, updated_to)
         if ms or country:

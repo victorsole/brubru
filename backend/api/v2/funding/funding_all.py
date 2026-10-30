@@ -105,6 +105,7 @@ WITH all_funding AS (
            public_url, {b}document_date, created_at AS creation_date, 'cohesion' AS source_kind,
            updated_at, NULL AS status, amount_eur
     FROM (SELECT *, <<PAYMENT>> FROM eu_cap_payments) c
+    WHERE c.ms IS DISTINCT FROM 'TOTAL'   -- the EU-total rows are not items (O102)
 )
 """
 
