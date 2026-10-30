@@ -327,11 +327,13 @@ def test_partners_take_max_amount_and_all_takes_the_publication_window():
     assert r.status_code == 200, r.text
     assert any("sum(amount_eur) IS NOT NULL) AND " in sql and "<= :max_amt" in sql and params.get("max_amt") == 250000
                for sql, params in db.sql)         # an organisation with no known amount is not "at most"
+    # /funding/all, an alias of /opportunities since 30 Oct 2026, hands the window on to it
     db = _Db()
     r = _client(funding, db).get("/api/v2/funding/all", params={"published_from": "2026-10-01", "published_to": "2026-10-28"})
     assert r.status_code == 200, r.text
     sql, params = db.sql[0]
-    assert "document_date >= :since" in sql and str(params["since"]) == "2026-10-01" and str(params["until"]) == "2026-10-28"
+    values = [str(v) for v in params.values()]
+    assert "FROM tenders" in sql and any(v.startswith("2026-10-01") for v in values) and any(v.startswith("2026-10-28") for v in values)
 
 
 # --- step 3: the shared fields ------------------------------------------------------------------------ #
@@ -406,15 +408,14 @@ def test_an_agency_list_names_its_body_and_states_no_amount():
                                           "body_name": "European Centre for Disease Prevention and Control"}
 
 
-def test_the_cohesion_rows_carry_the_compositions_all_serves():
-    from api.v2.funding import funding_all
-    from api.v2.funding.cohesion_cap import SHARED_SQL as payment
-    from api.v2.funding.cohesion_eusf import SHARED_SQL as solidarity
-    from api.v2.funding.cohesion_finances import SHARED_SQL as allocation
-    cte = funding_all._union_cte(False)
-    assert allocation in cte and solidarity in cte and payment in cte
-    assert "—" not in cte and "coalesce(round(" not in cte      # no em-dash; an unknown total is not "EUR 0"
-    assert "round(eusf_grant_paid_meur * 1000000) AS amount_eur" in solidarity
+def test_the_budget_rows_compose_their_shared_fields_once():
+    # Each fund list composes its rows' shared fields once, and /budgets reads them through that list's
+    # own columns (it was /funding/all's union until 30 Oct 2026).
+    from api.v2.funding import cohesion_cap, cohesion_eusf, cohesion_finances
+    for module in (cohesion_cap, cohesion_eusf, cohesion_finances):
+        assert module.SHARED_SQL in module._DETAIL_COLS
+        assert "—" not in module.SHARED_SQL and "coalesce(round(" not in module.SHARED_SQL   # no em-dash; unknown is not "EUR 0"
+    assert "round(eusf_grant_paid_meur * 1000000) AS amount_eur" in cohesion_eusf.SHARED_SQL
 
 
 def test_an_outcome_names_its_indicator_and_its_fund_as_the_finances_list_does():
@@ -608,28 +609,21 @@ def test_a_grant_list_names_its_reference_as_the_calls_do():
     assert "topic_id" not in _item_properties(spec, spec["paths"]["/api/v2/funding/ecdc-tenders"]["get"])
 
 
-def test_all_filters_item_type_beside_its_legacy_name_type():
+def test_all_is_an_alias_of_opportunities_that_keeps_its_legacy_type():
+    # 30 Oct 2026: /funding/all answers as /opportunities; `type` is still item_type; the budget rows moved.
     from api.v2.funding import router as funding
-    for params in ({"item_type": "cap_payment"}, {"type": "cap_payment"}):
+    for params in ({"item_type": "tender"}, {"type": "tender"}):
         db = _Db()
         r = _client(funding, db).get("/api/v2/funding/all", params=params)
         assert r.status_code == 200, r.text
-        assert any("item_type = :it" in sql and p.get("it") == "cap_payment" for sql, p in db.sql), params
+        assert "tender" in set(map(str, db.sql[0][1].values())), params
+    for params in ({"item_type": "cap_payment"}, {"type": "cohesion_allocation"}, {"body": "ERDF"}):
+        r = _client(funding, _Db()).get("/api/v2/funding/all", params=params)
+        assert r.status_code == 400 and "/api/v2/funding/budgets" in r.text, params
     assert _client(funding, _Db()).get("/api/v2/funding/all", params={"item_type": "x"}).status_code == 400
 
 
 # Step 5 (28 Oct 2026): status from dates.
-
-def test_all_filters_status_on_the_items_status_not_on_its_summary():
-    # O90: `status=open` matched "open" anywhere in the summary, and never a cohesion row.
-    from api.v2.funding import router as funding
-    db = _Db()
-    r = _client(funding, db).get("/api/v2/funding/all", params={"status": "Open "})
-    assert r.status_code == 200, r.text
-    counted = [(sql, p) for sql, p in db.sql if "count(*)" in sql]
-    assert counted and all("lower(status) = lower(:st)" in sql and "summary ILIKE :st" not in sql
-                           and p["st"] == "Open" for sql, p in counted)
-
 
 def test_the_ted_notices_in_the_ft_tenders_table_take_the_ted_rows_deadline_and_status():
     # O96: 386 TED notices in ft_calls_for_tenders all said "open", 205 closed on TED.
@@ -756,11 +750,11 @@ def test_a_budget_status_filter_takes_the_standard_word_and_still_the_sources():
         assert "= :status_std" in std[0] and "THEN 'adopted'" in std[0] and std[1]["status_std"] == "accepted"
 
 
-def test_all_serves_the_cohesion_and_solidarity_status_in_the_standard_words():
-    from api.v2.funding.funding_all import _union_cte
-    union = _union_cte(False)
-    assert union.count("WHEN lower(btrim(status)) LIKE 'adopted%' THEN 'adopted'") == 2
-    assert "<<BUDGET_STATUS>>" not in union
+def test_budgets_filter_the_cohesion_and_solidarity_status_in_the_standard_words():
+    # /budgets (the funds' rows' list since 30 Oct 2026) filters on the standard word, as its items carry it.
+    from api.v2.funding import budgets
+    for side in (budgets._ALLOC_SIDE, budgets._EUSF_SIDE):
+        assert "WHEN lower(btrim(status)) LIKE 'adopted%' THEN 'adopted'" in side
 
 
 def test_the_sql_budget_status_has_a_branch_for_every_word_the_python_one_maps():
@@ -825,7 +819,6 @@ def test_an_orm_list_filters_and_orders_on_its_own_amount_in_euros(path, fragmen
     ("/api/v2/funding/erdf", "total", "ORDER BY total DESC NULLS LAST, cci, id"),
     ("/api/v2/funding/eagf", "total_eur", "ORDER BY total_eur DESC NULLS LAST, ms, id"),
     ("/api/v2/funding/eusf", "round(eusf_grant_paid_meur * 1000000)", "ORDER BY eusf_grant_paid_meur DESC NULLS LAST"),
-    ("/api/v2/funding/all", "amount_eur", "ORDER BY amount_eur DESC NULLS LAST, id DESC, item_type"),
     ("/api/v2/funding/ft-cascade-calls", "2) END)", "2) END) DESC NULLS LAST, id DESC LIMIT"),
 ])
 def test_a_sql_list_filters_on_its_own_amount_in_euros(path, expr, order):

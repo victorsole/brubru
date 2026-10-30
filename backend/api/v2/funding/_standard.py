@@ -113,3 +113,21 @@ def with_shared_fields_doc(description: Optional[str]) -> str:
     if end < 0:
         return description.rstrip() + "\n\n" + SHARED_FIELDS_DOC
     return description[:end].rstrip() + "\n\n" + SHARED_FIELDS_DOC + description[end:]
+
+
+_ITEM_ROUTES: Optional[dict] = None
+
+
+def item_routes(app) -> dict:
+    """(body_code, item_type) -> the item route that serves it, read from the live route table (each
+    detail route is tagged brubru_item_key), so a link cannot point at a route that is not served. Used
+    by the consolidated lists (/opportunities, /budgets) for each item's `self`; it lived in
+    funding_all.py until /funding/all became an alias (30 Oct 2026)."""
+    global _ITEM_ROUTES
+    if _ITEM_ROUTES is None:
+        _ITEM_ROUTES = {}
+        for r in app.routes:
+            key = getattr(getattr(r, "endpoint", None), "brubru_item_key", None)
+            if key and "GET" in (getattr(r, "methods", None) or ()):
+                _ITEM_ROUTES.setdefault(key, r.path)
+    return _ITEM_ROUTES

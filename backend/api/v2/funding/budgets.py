@@ -33,7 +33,7 @@ from . import cohesion_cap as cap
 from . import cohesion_eusf as eusf
 from . import cohesion_finances as cf
 from ._standard import amount_range, include_body_param
-from .funding_all import _item_routes
+from ._standard import item_routes as _item_routes
 
 router = APIRouter()
 

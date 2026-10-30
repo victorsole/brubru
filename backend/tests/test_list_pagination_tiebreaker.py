@@ -174,19 +174,6 @@ def test_raw_sql_list_orders_by_primary_key_last(harness, path):
     keys = _order_by_of_paged_sql(db.sql)
     assert re.fullmatch(r"(\w+\.)?id( DESC| ASC)?", keys[-1]), f"{path} ORDER BY {keys}"
 
-
-@pytest.mark.parametrize("order", ["recent", "oldest", "title"])
-def test_funding_all_union_orders_by_id_and_item_type(harness, order):
-    """The UNION mixes four tables whose id ranges overlap, so `id` alone is not
-    unique across it; (id, item_type) is, because every non-economy_items member
-    has a constant item_type of its own."""
-    client, db = harness
-    resp = client.get("/v2/funding/all", params={"order": order, "page": 2, "limit": 5})
-    assert resp.status_code == 200, resp.text
-    keys = [re.sub(r"\s+(ASC|DESC)$", "", k) for k in _order_by_of_paged_sql(db.sql)]
-    assert keys[-2:] == ["id", "item_type"], f"ORDER BY {keys}"
-
-
 def test_detector_rejects_a_non_unique_sort(harness):
     """Poisoned input: prove the parser would flag `ORDER BY date DESC` alone."""
     _, db = harness

@@ -27,10 +27,9 @@ from openpyxl.styles import Alignment, Font, PatternFill
 
 REPO = Path(__file__).resolve().parents[2]
 
+# The organisations matched (Terraqui ended 12 Oct 2026; Cadence: Victor, 30 Oct 2026, not matched again).
 ORGS = {
-    "terraqui": ("Terraqui", "Estudi Jurídic Ambiental, S.L.P. (Terraqui), Barcelona"),
     "gbsb": ("GBSB", "GBSB Global Business School"),
-    "cadence": ("Cadence", "Cadence Design Systems"),
     "tas": ("TAS_Europrojects", "TAS Europrojects, Brussels"),
 }
 BLUE, GREEN, AMBER, GREY, LINK = "1F3A8A", "15803D", "B45309", "555555", "1D4ED8"

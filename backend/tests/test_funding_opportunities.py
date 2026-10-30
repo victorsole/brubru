@@ -137,3 +137,12 @@ def test_a_ted_notice_of_a_procedure_the_portal_lists_is_the_portals_item():
     assert op.FT_PROCEDURE == "regexp_replace(x.tender_reference, '-[A-Z]+$', '')"
     assert "JOIN tenders t ON t.contract_folder_id = {FT_PROCEDURE}" in inspect.getsource(op._same_as)
     assert "regexp_replace(x.tender_reference, '-[A-Z]+$', '') = t.contract_folder_id" in inspect.getsource(ted.ted_same_as)
+
+
+def test_body_agencies_keeps_every_agencys_own_items():
+    """30 Oct 2026: the funding matcher's agency source (it read /funding/all, now an alias)."""
+    db = _Db()
+    assert _client(db).get("/api/v2/funding/opportunities", params={"body": "Agencies"}).status_code == 200
+    sql, params = db.sql[0]
+    assert "opp.src = %(src_1)s" in sql and params["src_1"] == "agency"
+    assert "agencies" not in set(map(str, params.values()))      # not read as a body code

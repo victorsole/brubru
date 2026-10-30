@@ -79,7 +79,8 @@ def test_the_new_routes_come_before_the_item_routes_and_the_old_ones_are_legacy(
     spec = app.openapi()["paths"]
     deprecated = sorted(p for p, ops in spec.items() if ops.get("get", {}).get("deprecated"))
     # funding-opportunities has been the legacy alias of ft-calls-for-proposals since Phase 0
-    assert deprecated == ["/api/v2/funding/ft-events", "/api/v2/funding/ft-events/{item_id}",
+    assert deprecated == ["/api/v2/funding/all",          # an alias of /opportunities since 30 Oct 2026
+                          "/api/v2/funding/ft-events", "/api/v2/funding/ft-events/{item_id}",
                           "/api/v2/funding/ft-news", "/api/v2/funding/ft-news/{item_id}",
                           "/api/v2/funding/funding-opportunities", "/api/v2/funding/funding-opportunities/{topic_id}"]
     assert "/api/v2/news/ft-portal" in spec["/api/v2/funding/ft-news"]["get"]["description"]

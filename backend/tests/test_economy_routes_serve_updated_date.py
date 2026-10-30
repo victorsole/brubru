@@ -140,17 +140,6 @@ def test_international_cooperation_serves_updated_date():
     assert _items(env)[0]["updated_date"] == T
     assert _call(ic.get_intl_cooperation, request=_REQ, db=_DB(), item_id=1).updated_date == T
 
-
-def test_funding_all_projects_updated_at_in_every_union_arm():
-    """Every arm of the UNION names updated_at, or Postgres refuses the query."""
-    from api.v2.funding import funding_all as fa
-    for body in (False, True):
-        cte = fa._union_cte(body)
-        arms = re.split(r"\bUNION ALL\b", cte)
-        assert len(arms) == 4
-        assert all(re.search(r"\bupdated_at\b", a) for a in arms)
-
-
 # --------------------------------------------------------------------------- #
 # Live: the real SQL against production data.
 # --------------------------------------------------------------------------- #
@@ -176,20 +165,6 @@ def test_live_cedefop_tenders_and_files_carry_updated_date(db):
     env = _call(routes["/cedefop-tenders/{item_id}/documents"], request=_REQ, db=db, item_id=pid,
                 page=1, limit=50, include_body=False)
     assert all(d["updated_date"] for d in _items(env))
-
-
-@pytest.mark.live
-@pytest.mark.parametrize("include_body", [False, True])
-def test_live_funding_all_union_runs_and_dates_agency_items(db, include_body):
-    from api.v2.funding import funding_all as fa
-    env = _call(fa.funding_all, request=_REQ, db=db, order="recent", page=1, limit=100,
-                include_body=include_body, type="tender")
-    items = _items(env)
-    assert items and all(i["updated_date"] for i in items)
-    env = _call(fa.funding_all, request=_REQ, db=db, order="recent", page=1, limit=20,
-                include_body=include_body, type="cohesion_allocation")
-    assert _items(env)          # the other arms still answer (their updated_date is NULL)
-
 
 @pytest.mark.live
 def test_live_change_triggers_ignore_the_fetch_stamps(db):

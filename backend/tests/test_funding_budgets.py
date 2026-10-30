@@ -99,7 +99,7 @@ def test_each_row_is_built_by_its_own_lists_builder_and_links_its_own_item():
 
 
 def test_every_fund_has_the_item_route_self_points_at():
-    from api.v2.funding.funding_all import _item_routes
+    from api.v2.funding._standard import item_routes as _item_routes
     from main import app
     routes = _item_routes(app)
     for fund in ("erdf", "esf", "cf", "jtf", "interreg", "emfaf", "amif", "isf"):

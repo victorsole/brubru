@@ -39,7 +39,8 @@ def test_every_v2_route_with_updated_from_takes_updated_to_and_passes_it_on():
         assert "updated_to" in params, path
         # Used beyond its own declaration: passed on, filtered on, or handed to a window
         # helper (the infringement routes use sql_window(validate_window(...))).
-        src = inspect.getsource(r.endpoint)
+        # An alias forwards every parameter to another handler (/funding/all, 30 Oct 2026): read that one.
+        src = inspect.getsource(getattr(r.endpoint, "forwards_to", r.endpoint))
         uses = [ln for ln in src.splitlines() if re.search(r"\bupdated_to\b", ln) and "Query(" not in ln]
         assert uses, path
     assert seen >= 40, f"only {seen} routes found; the scan is broken (45 on 14 Oct 2026)"

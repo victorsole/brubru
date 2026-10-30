@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Build the client-facing EU funding match report for Terraqui, GBSB, Cadence and TAS Europrojects.
+"""Build the client-facing EU funding match report for GBSB Global Business School and TAS Europrojects.
+
+Terraqui (ended 12 Oct 2026) and Cadence (Victor, 30 Oct 2026: "Cadence should not be matched again") keep
+their profiles below for the record and are never run (RETIRED). How to run it: the /funding-matches skill.
 
 Pulls live opportunities from Brubru's production API v2 (funding + agency
 folders + TED), verifies status, dates, English titles and budgets for every
@@ -75,7 +78,7 @@ class Api:
         self.failures: list[str] = []
 
     def get(self, path: str, **params):
-        url = BASE + path + ("?" + urllib.parse.urlencode(params) if params else "")
+        url = BASE + path + (("&" if "?" in path else "?") + urllib.parse.urlencode(params) if params else "")
         err = None
         for attempt in range(4):
             try:
@@ -182,7 +185,9 @@ def sedia_portal_open_count() -> int | None:
 FT_ENDPOINTS = ["/api/v2/funding/funding-opportunities", "/api/v2/funding/startups",
                 "/api/v2/funding/innovation-fund", "/api/v2/funding/justice",
                 "/api/v2/funding/ft-calls-for-tenders"]
-AGENCY_ENDPOINTS = ["/api/v2/funding/all", "/api/v2/eismea/calls", "/api/v2/hadea/calls",
+# The EU agencies' own calls and tenders: /opportunities?body=agencies since 30 Oct 2026 (it was /funding/all,
+# now an alias of /opportunities). A portal procedure an agency links to comes once there, as the portal's item.
+AGENCY_ENDPOINTS = ["/api/v2/funding/opportunities?body=agencies", "/api/v2/eismea/calls", "/api/v2/hadea/calls",
                     "/api/v2/hadea/tenders", "/api/v2/eccc/calls", "/api/v2/eeas/tenders"]
 
 
@@ -696,6 +701,9 @@ PROFILES = [
         prog_bonus={"CEF": 1.0, "SMP": 0.5},
     ),
 ]
+# Organisations no longer matched (their profiles stay above for the record; a run never scores them).
+RETIRED = {"terraqui": "the engagement ended on 12 Oct 2026", "cadence": "Victor, 30 Oct 2026: not matched again"}
+PROFILES = [p for p in PROFILES if p["slug"] not in RETIRED]
 
 THRESHOLDS = [("High", 8.0), ("Medium", 5.5), ("Stretch", 4.0)]
 
@@ -1014,7 +1022,8 @@ def render(today: dt.date, results: dict, closing: dict, stats: dict, problems: 
     brand_img = ('<img alt="Brubru" src="' + brubru + '">') if brubru else ""
     h.append(f'<div class="brand">{brand_img}Brubru</div>')
     h.append(f'<div class="overline">EU funding and tender matches &middot; {esc(date_txt)}</div>')
-    h.append("<h1>Where EU money fits Terraqui, GBSB Global Business School, Cadence and TAS Europrojects</h1>")
+    _names = [p["name"] for p in PROFILES]
+    h.append(f"<h1>Where EU money fits {', '.join(_names[:-1]) + ' and ' + _names[-1] if len(_names) > 1 else _names[0]}</h1>")
     h.append(f"<p>{stats['eligible_total']:,} open or forthcoming opportunities with a deadline on or after {esc(date_txt)} were scored against each organisation's own activities. Every match below links to its public page and says why it fits, what role is realistic and what could stop it.</p>")
     h.append('<div class="stats">')
     for p in PROFILES:
@@ -1025,7 +1034,7 @@ def render(today: dt.date, results: dict, closing: dict, stats: dict, problems: 
     # Method
     h.append('<main class="wrap"><section class="method"><div class="label">Method and data</div><h2>How this report was built</h2>')
     h.append('<div class="card"><ul>')
-    h.append(f"<li><b>Sources.</b> Brubru API v2, production: Funding and Tenders portal calls ({stats['ft_rows']:,} rows across funding-opportunities, startups, entrepreneur-instruments, innovation-fund, justice and calls for tenders), EU agency procurement and calls ({stats['agency_rows']:,} rows from funding/all, EISMEA, HaDEA, ECCC and EEAS, with cohesion allocations, CAP payments and Solidarity Fund cases ignored), and {stats['ted_rows']:,} TED notices with a deadline from {esc(date_txt)}.</li>")
+    h.append(f"<li><b>Sources.</b> Brubru API v2, production: Funding and Tenders portal calls ({stats['ft_rows']:,} rows across funding-opportunities, startups, entrepreneur-instruments, innovation-fund, justice and calls for tenders), EU agency procurement and calls ({stats['agency_rows']:,} rows from the agencies' own lists (funding/opportunities?body=agencies), EISMEA, HaDEA, ECCC and EEAS), and {stats['ted_rows']:,} TED notices with a deadline from {esc(date_txt)}.</li>")
     h.append("<li><b>Verification.</b> The API's status field lags and hundreds of portal rows have no deadline, so every portal row was checked against the portal's own search service for status, opening date, deadline, English title and budget. An opportunity is included only if it is open or forthcoming with a deadline on or after today. Agency calls without a readable deadline were left out rather than guessed.</li>")
     h.append("<li><b>Scoring.</b> Each organisation has a written profile (read from its website) turned into weighted themes: keywords in the title and full call text, CPV codes for tenders, programme and type of action, buyer country, and realistic role. Title evidence counts more than a keyword buried in a long call text. Out-of-scope subjects are penalised. Scores map to High (8+), Medium (5.5+) and Stretch (4+). Foreign national tenders never rate above Stretch for the two Spanish organisations. Opportunities closing within 48 hours are listed separately.</li>")
     h.append("<li><b>Strength means fit, not probability of winning.</b> High: the subject matter is squarely what the organisation does and a realistic role exists. Medium: clear overlap, but a partner, language or eligibility step is needed. Stretch: plausible angle worth a quick read.</li>")

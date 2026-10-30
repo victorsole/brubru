@@ -181,17 +181,6 @@ def test_international_cooperation_counts_a_change_window_live():
     assert len(counts) == 2 and all("greatest(e.updated_at, c.last_updated) >= :updated_from" in sql for sql in counts)
     assert "ORDER BY greatest(e.updated_at, c.last_updated) ASC, e.id ASC" in db.sql[-1][0]
 
-
-def test_funding_all_applies_the_window_to_the_whole_union():
-    from api.v2.funding import funding_all as fa
-    r, db = _get(fa.router, "/api/v2/funding/all", {"updated_from": "2026-10-22", "updated_to": "2026-10-23"})
-    assert r.status_code == 200, r.text
-    count_sql, page_sql = db.sql[0][0], db.sql[1][0]
-    for sql in (count_sql, page_sql):
-        tail = sql.split("FROM all_funding", 1)[1]      # filtered on the union, not on one side
-        assert "updated_at >= :updated_from" in tail and "updated_at <= :updated_to" in tail
-
-
 def test_programmes_keep_or_drop_the_whole_list_by_its_own_revision_date():
     from api.v2.funding import funding_programmes as fp
     created, updated = fp._config_dates()

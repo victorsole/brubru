@@ -11,18 +11,16 @@ BACKEND = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND))
 
 
-def test_every_funding_all_type_has_a_live_item_route():
+def test_every_type_the_consolidated_lists_link_has_a_live_item_route():
+    """/opportunities and /budgets point each row at the route that serves it, read from the live route
+    table (it served /funding/all's rows until that list became an alias of /opportunities, 30 Oct 2026)."""
     from main import app
-    from api.v2.funding import funding_all as fa
-    routes = fa._item_routes(app)
+    from api.v2.funding._standard import item_routes
+    routes = item_routes(app)
     assert routes[("euaa", "eoi_call")] == "/api/v2/funding/euaa-calls/{item_id}"
     assert routes[("erdf", "cohesion_allocation")] == "/api/v2/funding/erdf/{row_id}"
     assert routes[("eusf", "solidarity_case")] == "/api/v2/funding/eusf/{row_id}"
     assert routes[("eagf", "cap_payment")] == "/api/v2/funding/eagf/{row_id}"
-    item = fa.EconomyItem(id=7, body_code="euaa", item_type="eoi_call", title="CEI", summary=None,
-                          public_url="https://euaa.europa.eu/x", source_kind="euaa_procurement")
-    assert fa._with_self(item, "https://brubru-production.up.railway.app", routes).self == \
-        "https://brubru-production.up.railway.app/api/v2/funding/euaa-calls/7"
 
 
 def test_an_entrepreneur_instrument_links_its_call():

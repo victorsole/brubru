@@ -44,8 +44,7 @@ def test_the_cap_lists_count_and_page_without_the_eu_total():
 
 
 def test_funding_all_and_budgets_leave_it_out_too_and_the_item_route_still_answers():
-    from api.v2.funding import budgets, funding_all
-    assert "FROM eu_cap_payments) c\n    WHERE c.ms IS DISTINCT FROM 'TOTAL'" in funding_all._union_cte(False)
+    from api.v2.funding import budgets
     assert "FROM eu_cap_payments WHERE ms IS DISTINCT FROM 'TOTAL'" in budgets._CAP_SIDE
     db = _Db()
     _client(db).get("/api/v2/funding/eagf/1092")

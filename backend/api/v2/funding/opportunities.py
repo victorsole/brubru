@@ -43,7 +43,7 @@ from ..economy_endpoints import (FUNDING_LISTS, _DETAIL_COLS, _PROCUREMENT_COLS,
                                  build_envelope)
 from . import ft_cascade_calls as cascade
 from ._standard import amount_range, include_body_param, without_bodies
-from .funding_all import _item_routes
+from ._standard import item_routes as _item_routes
 
 router = APIRouter()
 
@@ -272,7 +272,7 @@ Every call and tender Brubru holds, in one list, **each procedure once**: TED no
 "What can I bid for or apply to?" across every source at once, for example every open call or tender on a subject: `status=open&q=hydrogen`. To work with one source and its own fields, use its list; each item's `self` opens it there.
 
 **Input**
-`q` (words in the title or text; accents ignored), `status` (forthcoming | open | closed | cancelled | unknown), `item_type` (tender | grant | cascade_call | eoi_call | startup_funding), `body` (`ftportal` for the portal's items, an agency's code such as `efsa`), `country` (a TED buyer's two-letter country; the other items name none), `programme` (words in a call's programme), `deadline_from`/`deadline_to`, `published_from`/`published_to` (the item's `document_date`; `since`, `until`, `from`, `to` are aliases), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `min_amount_eur`/`max_amount_eur`, `order` (recent | oldest | deadline | amount | updated_asc | updated_desc | created_asc | created_desc), `page`, `limit` (default 50, max 200), `include_body` (default true).
+`q` (words in the title or text; accents ignored), `status` (forthcoming | open | closed | cancelled | unknown), `item_type` (tender | grant | cascade_call | eoi_call | startup_funding), `body` (`ftportal` for the portal's items, an agency's code such as `efsa`, `agencies` for every agency's own items), `country` (a TED buyer's two-letter country; the other items name none), `programme` (words in a call's programme), `deadline_from`/`deadline_to`, `published_from`/`published_to` (the item's `document_date`; `since`, `until`, `from`, `to` are aliases), `created_from`/`created_to` and `updated_from`/`updated_to` (incremental sync; a bare date as `_to` covers the whole day), `min_amount_eur`/`max_amount_eur`, `order` (recent | oldest | deadline | amount | updated_asc | updated_desc | created_asc | created_desc), `page`, `limit` (default 50, max 200), `include_body` (default true).
 
 **Try it**
 ```
@@ -298,7 +298,7 @@ async def list_opportunities(
     q: Optional[str] = Query(None, description="Words in the title or text (accents ignored; a short word matches whole words)."),
     status: Optional[str] = Query(None, description="forthcoming | open | closed | cancelled | unknown."),
     item_type: Optional[str] = Query(None, description="tender | grant | cascade_call | eoi_call | startup_funding."),
-    body: Optional[str] = Query(None, description="ftportal (the F&T Portal's items) or an agency's code, e.g. efsa, eea."),
+    body: Optional[str] = Query(None, description="ftportal (the F&T Portal's items), an agency's code (e.g. efsa, eea), or agencies: every EU agency's own items."),
     country: Optional[str] = Query(None, description="A TED buyer's country, two letters (ISO 3166-1), e.g. BE. The portal's and the agencies' items name no country, so they are left out."),
     programme: Optional[str] = Query(None, description="Words in a call's programme, e.g. Horizon Europe. Only calls for proposals name one."),
     deadline_from: Optional[date] = Query(None, description="Deadline on or after (YYYY-MM-DD)."),
@@ -329,7 +329,11 @@ async def list_opportunities(
     where = []
     if item_type:
         where.append(u.c.item_type == item_type)
-    if body:
+    if body and body.strip().lower() == "agencies":
+        # Every EU agency's own items (a portal procedure an agency links to comes once, as the portal's
+        # item): the funding matcher's agency source, which read /funding/all until 30 Oct 2026.
+        where.append(u.c.src == "agency")
+    elif body:
         where.append(u.c.body_code == body.strip().lower())
     if status:
         where.append(func.lower(u.c.status) == status.strip().lower())
