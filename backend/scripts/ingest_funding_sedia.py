@@ -591,6 +591,16 @@ def external_action_fields(md: Dict[str, Any], topic_id: str, title: str, publis
     }
 
 
+def named_title(title: str, call_title: Optional[str]) -> str:
+    """The portal files some topics under their code as title (57 on 2 Nov 2026: AGRIP-SIMPLE-2026-IM-FRESH-FV,
+    CORRUPT), and the call's title names them. The code stays beside it: one call holds several topics."""
+    title, call_title = str(title).strip(), " ".join(str(call_title or "").split())
+    code = re.compile(r"[A-Z0-9-]+")
+    if not call_title or not code.fullmatch(title) or code.fullmatch(call_title):
+        return title
+    return call_title if title in call_title else f"{call_title} ({title})"
+
+
 def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Optional[Dict[str, Any]]:
     today = today or dt.date.today()
     md = result.get("metadata") or {}
@@ -598,6 +608,7 @@ def normalise_row(result: Dict[str, Any], today: Optional[dt.date] = None) -> Op
     title = first_or_none(md.get("title")) or result.get("content")
     if not topic_id or not title:
         return None
+    title = named_title(title, first_or_none(md.get("callTitle")))
     record_type = str(first_or_none(md.get("type")) or "")
     is_tender = record_type in TENDER_TYPES or str(topic_id).endswith(("-CN", "-PIN"))
     description_html = (first_or_none(md.get("descriptionByte"))

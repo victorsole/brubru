@@ -97,3 +97,14 @@ def test_repair_strips_the_share_menu_and_nothing_else_and_dates_from_the_line()
 def test_repair_leaves_a_clean_right_row_alone():
     assert _repair(body_txt=TENDER, body_html="<p>The Delegation is launching a call.</p>",
                    document_date=datetime(2026, 10, 13, 9, tzinfo=timezone.utc)) == {}
+
+
+def test_a_topic_titled_by_its_code_takes_the_calls_title_and_keeps_the_code():
+    from ingest_funding_sedia import named_title
+    call = "Call for proposals on the fight against corruption"
+    assert named_title("CORRUPT", call) == f"{call} (CORRUPT)"
+    assert named_title("AGRIP-SIMPLE-2026-IM-FRESH-FV", call) == f"{call} (AGRIP-SIMPLE-2026-IM-FRESH-FV)"
+    assert named_title("Support for National Contact Points", call) == "Support for National Contact Points"
+    assert named_title("CORRUPT", None) == "CORRUPT"
+    assert named_title("CHIPS-2025-SG", "CHIPS-2025-SG") == "CHIPS-2025-SG"      # the call is titled by a code too
+    assert named_title("CEEP", "Call on community engagement (CEEP)") == "Call on community engagement (CEEP)"
