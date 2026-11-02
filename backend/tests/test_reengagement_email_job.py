@@ -34,7 +34,7 @@ def _email_service(configured=True, ok=True):
         sent.append(to)
         return ok
 
-    return SimpleNamespace(is_configured=configured, send=send, sent=sent)
+    return SimpleNamespace(is_configured=configured, mail_closed=False, send=send, sent=sent)
 
 
 def _patch_email(monkeypatch, svc):

@@ -8,6 +8,7 @@ No third-party dependencies - uses Python stdlib smtplib + email.mime.
 """
 
 import logging
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -16,6 +17,19 @@ from typing import List, Optional
 from core.config import settings
 
 logger = logging.getLogger(__name__)
+
+
+def mail_closed_on_this_host() -> bool:
+    """True where SMTP cannot get out: Railway disables it on the Hobby plan (2 Nov 2026).
+
+    A send there waited out its 30-second timeout and then failed with `[Errno 101] Network
+    is unreachable`, and the alert, password reset and sign-up routes did that on the
+    server's only process. SMTP_OPEN_ON_RAILWAY=true turns this off once mail can leave.
+    """
+    from services.sync.freshness import current_runner
+    if os.getenv("SMTP_OPEN_ON_RAILWAY", "").strip().lower() in ("true", "1", "yes"):
+        return False
+    return current_runner() == "railway"
 
 
 class EmailService:
@@ -45,6 +59,10 @@ class EmailService:
     def is_configured(self) -> bool:
         return bool(self.user and self.password)
 
+    @property
+    def mail_closed(self) -> bool:
+        return mail_closed_on_this_host()
+
     def _from_address(self) -> str:
         return f"{self.from_name} <{self.user}>"
 
@@ -67,6 +85,10 @@ class EmailService:
         Returns:
             True if sent successfully
         """
+        if self.mail_closed:
+            logger.warning(f"[EMAIL] Not sent, SMTP is closed on this host: {subject}")
+            return False
+
         if not self.is_configured:
             logger.info(f"[EMAIL][DRY-RUN] To: {to} | Subject: {subject}")
             return False

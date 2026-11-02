@@ -1792,12 +1792,14 @@ def _send_staleness_email(stale: list[dict]) -> None:
             f"<ul>{rows}</ul>"
             "<p>Check the Railway cron logs and the source endpoints.</p>"
         )
-        EmailService().send(
+        if EmailService().send(
             to=recipient,
             subject=f"[Brubru] {len(stale)} MEUB feed(s) went stale",
             html_body=html,
-        )
-        logger.info("[CRON] Staleness email sent to %s (%d feeds)", recipient, len(stale))
+        ):
+            logger.info("[CRON] Staleness email sent to %s (%d feeds)", recipient, len(stale))
+        else:
+            logger.error("[CRON] Staleness email could not be sent to %s (%d feeds)", recipient, len(stale))
     except Exception as exc:  # pragma: no cover - defensive
         logger.warning("[CRON] Staleness email failed: %s", exc)
 

@@ -585,6 +585,8 @@ def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
         _formatted = brief_date.strftime("%-d %B %Y") if hasattr(brief_date, "strftime") else str(brief_date)
     subject = f"Brubru Daily EU Brief - {_formatted}"
     service = EmailService()
+    if service.mail_closed:
+        return {"sent": 0, "failed": len(pending_emails), "skipped": skipped, "error": "SMTP is closed on this host"}
     sent = 0
     failed = 0
 

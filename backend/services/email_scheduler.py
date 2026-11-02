@@ -90,6 +90,14 @@ def _send_reengagement_emails():
                        error="DISABLED (REENGAGEMENT_EMAILS_ENABLED=false)", started_at=started)
             return
         email_service = get_email_service()
+        if email_service.mail_closed:
+            lists = reengagement_recipients(db)
+            summary = (f"SMTP is closed on this host: welcome_back={len(lists['welcome_back'])} "
+                       f"first_time={len(lists['first_time'])} not mailed")
+            logger.warning(f"[EMAIL-SCHEDULER] {summary}")
+            record_run(db, source_key=SOURCE_KEY, tier="email", status="skipped", items_added=0,
+                       error=summary, started_at=started)
+            return
         if not email_service.is_configured:
             logger.warning("[EMAIL-SCHEDULER] SMTP not configured, skipping")
             record_run(db, source_key=SOURCE_KEY, tier="email", status="skipped", items_added=0,
