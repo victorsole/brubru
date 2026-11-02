@@ -1060,11 +1060,16 @@ def refresh_status_from_dates(cur, today_sql: str = "CURRENT_DATE") -> Dict[str,
     Mirrors derive_status(): a deadline before today closes the call; a
     forthcoming call whose opening date has arrived and whose deadline has not
     passed is open. Rows without a deadline are never guessed at.
+
+    A call's opening is `opening_date`, not `published_at`: since 30 Oct 2026 `published_at` is the
+    earlier of the portal's first publication and the opening, in the past for every forthcoming
+    call, and reading it here labelled 247 calls not yet open `open` from 31 Oct to 2 Nov.
     """
     changed = {}
     for table in ("ft_calls_for_proposals", "ft_calls_for_tenders"):
         final = ("GREATEST(deadline, COALESCE(deadline_secondary, deadline))"
                  if table != "ft_calls_for_tenders" else "deadline")
+        opening = "COALESCE(opening_date, published_at)" if table != "ft_calls_for_tenders" else "published_at"
         cur.execute(f"""
             UPDATE {table} SET status = 'closed', last_updated = now()
              WHERE status IN ('open', 'forthcoming', 'unknown')
@@ -1073,7 +1078,7 @@ def refresh_status_from_dates(cur, today_sql: str = "CURRENT_DATE") -> Dict[str,
         cur.execute(f"""
             UPDATE {table} SET status = 'open', last_updated = now()
              WHERE status IN ('forthcoming', 'unknown')
-               AND published_at IS NOT NULL AND published_at::date <= {today_sql}
+               AND {opening} IS NOT NULL AND ({opening})::date <= {today_sql}
                AND deadline IS NOT NULL AND ({final})::date >= {today_sql}""")
         changed[table] = closed + cur.rowcount
     return changed

@@ -306,3 +306,25 @@ def test_both_call_writers_keep_the_earliest_date_and_the_opening_apart():
         assert "published_at = LEAST(EXCLUDED.published_at, ft_calls_for_proposals.published_at)" in text
         assert "opening_date = COALESCE(EXCLUDED.opening_date, ft_calls_for_proposals.opening_date)" in text
         assert "%(opening_date)s" in text
+
+
+def test_a_call_not_yet_open_stays_forthcoming_after_the_nightly_status_step():
+    """2 Nov 2026: since 30 Oct published_at is the earlier of first publication and opening, so it is
+    in the past for every forthcoming call. The step promoted on published_at: 247 calls the portal
+    calls Forthcoming were served as open, and flipped back and forth every night."""
+    class Cursor:
+        def __init__(self):
+            self.sql, self.rowcount = [], 0
+
+        def execute(self, sql, params=None):
+            self.sql.append(" ".join(sql.split()))
+
+    cur = Cursor()
+    sedia.refresh_status_from_dates(cur)
+    promote = [s for s in cur.sql if "SET status = 'open'" in s]
+    assert len(promote) == 2
+    calls = next(s for s in promote if "ft_calls_for_proposals" in s)
+    tenders = next(s for s in promote if "ft_calls_for_tenders" in s)
+    assert "(COALESCE(opening_date, published_at))::date <= CURRENT_DATE" in calls
+    assert "published_at::date" not in calls
+    assert "(published_at)::date <= CURRENT_DATE" in tenders and "opening_date" not in tenders    # the column is the calls'
