@@ -57,8 +57,9 @@ def _cffi_session():
     compatible with the requests.Session API the helpers use.
 
     An EXCEPTION to the rule that enforced blocks are not circumvented: Victor's decision of
-    2 Nov 2026, "for now", for EUDA's news, events and topics only. It extends to no other host and to
-    no other EUDA reader: the tender and publication readers stay plain and report the block."""
+    2 Nov 2026, "for now", for EUDA's news, events and topics. It extends to no other EUDA reader: the
+    tender and publication readers stay plain and report the block. The one other use is the date
+    fallback in services/news/item_date.py, which he also kept that day (register O125)."""
     from curl_cffi import requests as _creq
     return _creq.Session(impersonate="chrome131")
 

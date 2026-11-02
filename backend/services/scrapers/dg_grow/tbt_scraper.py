@@ -73,10 +73,13 @@ class TBTScraper(BaseScraper):
 
     BASE_URL = "https://technical-barriers-trade.ec.europa.eu"
 
-    # The site hangs now and then: one request runs out its 30 seconds and the next answers in a
-    # tenth of a second (Railway, 31 Oct to 2 Nov 2026, each night's only try; once from a laptop).
+    # The site is slow rather than down. Railway's runs took 2 s or 19-31 s (12 to 30 Oct 2026), so
+    # the base 30 seconds sat on the edge, and every failure stopped at 30-31 s (16 Oct, 31 Oct to
+    # 2 Nov). From a laptop one request ran out its 30 seconds and the next took a tenth of a second.
+    # Three tries at 75 s stay inside the 300 seconds the daily tier allows this script.
     LATEST_TRIES = 3
     RETRY_PAUSE_SECONDS = 5
+    TRY_TIMEOUT_SECONDS = 75
 
     def __init__(self):
         # Why the last read of the list got no page at all; None when a page came back.
@@ -86,6 +89,7 @@ class TBTScraper(BaseScraper):
             name="TBT",
             rate_limit_delay=3.0,
             cache_ttl=3600,
+            timeout=self.TRY_TIMEOUT_SECONDS,
         )
 
     async def search(self, query: str, **kwargs) -> List[Dict[str, Any]]:

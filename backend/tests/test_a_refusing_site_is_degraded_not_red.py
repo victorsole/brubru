@@ -153,6 +153,15 @@ def test_tbt_tries_three_times_and_names_the_refusal(monkeypatch):
     assert len(calls) == 3 and "Request timeout" in scraper.refused
 
 
+def test_tbt_waits_longer_than_the_site_is_slow_and_stays_inside_the_tier_limit():
+    from services.scrapers.dg_grow.tbt_scraper import TBTScraper
+    scraper = TBTScraper()
+    # Railway's good runs took up to 31 s, so the base 30 seconds failed on a slow answer.
+    assert scraper.timeout.total >= 60
+    worst = scraper.timeout.total * TBTScraper.LATEST_TRIES + TBTScraper.RETRY_PAUSE_SECONDS * (TBTScraper.LATEST_TRIES - 1)
+    assert worst < 300                                            # api/cron.py: `tbt` runs with timeout=300
+
+
 def _record(monkeypatch, stats, last_good):
     spec = importlib.util.spec_from_file_location("sync_dg_grow_refusals", BACKEND / "scripts" / "sync_dg_grow.py")
     mod = importlib.util.module_from_spec(spec)
