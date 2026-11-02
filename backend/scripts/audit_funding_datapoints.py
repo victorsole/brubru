@@ -48,10 +48,20 @@ BANNER = re.compile(r"(?i)accept (all )?cookies|we use cookies|enable javascript
 MOJIBAKE = re.compile("�|Ã[\u0080-¿]|â€")
 TAG = re.compile(r"<[^>]+>")
 # Findings an open register item explains (they print as KNOWN, not FAIL): (list slug or "*", code) -> id.
-_CALLS = ("ft-calls-for-proposals", "funding-opportunities", "opportunities", "startups")
 KNOWN = {("*", "naive_datetime"): "O106",
-         **{(s, "document_date_in_future"): "O95" for s in _CALLS},
-         **{("euda-tenders", c): "O99" for c in ("public_url_home_page", "body_txt_stub_under_200", "document_date_missing")}}
+         **{(s, "document_date_in_future"): "O115" for s in ("ft-cascade-calls", "opportunities", "all")},
+         **{("euda-tenders", c): "O99" for c in ("public_url_home_page", "body_txt_stub_under_200", "document_date_missing")},
+         ("ft-events", "public_url_not_absolute"): "O107",
+         ("partner-announcements", "public_url_shared_by_3_or_more"): "O113",
+         ("ft-calls-for-tenders", "body_txt_stub_under_200"): "O123",
+         **{(s, "body_txt_and_html_differ_in_length"): "O108" for s in (
+             "cedefop-tenders", "echa-calls", "echa-tenders", "eea-tenders", "efsa-tenders", "ema-calls", "ema-tenders",
+             "eu-osha-tenders", "eurofound-tenders", "fra-tenders")},
+         **{(s, "document_date_missing"): "O109" for s in (
+             "cedefop-calls", "cedefop-grants", "cedefop-tenders", "echa-calls", "echa-tenders", "efca-calls",
+             "efca-tenders", "eib-tenders", "eige-calls", "eige-tenders", "enisa-calls", "enisa-tenders", "era-tenders")},
+         **{(s, "body_txt_stub_under_200"): "O110" for s in (
+             "cedefop-grants", "enisa-calls", "enisa-tenders", "era-tenders", "etf-tenders")}}
 # Findings that are what the list says it serves (documented in its description): (slug, code) -> why.
 _FUNDS = ("erdf", "esf-plus", "cohesion-fund", "jtf", "interreg", "emfaf", "amif", "isf")
 _ROWS = ("eagf", "eafrd", "eusf", "budgets")
@@ -85,6 +95,34 @@ def _when(value):
 
 def _text(value) -> str:
     return " ".join(str(value or "").split())
+
+
+def audit_status(items: list, now: datetime) -> tuple[Counter, dict]:
+    """A status against the item's own dates: Counter code -> items, examples code -> first ids. Pure.
+    Added 2 Nov 2026: 247 calls not yet open were served as open for three days and this audit, which
+    read the dates and not the status they decide, saw nothing."""
+    found, examples = Counter(), {}
+
+    def flag(code, item):
+        found[code] += 1
+        examples.setdefault(code, [])
+        if len(examples[code]) < 3:
+            examples[code].append(str(item.get("id")))
+
+    day = timedelta(days=1)
+    for i in items:
+        status = str(i.get("status") or "").lower()
+        if status not in ("open", "forthcoming"):
+            continue
+        opening, _ = _when(i.get("opening_date"))
+        ends = [d for d in (_when(i.get("deadline"))[0], _when(i.get("deadline_secondary"))[0]) if d]
+        if ends and max(ends) < now - day:
+            flag(f"status_{status}_past_deadline", i)
+        if status == "open" and opening and opening > now + day:
+            flag("status_open_before_opening", i)
+        if status == "forthcoming" and opening and opening < now - day and not (ends and max(ends) < now - day):
+            flag("status_forthcoming_after_opening", i)
+    return found, examples
 
 
 def audit_items(items: list, now: datetime, with_body: bool = True) -> tuple[Counter, dict]:
@@ -237,6 +275,18 @@ def main() -> int:
             if s2 == 200 and isinstance(d2, dict):
                 items += [i for i in (d2.get("data") or []) if str(i.get("id")) not in {str(x.get("id")) for x in items}]
         found, examples = audit_items(items, now)
+        status_found, status_examples = audit_status(items, now)
+        # The newest page rarely holds the wrong ones: read each live status on its own, without bodies.
+        if any(p.get("name") == "status" for p in spec["paths"][path]["get"].get("parameters", [])):
+            for word in ("open", "forthcoming"):
+                s3, d3 = api.get(path, limit=PAGE, status=word, include_body="false")
+                if s3 == 200 and isinstance(d3, dict):
+                    more, more_examples = audit_status(list(d3.get("data") or []), now)
+                    status_found.update(more)
+                    for code, ids in more_examples.items():
+                        status_examples.setdefault(code, []).extend(ids)
+        found.update(status_found)
+        examples.update({c: ids[:3] for c, ids in status_examples.items()})
         selfs = self_check(api, items)
         empty = empty_fields(items)
         lo, med, hi = body_lengths(items)

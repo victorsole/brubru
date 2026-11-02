@@ -2,7 +2,7 @@
 breaks it, and a clean page that breaks none."""
 from datetime import datetime, timezone
 
-from scripts.audit_funding_datapoints import audit_items, empty_fields
+from scripts.audit_funding_datapoints import audit_items, audit_status, empty_fields
 
 NOW = datetime(2026, 10, 30, 15, 0, tzinfo=timezone.utc)
 BODY = "A call for tenders for evaluation services. " * 10
@@ -57,3 +57,19 @@ def test_one_batch_stamp_for_many_items_is_not_a_source_date():
 def test_a_field_empty_on_every_item_is_listed():
     items = [_item(1, deadline=None, cpv=[]), _item(2, deadline="", cpv=[])]
     assert empty_fields(items) == ["cpv", "deadline"]
+
+
+def test_a_status_is_read_against_the_items_own_dates():
+    now = datetime(2026, 11, 2, 12, 0, tzinfo=timezone.utc)
+    found, examples = audit_status([
+        {"id": 1, "status": "open", "opening_date": "2027-10-07", "deadline": "2028-01-20"},          # 2 Nov 2026: 247 of these
+        {"id": 2, "status": "forthcoming", "opening_date": "2027-10-07", "deadline": "2028-01-20"},   # fine
+        {"id": 3, "status": "open", "opening_date": "2026-09-01", "deadline": "2026-10-01"},          # past its deadline
+        {"id": 4, "status": "open", "deadline": "2026-10-01", "deadline_secondary": "2027-01-01"},    # a second stage ahead: fine
+        {"id": 5, "status": "forthcoming", "opening_date": "2026-09-01", "deadline": "2027-01-01"},   # opened, still forthcoming
+        {"id": 6, "status": "closed", "opening_date": "2027-10-07", "deadline": "2028-01-20"},        # a source may close early
+        {"id": 7, "status": "open"},                                                                  # no date to judge by
+    ], now)
+    assert dict(found) == {"status_open_before_opening": 1, "status_open_past_deadline": 1,
+                           "status_forthcoming_after_opening": 1}
+    assert examples["status_open_before_opening"] == ["1"] and examples["status_forthcoming_after_opening"] == ["5"]
