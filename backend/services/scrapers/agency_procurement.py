@@ -30,7 +30,7 @@ from urllib.parse import quote, unquote
 import requests
 
 from services.funding.agency_status import from_source
-from services.scrapers.economy_common import Item, clean
+from services.scrapers.economy_common import Item, clean, raise_if_blocked
 
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36")
@@ -932,8 +932,10 @@ _EUDA = "https://www.euda.europa.eu"
 
 
 def ingest_euda_tenders(*, fetch_bodies: bool = True, **_) -> list[Item]:
+    r = requests.get(_EUDA + "/about/procurement_en", headers=_HEADERS, timeout=40)
+    raise_if_blocked("procurement page", r.status_code, r.text)    # until 2 Nov 2026 it parsed to nothing, in silence
     return _from_item_pages(parse_positional_table(
-        _fetch(_EUDA + "/about/procurement_en"), _EUDA,
+        r.text, _EUDA,
         body_code="euda", item_type="tender", source_kind="euda_procurement",
         title_col=1, ref_col=0, deadline_col=3, status="",   # the deadline decides, as for ETF
     ), fetch_bodies=fetch_bodies)

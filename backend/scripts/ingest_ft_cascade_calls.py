@@ -77,8 +77,11 @@ def normalise(result: Dict[str, Any], today: Optional[dt.date] = None) -> Option
     topic_id = _text(md, "identifier") or None
     deadline, final_deadline = pick_deadlines(md.get("deadlineDate"), today)
     published = parse_iso_date(first_or_none(md.get("startDate")))
-    # The dates decide, as for every call (derive_status); no SEDIA flag is passed in.
+    # The dates decide, as for every call (derive_status); no SEDIA flag is passed in. `published` is
+    # the opening (startDate), which the status reads; the date served is the earlier of the portal's
+    # first publication of the record and the opening (Victor, 2 Nov 2026, as for the calls on 30 Oct).
     status = derive_status(None, published, final_deadline, today)
+    first = parse_iso_date(first_or_none(md.get("esDA_FirstIngestDate")))
     text, html = body_sections(md)
     return {
         "call_id": call_id,
@@ -91,7 +94,8 @@ def normalise(result: Dict[str, Any], today: Optional[dt.date] = None) -> Option
         "framework_programme": programme_label(md, topic_id or ""),
         "status": status,
         "deadline_model": _text(md, "deadlineModel") or None,
-        "published_at": published,
+        "published_at": min(first, published) if first and published else (published or first),
+        "opening_date": published,
         "deadline": deadline,
         "deadline_secondary": final_deadline if final_deadline and final_deadline != deadline else None,
         "duration": _text(md, "duration") or None,
@@ -126,11 +130,11 @@ def collect(pages) -> tuple[Dict[str, Dict[str, Any]], int]:
 UPSERT = """
 INSERT INTO ft_cascade_calls
     (call_id, topic_id, title, topic_title, project_id, project_acronym, project_name,
-     framework_programme, status, deadline_model, published_at, deadline, deadline_secondary,
+     framework_programme, status, deadline_model, published_at, opening_date, deadline, deadline_secondary,
      duration, indicative_budget, budget_currency, source_url, description, description_html, raw)
 VALUES (%(call_id)s, %(topic_id)s, %(title)s, %(topic_title)s, %(project_id)s, %(project_acronym)s,
         %(project_name)s, %(framework_programme)s, %(status)s, %(deadline_model)s, %(published_at)s,
-        %(deadline)s, %(deadline_secondary)s, %(duration)s, %(indicative_budget)s, %(budget_currency)s,
+        %(opening_date)s, %(deadline)s, %(deadline_secondary)s, %(duration)s, %(indicative_budget)s, %(budget_currency)s,
         %(source_url)s, %(description)s, %(description_html)s, %(raw)s)
 ON CONFLICT (call_id) DO UPDATE SET
     topic_id = EXCLUDED.topic_id, title = EXCLUDED.title, topic_title = EXCLUDED.topic_title,
@@ -138,7 +142,8 @@ ON CONFLICT (call_id) DO UPDATE SET
     project_name = EXCLUDED.project_name,
     framework_programme = COALESCE(EXCLUDED.framework_programme, ft_cascade_calls.framework_programme),
     status = EXCLUDED.status, deadline_model = EXCLUDED.deadline_model,
-    published_at = COALESCE(EXCLUDED.published_at, ft_cascade_calls.published_at),
+    published_at = LEAST(EXCLUDED.published_at, ft_cascade_calls.published_at),
+    opening_date = COALESCE(EXCLUDED.opening_date, ft_cascade_calls.opening_date),
     deadline = COALESCE(EXCLUDED.deadline, ft_cascade_calls.deadline),
     deadline_secondary = EXCLUDED.deadline_secondary, duration = EXCLUDED.duration,
     indicative_budget = COALESCE(EXCLUDED.indicative_budget, ft_cascade_calls.indicative_budget),

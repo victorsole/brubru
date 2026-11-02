@@ -367,7 +367,8 @@ def pdf_dateline_date(text: str) -> Tuple[Optional[datetime], str]:
 def cffi_get(url: str) -> Optional[str]:
     """EUDA sits behind a WAF that 403s a plain requests UA, so its own scraper uses
     a curl_cffi Chrome TLS fingerprint. Reuse that rather than re-tuning headers,
-    per feedback_waf_walled_use_playwright."""
+    per feedback_waf_walled_use_playwright. Victor's exception of 2 Nov 2026 covers EUDA only
+    (euda_content._cffi_session); the fallback below reaches other hosts: register O125."""
     from curl_cffi import requests as creq
     s = creq.Session(impersonate="chrome131")
     try:

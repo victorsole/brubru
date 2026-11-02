@@ -49,7 +49,6 @@ MOJIBAKE = re.compile("�|Ã[\u0080-¿]|â€")
 TAG = re.compile(r"<[^>]+>")
 # Findings an open register item explains (they print as KNOWN, not FAIL): (list slug or "*", code) -> id.
 KNOWN = {("*", "naive_datetime"): "O106",
-         **{(s, "document_date_in_future"): "O115" for s in ("ft-cascade-calls", "opportunities", "all")},
          **{("euda-tenders", c): "O99" for c in ("public_url_home_page", "body_txt_stub_under_200", "document_date_missing")},
          ("ft-events", "public_url_not_absolute"): "O107",
          ("partner-announcements", "public_url_shared_by_3_or_more"): "O113",

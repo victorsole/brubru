@@ -47,6 +47,7 @@ class CascadeCallItem(BaseModel):
     framework_programme: Optional[str] = None
     status: Optional[str] = Field(None, description="forthcoming | open | closed, from the call's own dates.")
     deadline_model: Optional[str] = Field(None, description="single-stage, multiple cut-off, ... as the portal states it.")
+    opening_date: Optional[datetime] = Field(None, description="When the call opens for submissions (the portal's startDate); ahead for a forthcoming call.")
     deadline: Optional[datetime] = Field(None, description="The next cut-off, or the last one once all have passed.")
     deadline_secondary: Optional[datetime] = Field(None, description="The final cut-off, when later than `deadline`.")
     duration: Optional[str] = Field(None, description="Expected duration of participation, as the portal states it.")
@@ -60,7 +61,7 @@ class CascadeCallItem(BaseModel):
     public_url: Optional[str] = Field(None, description="The portal's page for this cascade call.")
     body_txt: Optional[str] = Field(None, description="The page's text: task description, submission and evaluation process, further information.")
     body_html: Optional[str] = Field(None, description="The same sections as HTML.")
-    document_date: Optional[datetime] = Field(None, description="The portal's opening date/publication date (one date for a call, as the portal shows it).")
+    document_date: Optional[datetime] = Field(None, description="Publication date: the earlier of the portal's first publication of the record and the call's opening, so never a date ahead (the opening is `opening_date`).")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first recorded the call.")
     updated_date: Optional[datetime] = Field(None, description="When the call's content last changed in Brubru; a daily re-read that finds the same call does not move it.")
 
@@ -70,7 +71,7 @@ class CascadeCallItem(BaseModel):
 _CASCADE_EUR = amount_eur_sql("indicative_budget", "budget_currency", brussels_day("published_at", "timestamptz"))
 _COLS = ("id, call_id, title, topic_id, topic_title, project_id, project_acronym, project_name, "
          "framework_programme, status, deadline_model, deadline, deadline_secondary, duration, "
-         "indicative_budget, budget_currency, source_url AS public_url, published_at AS document_date, "
+         "indicative_budget, budget_currency, source_url AS public_url, published_at AS document_date, opening_date, "
          "first_seen AS creation_date, last_updated AS updated_date, left(description, 1500) AS summary_src, "
          + _CASCADE_EUR + " AS amount_eur")
 _BODY = ", description AS body_txt, description_html AS body_html"
@@ -115,7 +116,7 @@ every call one project has issued.
 **Input**
 - `q` words in the title or text; `status` (comma list: forthcoming, open, closed); `programme`
   (substring); `topic_id`; `project_id`; `call_id`.
-- `published_from` / `published_to` on the opening/publication date (`since`/`until` accepted);
+- `published_from` / `published_to` on the publication date (`since`/`until` accepted);
   `deadline_from` / `deadline_to`.
 - `order` (recent default | oldest | deadline | amount | updated_asc | updated_desc | created_asc | created_desc).
 - `min_amount_eur`, `max_amount_eur` — the budget in euros (`amount_eur`) at least / at most (a call with no euro figure is left out); `order=amount` lists the largest first.
@@ -132,7 +133,7 @@ GET /api/v2/funding/ft-cascade-calls?updated_from=2026-10-23&order=updated_asc
 **You get back**
 A `PaginatedResponse[CascadeCallItem]` envelope: `id`, `call_id`, `title`, `topic_id`, `project_id`,
 `project_acronym`, `status`, `deadline`, `indicative_budget` and the five datapoints (`public_url` =
-the portal's page for the call, `document_date` = its opening/publication date).
+the portal's page for the call, `document_date` = its publication date, `opening_date` = when it opens).
 
 **Data freshness**
 Read daily from the portal's search service (every cascade call, closed ones included).""",

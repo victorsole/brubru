@@ -31,6 +31,7 @@ from psycopg2.extras import execute_values  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from services.scrapers.economy_common import SourceBlocked  # noqa: E402
 from services.scrapers import economy_ecb as e          # noqa: E402
 from services.scrapers import economy_eba as eba        # noqa: E402
 from services.scrapers import economy_esma as esma      # noqa: E402
@@ -651,6 +652,8 @@ def _reject_future_news_date(it) -> None:
 # publications, events and tenders are outside this rule.
 _NEWS_TYPES = {"news", "press_release"}
 _UNDATED_REFUSED: list = []
+# Resources a site refused this run (economy_common.SourceBlocked): "body/type: why".
+_BLOCKED: list = []
 
 
 def _existing_urls(keys) -> set:
@@ -963,6 +966,10 @@ def _run_targets(db, targets, run_one, max_seconds: float | None) -> tuple[int, 
             db.rollback()
             stopped = f"{body}/{itype}"
             print(f"[WARN] {stopped}: stopped at the time budget of {max_seconds:.0f}s", flush=True)
+        except SourceBlocked as exc:
+            db.rollback()
+            _BLOCKED.append(f"{body}/{itype}: {exc}")
+            print(f"[WARN] blocked by the site: {body}/{itype}: {exc}", flush=True)
         except Exception as exc:  # one resource failing must not abort the rest
             db.rollback()
             print(f"[ERROR] {body}/{itype}: {exc}", flush=True)
@@ -1012,6 +1019,9 @@ def main() -> None:
             from services.sync.freshness import BUDGET_STOP
             print(f"[SYNC_STATUS] degraded: {BUDGET_STOP} ({args.max_seconds:.0f}s) during "
                   f"{stopped or 'none'}; not started: {', '.join(not_started) or 'none'}; "
+                  f"{total} item(s) stored", flush=True)
+        elif _BLOCKED:
+            print(f"[SYNC_STATUS] degraded: blocked by the site ({'; '.join(_BLOCKED)[:500]}); "
                   f"{total} item(s) stored", flush=True)
 
         # New news items nobody could date were NOT upserted. Record them in the

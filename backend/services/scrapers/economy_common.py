@@ -24,6 +24,22 @@ _TIMEOUT = 30
 _BODY_CAP = 800_000  # chars; working-paper PDFs can be large
 
 
+class SourceBlocked(Exception):
+    """The site refuses us: its firewall answers 403, 429 or a block page (Victor, 29 Oct 2026). A
+    known break, not a failed job: sync_economy records the run `degraded: blocked by the site`,
+    which is never red. A block is reported, never worked around by a reader that does not already
+    have an exception (see euda_content._cffi_session)."""
+
+
+_BLOCK_STATUSES = (403, 429)
+_BLOCK_WORDS = "you have been blocked"          # Cloudflare's page, whatever its status
+
+
+def raise_if_blocked(scope: str, status: int, text: str = "") -> None:
+    if status in _BLOCK_STATUSES or _BLOCK_WORDS in (text or "")[:20000].lower():
+        raise SourceBlocked(f"{scope}: HTTP {status}")
+
+
 @dataclass
 class Item:
     # CANONICAL item shape. The 5 "target" datapoints (public_url, body_txt, body_html,

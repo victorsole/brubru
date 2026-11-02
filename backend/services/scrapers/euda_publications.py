@@ -18,7 +18,7 @@ import html as _html
 
 import requests
 
-from services.scrapers.economy_common import Item, clean, known, needs_fetch
+from services.scrapers.economy_common import Item, clean, known, needs_fetch, raise_if_blocked
 
 _SITEMAP = "https://www.euda.europa.eu/sitemap.xml?page={page}"
 # The EUDA sitemap index has 35 sub-sitemap pages; scan them all (news/events/
@@ -40,6 +40,8 @@ def sitemap_urls(session: requests.Session, substr: str) -> list[str]:
             r = session.get(_SITEMAP.format(page=page), timeout=40)
         except Exception:  # requests OR curl_cffi errors
             continue
+        if not urls:      # a block on the way in, before the 35-page walk spends the run's budget
+            raise_if_blocked(f"sitemap page {page}", r.status_code, r.text)
         if r.status_code != 200:
             continue
         for loc in _LOC.findall(r.text):

@@ -92,6 +92,7 @@ def test_the_listings_we_labelled_open_send_no_word(monkeypatch):
     from services.scrapers import agency_procurement as ap
     seen = {}
     monkeypatch.setattr(ap, "_fetch", lambda url: "")
+    monkeypatch.setattr(ap.requests, "get", lambda *a, **kw: SimpleNamespace(status_code=200, text=""))   # EUDA's own read
     monkeypatch.setattr(ap, "_from_item_pages", lambda items, fetch_bodies=True: items)
     monkeypatch.setattr(ap, "parse_field_cards", lambda *a, **kw: seen.setdefault("etf", kw["status"]) and [])
     monkeypatch.setattr(ap, "parse_positional_table",

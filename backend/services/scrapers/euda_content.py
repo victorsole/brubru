@@ -14,7 +14,7 @@ import requests
 
 from bs4 import BeautifulSoup
 
-from services.scrapers.economy_common import Item, clean, norm_url, extract_html, known, needs_fetch
+from services.scrapers.economy_common import Item, clean, norm_url, extract_html, known, needs_fetch, raise_if_blocked
 from services.scrapers.euda_publications import sitemap_urls, fetch_title, fetch_title_and_date, _HEADERS
 
 _SITE = "https://www.euda.europa.eu"
@@ -54,7 +54,11 @@ def _cffi_session():
     """EUDA sits behind a WAF that 403s plain requests (Aug 2026), including its
     sitemap sub-pages. A curl_cffi session impersonating a real Chrome TLS/JA3
     fingerprint clears it (Playwright can't read the XML sitemaps). Drop-in
-    compatible with the requests.Session API the helpers use."""
+    compatible with the requests.Session API the helpers use.
+
+    An EXCEPTION to the rule that enforced blocks are not circumvented: Victor's decision of
+    2 Nov 2026, "for now", for EUDA's news, events and topics only. It extends to no other host and to
+    no other EUDA reader: the tender and publication readers stay plain and report the block."""
     from curl_cffi import requests as _creq
     return _creq.Session(impersonate="chrome131")
 
@@ -96,6 +100,8 @@ def ingest_euda_topics(*, fetch_bodies: bool = True, **_) -> list[Item]:
         for attempt in range(3):
             try:
                 resp = s.get(url, timeout=30)
+                if not items:
+                    raise_if_blocked(f"topic page {path}", resp.status_code, resp.text)
                 if resp.status_code == 200:
                     r = resp
                     break

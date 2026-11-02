@@ -41,7 +41,8 @@ def test_a_record_becomes_its_own_call_with_its_own_page(monkeypatch):
     assert (row["project_id"], row["project_acronym"]) == ("101237681", "Cultural Horizons")
     assert row["source_url"].endswith("/competitive-calls-cs/16842")          # not the topic's 47365875
     assert row["status"] == "forthcoming"                                      # opens 26 Oct
-    assert row["published_at"].date() == dt.date(2026, 10, 26)
+    assert row["opening_date"].date() == dt.date(2026, 10, 26)
+    assert row["published_at"].date() == dt.date(2026, 10, 23)                 # first published, before it opens
     assert row["deadline"].date() == dt.date(2026, 12, 28)
     assert row["indicative_budget"] == 220000.0 and row["deadline_model"] == "single-stage"
     assert row["framework_programme"] == "Creative Europe Programme (CREA)"
@@ -163,3 +164,25 @@ def test_the_item_route_and_a_missing_id():
     client, _ = _client([])
     r = client.get("/api/v2/funding/ft-cascade-calls/999999")
     assert r.status_code == 404 and r.json()["detail"]["reason_code"] == "not_found"
+
+
+def test_a_cascade_calls_date_is_never_ahead_and_its_status_reads_the_opening():
+    """2 Nov 2026 (Victor; O115): `published_at` held the opening, so a forthcoming call sat at the top of
+    /funding/opportunities. It is now the earlier of first publication and opening, as for the calls; the
+    status must keep reading the opening, which the calls lost on 31 Oct (O117)."""
+    import copy
+    record = copy.deepcopy(RECORD)
+    md = record["metadata"]
+    md["startDate"], md["esDA_FirstIngestDate"] = ["2027-03-01T00:00:00.000+0000"], ["2026-10-01T10:00:00.000+0200"]
+    md["deadlineDate"] = ["2027-06-01T00:00:00.000+0000"]
+    row = cascade.normalise(record, today=TODAY)
+    assert row["status"] == "forthcoming" and row["opening_date"].date() == dt.date(2027, 3, 1)
+    assert row["published_at"].date() == dt.date(2026, 10, 1)
+    # a re-index stamp after the opening never replaces it
+    md["startDate"], md["esDA_FirstIngestDate"] = ["2026-01-10T00:00:00.000+0000"], ["2026-09-01T10:00:00.000+0200"]
+    row = cascade.normalise(record, today=TODAY)
+    assert row["status"] == "open" and row["published_at"].date() == dt.date(2026, 1, 10)
+    assert "published_at = LEAST(EXCLUDED.published_at, ft_cascade_calls.published_at)" in cascade.UPSERT
+    assert "opening_date = COALESCE(EXCLUDED.opening_date, ft_cascade_calls.opening_date)" in cascade.UPSERT
+    assert "%(opening_date)s" in cascade.UPSERT
+
