@@ -99,3 +99,10 @@ def test_a_date_tomorrow_is_in_the_future_and_today_in_another_time_zone_is_not(
     assert found["document_date_in_future"] == 1
     found, _ = audit_items([_item(2, document_date="2026-10-31T00:00:00Z")], NOW)     # 9 hours ahead
     assert not found["document_date_in_future"]
+
+
+def test_an_address_visible_only_in_the_html_does_not_make_the_two_bodies_differ():
+    url = "http://ted.europa.eu/udl?uri=TED:NOTICE:316915-2010:TEXT:EN:HTML" + "x" * 300
+    htm = f"<p>{BODY}</p>" + "".join(f"<p>{url}</p>" for _ in range(4))
+    found, _ = audit_items([_item(1, body_txt=BODY, body_html=htm)], NOW)
+    assert not found["body_txt_and_html_differ_in_length"]

@@ -65,6 +65,7 @@ KNOWN = {("*", "naive_datetime"): "O106",
              "efca-tenders", "eib-tenders", "eige-calls", "eige-tenders", "enisa-calls", "enisa-tenders", "era-tenders",
              "all", "opportunities", "ecdc-tenders", "etf-tenders", "eeas/tenders")},
          ("hadea/calls", "document_date_missing"): "O138",
+         **{("hadea/tenders", c): "O110" for c in ("body_txt_missing", "body_html_missing")},
          **{(s, "body_txt_stub_under_200"): "O110" for s in (
              "cedefop-grants", "enisa-calls", "enisa-tenders", "era-tenders", "etf-tenders")}}
 # Findings that are what the list says it serves (documented in its description): (slug, code) -> why.
@@ -185,9 +186,9 @@ def audit_items(items: list, now: datetime, with_body: bool = True) -> tuple[Cou
                 if SHARE_MENU.search(str(txt)[:1000]):
                     flag("body_share_menu", i)
                 if htm:
-                    # A file's address is visible in the text and inside href in the html: 431 rows
-                    # flagged on 2 Nov 2026 held the same files in both (register O108, closed).
-                    h = _text(html_lib.unescape(TAG.sub(" ", str(htm))))
+                    # An address may be visible in one body and inside href in the other: 431 rows flagged on
+                    # 2 Nov 2026 held the same files in both (register O108, closed). Compare the words only.
+                    h = _text(URL.sub("", html_lib.unescape(TAG.sub(" ", str(htm)))))
                     if h and not (0.5 <= len(h) / max(len(_text(URL.sub("", t))), 1) <= 2.0):
                         flag("body_txt_and_html_differ_in_length", i)
         doc, _ = _when(i.get("document_date"))
