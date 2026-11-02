@@ -499,7 +499,7 @@ def decide_tiers(now: datetime.datetime) -> list[tuple[str, str]]:
     if weekday == 6 and hour == 5:
         fires.append(("weekly", "/api/cron/sync/weekly"))
 
-    # Commission heavy bulk datasets: Sunday 07:00 UTC. The 6 large commission
+    # Commission heavy bulk datasets: Sunday 07:00 UTC. The 5 large commission
     # sub-types (CORDIS research / RASFF alerts / DG COMP state-aid / EBTI tariff
     # rulings / TARIC codes / FTS recipients) that no other tier covers -- bulk
     # reference universes that move slowly. Separate weekly slot so they never

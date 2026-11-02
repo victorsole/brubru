@@ -1354,14 +1354,13 @@ async def cron_sync_economy(
 
 
 # ---- Commission heavy bulk datasets (weekly) -------------------------------
-# The 6 large economy_items sub-types under body_code='commission' that NO other
+# The 5 large economy_items sub-types under body_code='commission' that NO other
 # cron tier covers. Bulk reference universes (tens-to-hundreds of thousands of
 # rows) that move slowly; without this tier they went stale ~2 months (frozen
 # since June 2026 until the 17 Aug 2026 general DB update surfaced it). Each
 # syncs one at a time via sync_economy --no-bodies (500-row batched commits +
 # reconnect-on-drop), so a 100k-row upsert stays gentle on the pooled connection.
 _COMMISSION_HEAVY_TYPES: list[str] = [
-    "research_project",    # CORDIS Horizon projects (~23k)
     "rasff_notification",  # RASFF food-safety alerts (~32k)
     "state_aid_case",      # DG COMP state-aid cases (~62k)
     "tariff_ruling",       # EBTI binding tariff rulings (~76k; slow EBTI export)
@@ -1436,9 +1435,9 @@ async def _run_commission_heavy_bg() -> None:
 @router.post("/sync/commission-heavy")
 async def cron_sync_commission_heavy(authorization: str = Header(...)):
     """
-    Commission heavy bulk datasets (weekly, Sunday 07:00 UTC): the 6 large
+    Commission heavy bulk datasets (weekly, Sunday 07:00 UTC): the 5 large
     economy_items sub-types under body_code='commission' that no other cron tier
-    covers -- CORDIS research projects, RASFF food-safety alerts, DG COMP
+    covers -- RASFF food-safety alerts, DG COMP
     state-aid cases, EBTI tariff rulings, TARIC tariff codes, and FTS funding
     recipients. Bulk reference universes (tens-to-hundreds of thousands of rows)
     that move slowly; without this tier they were frozen ~2 months (stuck since

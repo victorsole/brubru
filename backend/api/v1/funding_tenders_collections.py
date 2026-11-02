@@ -725,6 +725,7 @@ def _project_order(order: Optional[str]):
         "recent": (_PROJECT_DATE_SQL.desc().nullslast(), FtFundedProject.id.desc()),
         "oldest": (_PROJECT_DATE_SQL.asc().nullslast(), FtFundedProject.id.asc()),
         "amount": (text(f"{_PROJECT_EUR} DESC NULLS LAST"), FtFundedProject.id.desc()),
+        "title": (FtFundedProject.title.asc(), FtFundedProject.id.asc()),
     }.get(order, (FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc()))
 
 
@@ -756,9 +757,12 @@ async def funded_projects_page(
     order: Optional[str] = None,
     min_amount_eur: Optional[float] = None,
     max_amount_eur: Optional[float] = None,
+    programme_codes: Optional[tuple] = None,
 ) -> PaginatedResponse[FtFundedProjectItem]:
     query = db.query(FtFundedProject).filter(FtFundedProject.is_test == False)  # noqa: E712
     filters = []
+    if programme_codes:
+        filters.append(FtFundedProject.framework_programme.in_(programme_codes))
     if framework_programme:
         # The column holds the source's code (HORIZON, H2020, ERASMUS2027); a name that is part of no
         # code (`Horizon Europe`) also finds the codes it names (26 Oct 2026).
