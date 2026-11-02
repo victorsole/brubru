@@ -73,7 +73,7 @@ def test_the_real_auth_dependency_records_the_ignored_parameter_before_anything_
     route = next(r for r in fr.router.routes if r.path == "/eu-funding-recipients")
     request = Request({"type": "http", "method": "GET", "path": "/api/v2/funding/eu-funding-recipients",
                        "query_string": b"unit=CNECT&q=study", "headers": [], "route": route})
-    request.state.api_key = SimpleNamespace(grants_scope=lambda scope: False, api_tier="free")
+    request.state.api_key = SimpleNamespace(grants_route=lambda path: True, grants_scope=lambda scope: False, api_tier="free")
     with pytest.raises(HTTPException) as refused:          # the scope check comes after the guard
         import asyncio
         asyncio.run(api_user_with_rate_limit(request, user=SimpleNamespace(id=1), db=None))

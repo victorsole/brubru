@@ -35,6 +35,7 @@ from core.database import Base
 
 
 KEY_PREFIX = "brubru_live_"
+ROUTE_PREFIX = "route:"
 _RANDOM_BYTES = 24  # 192 bits of entropy; token_hex(24) returns 48 hex chars
 DEFAULT_SELF_SERVE_EXPIRY_DAYS = 180
 
@@ -97,6 +98,24 @@ class ApiKey(Base):
         if "*" in scopes:
             return True
         return required in scopes
+
+    @property
+    def route_limits(self) -> List[str]:
+        """The routes this key is limited to, from its "route:/api/v2/..." entries; none on an ordinary key."""
+        return [s[len(ROUTE_PREFIX):].rstrip("/") for s in (self.scopes or [])
+                if isinstance(s, str) and s.startswith(ROUTE_PREFIX)]
+
+    def grants_route(self, path: str) -> bool:
+        """False when this key is limited to named routes and `path` is not one of them or under one.
+
+        For an evaluator's key (Victor, 2 Nov 2026: "a taste of the API, not everything"), since one scope
+        opens over 100 routes. A limit only narrows: the scope check still applies on top of it.
+        """
+        limits = self.route_limits
+        if not limits:
+            return True
+        path = path.rstrip("/")
+        return any(path == r or path.startswith(r + "/") for r in limits)
 
     @classmethod
     def generate(

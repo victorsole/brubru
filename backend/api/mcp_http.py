@@ -454,6 +454,11 @@ async def _dispatch_tools_call(
     if not isinstance(tool_name, str) or not tool_name:
         return _err(req_id, -32602, "tools/call requires `name` (string).")
 
+    # A key limited to named REST routes opens no tool: a tool's scope reaches far more than those routes.
+    if api_key.route_limits:
+        return _err(req_id, _ERR_SCOPE_MISSING, "This evaluation key covers a selection of REST routes, not the MCP tools.",
+                    data={"tool": tool_name})
+
     _find = (profile.find_tool if profile is not None else find_tool)
     tool: Optional[McpTool] = _find(tool_name)
     if tool is None:
