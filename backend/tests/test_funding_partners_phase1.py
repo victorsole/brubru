@@ -242,7 +242,7 @@ def test_a_project_item_carries_its_consortium():
                                         "ec_contribution": 1.5, "vat": "X", "nuts_code": "ES30"}],
                         start_date=None, end_date=None, total_cost=None, eu_contribution=None, cost_currency="EUR",
                         status="ongoing", source_status="signed", source_url="u", published_at=None, last_updated=None,
-                        keywords="soil; carbon", scraped_at=None)
+                        keywords="soil; carbon", scraped_at=None, first_seen=None)
     item = _project_to_item(r)
     assert item.coordinator_pic == "999991722" and item.organisations[0].pic == "999991722"
     assert "soil; carbon" in item.body_txt                                             # the Keywords section is no longer empty

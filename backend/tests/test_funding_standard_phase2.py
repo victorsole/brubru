@@ -225,7 +225,7 @@ def test_the_funded_projects_list_takes_programme_country_the_windows_and_the_or
     count_sql, page_sql = sql
     assert "ft_funded_projects.framework_programme ILIKE" in count_sql
     assert "ft_funded_projects.coordinator_country IN" in count_sql
-    assert "ft_funded_projects.scraped_at >= " in count_sql
+    assert "ft_funded_projects.first_seen >= " in count_sql
     # The publication window reads the document date the item shows: the publication date, else a past start.
     assert "CASE WHEN (CURRENT_DATE >= date(ft_funded_projects.published_at))" in count_sql
     assert "ORDER BY CASE WHEN (CURRENT_DATE >= date(ft_funded_projects.published_at))" in page_sql and "DESC NULLS LAST" in page_sql

@@ -82,7 +82,7 @@ class ResearchProjectItem(BaseModel):
     )
     creation_date: Optional[datetime] = Field(
         None,
-        description="When Brubru first ingested this project row (ft_funded_projects.scraped_at).",
+        description="When Brubru first ingested this project row (ft_funded_projects.first_seen).",
     )
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
@@ -100,7 +100,7 @@ class ConsortiumPayload(BaseModel):
     body_txt: Optional[str] = Field(None, description="Parent project's objective as plain text.")
     body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
     document_date: Optional[date] = Field(None, description="Parent project's start_date.")
-    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project (ft_funded_projects.scraped_at).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project (ft_funded_projects.first_seen).")
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
@@ -170,7 +170,7 @@ def _row_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Researc
         # 5 mandatory datapoints
         public_url=r.source_url,
         document_date=r.start_date,
-        creation_date=getattr(r, "scraped_at", None),
+        creation_date=getattr(r, "first_seen", None),
     )
 
 
@@ -347,7 +347,7 @@ async def project_consortium(
         body_txt=bt,
         body_html=bh,
         document_date=row.start_date,
-        creation_date=getattr(row, "scraped_at", None),
+        creation_date=getattr(row, "first_seen", None),
     )
 
 
@@ -411,7 +411,7 @@ async def project_deliverables(
         body_txt=bt,
         body_html=bh,
         document_date=row.start_date,
-        creation_date=getattr(row, "scraped_at", None),
+        creation_date=getattr(row, "first_seen", None),
     )
 
 
@@ -479,7 +479,7 @@ async def project_funding(
         body_txt=bt,
         body_html=bh,
         document_date=row.start_date,
-        creation_date=getattr(row, "scraped_at", None),
+        creation_date=getattr(row, "first_seen", None),
     )
 
 

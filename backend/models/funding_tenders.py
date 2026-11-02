@@ -107,6 +107,9 @@ class FtFundedProject(Base):
     published_at = Column(DateTime)
     last_updated = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
     scraped_at = Column(DateTime, server_default=func.now())
+    # When Brubru first saw the project (migration 324), the item's creation_date; scraped_at is the last
+    # read and moves on every sync.
+    first_seen = Column(DateTime, server_default=func.now())
     detected_lang = Column(String(8))
     # In the table all along, never mapped: the item body's "Keywords" section was always empty and
     # nothing could filter on them (26 Oct 2026, partner search).

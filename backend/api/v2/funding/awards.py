@@ -55,7 +55,7 @@ _PROJECT_DATE = str(ft._PROJECT_DATE_SQL.compile(dialect=postgresql.dialect(), c
 # Each source with the union's columns; {q} is each list's own full-text condition (or nothing).
 _PROJECT_SIDE = f"""
 SELECT 'project' AS src, ft_funded_projects.id::text AS rid, 'funded_project'::text AS item_type, 'ftportal'::text AS body_code,
-       ({_PROJECT_DATE})::timestamptz AS document_date, ft_funded_projects.scraped_at AT TIME ZONE 'UTC' AS creation_date,
+       ({_PROJECT_DATE})::timestamptz AS document_date, ft_funded_projects.first_seen AT TIME ZONE 'UTC' AS creation_date,
        ft_funded_projects.last_updated AT TIME ZONE 'UTC' AS updated_date, ft_funded_projects.status::text AS status,
        ({ft._PROJECT_EUR})::numeric AS amount_eur, ft_funded_projects.coordinator_country::text AS country,
        ft_funded_projects.framework_programme::text AS programme

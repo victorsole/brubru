@@ -40,7 +40,7 @@ def _row(**kw):
                 coordinator_name=None, coordinator_country=None, start_date=date(2027, 10, 1),
                 end_date=date(2032, 9, 30), total_cost=None, eu_contribution=None, cost_currency="EUR",
                 status="planned", source_status="signed", source_url="https://cordis.europa.eu/project/id/101230663",
-                published_at=None, last_updated=None, keywords=None, scraped_at=None)
+                published_at=None, last_updated=None, keywords=None, scraped_at=None, first_seen=None)
     base.update(kw)
     return SimpleNamespace(**base)
 

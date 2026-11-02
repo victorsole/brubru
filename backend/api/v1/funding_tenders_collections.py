@@ -701,7 +701,7 @@ def _project_to_item(
         has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
         document_date=_project_date(r),
-        creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
+        creation_date=r.first_seen,
         updated_date=r.last_updated,
         summary=cut_summary(r.objective), amount_eur=eur(r.eu_contribution, r.cost_currency),
     )
@@ -718,7 +718,7 @@ _PROJECT_DATE_SQL = case(
 def _project_order(order: Optional[str]):
     """The list's order: the start date, newest first (default) | recent | oldest (the document date) |
     amount (the largest EU contribution first) | a sync order (first recorded, last changed)."""
-    sync = orm_order(order, FtFundedProject.scraped_at, FtFundedProject.last_updated, FtFundedProject.id) if order else None
+    sync = orm_order(order, FtFundedProject.first_seen, FtFundedProject.last_updated, FtFundedProject.id) if order else None
     if sync:
         return sync
     return {
@@ -797,9 +797,9 @@ async def funded_projects_page(
     if updated_to:
         filters.append(FtFundedProject.last_updated <= updated_to)
     if created_from:
-        filters.append(FtFundedProject.scraped_at >= created_from)
+        filters.append(FtFundedProject.first_seen >= created_from)
     if created_to:
-        filters.append(FtFundedProject.scraped_at <= created_to)
+        filters.append(FtFundedProject.first_seen <= created_to)
     if published_from:
         filters.append(_PROJECT_DATE_SQL >= published_from)
     if published_to:

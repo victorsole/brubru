@@ -245,13 +245,13 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
                CASE WHEN o->>'role' = 'coordinator' THEN 'coordinator' ELSE 'participant' END AS role,
                (o->>'ec_contribution')::numeric AS eu_contribution, NULL::numeric AS amount_eur,
                NULL::text AS department, NULL::numeric AS tender_value_eur,
-               pr.last_updated AS changed, pr.scraped_at AS created, NULL::text AS text_key
+               pr.last_updated AS changed, pr.first_seen AS created, NULL::text AS text_key
           FROM proj pr, jsonb_array_elements(pr.organisations) o
         UNION ALL
         SELECT 'project', pr.project_id, pr.title, pr.framework_programme, pr.start_date,
                nullif(pr.coordinator_pic, ''), '', pr.coordinator_name, NULL, {_EU_COUNTRY.format(c='pr.coordinator_country')},
                NULL, NULL, NULL::boolean, 'coordinator', NULL::numeric, NULL::numeric, NULL::text, NULL::numeric,
-               pr.last_updated, pr.scraped_at, NULL::text
+               pr.last_updated, pr.first_seen, NULL::text
           FROM proj pr
          WHERE jsonb_array_length(coalesce(pr.organisations, '[]'::jsonb)) = 0 AND pr.coordinator_name IS NOT NULL""")
     if use_payments:
@@ -306,7 +306,7 @@ def _sql(*, q, name, role, programme, topic, dg, country, activity_type, is_sme,
     sql = f"""
     WITH proj AS (
         SELECT p.project_id, p.title, p.framework_programme, p.start_date, p.organisations, p.coordinator_pic,
-               p.coordinator_name, p.coordinator_country, p.last_updated, p.scraped_at
+               p.coordinator_name, p.coordinator_country, p.last_updated, p.first_seen
           FROM ft_funded_projects p WHERE p.is_test = false{pw}
     ), acts AS ({" UNION ALL ".join(parts)}
     ), keyed AS (
