@@ -178,7 +178,9 @@ def build() -> tuple:
     off_keys = set()
     for b in rows:
         name = _v(b, "name")
-        if not name:
+        # The directory holds one unnamed post as a person, given name "." and family name "..." (ECHA,
+        # UNDEFINED_NRE529256, 2 Nov 2026). It is nobody, and it stood first on the default page (O142).
+        if not name or not re.search(r"[^\W\d_]", name):
             continue
         mnem = _v(b, "entity")
         org = _v(b, "orgLabel")
