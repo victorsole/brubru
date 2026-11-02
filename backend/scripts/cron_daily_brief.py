@@ -7,8 +7,7 @@ Calls the backend's /api/cron/daily-brief endpoint and exits.
 
 Railway cron schedule: 0 11 * * * (11:00 UTC = 12:00 CET)
 
-This scrapes EU news portals, saves top headlines, and sends
-the daily brief email to all subscribers (registered users + pre-users).
+This scrapes EU news portals and saves top headlines. It sends no email (2 Nov 2026).
 
 Usage:
     python scripts/cron_daily_brief.py
