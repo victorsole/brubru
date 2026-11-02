@@ -32,7 +32,7 @@ Usage:
 
 Sources (15 Sep 2026): EP Think Tank portal RSS with the search's date/type
 filters -> on a WAF status or unparseable body, the HTML listing -> Playwright
-rendering of that listing; plus the epthinktank.eu blog feed.
+rendering of that listing. (The epthinktank.eu blog feed ended with the blog on 29 Oct 2026.)
 
 Exit codes:
     0  every source fetched, every item processed

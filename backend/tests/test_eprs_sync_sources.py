@@ -192,14 +192,6 @@ def test_every_route_walled_fails_the_source():
     assert len(report.errors) == 3          # RSS, plain listing, Playwright
 
 
-def test_blog_feed_202_is_a_failed_source_not_an_empty_one():
-    async def http_get(url, params=None):
-        return 202, ""
-
-    items, report = _run(svc.EPRSBlogFeedSource(http_get=http_get).fetch(START, END))
-    assert items == [] and report.status == "failed" and report.errors
-
-
 # ---------------------------------------------------------------- sync + exit code
 
 class _FailingSource:
@@ -234,8 +226,7 @@ def test_sync_all_with_every_source_walled_reports_errors_and_exits_non_zero():
     service = svc.EPRSSyncService.__new__(svc.EPRSSyncService)   # no scraper, no DB
     service._db = _NoQueryDb()
     service._owns_db = False
-    service.portal_source = _FailingSource("thinktank_portal")
-    service.blog_source = _FailingSource("epthinktank_blog")
+    service.sources = [_FailingSource("thinktank_portal"), _FailingSource("second_source")]
 
     stats = _run(service.sync_all(days=7))
     assert stats["nothing_fetched"] is True

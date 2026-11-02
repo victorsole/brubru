@@ -2,7 +2,9 @@
 """
 Sync EPRS "EU Legislation in Progress" to Database
 
-Scrapes the curated list from epthinktank.eu (~184 procedures)
+RETIRED from the cron on 2 Nov 2026: the page it reads went with the EPRS blog on 29 Oct 2026, and
+the new site lists no file, only a link to the Legislative Train Schedule. The carriages it created
+stay. Scraped the curated list from epthinktank.eu (~184 procedures)
 and creates carriages in the database with source='oeil_direct'.
 
 These will then appear in the "Track a Legislative File" modal.

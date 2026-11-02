@@ -26,8 +26,9 @@ logger = logging.getLogger(__name__)
 BUDGET_STOP = "time budget reached"
 
 # A site that will not serve us (a timeout, a refused connection, a WAF page, an HTTP error
-# status) is the site's state, not a broken job (Victor, 30 Oct 2026: epthinktank.eu has been
-# unreachable since 29 Oct, and its two EPRS jobs made the cron red twice a day). Such a run is
+# status) is the site's state, not a broken job (Victor, 30 Oct 2026: epthinktank.eu stopped
+# answering on 29 Oct, and its two EPRS jobs made the cron red twice a day; it had in fact been
+# discontinued, which the red after 72 hours brought out on 2 Nov). Such a run is
 # recorded `degraded`, with the reason, while the job's last success is less than
 # UNREACHABLE_GRACE_HOURS old; after that it fails as before, and two failures in a row are red.
 # A page that answers but no longer parses is never this: it fails at once.
@@ -35,25 +36,33 @@ UNREACHABLE = "source unreachable"
 UNREACHABLE_GRACE_HOURS = 72
 
 
+def unreachable_verdict(reasons: List[str], last_success: Optional[datetime],
+                        now: Optional[datetime] = None) -> tuple:
+    """(status, reason) of a run whose only errors are refusals: `degraded` inside the grace,
+    `failed` after it or with no success on record."""
+    now = now or datetime.now(timezone.utc)
+    why = "; ".join(reasons)[:600]
+    if last_success is None:
+        return "failed", f"{UNREACHABLE}, and no good run on record ({why})"
+    if last_success.tzinfo is None:
+        last_success = last_success.replace(tzinfo=timezone.utc)
+    hours = (now - last_success).total_seconds() / 3600
+    if hours < UNREACHABLE_GRACE_HOURS:
+        return "degraded", (f"{UNREACHABLE} ({why}); last good run {last_success:%d %b %H:%M} UTC, "
+                            f"{hours:.0f}h ago; it fails after {UNREACHABLE_GRACE_HOURS}h")
+    return "failed", f"{UNREACHABLE} for {hours:.0f}h, over {UNREACHABLE_GRACE_HOURS}h ({why})"
+
+
 def unreachable_exit(reasons: List[str], last_success: Optional[datetime],
                      now: Optional[datetime] = None) -> int:
     """The exit code of a job whose only errors are refusals: 0 with a `[SYNC_STATUS] degraded:`
     line (the cron runner records it degraded) inside the grace, 1 after it or with no success on
     record. Prints the line itself."""
-    now = now or datetime.now(timezone.utc)
-    why = "; ".join(reasons)[:600]
-    if last_success is not None:
-        if last_success.tzinfo is None:
-            last_success = last_success.replace(tzinfo=timezone.utc)
-        hours = (now - last_success).total_seconds() / 3600
-        if hours < UNREACHABLE_GRACE_HOURS:
-            print(f"[SYNC_STATUS] degraded: {UNREACHABLE} ({why}); last good run "
-                  f"{last_success:%d %b %H:%M} UTC, {hours:.0f}h ago; it fails after {UNREACHABLE_GRACE_HOURS}h",
-                  flush=True)
-            return 0
-        print(f"[ERROR] {UNREACHABLE} for {hours:.0f}h, over {UNREACHABLE_GRACE_HOURS}h ({why})", flush=True)
-        return 1
-    print(f"[ERROR] {UNREACHABLE}, and no good run on record ({why})", flush=True)
+    status, reason = unreachable_verdict(reasons, last_success, now)
+    if status == "degraded":
+        print(f"[SYNC_STATUS] degraded: {reason}", flush=True)
+        return 0
+    print(f"[ERROR] {reason}", flush=True)
     return 1
 
 

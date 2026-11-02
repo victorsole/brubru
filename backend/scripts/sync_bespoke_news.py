@@ -24,6 +24,7 @@ from services.news.fetch_anchor import stamp_fetched
 from services.tracking.policy_area_classifier import classify
 from services.scrapers.bespoke_news_scraper import BESPOKE_SOURCES, BespokeFetchError, scrape_bespoke, scrape_eeas
 from services.scrapers.waf_browser_fetcher import WafBrowserFetcher
+from services.sync.freshness import last_success_at, unreachable_exit
 from services.news.write_guard import date_new_items, record_refusals
 
 
@@ -65,7 +66,7 @@ def main():
                 except BespokeFetchError as e:
                     # UNREACHABLE, not empty. Named so stderr_tail identifies it.
                     print(f"  UNREACHABLE {cfg['institution']}: {e}", file=sys.stderr)
-                    counts["unreachable"] += 1; unreachable.append(cfg["institution"]); continue
+                    counts["unreachable"] += 1; unreachable.append(str(e)[:200]); continue
                 except Exception as e:
                     print(f"  source failed {cfg['institution']}: {e}", file=sys.stderr)
                     counts["errors"] += 1; failed.append(cfg["institution"]); continue
@@ -111,10 +112,6 @@ def main():
         # days without a row. The cron maps exit code only (0 = success, non-zero =
         # failed with stderr_tail), so the verdict has to be an exit code and the
         # culprits have to be on stderr to be visible at all.
-        if unreachable:
-            print(f"[ERROR] bespoke_news FAILED: unreachable sources: {', '.join(unreachable)}",
-                  file=sys.stderr)
-            return 1
         if failed:
             print(f"[bespoke_news] FAILED: errored sources: {', '.join(failed)}",
                   file=sys.stderr)
@@ -131,6 +128,10 @@ def main():
                   "fetcher or the parser, not sixteen simultaneously quiet publishers",
                   file=sys.stderr)
             return 1
+        if unreachable:
+            # An institution's own outage (ECHA answered 502 for a day, 31 Oct 2026: four red runs)
+            # is degraded for 72 hours after the last good run, then fails. Named so it is traceable.
+            return unreachable_exit(unreachable, last_success_at(db, "news_bespoke"))
         if empty:
             # Degraded: some sources parsed nothing. Exit 0 (the run did land rows)
             # but name them, so a stale feed is traceable to a source and not just

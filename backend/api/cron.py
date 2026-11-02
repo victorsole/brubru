@@ -421,7 +421,7 @@ _HOT_TIER_RECORDED = (
     "commission_docs_complete", "eu_laws_eurovoc",
 )
 _WARM_TIER_RECORDED = (
-    "committee_work", "eprs_publications", "eprs_records", "eprs_full_text", "eprs_legislation",
+    "committee_work", "eprs_publications", "eprs_records", "eprs_full_text",
     "committee_minutes", "committee_transcripts", "auto_archive",
 )
 _WEEKLY_TIER_RECORDED = (
@@ -674,7 +674,9 @@ async def cron_sync_warm_12h(
     # was scheduled, so 870 of 871 publications served no author (15 Oct 2026).
     results["eprs_records"] = await _run_script_async("eprs_records", "scripts/enrich_eprs_records.py", ["--apply", "--max-seconds", "600"], timeout=900)
     results["eprs_full_text"] = await _run_script_async("eprs_full_text", "scripts/backfill_eprs_full_text.py", ["--apply", "--limit", "150"], timeout=1200)
-    results["eprs_legislation"] = await _run_script_async("eprs_legislation", "scripts/sync_eprs_legislation_in_progress.py", [], timeout=600)
+    # `sync_eprs_legislation_in_progress.py` used to run here. Its page is gone: EPRS discontinued
+    # its blog on 29 Oct 2026, and the new site's "Tracking legislation in progress" page (read on
+    # 2 Nov 2026) lists no file, only a link to the Legislative Train Schedule.
     results["committee_minutes"] = await _run_script_async("committee_minutes", "scripts/sync_committee_minutes.py", ["--max-pages", "2"], timeout=600)
     # Committee agendas -> My EU Calendar.
     #

@@ -65,6 +65,7 @@ from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
 from scripts.leg_export_metadata import SPARQL, Budget, CellarDown  # noqa: E402
+from services.sync.freshness import last_success_at, unreachable_exit  # noqa: E402
 from services.oj_citation import (OFFICIAL_SQL, act_citation, export_issue_parts, issue_citation,  # noqa: E402
                                   parse_oj_id)
 
@@ -312,6 +313,9 @@ def main() -> int:
                 done += write(db, changes[j:j + CHUNK])
                 time.sleep(0.2)
             print(f"[OK] written: {done} of {len(changes)} (a row another writer changed meanwhile is left); updated_at kept")
+        if stopped and budget.failed >= Budget.FAILS_IN_A_ROW:   # Cellar down or walled, not the time budget
+            return unreachable_exit([f"Cellar: {stopped}; what was written stays"],
+                                    last_success_at(db, "eu_laws_oj_reference"))
         if stopped:
             print(f"[ERROR] Cellar stopped the run: {stopped}; what was written stays", file=sys.stderr)
             return 1

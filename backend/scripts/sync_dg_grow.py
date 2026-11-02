@@ -94,14 +94,17 @@ def _record_tris(db, stats: dict, started) -> None:
 
 
 def _record_simple(db, source_key: str, stats: dict, started) -> None:
-    """sync_runs row for a list-page source: nothing fetched is a failure."""
-    from services.sync.freshness import record_run
+    """sync_runs row for a list-page source: nothing fetched is a failure, unless the site gave no
+    page at all (freshness.UNREACHABLE: degraded for 72 hours after the last good run)."""
+    from services.sync.freshness import last_success_at, record_run, unreachable_verdict
     try:
         db.rollback()
     except Exception:  # noqa: BLE001
         pass
     if stats.get("error"):
         status, err = "failed", stats["error"]
+    elif stats.get("refused"):
+        status, err = unreachable_verdict([stats["refused"]], last_success_at(db, source_key))
     elif not stats.get("synced"):
         status, err = "failed", "nothing fetched"
     elif stats.get("errors"):

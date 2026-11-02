@@ -34,6 +34,7 @@ from sqlalchemy import text  # noqa: E402
 
 from core.database import SessionLocal  # noqa: E402
 from scripts.leg_export_metadata import Budget, CellarDown, cellar_facts  # noqa: E402
+from services.sync.freshness import last_success_at, unreachable_exit  # noqa: E402
 
 SLICE = 2000
 BUDGET_SECONDS = 1200
@@ -90,6 +91,9 @@ def main() -> int:
         print(f"[INFO] Cellar returned {seen} of {len(rows)} laws ({seen / max(len(rows), 1):.1%}) | in_force {verb}: "
               f"{changed} changed (now in force {to_true}, no longer or not yet in force {changed - to_true}; updated_at "
               f"moved), {filled} filled (updated_at kept)")
+        if stopped and budget.failed >= Budget.FAILS_IN_A_ROW:   # Cellar down or walled, not the time budget
+            return unreachable_exit([f"Cellar: {stopped}; what was written stays"],
+                                    last_success_at(db, "eu_laws_in_force"))
         if stopped:
             print(f"[ERROR] stopped early: {stopped}; what was written stays", file=sys.stderr)
             return 1

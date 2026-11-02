@@ -430,6 +430,8 @@ class DGGrowSyncService:
         stats = {"synced": 0, "new": 0, "updated": 0, "errors": 0}
 
         notifications = await self.tbt.get_latest_eu_notifications(limit=50)
+        if self.tbt.refused:
+            stats["refused"] = self.tbt.refused
 
         for notif in notifications:
             try:

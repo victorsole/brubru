@@ -234,6 +234,7 @@ def main() -> int:
     from sqlalchemy import text
     from core.database import SessionLocal
     from scripts.leg_export_metadata import Budget
+    from services.sync.freshness import last_success_at, unreachable_exit
     db = SessionLocal()
     budget = Budget(a.budget or None)
     try:
@@ -268,6 +269,9 @@ def main() -> int:
                 done += write(db, changes[j:j + CHUNK])
                 time.sleep(0.2)
             print(f"[OK] written: {done} of {len(changes)} (a row another writer changed meanwhile is left); updated_at kept")
+        if stopped and budget.failed >= Budget.FAILS_IN_A_ROW:   # Cellar down or walled, not the time budget
+            return unreachable_exit([f"Cellar: {stopped}; what was written stays"],
+                                    last_success_at(db, "eu_laws_legal_basis"))
         if stopped:
             print(f"[ERROR] Cellar stopped the run: {stopped}; what was written stays", file=sys.stderr)
             return 1

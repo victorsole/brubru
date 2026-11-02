@@ -189,7 +189,6 @@ THINKTANK_BASE = "https://www.europarl.europa.eu"
 THINKTANK_LISTING_URL = f"{THINKTANK_BASE}/thinktank/en/research/advanced-search"
 THINKTANK_RSS_URL = f"{THINKTANK_LISTING_URL}/rss"
 THINKTANK_DOC_URL = f"{THINKTANK_BASE}/thinktank/en/document/"
-BLOG_FEED_URL = "https://epthinktank.eu/feed/"
 
 # The four types the table holds. Fact sheets / documentation re-date old
 # documents (e.g. 04A_FT(2017)...) and are deliberately excluded.
@@ -199,7 +198,6 @@ RSS_PAGE_SIZE = 25          # measured 15 Sep 2026; page index is 0-based
 LISTING_PAGE_SIZE = 10      # measured 15 Sep 2026; page index is 0-based
 LISTING_RESULT_CAP = 500    # "The number of results displayed is limited to 500"
 MAX_RSS_PAGES = 25
-MAX_BLOG_PAGES = 10
 WAF_STATUSES = {202, 403, 429, 503}
 
 _TYPE_LABELS = {
@@ -571,63 +569,6 @@ async def _default_http_get(url: str, params=None) -> Tuple[int, str]:
         return response.status_code, response.text
 
 
-class EPRSBlogFeedSource:
-    """epthinktank.eu WordPress feed (blog posts), paged until the window ends."""
-
-    def __init__(self, http_get=None):
-        self._http_get = http_get or _default_http_get
-
-    async def fetch(self, start: datetime, end: datetime) -> Tuple[List[Dict[str, Any]], SourceReport]:
-        import feedparser
-
-        report = SourceReport(name="epthinktank_blog")
-        collected: List[Dict[str, Any]] = []
-        for page in range(1, MAX_BLOG_PAGES + 1):
-            params = [("paged", str(page))] if page > 1 else None
-            try:
-                status, body = await self._http_get(BLOG_FEED_URL, params)
-            except Exception as exc:
-                report.refuse(f"Blog feed page {page}: {type(exc).__name__}: {exc}")
-                break
-            if page > 1 and status == 404:
-                break  # WordPress answers 404 past the last page
-            if is_waf_response(status, body) or status != 200:
-                report.refuse(
-                    f"Blog feed page {page}: WAF signature or HTTP {status} ({len(body or '')} bytes)")
-                break
-            parsed = feedparser.parse(body)
-            if not parsed.get("feed") or ("title" not in parsed.feed and not parsed.entries):
-                report.errors.append(f"Blog feed page {page}: unparseable 200")
-                break
-            oldest = None
-            for entry in parsed.entries:
-                published = None
-                if entry.get("published_parsed"):
-                    published = datetime(*entry.published_parsed[:6])
-                oldest = published if oldest is None or (published and published < oldest) else oldest
-                if published and not (start <= published < end + timedelta(days=1)):
-                    continue
-                collected.append({
-                    "title": entry.get("title", ""),
-                    "link": entry.get("link", ""),
-                    "published": published.isoformat() if published else None,
-                    "summary": _clean_summary(entry.get("summary", "")),
-                    "categories": [t.get("term") for t in entry.get("tags", []) if t.get("term")],
-                    "author": entry.get("author"),
-                    "_source_type": "blog",
-                })
-            if not parsed.entries or (oldest and oldest < start):
-                break
-
-        if report.errors and not collected:
-            report.status = "failed"
-        else:
-            report.status = "ok"
-            report.via = "rss"
-        report.fetched = len(collected)
-        return collected, report
-
-
 class EPRSSyncService:
     """
     Service to sync EPRS publications from RSS feeds to PostgreSQL.
@@ -657,8 +598,11 @@ class EPRSSyncService:
         self.enable_pdf_extraction = enable_pdf_extraction
         self._db = db
         self._owns_db = db is None
-        self.portal_source = ThinkTankPortalSource()
-        self.blog_source = EPRSBlogFeedSource()
+        # The Think Tank portal alone. The second source, the epthinktank.eu blog feed, ended
+        # with the blog: EPRS's post of 27 Oct 2026 said it would stay until 29 Oct and then be
+        # discontinued. Its new site (eprs.europarl.europa.eu) has no feed, and the nine
+        # publications its pages listed on 2 Nov 2026 were all in the table from the portal.
+        self.sources = [ThinkTankPortalSource()]
 
     @property
     def db(self) -> Session:
@@ -720,7 +664,7 @@ class EPRSSyncService:
         }
 
         batches: List[Tuple[str, List[Dict[str, Any]]]] = []
-        for source in (self.portal_source, self.blog_source):
+        for source in self.sources:
             try:
                 items, report = await source.fetch(start, end)
             except Exception as e:  # a source bug must not read as "no items"

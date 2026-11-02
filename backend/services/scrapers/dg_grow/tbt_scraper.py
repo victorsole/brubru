@@ -13,12 +13,13 @@ Integration with Tenderator:
 - Tracks EU notifications that may change procurement requirements
 """
 
+import asyncio
 import logging
 import re
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
-from services.scrapers.base_scraper import BaseScraper
+from services.scrapers.base_scraper import BaseScraper, ScraperError
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,14 @@ class TBTScraper(BaseScraper):
 
     BASE_URL = "https://technical-barriers-trade.ec.europa.eu"
 
+    # The site hangs now and then: one request runs out its 30 seconds and the next answers in a
+    # tenth of a second (Railway, 31 Oct to 2 Nov 2026, each night's only try; once from a laptop).
+    LATEST_TRIES = 3
+    RETRY_PAUSE_SECONDS = 5
+
     def __init__(self):
+        # Why the last read of the list got no page at all; None when a page came back.
+        self.refused: Optional[str] = None
         super().__init__(
             base_url=self.BASE_URL,
             name="TBT",
@@ -100,8 +108,20 @@ class TBTScraper(BaseScraper):
             List of EU TBT notification records
         """
         url = f"{self.BASE_URL}/en/notifications/latest/EU/{limit}"
+        content = None
+        for attempt in range(1, self.LATEST_TRIES + 1):
+            try:
+                content = await self._fetch(url)
+                self.refused = None
+                break
+            except ScraperError as e:
+                self.refused = f"{self.LATEST_TRIES} tries, last: {e}"
+                logger.warning(f"TBT: try {attempt} of {self.LATEST_TRIES} failed: {e}")
+                if attempt < self.LATEST_TRIES:
+                    await asyncio.sleep(self.RETRY_PAUSE_SECONDS)
+        if content is None:
+            return []
         try:
-            content = await self._fetch(url)
             soup = self._parse_html(content)
             return self._parse_notification_list(soup, is_eu=True)
         except Exception as e:
