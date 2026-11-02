@@ -73,3 +73,29 @@ def test_a_status_is_read_against_the_items_own_dates():
     assert dict(found) == {"status_open_before_opening": 1, "status_open_past_deadline": 1,
                            "status_forthcoming_after_opening": 1}
     assert examples["status_open_before_opening"] == ["1"] and examples["status_forthcoming_after_opening"] == ["5"]
+
+
+def test_an_outage_page_and_a_share_menu_in_a_body_are_flagged():
+    outage = "Server inaccessibility\nbg\nСървърът е временно недостъпен\n" + "Please try again later. " * 20
+    share = "Share\nFacebook\nLinkedIn\nX\nWhatsapp\nPRINT\nA tender for legal services.\n" + BODY
+    found, _ = audit_items([_item(1, body_txt=outage, body_html=f"<p>{outage}</p>"),
+                            _item(2, body_txt=share, body_html=f"<p>{share}</p>")], NOW)
+    assert found["body_is_outage_page"] == 1 and found["body_share_menu"] == 1
+
+
+def test_a_files_address_in_the_text_does_not_make_the_two_bodies_differ():
+    url = "https://ec.europa.eu/info/funding-tenders/opportunities/docs/annex-" + "x" * 300 + ".pdf"
+    txt = BODY + "\n" + "\n".join(f"Document: Annex {i} (PDF) {url}" for i in range(4))
+    htm = f"<p>{BODY}</p><h2>Documents</h2><ul>" + "".join(f'<li><a href="{url}">Annex {i}</a> · PDF</li>' for i in range(4)) + "</ul>"
+    found, _ = audit_items([_item(1, body_txt=txt, body_html=htm)], NOW)
+    assert not found["body_txt_and_html_differ_in_length"]
+    # text the html really lacks is still flagged
+    found, _ = audit_items([_item(2, body_txt=BODY * 4, body_html=f"<p>{BODY}</p>")], NOW)
+    assert found["body_txt_and_html_differ_in_length"] == 1
+
+
+def test_a_date_tomorrow_is_in_the_future_and_today_in_another_time_zone_is_not():
+    found, _ = audit_items([_item(1, document_date="2026-10-31T12:00:00Z")], NOW)     # 21 hours ahead
+    assert found["document_date_in_future"] == 1
+    found, _ = audit_items([_item(2, document_date="2026-10-31T00:00:00Z")], NOW)     # 9 hours ahead
+    assert not found["document_date_in_future"]

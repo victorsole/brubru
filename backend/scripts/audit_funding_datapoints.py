@@ -47,18 +47,24 @@ BANNER = re.compile(r"(?i)accept (all )?cookies|we use cookies|enable javascript
                     r"this site uses cookies|cookie (policy|settings)")
 MOJIBAKE = re.compile("�|Ã[\u0080-¿]|â€")
 TAG = re.compile(r"<[^>]+>")
+URL = re.compile(r"https?://\S+")
+OUTAGE = re.compile(r"Сървърът е временно недостъпен|server is temporarily unavailable", re.I)
+SHARE_MENU = re.compile(r"(?m)^\s*Facebook\s*\n\s*(?:LinkedIn|X|Twitter)\s*$")
+# The body folders' funding lists: outside /funding/, feeding /funding/opportunities, and sending no body unless
+# asked. Not read until 2 Nov 2026, when 27 outage pages and 8 future dates sat in them (register O139).
+AGENCY_LISTS = ("/api/v2/eeas/tenders", "/api/v2/hadea/calls", "/api/v2/hadea/tenders", "/api/v2/eismea/calls",
+                "/api/v2/eccc/calls")
 # Findings an open register item explains (they print as KNOWN, not FAIL): (list slug or "*", code) -> id.
 KNOWN = {("*", "naive_datetime"): "O106",
          **{("euda-tenders", c): "O99" for c in ("public_url_home_page", "body_txt_stub_under_200", "document_date_missing")},
          ("ft-events", "public_url_not_absolute"): "O107",
          ("partner-announcements", "public_url_shared_by_3_or_more"): "O113",
          ("ft-calls-for-tenders", "body_txt_stub_under_200"): "O123",
-         **{(s, "body_txt_and_html_differ_in_length"): "O108" for s in (
-             "cedefop-tenders", "echa-calls", "echa-tenders", "eea-tenders", "efsa-tenders", "ema-calls", "ema-tenders",
-             "eu-osha-tenders", "eurofound-tenders", "fra-tenders")},
          **{(s, "document_date_missing"): "O109" for s in (
              "cedefop-calls", "cedefop-grants", "cedefop-tenders", "echa-calls", "echa-tenders", "efca-calls",
-             "efca-tenders", "eib-tenders", "eige-calls", "eige-tenders", "enisa-calls", "enisa-tenders", "era-tenders")},
+             "efca-tenders", "eib-tenders", "eige-calls", "eige-tenders", "enisa-calls", "enisa-tenders", "era-tenders",
+             "all", "opportunities", "ecdc-tenders", "etf-tenders", "eeas/tenders")},
+         ("hadea/calls", "document_date_missing"): "O138",
          **{(s, "body_txt_stub_under_200"): "O110" for s in (
              "cedefop-grants", "enisa-calls", "enisa-tenders", "era-tenders", "etf-tenders")}}
 # Findings that are what the list says it serves (documented in its description): (slug, code) -> why.
@@ -174,9 +180,15 @@ def audit_items(items: list, now: datetime, with_body: bool = True) -> tuple[Cou
                     flag("body_banner_or_javascript_text", i)
                 if MOJIBAKE.search(t):
                     flag("body_mojibake", i)
+                if OUTAGE.search(t):
+                    flag("body_is_outage_page", i)
+                if SHARE_MENU.search(str(txt)[:1000]):
+                    flag("body_share_menu", i)
                 if htm:
+                    # A file's address is visible in the text and inside href in the html: 431 rows
+                    # flagged on 2 Nov 2026 held the same files in both (register O108, closed).
                     h = _text(html_lib.unescape(TAG.sub(" ", str(htm))))
-                    if h and not (0.5 <= len(h) / max(len(t), 1) <= 2.0):
+                    if h and not (0.5 <= len(h) / max(len(_text(URL.sub("", t))), 1) <= 2.0):
                         flag("body_txt_and_html_differ_in_length", i)
         doc, _ = _when(i.get("document_date"))
         if i.get("document_date") in (None, ""):
@@ -184,7 +196,9 @@ def audit_items(items: list, now: datetime, with_body: bool = True) -> tuple[Cou
         elif doc is None:
             flag("document_date_unreadable", i)
         else:
-            if doc > now + timedelta(days=1):
+            # 14 hours is the widest time-zone offset of a date written without one. A full day let tender
+            # 8870225, dated tomorrow, stand first on /opportunities unflagged (2 Nov 2026).
+            if doc > now + timedelta(hours=14):
                 flag("document_date_in_future", i)
             if doc.year < 1990:
                 flag("document_date_before_1990", i)
@@ -255,13 +269,15 @@ def main() -> int:
     lists = sorted(p for p, ops in spec["paths"].items()
                    if p.startswith(PREFIX) and "get" in ops and not p.endswith("}") and not p.endswith("/documents")
                    and (not only or p[len(PREFIX):] in only))
+    lists += [p for p in AGENCY_LISTS if not only or p[len("/api/v2/"):] in only]
     now = datetime.now(timezone.utc)
     report, failing, known = {}, 0, 0
     for path in lists:
-        slug = path[len(PREFIX):]
+        slug = path[len(PREFIX):] if path.startswith(PREFIX) else path[len("/api/v2/"):]
+        bodies = {"include_body": "true"} if path in AGENCY_LISTS else {}
         order_doc = " ".join(str(p.get("description") or "") for p in spec["paths"][path]["get"].get("parameters", [])
                              if p.get("name") == "order")
-        s, d = api.get(path, limit=PAGE)
+        s, d = api.get(path, limit=PAGE, **bodies)
         if s != 200 or not isinstance(d, dict):
             print(f"[FAIL] {slug}: HTTP {s}")
             failing += 1
@@ -270,7 +286,7 @@ def main() -> int:
         items = list(d.get("data") or [])
         total = d.get("total")
         if "oldest" in order_doc:
-            s2, d2 = api.get(path, limit=OLDEST, order="oldest")
+            s2, d2 = api.get(path, limit=OLDEST, order="oldest", **bodies)
             if s2 == 200 and isinstance(d2, dict):
                 items += [i for i in (d2.get("data") or []) if str(i.get("id")) not in {str(x.get("id")) for x in items}]
         found, examples = audit_items(items, now)

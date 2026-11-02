@@ -33,7 +33,7 @@ import re
 from datetime import datetime, timezone
 
 from services.funding.agency_status import deadline_in_text, from_source
-from services.scrapers.economy_common import Item, clean, extract_html, extract_item_date
+from services.scrapers.economy_common import Item, clean, extract_html, is_outage_page
 
 _BASE = "https://www.eeas.europa.eu"
 _UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -151,6 +151,24 @@ def _parse_date(s: str | None) -> datetime | None:
     return None
 
 
+# The date line under a tender's title ("20.10.2026") is the EEAS's own. The rest of the text holds later
+# dates, an estimated launch or a deadline, and the general date reader took those: all 26 tenders holding
+# both disagreed on 2 Nov 2026, always later (8870225, dated by its "estimated launch" a day ahead, headed
+# /funding/opportunities). A delegation sometimes prints the deadline on that line (9077975), so a date
+# ahead, or the deadline itself, is no date.
+_DATE_LINE = re.compile(r"^\d{2}\.\d{2}\.\d{4}$", re.M)
+
+
+def tender_page_date(body_txt: str | None, deadline, today) -> datetime | None:
+    m = _DATE_LINE.search((body_txt or "")[:800])
+    day = _parse_date(m.group(0)) if m else None
+    if day is None or day.date() > today:
+        return None
+    if deadline is not None and day.date() == deadline.date():
+        return None
+    return day
+
+
 async def _render(page, url: str, *, scrolls: int = 0, settle_ms: int = 2500) -> str | None:
     try:
         await page.goto(url, wait_until="networkidle", timeout=55000)
@@ -195,11 +213,14 @@ async def _scrape_listing(item_type: str, path: str, *, fetch_bodies: bool,
                 html = await _render(page, it.public_url, settle_ms=800)
                 if html:
                     it.body_txt, it.body_html = extract_html(html)
+                    if is_outage_page(it.body_txt):     # nothing on this page is the item's (O72)
+                        it.body_txt = it.body_html = None
+                        continue
                     if item_type == "tender":
-                        it.document_date, _ = extract_item_date(html)
                         # The page's own labelled deadline ("Deadline for submission of tenders:
                         # 27/11/2026"); until 26 Oct 2026 no EEAS tender had a deadline or status.
                         deadline, says_closed = deadline_in_text(it.body_txt)
+                        it.document_date = tender_page_date(it.body_txt, deadline, now.date())
                         it.extras = {"tender_reference": None, "deadline": deadline,
                                      "status": from_source("closed" if says_closed else None,
                                                            deadline, now.date())}
@@ -227,6 +248,9 @@ async def _scrape_topics(*, fetch_bodies: bool) -> list[Item]:
               return {title: h1 ? h1.textContent.trim() : document.title, date: m ? m[0] : null};
             }""")
             body_txt, body_html = (extract_html(html) if fetch_bodies else (None, None))
+            # The outage page's heading was stored as two topics' title (O72).
+            if is_outage_page(html):
+                continue
             title = clean(meta.get("title") or path.rsplit("/", 1)[-1])[:300]
             items.append(Item(
                 body_code="eeas", item_type="topic", title=title, public_url=url,

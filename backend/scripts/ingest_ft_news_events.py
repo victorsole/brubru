@@ -105,6 +105,9 @@ def normalise(kind: str, result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     md = result.get("metadata") or {}
     title = _first(md.get("title")) or result.get("title")
     url = _first(md.get("url")) or result.get("url")
+    # One portal record holds the word "uri" in its url field (484084, 30 Oct 2026; register O107).
+    if not str(url or "").startswith("http"):
+        url = _first(md.get("detailsUrl"))
     if not title or not url:
         return None
     desc = _strip(_first(md.get("description")) or "", 1200)

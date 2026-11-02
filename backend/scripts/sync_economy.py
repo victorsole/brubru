@@ -599,7 +599,10 @@ ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
 # legitimately future-dated: on 19 Aug 2026, 3,433 of 3,434 "future-dated" rows
 # were exactly those, and reading that count without the item_type produced a
 # phantom regression report. The real defect was a single news row.
-_PAST_ONLY_TYPES = {"news", "press_release", "publication", "speech", "statement"}
+# A call or tender's document_date is its publication: an opening or a deadline ahead is not one (funding
+# standard 5; 8 HaDEA calls dated by an opening up to June 2027, 1 EEAS tender by its launch, 2 Nov 2026).
+_PAST_ONLY_TYPES = {"news", "press_release", "publication", "speech", "statement",
+                    "call", "tender", "grant", "eoi_call", "framework"}
 
 
 def _drop_furniture_bodies(it) -> None:
@@ -612,8 +615,14 @@ def _drop_furniture_bodies(it) -> None:
     blocked by a banner that merely happens to be longer.
     """
     from services.news.rendered_article import looks_like_challenge, looks_like_consent_banner_only
-    from services.scrapers.economy_common import looks_like_file_bytes
+    from services.scrapers.economy_common import is_outage_page, looks_like_file_bytes
     bt = getattr(it, "body_txt", None)
+    # So is the Commission's outage page, and its 2,770 characters beat most EEAS tender texts: it
+    # replaced them, and no later good read could replace it (27 tenders, 2 Nov 2026; register O72).
+    if is_outage_page(bt) or is_outage_page(getattr(it, "body_html", None)):
+        it.body_txt = None
+        it.body_html = None
+        return
     # Markup with no text in it is no body either: an EDA news row stored the literal
     # "<body>\n\n</body>" (15 characters) as its body_txt (18 Oct 2026).
     tags_only = bool(bt) and not re.sub(r"<[^>]*>", "", bt).strip()

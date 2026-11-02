@@ -158,10 +158,21 @@ def test_an_eeas_tender_takes_its_page_deadline(monkeypatch):
     monkeypatch.setattr(ee, "_render", _render)
     monkeypatch.setattr(ee, "extract_html", lambda html: (
         "Supply of generators. Deadline for submission of tenders: 27/11/2099.", "<p/>"))
-    monkeypatch.setattr(ee, "extract_item_date", lambda html: (None, None))
     [it] = asyncio.run(ee._scrape_listing("tender", "/x", fetch_bodies=True, scrolls=0, body_cap=5))
     assert it.extras == {"tender_reference": None, "deadline": D(2099, 11, 27), "status": "open"}
     assert it.document_date is None          # the card's date is not taken as a publication date
+
+    # The line under the title is the date; the deadline further down is not (register O136).
+    monkeypatch.setattr(ee, "extract_html", lambda html: (
+        "Supply of generators\n20.10.2026\nDeadline for submission of tenders: 27/11/2099.", "<p/>"))
+    [it] = asyncio.run(ee._scrape_listing("tender", "/x", fetch_bodies=True, scrolls=0, body_cap=5))
+    assert it.document_date == D(2026, 10, 20)
+
+    # An outage page yields no body, date, deadline or status (register O72).
+    monkeypatch.setattr(ee, "extract_html", lambda html: (
+        "Server inaccessibility\nbg\nСървърът е временно недостъпен\n20.10.2026\nDeadline: 27/11/2099.", "<h1>Server inaccessibility</h1>"))
+    [it] = asyncio.run(ee._scrape_listing("tender", "/x", fetch_bodies=True, scrolls=0, body_cap=5))
+    assert it.body_txt is None and it.body_html is None and it.document_date is None and not it.extras
 
 
 # --- the routes and the daily pass ------------------------------------------------------------ #

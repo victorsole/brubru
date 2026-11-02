@@ -560,13 +560,23 @@ def parse_listing_date(text: str) -> datetime | None:
 # two sentences long, and suppressing those would trade a false positive for a false
 # negative. Returns a reason string so a caller can log WHY, never a bare bool.
 
+# The sentence every form of the Commission's outage page carries. It comes with the languages named
+# ("bg български Сървърът...") or without them, and with or without its heading: EEAS serves the shorter
+# forms, which the first version of this check missed (30 rows, 2 Nov 2026; register O72).
+_OUTAGE_PAGE = re.compile(r"Сървърът е временно недостъпен")
+
+
+def is_outage_page(text: str | None) -> bool:
+    return bool(text) and bool(_OUTAGE_PAGE.search(text))
+
+
 # STRONG signatures: phrases and markup that effectively never appear in EU-body
 # prose, so they are decisive at any body length.
 _ERROR_BODY_STRONG = (
     ("404_not_found", re.compile(r"\b404\s+not\s+found\b", re.I)),
     # The Commission's outage page, in 24 languages ("Server inaccessibility ... Försök
     # igen senare."): stored as the body of 12 EU GovTech items (16 Oct 2026).
-    ("ec_server_inaccessible", re.compile(r"Server inaccessibility\s+bg\s+български", re.I)),
+    ("ec_server_inaccessible", _OUTAGE_PAGE),
     ("page_not_found", re.compile(r"requested page not found", re.I)),
     ("error_occurred", re.compile(r"an error has occ?ur+ed", re.I)),
     ("unrendered_template", re.compile(r"!\[template[_.]")),
