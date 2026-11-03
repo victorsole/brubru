@@ -38,6 +38,7 @@ const ROUTE_META = {
   '/':                              { priority: 1.0, changefreq: 'weekly'  },
   '/about/':                        { priority: 0.8, changefreq: 'monthly' },
   '/api/':                          { priority: 0.9, changefreq: 'weekly'  },
+  '/api/console/':                  { priority: 0.8, changefreq: 'weekly'  },
   '/contact/':                      { priority: 0.7, changefreq: 'monthly' },
   '/login/':                        { priority: 0.5, changefreq: 'monthly' },
   '/signup/':                       { priority: 0.6, changefreq: 'monthly' },

@@ -1,0 +1,226 @@
+/* frontend/src/components/api_console/api_console.css
+   Brubru's canonical look: the page's own serif, the /api blue, monospace only for code.
+   Widths: 375, 393, 768, 1024, 1440, 2560. No horizontal scroll at any of them. */
+
+.api-console {
+  --console-blue: #0693e3;
+  --console-blue-text: #0369a1;
+  --console-blue-button: #0472ad;
+  --console-line: #e5e7eb;
+  --console-muted: #4b5563;
+  --console-ink: #111827;
+  --console-soft: #f8fafc;
+  --console-mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  color: var(--console-ink);
+  font-family: inherit;
+  min-width: 0;
+}
+.api-console code, .api-console pre { font-family: var(--console-mono); }
+/* The site's global code style is red on grey: here code is plain, and coloured only where it is a link or a route. */
+.api-console code { background: none; color: inherit; padding: 0; border-radius: 0; font-size: 0.92em; }
+
+.api-console__sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ---- Top bar ---- */
+.api-console__bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 10px 20px; margin-bottom: 14px;
+}
+.api-console__starters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.api-console__starters-label { font-size: 0.85rem; font-weight: 600; color: var(--console-muted); }
+.api-console__starter {
+  font: inherit; font-size: 0.88rem; line-height: 1.2; color: var(--console-blue-text);
+  background: #fff; border: 1px solid var(--console-blue); border-radius: 999px;
+  padding: 6px 12px; cursor: pointer;
+}
+.api-console__starter:hover { background: #f0f9ff; }
+.api-console__starter--active { background: var(--console-blue-button); border-color: var(--console-blue-button); color: #fff; }
+.api-console__starter--active:hover { background: var(--console-blue-button); }
+.api-console__allowance { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 0.88rem; color: var(--console-muted); }
+.api-console__full-link { color: var(--console-blue-text); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.api-console__full-link:hover { text-decoration: underline; }
+
+/* ---- Three panes ---- */
+.api-console__panes {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 14px;
+  align-items: stretch;
+  height: calc(100vh - 285px);
+  min-height: 480px;
+}
+.api-console__request-anchor { min-width: 0; min-height: 0; display: flex; }
+.api-console__pane {
+  background: #fff; border: 1px solid var(--console-line); border-radius: 8px;
+  padding: 14px; min-width: 0; min-height: 0; width: 100%; overflow: auto;
+}
+.api-console__pane--catalogue { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+.api-console__pane-title, .api-console__summary { font-size: 1.05rem; font-weight: 600; margin: 0 0 10px; line-height: 1.3; }
+
+/* ---- Catalogue ---- */
+.api-console__search {
+  font: inherit; font-size: 0.92rem; width: auto; box-sizing: border-box;
+  margin: 10px; padding: 8px 10px; border: 1px solid #9ca3af; border-radius: 6px; background: #fff; color: var(--console-ink);
+}
+.api-console__search:focus, .api-console__field input:focus, .api-console__field select:focus {
+  outline: 2px solid var(--console-blue); outline-offset: 1px; border-color: var(--console-blue);
+}
+.api-console__list { flex: 1; min-height: 0; overflow-y: auto; padding: 0 6px 10px; }
+.api-console__list .api-console__note, .policy-page__section .api-console .api-console__list .api-console__note { padding: 0 6px; margin-bottom: 6px; }
+.api-console__folder-head {
+  display: flex; align-items: center; gap: 6px; width: 100%; font: inherit; font-size: 0.92rem;
+  padding: 6px; background: none; border: 0; border-radius: 4px; cursor: pointer; color: var(--console-ink); text-align: left;
+}
+.api-console__folder-head:hover { background: var(--console-soft); }
+.api-console__folder-name { flex: 1; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.api-console__folder-count { font-size: 0.78rem; color: var(--console-muted); }
+.api-console__routes { list-style: none; margin: 0; padding: 0 0 6px 8px; }
+.api-console__route {
+  display: block; width: 100%; font: inherit; text-align: left; padding: 6px 8px; margin: 1px 0;
+  background: none; border: 0; border-left: 2px solid transparent; cursor: pointer; color: var(--console-ink);
+}
+.api-console__route:hover { background: var(--console-soft); }
+.api-console__route--active { background: #f0f9ff; border-left-color: var(--console-blue); }
+.api-console__route code { display: block; font-size: 0.76rem; overflow-wrap: anywhere; color: var(--console-blue-text); }
+.api-console__route-summary { display: block; font-size: 0.82rem; line-height: 1.3; color: var(--console-muted); margin-top: 2px; }
+.api-console__badge {
+  display: inline-block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase;
+  color: #92400e; background: #fef3c7; border-radius: 999px; padding: 1px 8px; margin: 3px 0;
+}
+
+/* ---- Request ---- */
+.api-console__heading { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; min-width: 0; }
+.api-console__method {
+  flex: none; background: #047857; color: #fff; font-family: var(--console-mono);
+  font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 3px;
+}
+.api-console__path { font-size: 0.86rem; overflow-wrap: anywhere; min-width: 0; }
+.api-console__about { font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px; color: #1f2937; }
+.api-console__about summary { cursor: pointer; font-weight: 600; color: var(--console-blue-text); }
+.api-console__about p, .api-console__about ul { margin: 8px 0; overflow-wrap: anywhere; }
+.api-console__about ul { padding-left: 18px; }
+.api-console__about code { font-size: 0.82em; background: #f3f4f6; padding: 0 3px; border-radius: 3px; color: var(--console-ink); }
+.api-console__field { margin-bottom: 12px; min-width: 0; }
+.api-console__field label { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 0.82rem; margin-bottom: 3px; }
+.api-console__required { font-size: 0.72rem; font-weight: 700; color: #b91c1c; }
+.api-console__field input, .api-console__field select {
+  font: inherit; font-size: 0.92rem; width: 100%; box-sizing: border-box; padding: 7px 9px;
+  border: 1px solid #9ca3af; border-radius: 6px; background: #fff; color: var(--console-ink);
+}
+.api-console__help { font-size: 0.8rem; line-height: 1.35; color: var(--console-muted); margin: 3px 0 0; overflow-wrap: anywhere; }
+.api-console__send { position: sticky; bottom: -14px; background: #fff; padding: 10px 0 2px; border-top: 1px solid var(--console-line); }
+.api-console__url { font-size: 0.76rem; overflow-wrap: anywhere; color: var(--console-muted); margin-bottom: 8px; }
+.api-console__send-button {
+  display: inline-flex; align-items: center; gap: 7px; font: inherit; font-size: 1rem; font-weight: 700;
+  color: #fff; background: var(--console-blue-button); border: 0; border-radius: 6px; padding: 9px 22px; cursor: pointer;
+}
+.api-console__send-button:hover:not(:disabled) { background: #035d8d; }
+.api-console__send-button:disabled { background: #6b7280; cursor: not-allowed; }
+.api-console__cost p { font-size: 0.84rem; line-height: 1.4; margin: 8px 0 0; color: var(--console-muted); }
+.api-console__cost a, .api-console__problem a { color: var(--console-blue-text); font-weight: 600; }
+
+/* ---- Response ---- */
+.api-console__note { font-size: 0.88rem; line-height: 1.45; color: var(--console-muted); margin: 0 0 10px; }
+.api-console__loading { padding: 40px 0; text-align: center; }
+.api-console__problem {
+  font-size: 0.92rem; line-height: 1.45; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px;
+  padding: 10px 12px; margin-bottom: 12px; overflow-wrap: anywhere;
+}
+.api-console__problem p { margin: 0 0 4px; }
+.api-console__facts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 0.88rem; margin-bottom: 12px; }
+.api-console__status { font-family: var(--console-mono); font-weight: 700; color: #fff; border-radius: 4px; padding: 2px 8px; }
+.api-console__status--ok { background: #047857; }
+.api-console__status--bad { background: #b91c1c; }
+.api-console__tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--console-line); margin-bottom: 12px; }
+.api-console__tabs button {
+  font: inherit; font-size: 0.9rem; background: none; border: 0; border-bottom: 2px solid transparent;
+  padding: 6px 10px; cursor: pointer; color: var(--console-muted);
+}
+.api-console__tabs button[aria-selected='true'] { color: var(--console-blue-text); border-bottom-color: var(--console-blue); font-weight: 600; }
+.api-console__row { border: 1px solid var(--console-line); border-radius: 6px; padding: 10px 12px; margin-bottom: 10px; min-width: 0; }
+.api-console__row h4 { font-size: 0.98rem; font-weight: 600; line-height: 1.3; margin: 0 0 8px; overflow-wrap: anywhere; }
+.api-console__row dl { margin: 0; }
+.api-console__point { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 2px 10px; padding: 4px 0; border-top: 1px solid #f3f4f6; }
+.api-console__point dt { font-size: 0.74rem; margin: 0; color: var(--console-blue-text); overflow-wrap: anywhere; }
+.api-console__point dd { font-size: 0.84rem; margin: 0; min-width: 0; overflow-wrap: anywhere; line-height: 1.4; }
+.api-console__point dd code { font-size: 0.78rem; }
+.api-console__point a { color: var(--console-blue-text); }
+.api-console__empty { color: #b91c1c; font-style: italic; }
+.api-console__snippet { font-size: 0.82rem; color: var(--console-muted); margin: 4px 0 0; }
+.api-console__code { min-width: 0; }
+.api-console__code-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0; font-size: 0.86rem; }
+.api-console__code-head .api-console__note { margin: 0; }
+.api-console__code pre {
+  background: #0f172a; color: #e2e8f0; font-size: 0.76rem; line-height: 1.45; border-radius: 6px;
+  padding: 10px 12px; margin: 0 0 12px; overflow: auto; max-height: 520px; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.api-console__copy {
+  flex: none; display: inline-flex; align-items: center; gap: 5px; font: inherit; font-size: 0.82rem;
+  background: #fff; color: var(--console-blue-text); border: 1px solid #9ca3af; border-radius: 5px; padding: 3px 9px; cursor: pointer;
+}
+.api-console__request-id { font-size: 0.76rem; color: var(--console-muted); margin: 10px 0 0; overflow-wrap: anywhere; }
+
+/* ---- Panel on /api: the page's section styles must not reach inside the console ---- */
+.policy-page__section .api-console ul { list-style: none; padding: 0 0 6px 8px; margin: 0; }
+.policy-page__section .api-console li { list-style: none; margin: 0; padding: 0; font-size: inherit; line-height: inherit; }
+.policy-page__section .api-console .api-console__about ul { list-style: disc; padding-left: 18px; margin: 8px 0; }
+.policy-page__section .api-console .api-console__about li { list-style: disc; }
+.policy-page__section .api-console h3 { font-size: 1.05rem; font-weight: 600; margin: 0 0 10px; line-height: 1.3; color: var(--console-ink); }
+.policy-page__section .api-console h4 { font-size: 0.98rem; font-weight: 600; margin: 0 0 8px; line-height: 1.3; color: var(--console-ink); }
+.policy-page__section .api-console .api-console__help { font-size: 0.8rem; line-height: 1.35; margin: 3px 0 0; color: var(--console-muted); }
+.policy-page__section .api-console .api-console__note { font-size: 0.88rem; line-height: 1.45; margin: 0 0 10px; color: var(--console-muted); }
+.policy-page__section .api-console .api-console__cost p { font-size: 0.84rem; line-height: 1.4; margin: 8px 0 0; color: var(--console-muted); }
+.policy-page__section .api-console .api-console__snippet { font-size: 0.82rem; line-height: 1.4; margin: 4px 0 0; color: var(--console-muted); }
+.policy-page__section .api-console .api-console__problem p { font-size: 0.92rem; line-height: 1.45; margin: 0 0 4px; color: var(--console-ink); }
+.policy-page__section .api-console .api-console__request-id { font-size: 0.76rem; margin: 10px 0 0; color: var(--console-muted); }
+.policy-page__section .api-console .api-console__about p { font-size: 0.9rem; line-height: 1.5; margin: 8px 0; color: #1f2937; }
+
+/* ---- Panel on /api: the column is narrower, so the response takes the full width below ---- */
+.api-console--compact .api-console__panes {
+  grid-template-columns: 250px minmax(0, 1fr);
+  height: auto;
+  min-height: 0;
+}
+.api-console--compact .api-console__pane--catalogue { height: 560px; }
+.api-console--compact .api-console__request-anchor { height: 560px; }
+.api-console--compact .api-console__pane--response { grid-column: 1 / -1; min-height: 120px; overflow: visible; }
+
+/* ---- Page at /api/console ---- */
+.api-console-page {
+  background: #fff;
+  padding: 20px 2rem 2rem;
+  max-width: 2200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.api-console-page__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 24px; margin-bottom: 14px; }
+.api-console-page__head > div { min-width: 0; }
+.api-console-page__head .api-page__eyebrow { margin-bottom: 2px; }
+.api-console-page__head .policy-page__title { font-size: 1.9rem; margin: 0 0 4px; padding: 0; border: 0; }
+.api-console-page__lede { margin: 0; font-size: 1rem; line-height: 1.45; color: #374151; max-width: 90ch; }
+.api-console-page__links { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 0.92rem; }
+.api-console-page__links a { color: #0369a1; font-weight: 600; text-decoration: none; }
+.api-console-page__links a:hover { text-decoration: underline; }
+
+@media (max-width: 1024px) {
+  .api-console__panes {
+    grid-template-columns: 250px minmax(0, 1fr);
+    height: auto;
+    min-height: 0;
+  }
+  .api-console__pane--catalogue, .api-console__request-anchor { height: 560px; }
+  .api-console__pane--response { grid-column: 1 / -1; min-height: 120px; overflow: visible; }
+}
+
+@media (max-width: 767px) {
+  .api-console__panes, .api-console--compact .api-console__panes { grid-template-columns: minmax(0, 1fr); }
+  .api-console__pane--catalogue, .api-console--compact .api-console__pane--catalogue { height: 320px; }
+  .api-console__request-anchor, .api-console--compact .api-console__request-anchor { height: auto; display: block; scroll-margin-top: 70px; }
+  .api-console__pane--request { overflow: visible; }
+  .api-console__send { position: static; }
+  .api-console__point { grid-template-columns: minmax(0, 1fr); }
+  .api-console-page { padding: 16px 1.25rem 1.25rem; }
+}

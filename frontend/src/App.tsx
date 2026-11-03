@@ -29,6 +29,7 @@ import { EUComplyPage } from './pages/eu_comply_page';
 import { TenderatorPage } from './pages/tenderator_page';
 import { AboutPage } from './pages/about_page';
 import { ApiPage } from './pages/api_page';
+import { ApiConsolePage } from './pages/api_console_page';
 import { ApiBillingPage } from './pages/api_billing_page';
 import { McpPage } from './pages/mcp_page';
 import { ContactPage } from './pages/contact_page';
@@ -151,6 +152,15 @@ export const App = () => {
               <Header />
               <AnimatedPage>
                 <ApiPage />
+              </AnimatedPage>
+              <Footer isSidebarOpen={isSidebarOpen} />
+            </>
+          )} />
+          <Route path="/api/console" element={(
+            <>
+              <Header />
+              <AnimatedPage>
+                <ApiConsolePage />
               </AnimatedPage>
               <Footer isSidebarOpen={isSidebarOpen} />
             </>

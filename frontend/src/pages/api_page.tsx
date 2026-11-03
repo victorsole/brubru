@@ -1,9 +1,10 @@
 // frontend/src/pages/api_page.tsx
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/use_auth';
 import { ApiKeysPanel } from '../components/api/api_keys_panel';
+import { ApiConsole } from '../components/api_console/api_console';
 import '../components/api/api_keys.css';
 import './policy_pages.css';
 import './api_page.css';
@@ -12,29 +13,12 @@ export const ApiPage = () => {
   const { t } = useTranslation();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const [activeSection, setActiveSection] = useState('your-keys');
+  const { hash } = useLocation();
 
-  // Public landing surface — only GET endpoints are listed here, all from the
-  // v2 (institution-based) API, which is the only public surface we document.
-  // POST endpoints (resolve-*) are documented in /api/docs for partners; we
-  // intentionally do not surface them on this page.
-  const endpoints = [
-    { m: 'GET',  p: '/api/v2/proprietary/brussels-lobbies',                          k: 'brusselsLobbies' },
-    { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws',                              k: 'laws' },
-    { m: 'GET',  p: '/api/v2/legislative/oeil/procedures',                           k: 'procedures' },
-    { m: 'GET',  p: '/api/v2/funding/opportunities',                                 k: 'fundingOpportunities' },
-    { m: 'GET',  p: '/api/v2/funding/awards',                                        k: 'fundingAwards' },
-    { m: 'GET',  p: '/api/v2/proprietary/catalan',                                   k: 'catalanTranslations' },
-    { m: 'GET',  p: '/api/v2/commission/consultations/by-initiative/{id}/feedback',  k: 'consultations' },
-    { m: 'GET',  p: '/api/v2/commission/commissioners/{name}/agenda',                k: 'commissioners' },
-    { m: 'GET',  p: '/api/v2/predictions/{procedure_ref}/outcome',                   k: 'predictions' },
-    { m: 'GET',  p: '/api/v2/proprietary/tender-docs/templates/{template_id}',       k: 'tenderDocs' },
-    { m: 'GET',  p: '/api/v2/open-data/eurostat-series/{dataset_code}',              k: 'eurostatSeries' },
-    { m: 'GET',  p: '/api/v2/eeas/news',                                             k: 'eeas' },
-    { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/recital-article-map',  k: 'recitalMap' },
-    { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws/{celex}/defined-terms',        k: 'definedTerms' },
-    { m: 'GET',  p: '/api/v2/extract',                                               k: 'extract' },
-    { m: 'GET',  p: '/api/v2/social/posts',                                          k: 'social' },
-  ];
+  // A link such as /api#your-keys from the console lands on its section.
+  useEffect(() => {
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView();
+  }, [hash]);
 
   const errorRows: Array<{ code: string; key: string }> = [
     { code: '200', key: 'ok' },
@@ -48,7 +32,7 @@ export const ApiPage = () => {
 
   const navItems = [
     { id: 'your-keys',      label: t('api.keys.title') },
-    { id: 'endpoints',      label: t('api.sections.whatYouGet') },
+    { id: 'endpoints',      label: t('api.console.title') },
     { id: 'quickstart',     label: t('api.sections.quickstart') },
     { id: 'authentication', label: t('api.sections.authentication') },
     { id: 'envelope',       label: t('api.sections.envelope') },
@@ -144,23 +128,13 @@ export const ApiPage = () => {
             </section>
           )}
 
-          {/* Endpoints */}
+          {/* The console: every route, from the live spec, callable from here */}
           <section className="policy-page__section" id="endpoints">
-            <h2>{t('api.sections.whatYouGet')}</h2>
-            <div className="api-page__grid">
-              {endpoints.map((e) => (
-                <div className="api-page__card" key={e.p}>
-                  <div className="api-page__card-head">
-                    <span className={`api-page__method api-page__method--${e.m.toLowerCase()}`}>{e.m}</span>
-                    <code>{e.p}</code>
-                  </div>
-                  <p>{t(`api.endpoints.${e.k}`)}</p>
-                </div>
-              ))}
-            </div>
+            <h2>{t('api.console.title')}</h2>
+            <p>{t('api.console.lede')}</p>
+            <ApiConsole compact />
           </section>
 
-          {/* Quickstart */}
           <section className="policy-page__section" id="quickstart">
             <h2>{t('api.sections.quickstart')}</h2>
             <p>{t('api.quickstart.intro')}</p>
