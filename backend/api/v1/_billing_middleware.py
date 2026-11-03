@@ -27,10 +27,10 @@ from typing import Awaitable, Callable
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from starlette.responses import Response
+from starlette.responses import JSONResponse, Response
 
 from core.database import SessionLocal
-from services.billing.api_meter import mark_event_refunded, refund, set_event_status
+from services.billing.api_meter import SANDBOX_MAX_BYTES, mark_event_refunded, refund, set_event_status
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +53,23 @@ def _stamp_cost_headers(state, response: Response) -> None:
             response.headers["X-Brubru-Balance-Eur"] = _eur(state.billing_balance_micro)
 
 
+def _too_large_for_the_sandbox(state, response: Response) -> Response:
+    """A public sandbox answer is small, whatever its limit asked for. This middleware sits outside CORS, so the
+    replacement keeps the CORS headers of the answer it replaces."""
+    size = response.headers.get("content-length")
+    if getattr(state, "sandbox_ip_left", None) is None or not size or int(size) <= SANDBOX_MAX_BYTES:
+        return response
+    refused = JSONResponse(status_code=403, content={
+        "error": "This answer is too large for the public sandbox. Ask for include_body=false or a smaller limit, or use your own API key.",
+        "reason_code": "sandbox_too_large",
+        "top_up_url": "https://brubru.beresol.eu/api",
+    })
+    for name, value in response.headers.items():
+        if name.lower().startswith("access-control-") or name.lower() in ("vary", "x-request-id"):
+            refused.headers[name] = value
+    return refused
+
+
 class BillingRefundMiddleware(BaseHTTPMiddleware):
     """Refund the per-call debit on 5xx responses."""
 
@@ -67,6 +84,7 @@ class BillingRefundMiddleware(BaseHTTPMiddleware):
         if not request.url.path.startswith(("/api/v1/", "/api/v2/")):
             return response
 
+        response = _too_large_for_the_sandbox(request.state, response)
         _stamp_cost_headers(request.state, response)
 
         # If the dependency didn't set billing state, nothing to refund.

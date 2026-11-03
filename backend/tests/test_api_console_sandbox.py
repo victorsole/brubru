@@ -112,6 +112,29 @@ def test_a_visitor_over_the_cap_is_told_nothing_is_left(monkeypatch):
     assert r.headers["X-Brubru-Sandbox-Remaining"] == "0"
 
 
+def _big_answer_client(monkeypatch, is_sandbox, size):
+    c, _ = _client(monkeypatch, is_sandbox=is_sandbox)
+    app = c.app
+    from api.v1 import _deps
+
+    @app.get("/api/v2/big")
+    async def big(user=Depends(_deps.api_user_with_rate_limit)):
+        return {"data": "x" * size}
+    return c
+
+
+def test_a_sandbox_answer_too_large_is_refused_with_a_reason(monkeypatch):
+    r = _big_answer_client(monkeypatch, True, api_meter.SANDBOX_MAX_BYTES + 10).get("/api/v2/big", headers={"Origin": "http://localhost:5173"})
+    assert r.status_code == 403 and r.json()["reason_code"] == "sandbox_too_large"
+    assert len(r.content) < 1000 and r.headers["X-Brubru-Sandbox-Remaining"] == "7"
+
+
+def test_a_sandbox_answer_under_the_size_is_served_and_a_paying_key_has_no_such_limit(monkeypatch):
+    assert _big_answer_client(monkeypatch, True, 1000).get("/api/v2/big").status_code == 200
+    r = _big_answer_client(monkeypatch, False, api_meter.SANDBOX_MAX_BYTES + 10).get("/api/v2/big")
+    assert r.status_code == 200 and len(r.content) > api_meter.SANDBOX_MAX_BYTES
+
+
 def test_the_price_route_answers_with_no_key_and_reads_the_meters_table():
     from main import app
     r = TestClient(app).get("/api/v2/pricing")

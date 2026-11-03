@@ -55,6 +55,8 @@ SANDBOX_GLOBAL_CAP = 100
 # deep pages and big pages are what cost database egress. Live fetches and the heavy routes need a key.
 SANDBOX_MAX_LIMIT = 25
 SANDBOX_MAX_PAGE = 10
+# A limit does not bound a body: five acts of the Official Journal came to 24.6 MB (3 Nov 2026).
+SANDBOX_MAX_BYTES = 3_000_000
 _SANDBOX_NEVER = re.compile(r"^/api/v2/extract(/|$)")
 
 
