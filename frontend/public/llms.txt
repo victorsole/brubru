@@ -14,7 +14,8 @@ Brubru is organised into six canonical products:
 - [EU Law Comply](https://brubru.beresol.eu/eulawcomply): automated compliance gap analysis against EU-law obligation clusters, with actionable recommendations and exportable reports.
 - [Tenderator](https://brubru.beresol.eu/tenderator): EU public-procurement and funding intelligence over TED notices, with AI matching and bid-readiness analysis.
 - [Brubru Public Data API](https://brubru.beresol.eu/api): a paid REST API over Brubru's EU legal and institutional data — 27,103 laws, OJ publications, OEIL procedures, the Council register, the EU Who-is-Who, and the Publications Office / data.europa.eu surfaces — billed via prepaid micro-credits.
-- [Brubru API Console](https://brubru.beresol.eu/api/try): call the API from a browser with no account: every route, a form built from its parameters, and the live EU rows that come back.
+- [Brubru API Console](https://brubru.beresol.eu/api/try): call the API from a browser with no account, 10 calls a day: every route, a form built from its parameters, and the live EU rows that come back.
+- [API bundles](https://brubru.beresol.eu/api/docs/bundles.html): the API's routes grouped by what you want: Official Journal, laws and the legislative process, funding and procurement, news and events, agencies and bodies, people and organisations, public consultations, enforcement and markets, research and data. No key is needed to read them at `https://brubru-production.up.railway.app/api/v2/bundles`, or the price of each route at `/api/v2/pricing`. A key can be limited to chosen bundles.
 
 Additional capabilities: AI document generation (position papers, MEP briefings, talking points, and more) inside My EU Bubble; AI legislative-outcome Predictions (timeline, EP plenary vote, Council QMV, resolution leading indicators); and a growing public library of EU legislation machine-translated into Catalan at https://brubru.beresol.eu/legislacio-ue-catala/ (CC BY 4.0).
 
