@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bundles: Brubru EU Data API</title>
+<meta name="description" content="Brubru API rate limits, retry strategy, headers, monthly quotas.">
+<link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
+<link rel="stylesheet" href="/api/docs/_assets/docs.css?v=20260811">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <script src="/analytics.js" defer></script>
+</head>
+<body>
+<div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+  <span>You're viewing the reference. To execute live calls you need a Brubru API key: </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span> &middot; or </span>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
+</div>
+<script>
+(function(){
+  // Hide for authenticated Professional users (detected via cookie set after login)
+  var m = document.cookie.match(/brubru_tier=([^;]+)/);
+  if (m && m[1] === 'blue') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+  // Hide for users who dismissed in this session
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+})();
+</script>
+
+<div class="shell">
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time. Pages mark the
+active link by adding class="active" to the matching <a>.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="" width="28" height="28" style="height:28px;width:28px;object-fit:contain">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <h3>Start here</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
+    <li><a href="/api/console"><strong>API Console</strong>: try any route, no account</a></li>
+    <li><a href="/api/docs/bundles.html" data-nav="bundles" class="active"><strong>Bundles</strong>: routes by what you want</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 1,064 endpoints</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
+    <li><a href="#client-libraries">Client libraries</a></li>
+  </ul>
+
+  <h3>Legislation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#legislative" data-nav="ep-legislative">Legislation &amp; procedures (43)</a></li>
+  </ul>
+
+  <h3>European Parliament</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#parliament" data-nav="ep-parliament">Parliament (43)</a></li>
+  </ul>
+
+  <h3>Council &amp; summits</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#council" data-nav="ep-council">Council of the EU (21)</a></li>
+    <li><a href="/api/docs/endpoints.html#european-council" data-nav="ep-european-council">European Council (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#eurogroup" data-nav="ep-eurogroup">Eurogroup (10)</a></li>
+  </ul>
+
+  <h3>Commission</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#commission" data-nav="ep-commission">European Commission (52)</a></li>
+    <li><a href="/api/docs/endpoints.html#interoperable" data-nav="ep-interoperable">EU Interoperable (9)</a></li>
+    <li><a href="/api/docs/endpoints.html#eugovtech" data-nav="ep-eugovtech">EC GovTech (11)</a></li>
+  </ul>
+
+  <h3>Economic &amp; financial</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#ecb" data-nav="ep-ecb">European Central Bank (17)</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-financial-institutions" data-nav="ep-eufi">EU financial institutions (51)</a></li>
+    <li><a href="/api/docs/endpoints.html#esm" data-nav="ep-esm">European Stability Mechanism (9)</a></li>
+  </ul>
+
+  <h3>EU agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#acer" data-nav="ep-acer">ACER: energy regulators</a></li>
+    <li><a href="/api/docs/endpoints.html#berec" data-nav="ep-berec">BEREC: electronic comms</a></li>
+    <li><a href="/api/docs/endpoints.html#cedefop" data-nav="ep-cedefop">Cedefop: vocational training</a></li>
+    <li><a href="/api/docs/endpoints.html#cpvo" data-nav="ep-cpvo">CPVO: plant variety</a></li>
+    <li><a href="/api/docs/endpoints.html#ecdc" data-nav="ep-ecdc">ECDC: disease control</a></li>
+    <li><a href="/api/docs/endpoints.html#echa" data-nav="ep-echa">ECHA: chemicals</a></li>
+    <li><a href="/api/docs/endpoints.html#eea" data-nav="ep-eea">EEA: environment</a></li>
+    <li><a href="/api/docs/endpoints.html#efsa" data-nav="ep-efsa">EFSA: food safety</a></li>
+    <li><a href="/api/docs/endpoints.html#eige" data-nav="ep-eige">EIGE: gender equality</a></li>
+    <li><a href="/api/docs/endpoints.html#eit" data-nav="ep-eit">EIT: innovation</a></li>
+    <li><a href="/api/docs/endpoints.html#ema" data-nav="ep-ema">EMA: medicines (29)</a></li>
+    <li><a href="/api/docs/endpoints.html#enisa" data-nav="ep-enisa">ENISA: cybersecurity</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-lisa" data-nav="ep-eu-lisa">eu-LISA: IT systems</a></li>
+    <li><a href="/api/docs/endpoints.html#eu-osha" data-nav="ep-eu-osha">EU-OSHA: safety at work</a></li>
+    <li><a href="/api/docs/endpoints.html#euaa" data-nav="ep-euaa">EUAA: asylum</a></li>
+    <li><a href="/api/docs/endpoints.html#euda" data-nav="ep-euda">EUDA: drugs</a></li>
+    <li><a href="/api/docs/endpoints.html#euipo" data-nav="ep-euipo">EUIPO: intellectual property</a></li>
+    <li><a href="/api/docs/endpoints.html#fra" data-nav="ep-fra">FRA: fundamental rights</a></li>
+    <li><a href="/api/docs/endpoints.html#eeas" data-nav="ep-eeas">EEAS: external action</a></li>
+  </ul>
+
+  <h3>Funding &amp; consultations</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#funding" data-nav="ep-funding">Funding &amp; tenders (161)</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="ep-consultations">Agency consultations (14)</a></li>
+  </ul>
+
+  <h3>Predictions, calendar &amp; registers</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#predictions" data-nav="ep-predictions">Predictions (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#calendar" data-nav="ep-calendar">EU Calendar (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#transparency-register" data-nav="ep-transparency-register">Transparency Register (3)</a></li>
+  </ul>
+
+  <h3>Open data &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#open-data" data-nav="ep-open-data">Open data (13)</a></li>
+    <li><a href="/api/docs/endpoints.html#general-publications" data-nav="ep-general-publications">General publications (2)</a></li>
+    <li><a href="/api/docs/endpoints.html#who-is-who" data-nav="ep-who-is-who">Who's Who: officials (4)</a></li>
+    <li><a href="/api/docs/endpoints.html#geographical-indications" data-nav="ep-gi">Geographical indications (10)</a></li>
+  </ul>
+
+  <h3>Proprietary</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#dpp" data-nav="ep-dpp">Digital Product Passport (19)</a></li>
+    <li><a href="/api/docs/endpoints.html#proprietary" data-nav="ep-proprietary">Brubru EU intelligence (12)</a></li>
+    <li><a href="/api/docs/endpoints.html#tender-docs" data-nav="ep-tender-docs">Tender Docs (4)</a></li>
+  </ul>
+
+    <h3>More EU agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#easa" data-nav="ep-easa">EASA: aviation safety</a></li>
+    <li><a href="/api/docs/endpoints.html#emsa" data-nav="ep-emsa">EMSA: maritime safety</a></li>
+    <li><a href="/api/docs/endpoints.html#era" data-nav="ep-era">ERA: railways</a></li>
+    <li><a href="/api/docs/endpoints.html#euspa" data-nav="ep-euspa">EUSPA: space programme</a></li>
+    <li><a href="/api/docs/endpoints.html#ela" data-nav="ep-ela">ELA: labour authority</a></li>
+    <li><a href="/api/docs/endpoints.html#efca" data-nav="ep-efca">EFCA: fisheries control</a></li>
+    <li><a href="/api/docs/endpoints.html#eurofound" data-nav="ep-eurofound">Eurofound: living and working conditions</a></li>
+    <li><a href="/api/docs/endpoints.html#etf" data-nav="ep-etf">ETF: training foundation</a></li>
+    <li><a href="/api/docs/endpoints.html#eurojust" data-nav="ep-eurojust">Eurojust: judicial cooperation</a></li>
+    <li><a href="/api/docs/endpoints.html#cepol" data-nav="ep-cepol">CEPOL: law enforcement training</a></li>
+    <li><a href="/api/docs/endpoints.html#europol" data-nav="ep-europol">Europol: law enforcement</a></li>
+    <li><a href="/api/docs/endpoints.html#frontex" data-nav="ep-frontex">Frontex: border and coast guard</a></li>
+  </ul>
+
+  <h3>Executive agencies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#cinea" data-nav="ep-cinea">CINEA: climate, infrastructure, environment</a></li>
+    <li><a href="/api/docs/endpoints.html#eacea" data-nav="ep-eacea">EACEA: education, audiovisual, culture</a></li>
+    <li><a href="/api/docs/endpoints.html#hadea" data-nav="ep-hadea">HaDEA: health and digital</a></li>
+    <li><a href="/api/docs/endpoints.html#eismea" data-nav="ep-eismea">EISMEA: innovation and SMEs</a></li>
+    <li><a href="/api/docs/endpoints.html#ercea" data-nav="ep-ercea">ERCEA: European Research Council</a></li>
+    <li><a href="/api/docs/endpoints.html#rea" data-nav="ep-rea">REA: research</a></li>
+  </ul>
+
+  <h3>Courts, auditors and advisory bodies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#cjeu" data-nav="ep-cjeu">CJEU: Court of Justice</a></li>
+    <li><a href="/api/docs/endpoints.html#eca" data-nav="ep-eca">ECA: Court of Auditors</a></li>
+    <li><a href="/api/docs/endpoints.html#eesc" data-nav="ep-eesc">EESC: Economic and Social Committee</a></li>
+    <li><a href="/api/docs/endpoints.html#cor" data-nav="ep-cor">CoR: Committee of the Regions</a></li>
+    <li><a href="/api/docs/endpoints.html#advisory-opinions" data-nav="ep-advisory-opinions">Advisory opinions: EESC and CoR</a></li>
+    <li><a href="/api/docs/endpoints.html#ombudsman" data-nav="ep-ombudsman">European Ombudsman</a></li>
+    <li><a href="/api/docs/endpoints.html#edps" data-nav="ep-edps">EDPS: data protection supervisor</a></li>
+    <li><a href="/api/docs/endpoints.html#edpb" data-nav="ep-edpb">EDPB: data protection board</a></li>
+  </ul>
+
+  <h3>Inter-institutional services</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#epso" data-nav="ep-epso">EPSO: personnel selection</a></li>
+    <li><a href="/api/docs/endpoints.html#eas" data-nav="ep-eas">EUSA: School of Administration</a></li>
+    <li><a href="/api/docs/endpoints.html#cdt" data-nav="ep-cdt">CdT: translation centre</a></li>
+    <li><a href="/api/docs/endpoints.html#cert-eu" data-nav="ep-cert-eu">CERT-EU: cybersecurity for EU bodies</a></li>
+  </ul>
+
+  <h3>Security and defence</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#eccc" data-nav="ep-eccc">ECCC: cybersecurity competence centre</a></li>
+    <li><a href="/api/docs/endpoints.html#euiss" data-nav="ep-euiss">EUISS: security studies</a></li>
+    <li><a href="/api/docs/endpoints.html#eda" data-nav="ep-eda">EDA: defence agency</a></li>
+    <li><a href="/api/docs/endpoints.html#satcen" data-nav="ep-satcen">SatCen: satellite centre</a></li>
+    <li><a href="/api/docs/endpoints.html#esdc" data-nav="ep-esdc">ESDC: security and defence college</a></li>
+  </ul>
+
+  <h3>Joint undertakings</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#clean-hydrogen" data-nav="ep-clean-hydrogen">Clean Hydrogen</a></li>
+    <li><a href="/api/docs/endpoints.html#edctp3" data-nav="ep-edctp3">EDCTP3: global health</a></li>
+    <li><a href="/api/docs/endpoints.html#eurohpc" data-nav="ep-eurohpc">EuroHPC: supercomputing</a></li>
+    <li><a href="/api/docs/endpoints.html#clean-aviation" data-nav="ep-clean-aviation">Clean Aviation</a></li>
+    <li><a href="/api/docs/endpoints.html#cbe" data-nav="ep-cbe">CBE: circular bio-based</a></li>
+    <li><a href="/api/docs/endpoints.html#ihi" data-nav="ep-ihi">IHI: innovative health</a></li>
+    <li><a href="/api/docs/endpoints.html#chips" data-nav="ep-chips">Chips</a></li>
+    <li><a href="/api/docs/endpoints.html#sesar" data-nav="ep-sesar">SESAR 3: air traffic</a></li>
+    <li><a href="/api/docs/endpoints.html#f4e" data-nav="ep-f4e">F4E: fusion energy</a></li>
+    <li><a href="/api/docs/endpoints.html#europes-rail" data-nav="ep-europes-rail">Europe's Rail</a></li>
+    <li><a href="/api/docs/endpoints.html#sns" data-nav="ep-sns">SNS: smart networks</a></li>
+    <li><a href="/api/docs/endpoints.html#euratom" data-nav="ep-euratom">Euratom Supply Agency</a></li>
+  </ul>
+
+  <h3>Across EU bodies</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#news" data-nav="ep-news">News across EU bodies</a></li>
+    <li><a href="/api/docs/endpoints.html#events" data-nav="ep-events">Events across EU bodies</a></li>
+    <li><a href="/api/docs/endpoints.html#programmes" data-nav="ep-programmes">Funding programmes directory</a></li>
+  </ul>
+
+  <h3>Social &amp; extract</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#social" data-nav="ep-social">Social media directory (7)</a></li>
+    <li><a href="/api/docs/endpoints.html#extract" data-nav="ep-extract">Extract: any EU URL (1)</a></li>
+  </ul>
+
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions">EU institutions covered</a></li>
+    <li><a href="/api/docs/extract-engine.html" data-nav="extract-engine">Extract engine: issues &amp; fixes</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossary</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Use cases by role</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Changelog</a></li>
+  </ul>
+
+  <h3>External</h3>
+  <ul>
+    <li><a href="https://brubru-production.up.railway.app/api/openapi.json" target="_blank" rel="noopener">OpenAPI spec (JSON)</a></li>
+  </ul>
+</aside>
+
+<main class="main">
+
+<div class="main__eyebrow">Bundles</div>
+<h1>Bundles</h1>
+<p class="main__lede">The API serves over a thousand routes. A bundle is a group of them by what you want: take the ones you need and leave the rest.</p>
+
+<table>
+<thead><tr><th>Bundle</th><th>Routes</th><th>Lists</th><th>Use it</th></tr></thead>
+<tbody>
+<tr><td><strong>Official Journal</strong><br>What the EU publishes each day: its acts, by date or by reference.</td><td>3</td><td>2</td><td><a href="/api/console?bundle=official-journal">Try it</a><br><code>/api/v2/bundles/official-journal</code></td></tr>
+<tr><td><strong>Laws and the legislative process</strong><br>EU laws and the files behind them: procedures, amendments, votes, adopted texts, Council documents, delegated and implementing acts, court rulings.</td><td>110</td><td>54</td><td><a href="/api/console?bundle=legislation">Try it</a><br><code>/api/v2/bundles/legislation</code></td></tr>
+<tr><td><strong>Funding and procurement</strong><br>Every call, tender and award, EU programmes and budgets, and who can partner.</td><td>191</td><td>86</td><td><a href="/api/console?bundle=funding-procurement">Try it</a><br><code>/api/v2/bundles/funding-procurement</code></td></tr>
+<tr><td><strong>News and events</strong><br>News, press releases and events from every EU institution and body, and what is on the calendar.</td><td>281</td><td>144</td><td><a href="/api/console?bundle=news-events">Try it</a><br><code>/api/v2/bundles/news-events</code></td></tr>
+<tr><td><strong>Agencies and bodies</strong><br>Everything from the EU&#x27;s agencies, financial institutions, courts and advisory bodies, folder by folder.</td><td>586</td><td>327</td><td><a href="/api/console?bundle=agencies-bodies">Try it</a><br><code>/api/v2/bundles/agencies-bodies</code></td></tr>
+<tr><td><strong>People and organisations</strong><br>Officials, MEPs and their assistants, Commissioners, expert groups, lobbyists and the organisations on the Transparency Register.</td><td>29</td><td>14</td><td><a href="/api/console?bundle=people">Try it</a><br><code>/api/v2/bundles/people</code></td></tr>
+<tr><td><strong>Public consultations</strong><br>Public consultations of the Commission and the agencies, and the feedback they receive.</td><td>17</td><td>9</td><td><a href="/api/console?bundle=consultations">Try it</a><br><code>/api/v2/bundles/consultations</code></td></tr>
+<tr><td><strong>Enforcement and markets</strong><br>Infringements, competition, state aid, digital markets cases, sanctions, trade defence, tariffs, food alerts, product passports and geographical indications.</td><td>63</td><td>34</td><td><a href="/api/console?bundle=enforcement-markets">Try it</a><br><code>/api/v2/bundles/enforcement-markets</code></td></tr>
+<tr><td><strong>Research and data</strong><br>Studies, publications and topic pages, Parliament&#x27;s research service, open data and statistics, and Brubru&#x27;s own guides and translations.</td><td>268</td><td>137</td><td><a href="/api/console?bundle=research-data">Try it</a><br><code>/api/v2/bundles/research-data</code></td></tr>
+</tbody>
+</table>
+<p>A route can sit in several bundles: an agency's news is both Agencies and News. Every data route sits in at least one.</p>
+
+<h2 id="find">Find the routes in a bundle</h2>
+<p><strong>In the browser:</strong> the <a href="/api/console">API Console</a> narrows its catalogue to one bundle, with no account.</p>
+<p><strong>From code:</strong> both routes are public and free, and need no key.</p>
+<pre><code>curl https://brubru-production.up.railway.app/api/v2/bundles
+curl https://brubru-production.up.railway.app/api/v2/bundles/funding-procurement</code></pre>
+<p>The <a href="/api/v2/openapi.json">OpenAPI spec</a> names each route's bundles in <code>x-brubru-bundles</code>.</p>
+
+<h2 id="limit">Limit a key to bundles</h2>
+<p>When you <a href="/api#your-keys">create a key</a>, choose "Only the bundles I choose". The key is then refused on anything else, with the error <code>route_not_included</code>, and routes added later join their bundle by themselves. The price of a call does not change.</p>
+<p>A key limited to bundles does not open the MCP tools, because a tool reaches further than any one bundle. For those, create a key with every route.</p>
+</main>
+</div>
+</body>
+</html>
