@@ -1,6 +1,7 @@
 # REACH and EU Chemicals Regulation
 
 ## QUICK FACTS
+- **LATEST (OJ L of 3 November 2026): Regulation (EU) 2026/2382 replaces REACH Article 2(3) on defence exemptions. NOT YET in force on 3 November; it will enter into force on 23 November 2026.** The words "in specific cases for certain" go. Member States "may allow" exemptions where necessary in the interests of defence: their decision, NOT automatic. Details: `defence_readiness_chemicals_edf_regulation_2026_2382`.
 - **LATEST (3 June 2026):** the Commission published a **Communication "Roadmap towards phasing out animal testing for chemical safety assessments"** (CELEX 52026XC03087, OJ C-series). It sets out a staged plan, milestones and timeline for replacing animal tests with New Approach Methodologies (NAMs) across REACH, CLP and the wider chemicals acquis, coordinated with ECHA and EFSA. Cross-references the Chemicals Strategy for Sustainability and the ongoing REACH revision (COM(2023) 245, 2023/0234(COD)).
 - Full name: Regulation (EC) No 1907/2006 -- Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH)
 - CELEX: 32006R1907

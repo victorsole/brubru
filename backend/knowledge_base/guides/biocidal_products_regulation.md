@@ -1,6 +1,7 @@
 # Biocidal Products Regulation (BPR)
 
 ## QUICK FACTS
+- **LATEST (OJ L of 3 November 2026): Regulation (EU) 2026/2382 replaces Article 2(8) on defence exemptions, dropping "in specific cases for certain". NOT YET in force on 3 November; it will enter into force on 23 November 2026.** Member States decide; NOT automatic. Details: `defence_readiness_chemicals_edf_regulation_2026_2382`.
 - Full name: Regulation (EU) No 528/2012 of the European Parliament and of the Council of 22 May 2012 concerning the making available on the market and use of biocidal products
 - CELEX: 32012R0528 (https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32012R0528)
 - Type: Regulation, directly applicable in all Member States

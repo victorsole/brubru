@@ -1,0 +1,14 @@
+# Tagu (C-583/24): Court of Justice judgment on the European arrest warrant and disproportionate sentences, 3 November 2026
+
+## QUICK FACTS
+- **What it is: a judgment of the Court of Justice, 3 November 2026**, Case C-583/24 [Tagu], ECLI:EU:C:2026:920, on a reference from the District Court of Amsterdam. Advocate General Richard de la Tour gave his opinion on 22 January 2026 (ECLI:EU:C:2026:35). "Tagu" is a fictitious name, not a party's real name.
+- **The holding:** an alleged disproportion between the sentence and the seriousness of the offence is NOT, in itself, enough to refuse a European arrest warrant.
+- **The facts:** seven years' imprisonment in Romania for importing three grams of cannabis and four MDMA pills, which the person said were for his wife's pain relief. In the Netherlands, a comparable offence (up to 10 grams) carries one to three weeks. That gap did not suffice.
+- **The test, two steps (Aranyosi and Căldăraru line):** (1) systemic or generalised deficiencies in the issuing State, or affecting an identifiable group; (2) only then, a real risk for this person, given their situation.
+- **Differences between national penalties, even significant ones, are NOT such a deficiency.** Letting the executing court compare with its own law would mean a general review of other States' criminal decisions, contrary to mutual trust.
+- **When refusal is exceptionally possible:** a serious and manifest breach of proportionality of penalties in the issuing State's law or practice with no effective judicial remedy, for example where law permits or requires sentences so disproportionate that they are inhuman or degrading (Article 4 of the Charter), or where rules ignore the seriousness of the offence and bar the court from taking individual circumstances into account.
+- **The outcome here:** Romania's law does NOT reveal such a deficiency. The minimum sentence is not in itself inhuman or degrading, and Romanian courts can individualise the sentence.
+- **Legal basis:** Framework Decision 2002/584/JHA, Article 1(3); Charter Article 49(3) (proportionality). Disproportion is not among the express grounds in Articles 3, 4 and 4a.
+- **What was NOT read:** the judgment's full text, not on EUR-Lex in English on 3 November. This guide rests on **press release 154/26**. **The chamber was not read: do not say Grand Chamber.** Give no paragraph numbers.
+- **The national decision stays with the Dutch court.** Source: https://curia.europa.eu/site/upload/docs/application/pdf/2026-11/cp260154en.pdf . Related: `european_arrest_warrant`.
+- **Search words (other languages):** mandat d'arrêt européen, peine disproportionnée; Europees aanhoudingsbevel, onevenredige straf; orden europea de detención, euroorden, pena desproporcionada; ordre europea de detenció, euroordre, pena desproporcionada; mandato d'arresto europeo, pena sproporzionata.

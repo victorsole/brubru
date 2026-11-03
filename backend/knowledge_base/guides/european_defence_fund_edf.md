@@ -1,6 +1,7 @@
 # European Defence Fund (EDF)
 
 ## QUICK FACTS
+- **LATEST (OJ L of 3 November 2026): Regulation (EU) 2026/2382 (Omnibus V) amends the Fund's Regulation 2021/697. NOT YET in force on 3 November; it will enter into force on 23 November 2026;** Article 9(6), third subparagraph, applies from 1 January 2025. Award criteria, funding-rate bonuses and SME rules change. Details: `defence_readiness_chemicals_edf_regulation_2026_2382`.
 - **LATEST (9 October 2026):** the Council adopted the defence readiness regulation (procedure 2025/0176(COD), part of Omnibus V) that **simplifies the management of the EDF**: simpler application requirements, a higher funding-rate bonus for projects involving SMEs, and European public bodies such as the European Defence Agency kept able to act as central purchasing bodies. Official Journal publication follows. Details: `eu_defence_readiness_omnibus_v_and_agile_2026`.
 - **LATEST (DEFIS, 2 October 2026): record 2026 calls.** **612 project proposals** applied for the **EUR 1.006 billion** available under the 2026 calls: **+49% on last year**, after +38% from 2024 to 2025. For the first time the calls were **open to Ukrainian applicants**, in anticipation of the entry into force of Ukraine's association agreement to the EDF. Half of the budget goes to collaborative R&D on major defence capabilities, a quarter to the EU Defence Innovation Scheme (EUDIS). **Results are expected by March 2027.** The total EDF budget is quoted as "nearly EUR 7.3 billion" for 2021-2027 (constant prices).
 - Full name: European Defence Fund (EDF)

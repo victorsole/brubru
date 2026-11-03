@@ -1,6 +1,7 @@
 # European Arrest Warrant: Framework Decision 2002/584/JHA
 
 ## QUICK FACTS
+- **LATEST (Court of Justice, 3 November 2026, C-583/24 Tagu, press release 154/26): an alleged disproportion between sentence and offence is NOT, in itself, enough to refuse a warrant.** Refusal needs a serious and manifest breach of proportionality in the issuing State with no effective remedy. Details: `ecj_tagu_european_arrest_warrant_proportionality_c583_24`. **Pending (OJ C, 3 November 2026): C-825/26 Commission v Hungary**, on Hungary making the Article 4(1) ground mandatory.
 - Legal basis: Council Framework Decision 2002/584/JHA of 13 June 2002 on the European arrest warrant and the surrender procedures between Member States (CELEX 32002F0584), amended by Council Framework Decision 2009/299/JHA (in absentia trials)
 - Operational since: 1 January 2004, replacing traditional bilateral extradition between EU Member States
 - Mechanism: judicial surrender based on mutual recognition of judicial decisions, not a political/diplomatic extradition request

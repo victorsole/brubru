@@ -1,6 +1,7 @@
 # Digital Networks Act
 
 ## QUICK FACTS
+- **Votes, NO result (as of 3 November 2026):** LIBE votes its **opinion** on 2026/0013(COD) on **4 November 2026**; ITRE, the lead committee, has the file on its 10 November agenda. List: `ep_committee_votes_3_10_november_2026`.
 - Full name: Proposal for a Regulation on digital networks (Digital Networks Act, DNA)
 - COM reference: COM(2026) 0016 final, 21 January 2026
 - Procedure: 2026/0013(COD)

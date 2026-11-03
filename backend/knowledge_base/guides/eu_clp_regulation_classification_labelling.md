@@ -1,6 +1,7 @@
 # CLP Regulation: Classification, Labelling and Packaging
 
 ## QUICK FACTS
+- **LATEST (OJ L of 3 November 2026): Regulation (EU) 2026/2382 replaces CLP Article 1(4) on defence exemptions, dropping "in specific cases for certain". NOT YET in force on 3 November; it will enter into force on 23 November 2026.** Member States decide; NOT automatic. Details: `defence_readiness_chemicals_edf_regulation_2026_2382`.
 - Full name: Regulation (EC) No 1272/2008 on classification, labelling and packaging of substances and mixtures (CLP) -- the EU's implementation of the UN Globally Harmonised System of Classification and Labelling of Chemicals (GHS)
 - CELEX: 32008R1272
 - Type: Regulation (directly applicable in all Member States)

@@ -1,6 +1,7 @@
 # Late Payments Regulation
 
 ## QUICK FACTS
+- **Infringement action (OJ C of 3 November 2026): C-1018/26 Commission v Romania**, lodged 16 September 2026: the national health insurance fund allegedly pays pharmacies late, systematically and persistently, against the CURRENT Directive 2011/7/EU, Article 4(4)(b). **PENDING.** This is the current Directive, NOT the proposed Regulation below.
 - Full name: Regulation on combating late payment in commercial transactions (replacing Directive 2011/7/EU)
 - Commission proposal: COM(2023)533, 12 September 2023
 - Procedure: [2023/0323(COD)](https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0323(COD))
