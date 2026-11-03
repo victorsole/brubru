@@ -64,7 +64,7 @@
       "label": "heavy compute (legal-text TF-IDF)"
     },
     {
-      "regex": "^/api/v1/predictions/.+/(outcome|timeline)/?$",
+      "regex": "^/api/v[12]/predictions/.+/(outcome|timeline)/?$",
       "cost_micro": 5000,
       "label": "heavy compute (predictions)"
     },

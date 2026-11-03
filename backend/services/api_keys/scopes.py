@@ -62,7 +62,7 @@ SCOPE_CATALOGUE: Tuple[Scope, ...] = (
     Scope(
         name="read:commission",
         label="European Commission",
-        description="Commissioners, consultations, infringements, funding opportunities, F&T calls and projects, TED tenders, DG-specialised datasets (TBT, GI, sanctions, ...).",
+        description="Commissioners, consultations, infringements, funding opportunities, F&T calls and projects, TED tenders, DG-specialised datasets (TBT, GI, sanctions, ...); every EU funding list: awards, budgets, partners and the agencies' calls and tenders.",
     ),
     Scope(
         name="read:council",
@@ -82,12 +82,12 @@ SCOPE_CATALOGUE: Tuple[Scope, ...] = (
     Scope(
         name="read:knowledge",
         label="Brubru knowledge layer",
-        description="Brubru's curated knowledge guides and EPRS / JRC research publications.",
+        description="Brubru's curated knowledge guides, EPRS / JRC research publications, the Digital Product Passport, the Transparency Register and tender templates.",
     ),
     Scope(
         name="read:publications",
-        label="EU publications and vocabularies",
-        description="Cross-institutional press releases and EU controlled vocabularies (NALs, ontologies).",
+        label="EU agencies, bodies, publications and vocabularies",
+        description="The news, publications, events and registers of every EU agency and body; cross-institutional press releases; the Who is Who directory; open data; geographical indications; EU controlled vocabularies (NALs, ontologies).",
     ),
     Scope(
         name="read:economy",
@@ -251,6 +251,29 @@ PATH_TO_SCOPE: Tuple[Tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"^/api/v2/social(/|$)"),                       "read:social"),
     (re.compile(r"^/api/v2/interoperable(/|$)"),                "read:economy"),
     (re.compile(r"^/api/v2/eugovtech(/|$)"),                    "read:economy"),
+
+    # --- API v2: every other folder (Victor, 3 Nov 2026; register O141) ----
+    # 752 GET routes had no entry and fell to read:misc, which no self-serve key can hold, so a
+    # standard key got a 403 on 64 of the 69 funding lists and on every agency folder. The audits
+    # hold wildcard keys and never saw it. tests/test_every_v2_route_opens_to_a_standard_key.py now
+    # fails on any v2 route left without a scope a standard key holds.
+    (re.compile(r"^/api/v2/parliament(/|$)"),                   "read:ep"),
+    (re.compile(r"^/api/v2/commission(/|$)"),                   "read:commission"),
+    (re.compile(r"^/api/v2/funding(/|$)"),                      "read:commission"),
+    (re.compile(r"^/api/v2/council(/|$)"),                      "read:council"),
+    (re.compile(r"^/api/v2/predictions(/|$)"),                  "read:procedures"),
+    (re.compile(r"^/api/v2/calendar(/|$)"),                     "read:calendar"),
+    (re.compile(r"^/api/v2/proprietary(/|$)"),                  "read:knowledge"),
+    (re.compile(r"^/api/v2/dpp(/|$)"),                          "read:knowledge"),
+    (re.compile(r"^/api/v2/transparency-register(/|$)"),        "read:knowledge"),
+    (re.compile(r"^/api/v2/open-data(/|$)"),                    "read:publications"),
+    (re.compile(r"^/api/v2/geographical-indications(/|$)"),     "read:publications"),
+    (re.compile(r"^/api/v2/advisory-opinions(/|$)"),            "read:publications"),
+    (re.compile(r"^/api/v2/(?:acer|berec|cbe|cdt|cedefop|cepol|cert-eu|chips|cinea|cjeu|clean-aviation|clean-hydrogen|"
+                r"cor|cpvo|eacea|eas|easa|eca|eccc|ecdc|echa|eda|edctp3|edpb|edps|eea|eeas|eesc|efca|efsa|eige|eismea|"
+                r"eit|ela|ema|emsa|enisa|epso|era|ercea|esdc|etf|eu-lisa|eu-osha|euaa|euda|euipo|euiss|euratom|eurofound|"
+                r"eurohpc|eurojust|europes-rail|europol|euspa|f4e|fra|frontex|hadea|ihi|ombudsman|rea|satcen|sesar|sns)"
+                r"(/|$)"),                                      "read:publications"),
 
     # read:laws
     (re.compile(r"^/api/v1/laws(/|$)"),                         "read:laws"),
