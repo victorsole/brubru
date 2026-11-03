@@ -957,7 +957,7 @@
       "mcpDescription": "Brubru exposes a Model Context Protocol (MCP) server. Connect it to Claude, ChatGPT, Gemini, Mistral, or any MCP-compatible AI agent to give your assistant live EU legislative intelligence."
     },
     "auth": {
-      "description": "Every /api/v1/* endpoint requires an API key. Pass it as Authorization: Bearer <key> (recommended) or X-API-Key: <key>. Keys are minted by Brubru's admin team for Professional subscribers. Rate limit is 60 requests per minute per key.",
+      "description": "Every /api/v2/* endpoint requires an API key. Pass it as Authorization: Bearer <key> (recommended) or X-API-Key: <key>. Keys are minted by Brubru's admin team for Professional subscribers. Rate limit is 60 requests per minute per key.",
       "note": "X-API-Key is also accepted for curl-friendly scripts. Bearer is the default for Postman, OpenAPI tooling, and SDKs."
     },
     "envelope": {
@@ -987,7 +987,7 @@
       "loading": "Loading your keys…",
       "empty": {
         "title": "No keys yet",
-        "body": "Create your first API key to start calling /api/v1/* from your application, command line or notebook.",
+        "body": "Create your first API key to start calling /api/v2/* from your application, command line or notebook.",
         "cta": "Create your first API key"
       },
       "cap": {
@@ -1077,7 +1077,7 @@
       },
       "balance": {
         "title": "Balance",
-        "empty": "Your balance is empty - top up to start calling /api/v1/*.",
+        "empty": "Your balance is empty - top up to start calling /api/v2/*.",
         "calls": "~{{count}} lightweight calls remaining"
       },
       "banner": {
@@ -1115,7 +1115,7 @@
       },
       "usage": {
         "title": "Recent usage",
-        "empty": "No paid calls yet. Calls against /api/v1/* will appear here as soon as they land.",
+        "empty": "No paid calls yet. Calls against /api/v2/* will appear here as soon as they land.",
         "when": "When",
         "endpoint": "Endpoint",
         "method": "Method",

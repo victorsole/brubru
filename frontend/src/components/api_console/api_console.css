@@ -167,6 +167,7 @@
 .api-console__point dd code { font-size: 0.78rem; }
 .api-console__point a { color: var(--console-blue-text); }
 .api-console__empty { color: #b91c1c; font-style: italic; }
+.api-console__not-requested { color: var(--console-muted); font-style: italic; }
 .api-console__snippet { font-size: 0.82rem; color: var(--console-muted); margin: 4px 0 0; }
 .api-console__code { min-width: 0; }
 .api-console__code-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0; font-size: 0.86rem; }

@@ -33,17 +33,17 @@ const CopyButton = ({ text }: { text: string }) => {
 
 const RowCard = ({ row, bodiesRequested }: { row: Record<string, any>; bodiesRequested: boolean }) => {
   const { t, i18n } = useTranslation();
-  const title = row.title ?? row.name ?? row.reference ?? row.id;
+  const title = row.title || row.name || row.reference || row.celex || row.id;
   const url = safeHttpUrl(row.public_url);
   const empty = <span className="api-console__empty">{t('api.console.emptyValue')}</span>;
   const bodyValue = (value: unknown) => {
     if (typeof value === 'string' && value.length > 0) return t('api.console.characters', { count: value.length, formatted: value.length.toLocaleString(i18n.language) });
-    return bodiesRequested ? empty : <span className="api-console__empty">{t('api.console.notRequested')}</span>;
+    return bodiesRequested ? empty : <span className="api-console__not-requested">{t('api.console.notRequested')}</span>;
   };
   const date = (value: unknown) => (typeof value === 'string' && value ? <code>{value}</code> : empty);
   return (
     <article className="api-console__row">
-      {title !== undefined && title !== null && <h4>{String(title).slice(0, 220)}</h4>}
+      {title ? <h4>{String(title).slice(0, 220)}</h4> : null}
       <dl>
         <div className="api-console__point">
           <dt><code>public_url</code></dt>

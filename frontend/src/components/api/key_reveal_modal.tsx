@@ -121,7 +121,15 @@ export const KeyRevealModal = ({ result, onDone }: Props) => {
               <span className="api-keys-reveal__metadata-label">
                 {t('api.keys.list.scopes')}:
               </span>
-              <span>{result.scopes.join(', ')}</span>
+              <span>
+                {(() => {
+                  // A key limited to bundles names them: its read scopes are not the limit.
+                  const bundles = result.scopes.filter((s) => s.startsWith('bundle:')).map((s) => s.slice('bundle:'.length));
+                  return bundles.length > 0
+                    ? bundles.map((b) => t(`api.bundles.${b}.name`, { defaultValue: b })).join(', ')
+                    : result.scopes.join(', ');
+                })()}
+              </span>
             </div>
             <div className="api-keys-reveal__metadata-row">
               <span className="api-keys-reveal__metadata-label">

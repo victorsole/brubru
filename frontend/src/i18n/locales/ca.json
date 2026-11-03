@@ -957,7 +957,7 @@
       "mcpDescription": "Brubru exposa un servidor Model Context Protocol (MCP). Connecta'l a Claude, ChatGPT, Gemini, Mistral o qualsevol agent d'IA compatible amb MCP per donar al teu assistent intel·ligència legislativa europea en temps real."
     },
     "auth": {
-      "description": "Cada endpoint /api/v1/* requereix una clau d'API. Envia-la com a Authorization: Bearer <clau> (recomanat) o X-API-Key: <clau>. Les claus les emet l'equip Brubru per a subscriptors Professional. Límit: 60 peticions per minut per clau.",
+      "description": "Cada endpoint /api/v2/* requereix una clau d'API. Envia-la com a Authorization: Bearer <clau> (recomanat) o X-API-Key: <clau>. Les claus les emet l'equip Brubru per a subscriptors Professional. Límit: 60 peticions per minut per clau.",
       "note": "X-API-Key també s'accepta per a scripts amb curl. Bearer és l'estàndard a Postman, OpenAPI i SDKs."
     },
     "envelope": {
@@ -987,7 +987,7 @@
       "loading": "Carregant les teves claus…",
       "empty": {
         "title": "Encara no tens claus",
-        "body": "Crea la teva primera clau API per començar a cridar /api/v1/* des de l'aplicació, terminal o notebook.",
+        "body": "Crea la teva primera clau API per començar a cridar /api/v2/* des de l'aplicació, terminal o notebook.",
         "cta": "Crea la primera clau API"
       },
       "cap": {
@@ -1077,7 +1077,7 @@
       },
       "balance": {
         "title": "Saldo",
-        "empty": "El teu saldo està buit - recarrega per començar a cridar /api/v1/*.",
+        "empty": "El teu saldo està buit - recarrega per començar a cridar /api/v2/*.",
         "calls": "~{{count}} trucades lleugeres restants"
       },
       "banner": {
@@ -1115,7 +1115,7 @@
       },
       "usage": {
         "title": "Ús recent",
-        "empty": "Encara no hi ha trucades de pagament. Les trucades contra /api/v1/* apareixeran aquí tan bon punt es facin.",
+        "empty": "Encara no hi ha trucades de pagament. Les trucades contra /api/v2/* apareixeran aquí tan bon punt es facin.",
         "when": "Quan",
         "endpoint": "Endpoint",
         "method": "Mètode",

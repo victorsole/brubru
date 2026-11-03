@@ -143,7 +143,7 @@ export const BUNDLE_ORDER = [
 
 // The route a bundle opens on: a list of real rows, not a folder's directory.
 const BUNDLE_START: Record<string, string> = {
-  'official-journal': '/api/v2/legislative/eur-lex/recent',
+  'official-journal': '/api/v2/legislative/eur-lex/oj/daily',
   legislation: '/api/v2/legislative/eur-lex/laws',
   'funding-procurement': '/api/v2/funding/opportunities',
   'news-events': '/api/v2/news/all',

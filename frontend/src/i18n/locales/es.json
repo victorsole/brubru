@@ -957,7 +957,7 @@
       "mcpDescription": "Brubru expone un servidor Model Context Protocol (MCP). Conéctalo a Claude, ChatGPT, Gemini, Mistral o cualquier agente de IA compatible con MCP para dar a tu asistente inteligencia legislativa europea en tiempo real."
     },
     "auth": {
-      "description": "Cada endpoint /api/v1/* requiere una clave de API. Envíala como Authorization: Bearer <clave> (recomendado) o X-API-Key: <clave>. Las claves son emitidas por el equipo Brubru para suscriptores Professional. Límite: 60 peticiones por minuto por clave.",
+      "description": "Cada endpoint /api/v2/* requiere una clave de API. Envíala como Authorization: Bearer <clave> (recomendado) o X-API-Key: <clave>. Las claves son emitidas por el equipo Brubru para suscriptores Professional. Límite: 60 peticiones por minuto por clave.",
       "note": "X-API-Key también se acepta para scripts con curl. Bearer es el estándar en Postman, OpenAPI y SDKs."
     },
     "envelope": {
@@ -987,7 +987,7 @@
       "loading": "Cargando tus claves…",
       "empty": {
         "title": "Aún no tienes claves",
-        "body": "Crea tu primera clave API para empezar a llamar /api/v1/* desde tu aplicación, terminal o notebook.",
+        "body": "Crea tu primera clave API para empezar a llamar /api/v2/* desde tu aplicación, terminal o notebook.",
         "cta": "Crea tu primera clave API"
       },
       "cap": {
@@ -1077,7 +1077,7 @@
       },
       "balance": {
         "title": "Saldo",
-        "empty": "Tu saldo está vacío - recarga para empezar a llamar /api/v1/*.",
+        "empty": "Tu saldo está vacío - recarga para empezar a llamar /api/v2/*.",
         "calls": "~{{count}} llamadas ligeras restantes"
       },
       "banner": {
@@ -1115,7 +1115,7 @@
       },
       "usage": {
         "title": "Uso reciente",
-        "empty": "Aún no hay llamadas de pago. Las llamadas contra /api/v1/* aparecerán aquí en cuanto se realicen.",
+        "empty": "Aún no hay llamadas de pago. Las llamadas contra /api/v2/* aparecerán aquí en cuanto se realicen.",
         "when": "Cuándo",
         "endpoint": "Endpoint",
         "method": "Método",

@@ -957,7 +957,7 @@
       "mcpDescription": "Brubru biedt een Model Context Protocol (MCP)-server. Verbind deze met Claude, ChatGPT, Gemini, Mistral of een andere MCP-compatibele AI-agent om uw assistent live EU-wetgevingsintelligentie te bieden."
     },
     "auth": {
-      "description": "Elk /api/v1/*-eindpunt vereist een API-sleutel. Stuur die als Authorization: Bearer <sleutel> (aanbevolen) of X-API-Key: <sleutel>. Sleutels worden uitgegeven door het Brubru-team voor Professional-abonnees. Limiet: 60 verzoeken per minuut per sleutel.",
+      "description": "Elk /api/v2/*-eindpunt vereist een API-sleutel. Stuur die als Authorization: Bearer <sleutel> (aanbevolen) of X-API-Key: <sleutel>. Sleutels worden uitgegeven door het Brubru-team voor Professional-abonnees. Limiet: 60 verzoeken per minuut per sleutel.",
       "note": "X-API-Key wordt ook geaccepteerd voor curl-scripts. Bearer is de standaard voor Postman, OpenAPI en SDK's."
     },
     "envelope": {
@@ -987,7 +987,7 @@
       "loading": "Sleutels worden geladen…",
       "empty": {
         "title": "Nog geen sleutels",
-        "body": "Maak je eerste API-sleutel aan om /api/v1/* aan te roepen vanuit je applicatie, terminal of notebook.",
+        "body": "Maak je eerste API-sleutel aan om /api/v2/* aan te roepen vanuit je applicatie, terminal of notebook.",
         "cta": "Maak je eerste API-sleutel"
       },
       "cap": {
@@ -1077,7 +1077,7 @@
       },
       "balance": {
         "title": "Saldo",
-        "empty": "Je saldo is leeg - vul bij om /api/v1/* te kunnen aanroepen.",
+        "empty": "Je saldo is leeg - vul bij om /api/v2/* te kunnen aanroepen.",
         "calls": "~{{count}} lichte calls over"
       },
       "banner": {
@@ -1115,7 +1115,7 @@
       },
       "usage": {
         "title": "Recent gebruik",
-        "empty": "Nog geen betaalde calls. Aanroepen naar /api/v1/* verschijnen hier zodra ze plaatsvinden.",
+        "empty": "Nog geen betaalde calls. Aanroepen naar /api/v2/* verschijnen hier zodra ze plaatsvinden.",
         "when": "Wanneer",
         "endpoint": "Endpoint",
         "method": "Methode",

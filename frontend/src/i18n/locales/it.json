@@ -2013,7 +2013,7 @@
       "mcpDescription": "Brubru espone un server Model Context Protocol (MCP). Collegalo a Claude, ChatGPT, Gemini, Mistral o a qualsiasi agente IA compatibile con MCP per fornire al tuo assistente un'intelligenza legislativa europea in tempo reale."
     },
     "auth": {
-      "description": "Ogni endpoint /api/v1/* richiede una chiave API. Inviala in Authorization: Bearer <chiave> (consigliato) o X-API-Key: <chiave>. Le chiavi sono emesse dal team Brubru per gli abbonati Professional. Limite: 60 richieste al minuto per chiave.",
+      "description": "Ogni endpoint /api/v2/* richiede una chiave API. Inviala in Authorization: Bearer <chiave> (consigliato) o X-API-Key: <chiave>. Le chiavi sono emesse dal team Brubru per gli abbonati Professional. Limite: 60 richieste al minuto per chiave.",
       "note": "X-API-Key è accettato anche per script curl. Bearer è lo standard per Postman, OpenAPI e SDK."
     },
     "envelope": {
@@ -2043,7 +2043,7 @@
       "loading": "Caricamento delle chiavi…",
       "empty": {
         "title": "Nessuna chiave ancora",
-        "body": "Crea la tua prima chiave API per iniziare a chiamare /api/v1/* dalla tua applicazione, terminale o notebook.",
+        "body": "Crea la tua prima chiave API per iniziare a chiamare /api/v2/* dalla tua applicazione, terminale o notebook.",
         "cta": "Crea la prima chiave API"
       },
       "cap": {
@@ -2133,7 +2133,7 @@
       },
       "balance": {
         "title": "Saldo",
-        "empty": "Il saldo è vuoto - ricarica per iniziare a chiamare /api/v1/*.",
+        "empty": "Il saldo è vuoto - ricarica per iniziare a chiamare /api/v2/*.",
         "calls": "~{{count}} chiamate leggere rimanenti"
       },
       "banner": {
@@ -2171,7 +2171,7 @@
       },
       "usage": {
         "title": "Uso recente",
-        "empty": "Nessuna chiamata a pagamento ancora. Le chiamate verso /api/v1/* compariranno qui non appena effettuate.",
+        "empty": "Nessuna chiamata a pagamento ancora. Le chiamate verso /api/v2/* compariranno qui non appena effettuate.",
         "when": "Quando",
         "endpoint": "Endpoint",
         "method": "Metodo",

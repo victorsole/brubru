@@ -957,7 +957,7 @@
       "mcpDescription": "Brubru expose un serveur Model Context Protocol (MCP). Connectez-le à Claude, ChatGPT, Gemini, Mistral ou à tout agent IA compatible MCP pour donner à votre assistant une intelligence législative européenne en temps réel."
     },
     "auth": {
-      "description": "Chaque endpoint /api/v1/* exige une clé API. Envoyez-la en Authorization: Bearer <clé> (recommandé) ou X-API-Key: <clé>. Les clés sont émises par l'équipe Brubru pour les abonnés Professional. Limite : 60 requêtes par minute par clé.",
+      "description": "Chaque endpoint /api/v2/* exige une clé API. Envoyez-la en Authorization: Bearer <clé> (recommandé) ou X-API-Key: <clé>. Les clés sont émises par l'équipe Brubru pour les abonnés Professional. Limite : 60 requêtes par minute par clé.",
       "note": "X-API-Key est aussi accepté pour les scripts curl. Bearer est la valeur par défaut pour Postman, OpenAPI et les SDK."
     },
     "envelope": {
@@ -987,7 +987,7 @@
       "loading": "Chargement de vos clés…",
       "empty": {
         "title": "Pas encore de clé",
-        "body": "Créez votre première clé API pour commencer à appeler /api/v1/* depuis votre application, terminal ou notebook.",
+        "body": "Créez votre première clé API pour commencer à appeler /api/v2/* depuis votre application, terminal ou notebook.",
         "cta": "Créer ma première clé API"
       },
       "cap": {
@@ -1077,7 +1077,7 @@
       },
       "balance": {
         "title": "Solde",
-        "empty": "Votre solde est vide - rechargez pour commencer à appeler /api/v1/*.",
+        "empty": "Votre solde est vide - rechargez pour commencer à appeler /api/v2/*.",
         "calls": "~{{count}} appels légers restants"
       },
       "banner": {
@@ -1115,7 +1115,7 @@
       },
       "usage": {
         "title": "Utilisation récente",
-        "empty": "Aucun appel payant pour l'instant. Les appels vers /api/v1/* apparaîtront ici dès qu'ils seront effectués.",
+        "empty": "Aucun appel payant pour l'instant. Les appels vers /api/v2/* apparaîtront ici dès qu'ils seront effectués.",
         "when": "Quand",
         "endpoint": "Endpoint",
         "method": "Méthode",
