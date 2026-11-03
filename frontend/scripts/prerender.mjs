@@ -18,6 +18,13 @@ import puppeteer from 'puppeteer';
 import sirv from 'sirv';
 import { createServer } from 'http';
 
+// A build without the public sandbox key ships an API Console whose Send is switched off, with no error anywhere.
+if (!process.env.VITE_BRUBRU_SANDBOX_KEY) {
+  console.error("[prerender] VITE_BRUBRU_SANDBOX_KEY is not set, so the API Console could not send. Build with:\n" +
+    "  export VITE_BRUBRU_SANDBOX_KEY=$(tr -d '\\n' < ~/.brubru_tools/sandbox_api_key.txt)\n  npm run build:prerender");
+  process.exit(1);
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = resolve(__dirname, '..', 'dist');
 const SITE_URL = 'https://brubru.beresol.eu';
