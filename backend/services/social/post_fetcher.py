@@ -106,7 +106,13 @@ def fetch_x(handle, n=20):
     def walk(o):
         if isinstance(o, dict):
             if "full_text" in o and "id_str" in o:
+                # Stop here. A tweet nests the tweet it retweets or quotes under
+                # retweeted_status / quoted_status: descending stored other people's
+                # words as this account's own, unflagged, with their likes and date
+                # (6,421 of 23,088 "own" X rows on 3 Nov 2026; Tusk's post ranked as
+                # an MEP's most engaging).
                 tweets.append(o)
+                return
             for v in o.values():
                 walk(v)
         elif isinstance(o, list):
@@ -125,12 +131,13 @@ def fetch_x(handle, n=20):
         seen.add(tid)
         _txt = t.get("full_text") or ""
         _rt = _RT_PREFIX_RE.match(_txt)
+        _rt_user = ((t.get("retweeted_status") or {}).get("user") or {}).get("screen_name")
         out.append({"platform_post_id": tid, "content": _txt,
                     "post_url": f"https://x.com/{handle}/status/{tid}",
                     "posted_at": _dt_twitter(t.get("created_at")), "lang": t.get("lang"),
                     "like_count": t.get("favorite_count"), "repost_count": t.get("retweet_count"),
                     "reply_count": t.get("reply_count"), "view_count": None, "media": [], "extra": {},
-                    "is_repost": bool(_rt), "original_author": _rt.group(1) if _rt else None})
+                    "is_repost": bool(_rt or _rt_user), "original_author": _rt.group(1) if _rt else _rt_user})
     return out
 
 

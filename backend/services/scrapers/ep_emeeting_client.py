@@ -67,7 +67,7 @@ _BASE_KIND = {
     # MEUB surface at all.
     "CLS": "council_document",
 }
-_VL_RE = re.compile(r"voting[ _]?list|\bvl[ _]|\bfinal vl\b|_voting_list\b", re.I)
+_VL_RE = re.compile(r"voting[ _]?list|\bvl[ _-]|\bfinal vl\b|_voting_list\b", re.I)
 _CA_RE = re.compile(r"compromise amendment|\bca[s]?\b|_ca[s]?[_ .]|\bca[s]?_", re.I)
 
 

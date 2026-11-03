@@ -1,7 +1,7 @@
 # Combating Child Sexual Abuse Online: EU Regulatory Framework
 
 ## QUICK FACTS
-- **Do not confuse two files (as of 3 November 2026):** LIBE has the **child sexual abuse Directive recast, 2024/0035(COD)**, in its vote block on **4 November 2026**, NO result yet. That is a DIFFERENT file from this guide's online detection Regulation, 2022/0155(COD). List: `ep_committee_votes_3_10_november_2026`.
+- **Do not confuse two files (as of 3 November 2026):** LIBE votes on the provisional agreement on the **child sexual abuse Directive recast, 2024/0035(COD)**, on **4 November 2026**, NO result yet. That is a DIFFERENT file from this guide's online detection Regulation, 2022/0155(COD). See `child_sexual_abuse_directive_recast_2024_0035`.
 - **Watch (15 September 2026)**: "Child safety online" is listed under the President on the Commission's tentative agenda SEC(2026) 2577 for the College meeting of 15 September 2026 in Strasbourg. Its content and whether it touches child sexual abuse material were not published at the time of writing; do not link it to this Regulation until the adopted text is available. See `eu_minors_social_media_age_limits`.
 - Permanent regulation proposal: COM(2022) 209, procedure 2022/0155(COD)
 - Proposed: 11 May 2022

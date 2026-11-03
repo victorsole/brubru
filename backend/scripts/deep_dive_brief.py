@@ -70,7 +70,7 @@ _AM_RANGE = re.compile(r"AMENDMENTS?\s*\n\s*(\d+)\s*-\s*(\d+)")
 _RAPP = re.compile(r"Rapporteurs?(?: for opinion)?:\s*([^\n]+)")
 _DATE = re.compile(r"\n\s*(\d{1,2}\.\d{1,2}\.\d{4})\s*\n")
 _TARGET = re.compile(
-    r"Amendment\s+\d+\s*\n(?:.*\n)?\s*Proposal for a (?:regulation|directive|decision)\s*\n\s*(.{0,60})")
+    r"Amendment\s+\d+\s*\n(?:.*\n){0,8}?\s*Proposal for a (?:regulation|directive|decision)\s*\n\s*(.{0,60})")
 _TABLER = re.compile(r"^\s*Amendment\s+\d+\s*\n((?:\s*[^\n]{2,90}\n){1,6})", re.M)
 _ROLLCALL = re.compile(r"\n\s*(\d+)\s*([+\-0])\s*\n")
 

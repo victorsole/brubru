@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (read 3 November 2026): JURI's draft opinion PE796.306, 8 October 2026, 231 amendments, on JURI's agenda for 4 November 2026 (rapporteur for opinion Sergey Lagodinsky, Greens/EFA). A DRAFT opinion: JURI has not voted, and it advises ITRE and IMCO; it does not decide.** Proposes: at least 80% of data-centre capacity in an acceleration area for operators established in the Union and not controlled from third countries (a proposal, NOT in the Commission's text); Union assurance levels cut from four to two; no Commission power to identify associated third countries; a new Article 44a on international agreements. Read in French, the only language found; justification and count read, not all 231 amendments.
 - **LATEST — PARLIAMENT'S TEAM IS APPOINTED AND THE FILE IS A JOINT-COMMITTEE FILE (read from OEIL on 22 September 2026).**
   - **This is a Rule 58 JOINT committee file: ITRE and IMCO share responsibility.** Do NOT describe it as an ITRE file with an IMCO opinion, and do not name one rapporteur as "the" rapporteur.
     - **ITRE — SOLIER Diego (ECR), appointed 24 June 2026.**
