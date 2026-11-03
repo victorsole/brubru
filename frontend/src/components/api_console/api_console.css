@@ -207,7 +207,7 @@
 .api-console--compact .api-console__request-anchor { height: 560px; }
 .api-console--compact .api-console__pane--response { grid-column: 1 / -1; min-height: 120px; overflow: visible; }
 
-/* ---- Page at /api/console ---- */
+/* ---- Page at /api/try ---- */
 .api-console-page {
   background: #fff;
   padding: 20px 2rem 2rem;

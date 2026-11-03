@@ -1,5 +1,5 @@
 // frontend/src/pages/api_console_page.tsx
-// /api/console: the full-screen API Console. /api keeps the pitch, the keys and the docs, and shows the same console as a panel.
+// /api/try: the full-screen API Console. /api keeps the pitch, the keys and the docs, and shows the same console as a panel.
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApiConsole } from '../components/api_console/api_console';

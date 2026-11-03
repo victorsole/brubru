@@ -1,5 +1,5 @@
 // frontend/src/components/api_console/api_console.tsx
-// The API Console: catalogue, request, response. Used full screen at /api/console and as the panel on /api.
+// The API Console: catalogue, request, response. Used full screen at /api/try and as the panel on /api.
 // The catalogue is free and loads when the console comes into view; a metered call only ever follows the Send button.
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -172,7 +172,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
             </span>
           )}
           {compact && (
-            <Link className="api-console__full-link" to={bundle ? `/api/console?bundle=${bundle}` : '/api/console'}>
+            <Link className="api-console__full-link" to={bundle ? `/api/try?bundle=${bundle}` : '/api/try'}>
               <span className="mdi mdi-arrow-expand" aria-hidden="true" /> {t('api.console.openFull')}
             </Link>
           )}

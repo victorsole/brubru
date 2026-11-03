@@ -251,6 +251,27 @@ def self_check(api: Api, items: list) -> list:
     return out
 
 
+def _required_values(op: dict, now: datetime):
+    """Values for a route's required query parameters, the same starting points the API Console fills in.
+    None when a parameter needs a value only the caller can choose, such as a search word."""
+    out = {}
+    for param in op.get("parameters", []):
+        if param.get("in") != "query" or not param.get("required"):
+            continue
+        name = param.get("name")
+        if name == "date":     # two working days back, so the day's publication is complete
+            day, left = now, 2
+            while left:
+                day -= timedelta(days=1)
+                left -= day.weekday() < 5
+            out[name] = day.strftime("%Y-%m-%d")
+        elif name == "published_from":
+            out[name] = (now - timedelta(days=7)).strftime("%Y-%m-%d")
+        else:
+            return None
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--base", default=BASE)
@@ -284,6 +305,11 @@ def main() -> int:
         bodies = {"include_body": "true"} if path in AGENCY_LISTS or (args.bundle and declares_body) else {}
         order_doc = " ".join(str(p.get("description") or "") for p in spec["paths"][path]["get"].get("parameters", [])
                              if p.get("name") == "order")
+        needed = _required_values(spec["paths"][path]["get"], now) if args.bundle else {}
+        if needed is None:
+            print(f"[SKIP] {slug}: asks for a value only the caller can choose")
+            continue
+        bodies.update(needed or {})
         s, d = api.get(path, limit=PAGE, **bodies)
         if s != 200 or not isinstance(d, dict):
             print(f"[FAIL] {slug}: HTTP {s}")

@@ -11,8 +11,10 @@
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-  <span>You're viewing the reference. To execute live calls you need a Brubru API key: </span>
-  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span>You're viewing the reference. Try any route with no account in the </span>
+  <a href="/api/try" style="color:#fff;font-weight:700;text-decoration:underline;">API Console</a>
+  <span> &middot; </span>
+  <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">get your own key</a>
   <span> &middot; or </span>
   <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
@@ -48,7 +50,7 @@ active link by adding class="active" to the matching <a>.
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
-    <li><a href="/api/console"><strong>API Console</strong>: try any route, no account</a></li>
+    <li><a href="/api/try"><strong>API Console</strong>: try any route, no account</a></li>
     <li><a href="/api/docs/bundles.html" data-nav="bundles"><strong>Bundles</strong>: routes by what you want</a></li>
     <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 1,064 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>

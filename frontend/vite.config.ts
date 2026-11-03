@@ -10,8 +10,8 @@ export default defineConfig({
       '/api/': {
         target: 'http://localhost:8000',
         changeOrigin: true,
-        // /api/console is a page of the app, not a backend route.
-        bypass: (req) => (req.url?.startsWith('/api/console') ? '/index.html' : undefined),
+        // /api/try is a page of the app, not a backend route; /api/console/ forwards to it.
+        bypass: (req) => (/^\/api\/(try|console)(\/|\?|$)/.test(req.url ?? '') ? '/index.html' : undefined),
       },
     },
   },

@@ -8,7 +8,8 @@ from services.api_keys.bundles import API_BUNDLES, bundles_of, get_bundle
 
 router = APIRouter(tags=["v2-docs"])
 
-_CONSOLE = "https://brubru.beresol.eu/api/console?bundle="
+# Not /api/console: SiteGround's edge resets any browser request whose path ends in /console.
+_CONSOLE = "https://brubru.beresol.eu/api/try?bundle="
 _routes_cache: List[dict] = []
 
 

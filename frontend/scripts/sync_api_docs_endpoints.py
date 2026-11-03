@@ -60,11 +60,9 @@ TENDER_DOCS = "/api/v2/proprietary/tender-docs"
 # The funding standard's consolidated lists come first on the funding table.
 FUNDING_FIRST = ["opportunities", "awards", "budgets", "partners", "tenders", "ft-calls-for-proposals",
                  "ft-calls-for-tenders", "ft-cascade-calls", "ft-funded-projects", "tender-awards", "eu-funding-recipients"]
-NUMBER_WORDS = {
-    "index.html": ("1,002", "1,061"), "endpoints.html": ("1,002", "1,061"), "reference.html": ("1,002", "1,061"),
-    "es.html": ("1.002", "1.061"), "ca.html": ("1.002", "1.061"), "it.html": ("1.002", "1.061"), "nl.html": ("1.002", "1.061"),
-}
-FOLDER_WORD = r"\b92(?=(?:&nbsp;|\s)(?:EU institution folders|EU|folders|carpetas|carpetes|dossiers|cartelle|mappen|r[ée]pertoires))"
+# Whatever number the page last carried, in the page's own way of writing a thousand.
+ENDPOINT_COUNT = re.compile(r"\b1(,|\.|&nbsp;| )0\d\d(?=(?:&nbsp;|\s)(?:REST\s|v2\s)?endpoints?)")
+FOLDER_WORD = r"\b9\d(?=(?:&nbsp;|\s)(?:EU institution folders|EU|folders|carpetas|carpetes|dossiers|cartelle|mappen|r[ée]pertoires))"
 
 
 def live_spec() -> dict:
@@ -166,10 +164,8 @@ def sync_counts(counts: dict) -> None:
                    lambda m: f'{m.group(1)}{m.group(2)}{m.group(3)}({counts.get(m.group(2), 0)}){m.group(5)}' if counts.get(m.group(2)) else m.group(0), s)
         if page.name != "changelog.html":
             s = re.sub(r"(</strong>: all )[\d,]+( endpoints)", rf"\g<1>{total:,}\g<2>", s)
-            if page.name in NUMBER_WORDS:
-                s = s.replace(*NUMBER_WORDS[page.name])
+            s = ENDPOINT_COUNT.sub(lambda m: f"1{m.group(1)}{total % 1000:03d}", s)
             s = re.sub(FOLDER_WORD, str(folders), s)
-            s = s.replace("1 002", "1 061").replace("1&nbsp;002", "1&nbsp;061")
         if s != original:
             page.write_text(s, encoding="utf-8")
     print(f"[OK] {total} endpoints across {folders} folders")
@@ -227,14 +223,15 @@ def write_bundles_page(paths: dict) -> None:
     rows = "\n".join(
         f'<tr><td><strong>{escape(label)}</strong><br>{escape(text)}</td>'
         f'<td>{len(routes[bid])}</td><td>{sum(1 for p in routes[bid] if "{" not in p)}</td>'
-        f'<td><a href="/api/console?bundle={bid}">Try it</a><br><code>/api/v2/bundles/{bid}</code></td></tr>'
+        f'<td><a href="/api/try?bundle={bid}">Try it</a><br><code>{bid}</code></td></tr>'
         for bid, label, text in BUNDLES)
     body = f"""<div class="main__eyebrow">Bundles</div>
 <h1>Bundles</h1>
 <p class="main__lede">The API serves over a thousand routes. A bundle is a group of them by what you want: take the ones you need and leave the rest.</p>
 
 <table>
-<thead><tr><th>Bundle</th><th>Routes</th><th>Lists</th><th>Use it</th></tr></thead>
+<colgroup><col style="width:52%"><col style="width:10%"><col style="width:10%"><col style="width:28%"></colgroup>
+<thead><tr><th>Bundle</th><th>Routes</th><th>Lists</th><th>Try it, and its id</th></tr></thead>
 <tbody>
 {rows}
 </tbody>
@@ -242,7 +239,7 @@ def write_bundles_page(paths: dict) -> None:
 <p>A route can sit in several bundles: an agency's news is both Agencies and News. Every data route sits in at least one.</p>
 
 <h2 id="find">Find the routes in a bundle</h2>
-<p><strong>In the browser:</strong> the <a href="/api/console">API Console</a> narrows its catalogue to one bundle, with no account.</p>
+<p><strong>In the browser:</strong> the <a href="/api/try">API Console</a> narrows its catalogue to one bundle, with no account.</p>
 <p><strong>From code:</strong> both routes are public and free, and need no key.</p>
 <pre><code>curl https://brubru-production.up.railway.app/api/v2/bundles
 curl https://brubru-production.up.railway.app/api/v2/bundles/funding-procurement</code></pre>

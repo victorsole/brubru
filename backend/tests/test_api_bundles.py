@@ -201,6 +201,7 @@ def test_the_bundle_routes_answer_with_no_key_and_count_the_live_routes():
     d = r.json()
     assert [b["id"] for b in d["data"]] == bundle_ids() and d["total"] == len(API_BUNDLES) == 9
     assert all(b["routes"] > 0 and b["lists"] > 0 for b in d["data"])
+    assert all(b["console_url"] == f"https://brubru.beresol.eu/api/try?bundle={b['id']}" for b in d["data"])
     one = c.get("/api/v2/bundles/official-journal")
     assert one.status_code == 200 and one.json()["total"] == next(b["routes"] for b in d["data"] if b["id"] == "official-journal")
     assert all("official-journal" in x["bundles"] for x in one.json()["data"])

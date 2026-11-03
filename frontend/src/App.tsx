@@ -1,6 +1,6 @@
 // frontend/src/App.tsx
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { RoutePresence, AnimatedPage } from './components/animations/page_transition';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useAuth } from './hooks/use_auth';
@@ -48,6 +48,13 @@ if (import.meta.env.DEV) {
   console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
   console.log('VITE_LINKEDIN_CLIENT_ID:', import.meta.env.VITE_LINKEDIN_CLIENT_ID);
 }
+
+// The API Console lives at /api/try: SiteGround's edge resets any browser request whose path ends in /console.
+// /api/console/ with its slash does reach the app, so it forwards.
+const ConsoleMoved = () => {
+  const { search } = useLocation();
+  return <Navigate to={`/api/try${search}`} replace />;
+};
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -156,7 +163,8 @@ export const App = () => {
               <Footer isSidebarOpen={isSidebarOpen} />
             </>
           )} />
-          <Route path="/api/console" element={(
+          <Route path="/api/console" element={<ConsoleMoved />} />
+          <Route path="/api/try" element={(
             <>
               <Header />
               <AnimatedPage>

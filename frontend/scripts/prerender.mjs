@@ -33,7 +33,7 @@ const ROUTES = [
   { path: '/terms', title: 'Terms of Service - Brubru', description: 'Brubru terms of service and conditions of use.' },
   { path: '/cookies', title: 'Cookie Policy - Brubru', description: 'Brubru cookie policy and tracking information.' },
   { path: '/subprocessors', title: 'Subprocessors - Brubru', description: 'List of third-party subprocessors used by Brubru.' },
-  { path: '/api/console', title: 'API Console - Brubru', description: 'Call the Brubru API from your browser, with no account: every route, a form built from its parameters, and the live EU rows that come back.' },
+  { path: '/api/try', title: 'API Console - Brubru', description: 'Call the Brubru API from your browser, with no account: every route, a form built from its parameters, and the live EU rows that come back.' },
   { path: '/api', title: 'Brubru API - The EU, structured.', description: 'Brubru Data Provider API. REST + MCP access to 28,500+ EU laws, 2,000+ legislative procedures, live consultation feedback, commissioner agendas, and legal-text intelligence. Professional subscription.' },
 ];
 

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Introduction: Brubru EU Data API</title>
-<meta name="description" content="Brubru EU Data API v2: 1,061 REST endpoints across 93 EU institution folders. 27,103 EU laws, legislative procedures, MEPs and officials, amendments, the Parliament / Council / Commission databases, the EU-agency databases (medicines, food safety, environment, chemicals, drugs, fundamental rights), funding, open data, the 19 funding-application templates behind Brubru's Tender Docs product, and Brubru's proprietary EU intelligence. One API key.">
+<meta name="description" content="Brubru EU Data API v2: 1,064 REST endpoints across 95 EU institution folders. 27,103 EU laws, legislative procedures, MEPs and officials, amendments, the Parliament / Council / Commission databases, the EU-agency databases (medicines, food safety, environment, chemicals, drugs, fundamental rights), funding, open data, the 19 funding-application templates behind Brubru's Tender Docs product, and Brubru's proprietary EU intelligence. One API key.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css?v=20260811" />
 <link rel="stylesheet" href="/api/docs/_assets/app_header.css?v=20260811">
@@ -64,8 +64,10 @@
 </header>
 
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-  <span>You're viewing the reference. To execute live calls you need a Brubru API key: </span>
-  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span>You're viewing the reference. Try any route with no account in the </span>
+  <a href="/api/try" style="color:#fff;font-weight:700;text-decoration:underline;">API Console</a>
+  <span> &middot; </span>
+  <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">get your own key</a>
   <span> &middot; or </span>
   <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
@@ -89,7 +91,7 @@
   <h3>Start here</h3>
   <ul>
     <li><a href="/api/docs/" data-nav="home" class="active">Introduction</a></li>
-    <li><a href="/api/console"><strong>API Console</strong>: try any route, no account</a></li>
+    <li><a href="/api/try"><strong>API Console</strong>: try any route, no account</a></li>
     <li><a href="/api/docs/bundles.html" data-nav="bundles"><strong>Bundles</strong>: routes by what you want</a></li>
     <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 1,064 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
@@ -282,13 +284,13 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1,061 endpoints across 93 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1,064 endpoints across 95 EU institution folders</div>
 <h1>The EU, structured.</h1>
 <p class="main__lede">
 Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>27,103 adopted EU laws</strong> (30,246 OJ publications with full text), <strong>2,080 legislative files</strong> tracked from proposal to adoption, <strong>16,521 EU officials</strong>, every MEP, <strong>58,399 EP amendments</strong>, the Parliament / Council / European Council / Eurogroup / Commission registers, the European Central Bank and the EU financial institutions, the decentralised EU agencies (medicines, food safety, environment, chemicals, drugs, fundamental rights and more), EU funding and tenders, open data including <strong>12 curated Eurostat sport + fitness-relevant health datasets</strong> served live, the <strong>19 funding-application templates</strong> behind Brubru's Tender Docs product, and Brubru's own proprietary EU intelligence. The same data we use internally is what you call. Brubru is the first customer of its own API.
 </p>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
-<strong>One surface, one key.</strong> The API is organised the way the EU is: one folder per institution or body, 93 folders in total, <strong>1,061 endpoints</strong>. Browse the folders below, or open the <a href="/api/docs/reference.html"><strong>full, always-current API reference &rarr;</strong></a>: every deployed endpoint, rendered live from the OpenAPI spec.
+<strong>One surface, one key.</strong> The API is organised the way the EU is: one folder per institution or body, 95 folders in total, <strong>1,064 endpoints</strong>. Browse the folders below, or open the <a href="/api/docs/reference.html"><strong>full, always-current API reference &rarr;</strong></a>: every deployed endpoint, rendered live from the OpenAPI spec.
 </p>
 
 <div class="callout callout--ok">
@@ -619,7 +621,7 @@ eurovoc.classify_url("https://environment.ec.europa.eu/news_en", api_key="brubru
 <div class="toc-grid">
 <a class="toc-card" href="/api/docs/endpoints.html">
   <div class="toc-card__title">All endpoints</div>
-  <div class="toc-card__desc">The full hand-grouped list of all 1,061 v2 endpoints, one section per institution folder.</div>
+  <div class="toc-card__desc">The full hand-grouped list of all 1,064 v2 endpoints, one section per institution folder.</div>
 </a>
 <a class="toc-card" href="/api/docs/authentication.html">
   <div class="toc-card__title">Authentication</div>
