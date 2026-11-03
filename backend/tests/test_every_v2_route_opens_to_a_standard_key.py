@@ -8,8 +8,9 @@ from services.billing.api_meter import resolve_cost_micro
 
 def _v2_paths():
     from main import app
-    # The spec and its page are public: the gate never asks them for a scope.
-    return sorted({r.path for r in app.routes if getattr(r, "path", "").startswith("/api/v2")} - {"/api/v2/docs", "/api/v2/openapi.json"})
+    # The spec, its page and the price list are public: the gate never asks them for a scope.
+    return sorted({r.path for r in app.routes if getattr(r, "path", "").startswith("/api/v2")}
+                  - {"/api/v2/docs", "/api/v2/openapi.json", "/api/v2/pricing"})
 
 
 def test_no_v2_route_needs_a_scope_a_standard_key_cannot_hold():

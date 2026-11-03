@@ -25,7 +25,8 @@ from services.billing.api_meter import (
     record_usage,
     is_probe_header,
     resolve_cost_micro,
-    sandbox_consume,
+    sandbox_consume_counted,
+    sandbox_refusal,
 )
 from services.rate_limiter.global_rate_limiter import get_rate_limiter
 from api.v1._query_guard import check_query_params
@@ -107,22 +108,33 @@ async def api_user_with_rate_limit(
         request.state.billing_skipped = True
         return user
 
+    cost_micro, _label = resolve_cost_micro(path)
+    is_sandbox = bool(getattr(request.state, "api_key_is_sandbox", False))
+
     # Admin users (role='admin') call their own API for free. Rate limit still
     # applies, but no euro debit and no usage event — Brubru's operators must
     # not pay to query infrastructure they own. Hardcoded list-of-one today
     # (hello@beresol.eu); extend via the users.role column if more admins land.
-    if getattr(user, "role", None) == "admin":
+    # The public sandbox key is OWNED by an admin, so it is asked first: until
+    # 3 Nov 2026 this check came first and no sandbox cap could ever apply.
+    if not is_sandbox and getattr(user, "role", None) == "admin":
         request.state.billing_skipped = True
         request.state.billing_admin_exempt = True
         return user
 
-    cost_micro, _label = resolve_cost_micro(path)
-    is_sandbox = bool(getattr(request.state, "api_key_is_sandbox", False))
-
+    balance_micro = None
     if is_sandbox:
+        refusal = sandbox_refusal(request.method, path, request.query_params, cost_micro)
+        if refusal is not None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={"error": refusal[1], "reason_code": refusal[0], "top_up_url": "https://brubru.beresol.eu/api"},
+            )
         # Sandbox key: bills against the shared pool, not the user's balance.
         client_ip = request.client.host if request.client else "0.0.0.0"
-        ok, reason = sandbox_consume(db, client_ip)
+        ok, reason, ip_left, pool_left = sandbox_consume_counted(db, client_ip)
+        request.state.sandbox_ip_left = ip_left
+        request.state.sandbox_pool_left = pool_left
         if not ok:
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
@@ -138,6 +150,7 @@ async def api_user_with_rate_limit(
     else:
         # Normal user-key debit. Atomic.
         ok, balance_or_remaining = debit(db, api_key.user_id, cost_micro)
+        balance_micro = balance_or_remaining
         if not ok:
             raise HTTPException(
                 status_code=402,  # Payment Required
@@ -171,5 +184,6 @@ async def api_user_with_rate_limit(
     request.state.billing_cost_micro = cost_micro
     request.state.billing_is_sandbox = is_sandbox
     request.state.billing_user_id = str(api_key.user_id)
+    request.state.billing_balance_micro = balance_micro
 
     return user

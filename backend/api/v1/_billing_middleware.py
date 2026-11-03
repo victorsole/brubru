@@ -35,6 +35,24 @@ from services.billing.api_meter import mark_event_refunded, refund, set_event_st
 logger = logging.getLogger(__name__)
 
 
+def _eur(micro: int) -> str:
+    return f"{int(micro) / 1_000_000:.6f}".rstrip("0").rstrip(".") or "0"
+
+
+def _stamp_cost_headers(state, response: Response) -> None:
+    """What this call cost and what is left (the API Console shows them, 3 Nov 2026)."""
+    if getattr(state, "sandbox_ip_left", None) is not None:
+        response.headers["X-Brubru-Cost-Eur"] = "0"
+        response.headers["X-Brubru-Sandbox-Remaining"] = str(state.sandbox_ip_left)
+        response.headers["X-Brubru-Sandbox-Pool-Remaining"] = str(state.sandbox_pool_left)
+    elif getattr(state, "billing_admin_exempt", False):
+        response.headers["X-Brubru-Cost-Eur"] = "0"
+    elif getattr(state, "billing_cost_micro", None) is not None:
+        response.headers["X-Brubru-Cost-Eur"] = _eur(state.billing_cost_micro)
+        if getattr(state, "billing_balance_micro", None) is not None:
+            response.headers["X-Brubru-Balance-Eur"] = _eur(state.billing_balance_micro)
+
+
 class BillingRefundMiddleware(BaseHTTPMiddleware):
     """Refund the per-call debit on 5xx responses."""
 
@@ -48,6 +66,8 @@ class BillingRefundMiddleware(BaseHTTPMiddleware):
         # Consider both metered API surfaces (the per-call debit runs for v1 and v2).
         if not request.url.path.startswith(("/api/v1/", "/api/v2/")):
             return response
+
+        _stamp_cost_headers(request.state, response)
 
         # If the dependency didn't set billing state, nothing to refund.
         event_id = getattr(request.state, "billing_event_id", None)
@@ -87,8 +107,10 @@ class BillingRefundMiddleware(BaseHTTPMiddleware):
 
         db = SessionLocal()
         try:
-            refund(db, user_id_str, int(cost_micro))
+            refunded_balance = refund(db, user_id_str, int(cost_micro))
             mark_event_refunded(db, int(event_id))
+            response.headers["X-Brubru-Cost-Eur"] = "0"
+            response.headers["X-Brubru-Balance-Eur"] = _eur(refunded_balance)
             logger.info(
                 f"[billing] refunded {cost_micro} μEUR to user {user_id_str} "
                 f"(event {event_id}, status {response.status_code})"

@@ -214,7 +214,11 @@ app.add_middleware(
     # download button can only read these if they are explicitly exposed.
     # X-Export-Rows tells the user how many rows they actually got (exports are
     # capped per endpoint); Content-Disposition carries the filename.
-    expose_headers=["X-Export-Rows", "Content-Disposition", "X-Brubru-Unknown-Params", "X-Source-Credit", "Link"],
+    # The API Console (3 Nov 2026) reads the rest: what a call cost, what is left, and the id to quote to support.
+    expose_headers=["X-Export-Rows", "Content-Disposition", "X-Brubru-Unknown-Params", "X-Source-Credit", "Link",
+                    "X-Brubru-Cost-Eur", "X-Brubru-Balance-Eur", "X-Brubru-Sandbox-Remaining",
+                    "X-Brubru-Sandbox-Pool-Remaining", "X-RateLimit-Limit", "X-RateLimit-Remaining",
+                    "X-RateLimit-Tier", "X-Request-Id", "Retry-After"],
 )
 
 # Billing refund middleware (Phase B — refunds 5xx debits on /api/v1/*).

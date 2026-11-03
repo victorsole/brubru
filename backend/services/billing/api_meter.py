@@ -51,6 +51,11 @@ logger = logging.getLogger(__name__)
 # Sandbox daily caps (CLI tools that need to adjust these stay in this module).
 SANDBOX_IP_CAP = 10
 SANDBOX_GLOBAL_CAP = 100
+# The console lets anyone call the API with no account (Victor, 3 Nov 2026), so a sandbox call is small:
+# deep pages and big pages are what cost database egress. Live fetches and the heavy routes need a key.
+SANDBOX_MAX_LIMIT = 25
+SANDBOX_MAX_PAGE = 10
+_SANDBOX_NEVER = re.compile(r"^/api/v2/extract(/|$)")
 
 
 # ---------------------------------------------------------------------------
@@ -237,8 +242,35 @@ def mark_event_refunded(db: Session, event_id: int) -> None:
 # Sandbox pool
 # ---------------------------------------------------------------------------
 
+def sandbox_refusal(method: str, path: str, query_params, cost_micro: int) -> Optional[Tuple[str, str]]:
+    """Why the public sandbox does not serve this call, or None. Asked BEFORE the pool is spent, so a
+    visitor's mistake costs them no call. Returns (reason_code, message)."""
+    if method.upper() != "GET":
+        return "sandbox_method", "The public sandbox only reads: GET requests."
+    if cost_micro > _DEFAULT_COST or _SANDBOX_NEVER.match(path):
+        return ("sandbox_route_not_included",
+                "This route does heavier work or fetches live, so it needs your own API key. "
+                "Mint one at brubru.beresol.eu/api.")
+    for name, top in (("limit", SANDBOX_MAX_LIMIT), ("page", SANDBOX_MAX_PAGE)):
+        raw = query_params.get(name)
+        try:
+            over = raw is not None and int(raw) > top
+        except (TypeError, ValueError):
+            over = False  # the route's own validation answers a value that is not a number
+        if over:
+            return "sandbox_too_large", f"The public sandbox serves {name} up to {top}. Use your own API key for more."
+    if (query_params.get("format") or "json").lower() != "json":
+        return "sandbox_no_export", "The public sandbox answers in JSON. Exports need your own API key."
+    return None
+
+
 def sandbox_consume(db: Session, ip: str) -> Tuple[bool, str]:
-    """Increment the sandbox pool. Returns (ok, reason_code).
+    """Increment the sandbox pool. Returns (ok, reason_code)."""
+    return sandbox_consume_counted(db, ip)[:2]
+
+
+def sandbox_consume_counted(db: Session, ip: str) -> Tuple[bool, str, int, int]:
+    """Increment the sandbox pool. Returns (ok, reason_code, calls left for this visitor, calls left today).
 
     Algorithm:
         1. UPSERT today's row for the given IP, incrementing count_today.
@@ -269,15 +301,17 @@ def sandbox_consume(db: Session, ip: str) -> Tuple[bool, str]:
     db.commit()
     ip_count = int(row[0]) if row else 0
 
+    ip_left = max(0, SANDBOX_IP_CAP - ip_count)
     if ip_count > SANDBOX_IP_CAP:
-        return False, "sandbox_ip_capped"
+        return False, "sandbox_ip_capped", 0, 0
 
     # Step 2 — global cap.
     total = db.execute(
         text("SELECT COALESCE(SUM(count_today),0) FROM public.api_sandbox_pool WHERE pool_date = :d"),
         {"d": today},
     ).scalar() or 0
+    pool_left = max(0, SANDBOX_GLOBAL_CAP - int(total))
     if int(total) > SANDBOX_GLOBAL_CAP:
-        return False, "sandbox_global_capped"
+        return False, "sandbox_global_capped", ip_left, 0
 
-    return True, ""
+    return True, "", ip_left, pool_left

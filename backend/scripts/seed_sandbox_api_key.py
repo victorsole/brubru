@@ -42,19 +42,11 @@ from sqlalchemy.orm import Session
 from core.database import SessionLocal  # noqa: E402
 from models.api_key import ApiKey       # noqa: E402
 from models.user import User            # noqa: E402
+from services.api_keys.scopes import all_self_serve_scopes  # noqa: E402
 
 # Scopes the sandbox key is permitted to use. All read:* scopes — the sandbox
 # is meant to let evaluators try every retrieval-style endpoint.
-SANDBOX_SCOPES = [
-    "read:laws",
-    "read:procedures",
-    "read:calendar",
-    "read:ep",
-    "read:commission",
-    "read:council",
-    "read:knowledge",
-    "read:publications",
-]
+SANDBOX_SCOPES = sorted(all_self_serve_scopes())
 
 
 def _resolve_owner(db: Session, owner_email: str | None) -> User:
@@ -96,6 +88,10 @@ def main() -> int:
         action="store_true",
         help="Revoke any existing sandbox key first, then mint a new one.",
     )
+    parser.add_argument(
+        "--key-file",
+        help="Write the plaintext to this file (mode 600) instead of printing it. Keep it outside the repo.",
+    )
     args = parser.parse_args()
 
     db = SessionLocal()
@@ -128,6 +124,14 @@ def main() -> int:
         db.add(api_key)
         db.commit()
         db.refresh(api_key)
+
+        if args.key_file:
+            path = Path(args.key_file).expanduser()
+            path.touch(mode=0o600, exist_ok=True)
+            path.chmod(0o600)
+            path.write_text(plaintext + "\n", encoding="utf-8")
+            print(f"[seed_sandbox] minted {api_key.id} with {len(SANDBOX_SCOPES)} scopes; plaintext in {path}")
+            return 0
 
         print()
         print("=" * 72)
