@@ -84,6 +84,42 @@ BY_DESIGN = {
 }
 
 
+# People and organisations are records, not documents: nothing publishes them on a date, and a short card is their body.
+# A declaration is a document, so /parliament/mep-declarations is not here (O158).
+_RECORDS = ("commission/commissioners", "commission/expert-groups", "eurogroup/eurogroup-members",
+            "european-council/euco-members", "parliament/mep-assistants", "parliament/meps", "proprietary/brussels-lobbies",
+            "social/accounts", "transparency-register", "who-is-who/departments", "who-is-who/officials")
+BY_DESIGN.update({(s, c): "a record of a person or a body, not a document" for s in _RECORDS
+                  for c in ("document_date_missing", "body_txt_stub_under_200")})
+BY_DESIGN.update({("social/accounts", c): "a directory of accounts: it holds no text" for c in ("body_txt_missing", "body_html_missing")})
+# Found by the first bundle audits, 3 Nov 2026.
+KNOWN.update({
+    **{("legislative/eur-lex/recent", c): "O152" for c in ("id_missing", "self_missing", "updated_date_missing", "body_txt_missing", "body_html_missing")},
+    ("legislative/eur-lex/oj/daily", "self_missing"): "O153",
+    **{(s, "id_missing"): "O154" for s in ("commission/commissioners", "transparency-register", "proprietary/brussels-lobbies")},
+    ("proprietary/brussels-lobbies", "self_missing"): "O154",
+    **{(s, "updated_date_missing"): "O155" for s in ("eurogroup/eurogroup-members", "european-council/euco-members", "who-is-who/departments", "social/accounts")},
+    ("transparency-register", "updated_date_missing"): "O156",
+    ("transparency-register", "self"): "O156",
+    ("who-is-who/departments", "public_url_shared_by_3_or_more"): "O157",
+    ("parliament/mep-declarations", "document_date_missing"): "O158",
+})
+
+
+def unseen(lists: list, seen: set) -> list:
+    """A route can sit in several bundles: a list already read in this pass is not read again (egress)."""
+    return [p for p in lists if p not in seen]
+
+
+def summary(report: dict) -> list:
+    """Each open finding with how many lists have it, most lists first: a class across lists is one cause, not many."""
+    counts = Counter()
+    for entry in report.values():
+        for code in entry.get("open", []):
+            counts[code] += 1
+    return counts.most_common()
+
+
 def _ref(table: dict, slug: str, code: str):
     return table.get((slug, code)) or table.get(("*", code))
 
@@ -278,6 +314,7 @@ def main() -> int:
     ap.add_argument("--only", default="", help="comma-separated list slugs (e.g. budgets,awards)")
     ap.add_argument("--bundle", default="", help="audit every list in this API bundle instead of the funding lists (ids: /api/v2/bundles)")
     ap.add_argument("--json", default=None, help="write the full findings here")
+    ap.add_argument("--seen", default=None, help="a file of lists already read in this pass; they are skipped and this run's are added")
     args = ap.parse_args()
     key = os.environ.get("BRUBRU_API_KEY")
     if not key:
@@ -297,6 +334,12 @@ def main() -> int:
         lists = sorted(p for p, ops in spec["paths"].items()
                        if "get" in ops and args.bundle in ops["get"].get("x-brubru-bundles", []) and "{" not in p
                        and (not only or p[len("/api/v2/"):] in only))
+    seen_path = pathlib.Path(args.seen) if args.seen else None
+    seen = set(json.loads(seen_path.read_text())) if seen_path and seen_path.exists() else set()
+    if seen:
+        kept = unseen(lists, seen)
+        print(f"[INFO] {len(lists) - len(kept)} of {len(lists)} lists already read in this pass")
+        lists = kept
     now = datetime.now(timezone.utc)
     report, failing, known = {}, 0, 0
     for path in lists:
@@ -359,8 +402,13 @@ def main() -> int:
             print(f"       {line}" + (f"  [known: {k}]" if k else f"  [by design: {why}]" if why else ""))
         if empty:
             print(f"       empty on every item read: {', '.join(empty)}")
-        report[slug] = {"total": total, "read": len(items), "findings": dict(found), "examples": examples,
+        report[slug] = {"total": total, "read": len(items), "findings": dict(found), "open": sorted(open_), "examples": examples,
                         "self": selfs, "empty_fields": empty, "body_chars": [lo, med, hi]}
+    if args.bundle:
+        for code, n in summary(report):
+            print(f"[CLASS] {code}: {n} lists")
+    if seen_path:
+        seen_path.write_text(json.dumps(sorted(seen | set(lists))))
     print(f"[DONE] lists={len(lists)} failing={failing} known={known} calls={api.calls}")
     if args.json:
         pathlib.Path(args.json).write_text(json.dumps({"at": now.isoformat(), "base": args.base, "lists": report}, indent=1))

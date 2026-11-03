@@ -106,3 +106,23 @@ def test_an_address_visible_only_in_the_html_does_not_make_the_two_bodies_differ
     htm = f"<p>{BODY}</p>" + "".join(f"<p>{url}</p>" for _ in range(4))
     found, _ = audit_items([_item(1, body_txt=BODY, body_html=htm)], NOW)
     assert not found["body_txt_and_html_differ_in_length"]
+
+
+def test_a_person_is_a_record_so_no_publication_date_is_not_a_fault():
+    from scripts.audit_funding_datapoints import BY_DESIGN, _ref
+    assert _ref(BY_DESIGN, "who-is-who/officials", "document_date_missing")
+    assert _ref(BY_DESIGN, "who-is-who/officials", "body_txt_stub_under_200")
+    assert not _ref(BY_DESIGN, "parliament/mep-declarations", "document_date_missing")     # a declaration is a document
+    assert not _ref(BY_DESIGN, "who-is-who/officials", "updated_date_missing")             # a record still has a change date
+
+
+def test_a_list_read_for_one_bundle_is_not_read_again_for_the_next():
+    from scripts.audit_funding_datapoints import unseen
+    assert unseen(["/a", "/b", "/c"], {"/b"}) == ["/a", "/c"]
+    assert unseen(["/a"], set()) == ["/a"]
+
+
+def test_the_summary_counts_lists_not_rows_and_leaves_out_what_is_explained():
+    from scripts.audit_funding_datapoints import summary
+    report = {"a": {"open": ["id_missing", "self_missing"]}, "b": {"open": ["id_missing"]}, "c": {"open": []}, "d": {"http": 500}}
+    assert summary(report) == [("id_missing", 2), ("self_missing", 1)]
