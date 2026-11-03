@@ -63,7 +63,7 @@ async def api_user_with_rate_limit(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail={
-                "error": "This evaluation key covers a selection of routes, and this is not one of them.",
+                "error": "This key covers a selection of routes, and this is not one of them.",
                 "reason_code": "route_not_included",
             },
         )

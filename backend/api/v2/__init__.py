@@ -118,6 +118,7 @@ from .programmes import router as _programmes_router
 from .extract import router as _extract_router
 from . import docs as _docs
 from . import pricing as _pricing
+from . import bundles as _bundles
 
 router = APIRouter(prefix="/api/v2")
 router.include_router(_legislative_router)
@@ -233,6 +234,7 @@ router.include_router(_extract_router)
 # Scalar docs + filtered OpenAPI spec → /api/v2/docs and /api/v2/openapi.json
 router.include_router(_docs.router)
 router.include_router(_pricing.router)
+router.include_router(_bundles.router)
 
 # Canonical public docs alias: /api/docs and /api/openapi.json serve the v2
 # Scalar viewer and v2 spec. This is the ONLY API reference Brubru links publicly.

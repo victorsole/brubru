@@ -21,7 +21,7 @@ route table (the default order, then the oldest items, bodies on), it judges
 No LLM, read only, small pages (egress: never a walk of the API). Prints one block per list with its
 findings and exits 1 if any list has one that no open register item explains (KNOWN).
 
-Run: BRUBRU_API_KEY=... python3.12 scripts/audit_funding_datapoints.py [--only budgets,awards] [--json out.json]
+Run: BRUBRU_API_KEY=... python3.12 scripts/audit_funding_datapoints.py [--only budgets,awards] [--bundle people] [--json out.json]
 """
 from __future__ import annotations
 
@@ -255,6 +255,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--base", default=BASE)
     ap.add_argument("--only", default="", help="comma-separated list slugs (e.g. budgets,awards)")
+    ap.add_argument("--bundle", default="", help="audit every list in this API bundle instead of the funding lists (ids: /api/v2/bundles)")
     ap.add_argument("--json", default=None, help="write the full findings here")
     args = ap.parse_args()
     key = os.environ.get("BRUBRU_API_KEY")
@@ -271,11 +272,16 @@ def main() -> int:
                    if p.startswith(PREFIX) and "get" in ops and not p.endswith("}") and not p.endswith("/documents")
                    and (not only or p[len(PREFIX):] in only))
     lists += [p for p in AGENCY_LISTS if not only or p[len("/api/v2/"):] in only]
+    if args.bundle:     # every list in one API bundle (Victor, 3 Nov 2026: bundles let us audit them better)
+        lists = sorted(p for p, ops in spec["paths"].items()
+                       if "get" in ops and args.bundle in ops["get"].get("x-brubru-bundles", []) and not p.endswith("}")
+                       and (not only or p[len("/api/v2/"):] in only))
     now = datetime.now(timezone.utc)
     report, failing, known = {}, 0, 0
     for path in lists:
         slug = path[len(PREFIX):] if path.startswith(PREFIX) else path[len("/api/v2/"):]
-        bodies = {"include_body": "true"} if path in AGENCY_LISTS else {}
+        declares_body = any(p.get("name") == "include_body" for p in spec["paths"][path]["get"].get("parameters", []))
+        bodies = {"include_body": "true"} if path in AGENCY_LISTS or (args.bundle and declares_body) else {}
         order_doc = " ".join(str(p.get("description") or "") for p in spec["paths"][path]["get"].get("parameters", [])
                              if p.get("name") == "order")
         s, d = api.get(path, limit=PAGE, **bodies)
@@ -283,6 +289,9 @@ def main() -> int:
             print(f"[FAIL] {slug}: HTTP {s}")
             failing += 1
             report[slug] = {"http": s}
+            continue
+        if args.bundle and not isinstance(d.get("data"), list):
+            print(f"[SKIP] {slug}: not a list of items (a folder's directory or a statistic)")
             continue
         items = list(d.get("data") or [])
         total = d.get("total")

@@ -32,8 +32,9 @@ from sqlalchemy.orm import Session
 
 from api.auth import get_current_user
 from core.database import get_db
-from models.api_key import ApiKey, DEFAULT_SELF_SERVE_EXPIRY_DAYS
+from models.api_key import ApiKey, DEFAULT_SELF_SERVE_EXPIRY_DAYS, BUNDLE_PREFIX
 from models.user import User
+from services.api_keys.bundles import get_bundle
 from services.api_keys.scopes import (
     SCOPE_CATALOGUE,
     all_self_serve_scopes,
@@ -78,6 +79,11 @@ class CreateKeyRequest(BaseModel):
         min_length=1,
         max_length=20,
         description="One or more read:* scopes from the catalogue. Wildcard '*' is reserved for admins.",
+    )
+    bundles: Optional[List[str]] = Field(
+        default=None,
+        max_length=20,
+        description="Limit the key to these API bundles (ids from GET /api/v2/bundles). Leave out for a key with no such limit.",
     )
     expires_in_days: int = Field(
         default=DEFAULT_SELF_SERVE_EXPIRY_DAYS,
@@ -202,6 +208,16 @@ async def mint_my_api_key(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail={"error": str(exc), "reason_code": "invalid_scopes"},
         )
+
+    # ---- Bundles: the limit is the bundle, so the key holds every read scope ---
+    if body.bundles:
+        unknown = [b for b in body.bundles if get_bundle(b) is None]
+        if unknown:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail={"error": f"Unknown bundle: {unknown[0]}. See /api/v2/bundles.", "reason_code": "invalid_bundles"},
+            )
+        scopes = all_self_serve_scopes() + [f"{BUNDLE_PREFIX}{b}" for b in dict.fromkeys(body.bundles)]
 
     # ---- Validate expiry ------------------------------------------------
     if body.expires_in_days not in ALLOWED_EXPIRY_DAYS:

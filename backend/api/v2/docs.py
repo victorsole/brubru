@@ -13,6 +13,7 @@ v2 surface. The legacy v1 viewer has been retired (its raw spec stays available 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
+from services.api_keys.bundles import bundles_of
 from services.vocabularies.licences import BRUBRU_DATA_TERMS, BRUBRU_DATA_TERMS_TITLE
 
 router = APIRouter(tags=["v2-docs"])
@@ -62,6 +63,8 @@ def v2_openapi(request: Request) -> JSONResponse:
         "schema": {"type": "string", "enum": ["json", "csv", "xlsx"], "default": "json"},
     }
     for _p, _item in paths.items():
+        if _item.get("get"):
+            _item["get"]["x-brubru-bundles"] = bundles_of(_p)   # which bundles this route sits in
         if "{" in _p:                       # detail-by-id returns a single object, not a list
             continue
         op = _item.get("get")

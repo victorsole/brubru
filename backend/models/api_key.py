@@ -36,6 +36,7 @@ from core.database import Base
 
 KEY_PREFIX = "brubru_live_"
 ROUTE_PREFIX = "route:"
+BUNDLE_PREFIX = "bundle:"
 _RANDOM_BYTES = 24  # 192 bits of entropy; token_hex(24) returns 48 hex chars
 DEFAULT_SELF_SERVE_EXPIRY_DAYS = 180
 
@@ -111,11 +112,22 @@ class ApiKey(Base):
         For an evaluator's key (Victor, 2 Nov 2026: "a taste of the API, not everything"), since one scope
         opens over 100 routes. A limit only narrows: the scope check still applies on top of it.
         """
-        limits = self.route_limits
-        if not limits:
+        limits, bundles = self.route_limits, self.bundle_limits
+        if not limits and not bundles:
             return True
         path = path.rstrip("/")
-        return any(path == r or path.startswith(r + "/") for r in limits)
+        if any(path == r or path.startswith(r + "/") for r in limits):
+            return True
+        if not bundles:
+            return False
+        from services.api_keys.bundles import path_in_bundles
+        return path_in_bundles(path, bundles)
+
+    @property
+    def bundle_limits(self) -> List[str]:
+        """The API bundles this key is limited to, from its "bundle:<id>" entries; none on an ordinary key.
+        Stored by id and not as a list of routes, so a new route joins its bundle by itself."""
+        return [s[len(BUNDLE_PREFIX):] for s in (self.scopes or []) if isinstance(s, str) and s.startswith(BUNDLE_PREFIX)]
 
     @classmethod
     def generate(
