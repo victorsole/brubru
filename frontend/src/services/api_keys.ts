@@ -50,7 +50,16 @@ export interface ApiKeySummary {
 export interface CreateKeyRequest {
   name: string;
   scopes: string[];
+  bundles?: string[];
   expires_in_days: number;
+}
+
+export interface BundleSummary {
+  id: string;
+  label: string;
+  description: string;
+  routes: number;
+  lists: number;
 }
 
 export interface CreateKeyResponse {
@@ -80,6 +89,12 @@ export const ApiKeysService = {
   async getScopeCatalogue(): Promise<ScopeCatalogue> {
     const res = await axios.get<ScopeCatalogue>(`${API_BASE}/scopes`);
     return res.data;
+  },
+
+  /** The API's bundles with their route counts, from the live API. Public: no auth. */
+  async getBundles(): Promise<BundleSummary[]> {
+    const res = await axios.get<{ data: BundleSummary[] }>(`${import.meta.env.VITE_API_URL || ''}/api/v2/bundles`);
+    return res.data.data;
   },
 
   /** Mint a new key for the current user. Returns plaintext ONCE. */

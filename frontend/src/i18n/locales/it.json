@@ -2072,12 +2072,10 @@
       },
       "create": {
         "title": "Crea chiave API",
-        "subtitle": "Scegli gli ambiti necessari e la finestra di scadenza.",
+        "subtitle": "Scegli cosa apre questa chiave e quando scade.",
         "nameLabel": "Nome",
         "namePlaceholder": "Produzione, Locale, Integrazione GovClipping…",
         "nameHint": "Tra 3 e 100 caratteri. Visibile solo a te.",
-        "scopesLabel": "Cosa può fare questa chiave?",
-        "scopesHint": "Ogni ambito sblocca un gruppo di endpoint /api/v1/*. Spunta ciò che ti serve; lascia il resto.",
         "loadingScopes": "Caricamento del catalogo degli ambiti…",
         "expiryLabel": "Scade dopo",
         "expiryHint": "Trascorsa questa finestra la chiave smette di funzionare. Puoi crearne una nuova in qualsiasi momento.",
@@ -2092,14 +2090,20 @@
         "cancel": "Annulla",
         "errors": {
           "nameLength": "Il nome deve essere tra 3 e 100 caratteri.",
-          "scopesRequired": "Scegli almeno un ambito.",
           "invalid_scopes": "Uno degli ambiti scelti non è ammesso. Scegli solo dalla lista.",
           "invalid_expiry": "Scegli una finestra di scadenza valida.",
           "key_cap_reached": "Hai già 3 chiavi attive. Revoca una chiave inutilizzata per crearne una nuova.",
           "mint_rate_limited": "Troppe chiavi create nell'ultima ora. Riprova più tardi.",
           "validation_error": "Uno dei campi non è valido. Verifica e riprova.",
-          "unknown": "Non siamo riusciti a creare la chiave. Riprova o scrivi a hello@beresol.eu."
-        }
+          "unknown": "Non siamo riusciti a creare la chiave. Riprova o scrivi a hello@beresol.eu.",
+          "bundlesRequired": "Scegli almeno un pacchetto.",
+          "invalid_bundles": "Uno dei pacchetti scelti non è disponibile. Scegli solo dalla lista."
+        },
+        "accessLabel": "Cosa deve aprire questa chiave?",
+        "accessAll": "Tutte le rotte",
+        "accessAllDesc": "Tutto ciò che serve l'API, e ogni rotta aggiunta in seguito.",
+        "accessBundles": "Solo i pacchetti che scelgo",
+        "accessBundlesDesc": "La chiave viene rifiutata su tutto il resto, e le nuove rotte entrano da sole nel loro pacchetto. Una chiave limitata non apre gli strumenti MCP."
       },
       "reveal": {
         "title": "Salva questa chiave ora",
@@ -2251,7 +2255,48 @@
       "copy": "Copia",
       "copied": "Copiato",
       "codeNote": "La stessa chiamata dal tuo codice. Sostituisci YOUR_API_KEY con la tua chiave.",
-      "requestId": "Id della richiesta:"
+      "requestId": "Id della richiesta:",
+      "bundleLabel": "Mostra",
+      "allRoutes": "Tutte le rotte",
+      "bundleCardsLabel": "Scegli ciò che ti serve"
+    },
+    "bundles": {
+      "official-journal": {
+        "name": "Gazzetta ufficiale",
+        "desc": "Ciò che l'UE pubblica ogni giorno: i suoi atti, per data o per riferimento."
+      },
+      "legislation": {
+        "name": "Leggi e processo legislativo",
+        "desc": "Le leggi dell'UE e i loro fascicoli: procedure, emendamenti, votazioni, documenti del Consiglio, sentenze."
+      },
+      "funding-procurement": {
+        "name": "Finanziamenti e appalti",
+        "desc": "Ogni bando, gara e aggiudicazione, programmi e bilanci dell'UE, e con chi associarsi."
+      },
+      "news-events": {
+        "name": "Notizie ed eventi",
+        "desc": "Notizie, comunicati ed eventi di tutte le istituzioni e di tutti gli organismi dell'UE."
+      },
+      "agencies-bodies": {
+        "name": "Agenzie e organismi",
+        "desc": "Tutto dalle agenzie dell'UE, dalle sue istituzioni finanziarie, corti e organi consultivi."
+      },
+      "people": {
+        "name": "Persone e organizzazioni",
+        "desc": "Alti funzionari, eurodeputati e i loro assistenti, commissari, lobbisti e il registro per la trasparenza."
+      },
+      "consultations": {
+        "name": "Consultazioni pubbliche",
+        "desc": "Consultazioni della Commissione e delle agenzie, e le risposte ricevute."
+      },
+      "enforcement-markets": {
+        "name": "Controlli e mercati",
+        "desc": "Infrazioni, concorrenza, aiuti di Stato, sanzioni, difesa commerciale, dazi e passaporti dei prodotti."
+      },
+      "research-data": {
+        "name": "Ricerca e dati",
+        "desc": "Studi e pubblicazioni, il servizio di ricerca del Parlamento, dati aperti e statistiche."
+      }
     }
   },
   "auth": {

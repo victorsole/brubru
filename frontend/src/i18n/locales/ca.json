@@ -1016,12 +1016,10 @@
       },
       "create": {
         "title": "Crear clau API",
-        "subtitle": "Tria els àmbits que aquesta clau necessita i la finestra de caducitat.",
+        "subtitle": "Tria què obre aquesta clau i quan caduca.",
         "nameLabel": "Nom",
         "namePlaceholder": "Producció, Local, Integració GovClipping…",
         "nameHint": "Entre 3 i 100 caràcters. Només la veus tu.",
-        "scopesLabel": "Què pot fer aquesta clau?",
-        "scopesHint": "Cada àmbit desbloqueja un grup d'endpoints /api/v1/*. Marca el que necessitis; deixa la resta sense marcar.",
         "loadingScopes": "Carregant el catàleg d'àmbits…",
         "expiryLabel": "Caduca al cap de",
         "expiryHint": "Passada aquesta finestra la clau deixa de funcionar. Pots rotar-la quan vulguis.",
@@ -1036,14 +1034,20 @@
         "cancel": "Cancel·lar",
         "errors": {
           "nameLength": "El nom ha de tenir entre 3 i 100 caràcters.",
-          "scopesRequired": "Tria almenys un àmbit.",
           "invalid_scopes": "Algun dels àmbits triats no és permès. Tria només els de la llista.",
           "invalid_expiry": "Tria una finestra de caducitat vàlida.",
           "key_cap_reached": "Ja tens 3 claus actives. Revoca'n una de no utilitzada per crear-ne una de nova.",
           "mint_rate_limited": "Massa claus creades a l'última hora. Torna-ho a provar més tard.",
           "validation_error": "Algun camp no és vàlid. Revisa'l i torna-ho a provar.",
-          "unknown": "No hem pogut crear la clau. Torna-ho a provar o escriu a hello@beresol.eu."
-        }
+          "unknown": "No hem pogut crear la clau. Torna-ho a provar o escriu a hello@beresol.eu.",
+          "bundlesRequired": "Tria almenys un paquet.",
+          "invalid_bundles": "Un dels paquets triats no està disponible. Tria només de la llista."
+        },
+        "accessLabel": "Què ha d'obrir aquesta clau?",
+        "accessAll": "Totes les rutes",
+        "accessAllDesc": "Tot el que serveix l'API, i cada ruta que s'hi afegeixi.",
+        "accessBundles": "Només els paquets que triï",
+        "accessBundlesDesc": "La clau es rebutja en tota la resta, i les rutes noves entren soles al seu paquet. Una clau limitada no obre les eines MCP."
       },
       "reveal": {
         "title": "Desa aquesta clau ara",
@@ -1195,7 +1199,48 @@
       "copy": "Copia",
       "copied": "Copiat",
       "codeNote": "La mateixa crida des del teu propi codi. Substitueix YOUR_API_KEY per la teva clau.",
-      "requestId": "Id. de la petició:"
+      "requestId": "Id. de la petició:",
+      "bundleLabel": "Mostra",
+      "allRoutes": "Totes les rutes",
+      "bundleCardsLabel": "Tria el que necessites"
+    },
+    "bundles": {
+      "official-journal": {
+        "name": "Diari Oficial",
+        "desc": "El que la UE publica cada dia: els seus actes, per data o per referència."
+      },
+      "legislation": {
+        "name": "Lleis i procés legislatiu",
+        "desc": "Les lleis de la UE i els seus expedients: procediments, esmenes, votacions, documents del Consell, sentències."
+      },
+      "funding-procurement": {
+        "name": "Finançament i contractació",
+        "desc": "Cada convocatòria, licitació i adjudicació, programes i pressupostos de la UE, i amb qui associar-se."
+      },
+      "news-events": {
+        "name": "Notícies i esdeveniments",
+        "desc": "Notícies, notes de premsa i esdeveniments de totes les institucions i organismes de la UE."
+      },
+      "agencies-bodies": {
+        "name": "Agències i organismes",
+        "desc": "Tot de les agències de la UE, les seves institucions financeres, tribunals i òrgans consultius."
+      },
+      "people": {
+        "name": "Persones i organitzacions",
+        "desc": "Alts càrrecs, eurodiputats i els seus assistents, comissaris, grups de pressió i el Registre de Transparència."
+      },
+      "consultations": {
+        "name": "Consultes públiques",
+        "desc": "Consultes de la Comissió i de les agències, i les respostes que reben."
+      },
+      "enforcement-markets": {
+        "name": "Control i mercats",
+        "desc": "Infraccions, competència, ajuts d'estat, sancions, defensa comercial, aranzels i passaports de producte."
+      },
+      "research-data": {
+        "name": "Recerca i dades",
+        "desc": "Estudis i publicacions, el servei d'estudis del Parlament, dades obertes i estadístiques."
+      }
     }
   },
   "auth": {

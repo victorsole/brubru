@@ -1016,12 +1016,10 @@
       },
       "create": {
         "title": "Créer une clé API",
-        "subtitle": "Choisissez les périmètres dont cette clé a besoin et la fenêtre d'expiration.",
+        "subtitle": "Choisissez ce que cette clé ouvre et quand elle expire.",
         "nameLabel": "Nom",
         "namePlaceholder": "Production, Local, Intégration GovClipping…",
         "nameHint": "Entre 3 et 100 caractères. Visible uniquement par vous.",
-        "scopesLabel": "Que peut faire cette clé ?",
-        "scopesHint": "Chaque périmètre débloque un groupe d'endpoints /api/v1/*. Cochez ce dont vous avez besoin ; laissez le reste décoché.",
         "loadingScopes": "Chargement du catalogue de périmètres…",
         "expiryLabel": "Expire après",
         "expiryHint": "Passée cette fenêtre, la clé ne fonctionne plus. Vous pouvez en générer une nouvelle à tout moment.",
@@ -1036,14 +1034,20 @@
         "cancel": "Annuler",
         "errors": {
           "nameLength": "Le nom doit contenir entre 3 et 100 caractères.",
-          "scopesRequired": "Choisissez au moins un périmètre.",
           "invalid_scopes": "L'un des périmètres choisis n'est pas autorisé. Choisissez uniquement dans la liste.",
           "invalid_expiry": "Choisissez une fenêtre d'expiration valide.",
           "key_cap_reached": "Vous avez déjà 3 clés actives. Révoquez-en une inutilisée pour en créer une nouvelle.",
           "mint_rate_limited": "Trop de clés créées dans la dernière heure. Réessayez plus tard.",
           "validation_error": "Un des champs est invalide. Vérifiez et réessayez.",
-          "unknown": "Nous n'avons pas pu créer la clé. Réessayez ou contactez hello@beresol.eu."
-        }
+          "unknown": "Nous n'avons pas pu créer la clé. Réessayez ou contactez hello@beresol.eu.",
+          "bundlesRequired": "Choisissez au moins un ensemble.",
+          "invalid_bundles": "Un des ensembles choisis n'est pas disponible. Choisissez seulement dans la liste."
+        },
+        "accessLabel": "Que doit ouvrir cette clé ?",
+        "accessAll": "Toutes les routes",
+        "accessAllDesc": "Tout ce que sert l'API, et chaque route ajoutée ensuite.",
+        "accessBundles": "Seulement les ensembles choisis",
+        "accessBundlesDesc": "La clé est refusée sur tout le reste, et les nouvelles routes rejoignent seules leur ensemble. Une clé limitée n'ouvre pas les outils MCP."
       },
       "reveal": {
         "title": "Enregistrez cette clé maintenant",
@@ -1195,7 +1199,48 @@
       "copy": "Copier",
       "copied": "Copié",
       "codeNote": "Le même appel depuis votre code. Remplacez YOUR_API_KEY par votre clé.",
-      "requestId": "Id. de la requête :"
+      "requestId": "Id. de la requête :",
+      "bundleLabel": "Afficher",
+      "allRoutes": "Toutes les routes",
+      "bundleCardsLabel": "Choisissez ce dont vous avez besoin"
+    },
+    "bundles": {
+      "official-journal": {
+        "name": "Journal officiel",
+        "desc": "Ce que l'UE publie chaque jour : ses actes, par date ou par référence."
+      },
+      "legislation": {
+        "name": "Lois et processus législatif",
+        "desc": "Les lois de l'UE et leurs dossiers : procédures, amendements, votes, documents du Conseil, arrêts."
+      },
+      "funding-procurement": {
+        "name": "Financements et marchés publics",
+        "desc": "Chaque appel, marché et attribution, les programmes et budgets de l'UE, et avec qui s'associer."
+      },
+      "news-events": {
+        "name": "Actualités et événements",
+        "desc": "Actualités, communiqués et événements de toutes les institutions et de tous les organes de l'UE."
+      },
+      "agencies-bodies": {
+        "name": "Agences et organes",
+        "desc": "Tout ce qui vient des agences de l'UE, de ses institutions financières, cours et organes consultatifs."
+      },
+      "people": {
+        "name": "Personnes et organisations",
+        "desc": "Hauts fonctionnaires, eurodéputés et leurs assistants, commissaires, lobbyistes et le registre de transparence."
+      },
+      "consultations": {
+        "name": "Consultations publiques",
+        "desc": "Consultations de la Commission et des agences, et les réponses reçues."
+      },
+      "enforcement-markets": {
+        "name": "Contrôle et marchés",
+        "desc": "Infractions, concurrence, aides d'État, sanctions, défense commerciale, droits de douane et passeports produits."
+      },
+      "research-data": {
+        "name": "Recherche et données",
+        "desc": "Études et publications, le service de recherche du Parlement, données ouvertes et statistiques."
+      }
     }
   },
   "auth": {

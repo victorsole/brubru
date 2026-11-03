@@ -1,14 +1,15 @@
 // frontend/src/components/api/create_key_modal.tsx
 //
-// Mint a new API key. Fetches the scope catalogue from the backend, lets the
-// user pick scopes + expiry, validates locally, POSTs to /api/me/api-keys, and
-// hands the plaintext response back to the parent (which opens the reveal
+// Mint a new API key. Lets the user open every route or only the API bundles
+// they pick, and choose an expiry; validates locally, POSTs to /api/me/api-keys,
+// and hands the plaintext response back to the parent (which opens the reveal
 // modal).
 
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import type {
+  BundleSummary,
   CreateKeyRequest,
   CreateKeyResponse,
   ScopeCatalogue,
@@ -29,7 +30,9 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
   const [catalogueError, setCatalogueError] = useState<string | null>(null);
 
   const [name, setName] = useState('');
-  const [scopes, setScopes] = useState<Set<string>>(new Set());
+  const [limited, setLimited] = useState(false);
+  const [bundles, setBundles] = useState<BundleSummary[]>([]);
+  const [chosen, setChosen] = useState<Set<string>>(new Set());
   const [expiresInDays, setExpiresInDays] = useState<number>(180);
 
   const [submitting, setSubmitting] = useState(false);
@@ -60,12 +63,14 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
         const cat = await ApiKeysService.getScopeCatalogue();
         if (cancelled) return;
         setCatalogue(cat);
-        setScopes(new Set(cat.defaults));
+        ApiKeysService.getBundles()
+          .then((list) => { if (!cancelled) setBundles(list); })
+          .catch(() => { if (!cancelled) setBundles([]); });
         // Pick 180 if available else the first option
         if (cat.expiry_options_days.includes(180)) setExpiresInDays(180);
         else if (cat.expiry_options_days.length > 0) setExpiresInDays(cat.expiry_options_days[0]);
       } catch (e) {
-        if (!cancelled) setCatalogueError(e instanceof Error ? e.message : 'Failed to load scopes');
+        if (!cancelled) setCatalogueError(e instanceof Error ? e.message : 'Failed to load');
       } finally {
         if (!cancelled) setLoadingCatalogue(false);
       }
@@ -73,11 +78,11 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
     return () => { cancelled = true; };
   }, []);
 
-  const toggleScope = (scopeName: string) => {
-    setScopes((prev) => {
+  const toggleBundle = (id: string) => {
+    setChosen((prev) => {
       const next = new Set(prev);
-      if (next.has(scopeName)) next.delete(scopeName);
-      else next.add(scopeName);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
     setScopesError(null);
@@ -87,10 +92,11 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
     return (
       name.trim().length >= 3 &&
       name.trim().length <= 100 &&
-      scopes.size > 0 &&
+      catalogue !== null &&
+      (!limited || chosen.size > 0) &&
       !submitting
     );
-  }, [name, scopes, submitting]);
+  }, [name, catalogue, limited, chosen, submitting]);
 
   const validate = (): boolean => {
     let ok = true;
@@ -101,8 +107,8 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
     } else {
       setNameError(null);
     }
-    if (scopes.size === 0) {
-      setScopesError(t('api.keys.create.errors.scopesRequired') as string);
+    if (limited && chosen.size === 0) {
+      setScopesError(t('api.keys.create.errors.bundlesRequired') as string);
       ok = false;
     } else {
       setScopesError(null);
@@ -119,7 +125,8 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
 
     const payload: CreateKeyRequest = {
       name: name.trim(),
-      scopes: Array.from(scopes),
+      scopes: catalogue?.defaults ?? [],
+      ...(limited ? { bundles: Array.from(chosen) } : {}),
       expires_in_days: expiresInDays,
     };
 
@@ -197,11 +204,11 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
             <span className="api-keys-field__hint">{t('api.keys.create.nameHint')}</span>
           </div>
 
-          {/* --- Scopes --------------------------------------------------- */}
+          {/* --- What it opens ---------------------------------------------- */}
           <div className="api-keys-field">
-            <label className="api-keys-field__label">
-              {t('api.keys.create.scopesLabel')}
-            </label>
+            <span className="api-keys-field__label">
+              {t('api.keys.create.accessLabel')}
+            </span>
             {loadingCatalogue && (
               <div className="api-keys-loading">{t('api.keys.create.loadingScopes')}</div>
             )}
@@ -210,27 +217,35 @@ export const CreateKeyModal = ({ onClose, onCreated }: Props) => {
             )}
             {catalogue && (
               <div className="api-keys-scopes-grid">
-                {catalogue.scopes.map((s) => (
-                  <label key={s.name} className="api-keys-scope-row">
-                    <input
-                      type="checkbox"
-                      checked={scopes.has(s.name)}
-                      onChange={() => toggleScope(s.name)}
-                      disabled={submitting}
-                    />
+                <label className="api-keys-scope-row">
+                  <input type="radio" name="ak-access" checked={!limited} onChange={() => { setLimited(false); setScopesError(null); }} disabled={submitting} />
+                  <div>
+                    <div><span className="api-keys-scope-row__label">{t('api.keys.create.accessAll')}</span></div>
+                    <div className="api-keys-scope-row__desc">{t('api.keys.create.accessAllDesc')}</div>
+                  </div>
+                </label>
+                <label className="api-keys-scope-row">
+                  <input type="radio" name="ak-access" checked={limited} onChange={() => setLimited(true)} disabled={submitting || bundles.length === 0} />
+                  <div>
+                    <div><span className="api-keys-scope-row__label">{t('api.keys.create.accessBundles')}</span></div>
+                    <div className="api-keys-scope-row__desc">{t('api.keys.create.accessBundlesDesc')}</div>
+                  </div>
+                </label>
+                {limited && bundles.map((b) => (
+                  <label key={b.id} className="api-keys-scope-row api-keys-scope-row--indented">
+                    <input type="checkbox" checked={chosen.has(b.id)} onChange={() => toggleBundle(b.id)} disabled={submitting} />
                     <div>
                       <div>
-                        <span className="api-keys-scope-row__name">{s.name}</span>
-                        <span className="api-keys-scope-row__label">{s.label}</span>
+                        <span className="api-keys-scope-row__label">{t(`api.bundles.${b.id}.name`, { defaultValue: b.label })}</span>
+                        <span className="api-keys-scope-row__count"> ({t('api.console.resultCount', { count: b.routes })})</span>
                       </div>
-                      <div className="api-keys-scope-row__desc">{s.description}</div>
+                      <div className="api-keys-scope-row__desc">{t(`api.bundles.${b.id}.desc`, { defaultValue: b.description })}</div>
                     </div>
                   </label>
                 ))}
               </div>
             )}
             {scopesError && <span className="api-keys-field__error">{scopesError}</span>}
-            <span className="api-keys-field__hint">{t('api.keys.create.scopesHint')}</span>
           </div>
 
           {/* --- Expiry --------------------------------------------------- */}

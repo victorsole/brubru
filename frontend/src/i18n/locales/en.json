@@ -1016,12 +1016,10 @@
       },
       "create": {
         "title": "Create API key",
-        "subtitle": "Pick the scopes this key needs and choose an expiry window.",
+        "subtitle": "Choose what this key opens and when it expires.",
         "nameLabel": "Name",
         "namePlaceholder": "Production, Local dev, GovClipping integration…",
         "nameHint": "3–100 characters. Visible only to you.",
-        "scopesLabel": "What can this key do?",
-        "scopesHint": "Each scope unlocks a related group of /api/v1/* endpoints. Tick what you need; leave the rest off.",
         "loadingScopes": "Loading the scope catalogue…",
         "expiryLabel": "Expires after",
         "expiryHint": "After this window the key stops working. You can rotate to a new one at any time.",
@@ -1036,14 +1034,20 @@
         "cancel": "Cancel",
         "errors": {
           "nameLength": "Name must be between 3 and 100 characters.",
-          "scopesRequired": "Pick at least one scope.",
           "invalid_scopes": "One of the chosen scopes is not allowed. Pick only scopes from the list.",
           "invalid_expiry": "Pick a valid expiry window from the dropdown.",
           "key_cap_reached": "You already have 3 active keys. Revoke an unused one to create a new one.",
           "mint_rate_limited": "Too many keys minted in the last hour. Try again later.",
           "validation_error": "One of the fields is invalid. Please review and try again.",
-          "unknown": "We could not create the key. Please try again or contact hello@beresol.eu."
-        }
+          "unknown": "We could not create the key. Please try again or contact hello@beresol.eu.",
+          "bundlesRequired": "Pick at least one bundle.",
+          "invalid_bundles": "One of the chosen bundles is not available. Pick only from the list."
+        },
+        "accessLabel": "What should this key open?",
+        "accessAll": "Every route",
+        "accessAllDesc": "Everything the API serves, and every route added later.",
+        "accessBundles": "Only the bundles I choose",
+        "accessBundlesDesc": "The key is refused on anything else, and new routes join their bundle by themselves. A limited key does not open the MCP tools."
       },
       "reveal": {
         "title": "Save this key now",
@@ -1195,7 +1199,48 @@
       "copy": "Copy",
       "copied": "Copied",
       "codeNote": "The same call from your own code. Replace YOUR_API_KEY with your key.",
-      "requestId": "Request id:"
+      "requestId": "Request id:",
+      "bundleLabel": "Show",
+      "allRoutes": "All routes",
+      "bundleCardsLabel": "Choose what you need"
+    },
+    "bundles": {
+      "official-journal": {
+        "name": "Official Journal",
+        "desc": "What the EU publishes each day: its acts, by date or by reference."
+      },
+      "legislation": {
+        "name": "Laws and the legislative process",
+        "desc": "EU laws and the files behind them: procedures, amendments, votes, Council documents, court rulings."
+      },
+      "funding-procurement": {
+        "name": "Funding and procurement",
+        "desc": "Every call, tender and award, EU programmes and budgets, and who can partner."
+      },
+      "news-events": {
+        "name": "News and events",
+        "desc": "News, press releases and events from every EU institution and body."
+      },
+      "agencies-bodies": {
+        "name": "Agencies and bodies",
+        "desc": "Everything from the EU's agencies, financial institutions, courts and advisory bodies."
+      },
+      "people": {
+        "name": "People and organisations",
+        "desc": "Officials, MEPs and their assistants, Commissioners, lobbyists and the Transparency Register."
+      },
+      "consultations": {
+        "name": "Public consultations",
+        "desc": "Consultations of the Commission and the agencies, and the feedback they receive."
+      },
+      "enforcement-markets": {
+        "name": "Enforcement and markets",
+        "desc": "Infringements, competition, state aid, sanctions, trade defence, tariffs and product passports."
+      },
+      "research-data": {
+        "name": "Research and data",
+        "desc": "Studies and publications, Parliament's research service, open data and statistics."
+      }
     }
   },
   "auth": {

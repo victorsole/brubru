@@ -28,6 +28,7 @@ export interface ConsoleOperation {
   deprecated: boolean;
   params: ConsoleParam[];
   searchText: string;
+  bundles: string[];
 }
 
 export interface ConsoleFolder {
@@ -115,6 +116,7 @@ export function parseSpec(spec: any): ConsoleCatalogue {
       deprecated: get.deprecated === true,
       params,
       searchText: normaliseText(`${path} ${summary} ${description}`),
+      bundles: Array.isArray(get['x-brubru-bundles']) ? get['x-brubru-bundles'] : [],
     });
   }
   operations.sort((a, b) => a.path.localeCompare(b.path));
@@ -131,6 +133,36 @@ export function parseSpec(spec: any): ConsoleCatalogue {
     .map(([id, ops]) => ({ id, operations: ops }))
     .sort((a, b) => rank(a.id) - rank(b.id) || a.id.localeCompare(b.id));
   return { folders, operations };
+}
+
+// The bundles in the order a user reads them (backend: services/api_keys/bundles.py). Names are in the locales.
+export const BUNDLE_ORDER = [
+  'official-journal', 'legislation', 'funding-procurement', 'news-events', 'agencies-bodies',
+  'people', 'consultations', 'enforcement-markets', 'research-data',
+];
+
+// The route a bundle opens on: a list of real rows, not a folder's directory.
+const BUNDLE_START: Record<string, string> = {
+  'official-journal': '/api/v2/legislative/eur-lex/recent',
+  legislation: '/api/v2/legislative/eur-lex/laws',
+  'funding-procurement': '/api/v2/funding/opportunities',
+  'news-events': '/api/v2/news/all',
+  'agencies-bodies': '/api/v2/ema/news',
+  people: '/api/v2/who-is-who/officials',
+  consultations: '/api/v2/consultations/all',
+  'enforcement-markets': '/api/v2/commission/infringements',
+  'research-data': '/api/v2/open-data/datasets',
+};
+
+export function bundleCount(catalogue: ConsoleCatalogue, bundle: string): number {
+  return catalogue.operations.filter((op) => op.bundles.includes(bundle)).length;
+}
+
+export function startOfBundle(catalogue: ConsoleCatalogue, bundle: string): ConsoleOperation | undefined {
+  const inside = catalogue.operations.filter((op) => op.bundles.includes(bundle));
+  return inside.find((op) => op.path === BUNDLE_START[bundle])
+    || inside.find((op) => !op.path.includes('{') && op.path.split('/').length > 4)
+    || inside[0];
 }
 
 export function searchOperations(catalogue: ConsoleCatalogue, query: string): ConsoleOperation[] {

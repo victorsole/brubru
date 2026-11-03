@@ -517,6 +517,9 @@
   transition: background 0.1s ease;
 }
 
+.api-keys-scope-row--indented { margin-left: 1.5rem; }
+.api-keys-scope-row__count { font-size: 0.8rem; color: #4b5563; }
+
 .api-keys-scope-row:hover {
   background: #f7f9fc;
 }

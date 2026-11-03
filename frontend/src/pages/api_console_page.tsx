@@ -22,7 +22,7 @@ export const ApiConsolePage = () => {
           <a href="/api/docs"><span className="mdi mdi-book-open-variant" aria-hidden="true" /> {t('api.cta.reference')}</a>
         </div>
       </div>
-      <ApiConsole initialRoute={params.get('route')} />
+      <ApiConsole initialRoute={params.get('route')} initialBundle={params.get('bundle')} />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import type { ConsoleCatalogue, ConsoleOperation, ConsolePricing, ConsoleResponse } from '../../services/api_console';
-import { buildRequestPath, initialValues, loadCatalogue, loadPricing, sendRequest } from '../../services/api_console';
+import { BUNDLE_ORDER, buildRequestPath, bundleCount, initialValues, loadCatalogue, loadPricing, sendRequest, startOfBundle } from '../../services/api_console';
 import { CataloguePane } from './catalogue_pane';
 import { RequestPane } from './request_pane';
 import { ResponsePane } from './response_pane';
@@ -22,14 +22,16 @@ const STARTERS: Array<{ path: string; key: string }> = [
 interface Props {
   compact?: boolean;
   initialRoute?: string | null;
+  initialBundle?: string | null;
 }
 
-export const ApiConsole = ({ compact = false, initialRoute = null }: Props) => {
+export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle = null }: Props) => {
   const { t } = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const [wanted, setWanted] = useState(!compact);
+  const [bundle, setBundle] = useState(BUNDLE_ORDER.includes(initialBundle || '') ? (initialBundle as string) : '');
   const [catalogue, setCatalogue] = useState<ConsoleCatalogue | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [pricing, setPricing] = useState<ConsolePricing | null>(null);
@@ -79,10 +81,19 @@ export const ApiConsole = ({ compact = false, initialRoute = null }: Props) => {
   useEffect(() => {
     if (!catalogue || selected) return;
     const first = catalogue.operations.find((op) => op.path === initialRoute)
+      || (bundle ? startOfBundle(catalogue, bundle) : undefined)
       || catalogue.operations.find((op) => op.path === STARTERS[0].path)
       || catalogue.operations[0];
     if (first) select(first);
-  }, [catalogue, selected, initialRoute, select]);
+  }, [catalogue, selected, initialRoute, bundle, select]);
+
+  // Choosing a bundle makes no call: it narrows the list, and moves off a route that is not in it.
+  const chooseBundle = useCallback((next: string) => {
+    setBundle(next);
+    if (!catalogue || !next || selected?.bundles.includes(next)) return;
+    const start = startOfBundle(catalogue, next);
+    if (start) select(start);
+  }, [catalogue, selected, select]);
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
@@ -109,17 +120,41 @@ export const ApiConsole = ({ compact = false, initialRoute = null }: Props) => {
 
   return (
     <div ref={rootRef} className={`api-console${compact ? ' api-console--compact' : ''}`}>
+      {compact && (
+        <div className="api-console__bundles" role="group" aria-label={t('api.console.bundleCardsLabel')}>
+          {BUNDLE_ORDER.map((id) => {
+            const count = catalogue ? bundleCount(catalogue, id) : 0;
+            return (
+              <button
+                key={id}
+                type="button"
+                className={`api-console__bundle${bundle === id ? ' api-console__bundle--active' : ''}`}
+                aria-pressed={bundle === id}
+                onClick={() => chooseBundle(bundle === id ? '' : id)}
+              >
+                <strong>{t(`api.bundles.${id}.name`)}</strong>
+                <span>{t(`api.bundles.${id}.desc`)}</span>
+                {count > 0 && <small>{t('api.console.resultCount', { count })}</small>}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <div className="api-console__bar">
         <div className="api-console__starters">
-          {starters.length > 0 && <span className="api-console__starters-label">{t('api.console.start')}</span>}
-          {starters.map((s) => (
+          {!compact && starters.length > 0 && <span className="api-console__starters-label">{t('api.console.start')}</span>}
+          {!compact && starters.map((s) => (
             <button
               key={s.path}
               type="button"
               className={`api-console__starter${selected?.path === s.path ? ' api-console__starter--active' : ''}`}
               onClick={() => {
                 const op = catalogue?.operations.find((o) => o.path === s.path);
-                if (op) select(op, true);
+                if (op) {
+                  if (bundle && !op.bundles.includes(bundle)) setBundle('');
+                  select(op, true);
+                }
               }}
             >
               {t(`api.console.${s.key}`)}
@@ -135,7 +170,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null }: Props) => {
             </span>
           )}
           {compact && (
-            <Link className="api-console__full-link" to="/api/console">
+            <Link className="api-console__full-link" to={bundle ? `/api/console?bundle=${bundle}` : '/api/console'}>
               <span className="mdi mdi-arrow-expand" aria-hidden="true" /> {t('api.console.openFull')}
             </Link>
           )}
@@ -152,7 +187,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null }: Props) => {
 
       {catalogue && selected && (
         <div className="api-console__panes">
-          <CataloguePane catalogue={catalogue} selected={selected} onSelect={(op) => select(op, true)} />
+          <CataloguePane catalogue={catalogue} selected={selected} onSelect={(op) => select(op, true)} bundle={bundle} onBundle={chooseBundle} />
           <div ref={requestRef} className="api-console__request-anchor">
             <RequestPane
               op={selected}

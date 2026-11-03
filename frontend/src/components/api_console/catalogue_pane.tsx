@@ -1,9 +1,9 @@
 // frontend/src/components/api_console/catalogue_pane.tsx
 // Every route the API serves, from the live spec. Typing here only filters the list in the browser: no call is made.
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ConsoleCatalogue, ConsoleOperation } from '../../services/api_console';
-import { searchOperations } from '../../services/api_console';
+import { BUNDLE_ORDER, bundleCount, searchOperations } from '../../services/api_console';
 
 const MAX_RESULTS = 100;
 
@@ -11,6 +11,8 @@ interface Props {
   catalogue: ConsoleCatalogue;
   selected: ConsoleOperation | null;
   onSelect: (op: ConsoleOperation) => void;
+  bundle: string;
+  onBundle: (bundle: string) => void;
 }
 
 const Row = ({ op, active, onSelect }: { op: ConsoleOperation; active: boolean; onSelect: (op: ConsoleOperation) => void }) => {
@@ -31,16 +33,46 @@ const Row = ({ op, active, onSelect }: { op: ConsoleOperation; active: boolean; 
   );
 };
 
-export const CataloguePane = ({ catalogue, selected, onSelect }: Props) => {
+export const CataloguePane = ({ catalogue, selected, onSelect, bundle, onBundle }: Props) => {
   const { t, i18n } = useTranslation();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<string | null>(selected?.folder ?? null);
-  const results = useMemo(() => searchOperations(catalogue, query), [catalogue, query]);
+  const results = useMemo(
+    () => searchOperations(catalogue, query).filter((op) => !bundle || op.bundles.includes(bundle)),
+    [catalogue, query, bundle],
+  );
+  const folders = useMemo(() => (
+    bundle
+      ? catalogue.folders
+        .map((f) => ({ ...f, operations: f.operations.filter((op) => op.bundles.includes(bundle)) }))
+        .filter((f) => f.operations.length > 0)
+      : catalogue.folders
+  ), [catalogue, bundle]);
   const searching = query.trim().length > 0;
-  const count = catalogue.operations.length.toLocaleString(i18n.language);
+  const shown = bundle ? bundleCount(catalogue, bundle) : catalogue.operations.length;
+  const count = shown.toLocaleString(i18n.language);
+  const bundles = BUNDLE_ORDER.filter((id) => bundleCount(catalogue, id) > 0);
+
+  // The folder of the chosen route is the open one, including when a bundle chooses the route.
+  useEffect(() => {
+    if (selected) setOpen(selected.folder);
+  }, [selected]);
 
   return (
     <div className="api-console__pane api-console__pane--catalogue">
+      {bundles.length > 0 && (
+        <div className="api-console__bundle-picker">
+          <label htmlFor="api-console-bundle">{t('api.console.bundleLabel')}</label>
+          <select id="api-console-bundle" value={bundle} onChange={(e) => onBundle(e.target.value)}>
+            <option value="">{t('api.console.allRoutes')} ({catalogue.operations.length.toLocaleString(i18n.language)})</option>
+            {bundles.map((id) => (
+              <option key={id} value={id}>
+                {t(`api.bundles.${id}.name`, { defaultValue: id })} ({bundleCount(catalogue, id).toLocaleString(i18n.language)})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       <label className="api-console__sr-only" htmlFor="api-console-search">{t('api.console.search', { count })}</label>
       <input
         id="api-console-search"
@@ -68,7 +100,7 @@ export const CataloguePane = ({ catalogue, selected, onSelect }: Props) => {
             </ul>
           </>
         ) : (
-          catalogue.folders.map((folder) => {
+          folders.map((folder) => {
             const isOpen = open === folder.id;
             return (
               <div className="api-console__folder" key={folder.id}>

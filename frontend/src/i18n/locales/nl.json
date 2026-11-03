@@ -1016,12 +1016,10 @@
       },
       "create": {
         "title": "API-sleutel aanmaken",
-        "subtitle": "Kies de scopes die deze sleutel nodig heeft en de geldigheidsperiode.",
+        "subtitle": "Kies wat deze sleutel opent en wanneer hij verloopt.",
         "nameLabel": "Naam",
         "namePlaceholder": "Productie, Lokaal, GovClipping-integratie…",
         "nameHint": "3–100 tekens. Alleen jij ziet dit.",
-        "scopesLabel": "Wat mag deze sleutel doen?",
-        "scopesHint": "Elke scope geeft toegang tot een groep /api/v1/*-endpoints. Vink aan wat je nodig hebt; laat de rest staan.",
         "loadingScopes": "Scope-catalogus wordt geladen…",
         "expiryLabel": "Verloopt na",
         "expiryHint": "Na deze periode werkt de sleutel niet meer. Je kunt altijd een nieuwe aanmaken.",
@@ -1036,14 +1034,20 @@
         "cancel": "Annuleren",
         "errors": {
           "nameLength": "Naam moet tussen 3 en 100 tekens zijn.",
-          "scopesRequired": "Kies minstens één scope.",
           "invalid_scopes": "Een van de gekozen scopes is niet toegestaan. Kies alleen uit de lijst.",
           "invalid_expiry": "Kies een geldige geldigheidsperiode.",
           "key_cap_reached": "Je hebt al 3 actieve sleutels. Trek er een ongebruikte in om een nieuwe te maken.",
           "mint_rate_limited": "Te veel sleutels aangemaakt in het afgelopen uur. Probeer het later opnieuw.",
           "validation_error": "Een van de velden is ongeldig. Controleer en probeer opnieuw.",
-          "unknown": "We konden de sleutel niet aanmaken. Probeer het opnieuw of mail hello@beresol.eu."
-        }
+          "unknown": "We konden de sleutel niet aanmaken. Probeer het opnieuw of mail hello@beresol.eu.",
+          "bundlesRequired": "Kies minstens één bundel.",
+          "invalid_bundles": "Een van de gekozen bundels is niet beschikbaar. Kies alleen uit de lijst."
+        },
+        "accessLabel": "Wat moet deze sleutel openen?",
+        "accessAll": "Elke route",
+        "accessAllDesc": "Alles wat de API serveert, en elke route die later wordt toegevoegd.",
+        "accessBundles": "Alleen de bundels die ik kies",
+        "accessBundlesDesc": "De sleutel wordt op al het andere geweigerd, en nieuwe routes komen vanzelf in hun bundel. Een beperkte sleutel opent de MCP-tools niet."
       },
       "reveal": {
         "title": "Bewaar deze sleutel nu",
@@ -1195,7 +1199,48 @@
       "copy": "Kopiëren",
       "copied": "Gekopieerd",
       "codeNote": "Dezelfde oproep vanuit je eigen code. Vervang YOUR_API_KEY door je sleutel.",
-      "requestId": "Verzoek-id:"
+      "requestId": "Verzoek-id:",
+      "bundleLabel": "Toon",
+      "allRoutes": "Alle routes",
+      "bundleCardsLabel": "Kies wat je nodig hebt"
+    },
+    "bundles": {
+      "official-journal": {
+        "name": "Publicatieblad",
+        "desc": "Wat de EU elke dag publiceert: haar handelingen, op datum of op verwijzing."
+      },
+      "legislation": {
+        "name": "Wetten en wetgevingsproces",
+        "desc": "EU-wetten en de dossiers erachter: procedures, amendementen, stemmingen, Raadsdocumenten, arresten."
+      },
+      "funding-procurement": {
+        "name": "Financiering en aanbestedingen",
+        "desc": "Elke oproep, aanbesteding en gunning, EU-programma's en -begrotingen, en met wie samen te werken."
+      },
+      "news-events": {
+        "name": "Nieuws en evenementen",
+        "desc": "Nieuws, persberichten en evenementen van alle EU-instellingen en -organen."
+      },
+      "agencies-bodies": {
+        "name": "Agentschappen en organen",
+        "desc": "Alles van de EU-agentschappen, financiële instellingen, hoven en adviesorganen."
+      },
+      "people": {
+        "name": "Mensen en organisaties",
+        "desc": "Ambtenaren, Europarlementariërs en hun medewerkers, commissarissen, lobbyisten en het Transparantieregister."
+      },
+      "consultations": {
+        "name": "Openbare raadplegingen",
+        "desc": "Raadplegingen van de Commissie en de agentschappen, en de reacties die ze krijgen."
+      },
+      "enforcement-markets": {
+        "name": "Handhaving en markten",
+        "desc": "Inbreuken, mededinging, staatssteun, sancties, handelsverdediging, tarieven en productpaspoorten."
+      },
+      "research-data": {
+        "name": "Onderzoek en data",
+        "desc": "Studies en publicaties, de onderzoeksdienst van het Parlement, open data en statistieken."
+      }
     }
   },
   "auth": {

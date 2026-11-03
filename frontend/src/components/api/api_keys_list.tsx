@@ -30,17 +30,26 @@ function statusFor(k: ApiKeySummary): 'active' | 'revoked' | 'expired' {
   return 'active';
 }
 
+// A key limited to bundles holds every read scope, and the bundles are the limit: those are what it shows.
+function shownScopes(scopes: string[]): string[] {
+  const bundles = scopes.filter((s) => s.startsWith('bundle:'));
+  return bundles.length > 0 ? bundles : scopes;
+}
+
+function ScopeChip({ scope }: { scope: string }) {
+  const { t } = useTranslation();
+  const bundle = scope.startsWith('bundle:') ? scope.slice('bundle:'.length) : null;
+  return (
+    <span className={`api-keys-scope-chip${scope === '*' ? ' api-keys-scope-chip--wildcard' : ''}`}>
+      {bundle ? t(`api.bundles.${bundle}.name`, { defaultValue: bundle }) : scope}
+    </span>
+  );
+}
+
 function ScopeChips({ scopes }: { scopes: string[] }) {
   return (
     <div className="api-keys-table__scopes">
-      {scopes.map((s) => (
-        <span
-          key={s}
-          className={`api-keys-scope-chip${s === '*' ? ' api-keys-scope-chip--wildcard' : ''}`}
-        >
-          {s}
-        </span>
-      ))}
+      {shownScopes(scopes).map((s) => <ScopeChip key={s} scope={s} />)}
     </div>
   );
 }
@@ -131,14 +140,7 @@ export const ApiKeysList = ({ keys, onRevoke }: Props) => {
               <div className="api-keys-card__row">
                 <span className="api-keys-card__label">{t('api.keys.list.scopes')}</span>
                 <div className="api-keys-card__scopes">
-                  {k.scopes.map((s) => (
-                    <span
-                      key={s}
-                      className={`api-keys-scope-chip${s === '*' ? ' api-keys-scope-chip--wildcard' : ''}`}
-                    >
-                      {s}
-                    </span>
-                  ))}
+                  {shownScopes(k.scopes).map((s) => <ScopeChip key={s} scope={s} />)}
                 </div>
               </div>
 
