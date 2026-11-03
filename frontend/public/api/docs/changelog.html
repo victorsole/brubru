@@ -255,6 +255,17 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>3 November 2026: bundles, the API Console, and a standard key opens every route</h3>
+<p><a href="/api/docs/bundles.html">Bundles</a> group the routes by what you want: Official Journal, laws, funding and procurement, news and events, agencies and bodies, people and organisations, consultations, enforcement and markets, research and data. A new key can be limited to the bundles you choose. <code>GET /api/v2/bundles</code> lists them.</p>
+<p>The <a href="/api/console">API Console</a> calls the API from the browser: every route, a form built from its parameters, and the live rows that come back. No account is needed: it uses the public sandbox.</p>
+<ul>
+<li><strong>Fixed:</strong> a standard read key was refused on 752 routes, among them 64 of the 69 funding lists and every EU agency folder. Each route now belongs to a scope a standard key holds.</li>
+<li><strong>New:</strong> <code>GET /api/v2/pricing</code> lists what a call costs. It is public and free.</li>
+<li><strong>New headers:</strong> <code>X-Brubru-Cost-Eur</code> and <code>X-Brubru-Balance-Eur</code> on every metered call; <code>X-Brubru-Sandbox-Remaining</code> and <code>X-Brubru-Sandbox-Pool-Remaining</code> on a sandbox call. A browser can read them, with <code>X-RateLimit-*</code> and <code>X-Request-Id</code>.</li>
+<li><strong>Sandbox limits:</strong> 10 calls a day per visitor and 100 in total; GET only; <code>limit</code> up to 25, <code>page</code> up to 10, answers up to 3 MB, JSON only; heavy and live-fetch routes need your own key. See <a href="/api/docs/errors.html">the error codes</a>.</li>
+<li><strong>Price:</strong> <code>/predictions/{procedure_ref}/outcome</code> and <code>/timeline</code> now cost the same as their v1 twins, EUR 0.005 a call.</li>
+</ul>
+
 <h3>2 November 2026: the funding standard (1,061 total)</h3>
 <p>The funding lists now share one shape, one set of parameters and one vocabulary for status. Four consolidated lists are the place to start: <code>/funding/opportunities</code>, <code>/funding/awards</code>, <code>/funding/budgets</code> and <code>/funding/partners</code>. The F&amp;T Portal's news and events are served at <code>/news/ft-portal</code> and <code>/events/ft-portal</code>.</p>
 <ul>

@@ -86,7 +86,8 @@ export const RequestPane = ({ op, values, pricing, sending, sandboxLeft, onChang
   const { t, i18n } = useTranslation();
   const missing = missingRequired(op, values);
   const requestPath = buildRequestPath(op, values);
-  const pathOnly = requestPath.split('?')[0];
+  // Priced on the route, so an empty path parameter does not hide that a route is heavy.
+  const pathOnly = op.path.replace(/\{[^}]+\}/g, 'x');
   const served = sandboxServes(pathOnly, pricing);
   const price = priceOf(pathOnly, pricing);
   const priceText = price === null ? null : price.toLocaleString(i18n.language, { minimumFractionDigits: 3, maximumFractionDigits: 6 });

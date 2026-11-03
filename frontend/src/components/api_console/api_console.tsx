@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import type { ConsoleCatalogue, ConsoleOperation, ConsolePricing, ConsoleResponse } from '../../services/api_console';
-import { BUNDLE_ORDER, buildRequestPath, bundleCount, initialValues, loadCatalogue, loadPricing, sendRequest, startOfBundle } from '../../services/api_console';
+import { BUNDLE_ORDER, bodiesRequested, buildRequestPath, bundleCount, initialValues, loadCatalogue, loadPricing, sendRequest, startOfBundle } from '../../services/api_console';
 import { CataloguePane } from './catalogue_pane';
 import { RequestPane } from './request_pane';
 import { ResponsePane } from './response_pane';
@@ -40,6 +40,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
   const [response, setResponse] = useState<ConsoleResponse | null>(null);
   const [sending, setSending] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [bodiesOn, setBodiesOn] = useState(true);
   const [sandboxLeft, setSandboxLeft] = useState<number | null>(null);
 
   // The panel on /api waits until it is near the screen, so the page does not pay for the whole spec up front.
@@ -104,6 +105,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     setSending(true);
     setFailed(false);
     setResponse(null);
+    setBodiesOn(bodiesRequested(selected, values));
     try {
       const result = await sendRequest(buildRequestPath(selected, values), controller.signal);
       setResponse(result);
@@ -199,7 +201,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
               onSend={send}
             />
           </div>
-          <ResponsePane response={response} sending={sending} failed={failed} />
+          <ResponsePane response={response} sending={sending} failed={failed} bodiesRequested={bodiesOn} />
         </div>
       )}
     </div>

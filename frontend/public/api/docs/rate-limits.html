@@ -246,6 +246,10 @@ active link by adding class="active" to the matching <a>.
 Three per-key tiers: <strong>free 60</strong>, <strong>pro 300</strong>, <strong>enterprise 6000 requests / minute</strong>. Sliding-window enforcement. Your tier is on the <code>X-RateLimit-Tier</code> header of every response and on <code>/whoami</code>.
 </p>
 
+<h2 id="what-a-call-costs">What a call costs</h2>
+<p>Every metered call answers with <code>X-Brubru-Cost-Eur</code>, what it cost, and <code>X-Brubru-Balance-Eur</code>, what is left. <code>GET /api/v2/pricing</code> lists the prices, with no key and at no cost: most calls cost EUR 0.001, and a few heavier routes more. A call the server fails on (5xx) is refunded.</p>
+<p><strong>The public sandbox</strong> behind the <a href="/api/console">API Console</a> needs no account: 10 calls a day per visitor and 100 in total, GET only, <code>limit</code> up to 25, <code>page</code> up to 10, answers up to 3 MB, JSON only. Heavy and live-fetch routes need your own key. A sandbox call says what is left in <code>X-Brubru-Sandbox-Remaining</code>.</p>
+
 <h2>Tier table</h2>
 <table>
 <thead><tr><th>Tier</th><th>Per-minute limit</th><th>Monthly quota</th><th>Who gets it</th></tr></thead>

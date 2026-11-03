@@ -66,7 +66,14 @@ const RowCard = ({ row, bodiesRequested }: { row: Record<string, any>; bodiesReq
   );
 };
 
-export const ResponsePane = ({ response, sending, failed }: { response: ConsoleResponse | null; sending: boolean; failed: boolean }) => {
+interface Props {
+  response: ConsoleResponse | null;
+  sending: boolean;
+  failed: boolean;
+  bodiesRequested: boolean;
+}
+
+export const ResponsePane = ({ response, sending, failed, bodiesRequested }: Props) => {
   const { t, i18n } = useTranslation();
   const [tab, setTab] = useState<Tab>('rows');
 
@@ -76,7 +83,6 @@ export const ResponsePane = ({ response, sending, failed }: { response: ConsoleR
   const list = response ? isList(response.json) : false;
   const total = response ? totalOf(response.json) : null;
   const reason = response ? reasonOf(response.json) : { code: '', message: '' };
-  const bodiesRequested = !response?.url.includes('include_body=false');
 
   useEffect(() => {
     if (response) setTab(ok && hasPoints ? 'rows' : ok ? 'json' : 'rows');

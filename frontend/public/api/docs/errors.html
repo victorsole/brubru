@@ -288,9 +288,15 @@ Every non-2xx response on <code>/api/v2/*</code> uses the same canonical envelop
 <tr><td><code>auth_key_not_found</code></td><td>401</td><td>Key not in our DB or revoked.</td></tr>
 <tr><td><code>insufficient_balance</code></td><td>402</td><td>The account's balance does not cover this call.</td></tr>
 <tr><td><code>scope_missing</code></td><td>403</td><td>The key does not hold the scope this route requires.</td></tr>
-<tr><td><code>route_not_included</code></td><td>403</td><td>The key is limited to named routes and this is not one of them.</td></tr>
+<tr><td><code>route_not_included</code></td><td>403</td><td>The key is limited to bundles or named routes, and this route is not among them.</td></tr>
+<tr><td><code>sandbox_route_not_included</code></td><td>403</td><td>The public sandbox does not serve this route: it does heavier work or fetches live. Use your own key.</td></tr>
+<tr><td><code>sandbox_too_large</code></td><td>403</td><td>The public sandbox serves <code>limit</code> up to 25, <code>page</code> up to 10, and answers up to 3 MB. Ask for <code>include_body=false</code> or a smaller <code>limit</code>.</td></tr>
+<tr><td><code>sandbox_no_export</code></td><td>403</td><td>The public sandbox answers in JSON. Exports need your own key.</td></tr>
+<tr><td><code>sandbox_method</code></td><td>403</td><td>The public sandbox only reads: GET requests.</td></tr>
 <tr><td><code>org_inactive</code></td><td>403</td><td>Owner's account is disabled.</td></tr>
 <tr><td><code>rate_limited</code></td><td>429</td><td>Over 60 requests per minute for this key.</td></tr>
+<tr><td><code>sandbox_ip_capped</code></td><td>429</td><td>This visitor has used today's 10 free calls in the public sandbox.</td></tr>
+<tr><td><code>sandbox_global_capped</code></td><td>429</td><td>The public sandbox has served its 100 calls for today.</td></tr>
 <tr><td><code>not_found</code></td><td>404</td><td>Generic not-found (CELEX, procedure ref, MEP id, etc.).</td></tr>
 <tr><td><code>text_unavailable</code></td><td>404</td><td>No text cached for the requested law and Cellar fallback also failed.</td></tr>
 <tr><td><code>invalid_query</code></td><td>422</td><td>A query param failed validation.</td></tr>

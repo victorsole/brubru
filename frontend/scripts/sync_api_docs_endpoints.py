@@ -19,6 +19,7 @@ import json
 import re
 import ssl
 import urllib.request
+from html import escape
 from pathlib import Path
 
 DOCS = Path(__file__).resolve().parents[1] / "public" / "api" / "docs"
@@ -52,7 +53,8 @@ NEW_GROUPS = [
         "chips": "Chips", "sesar": "SESAR 3: air traffic", "f4e": "F4E: fusion energy", "europes-rail": "Europe's Rail",
         "sns": "SNS: smart networks", "euratom": "Euratom Supply Agency"}),
     ("Across EU bodies", {
-        "news": "News across EU bodies", "events": "Events across EU bodies", "programmes": "Funding programmes directory"}),
+        "news": "News across EU bodies", "events": "Events across EU bodies", "programmes": "Funding programmes directory",
+        "bundles": "Bundles: routes grouped by what you want", "pricing": "What each call costs"}),
 ]
 TENDER_DOCS = "/api/v2/proprietary/tender-docs"
 # The funding standard's consolidated lists come first on the funding table.
@@ -199,9 +201,69 @@ def add_to_nav(group_lang: dict) -> None:
         page.write_text(s, encoding="utf-8")
 
 
+# The bundles in reading order, as services/api_keys/bundles.py defines them; a bundle the spec does not name stops the run.
+BUNDLES = [
+    ("official-journal", "Official Journal", "What the EU publishes each day: its acts, by date or by reference."),
+    ("legislation", "Laws and the legislative process", "EU laws and the files behind them: procedures, amendments, votes, adopted texts, Council documents, delegated and implementing acts, court rulings."),
+    ("funding-procurement", "Funding and procurement", "Every call, tender and award, EU programmes and budgets, and who can partner."),
+    ("news-events", "News and events", "News, press releases and events from every EU institution and body, and what is on the calendar."),
+    ("agencies-bodies", "Agencies and bodies", "Everything from the EU's agencies, financial institutions, courts and advisory bodies, folder by folder."),
+    ("people", "People and organisations", "Officials, MEPs and their assistants, Commissioners, expert groups, lobbyists and the organisations on the Transparency Register."),
+    ("consultations", "Public consultations", "Public consultations of the Commission and the agencies, and the feedback they receive."),
+    ("enforcement-markets", "Enforcement and markets", "Infringements, competition, state aid, digital markets cases, sanctions, trade defence, tariffs, food alerts, product passports and geographical indications."),
+    ("research-data", "Research and data", "Studies, publications and topic pages, Parliament's research service, open data and statistics, and Brubru's own guides and translations."),
+]
+
+
+def write_bundles_page(paths: dict) -> None:
+    """bundles.html: its tables come from the live spec. The page's shell is copied from rate-limits.html."""
+    routes: dict = {b[0]: [] for b in BUNDLES}
+    for path, ops in paths.items():
+        for bundle in (ops.get("get") or {}).get("x-brubru-bundles", []):
+            routes[bundle].append(path)
+    missing = [b for b, r in routes.items() if not r]
+    if missing:
+        raise SystemExit(f"[ERROR] the live spec names no route in: {missing}. Is the backend deployed?")
+    rows = "\n".join(
+        f'<tr><td><strong>{escape(label)}</strong><br>{escape(text)}</td>'
+        f'<td>{len(routes[bid])}</td><td>{sum(1 for p in routes[bid] if "{" not in p)}</td>'
+        f'<td><a href="/api/console?bundle={bid}">Try it</a><br><code>/api/v2/bundles/{bid}</code></td></tr>'
+        for bid, label, text in BUNDLES)
+    body = f"""<div class="main__eyebrow">Bundles</div>
+<h1>Bundles</h1>
+<p class="main__lede">The API serves over a thousand routes. A bundle is a group of them by what you want: take the ones you need and leave the rest.</p>
+
+<table>
+<thead><tr><th>Bundle</th><th>Routes</th><th>Lists</th><th>Use it</th></tr></thead>
+<tbody>
+{rows}
+</tbody>
+</table>
+<p>A route can sit in several bundles: an agency's news is both Agencies and News. Every data route sits in at least one.</p>
+
+<h2 id="find">Find the routes in a bundle</h2>
+<p><strong>In the browser:</strong> the <a href="/api/console">API Console</a> narrows its catalogue to one bundle, with no account.</p>
+<p><strong>From code:</strong> both routes are public and free, and need no key.</p>
+<pre><code>curl https://brubru-production.up.railway.app/api/v2/bundles
+curl https://brubru-production.up.railway.app/api/v2/bundles/funding-procurement</code></pre>
+<p>The <a href="/api/v2/openapi.json">OpenAPI spec</a> names each route's bundles in <code>x-brubru-bundles</code>.</p>
+
+<h2 id="limit">Limit a key to bundles</h2>
+<p>When you <a href="/api#your-keys">create a key</a>, choose "Only the bundles I choose". The key is then refused on anything else, with the error <code>route_not_included</code>, and routes added later join their bundle by themselves. The price of a call does not change.</p>
+<p>A key limited to bundles does not open the MCP tools, because a tool reaches further than any one bundle. For those, create a key with every route.</p>
+"""
+    shell = (DOCS / "rate-limits.html").read_text(encoding="utf-8")
+    start, end = shell.index('<div class="main__eyebrow">'), shell.index('</main>')
+    page = shell[:start] + body + shell[end:]
+    page = page.replace("<title>Rate limits: Brubru EU Data API</title>", "<title>Bundles: Brubru EU Data API</title>")
+    (DOCS / "bundles.html").write_text(page, encoding="utf-8")
+    print(f"[OK] bundles.html: {len(BUNDLES)} bundles")
+
+
 def main() -> None:
     paths = live_spec()
     counts = rebuild_endpoints(paths)
+    write_bundles_page(paths)
     add_to_nav({"es": "M&aacute;s organismos de la UE", "ca": "M&eacute;s organismes de la UE", "fr": "Autres organes de l'UE",
                 "it": "Altri organismi dell'UE", "nl": "Meer EU-organen"})
     sync_counts(counts)

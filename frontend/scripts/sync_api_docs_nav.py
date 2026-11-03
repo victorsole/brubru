@@ -18,6 +18,7 @@ PAGE_NAV = {
     "envelope.html": "envelope",
     "errors.html": "errors",
     "rate-limits.html": "rate-limits",
+    "bundles.html": "bundles",
     "endpoints.html": None,  # endpoints page uses sub-anchors, no single active
     "institutions.html": "institutions",
     "glossary.html": "glossary",

@@ -171,9 +171,42 @@ export function searchOperations(catalogue: ConsoleCatalogue, query: string): Co
   return catalogue.operations.filter((op) => words.every((w) => op.searchText.includes(w)));
 }
 
+function isoDaysAgo(days: number, today: Date): string {
+  const d = new Date(today);
+  d.setUTCDate(d.getUTCDate() - days);
+  return d.toISOString().slice(0, 10);
+}
+
+function workingDaysAgo(days: number, today: Date): string {
+  const d = new Date(today);
+  for (let left = days; left > 0;) {
+    d.setUTCDate(d.getUTCDate() - 1);
+    if (d.getUTCDay() !== 0 && d.getUTCDay() !== 6) left -= 1;
+  }
+  return d.toISOString().slice(0, 10);
+}
+
 // The first values of a form. A small page: the sandbox serves 25 rows at most, and five show the shape.
-export function initialValues(op: ConsoleOperation): Record<string, string> {
-  return op.params.some((p) => p.name === 'limit' && p.in === 'query') ? { limit: '5' } : {};
+// A required date is filled in, or the Official Journal would open on a form with nothing to try. Two working days back:
+// the Journal's store is a day behind, and the day before may be a holiday. Its full texts run to megabytes: off to start.
+export function initialValues(op: ConsoleOperation, today: Date = new Date()): Record<string, string> {
+  const values: Record<string, string> = {};
+  for (const p of op.params) {
+    if (p.in !== 'query') continue;
+    if (p.name === 'limit') values.limit = '5';
+    else if (p.required && (p.kind === 'date' || p.name === 'date')) {
+      values[p.name] = p.name === 'date' ? workingDaysAgo(2, today) : isoDaysAgo(7, today);
+    }
+  }
+  if (op.path.endsWith('/oj/daily')) values.include_body = 'false';
+  return values;
+}
+
+// Whether this call asked for the bodies, so that an empty one reads as "not requested" and not as a missing text.
+export function bodiesRequested(op: ConsoleOperation, values: Record<string, string>): boolean {
+  const param = op.params.find((p) => p.name === 'include_body');
+  if (!param) return true;
+  return (values.include_body || param.defaultValue || 'true') !== 'false';
 }
 
 export function missingRequired(op: ConsoleOperation, values: Record<string, string>): string[] {
