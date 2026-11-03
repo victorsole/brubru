@@ -21,6 +21,8 @@ export const ApiPage = () => {
     { m: 'GET',  p: '/api/v2/proprietary/brussels-lobbies',                          k: 'brusselsLobbies' },
     { m: 'GET',  p: '/api/v2/legislative/eur-lex/laws',                              k: 'laws' },
     { m: 'GET',  p: '/api/v2/legislative/oeil/procedures',                           k: 'procedures' },
+    { m: 'GET',  p: '/api/v2/funding/opportunities',                                 k: 'fundingOpportunities' },
+    { m: 'GET',  p: '/api/v2/funding/awards',                                        k: 'fundingAwards' },
     { m: 'GET',  p: '/api/v2/proprietary/catalan',                                   k: 'catalanTranslations' },
     { m: 'GET',  p: '/api/v2/commission/consultations/by-initiative/{id}/feedback',  k: 'consultations' },
     { m: 'GET',  p: '/api/v2/commission/commissioners/{name}/agenda',                k: 'commissioners' },

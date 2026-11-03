@@ -1976,7 +1976,7 @@
     "eyebrow": "Per sviluppatori, RegTech e agenti IA",
     "titlePre": "L'UE,",
     "titleAccent": "strutturata",
-    "lede": "Brubru è un fornitore verticale di dati dell'UE. La nostra API REST ora copre ogni istituzione, organo e agenzia dell'UE: 935 endpoint in 88 cartelle, una cartella per istituzione. Hai accesso in tempo reale a oltre 28.500 atti adottati, oltre 1.200 procedure legislative, i riscontri delle consultazioni in tempo reale, le agende dei commissari, le previsioni sugli esiti legislativi con IA, il calendario istituzionale unificato dell'UE, il Registro per la trasparenza e il livello di intelligence sul testo giuridico che alimenta il chatbot e l'Amendator di Brubru. Brubru è il primo utente della propria API.",
+    "lede": "Brubru è un fornitore verticale di dati dell'UE. La nostra API REST ora copre ogni istituzione, organo e agenzia dell'UE: 1.061 endpoint in 93 cartelle, una cartella per istituzione. Hai accesso in tempo reale a 27.103 leggi dell'UE con testo integrale, oltre 2.100 procedure legislative, i riscontri delle consultazioni in tempo reale, le agende dei commissari, le previsioni sugli esiti legislativi con IA, il calendario istituzionale unificato dell'UE, il Registro per la trasparenza e il livello di intelligence sul testo giuridico che alimenta il chatbot e l'Amendator di Brubru. Brubru è il primo utente della propria API.",
     "cta": {
       "reference": "Riferimento API",
       "contact": "Contatta vendite",
@@ -2014,10 +2014,12 @@
       "mcpDescription": "Brubru espone un server Model Context Protocol (MCP). Collegalo a Claude, ChatGPT, Gemini, Mistral o a qualsiasi agente IA compatibile con MCP per fornire al tuo assistente un'intelligenza legislativa europea in tempo reale."
     },
     "endpoints": {
+      "fundingOpportunities": "Tutti gli inviti e le gare dell'UE in un unico elenco, ogni procedura una volta: oltre 90.000 da TED, dal Portale Finanziamenti e gare e dalle agenzie dell'UE. Filtri per stato, scadenza, CPV, paese, organismo, importo.",
+      "fundingAwards": "Chi ha ricevuto fondi dell'UE: oltre 300.000 progetti finanziati, beneficiari e aggiudicazioni in un unico elenco. Filtri per tipo, paese, programma, data, importo.",
       "brusselsLobbies": "Ogni organizzazione del registro per la trasparenza dell'UE con sede a Bruxelles, classificata, con le notizie e gli aggiornamenti che ciascuna pubblica sul proprio sito. Filtri per tipo di organizzazione, interesse politico e spesa per lobbying; indicatori di disponibilità delle notizie per organizzazione.",
-      "catalanTranslations": "Oltre 9.200 atti vincolanti UE tradotti in catalano (MIT). Dati aperti, senza chiave API. Filtri per tipo, categoria, engine; ricerca full-text.",
-      "laws": "Oltre 28.500 leggi UE. Filtri per CELEX, tipo documento, area politica, data pubblicazione, ricerca full-text.",
-      "procedures": "Oltre 2.000 dossier legislativi, da proposta ad adozione. Filtri per riferimento OEIL, commissione, relatore, ultimo aggiornamento.",
+      "catalanTranslations": "Oltre 9.200 atti vincolanti UE tradotti in catalano (CC BY 4.0). Dati aperti, senza chiave API. Filtri per tipo, categoria, engine; ricerca full-text.",
+      "laws": "27.103 leggi dell'UE con testo integrale. Filtri per CELEX, tipo documento, area politica, data pubblicazione, ricerca full-text.",
+      "procedures": "Oltre 2.100 dossier legislativi, da proposta ad adozione. Filtri per riferimento OEIL, commissione, relatore, ultimo aggiornamento.",
       "consultations": "Contributi degli stakeholder in diretta dal portale Have Your Say. Paginato con aggregati per paese e tipo.",
       "commissioners": "Agende in diretta di tutti i 27 membri del Collegio. Risoluzione nome insensibile agli accenti.",
       "predictions": "Probabilità di esito e tempistiche previste dall'IA per qualsiasi procedura legislativa dell'UE in corso (adottata, respinta, ritirata o in sospeso), con punteggio di confidenza e intervallo di incertezza.",

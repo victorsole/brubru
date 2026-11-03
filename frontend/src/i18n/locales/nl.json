@@ -920,7 +920,7 @@
     "eyebrow": "Voor ontwikkelaars, RegTech en AI-agenten",
     "titlePre": "De EU,",
     "titleAccent": "gestructureerd",
-    "lede": "Brubru is een verticale EU-dataprovider. Onze REST-API bestrijkt nu elke EU-instelling, elk orgaan en elk agentschap: 935 endpoints in 88 mappen, één map per instelling. Je krijgt realtime toegang tot meer dan 28.500 aangenomen wetten, meer dan 1.200 wetgevingsprocedures, live consultatiereacties, de agenda's van de commissarissen, AI-voorspellingen van wetgevingsuitkomsten, de geïntegreerde institutionele EU-kalender, het Transparantieregister en de juridische-tekstintelligentielaag die Brubru's eigen chatbot en Amendator aandrijft. Brubru is de eerste gebruiker van zijn eigen API.",
+    "lede": "Brubru is een verticale EU-dataprovider. Onze REST-API bestrijkt nu elke EU-instelling, elk orgaan en elk agentschap: 1.061 endpoints in 93 mappen, één map per instelling. Je krijgt realtime toegang tot 27.103 EU-wetten met volledige tekst, meer dan 2.100 wetgevingsprocedures, live consultatiereacties, de agenda's van de commissarissen, AI-voorspellingen van wetgevingsuitkomsten, de geïntegreerde institutionele EU-kalender, het Transparantieregister en de juridische-tekstintelligentielaag die Brubru's eigen chatbot en Amendator aandrijft. Brubru is de eerste gebruiker van zijn eigen API.",
     "cta": {
       "reference": "API-referentie",
       "contact": "Neem contact op",
@@ -958,10 +958,12 @@
       "mcpDescription": "Brubru biedt een Model Context Protocol (MCP)-server. Verbind deze met Claude, ChatGPT, Gemini, Mistral of een andere MCP-compatibele AI-agent om uw assistent live EU-wetgevingsintelligentie te bieden."
     },
     "endpoints": {
+      "fundingOpportunities": "Alle EU-oproepen en -aanbestedingen in één lijst, elke procedure één keer: ruim 90.000 uit TED, het Funding & Tenders-portaal en de EU-agentschappen. Filters op status, deadline, CPV, land, orgaan, bedrag.",
+      "fundingAwards": "Wie EU-geld ontving: ruim 300.000 gefinancierde projecten, begunstigden en gunningen in één lijst. Filters op type, land, programma, datum, bedrag.",
       "brusselsLobbies": "Elke in Brussel gevestigde organisatie uit het EU-transparantieregister, gerangschikt, met het nieuws en de updates die elk op de eigen website publiceert. Filters op organisatietype, beleidsinteresse en lobby-uitgaven; indicatoren voor nieuwsbeschikbaarheid per organisatie.",
-      "catalanTranslations": "Ruim 9.200 bindende EU-wetten vertaald naar het Catalaans (MIT). Open data - geen API-sleutel nodig. Filters op type, categorie, engine; full-text zoeken.",
-      "laws": "Ruim 28.500 aangenomen EU-wetten. Filters op CELEX, doctype, beleidsgebied, publicatiedatum, volledige-tekst zoeken.",
-      "procedures": "Ruim 2.000 wetgevingsdossiers, van voorstel tot aanname. Filters op OEIL-referentie, hoofdcommissie, rapporteur, laatste update.",
+      "catalanTranslations": "Ruim 9.200 bindende EU-wetten vertaald naar het Catalaans (CC BY 4.0). Open data - geen API-sleutel nodig. Filters op type, categorie, engine; full-text zoeken.",
+      "laws": "27.103 EU-wetten met volledige tekst. Filters op CELEX, doctype, beleidsgebied, publicatiedatum, volledige-tekst zoeken.",
+      "procedures": "Ruim 2.100 wetgevingsdossiers, van voorstel tot aanname. Filters op OEIL-referentie, hoofdcommissie, rapporteur, laatste update.",
       "consultations": "Live bijdragen van belanghebbenden via het Have Your Say-portaal. Gepagineerd met aggregaten per land en type.",
       "commissioners": "Live agenda's van alle 27 leden van het College. Naamresolutie ongevoelig voor accenten.",
       "predictions": "Door AI voorspelde uitkomstkansen en tijdlijn voor elke lopende EU-wetgevingsprocedure (aangenomen, verworpen, ingetrokken of in behandeling), met een betrouwbaarheidsscore en een onzekerheidsmarge.",

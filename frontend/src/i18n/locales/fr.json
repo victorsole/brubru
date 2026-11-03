@@ -920,7 +920,7 @@
     "eyebrow": "Pour développeurs, RegTech et agents IA",
     "titlePre": "L'UE,",
     "titleAccent": "structurée",
-    "lede": "Brubru est un fournisseur vertical de données de l'UE. Notre API REST couvre désormais chaque institution, organe et agence de l'UE : 935 endpoints répartis sur 88 dossiers, un dossier par institution. Vous obtenez un accès en temps réel à plus de 28 500 actes adoptés, plus de 1 200 procédures législatives, les retours des consultations en direct, les agendas des commissaires, les prédictions de résultats législatifs par IA, le calendrier institutionnel unifié de l'UE, le registre de transparence et la couche d'intelligence sur le texte juridique qui alimente le chatbot et l'Amendator de Brubru. Brubru est le premier utilisateur de sa propre API.",
+    "lede": "Brubru est un fournisseur vertical de données de l'UE. Notre API REST couvre désormais chaque institution, organe et agence de l'UE : 1 061 endpoints répartis sur 93 dossiers, un dossier par institution. Vous obtenez un accès en temps réel à 27 103 lois de l'UE avec leur texte intégral, plus de 2 100 procédures législatives, les retours des consultations en direct, les agendas des commissaires, les prédictions de résultats législatifs par IA, le calendrier institutionnel unifié de l'UE, le registre de transparence et la couche d'intelligence sur le texte juridique qui alimente le chatbot et l'Amendator de Brubru. Brubru est le premier utilisateur de sa propre API.",
     "cta": {
       "reference": "Référence de l'API",
       "contact": "Parler aux ventes",
@@ -958,10 +958,12 @@
       "mcpDescription": "Brubru expose un serveur Model Context Protocol (MCP). Connectez-le à Claude, ChatGPT, Gemini, Mistral ou à tout agent IA compatible MCP pour donner à votre assistant une intelligence législative européenne en temps réel."
     },
     "endpoints": {
+      "fundingOpportunities": "Tous les appels et marchés de l'UE dans une seule liste, chaque procédure une fois : plus de 90 000 issus de TED, du portail Financements et appels d'offres et des agences de l'UE. Filtres par statut, date limite, CPV, pays, organe, montant.",
+      "fundingAwards": "Qui a reçu des fonds de l'UE : plus de 300 000 projets financés, bénéficiaires et attributions dans une seule liste. Filtres par type, pays, programme, date, montant.",
       "brusselsLobbies": "Chaque organisation du registre de transparence de l'UE basée à Bruxelles, classée, avec les actualités et mises à jour que chacune publie sur son propre site. Filtres par type d'organisation, intérêt politique et dépenses de lobbying ; indicateurs de disponibilité des actualités par organisation.",
-      "catalanTranslations": "Plus de 9 200 textes contraignants de l'UE traduits en catalan (MIT). Données ouvertes, sans clé d'API. Filtres par type, catégorie, moteur ; recherche plein texte.",
-      "laws": "Plus de 28 500 textes de loi UE. Filtres par CELEX, type de document, domaine politique, date de publication, recherche plein-texte.",
-      "procedures": "Plus de 2 000 dossiers législatifs, de la proposition à l'adoption. Filtres par référence OEIL, commission compétente, rapporteur, dernière mise à jour.",
+      "catalanTranslations": "Plus de 9 200 textes contraignants de l'UE traduits en catalan (CC BY 4.0). Données ouvertes, sans clé d'API. Filtres par type, catégorie, moteur ; recherche plein texte.",
+      "laws": "27 103 lois de l'UE avec leur texte intégral. Filtres par CELEX, type de document, domaine politique, date de publication, recherche plein-texte.",
+      "procedures": "Plus de 2 100 dossiers législatifs, de la proposition à l'adoption. Filtres par référence OEIL, commission compétente, rapporteur, dernière mise à jour.",
       "consultations": "Contributions d'acteurs en direct depuis le portail Have Your Say. Paginé avec agrégats par pays et type.",
       "commissioners": "Agendas en direct des 27 membres du Collège. Résolution du nom insensible aux accents.",
       "predictions": "Probabilités de résultat et calendrier prédits par IA pour toute procédure législative de l'UE en cours (adoptée, rejetée, retirée ou en attente), avec un score de confiance et une marge d'incertitude.",

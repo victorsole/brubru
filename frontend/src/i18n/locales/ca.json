@@ -920,7 +920,7 @@
     "eyebrow": "Per a desenvolupadors, RegTech i agents d'IA",
     "titlePre": "La UE,",
     "titleAccent": "estructurada",
-    "lede": "Brubru és un proveïdor vertical de dades de la UE. La nostra API REST ja abasta totes les institucions, òrgans i agències de la UE: 935 endpoints en 88 carpetes, una carpeta per institució. Tens accés en temps real a més de 28.500 lleis adoptades, més de 1.200 procediments legislatius, el retorn de les consultes en directe, les agendes dels comissaris, les prediccions de resultats legislatius amb IA, el calendari institucional unificat de la UE, el Registre de Transparència i la capa d'intel·ligència sobre el text jurídic que impulsa el mateix chatbot i l'Amendator de Brubru. Brubru és el primer usuari de la seva pròpia API.",
+    "lede": "Brubru és un proveïdor vertical de dades de la UE. La nostra API REST ja abasta totes les institucions, òrgans i agències de la UE: 1.061 endpoints en 93 carpetes, una carpeta per institució. Tens accés en temps real a 27.103 lleis de la UE amb text complet, més de 2.100 procediments legislatius, el retorn de les consultes en directe, les agendes dels comissaris, les prediccions de resultats legislatius amb IA, el calendari institucional unificat de la UE, el Registre de Transparència i la capa d'intel·ligència sobre el text jurídic que impulsa el mateix chatbot i l'Amendator de Brubru. Brubru és el primer usuari de la seva pròpia API.",
     "cta": {
       "reference": "Referència de l'API",
       "contact": "Parlar amb vendes",
@@ -958,10 +958,12 @@
       "mcpDescription": "Brubru exposa un servidor Model Context Protocol (MCP). Connecta'l a Claude, ChatGPT, Gemini, Mistral o qualsevol agent d'IA compatible amb MCP per donar al teu assistent intel·ligència legislativa europea en temps real."
     },
     "endpoints": {
+      "fundingOpportunities": "Totes les convocatòries i licitacions de la UE en una llista, cada procediment una vegada: més de 90.000 de TED, el Portal de Finançament i Licitacions i les agències de la UE. Filtres per estat, termini, CPV, país, organisme, import.",
+      "fundingAwards": "Qui va rebre fons de la UE: més de 300.000 projectes finançats, beneficiaris i adjudicacions en una llista. Filtres per tipus, país, programa, data, import.",
       "brusselsLobbies": "Cada organització del Registre de Transparència de la UE amb seu a Brussel·les, classificada, amb les notícies i actualitzacions que cadascuna publica al seu propi web. Filtres per tipus d'organització, interès polític i despesa en lobby; indicadors de disponibilitat de notícies per organització.",
-      "catalanTranslations": "Més de 9.200 lleis vinculants de la UE traduïdes al català (MIT). Dades obertes, sense clau d'API. Filtres per tipus, categoria, motor; cerca de text.",
-      "laws": "Més de 28.500 lleis de la UE. Filtres per CELEX, tipus de document, àmbit polític, data de publicació, cerca de text.",
-      "procedures": "Més de 2.000 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
+      "catalanTranslations": "Més de 9.200 lleis vinculants de la UE traduïdes al català (CC BY 4.0). Dades obertes, sense clau d'API. Filtres per tipus, categoria, motor; cerca de text.",
+      "laws": "27.103 lleis de la UE amb text complet. Filtres per CELEX, tipus de document, àmbit polític, data de publicació, cerca de text.",
+      "procedures": "Més de 2.100 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
       "consultations": "Aportacions d'actors interessats en directe del portal Have Your Say. Paginat amb agregats per país i tipus.",
       "commissioners": "Agendes en directe dels 27 membres del Col·legi. Resolució de nom insensible a accents.",
       "predictions": "Probabilitats de resultat i terminis previstos per IA per a qualsevol procediment legislatiu de la UE en curs (adoptat, rebutjat, retirat o pendent), amb puntuació de confiança i marge d'incertesa.",

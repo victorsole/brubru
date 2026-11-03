@@ -920,7 +920,7 @@
     "eyebrow": "For developers, RegTech, and AI agents",
     "titlePre": "The EU,",
     "titleAccent": "structured",
-    "lede": "Brubru is a vertical EU data provider. Our REST API now spans every EU institution, body and agency: 935 endpoints across 88 folders, one folder per institution. You get real-time access to 28,500+ adopted laws, 1,200+ legislative procedures, live consultation feedback, commissioner agendas, AI legislative-outcome predictions, the unified EU institutional calendar, the Transparency Register, and the legal-text intelligence layer that powers Brubru's own chatbot and Amendator. Brubru itself is the first user of its own API.",
+    "lede": "Brubru is a vertical EU data provider. Our REST API now spans every EU institution, body and agency: 1,061 endpoints across 93 folders, one folder per institution. You get real-time access to 27,103 EU laws with full text, 2,100+ legislative procedures, live consultation feedback, commissioner agendas, AI legislative-outcome predictions, the unified EU institutional calendar, the Transparency Register, and the legal-text intelligence layer that powers Brubru's own chatbot and Amendator. Brubru itself is the first user of its own API.",
     "cta": {
       "reference": "API reference",
       "contact": "Contact sales",
@@ -958,10 +958,12 @@
       "mcpDescription": "Brubru exposes a Model Context Protocol (MCP) server. Connect it to Claude, ChatGPT, Gemini, Mistral, or any MCP-compatible AI agent to give your assistant live EU legislative intelligence."
     },
     "endpoints": {
+      "fundingOpportunities": "Every EU call and tender in one list, each procedure once: over 90,000 from TED, the Funding & Tenders Portal and the EU agencies. Filters by status, deadline, CPV, country, body, amount.",
+      "fundingAwards": "Who received EU money: over 300,000 funded projects, funding recipients and contract awards in one list. Filters by type, country, programme, date, amount.",
       "brusselsLobbies": "Every Brussels-based EU Transparency Register organisation, ranked, with the news and updates each one publishes on its own website. Filters by organisation type, policy interest and lobbying spend; news-availability flags per org.",
-      "catalanTranslations": "9,200+ binding EU laws translated into Catalan (MIT). Open data - no API key required. Filter by doc_type, category, engine; full-text search.",
-      "laws": "28,500+ adopted EU laws. Filters by CELEX, doc type, policy area, publication date, full-text search.",
-      "procedures": "2,000+ legislative files from proposal to adoption. Filters by OEIL reference, lead committee, rapporteur, last-update.",
+      "catalanTranslations": "9,200+ binding EU laws translated into Catalan (CC BY 4.0). Open data - no API key required. Filter by doc_type, category, engine; full-text search.",
+      "laws": "27,103 EU laws with full text. Filters by CELEX, doc type, policy area, publication date, full-text search.",
+      "procedures": "2,100+ legislative files from proposal to adoption. Filters by OEIL reference, lead committee, rapporteur, last-update.",
       "consultations": "Live stakeholder contributions from the EC Have Your Say portal. Paginated with country and user-type aggregates.",
       "commissioners": "Live calendar items for all 27 college members. Name resolution is accent-insensitive.",
       "predictions": "AI-predicted outcome probabilities and timeline for any ongoing EU legislative procedure (adopted, rejected, withdrawn or pending), with a confidence score and an uncertainty range.",
