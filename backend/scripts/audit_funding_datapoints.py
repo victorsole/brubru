@@ -295,7 +295,7 @@ def main() -> int:
     lists += [p for p in AGENCY_LISTS if not only or p[len("/api/v2/"):] in only]
     if args.bundle:     # every list in one API bundle (Victor, 3 Nov 2026: bundles let us audit them better)
         lists = sorted(p for p, ops in spec["paths"].items()
-                       if "get" in ops and args.bundle in ops["get"].get("x-brubru-bundles", []) and not p.endswith("}")
+                       if "get" in ops and args.bundle in ops["get"].get("x-brubru-bundles", []) and "{" not in p
                        and (not only or p[len("/api/v2/"):] in only))
     now = datetime.now(timezone.utc)
     report, failing, known = {}, 0, 0
@@ -311,6 +311,9 @@ def main() -> int:
             continue
         bodies.update(needed or {})
         s, d = api.get(path, limit=PAGE, **bodies)
+        if args.bundle and s == 200 and not isinstance(d, dict):
+            print(f"[SKIP] {slug}: a plain lookup list, not items")
+            continue
         if s != 200 or not isinstance(d, dict):
             print(f"[FAIL] {slug}: HTTP {s}")
             failing += 1
