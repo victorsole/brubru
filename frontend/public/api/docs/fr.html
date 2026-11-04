@@ -19,10 +19,12 @@
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-  <span>Vous consultez la r&eacute;f&eacute;rence. Pour ex&eacute;cuter des appels r&eacute;els, il vous faut une cl&eacute; d'API Brubru: </span>
-  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">D&eacute;marrer un essai Professional</a>
+  <span>Vous consultez la r&eacute;f&eacute;rence. Essayez n'importe quelle route sans compte dans la </span>
+  <a href="/api/try" style="color:#fff;font-weight:700;text-decoration:underline;">console API</a>
+  <span> &middot; </span>
+  <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">obtenez votre cl&eacute;</a>
   <span> &middot; ou </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contacter les ventes</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">demandez les tarifs</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -212,15 +214,20 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1 064 endpoints sur 95 dossiers d'institutions de l'UE</div>
 <h1>L'UE, structur&eacute;e.</h1>
 <p class="main__lede">
-Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST donne aux d&eacute;veloppeurs, plateformes RegTech, &eacute;quipes d'affaires publiques et agents d'IA un acc&egrave;s programmatique &agrave; <strong>27 103 actes de l'UE adopt&eacute;s</strong> (30 246 publications du JO en texte int&eacute;gral), <strong>2 080 dossiers l&eacute;gislatifs</strong> suivis, <strong>16 521 fonctionnaires de l'UE</strong>, tous les d&eacute;put&eacute;s, <strong>58 399 amendements du PE</strong>, les registres du Parlement / Conseil / Conseil europ&eacute;en / Eurogroupe / Commission, la Banque centrale europ&eacute;enne et les institutions financi&egrave;res de l'UE, les agences d&eacute;centralis&eacute;es de l'UE (m&eacute;dicaments, s&eacute;curit&eacute; alimentaire, environnement, produits chimiques, drogues, droits fondamentaux et plus), financements et appels d'offres de l'UE, les 19 mod&egrave;les d'application aux fonds europ&eacute;ens de Tender Docs de Brubru, donn&eacute;es ouvertes incluant <strong>12 s&eacute;ries Eurostat cur&eacute;es sur le sport et la sant&eacute; li&eacute;e au fitness</strong> servies en direct et l'intelligence propre de Brubru sur l'UE. Les m&ecirc;mes donn&eacute;es que nous utilisons en interne sont celles que vous appelez. Brubru est le premier client de sa propre API.
+L'API Brubru donne &agrave; vos logiciels, ou &agrave; votre assistant IA, un acc&egrave;s direct aux donn&eacute;es de l'UE : <strong>27 103 actes de l'UE adopt&eacute;s</strong>, <strong>2 080 dossiers l&eacute;gislatifs</strong>, <strong>16 521 fonctionnaires de l'UE</strong>, tous les d&eacute;put&eacute;s, les appels &agrave; financement et march&eacute;s, les actualit&eacute;s et consultations de chaque institution et agence de l'UE. Ce sont les m&ecirc;mes donn&eacute;es que celles de Brubru.
 </p>
+<div class="callout callout--ok">
+<p><strong>Nouveau dans les API&nbsp;?</strong> Une API permet &agrave; un programme de demander des donn&eacute;es &agrave; un autre : votre logiciel envoie une requ&ecirc;te, comme un navigateur, et re&ccedil;oit des donn&eacute;es structur&eacute;es (JSON). Pas besoin d'&ecirc;tre d&eacute;veloppeur pour l'essayer : cherchez dans la console API, sans compte.</p>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:.75rem;margin:1.25rem 0;">
+<a href="/api/try" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#0693e3;color:#fff;">Essayer gratuitement, sans compte</a>
+<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#fff;color:#0693e3;border:2px solid #0693e3;">Demander les tarifs</a>
+</div>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>Une seule surface, une seule cl&eacute;.</strong> L'API est organis&eacute;e comme l'UE elle-m&ecirc;me: un dossier par institution ou organe, 95 dossiers au total, <strong>1 064 endpoints</strong>. Parcourez les dossiers ci-dessous ou ouvrez la <a href="/api/docs/reference.html"><strong>r&eacute;f&eacute;rence compl&egrave;te et toujours &agrave; jour de l'API &rarr;</strong></a>: chaque endpoint d&eacute;ploy&eacute;, g&eacute;n&eacute;r&eacute; en direct depuis la sp&eacute;cification OpenAPI.
 </p>
 
-<div class="callout callout--ok">
-<p><strong>Nouveau dans les API&nbsp;?</strong> Une API permet &agrave; votre logiciel de dialoguer avec celui de Brubru sur internet. Vous envoyez une requ&ecirc;te HTTP (comme un navigateur) et nous renvoyons du JSON (des donn&eacute;es structur&eacute;es). Le reste de cette documentation explique comment.</p>
-</div>
 
 <h2>Ce que vous obtenez</h2>
 <p>Chaque dossier correspond &agrave; une institution ou un organe de l'UE. Les compteurs sont exacts et &eacute;voluent &agrave; mesure que l'API grandit.</p>
@@ -437,7 +444,7 @@ Brubru est un fournisseur vertical de donn&eacute;es de l'UE. Notre API REST don
 <p>Chaque appel &agrave; <code>/api/v2/*</code> exige une cl&eacute; d'API envoy&eacute;e en token Bearer ou en en-t&ecirc;te <code>X-API-Key</code> :</p>
 
 <pre><code>curl -H "Authorization: Bearer brubru_live_..." \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
 
 <p>D&eacute;tails complets dans <a href="/api/docs/authentication.html">Authentification</a>.</p>
 
@@ -476,11 +483,11 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>D&eacute;marrage rapide : votre premier appel</h2>
 
-<p><strong>1. Obtenez une cl&eacute; d'API.</strong> &Eacute;crivez &agrave; <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> une fois l'abonnement Professional souscrit. Les cl&eacute;s ont la forme <code>brubru_live_</code> suivi de 48 caract&egrave;res hexad&eacute;cimaux.</p>
+<p><strong>1. Obtenez une cl&eacute; d'API.</strong> Cr&eacute;ez un compte gratuit, puis <a href="/api#your-keys">cr&eacute;ez une cl&eacute;</a>. Vous ne la verrez qu'une fois : copiez-la alors. Ajoutez du cr&eacute;dit sur la <a href="/billing">page de facturation</a>. Les cl&eacute;s ont la forme <code>brubru_live_</code> suivi de 48 caract&egrave;res hexad&eacute;cimaux.</p>
 
 <p><strong>2. V&eacute;rifiez que le service r&eacute;pond.</strong> Le contr&ocirc;le de sant&eacute; est public: aucune cl&eacute; requise :</p>
 
-<pre><code>curl "https://brubru.beresol.eu/health"</code></pre>
+<pre><code>curl "https://brubru-production.up.railway.app/health"</code></pre>
 
 <p>R&eacute;ponse :</p>
 
@@ -493,7 +500,7 @@ X-RateLimit-Tier: free</code></pre>
 <p><strong>3. Essayez une vraie recherche.</strong></p>
 
 <pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
 
 <p>Vous obtenez une liste pagin&eacute;e d'actes de l'UE correspondant &agrave; "artificial intelligence", avec identifiants CELEX, titres, dates et URL EUR-Lex. &Agrave; partir de l&agrave;, chaque endpoint suit le m&ecirc;me mod&egrave;le d'enveloppe: changez simplement le chemin.</p>
 

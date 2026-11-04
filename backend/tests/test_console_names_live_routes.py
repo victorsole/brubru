@@ -53,3 +53,71 @@ def test_every_bundle_has_its_words_in_every_language(lang):
     words = json.loads((_REPO / f"frontend/src/i18n/locales/{lang}.json").read_text(encoding="utf-8"))["api"]["bundles"]
     for bundle in bundle_ids():
         assert words[bundle]["name"] and words[bundle]["desc"], f"{lang}: {bundle}"
+
+
+def _tasks() -> list:
+    """The console's starting cards, as written in the service: id, route, bundle and the fields each names."""
+    block = re.search(r"export const TASKS[^=]*=\s*\[(.*?)\n\];", _SERVICE.read_text(encoding="utf-8"), re.S).group(1)
+    tasks = []
+    for chunk in re.split(r"\n  \},?\n?", block):
+        task_id = re.search(r"id: '([a-z-]+)'", chunk)
+        if not task_id:
+            continue
+        names = set(re.findall(r"'([a-z_]+)'", re.search(r"main: \[(.*?)\]", chunk, re.S).group(1)))
+        for key in ("prefill", "examples", "options"):
+            found = re.search(key + r": \{(.*?)\},?\n", chunk, re.S)
+            if found:
+                names |= set(re.findall(r"(?:^|[\s,{])([a-z_]+):", found.group(1)))
+        tasks.append({
+            "id": task_id.group(1),
+            "path": re.search(r"path: '([^']+)'", chunk).group(1),
+            "bundle": re.search(r"bundle: '([^']+)'", chunk).group(1),
+            "names": names,
+        })
+    return tasks
+
+
+def test_the_cards_are_found_and_each_opens_inside_its_bundle():
+    tasks = _tasks()
+    assert len(tasks) >= 8, tasks
+    for task in tasks:
+        assert task["bundle"] in bundles_of(task["path"]), f"{task['id']}: {task['path']} is not in {task['bundle']}"
+
+
+def test_every_field_a_card_names_is_a_field_of_its_route():
+    from main import app
+    paths = app.openapi()["paths"]
+    for task in _tasks():
+        fields = {p["name"] for p in paths[task["path"]]["get"].get("parameters", [])}
+        missing = sorted(task["names"] - fields)
+        assert not missing, f"{task['id']} names fields {task['path']} does not take: {missing}"
+
+
+def _words(lang: str) -> dict:
+    return json.loads((_REPO / f"frontend/src/i18n/locales/{lang}.json").read_text(encoding="utf-8"))["api"]["console"]
+
+
+def _flat(tree: dict, prefix: str = "") -> dict:
+    out = {}
+    for key, value in tree.items():
+        if isinstance(value, dict):
+            out.update(_flat(value, f"{prefix}{key}."))
+        else:
+            out[f"{prefix}{key}"] = value
+    return out
+
+
+@pytest.mark.parametrize("lang", ["en", "es", "ca", "fr", "it", "nl"])
+def test_every_card_has_its_words(lang):
+    words = _words(lang)["tasks"]
+    for task in _tasks():
+        assert words[task["id"]]["title"] and words[task["id"]]["desc"], f"{lang}: {task['id']}"
+
+
+@pytest.mark.parametrize("lang", ["es", "ca", "fr", "it", "nl"])
+def test_the_console_says_the_same_things_in_every_language(lang):
+    english, other = _flat(_words("en")), _flat(_words(lang))
+    assert set(english) == set(other), sorted(set(english) ^ set(other))[:10]
+    placeholder = re.compile(r"\{\{(\w+)\}\}")
+    for key, text in english.items():
+        assert set(placeholder.findall(text)) == set(placeholder.findall(other[key])), f"{lang}: {key}"

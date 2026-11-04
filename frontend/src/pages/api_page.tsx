@@ -12,7 +12,7 @@ import './api_page.css';
 export const ApiPage = () => {
   const { t } = useTranslation();
   const isAuthenticated = useAuth((s) => s.isAuthenticated);
-  const [activeSection, setActiveSection] = useState('your-keys');
+  const [activeSection, setActiveSection] = useState(isAuthenticated ? 'your-keys' : 'endpoints');
   const { hash } = useLocation();
 
   // A link such as /api#your-keys from the console lands on its section.
@@ -31,8 +31,9 @@ export const ApiPage = () => {
   ];
 
   const navItems = [
-    { id: 'your-keys',      label: t('api.keys.title') },
-    { id: 'endpoints',      label: t('api.console.title') },
+    ...(isAuthenticated
+      ? [{ id: 'your-keys', label: t('api.keys.title') }, { id: 'endpoints', label: t('api.console.title') }]
+      : [{ id: 'endpoints', label: t('api.console.title') }, { id: 'your-keys', label: t('api.keys.signedOut.title') }]),
     { id: 'quickstart',     label: t('api.sections.quickstart') },
     { id: 'authentication', label: t('api.sections.authentication') },
     { id: 'envelope',       label: t('api.sections.envelope') },
@@ -97,7 +98,10 @@ export const ApiPage = () => {
           <p className="api-page__lede">{t('api.lede')}</p>
 
           <div className="api-page__cta-row">
-            <a className="api-page__cta api-page__cta--primary" href="/api/docs">
+            <a className="api-page__cta api-page__cta--primary" href="#endpoints">
+              <span className="mdi mdi-magnify" /> {t('api.cta.try')}
+            </a>
+            <a className="api-page__cta api-page__cta--secondary" href="/api/docs">
               <span className="mdi mdi-book-open-variant" /> {t('api.cta.reference')}
             </a>
             <Link to="/mcp" className="api-page__cta api-page__cta--secondary">
@@ -108,25 +112,7 @@ export const ApiPage = () => {
             </a>
           </div>
 
-          {/* Your API keys (Phase A — 21 May 2026)
-              Logged-in users see ApiKeysPanel; logged-out users see a sign-in CTA. */}
-          {isAuthenticated ? (
-            <ApiKeysPanel />
-          ) : (
-            <section className="api-keys-signin-cta" id="your-keys" style={{ margin: '3rem 0' }}>
-              <span className="mdi mdi-key-outline api-keys-signin-cta__icon" aria-hidden="true" />
-              <h2 className="api-keys-signin-cta__title">{t('api.keys.signedOut.title')}</h2>
-              <p className="api-keys-signin-cta__body">{t('api.keys.signedOut.body')}</p>
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Link to="/login" className="api-keys-btn api-keys-btn--primary">
-                  <span className="mdi mdi-login" aria-hidden="true" /> {t('api.keys.signedOut.cta')}
-                </Link>
-                <Link to="/signup" className="api-keys-btn api-keys-btn--secondary">
-                  {t('api.keys.signedOut.signup')}
-                </Link>
-              </div>
-            </section>
-          )}
+          {isAuthenticated && <ApiKeysPanel />}
 
           {/* The console: every route, from the live spec, callable from here */}
           <section className="policy-page__section" id="endpoints">
@@ -134,6 +120,26 @@ export const ApiPage = () => {
             <p>{t('api.console.lede')}</p>
             <ApiConsole compact />
           </section>
+
+          {/* Your API keys: a visitor has tried it by now; someone signed in sees them above. */}
+          {!isAuthenticated && (
+            <section className="api-keys-signin-cta" id="your-keys" style={{ margin: '3rem 0' }}>
+              <span className="mdi mdi-key-outline api-keys-signin-cta__icon" aria-hidden="true" />
+              <h2 className="api-keys-signin-cta__title">{t('api.keys.signedOut.title')}</h2>
+              <p className="api-keys-signin-cta__body">{t('api.keys.signedOut.body')}</p>
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link to="/signup" className="api-keys-btn api-keys-btn--primary">
+                  {t('api.keys.signedOut.signup')}
+                </Link>
+                <Link to="/login" className="api-keys-btn api-keys-btn--secondary">
+                  <span className="mdi mdi-login" aria-hidden="true" /> {t('api.keys.signedOut.cta')}
+                </Link>
+                <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" className="api-keys-btn api-keys-btn--secondary">
+                  <span className="mdi mdi-email" aria-hidden="true" /> {t('api.keys.signedOut.pricing')}
+                </a>
+              </div>
+            </section>
+          )}
 
           <section className="policy-page__section" id="quickstart">
             <h2>{t('api.sections.quickstart')}</h2>
@@ -151,7 +157,7 @@ export const ApiPage = () => {
                 <div>
                   <strong>{t('api.quickstart.step2Title')}</strong>
                   <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=victims+rights+directive&limit=5"`}</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=victims+rights+directive&limit=5"`}</code></pre>
                 </div>
               </div>
               <div className="api-page__step">
@@ -169,7 +175,7 @@ export const ApiPage = () => {
             <h2>{t('api.sections.authentication')}</h2>
             <p>{t('api.auth.description')}</p>
             <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?policy_area=Trade&limit=10"`}</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?policy_area=Trade&limit=10"`}</code></pre>
             <p className="api-page__note">{t('api.auth.note')}</p>
           </section>
 
@@ -209,7 +215,7 @@ export const ApiPage = () => {
             <pre className="api-page__pre"><code>{`import requests
 
 API_KEY = "brubru_live_..."
-BASE    = "https://brubru.beresol.eu/api/v2"
+BASE    = "https://brubru-production.up.railway.app/api/v2"
 
 # Search laws by keyword
 resp = requests.get(f"{BASE}/legislative/eur-lex/laws",
@@ -227,7 +233,7 @@ for org in resp.json()["data"]:
 
             <h3>JavaScript / Node.js</h3>
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
-const BASE    = "https://brubru.beresol.eu/api/v2";
+const BASE    = "https://brubru-production.up.railway.app/api/v2";
 
 const res = await fetch(\`\${BASE}/legislative/eur-lex/laws?q=customs+code&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },

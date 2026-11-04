@@ -19,10 +19,12 @@
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-  <span>Esteu veient la refer&egrave;ncia. Per executar crides reals necessiteu una clau d'API de Brubru: </span>
-  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Inicieu una prova Professional</a>
+  <span>Est&agrave;s veient la refer&egrave;ncia. Prova qualsevol ruta sense compte a la </span>
+  <a href="/api/try" style="color:#fff;font-weight:700;text-decoration:underline;">consola de l'API</a>
+  <span> &middot; </span>
+  <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">aconsegueix la teva clau</a>
   <span> &middot; o </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contacteu amb vendes</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">pregunta pels preus</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -212,15 +214,20 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1.064 endpoints en 95 carpetes d'institucions de la UE</div>
 <h1>La UE, estructurada.</h1>
 <p class="main__lede">
-Brubru &eacute;s un prove&iuml;dor vertical de dades de la UE. La nostra API REST dona a desenvolupadors, plataformes RegTech, equips d'afers p&uacute;blics i agents d'IA acc&eacute;s program&agrave;tic a <strong>27.103 lleis de la UE adoptades</strong> (30.246 publicacions del DO amb text complet), <strong>2.080 expedients legislatius</strong> en seguiment, <strong>16.521 funcionaris de la UE</strong>, tots els eurodiputats, <strong>58.399 esmenes del PE</strong>, els registres del Parlament / Consell / Consell Europeu / Eurogrup / Comissi&oacute;, el Banc Central Europeu i les institucions financeres de la UE, les ag&egrave;ncies descentralitzades de la UE (medicaments, seguretat aliment&agrave;ria, medi ambient, subst&agrave;ncies qu&iacute;miques, drogues, drets fonamentals i m&eacute;s), finan&ccedil;ament i licitacions de la UE, les 19 plantilles d'aplicaci&oacute; a fons europeus de Tender Docs de Brubru, dades obertes que inclouen <strong>12 s&egrave;ries curades d'Eurostat de salut i esport per al fitness</strong> servides en directe i la intel&middot;lig&egrave;ncia pr&ograve;pia de Brubru sobre la UE. Les mateixes dades que fem servir internament s&oacute;n les que crideu. Brubru &eacute;s el primer client de la seva pr&ograve;pia API.
+L'API de Brubru dona al teu programari, o al teu assistent d'IA, acc&eacute;s directe a les dades de la UE: <strong>27.103 lleis de la UE adoptades</strong>, <strong>2.080 expedients legislatius</strong>, <strong>16.521 funcionaris de la UE</strong>, tots els diputats, convocat&ograve;ries i licitacions, not&iacute;cies i consultes de cada instituci&oacute; i ag&egrave;ncia de la UE. S&oacute;n les mateixes dades amb qu&egrave; funciona Brubru.
 </p>
+<div class="callout callout--ok">
+<p><strong>Nou a les API?</strong> Una API &eacute;s la manera com un programa demana dades a un altre: el teu programari envia una petici&oacute;, com un navegador, i rep dades estructurades (JSON). No cal ser desenvolupador per provar-la: cerca a la consola de l'API, sense compte.</p>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:.75rem;margin:1.25rem 0;">
+<a href="/api/try" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#0693e3;color:#fff;">Prova-la gratis, sense compte</a>
+<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#fff;color:#0693e3;border:2px solid #0693e3;">Pregunta pels preus</a>
+</div>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>Una superf&iacute;cie, una clau.</strong> L'API est&agrave; organitzada com la mateixa UE: una carpeta per instituci&oacute; o organisme, 95 carpetes en total, <strong>1.064 endpoints</strong>. Exploreu les carpetes a continuaci&oacute;, o obriu la <a href="/api/docs/reference.html"><strong>refer&egrave;ncia completa i sempre actualitzada de l'API &rarr;</strong></a>: cada endpoint desplegat, generat en directe des de l'especificaci&oacute; OpenAPI.
 </p>
 
-<div class="callout callout--ok">
-<p><strong>Nou en les API?</strong> Una API &eacute;s una manera que el vostre programari parli amb el programari de Brubru per internet. Envieu una petici&oacute; HTTP (com fa un navegador) i us retornem JSON (dades estructurades). La resta d'aquesta documentaci&oacute; explica com.</p>
-</div>
 
 <h2>Qu&egrave; obteniu</h2>
 <p>Cada carpeta correspon a una instituci&oacute; o organisme de la UE. Les xifres s&oacute;n exactes i s'actualitzen a mesura que creix l'API.</p>
@@ -437,7 +444,7 @@ Brubru &eacute;s un prove&iuml;dor vertical de dades de la UE. La nostra API RES
 <p>Cada crida a <code>/api/v2/*</code> requereix una clau d'API enviada com a token Bearer o com a cap&ccedil;alera <code>X-API-Key</code>:</p>
 
 <pre><code>curl -H "Authorization: Bearer brubru_live_..." \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
 
 <p>Detalls complets a <a href="/api/docs/authentication.html">Autenticaci&oacute;</a>.</p>
 
@@ -476,11 +483,11 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Inici r&agrave;pid: la vostra primera crida</h2>
 
-<p><strong>1. Aconseguiu una clau d'API.</strong> Escriviu a <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> quan tingueu la subscripci&oacute; Professional. Les claus tenen la forma <code>brubru_live_</code> seguit de 48 car&agrave;cters hexadecimals.</p>
+<p><strong>1. Aconsegueix una clau d'API.</strong> Crea un compte gratu&iuml;t i despr&eacute;s <a href="/api#your-keys">crea una clau</a>. Nom&eacute;s la veur&agrave;s una vegada: copia-la llavors. Afegeix saldo a la <a href="/billing">p&agrave;gina de facturaci&oacute;</a>. Les claus tenen la forma <code>brubru_live_</code> seguida de 48 car&agrave;cters hexadecimals.</p>
 
 <p><strong>2. Comproveu que el servei funciona.</strong> La comprovaci&oacute; d'estat &eacute;s p&uacute;blica: no cal clau:</p>
 
-<pre><code>curl "https://brubru.beresol.eu/health"</code></pre>
+<pre><code>curl "https://brubru-production.up.railway.app/health"</code></pre>
 
 <p>Resposta:</p>
 
@@ -493,7 +500,7 @@ X-RateLimit-Tier: free</code></pre>
 <p><strong>3. Proveu una cerca real.</strong></p>
 
 <pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
 
 <p>Obteniu una llista paginada de lleis de la UE que coincideixen amb "artificial intelligence", amb identificadors CELEX, t&iacute;tols, dates i URL d'EUR-Lex. A partir d'aqu&iacute;, cada endpoint segueix el mateix patr&oacute; de sobre: nom&eacute;s cal canviar la ruta.</p>
 

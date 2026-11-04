@@ -16,7 +16,7 @@
   <span> &middot; </span>
   <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">get your own key</a>
   <span> &middot; or </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">ask about pricing</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -267,7 +267,7 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 <li><strong>New:</strong> <code>GET /api/v2/pricing</code> lists what a call costs. It is public and free.</li>
 <li><strong>New headers:</strong> <code>X-Brubru-Cost-Eur</code> and <code>X-Brubru-Balance-Eur</code> on every metered call; <code>X-Brubru-Sandbox-Remaining</code> and <code>X-Brubru-Sandbox-Pool-Remaining</code> on a sandbox call. A browser can read them, with <code>X-RateLimit-*</code> and <code>X-Request-Id</code>.</li>
 <li><strong>Sandbox limits:</strong> 10 calls a day per visitor and 100 in total; GET only; <code>limit</code> up to 25, <code>page</code> up to 10, answers up to 3 MB, JSON only; heavy and live-fetch routes need your own key. See <a href="/api/docs/errors.html">the error codes</a>.</li>
-<li><strong>Price:</strong> <code>/predictions/{procedure_ref}/outcome</code> and <code>/timeline</code> now cost the same as their v1 twins, EUR 0.005 a call.</li>
+<li><strong>Price:</strong> <code>/predictions/{procedure_ref}/outcome</code> and <code>/timeline</code> now cost the same as their v1 twins.</li>
 </ul>
 
 <h3>2 November 2026: the funding standard (1,061 total)</h3>
@@ -406,7 +406,7 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 <ul>
 <li><strong>34 institution folders</strong>: legislative (EUR-Lex / OEIL), parliament, commission, council, european-council, eurogroup, ecb, eu-financial-institutions, esm, and one folder each for every EU agency (ACER, BEREC, Cedefop, CPVO, ECDC, ECHA, EEA, EFSA, EIGE, EIT, EMA, ENISA, eu-LISA, EU-OSHA, EUAA, EUDA, EUIPO, FRA), plus funding, consultations, open-data, general-publications, who-is-who, geographical-indications, and proprietary.</li>
 <li><strong>OpenAPI spec</strong>: the canonical live JSON is at <code>https://brubru.beresol.eu/api/openapi.json</code>.</li>
-<li><strong>Rate-limit state</strong>: read from response headers on any authenticated call: <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Tier</code>. Example: <code>curl -i -H "Authorization: Bearer $KEY" "https://brubru.beresol.eu/api/v2/proprietary/guides?limit=1"</code>.</li>
+<li><strong>Rate-limit state</strong>: read from response headers on any authenticated call: <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Tier</code>. Example: <code>curl -i -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v2/proprietary/guides?limit=1"</code>.</li>
 <li><strong>Health check</strong>: <code>GET /health</code> (unversioned, no key required).</li>
 </ul>
 
@@ -552,7 +552,7 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 <li>Bulk exports (nightly CSV + Parquet).</li>
 <li>Multilingual responses (24 EU languages).</li>
 <li>Semantic search via embeddings.</li>
-<li>Multi-tenant organisations (Jordi's CTO can mint their own key under his org).</li>
+<li>Multi-tenant organisations (a partner's technical lead can create keys under their organisation).</li>
 </ul>
 
 <h2>Subscribe</h2>

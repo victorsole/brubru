@@ -319,13 +319,14 @@ export const McpPage = () => {
             <h2>{t('mcp.pricing.title')}</h2>
             <p>{t('mcp.pricing.body')}</p>
             <ul className="mcp-bullets">
-              <li>{t('mcp.pricing.b1')}</li>
-              <li>{t('mcp.pricing.b2')}</li>
               <li>{t('mcp.pricing.b3')}</li>
               <li>{t('mcp.pricing.b4')}</li>
             </ul>
             <div className="api-page__cta-row" style={{ marginTop: '1.5rem' }}>
-              <Link to="/api" className="api-page__cta api-page__cta--primary">
+              <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" className="api-page__cta api-page__cta--primary">
+                <span className="mdi mdi-email" aria-hidden="true" /> {t('mcp.cta.askPricing')}
+              </a>
+              <Link to="/api" className="api-page__cta api-page__cta--secondary">
                 <span className="mdi mdi-key-plus" aria-hidden="true" /> {t('mcp.cta.mintKey')}
               </Link>
               <Link to="/billing" className="api-page__cta api-page__cta--secondary">

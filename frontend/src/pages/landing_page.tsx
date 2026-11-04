@@ -221,6 +221,10 @@ export const LandingPage = () => {
             <span className="nav-link-text">{t('landing.nav.demo')}</span>
             <span className="nav-link-text nav-link-text--hover">{t('landing.nav.demo')}</span>
           </a>
+          <Link to="/api" className="nav-link">
+            <span className="nav-link-text">{t('landing.nav.api')}</span>
+            <span className="nav-link-text nav-link-text--hover">{t('landing.nav.api')}</span>
+          </Link>
           <a href="#about" className="nav-link">
             <span className="nav-link-text">{t('landing.nav.about')}</span>
             <span className="nav-link-text nav-link-text--hover">{t('landing.nav.about')}</span>
@@ -247,7 +251,7 @@ export const LandingPage = () => {
         {/* ========== 1. HERO ========== */}
         <section className="section section--hero">
           <div className="hero">
-            <video className="hero__video" autoPlay muted loop playsInline>
+            <video className="hero__video" autoPlay muted loop playsInline poster="/assets/jubelpark_poster.jpg">
               <source src="/assets/jubelpark.mp4" type="video/mp4" />
             </video>
             <div className="hero__overlay" />
@@ -259,6 +263,8 @@ export const LandingPage = () => {
                 <Link to="/chat" className="btn btn--white btn--large">{t('landing.hero.startTrial')}</Link>
                 <Link to="/login" className="btn btn--outline-white btn--large">{t('landing.hero.logIn')}</Link>
               </div>
+              {/* On a phone the header's links are hidden: this is how a visitor looking for the API finds it. */}
+              <Link to="/api" className="hero__api-link">{t('landing.hero.apiLink')}</Link>
             </div>
           </div>
         </section>
@@ -281,7 +287,7 @@ export const LandingPage = () => {
         {/* ========== 3. VIDEO ========== */}
         <section className="section video-section">
           <div className="video-container">
-            <video autoPlay muted loop playsInline>
+            <video autoPlay muted loop playsInline poster="/assets/eu_flag_poster.jpg">
               <source src="/assets/eu_flag.mp4" type="video/mp4" />
             </video>
             <div className="video-overlay">
@@ -430,17 +436,13 @@ export const LandingPage = () => {
         }}>
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <p style={{ color: '#0693e3', fontWeight: 600, fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>
-              For developers and RegTech partners
+              {t('landing.apiSection.eyebrow')}
             </p>
             <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#111827', marginBottom: '16px' }}>
-              The EU, structured. REST API and MCP server.
+              {t('landing.apiSection.title')}
             </h2>
             <p style={{ color: '#6b7280', fontSize: '1.1rem', lineHeight: 1.7, marginBottom: '32px' }}>
-              Brubru is a vertical EU data provider. The same 27,103 laws, 1,296 procedures,
-              live consultation feedback, commissioner agendas, and legal-text intelligence
-              that power the Brubru app are exposed as a paid <strong>REST API</strong> and as an{' '}
-              <strong>MCP server</strong>. Brubru itself is the first user of its own API.
-              Built for RegTech, law firms, public-affairs teams, and AI agents.
+              {t('landing.apiSection.body')}
             </p>
 
             <div style={{
@@ -450,25 +452,36 @@ export const LandingPage = () => {
               flexWrap: 'wrap',
               marginBottom: '32px',
             }}>
-              <a href="/api" style={{
+              <Link to="/api/try" style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
                 background: '#0693e3', color: '#fff', padding: '12px 22px',
                 borderRadius: '4px', textDecoration: 'none', fontWeight: 700,
               }}>
-                <span className="mdi mdi-api" /> Explore the API
-              </a>
-              <a href="/api/docs" style={{
+                <span className="mdi mdi-magnify" /> {t('landing.apiSection.try')}
+              </Link>
+              <Link to="/api" style={{
                 display: 'inline-flex', alignItems: 'center', gap: '8px',
                 background: '#fff', color: '#0693e3', padding: '12px 22px',
                 borderRadius: '4px', textDecoration: 'none', fontWeight: 700,
                 border: '2px solid #0693e3',
               }}>
-                <span className="mdi mdi-book-open-variant" /> API reference
+                <span className="mdi mdi-api" /> {t('landing.apiSection.explore')}
+              </Link>
+              <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                background: '#fff', color: '#0693e3', padding: '12px 22px',
+                borderRadius: '4px', textDecoration: 'none', fontWeight: 700,
+                border: '2px solid #0693e3',
+              }}>
+                <span className="mdi mdi-email" /> {t('landing.apiSection.pricing')}
               </a>
             </div>
 
+            <details style={{ textAlign: 'left', marginBottom: '16px' }}>
+              <summary style={{ cursor: 'pointer', color: '#0693e3', fontWeight: 700, marginBottom: '16px' }}>{t('landing.apiSection.reference')}</summary>
+
             <p style={{ color: '#374151', fontWeight: 700, marginBottom: '12px', textAlign: 'left' }}>
-              REST API endpoints (Professional subscription, 60 req/min):
+              REST API routes (60 requests a minute per key):
             </p>
             <div style={{
               display: 'grid',
@@ -511,7 +524,7 @@ export const LandingPage = () => {
               {[
                 { icon: 'mdi-chat-question', name: 'ask_brubru', desc: 'Ask any EU policy question' },
                 { icon: 'mdi-scale-balance', name: 'search_eu_legislation', desc: 'Search 27,103 EU laws' },
-                { icon: 'mdi-book-open-variant', name: 'search_knowledge_guides', desc: '128 curated policy guides' },
+                { icon: 'mdi-book-open-variant', name: 'search_knowledge_guides', desc: 'Curated policy guides' },
                 { icon: 'mdi-file-document-check', name: 'get_procedure_status', desc: 'Legislative procedure tracker' },
                 { icon: 'mdi-calendar-clock', name: 'get_calendar_events', desc: 'EU institutional calendar' },
                 { icon: 'mdi-library', name: 'search_eprs', desc: 'EP Research publications' },
@@ -531,11 +544,12 @@ export const LandingPage = () => {
 
             <p style={{ color: '#9ca3af', fontSize: '0.85rem' }}>
               Same canonical pagination envelope across every endpoint. OpenAPI 3.1 spec at{' '}
-              <a href="/api/v2/openapi.json" style={{ color: '#0693e3' }}>/api/v2/openapi.json</a>{' '}
+              <a href="https://brubru-production.up.railway.app/api/v2/openapi.json" style={{ color: '#0693e3' }}>/api/v2/openapi.json</a>{' '}
               &mdash; importable into Postman in one click.
               <br />
               Interested in integrating? Contact <a href="mailto:hello@beresol.eu" style={{ color: '#0693e3' }}>hello@beresol.eu</a>
             </p>
+            </details>
           </div>
         </section>
 

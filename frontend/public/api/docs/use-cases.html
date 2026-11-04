@@ -16,7 +16,7 @@
   <span> &middot; </span>
   <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">get your own key</a>
   <span> &middot; or </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">ask about pricing</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -255,38 +255,38 @@ What you'd actually call, in what order, to do your job. Each section maps a pro
 <h3>Morning monitoring</h3>
 <pre><code># Recently published EU acts in the digital policy area
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/recent?policy_area=digital&limit=50"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/recent?policy_area=digital&limit=50"</code></pre>
 
 <p>Then per hit, pull context:</p>
 <pre><code># Is there a procedure behind this announcement?
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?q=&lt;topic&gt;&limit=5"
+  "https://brubru-production.up.railway.app/api/v2/legislative/oeil/procedures?q=&lt;topic&gt;&limit=5"
 
 # What does EPRS say about it?
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/eprs?q=&lt;topic&gt;&limit=5"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/parliament/eprs?q=&lt;topic&gt;&limit=5"</code></pre>
 
 <h3>Briefing prep</h3>
 <pre><code># Procedure state, rapporteur, committee
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures/2022%2F0277%28COD%29"
+  "https://brubru-production.up.railway.app/api/v2/legislative/oeil/procedures/2022%2F0277%28COD%29"
 
 # EPRS briefings on it
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/eprs?procedure_ref=2022/0277(COD)"
+  "https://brubru-production.up.railway.app/api/v2/parliament/eprs?procedure_ref=2022/0277(COD)"
 
 # Latest committee activity
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/committees/LIBE/minutes?limit=5"
+  "https://brubru-production.up.railway.app/api/v2/parliament/committees/LIBE/minutes?limit=5"
 
 # Procedure timeline with all stages
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures/2022%2F0277%28COD%29"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/oeil/procedures/2022%2F0277%28COD%29"</code></pre>
 
 <h3>Draft support</h3>
 <pre><code># Extract the law's defined terms to paste into your memo
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws/32024R1689/defined-terms"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws/32024R1689/defined-terms"</code></pre>
 
 <h2>Corporate compliance / in-house counsel</h2>
 <p>You work inside a large company. You need to catch new regulation that affects your sector before your competitors brief their clients on it. Your main headache: a Spanish or German decree lands; is it transposing an EU directive, and if so, which one?</p>
@@ -294,38 +294,38 @@ curl -H "Authorization: Bearer $KEY" \
 <h3>Regulation detection</h3>
 <pre><code># Recently adopted EU acts matching a keyword
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/recent?q=Artificial+Intelligence&limit=20"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/recent?q=Artificial+Intelligence&limit=20"</code></pre>
 
 <h3>National-to-EU linking (the killer use case)</h3>
 <p>You have text from a Spanish BOE decree. Find the parent EU regulation automatically:</p>
 <pre><code>curl -X POST -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
   -d '{"text": "Real Decreto 123/2026, por el que se transpone la Directiva (UE) 2024/1234 sobre ciberseguridad"}' \
-  https://brubru.beresol.eu/api/v2/legislative/eur-lex/resolve-references</code></pre>
+  https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/resolve-references</code></pre>
 
 <p>Response tells you which CELEX the Spanish decree transposes. Then fetch the EU procedure:</p>
 <pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?q=cybersecurity&limit=3"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/oeil/procedures?q=cybersecurity&limit=3"</code></pre>
 
 <h3>Stakeholder watch</h3>
 <pre><code># Who in your country commented on the relevant consultation?
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/commission/consultations/by-initiative/14094/feedback?country=ESP&limit=20"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/commission/consultations/by-initiative/14094/feedback?country=ESP&limit=20"</code></pre>
 
 <h2>Trade association policy lead</h2>
 <p>You run policy for a sector federation (think DIGITALEUROPE, CEFIC, EFPIA, ACEA). You track files that affect your members, coordinate amendments, and engage with MEPs.</p>
 
 <h3>Committee scheduling</h3>
 <pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/committee-agendas?committee=ENVI&limit=20"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/parliament/committee-agendas?committee=ENVI&limit=20"</code></pre>
 
 <h3>Amendment intelligence</h3>
 <pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/committees/ENVI/work-items?q=packaging&limit=10"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/parliament/committees/ENVI/work-items?q=packaging&limit=10"</code></pre>
 
 <h3>MEP targeting</h3>
 <pre><code># Which EPP MEPs from your major-market countries are on the relevant committee?
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/meps?country=DE&group=EPP&limit=50"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/parliament/meps?country=DE&group=EPP&limit=50"</code></pre>
 
 <h2>EU official (Commission, EP, Council, agency)</h2>
 <p>You work inside the institutions. You need to see what sibling institutions are doing and what member states are saying, without logging into 5 different intranets.</p>
@@ -333,32 +333,32 @@ curl -H "Authorization: Bearer $KEY" \
 <h3>Cross-institution snapshot</h3>
 <pre><code># Recently published EU acts on your topic
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/recent?q=packaging&limit=50"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/recent?q=packaging&limit=50"</code></pre>
 
 <h3>Historical lookup</h3>
 <pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=packaging&published_from=2020-01-01&limit=20"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=packaging&published_from=2020-01-01&limit=20"</code></pre>
 
 <h2>Parliamentary assistant (MEP staff)</h2>
 <p>You work for an MEP. Your day revolves around your MEP's committees, files, and speaking slots.</p>
 
 <h3>Files where your MEP is rapporteur</h3>
 <pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?rapporteur_mep_id=197668"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/oeil/procedures?rapporteur_mep_id=197668"</code></pre>
 
 <h3>Committee prep</h3>
 <pre><code># What's on ENVI's agenda next week?
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/committee-agendas?committee=ENVI&date_from=2026-04-20&date_to=2026-04-27"
+  "https://brubru-production.up.railway.app/api/v2/parliament/committee-agendas?committee=ENVI&date_from=2026-04-20&date_to=2026-04-27"
 
 # What did they discuss last time?
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/committees/ENVI/minutes?limit=3"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/parliament/committees/ENVI/minutes?limit=3"</code></pre>
 
 <h3>Draft a question</h3>
 <pre><code># Find the relevant EPRS background
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/eprs?q=microplastics&limit=5"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/parliament/eprs?q=microplastics&limit=5"</code></pre>
 
 <h2>NGO / civil society advocate</h2>
 <p>You work for Transparency International EU, BEUC, EPHA, EDRi, BirdLife, WWF, CAN Europe or similar. You defend public interest in EU legislation: draft amendments, respond to consultations, brief coalitions.</p>
@@ -366,17 +366,17 @@ curl -H "Authorization: Bearer $KEY" \
 <h3>Campaign monitoring</h3>
 <pre><code># Open Commission consultations in your policy area
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/commission/consultations?q=environment"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/commission/consultations?q=environment"</code></pre>
 
 <h3>Amendment drafting</h3>
 <pre><code># Get the law's full text to cite
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws/32024R1689/text?format=plain"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws/32024R1689/text?format=plain"</code></pre>
 
 <h3>Stakeholder mapping</h3>
 <pre><code># Who's pushed back on the consultation? Which businesses?
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/commission/consultations/by-initiative/13174/feedback?user_type=BUSINESS_ASSOCIATION"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/commission/consultations/by-initiative/13174/feedback?user_type=BUSINESS_ASSOCIATION"</code></pre>
 
 <h2>Academic researcher</h2>
 <p>You're building a dataset for a paper on EU legislative productivity, or teaching an EU politics class.</p>
@@ -386,7 +386,7 @@ curl -H "Authorization: Bearer $KEY" \
 PAGE=1
 while : ; do
   curl -s -H "Authorization: Bearer $KEY" \
-    "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?policy_area=Digital&doc_type=Regulation&published_from=2020-01-01&limit=100&page=$PAGE" \
+    "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?policy_area=Digital&doc_type=Regulation&published_from=2020-01-01&limit=100&page=$PAGE" \
     >> dataset.jsonl
   HAS_MORE=$(tail -1 dataset.jsonl | jq .has_more)
   [ "$HAS_MORE" = "true" ] || break
@@ -395,11 +395,11 @@ done</code></pre>
 
 <h3>Trace a law's legislative history</h3>
 <pre><code>curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/oeil/procedures?q=GDPR&limit=1"
+  "https://brubru-production.up.railway.app/api/v2/legislative/oeil/procedures?q=GDPR&limit=1"
 
 # Then committee work
 curl -H "Authorization: Bearer $KEY" \
-  "https://brubru.beresol.eu/api/v2/parliament/committees/LIBE/work-items?q=data+protection"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/parliament/committees/LIBE/work-items?q=data+protection"</code></pre>
 
 <h2>Competitor integration patterns</h2>
 

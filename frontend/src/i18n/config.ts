@@ -93,4 +93,11 @@ i18n
     },
   });
 
+// The page says which language it is in: without this a screen reader reads French text with an English voice.
+const setPageLanguage = (language?: string) => {
+  if (language && typeof document !== 'undefined') document.documentElement.lang = language;
+};
+i18n.on('languageChanged', setPageLanguage);
+setPageLanguage(i18n.resolvedLanguage || i18n.language);
+
 export default i18n;

@@ -807,13 +807,15 @@
       "demo": "Démo",
       "about": "À propos",
       "logIn": "Se connecter",
-      "startFree": "Commencer gratuitement"
+      "startFree": "Commencer gratuitement",
+      "api": "API"
     },
     "hero": {
       "title": "Votre assistant IA pour la bulle européenne",
       "subtitle": "Analysez la législation. Rédigez des amendements. Naviguez les institutions de l'UE.",
       "startTrial": "Essai gratuit",
-      "logIn": "Se connecter"
+      "logIn": "Se connecter",
+      "apiLink": "Besoin de données de l'UE dans vos outils ? Essayez l'API, gratuitement"
     },
     "intro": {
       "eyebrow": "Qu'est-ce que Brubru",
@@ -914,20 +916,30 @@
       "terms": "Conditions",
       "cookies": "Cookies",
       "contact": "Contact"
+    },
+    "apiSection": {
+      "eyebrow": "Utilisez les données dans vos propres outils",
+      "title": "Toutes les données de l'UE derrière Brubru, prêtes pour vos logiciels",
+      "body": "Lois, dossiers législatifs, appels à financement, actualités, consultations et plus encore, de chaque institution et agence de l'UE. Une API permet à un programme de demander des données à un autre. Pas besoin d'être développeur pour l'essayer : cherchez ici, sans compte.",
+      "try": "Essayer gratuitement, sans compte",
+      "explore": "Comment fonctionne l'API",
+      "reference": "Référence pour les développeurs",
+      "pricing": "Demander les tarifs"
     }
   },
   "api": {
-    "eyebrow": "Pour développeurs, RegTech et agents IA",
+    "eyebrow": "Pour tous ceux qui ont besoin de données de l'UE",
     "titlePre": "L'UE,",
     "titleAccent": "structurée",
-    "lede": "Brubru est un fournisseur vertical de données de l'UE. Notre API REST couvre désormais chaque institution, organe et agence de l'UE : 1 064 endpoints répartis sur 95 dossiers, un dossier par institution. Vous obtenez un accès en temps réel à 27 103 lois de l'UE avec leur texte intégral, plus de 2 100 procédures législatives, les retours des consultations en direct, les agendas des commissaires, les prédictions de résultats législatifs par IA, le calendrier institutionnel unifié de l'UE, le registre de transparence et la couche d'intelligence sur le texte juridique qui alimente le chatbot et l'Amendator de Brubru. Brubru est le premier utilisateur de sa propre API.",
+    "lede": "L'API Brubru donne à vos logiciels, ou à votre assistant IA, un accès direct aux données de l'UE : lois, dossiers législatifs, appels à financement, actualités, consultations et plus encore, de chaque institution et agence de l'UE. Une API permet à un programme de demander des données à un autre. Pas besoin d'être développeur pour l'essayer : la console de cette page fonctionne sans compte.",
     "cta": {
       "reference": "Référence de l'API",
-      "contact": "Parler aux ventes",
+      "contact": "Nous contacter",
       "openRef": "Ouvrir la référence",
       "ping": "/api/v1/ping (public)",
       "openFullDocs": "Ouvrir la documentation complète",
-      "mcp": "Utiliser dans Claude / ChatGPT / IDE (MCP)"
+      "mcp": "Utiliser dans Claude / ChatGPT / IDE (MCP)",
+      "try": "Essayer maintenant, gratuitement"
     },
     "sections": {
       "quickstart": "Démarrage rapide",
@@ -944,9 +956,9 @@
       "onThisPage": "Sur cette page"
     },
     "quickstart": {
-      "intro": "Obtenez votre première réponse API en moins de deux minutes.",
-      "step1Title": "Obtenez un abonnement Professional",
-      "step1": "Demandez une démo à hello@beresol.eu pour mettre en place votre plan Professional. Votre clé API apparaîtra ensuite dans les paramètres de votre compte.",
+      "intro": "Pour les développeurs : votre premier appel depuis votre code, en deux minutes environ.",
+      "step1Title": "Créez votre clé",
+      "step1": "Créez un compte gratuit, puis une clé sous Vos clés API sur cette page. Ajoutez du crédit sur la page de facturation.",
       "step2Title": "Effectuez votre première requête",
       "step3Title": "Traitez la réponse",
       "step3": "Chaque endpoint renvoie la même enveloppe paginée. Extrayez le tableau data pour itérer sur les résultats. Vérifiez has_more et next_page pour paginer."
@@ -957,7 +969,7 @@
       "mcpDescription": "Brubru expose un serveur Model Context Protocol (MCP). Connectez-le à Claude, ChatGPT, Gemini, Mistral ou à tout agent IA compatible MCP pour donner à votre assistant une intelligence législative européenne en temps réel."
     },
     "auth": {
-      "description": "Chaque endpoint /api/v2/* exige une clé API. Envoyez-la en Authorization: Bearer <clé> (recommandé) ou X-API-Key: <clé>. Les clés sont émises par l'équipe Brubru pour les abonnés Professional. Limite : 60 requêtes par minute par clé.",
+      "description": "Chaque route /api/v2/* demande une clé, sauf lorsque vous essayez dans la console ci-dessus. Passez-la en Authorization: Bearer <clé> (recommandé) ou X-API-Key: <clé>. Vous créez vos clés vous-même depuis votre compte, jusqu'à trois à la fois. La limite est de 60 requêtes par minute par clé.",
       "note": "X-API-Key est aussi accepté pour les scripts curl. Bearer est la valeur par défaut pour Postman, OpenAPI et les SDK."
     },
     "envelope": {
@@ -969,7 +981,7 @@
       "meaning": "Signification",
       "ok": "Succès. Consultez X-RateLimit-Remaining pour vos appels restants dans la fenêtre.",
       "unauthorized": "Clé API manquante ou invalide.",
-      "forbidden": "Clé valide mais le titulaire n'est pas au niveau Professional.",
+      "forbidden": "Clé valide, mais elle ne couvre pas cette route.",
       "notFound": "Ressource introuvable.",
       "invalidQuery": "Paramètre de requête invalide.",
       "rateLimited": "Limite dépassée. Respectez l'en-tête Retry-After.",
@@ -994,10 +1006,11 @@
         "reached": "Vous avez atteint le maximum de 3 clés API actives. Révoquez une clé inutilisée pour en créer une autre."
       },
       "signedOut": {
-        "title": "Connectez-vous pour créer une clé API",
-        "body": "Les clés API se créent depuis votre compte Brubru. Connectez-vous ou créez-en un pour commencer.",
+        "title": "Obtenez votre propre clé",
+        "body": "Une clé permet à vos logiciels d'utiliser l'API, sans limite quotidienne. Créez un compte gratuit, puis une clé. Essayer dans la console ne demande rien de tout cela.",
         "cta": "Se connecter",
-        "signup": "Créer un compte"
+        "signup": "Créer un compte gratuit",
+        "pricing": "Demander les tarifs"
       },
       "list": {
         "name": "Nom",
@@ -1141,68 +1154,1373 @@
       "openSource": "Open source sur GitHub :"
     },
     "console": {
-      "title": "Console de l'API",
-      "lede": "Appelez l'API d'ici, sans compte : choisissez une route, remplissez son formulaire, cliquez sur Envoyer et voyez les lignes réelles de l'UE qui reviennent.",
+      "title": "Console API",
+      "lede": "Consultez des données européennes en direct en trois étapes, sans compte : choisissez ce que vous cherchez, affinez si vous le souhaitez, puis appuyez sur Rechercher.",
       "backToApi": "La page de l'API",
       "openFull": "Ouvrir en plein écran",
-      "search": "Chercher parmi {{count}} routes",
+      "search": "Chercher par mot ({{count}} au total)",
       "loading": "Chargement du catalogue...",
       "loadError": "Le catalogue n'a pas pu être chargé.",
       "retry": "Réessayer",
-      "noMatch": "Aucune route ne correspond.",
+      "noMatch": "Aucun résultat pour ce mot.",
       "resultCount_one": "{{count}} route",
       "resultCount_other": "{{count}} routes",
-      "firstResults": "Les {{shown}} premières routes sur {{count}}. Ajoutez un mot pour affiner.",
-      "deprecated": "Obsolète",
-      "start": "Commencez ici :",
-      "startNews": "Dernières actualités de l'UE",
-      "startFunding": "Appels et marchés",
-      "startLaws": "Lois de l'UE",
-      "startProcedures": "Procédures législatives",
-      "allowance": "{{calls}} appels gratuits par jour, jusqu'à {{rows}} lignes par appel.",
-      "callsLeft_one": "Il vous reste {{count}} appel gratuit aujourd'hui",
-      "callsLeft_other": "Il vous reste {{count}} appels gratuits aujourd'hui",
-      "about": "À propos de cette route",
-      "noParameters": "Cette route n'a pas de paramètres.",
-      "required": "obligatoire",
+      "firstResults": "Les {{shown}} premiers sur {{count}}. Ajoutez un mot pour affiner.",
+      "deprecated": "En cours de retrait",
+      "stepChoose": "Que cherchez-vous ?",
+      "stepNarrow": "Affinez (facultatif)",
+      "stepItem": "Ouvrir un élément",
+      "stepResults": "Résultats",
+      "allowance": "{{calls}} recherches gratuites par jour",
+      "callsLeft_one": "Encore {{count}} recherche gratuite aujourd'hui",
+      "callsLeft_other": "Encore {{count}} recherches gratuites aujourd'hui",
+      "allowanceTip": "Vous pouvez essayer sans compte : {{calls}} recherches par jour depuis votre connexion, jusqu'à {{rows}} résultats chacune. Avec votre propre clé API, cette limite disparaît et vos logiciels peuvent utiliser les mêmes données.",
+      "freeCallTipLabel": "À propos des recherches gratuites",
+      "bundleCardsLabel": "Choisissez ce dont vous avez besoin",
+      "browseAll": "Ou parcourez les {{count}} routes",
+      "routeTipLabel": "Qu'est-ce qu'une route ?",
+      "routeTip": "Une route est un type de données avec sa propre adresse web, comme les lois de l'UE ou les actualités d'une agence. Les cartes ci-dessus sont les meilleurs points de départ ; cette liste contient toutes les routes, classées par institution.",
+      "bundleLabel": "Afficher seulement",
+      "allRoutes": "Tout",
+      "idleList": "Appuyez sur Rechercher pour voir ici les résultats en direct.",
+      "idleItem": "Appuyez sur Ouvrir pour voir cet élément ici.",
+      "idleNeedsKey": "Cet élément nécessite votre propre clé API : l'essai gratuit ne peut pas l'afficher ici.",
+      "idleCost": "Chaque recherche utilise 1 de vos {{calls}} recherches gratuites du jour. Choisir et remplir le formulaire n'en utilise aucune.",
+      "allOptional": "Tous ces champs sont facultatifs. Laissez-les vides pour tout voir.",
+      "moreFilters_one": "Plus de filtres ({{count}})",
+      "moreFilters_other": "Plus de filtres ({{count}})",
+      "developerFilters_one": "Pour les développeurs ({{count}})",
+      "developerFilters_other": "Pour les développeurs ({{count}})",
+      "developerFiltersTipLabel": "De quoi s'agit-il ?",
+      "developerFiltersTip": "Des filtres pour tenir à jour une copie des données, et d'anciens noms conservés pour que les intégrations existantes continuent de fonctionner. Ils ne sont pas nécessaires pour chercher.",
+      "includeBodyChoice": "Inclure aussi le texte intégral (plus lent)",
+      "send": "Rechercher",
+      "sendItem": "Ouvrir",
+      "sending": "Recherche...",
+      "clear": "Effacer",
+      "usesOneCall": "Utilise 1 recherche gratuite.",
+      "freeHere": "Gratuit ici, grâce à l'essai public. Aucun compte requis.",
+      "needsKey": "Cet élément n'est pas inclus dans l'essai gratuit. Il faut votre propre clé API.",
+      "getKey": "Obtenir votre clé",
+      "sandboxUnavailable": "L'essai gratuit n'est pas disponible sur cette version de la page.",
+      "fillRequired": "Pour continuer, remplissez : {{names}}",
+      "datesReversed": "La date de début est postérieure à la date de fin. Inversez-les.",
+      "defaultChoice": "Par défaut : {{value}}",
       "any": "Tous",
-      "defaultValue": "Par défaut : {{value}}",
-      "send": "Envoyer",
-      "sending": "Envoi...",
-      "fillRequired": "À remplir : {{names}}",
-      "freeHere": "Gratuit ici, depuis l'environnement public de test.",
-      "ownKeyPrice": "Avec votre propre clé, cet appel coûte {{cost}} EUR.",
-      "needsKey": "Cette route nécessite votre propre clé d'API.",
-      "needsKeyPriced": "Cette route nécessite votre propre clé d'API, à {{cost}} EUR par appel.",
-      "getKey": "Obtenir votre propre clé",
-      "sandboxUnavailable": "L'environnement public de test n'est pas disponible sur cette version de la page.",
-      "response": "Réponse",
-      "nothingSent": "Rien n'a encore été envoyé. Choisissez une route et cliquez sur Envoyer.",
-      "networkError": "L'API n'a pas pu être jointe. Vérifiez votre connexion et réessayez.",
+      "yes": "Oui",
+      "no": "Non",
+      "required": "obligatoire",
+      "moreAbout": "En savoir plus sur {{name}}",
+      "noFieldHelp": "Un filtre sur ces données.",
+      "severalInCode": "Ici, vous en choisissez un. Dans votre code, vous pouvez en demander plusieurs, séparés par des virgules.",
+      "nameInAddress": "Son nom dans l'API :",
+      "tryExample": "Essayez :",
+      "hintMoment": "Écrivez la date sous la forme année-mois-jour, par exemple 2026-11-01.",
+      "hintCelex": "Un numéro CELEX ressemble à 32016R0679. Pour chercher par nom, utilisez Nom courant ou Mots à chercher.",
+      "hintProcedure": "Une référence de procédure ressemble à 2021/0106(COD). Pour chercher par sujet, utilisez Mots à chercher.",
+      "hintCountry": "Utilisez un code pays à deux lettres, comme BE, ou choisissez dans la liste en tapant.",
+      "hintCommittee": "Utilisez un code de commission, comme ENVI, ou choisissez dans la liste en tapant.",
+      "itemNeedsId": "Ceci ouvre un seul élément : il faut donc sa référence. Le plus simple : allez à la liste, cherchez, puis appuyez sur Ouvrir sur un résultat.",
+      "goToList": "Aller à la liste",
+      "backToResults": "Retour aux résultats",
+      "about": "Détails techniques de cette route",
+      "addressNote": "Voici l'adresse web que votre logiciel appellerait. La ligne ci-dessous correspond à cette recherche telle que vous l'avez remplie.",
+      "noParameters": "Rien à remplir : appuyez simplement sur le bouton.",
+      "opening": "Ouverture... {{seconds}} s",
+      "notAProgrammer": "Vous n'êtes pas programmeur ? Envoyez ceci à la personne qui construit vos outils, ou connectez Brubru à votre assistant IA.",
+      "connectAssistant": "Connecter à un assistant IA",
+      "mostlyEnglish": "La plupart de ces données sont en anglais : essayez les mêmes mots en anglais.",
+      "askPricing": "Demander les tarifs",
+      "tryOneWord": "Ou essayez un seul mot :",
+      "waiting": "Recherche... {{seconds}} s",
+      "slowNote": "Certaines recherches parcourent beaucoup de texte et peuvent prendre jusqu'à 30 secondes. Vous pouvez attendre ou annuler.",
+      "verySlowNote": "Celle-ci prend plus de temps que d'habitude. Vous pouvez attendre, ou annuler et affiner votre recherche.",
+      "cancel": "Annuler",
+      "cancelTipLabel": "Que coûte l'annulation ?",
+      "cancelTip": "La recherche a été comptée à son arrivée chez nous : annuler ne la rend pas.",
+      "cancelled": "Annulé. Cette recherche compte quand même parmi vos recherches gratuites.",
+      "networkError": "Aucune réponse n'est arrivée sur cette page. Vérifiez votre connexion et réessayez. Si cela se reproduit, le problème vient de chez nous.",
+      "notFound": "Rien trouvé avec cette référence. Vérifiez-la ou choisissez-en une dans la liste.",
+      "tooManyCalls": "Trop de recherches en peu de temps. Attendez une minute et réessayez.",
+      "serverFault": "Une erreur s'est produite de notre côté, pas dans ce que vous avez saisi. Réessayez ou changez les filtres. Si vous nous écrivez, indiquez l'identifiant ci-dessous.",
+      "checkFields": "Une saisie n'a pas le format attendu par ces données :",
+      "capVisitor": "Vous avez utilisé vos recherches gratuites du jour. Obtenez votre clé pour continuer.",
+      "capPool": "Le quota public du jour est épuisé. Obtenez votre clé ou revenez demain.",
       "failedStatus": "L'API a répondu avec le statut {{status}}.",
-      "capVisitor": "Vous avez utilisé vos appels gratuits du jour. Obtenez votre propre clé pour continuer.",
-      "capPool": "Le quota public du jour est épuisé. Obtenez votre propre clé ou revenez demain.",
-      "milliseconds": "{{ms}} ms",
-      "rowsFound_one": "{{formatted}} ligne trouvée",
-      "rowsFound_other": "{{formatted}} lignes trouvées",
-      "zeroRows": "L'appel a fonctionné et n'a trouvé aucune ligne avec ces filtres. Élargissez-les et réessayez.",
-      "tabRows": "Lignes",
-      "tabJson": "JSON",
-      "tabCode": "Code",
-      "datapointsNote": "Les cinq données de chaque élément : où il est publié, son texte et ses trois dates.",
-      "moreInJson": "{{shown}} des {{count}} lignes renvoyées sont affichées. L'onglet JSON les contient toutes.",
+      "statusOk": "Réussi",
+      "statusNotFound": "Introuvable",
+      "statusServer": "Échec de notre côté",
+      "statusRefused": "Non accepté",
+      "statusTipLabel": "Qu'est-ce que cela signifie ?",
+      "statusTip": "Le code de réponse de l'API est {{status}}. 200 : réussi ; 400 ou 422 : un élément du formulaire ; 404 : rien avec cette référence ; 500 : une panne de notre côté.",
+      "seconds": "{{value}} s",
+      "rowsFound_one": "{{formatted}} résultat trouvé",
+      "rowsFound_other": "{{formatted}} résultats trouvés",
+      "zeroTitle": "La recherche a fonctionné, mais rien ne correspond.",
+      "zeroWithFilters": "Retirez un filtre ci-dessous ou essayez d'autres mots, puis relancez la recherche :",
+      "zeroNoFilters": "Cette liste n'a rien à afficher pour le moment.",
+      "removeFilter": "Retirer ce filtre",
+      "tabRows": "Résultats",
+      "tabJson": "Données brutes",
+      "tabCode": "Utiliser dans votre code",
+      "rowsAtLeast": "Au moins {{formatted}} résultats",
+      "datapointsTitle": "Lien, texte et dates",
+      "datapointsTipLabel": "De quoi s'agit-il ?",
+      "datapointsNote": "Chaque élément de l'API porte les mêmes informations : où il est publié, son texte et ses trois dates.",
       "emptyValue": "vide",
       "notRequested": "non demandé",
       "characters_one": "{{formatted}} caractère",
       "characters_other": "{{formatted}} caractères",
-      "shortened": "Les textes longs sont raccourcis ici. Copier donne la réponse entière.",
+      "fullTextTitle": "Texte intégral ({{formatted}} caractères)",
+      "openItem": "Ouvrir (utilise 1 recherche gratuite)",
+      "openItemKey": "Ouvrir (nécessite votre clé)",
+      "officialPage": "Page officielle",
+      "nextPage": "Résultats suivants (utilise 1 recherche gratuite)",
+      "lastFreePage": "L'essai gratuit s'arrête ici.",
+      "moreInJson": "Affichage de {{shown}} des {{count}} résultats renvoyés. L'onglet Données brutes les contient tous.",
+      "shortened": "Les textes longs sont raccourcis ici. Copier donne la réponse complète.",
       "copy": "Copier",
       "copied": "Copié",
-      "codeNote": "Le même appel depuis votre code. Remplacez YOUR_API_KEY par votre clé.",
-      "requestId": "Id. de la requête :",
-      "bundleLabel": "Afficher",
-      "allRoutes": "Toutes les routes",
-      "bundleCardsLabel": "Choisissez ce dont vous avez besoin"
+      "codeNote": "La même recherche depuis votre logiciel. Remplacez YOUR_API_KEY par votre clé.",
+      "requestId": "Identifiant de la requête :",
+      "tooMany": {
+        "limit": "L'essai gratuit affiche jusqu'à {{top}} résultats par recherche. Réduisez ce nombre ou utilisez votre clé.",
+        "page": "L'essai gratuit va jusqu'à la page {{top}}."
+      },
+      "points": {
+        "public_url": "La page où l'institution elle-même publie cet élément.",
+        "body_txt": "Le texte intégral, en texte brut.",
+        "body_html": "Le texte intégral, avec sa mise en forme.",
+        "document_date": "La date du document lui-même, telle que publiée par l'institution.",
+        "creation_date": "Quand Brubru a enregistré cet élément pour la première fois.",
+        "updated_date": "Quand Brubru a enregistré pour la dernière fois une modification de cet élément."
+      },
+      "how": {
+        "open": "Comment ça marche",
+        "title": "Comment fonctionne la console API",
+        "intro": "L'API Brubru donne aux logiciels accès à des données européennes en direct. Cette page vous permet de l'essayer d'abord à la main, sans compte et sans rien installer.",
+        "step1Title": "Choisissez ce que vous cherchez",
+        "step1Text": "Choisissez une carte. Le formulaire se remplit avec un exemple réel.",
+        "step2Title": "Affinez, si vous le souhaitez",
+        "step2Text": "Modifiez les mots ou utilisez les filtres. Tout est facultatif, sauf mention contraire. Le petit i à côté d'un champ l'explique.",
+        "step3Title": "Appuyez sur Rechercher et lisez les résultats",
+        "step3Text": "Chaque résultat renvoie à sa page officielle. Appuyez sur Ouvrir sur un résultat pour le voir en entier.",
+        "wordsTitle": "Les mots que vous verrez",
+        "nextTitle": "Quand vous avez trouvé ce qu'il vous faut",
+        "nextText": "L'onglet Utiliser dans votre code présente la même recherche sous forme de commande que votre logiciel peut exécuter. Pour cela, il vous faut votre propre clé.",
+        "start": "Commencer à essayer",
+        "close": "Fermer",
+        "words": {
+          "apiTerm": "API",
+          "apiText": "Un moyen pour un programme de demander des données à un autre, au lieu qu'une personne lise un site web.",
+          "routeTerm": "Route",
+          "routeText": "Un type de données avec sa propre adresse web, comme les lois de l'UE ou les actualités d'une institution.",
+          "filterTerm": "Filtre",
+          "filterText": "Un champ qui affine les résultats, comme un pays ou une date.",
+          "resultTerm": "Résultat",
+          "resultText": "Un élément trouvé : une loi, un appel, une actualité, une personne. Les développeurs parlent aussi de ligne.",
+          "freeCallTerm": "Recherche gratuite",
+          "freeCallText": "Vous en avez {{calls}} par jour, avec jusqu'à {{rows}} résultats chacune. Ouvrir un élément compte pour une.",
+          "keyTerm": "Clé API",
+          "keyText": "Un mot de passe privé pour votre logiciel. Il supprime la limite quotidienne. Pour les tarifs, écrivez à hello@beresol.eu.",
+          "fullTextTerm": "Texte intégral",
+          "fullTextText": "Le document entier, pas seulement son titre. Cela ralentit la recherche : il est désactivé tant que vous ne le demandez pas."
+        }
+      },
+      "tasks": {
+        "laws": {
+          "title": "Trouver une loi de l'UE",
+          "desc": "Les lois adoptées, par sujet ou par un nom courant comme le RGPD."
+        },
+        "procedures": {
+          "title": "Suivre une loi en préparation",
+          "desc": "Les dossiers législatifs en cours, et où en est chacun."
+        },
+        "oj": {
+          "title": "Lire le Journal officiel",
+          "desc": "Ce que l'UE a publié un jour donné."
+        },
+        "funding": {
+          "title": "Trouver des appels et des marchés",
+          "desc": "Les appels à financement de l'UE et les marchés publics."
+        },
+        "news": {
+          "title": "Lire les dernières actualités de l'UE",
+          "desc": "Actualités et communiqués des institutions et organes de l'UE."
+        },
+        "events": {
+          "title": "Voir les événements de l'UE",
+          "desc": "Réunions, auditions et conférences dans les institutions."
+        },
+        "consultations": {
+          "title": "Trouver des consultations publiques",
+          "desc": "Les consultations de la Commission et des agences."
+        },
+        "people": {
+          "title": "Trouver des députés européens",
+          "desc": "Les membres du Parlement européen, par pays, groupe ou nom."
+        },
+        "enforcement": {
+          "title": "Consulter les procédures d'infraction",
+          "desc": "Les procédures ouvertes par la Commission contre des États membres."
+        },
+        "research": {
+          "title": "Lire les études du Parlement",
+          "desc": "Notes et études du service de recherche du Parlement."
+        }
+      },
+      "fields": {
+        "q": {
+          "label": "Mots à chercher",
+          "help": "Les mots à rechercher. Un sujet marche mieux qu'une phrase entière."
+        },
+        "name": {
+          "label": "Nom",
+          "help": "Une partie du nom de la personne ou de l'organisation."
+        },
+        "alias": {
+          "label": "Nom courant",
+          "help": "Le nom utilisé pour une loi, comme GDPR ou AI Act."
+        },
+        "doc_type": {
+          "label": "Type d'acte",
+          "help": "Règlement, directive ou décision."
+        },
+        "document_type": {
+          "label": "Type de document",
+          "help": "Le genre de document."
+        },
+        "in_force": {
+          "label": "En vigueur ?",
+          "help": "Si la loi s'applique aujourd'hui."
+        },
+        "published_from": {
+          "label": "Daté du",
+          "help": "Seulement les éléments datés de ce jour ou après."
+        },
+        "published_to": {
+          "label": "Daté au",
+          "help": "Seulement les éléments datés de ce jour ou avant."
+        },
+        "from": {
+          "label": "Du",
+          "help": "Seulement les éléments datés de ce jour ou après."
+        },
+        "to": {
+          "label": "Au",
+          "help": "Seulement les éléments datés de ce jour ou avant."
+        },
+        "since": {
+          "label": "Du",
+          "help": "Seulement les éléments datés de ce jour ou après."
+        },
+        "until": {
+          "label": "Au",
+          "help": "Seulement les éléments datés de ce jour ou avant."
+        },
+        "date": {
+          "label": "Date",
+          "help": "Le jour souhaité."
+        },
+        "days": {
+          "label": "Dans les ... derniers jours",
+          "help": "Jusqu'où remonter, en jours."
+        },
+        "committee": {
+          "label": "Commission parlementaire",
+          "help": "Choisissez dans la liste, ou tapez son code, comme ENVI."
+        },
+        "status": {
+          "label": "Statut",
+          "help": "Où en est l'élément."
+        },
+        "reference": {
+          "label": "Référence de procédure",
+          "help": "Le numéro du dossier, comme 2021/0106(COD)."
+        },
+        "procedure": {
+          "label": "Référence de procédure",
+          "help": "Le numéro du dossier, comme 2021/0106(COD)."
+        },
+        "procedure_ref": {
+          "label": "Référence de procédure",
+          "help": "Le numéro du dossier, comme 2021/0106(COD)."
+        },
+        "procedure_reference": {
+          "label": "Référence de procédure",
+          "help": "Le numéro du dossier, comme 2021/0106(COD)."
+        },
+        "series": {
+          "label": "Série",
+          "help": "L : législation ; C : informations et communications."
+        },
+        "item_type": {
+          "label": "Genre",
+          "help": "Un marché pour fournir un acheteur, ou une subvention ou un appel à financement."
+        },
+        "country": {
+          "label": "Pays",
+          "help": "Choisissez dans la liste, ou tapez le nom ou le code à deux lettres, comme BE."
+        },
+        "ms": {
+          "label": "Pays de l'UE",
+          "help": "Choisissez dans la liste, ou tapez le nom ou le code à deux lettres, comme BE."
+        },
+        "member_state": {
+          "label": "Pays de l'UE",
+          "help": "Choisissez dans la liste, ou tapez le nom ou le code à deux lettres, comme BE."
+        },
+        "programme": {
+          "label": "Programme de financement",
+          "help": "Une partie du nom du programme, comme Horizon Europe."
+        },
+        "deadline_from": {
+          "label": "Date limite du",
+          "help": "Seulement les éléments dont la date limite tombe ce jour ou après."
+        },
+        "deadline_to": {
+          "label": "Date limite au",
+          "help": "Seulement les éléments dont la date limite tombe ce jour ou avant."
+        },
+        "min_amount_eur": {
+          "label": "Montant minimum (EUR)",
+          "help": "Les éléments sans montant en euros sont exclus."
+        },
+        "max_amount_eur": {
+          "label": "Montant maximum (EUR)",
+          "help": "Les éléments sans montant en euros sont exclus."
+        },
+        "body": {
+          "label": "Institution ou organe de l'UE",
+          "help": "L'origine de l'élément."
+        },
+        "family": {
+          "label": "Domaine d'action",
+          "help": "Un groupe d'organes de l'UE travaillant dans le même domaine."
+        },
+        "kind": {
+          "label": "Type",
+          "help": "Actualités, communiqués ou publications."
+        },
+        "when": {
+          "label": "Quand",
+          "help": "À venir, passés ou tous."
+        },
+        "group": {
+          "label": "Groupe politique",
+          "help": "Le nom court du groupe, comme EPP."
+        },
+        "active": {
+          "label": "Toujours ouvert ?",
+          "help": "Si l'affaire est toujours ouverte."
+        },
+        "policy_area": {
+          "label": "Domaine d'action",
+          "help": "Un domaine, comme l'environnement."
+        },
+        "publication_type": {
+          "label": "Type de publication",
+          "help": "Note, étude, etc."
+        },
+        "order": {
+          "label": "Trier par",
+          "help": "L'ordre des résultats."
+        },
+        "limit": {
+          "label": "Résultats par page",
+          "help": "Combien de résultats chaque recherche affiche."
+        },
+        "page": {
+          "label": "Page",
+          "help": "Quelle page de résultats afficher."
+        },
+        "include_body": {
+          "label": "Texte intégral",
+          "help": "Apporte le texte entier de chaque résultat. Plus lent, et la réponse est bien plus volumineuse."
+        },
+        "celex": {
+          "label": "Numéro CELEX",
+          "help": "Le numéro de l'UE pour une loi, comme 32016R0679 pour le RGPD."
+        },
+        "item_id": {
+          "label": "Référence de l'élément",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "row_id": {
+          "label": "Référence de l'élément",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "document_id": {
+          "label": "Référence du document",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "event_id": {
+          "label": "Référence de l'événement",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "updated_from": {
+          "label": "Modifié depuis",
+          "help": "Seulement les éléments modifiés à partir de ce moment. Pour tenir une copie à jour."
+        },
+        "updated_to": {
+          "label": "Modifié jusqu'au",
+          "help": "Seulement les éléments modifiés jusqu'à ce moment."
+        },
+        "created_from": {
+          "label": "Enregistré depuis",
+          "help": "Seulement les éléments enregistrés par Brubru à partir de ce moment."
+        },
+        "created_to": {
+          "label": "Enregistré jusqu'au",
+          "help": "Seulement les éléments enregistrés par Brubru jusqu'à ce moment."
+        },
+        "year": {
+          "label": "Année",
+          "help": "L'année, en quatre chiffres."
+        },
+        "number": {
+          "label": "Numéro",
+          "help": "Le numéro de l'acte, sans l'année."
+        },
+        "author": {
+          "label": "Auteur"
+        },
+        "lang": {
+          "label": "Langue",
+          "help": "La langue, par un code court comme en ou fr."
+        },
+        "language": {
+          "label": "Langue"
+        },
+        "code": {
+          "label": "Code",
+          "help": "Le code de l'élément. La liste vous le donne."
+        },
+        "source": {
+          "label": "Source"
+        },
+        "type": {
+          "label": "Type"
+        },
+        "deadline": {
+          "label": "Date limite"
+        },
+        "submission_deadline": {
+          "label": "Date limite"
+        },
+        "amount_eur": {
+          "label": "Montant (EUR)"
+        },
+        "estimated_value": {
+          "label": "Valeur estimée"
+        },
+        "body_name": {
+          "label": "Origine"
+        },
+        "institution": {
+          "label": "Institution"
+        },
+        "contracting_authority": {
+          "label": "Acheteur",
+          "help": "Une partie du nom de l'acheteur."
+        },
+        "member_state_name": {
+          "label": "Pays de l'UE"
+        },
+        "buyer_country": {
+          "label": "Pays de l'acheteur"
+        },
+        "role": {
+          "label": "Rôle"
+        },
+        "consultation_type": {
+          "label": "Type"
+        },
+        "event_type": {
+          "label": "Type d'événement"
+        },
+        "venue": {
+          "label": "Lieu"
+        },
+        "case_type": {
+          "label": "Type d'affaire",
+          "help": "Le type d'affaire d'infraction."
+        },
+        "infringement_number": {
+          "label": "Numéro d'affaire"
+        },
+        "latest_decision_type": {
+          "label": "Dernière décision"
+        },
+        "oeil_procedure_ref": {
+          "label": "Référence de procédure"
+        },
+        "lead_committee": {
+          "label": "Commission compétente",
+          "help": "La commission compétente, par son code, par exemple ENVI."
+        },
+        "committee_code": {
+          "label": "Commission"
+        },
+        "start_date": {
+          "label": "Début"
+        },
+        "end_date": {
+          "label": "Fin"
+        },
+        "published_date": {
+          "label": "Publié"
+        },
+        "publication_date": {
+          "label": "Publié"
+        },
+        "feedback_count": {
+          "label": "Réponses"
+        },
+        "active_case": {
+          "label": "Affaire ouverte"
+        },
+        "in_office": {
+          "label": "En fonction"
+        },
+        "stage": {
+          "label": "Étape",
+          "help": "L'étape atteinte."
+        },
+        "current_status": {
+          "label": "Statut"
+        },
+        "document_date": {
+          "label": "Date"
+        },
+        "adopted_on": {
+          "label": "Adopté le"
+        },
+        "oj_reference": {
+          "label": "Référence au Journal officiel"
+        },
+        "is_blocked": {
+          "label": "Bloqué ?"
+        },
+        "text_type": {
+          "label": "Type de texte",
+          "help": "Le type de texte, par exemple résolution ou décision."
+        },
+        "publication_number": {
+          "label": "Numéro de publication"
+        },
+        "publication_id": {
+          "label": "Référence de la publication",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "families": {
+          "label": "Domaine d'action"
+        },
+        "policy_areas": {
+          "label": "Domaine d'action"
+        },
+        "authors": {
+          "label": "Auteurs"
+        },
+        "word_count": {
+          "label": "Mots"
+        },
+        "topic_id": {
+          "label": "Sujet",
+          "help": "La référence du sujet de financement. La liste vous la donne."
+        },
+        "acronym": {
+          "label": "Acronyme"
+        },
+        "category": {
+          "label": "Catégorie",
+          "help": "La catégorie, telle que la liste la nomme."
+        },
+        "count": {
+          "label": "Nombre"
+        },
+        "updated_end": {
+          "label": "Modifié jusqu'au (ancien nom)",
+          "help": "L'ancien nom de Modifié jusqu'au. Les deux fonctionnent."
+        },
+        "published_end": {
+          "label": "Daté au (ancien nom)",
+          "help": "L'ancien nom de Daté au. Les deux fonctionnent."
+        },
+        "council_configuration": {
+          "label": "Formation du Conseil",
+          "help": "La formation exacte du Conseil à laquelle cet élément appartient."
+        },
+        "interinstitutional_ref": {
+          "label": "Dossier interinstitutionnel",
+          "help": "Le numéro exact du dossier, par exemple 2021/0106(COD)."
+        },
+        "date_from": {
+          "label": "Du",
+          "help": "Uniquement les éléments datés de ce jour ou après."
+        },
+        "date_to": {
+          "label": "Au",
+          "help": "Uniquement les éléments datés de ce jour ou avant."
+        },
+        "parliamentary_term": {
+          "label": "Législature",
+          "help": "La législature du Parlement, par exemple 9 ou 10."
+        },
+        "related_celex": {
+          "label": "Acte concerné",
+          "help": "Le numéro UE de l'acte sur lequel porte l'avis."
+        },
+        "has_body": {
+          "label": "Texte intégral disponible ?",
+          "help": "Uniquement les éléments dont nous avons le texte intégral, ou ceux sans."
+        },
+        "type_of_action": {
+          "label": "Type d'action",
+          "help": "Une partie du type d'action financée, par exemple RIA ou IA."
+        },
+        "rapporteur_mep_id": {
+          "label": "Numéro du député rapporteur",
+          "help": "Le numéro que le Parlement donne au député rapporteur. La liste des députés l'indique."
+        },
+        "entity_type": {
+          "label": "Type de titulaire",
+          "help": "Qui détient le compte, par exemple une institution ou un député."
+        },
+        "entity_key": {
+          "label": "Titulaire",
+          "help": "La clé exacte d'un titulaire, telle que la liste des comptes la donne."
+        },
+        "framework_programme": {
+          "label": "Programme-cadre",
+          "help": "Le programme-cadre de recherche de l'UE, par exemple HORIZON ou H2020."
+        },
+        "parent_celex": {
+          "label": "Acte de base",
+          "help": "Le numéro UE de la loi sur laquelle cet acte se fonde, par exemple 32016R0679."
+        },
+        "proposing_dg": {
+          "label": "Service à l'origine",
+          "help": "Le service de la Commission à l'origine de l'acte, par son sigle, par exemple ENV."
+        },
+        "publisher": {
+          "label": "Éditeur",
+          "help": "Une partie du nom de l'éditeur."
+        },
+        "catalogue": {
+          "label": "Catalogue",
+          "help": "Le catalogue exact d'où vient le jeu de données."
+        },
+        "ta_reference": {
+          "label": "Référence du texte adopté",
+          "help": "Le numéro du texte au Parlement, par exemple P10_TA(2026)0123. La liste l'indique."
+        },
+        "rapporteur": {
+          "label": "Rapporteur",
+          "help": "Une partie du nom du rapporteur."
+        },
+        "has_commission_followup": {
+          "label": "Réponse de la Commission ?",
+          "help": "Si la Commission a publié une suite à cette résolution."
+        },
+        "interest": {
+          "label": "Domaine d'intérêt",
+          "help": "Une partie d'un intérêt déclaré par l'organisation."
+        },
+        "min_costs": {
+          "label": "Coûts de lobbying minimaux (EUR)",
+          "help": "Uniquement les organisations déclarant au moins ce montant par an."
+        },
+        "platform": {
+          "label": "Plateforme",
+          "help": "Le réseau social, par exemple bluesky ou youtube."
+        },
+        "mnemonic": {
+          "label": "Code court",
+          "help": "Le code court du service dans l'annuaire de l'UE."
+        },
+        "political_group": {
+          "label": "Groupe politique",
+          "help": "Le groupe du député qui a déposé l'amendement."
+        },
+        "pe_reference": {
+          "label": "Numéro de document PE",
+          "help": "Le numéro PE du document contenant l'amendement."
+        },
+        "element_type": {
+          "label": "Partie amendée",
+          "help": "La partie du texte modifiée, par exemple article ou considérant."
+        },
+        "is_main": {
+          "label": "Vote en plénière ?",
+          "help": "Oui pour les votes en plénière, non pour ceux en commission."
+        },
+        "asking_mep_id": {
+          "label": "Numéro du député auteur",
+          "help": "Le numéro que le Parlement donne au député auteur de la question. La liste des députés l'indique."
+        },
+        "dg_responsible": {
+          "label": "Service responsable",
+          "help": "Une partie du sigle du service, par exemple ENV ou CNECT."
+        },
+        "host_uuid": {
+          "label": "Référence de l'hôte",
+          "help": "La référence d'un hôte de la Commission. Chaque réunion de la liste l'indique."
+        },
+        "host_dg": {
+          "label": "Service de l'hôte",
+          "help": "Le sigle exact du service, par exemple ENV."
+        },
+        "target_dg": {
+          "label": "Service concerné",
+          "help": "Le sigle exact du service auquel l'avis s'adresse, par exemple ENV."
+        },
+        "transparency_register_id": {
+          "label": "Numéro du registre de transparence",
+          "help": "Le numéro de l'organisation dans le registre de transparence de l'UE."
+        },
+        "section": {
+          "label": "Section",
+          "help": "Une section des statistiques d'infraction de la Commission."
+        },
+        "month": {
+          "label": "Mois",
+          "help": "Un mois en chiffre, de 1 à 12, si ce tableau en a un."
+        },
+        "end_year": {
+          "label": "Dernière année",
+          "help": "La dernière année de la période, si ce tableau en a une."
+        },
+        "year_range": {
+          "label": "Années couvertes",
+          "help": "Le nombre d'années couvertes par le tableau, s'il permet ce choix."
+        },
+        "procedure_stage": {
+          "label": "Étape",
+          "help": "L'étape de l'affaire visée par le communiqué."
+        },
+        "user_type": {
+          "label": "Auteur de la réponse",
+          "help": "Le type de répondant, tel que la consultation l'enregistre, par exemple COMPANY ou NGO."
+        },
+        "case_instrument": {
+          "label": "Type d'affaire de concurrence",
+          "help": "L'instrument tel que la DG COMP l'enregistre : fusion, antitrust ou aide d'État."
+        },
+        "eu_ms_only": {
+          "label": "Pays de l'UE uniquement ?",
+          "help": "Oui ne garde que les États membres."
+        },
+        "level": {
+          "label": "Niveau de détail",
+          "help": "2 est un chapitre, 4 une position, 6 une sous-position, 8 un code complet."
+        },
+        "coordinator_country": {
+          "label": "Pays du coordinateur",
+          "help": "Le code à deux lettres du pays du coordinateur."
+        },
+        "start_from": {
+          "label": "Débute à partir du",
+          "help": "Uniquement les projets débutant ce jour ou après."
+        },
+        "end_to": {
+          "label": "Se termine au plus tard le",
+          "help": "Uniquement les projets se terminant ce jour ou avant."
+        },
+        "cpv_main": {
+          "label": "Code principal des biens ou services",
+          "help": "Le code CPV principal de l'avis, exact."
+        },
+        "gi_type": {
+          "label": "Type de protection",
+          "help": "AOP, IGP ou IG (codes PDO, PGI, GI)."
+        },
+        "product_type": {
+          "label": "Type de produit",
+          "help": "Par exemple wine (vin) ou cheese (fromage)."
+        },
+        "has_geometry": {
+          "label": "Carte disponible ?",
+          "help": "Si nous avons le tracé de la zone protégée."
+        },
+        "precise_only": {
+          "label": "Cartes précises uniquement ?",
+          "help": "Écarte les tracés issus seulement des limites de la région."
+        },
+        "tag": {
+          "label": "Étiquette",
+          "help": "Une partie d'une étiquette du jeu de données."
+        },
+        "hvd": {
+          "label": "Jeu de données de forte valeur ?",
+          "help": "S'il figure sur la liste UE des jeux de données de forte valeur."
+        },
+        "use_ml": {
+          "label": "Utiliser le modèle entraîné ?",
+          "help": "Ajoute l'estimation par apprentissage automatique au calendrier."
+        },
+        "org_type": {
+          "label": "Type d'organisation",
+          "help": "Un des types de lobby utilisés par cette liste."
+        },
+        "eutr_section": {
+          "label": "Section du registre",
+          "help": "La section du registre de transparence, par son code."
+        },
+        "for_profit": {
+          "label": "À but lucratif ?",
+          "help": "Si l'organisation est à but lucratif."
+        },
+        "has_news": {
+          "label": "Actualités disponibles ?",
+          "help": "Si nous avons des actualités datées de son site."
+        },
+        "exclude_global_corp": {
+          "label": "Exclure les multinationales ?",
+          "help": "Oui écarte les grandes entreprises mondiales."
+        },
+        "ethics_personal_data": {
+          "label": "Données personnelles ?",
+          "help": "Votre projet traite des données personnelles : ajoute les exigences correspondantes."
+        },
+        "ethics_special_categories": {
+          "label": "Données sensibles ?",
+          "help": "Votre projet traite des catégories particulières de données."
+        },
+        "ethics_clinical_studies": {
+          "label": "Études cliniques ?",
+          "help": "Votre projet comprend des études cliniques."
+        },
+        "ethics_dual_use": {
+          "label": "Double usage ?",
+          "help": "Votre projet a des usages civils et militaires possibles."
+        },
+        "ethics_animals": {
+          "label": "Animaux ?",
+          "help": "Votre projet implique des animaux."
+        },
+        "verified": {
+          "label": "Vérifié ?",
+          "help": "Si nous avons vérifié que le compte appartient à son titulaire."
+        },
+        "posts_limit": {
+          "label": "Publications affichées",
+          "help": "Le nombre de publications récentes à joindre."
+        },
+        "min_fte": {
+          "label": "Personnel minimum (temps plein)",
+          "help": "Uniquement les organisations déclarant au moins ce personnel à temps plein."
+        },
+        "ep_accredited_only": {
+          "label": "Accréditation PE uniquement ?",
+          "help": "Uniquement les organisations ayant du personnel accrédité au Parlement."
+        },
+        "body_threshold": {
+          "label": "Limite de texte court"
+        },
+        "sector": {
+          "label": "Secteur",
+          "help": "Le secteur ou le domaine concerné."
+        },
+        "dg": {
+          "label": "Service de la Commission"
+        },
+        "project_id": {
+          "label": "Numéro du projet",
+          "help": "Le numéro du projet."
+        },
+        "contract_nature": {
+          "label": "Nature du marché"
+        },
+        "topic": {
+          "label": "Sujet"
+        },
+        "collection": {
+          "label": "Collection"
+        },
+        "theme": {
+          "label": "Thème",
+          "help": "Le thème, tel que la liste le nomme."
+        },
+        "decision_from": {
+          "label": "Décision à partir du",
+          "help": "Uniquement ceux dont la décision date de ce jour ou après."
+        },
+        "decision_to": {
+          "label": "Décision jusqu'au",
+          "help": "Uniquement ceux dont la décision date de ce jour ou avant."
+        },
+        "lead_dg": {
+          "label": "Service chef de file"
+        },
+        "department": {
+          "label": "Service",
+          "help": "Une partie du nom du service."
+        },
+        "funding_type": {
+          "label": "Type de financement"
+        },
+        "call_id": {
+          "label": "Référence de l'appel"
+        },
+        "organisation": {
+          "label": "Organisation"
+        },
+        "keyword": {
+          "label": "Mot-clé",
+          "help": "Une partie d'un de ses mots-clés."
+        },
+        "heading": {
+          "label": "Rubrique budgétaire"
+        },
+        "cluster": {
+          "label": "Pôle"
+        },
+        "coverage": {
+          "label": "Couverture"
+        },
+        "procedure_type": {
+          "label": "Type de procédure",
+          "help": "Le type de procédure, par exemple ouverte ou restreinte."
+        },
+        "cpv_code": {
+          "label": "Code des biens ou services"
+        },
+        "include_delegated": {
+          "label": "Inclure les actes délégués ?"
+        },
+        "template_id": {
+          "label": "Modèle",
+          "help": "Le nom du modèle. La liste vous le donne."
+        },
+        "has_transcript": {
+          "label": "Transcription disponible ?"
+        },
+        "resolution_type": {
+          "label": "Type de résolution"
+        },
+        "position": {
+          "label": "Fonction",
+          "help": "Le poste de la personne ou, pour un vote, son choix."
+        },
+        "commission_dg": {
+          "label": "Service de la Commission"
+        },
+        "document_register_category": {
+          "label": "Catégorie du document"
+        },
+        "has_pdf": {
+          "label": "PDF disponible ?"
+        },
+        "latest_decision_category": {
+          "label": "Type de dernière décision"
+        },
+        "decision_category": {
+          "label": "Type de décision"
+        },
+        "decision_type": {
+          "label": "Mots de la décision"
+        },
+        "with_press_release": {
+          "label": "Avec communiqué ?"
+        },
+        "organisation_met": {
+          "label": "Organisation rencontrée"
+        },
+        "verdict": {
+          "label": "Avis"
+        },
+        "opinion_type": {
+          "label": "Type d'avis"
+        },
+        "notifying_country": {
+          "label": "Pays notifiant"
+        },
+        "classify": {
+          "label": "Ajouter des thèmes ?"
+        },
+        "shallow": {
+          "label": "Lecture rapide ?"
+        },
+        "url": {
+          "label": "Adresse web"
+        },
+        "deadline_before": {
+          "label": "Clôture avant le"
+        },
+        "responsible_department": {
+          "label": "Service responsable"
+        },
+        "coordinator": {
+          "label": "Coordinateurs uniquement ?"
+        },
+        "vat": {
+          "label": "Numéro de TVA"
+        },
+        "disaster_type": {
+          "label": "Type de catastrophe"
+        },
+        "contract_type": {
+          "label": "Nature du marché (ancien nom)"
+        },
+        "participant_country": {
+          "label": "Pays du participant"
+        },
+        "expertise": {
+          "label": "Offre ou demande"
+        },
+        "organisation_type": {
+          "label": "Type d'organisation"
+        },
+        "pic": {
+          "label": "Numéro PIC"
+        },
+        "without_eu_projects": {
+          "label": "Sans projet UE ?"
+        },
+        "requested_from": {
+          "label": "Annoncé à partir du"
+        },
+        "requested_to": {
+          "label": "Annoncé jusqu'au"
+        },
+        "activity_type": {
+          "label": "Type d'activité"
+        },
+        "is_sme": {
+          "label": "PME ?"
+        },
+        "period": {
+          "label": "Période budgétaire"
+        },
+        "instrument": {
+          "label": "Type de soutien"
+        },
+        "winner": {
+          "label": "Lauréat"
+        },
+        "winner_country": {
+          "label": "Pays du lauréat"
+        },
+        "include_superseded": {
+          "label": "Inclure les anciennes versions ?"
+        },
+        "form_type": {
+          "label": "Étape de l'avis"
+        },
+        "notice_subtype": {
+          "label": "Type d'avis"
+        },
+        "buyer_level": {
+          "label": "Niveau de l'acheteur"
+        },
+        "buyer_legal_type": {
+          "label": "Type juridique de l'acheteur"
+        },
+        "currency": {
+          "label": "Devise"
+        },
+        "min_value": {
+          "label": "Valeur minimale"
+        },
+        "max_value": {
+          "label": "Valeur maximale"
+        },
+        "text": {
+          "label": "Texte"
+        },
+        "include_orphans": {
+          "label": "Inclure les lignes sans numéro ?"
+        },
+        "corrects": {
+          "label": "Corrections de"
+        },
+        "version": {
+          "label": "Version"
+        },
+        "chapter": {
+          "label": "Chapitre"
+        },
+        "sectors": {
+          "label": "Secteurs"
+        },
+        "microthesaurus": {
+          "label": "Groupe de sujets"
+        },
+        "domain": {
+          "label": "Domaine thématique"
+        },
+        "priority": {
+          "label": "Priorité de la Commission"
+        },
+        "include_other_sources": {
+          "label": "Inclure d'autres sources ?"
+        },
+        "stale_after_days": {
+          "label": "Ancien après (jours)"
+        },
+        "body_stale_after_days": {
+          "label": "Un organe est ancien après (jours)"
+        },
+        "geo": {
+          "label": "Code géographique"
+        },
+        "time": {
+          "label": "Année"
+        },
+        "sex": {
+          "label": "Sexe"
+        },
+        "include_payload": {
+          "label": "Inclure tous les chiffres ?"
+        },
+        "amendment_type": {
+          "label": "Type d'amendement"
+        },
+        "upcoming": {
+          "label": "À venir uniquement ?"
+        },
+        "doc_kind": {
+          "label": "Type de document"
+        },
+        "gepro_code": {
+          "label": "Code de document du PE"
+        },
+        "term": {
+          "label": "Législature"
+        },
+        "include_former": {
+          "label": "Inclure les anciens membres ?"
+        },
+        "question_type": {
+          "label": "Type de question"
+        },
+        "answering_institution": {
+          "label": "Réponse de"
+        },
+        "result": {
+          "label": "Résultat"
+        },
+        "report_type": {
+          "label": "Type de rapport"
+        },
+        "legal_family": {
+          "label": "Famille juridique"
+        },
+        "category_en": {
+          "label": "Catégorie"
+        },
+        "engine": {
+          "label": "Moteur de traduction"
+        },
+        "detail_level": {
+          "label": "Quantité de texte"
+        },
+        "upcoming_only": {
+          "label": "Dates à venir uniquement ?"
+        },
+        "include_news": {
+          "label": "Inclure les actualités ?"
+        },
+        "funding_mode": {
+          "label": "Type de financement"
+        },
+        "sub_instrument": {
+          "label": "Sous-instrument"
+        },
+        "include_removed": {
+          "label": "Inclure les personnes parties ?"
+        },
+        "amendment_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "account_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "transcript_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "vote_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "mep_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "stream_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "guide_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "post_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "question_reference": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "opinion_reference": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "notification_number": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "inf_reference": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "initiative_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "meeting_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "summary_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "tender_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "tender_reference": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "file_number": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "doc_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "slug": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "case_number": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "case_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "decision_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "dataset": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "consultation_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "announcement_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "collection_key": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "socrata_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "dataset_code": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "uuid": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "bundle_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "notation": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "concept_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "carriage_id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "ref": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "table": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        },
+        "id": {
+          "label": "Référence",
+          "help": "La référence de cet élément. La liste vous la donne."
+        }
+      },
+      "options": {
+        "recent": "Les plus récents d'abord",
+        "oldest": "Les plus anciens d'abord",
+        "title": "Par titre",
+        "updated_asc": "Dernière modification, les plus anciennes d'abord",
+        "updated_desc": "Dernière modification, les plus récentes d'abord",
+        "created_asc": "Premier enregistrement, les plus anciens d'abord",
+        "created_desc": "Premier enregistrement, les plus récents d'abord",
+        "amount": "Montant le plus élevé d'abord",
+        "deadline": "Date limite la plus proche d'abord",
+        "deadline_desc": "Date limite la plus tardive d'abord",
+        "open": "Ouvert",
+        "closed": "Clos",
+        "forthcoming": "À venir",
+        "upcoming": "À venir",
+        "cancelled": "Annulé",
+        "unknown": "Inconnu",
+        "all": "Tous",
+        "news": "Actualités",
+        "press_release": "Communiqués de presse",
+        "publication": "Publications",
+        "past": "Passés",
+        "tender": "Marché",
+        "grant": "Subvention",
+        "cascade_call": "Appel en cascade",
+        "eoi_call": "Appel à manifestation d'intérêt",
+        "startup_funding": "Financement de start-up",
+        "regulation": "Règlement",
+        "directive": "Directive",
+        "decision": "Décision",
+        "L": "L : législation",
+        "C": "C : informations et communications",
+        "announced": "Annoncé",
+        "legislative_initiative": "Initiative législative",
+        "tabled": "Déposé",
+        "close_to_adoption": "Proche de l'adoption",
+        "completed": "Terminé",
+        "adopted": "Adopté",
+        "blocked": "Bloqué",
+        "withdrawn": "Retiré"
+      }
     },
     "bundles": {
       "official-journal": {
@@ -4500,7 +5818,8 @@
       "mintKey": "Créer une clé API",
       "topUp": "Recharger le solde",
       "signIn": "Se connecter",
-      "protocolSpec": "Spec MCP"
+      "protocolSpec": "Spec MCP",
+      "askPricing": "Demander les tarifs"
     },
     "copyBtn": {
       "copy": "Copier",
@@ -4516,8 +5835,8 @@
       "step1Title": "Créez une clé API Brubru",
       "step1": "Connectez-vous et créez une clé à",
       "step2Title": "Rechargez votre solde",
-      "step2": "Ajoutez au moins 1 € de crédit à",
-      "step2b": "Chaque appel d'outil MCP coûte 0,005 €.",
+      "step2": "Ajoutez du crédit à",
+      "step2b": "Pour les tarifs, écrivez à hello@beresol.eu.",
       "step3Title": "Collez la configuration dans votre client",
       "step3": "Choisissez votre client ci-dessous et collez la configuration. Redemarrez le client : les quinze outils de Brubru deviennent disponibles pour l'IA.",
       "curlLabel": "Vérification avec curl"
@@ -4583,7 +5902,7 @@
     },
     "tools": {
       "title": "Outils disponibles aujourd'hui",
-      "lede": "Quinze outils. ask_brubru est celui qu'il vous faut ; search + fetch alimentent les clients Deep Research ; le reste est avance. Chaque appel coute €0.005 sur votre solde.",
+      "lede": "Quinze outils. ask_brubru est celui qu'il vous faut ; search + fetch alimentent les clients Deep Research ; le reste est avance.",
       "descs": {
         "ask_brubru": "Celui qu'il vous faut. Posez n'importe quelle question sur l'UE et obtenez les guides de politique correspondants, les textes pertinents (avec liens EUR-Lex) et le statut en direct de la procédure, en un seul appel.",
         "search_eu_legislation": "Avancé : recherche par mots-clés dans la base de données de la législation de l'UE. ask_brubru inclut déjà les textes correspondants.",
@@ -4603,8 +5922,8 @@
       }
     },
     "pricing": {
-      "title": "Rappel tarifaire",
-      "body": "Les appels d'outils MCP Brubru sont facturés comme l'API REST :",
+      "title": "Tarifs",
+      "body": "Pour les tarifs, écrivez à hello@beresol.eu. Deux choses à savoir :",
       "b1": "Chaque appel coûte 0,005 € (5 000 micro-euros), débités de votre solde.",
       "b2": "Pas de crédit gratuit à l'inscription ; recharge minimum 1 €. Le sandbox public couvre l'évaluation.",
       "b3": "Si un appel échoue (erreur serveur), le coût est remboursé automatiquement.",

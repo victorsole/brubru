@@ -1,6 +1,6 @@
 // frontend/src/App.tsx
-import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from 'react-router-dom';
 import { RoutePresence, AnimatedPage } from './components/animations/page_transition';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useAuth } from './hooks/use_auth';
@@ -56,6 +56,17 @@ const ConsoleMoved = () => {
   return <Navigate to={`/api/try${search}`} replace />;
 };
 
+// A new page starts at its top. Without this, a link followed from far down one page landed far down the next:
+// /api opened on its error table and /signup on its last field (4 Nov 2026). Back and Forward keep their place.
+const ScrollToTop = () => {
+  const { pathname, hash } = useLocation();
+  const navigationType = useNavigationType();
+  useEffect(() => {
+    if (navigationType === 'PUSH' && !hash) window.scrollTo(0, 0);
+  }, [pathname, hash, navigationType]);
+  return null;
+};
+
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { isAuthenticated } = useAuth();
@@ -63,6 +74,7 @@ export const App = () => {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <BrowserRouter>
+        <ScrollToTop />
       <TourProvider>
       <div className="app">
         <ImpersonationBanner />

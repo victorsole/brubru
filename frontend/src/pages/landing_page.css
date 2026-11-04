@@ -203,6 +203,9 @@ html.landing-scroll-snap {
    ===================================================== */
 .landing .hero {
   position: relative;
+  /* What shows until the video plays, and instead of it where autoplay is blocked. Without this the overlay above an
+     empty box reads as grey. */
+  background: #123a63 url('/assets/jubelpark_poster.jpg') center / cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,6 +335,7 @@ html.landing-scroll-snap {
 }
 
 .landing .video-container {
+  background: #0b2a5b url('/assets/eu_flag_poster.jpg') center / cover no-repeat;
   width: 100%;
   height: 100vh;
   position: relative;
@@ -376,7 +380,7 @@ html.landing-scroll-snap {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('/assets/eu_labyrinth.png') center / cover no-repeat;
+  background: url('/assets/eu_labyrinth.jpg') center / cover no-repeat;
   opacity: 0.12;
   z-index: 0;
   pointer-events: none;
@@ -626,7 +630,7 @@ html.landing-scroll-snap {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('/assets/eu_labyrinth.png') center / cover no-repeat;
+  background: url('/assets/eu_labyrinth.jpg') center / cover no-repeat;
   opacity: 0.06;
   z-index: 0;
   pointer-events: none;
@@ -1520,3 +1524,16 @@ html.landing-scroll-snap {
   .landing .cta-section .btn--rainbow-outline { animation: none !important; opacity: 1; transform: none; }
   .landing .btn--rainbow { animation: none; }
 }
+
+/* The way to the API from the first screen, at every width. */
+.landing .hero__api-link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  color: #fff;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+.landing .hero__api-link:hover,
+.landing .hero__api-link:focus-visible { text-decoration-thickness: 2px; }

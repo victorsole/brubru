@@ -19,10 +19,12 @@
 </head>
 <body>
 <div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-  <span>U bekijkt de referentie. Om echte calls uit te voeren hebt u een Brubru API-sleutel nodig: </span>
-  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start een Professional-proef</a>
+  <span>U bekijkt de referentie. Probeer elke route zonder account in de </span>
+  <a href="/api/try" style="color:#fff;font-weight:700;text-decoration:underline;">API-console</a>
+  <span> &middot; </span>
+  <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">vraag uw sleutel aan</a>
   <span> &middot; of </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">neem contact op met sales</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">vraag naar de prijzen</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -212,15 +214,20 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1.064 endpoints in 95 mappen van EU-instellingen</div>
 <h1>De EU, gestructureerd.</h1>
 <p class="main__lede">
-Brubru is een verticale EU-dataleverancier. Onze REST-API geeft ontwikkelaars, RegTech-platforms, public-affairsteams en AI-agents programmatische toegang tot <strong>27.103 vastgestelde EU-wetten</strong> (30.246 PB-publicaties met volledige tekst), <strong>2.080 gevolgde wetgevingsdossiers</strong>, <strong>16.521 EU-ambtenaren</strong>, alle Europarlementari&euml;rs, <strong>58.399 EP-amendementen</strong>, de registers van Parlement / Raad / Europese Raad / Eurogroep / Commissie, de Europese Centrale Bank en de financi&euml;le instellingen van de EU, de gedecentraliseerde EU-agentschappen (geneesmiddelen, voedselveiligheid, milieu, chemische stoffen, drugs, grondrechten en meer), EU-financiering en aanbestedingen, de 19 aanvraagmodellen voor Europese fondsen van Brubru's Tender Docs, open data inclusief <strong>12 samengestelde Eurostat-reeksen over sport en fitness-relevante gezondheid</strong> live opgehaald, en Brubru's eigen EU-intelligentie. Dezelfde data die wij intern gebruiken, roept u aan. Brubru is de eerste klant van zijn eigen API.
+De Brubru-API geeft uw software, of uw AI-assistent, rechtstreeks toegang tot EU-gegevens: <strong>27.103 vastgestelde EU-wetten</strong>, <strong>2.080 gevolgde wetgevingsdossiers</strong>, <strong>16.521 EU-ambtenaren</strong>, alle EP-leden, financieringsoproepen en aanbestedingen, nieuws en raadplegingen van elke EU-instelling en elk agentschap. Het zijn dezelfde gegevens waarop Brubru zelf draait.
 </p>
+<div class="callout callout--ok">
+<p><strong>Nieuw met API's?</strong> Met een API vraagt het ene programma gegevens op bij het andere: uw software stuurt een verzoek, zoals een browser, en krijgt gestructureerde gegevens terug (JSON). U hoeft geen ontwikkelaar te zijn om het te proberen: zoek in de API-console, zonder account.</p>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:.75rem;margin:1.25rem 0;">
+<a href="/api/try" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#0693e3;color:#fff;">Gratis proberen, zonder account</a>
+<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#fff;color:#0693e3;border:2px solid #0693e3;">Vraag naar de prijzen</a>
+</div>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>E&eacute;n oppervlak, &eacute;&eacute;n sleutel.</strong> De API is ingedeeld zoals de EU zelf: &eacute;&eacute;n map per instelling of orgaan, 95 mappen in totaal, <strong>1.064 endpoints</strong>. Blader hieronder door de mappen of open de <a href="/api/docs/reference.html"><strong>volledige, altijd actuele API-referentie &rarr;</strong></a>: elk uitgerold endpoint, live gegenereerd uit de OpenAPI-specificatie.
 </p>
 
-<div class="callout callout--ok">
-<p><strong>Nieuw met API's?</strong> Een API is een manier voor uw software om via internet met de software van Brubru te praten. U stuurt een HTTP-verzoek (zoals een browser doet) en wij sturen JSON terug (gestructureerde data). De rest van deze documentatie legt uit hoe.</p>
-</div>
 
 <h2>Wat u krijgt</h2>
 <p>Elke map komt overeen met &eacute;&eacute;n EU-instelling of -orgaan. De aantallen zijn exact en worden bijgewerkt naarmate de API groeit.</p>
@@ -437,7 +444,7 @@ Brubru is een verticale EU-dataleverancier. Onze REST-API geeft ontwikkelaars, R
 <p>Elke call naar <code>/api/v2/*</code> vereist een API-sleutel, verstuurd als Bearer-token of als <code>X-API-Key</code>-header:</p>
 
 <pre><code>curl -H "Authorization: Bearer brubru_live_..." \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
 
 <p>Volledige details op <a href="/api/docs/authentication.html">Authenticatie</a>.</p>
 
@@ -476,11 +483,11 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Snelstart: uw eerste call</h2>
 
-<p><strong>1. Vraag een API-sleutel aan.</strong> Mail <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> zodra u het Professional-abonnement hebt. Sleutels zien eruit als <code>brubru_live_</code> gevolgd door 48 hexadecimale tekens.</p>
+<p><strong>1. Vraag een API-sleutel aan.</strong> Maak een gratis account en daarna <a href="/api#your-keys">een sleutel</a>. U ziet die maar &eacute;&eacute;n keer: kopieer hem dan. Voeg tegoed toe op de <a href="/billing">factureringspagina</a>. Sleutels zien eruit als <code>brubru_live_</code> gevolgd door 48 hexadecimale tekens.</p>
 
 <p><strong>2. Controleer of de service draait.</strong> De health-check is openbaar: geen sleutel nodig:</p>
 
-<pre><code>curl "https://brubru.beresol.eu/health"</code></pre>
+<pre><code>curl "https://brubru-production.up.railway.app/health"</code></pre>
 
 <p>Antwoord:</p>
 
@@ -493,7 +500,7 @@ X-RateLimit-Tier: free</code></pre>
 <p><strong>3. Probeer een echte zoekopdracht.</strong></p>
 
 <pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
 
 <p>U krijgt een gepagineerde lijst van EU-wetten die overeenkomen met "artificial intelligence", met CELEX-identificatoren, titels, datums en EUR-Lex-URL's. Vanaf daar volgt elk endpoint hetzelfde envelop-patroon: wijzig alleen het pad.</p>
 

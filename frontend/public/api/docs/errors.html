@@ -17,7 +17,7 @@
   <span> &middot; </span>
   <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">get your own key</a>
   <span> &middot; or </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">ask about pricing</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -250,6 +250,10 @@ active link by adding class="active" to the matching <a>.
 Every non-2xx response on <code>/api/v2/*</code> uses the same canonical envelope. Machine-readable <code>reason_code</code>s let you switch on error types without parsing free-text messages.
 </p>
 
+<div class="callout callout--ok">
+<p><strong>In plain words.</strong> When a call does not work, the answer says why. A code in the 200s means it worked, the 400s mean something in the request needs changing, and the 500s mean the fault is on our side or a source's.</p>
+</div>
+
 <h2>Error envelope</h2>
 <pre><code>{
   "error": "Unauthorized: Missing API key",
@@ -272,7 +276,7 @@ Every non-2xx response on <code>/api/v2/*</code> uses the same canonical envelop
 <tbody>
 <tr><td><code>200</code></td><td>Success.</td></tr>
 <tr><td><code>401</code></td><td>Missing, malformed, or revoked API key.</td></tr>
-<tr><td><code>402</code></td><td>The key's account has no balance left for this call. Top up at <code>/api/billing</code>.</td></tr>
+<tr><td><code>402</code></td><td>The key's account has no balance left for this call. Add credit on the <a href="/billing">billing page</a>.</td></tr>
 <tr><td><code>403</code></td><td>Key valid but this route is outside its scopes or its named routes, or the account is inactive.</td></tr>
 <tr><td><code>404</code></td><td>Resource not found.</td></tr>
 <tr><td><code>422</code></td><td>Invalid query parameter or conflicting params.</td></tr>

@@ -807,13 +807,15 @@
       "demo": "Demo",
       "about": "Over ons",
       "logIn": "Inloggen",
-      "startFree": "Gratis beginnen"
+      "startFree": "Gratis beginnen",
+      "api": "API"
     },
     "hero": {
       "title": "Jouw AI-assistent voor de EU-bubbel",
       "subtitle": "Analyseer wetgeving. Stel amendementen op. Navigeer EU-instellingen.",
       "startTrial": "Gratis proefperiode",
-      "logIn": "Inloggen"
+      "logIn": "Inloggen",
+      "apiLink": "EU-gegevens nodig in uw eigen tools? Probeer de API, gratis"
     },
     "intro": {
       "eyebrow": "Wat is Brubru",
@@ -914,20 +916,30 @@
       "terms": "Voorwaarden",
       "cookies": "Cookies",
       "contact": "Contact"
+    },
+    "apiSection": {
+      "eyebrow": "Gebruik de gegevens in uw eigen tools",
+      "title": "Alle EU-gegevens achter Brubru, klaar voor uw software",
+      "body": "Wetten, wetgevingsdossiers, financieringsoproepen, nieuws, raadplegingen en meer, van elke EU-instelling en -agentschap. Met een API vraagt het ene programma gegevens op bij het andere. U hoeft geen ontwikkelaar te zijn om het te proberen: zoek hier, zonder account.",
+      "try": "Gratis proberen, zonder account",
+      "explore": "Hoe de API werkt",
+      "reference": "Referentie voor ontwikkelaars",
+      "pricing": "Vraag naar de prijzen"
     }
   },
   "api": {
-    "eyebrow": "Voor ontwikkelaars, RegTech en AI-agenten",
+    "eyebrow": "Voor iedereen die EU-gegevens nodig heeft",
     "titlePre": "De EU,",
     "titleAccent": "gestructureerd",
-    "lede": "Brubru is een verticale EU-dataprovider. Onze REST-API bestrijkt nu elke EU-instelling, elk orgaan en elk agentschap: 1.064 endpoints in 95 mappen, één map per instelling. Je krijgt realtime toegang tot 27.103 EU-wetten met volledige tekst, meer dan 2.100 wetgevingsprocedures, live consultatiereacties, de agenda's van de commissarissen, AI-voorspellingen van wetgevingsuitkomsten, de geïntegreerde institutionele EU-kalender, het Transparantieregister en de juridische-tekstintelligentielaag die Brubru's eigen chatbot en Amendator aandrijft. Brubru is de eerste gebruiker van zijn eigen API.",
+    "lede": "De Brubru-API geeft uw software, of uw AI-assistent, rechtstreeks toegang tot EU-gegevens: wetten, wetgevingsdossiers, financieringsoproepen, nieuws, raadplegingen en meer, van elke EU-instelling en -agentschap. Met een API vraagt het ene programma gegevens op bij het andere. U hoeft geen ontwikkelaar te zijn om het te proberen: de console op deze pagina werkt zonder account.",
     "cta": {
       "reference": "API-referentie",
       "contact": "Neem contact op",
       "openRef": "Open de referentie",
       "ping": "/api/v1/ping (publiek)",
       "openFullDocs": "Volledige documentatie openen",
-      "mcp": "Gebruik in Claude / ChatGPT / IDE (MCP)"
+      "mcp": "Gebruik in Claude / ChatGPT / IDE (MCP)",
+      "try": "Nu gratis proberen"
     },
     "sections": {
       "quickstart": "Snelstartgids",
@@ -944,9 +956,9 @@
       "onThisPage": "Op deze pagina"
     },
     "quickstart": {
-      "intro": "Krijg uw eerste API-respons in minder dan twee minuten.",
-      "step1Title": "Neem een Professional-abonnement",
-      "step1": "Vraag een demo aan via hello@beresol.eu om uw Professional-plan te regelen. Uw API-sleutel verschijnt daarna in uw accountinstellingen.",
+      "intro": "Voor ontwikkelaars: uw eerste oproep vanuit uw eigen code, in ongeveer twee minuten.",
+      "step1Title": "Maak uw sleutel aan",
+      "step1": "Maak een gratis account en daarna een sleutel onder Uw API-sleutels op deze pagina. Voeg tegoed toe op de factureringspagina.",
       "step2Title": "Doe uw eerste verzoek",
       "step3Title": "Verwerk de respons",
       "step3": "Elk endpoint retourneert dezelfde gepagineerde envelop. Pak de data-array uit om door de resultaten te itereren. Controleer has_more en next_page om te pagineren."
@@ -957,7 +969,7 @@
       "mcpDescription": "Brubru biedt een Model Context Protocol (MCP)-server. Verbind deze met Claude, ChatGPT, Gemini, Mistral of een andere MCP-compatibele AI-agent om uw assistent live EU-wetgevingsintelligentie te bieden."
     },
     "auth": {
-      "description": "Elk /api/v2/*-eindpunt vereist een API-sleutel. Stuur die als Authorization: Bearer <sleutel> (aanbevolen) of X-API-Key: <sleutel>. Sleutels worden uitgegeven door het Brubru-team voor Professional-abonnees. Limiet: 60 verzoeken per minuut per sleutel.",
+      "description": "Elke /api/v2/*-route heeft een sleutel nodig, behalve wanneer u het probeert in de console hierboven. Geef hem door als Authorization: Bearer <sleutel> (aanbevolen) of X-API-Key: <sleutel>. U maakt sleutels zelf aan vanuit uw account, tot drie tegelijk. De limiet is 60 verzoeken per minuut per sleutel.",
       "note": "X-API-Key wordt ook geaccepteerd voor curl-scripts. Bearer is de standaard voor Postman, OpenAPI en SDK's."
     },
     "envelope": {
@@ -969,7 +981,7 @@
       "meaning": "Betekenis",
       "ok": "Succes. Bekijk X-RateLimit-Remaining voor je resterende aanroepen in het venster.",
       "unauthorized": "API-sleutel ontbreekt of is ongeldig.",
-      "forbidden": "Sleutel geldig maar houder heeft geen Professional-plan.",
+      "forbidden": "Geldige sleutel, maar die dekt deze route niet.",
       "notFound": "Bron niet gevonden.",
       "invalidQuery": "Ongeldige queryparameter.",
       "rateLimited": "Limiet overschreden. Respecteer de Retry-After header.",
@@ -994,10 +1006,11 @@
         "reached": "Je hebt het maximum van 3 actieve API-sleutels bereikt. Trek een ongebruikte sleutel in om een nieuwe te maken."
       },
       "signedOut": {
-        "title": "Log in om een API-sleutel aan te maken",
-        "body": "API-sleutels worden vanuit je Brubru-account aangemaakt. Log in of maak er een om te beginnen.",
+        "title": "Vraag uw eigen sleutel aan",
+        "body": "Met een sleutel kan uw eigen software de API gebruiken, zonder daglimiet. Maak een gratis account en daarna een sleutel. Proberen in de console vraagt dit allemaal niet.",
         "cta": "Inloggen",
-        "signup": "Account aanmaken"
+        "signup": "Gratis account maken",
+        "pricing": "Vraag naar de prijzen"
       },
       "list": {
         "name": "Naam",
@@ -1142,67 +1155,1372 @@
     },
     "console": {
       "title": "API-console",
-      "lede": "Roep de API hier aan, zonder account: kies een route, vul het formulier in, druk op Versturen en bekijk de echte EU-rijen die terugkomen.",
+      "lede": "Bekijk live EU-gegevens in drie stappen, zonder account: kies wat u zoekt, verfijn het als u wilt en druk op Zoeken.",
       "backToApi": "De API-pagina",
-      "openFull": "Volledig scherm openen",
-      "search": "Zoek in {{count}} routes",
-      "loading": "Catalogus laden...",
+      "openFull": "Volledig scherm",
+      "search": "Zoeken op woord ({{count}} in totaal)",
+      "loading": "De catalogus wordt geladen...",
       "loadError": "De catalogus kon niet worden geladen.",
       "retry": "Opnieuw proberen",
-      "noMatch": "Geen enkele route komt overeen.",
+      "noMatch": "Niets komt overeen met dat woord.",
       "resultCount_one": "{{count}} route",
       "resultCount_other": "{{count}} routes",
-      "firstResults": "De eerste {{shown}} van {{count}} routes. Voeg een woord toe om te verfijnen.",
-      "deprecated": "Verouderd",
-      "start": "Begin hier:",
-      "startNews": "Laatste EU-nieuws",
-      "startFunding": "Oproepen en aanbestedingen",
-      "startLaws": "EU-wetten",
-      "startProcedures": "Wetgevingsprocedures",
-      "allowance": "{{calls}} gratis oproepen per dag, tot {{rows}} rijen per oproep.",
-      "callsLeft_one": "Nog {{count}} gratis oproep vandaag",
-      "callsLeft_other": "Nog {{count}} gratis oproepen vandaag",
-      "about": "Over deze route",
-      "noParameters": "Deze route heeft geen parameters.",
-      "required": "verplicht",
+      "firstResults": "De eerste {{shown}} van {{count}}. Voeg een woord toe om te verfijnen.",
+      "deprecated": "Wordt afgebouwd",
+      "stepChoose": "Wat zoekt u?",
+      "stepNarrow": "Verfijn (optioneel)",
+      "stepItem": "Eén item openen",
+      "stepResults": "Resultaten",
+      "allowance": "{{calls}} gratis zoekopdrachten per dag",
+      "callsLeft_one": "Vandaag nog {{count}} gratis zoekopdracht",
+      "callsLeft_other": "Vandaag nog {{count}} gratis zoekopdrachten",
+      "allowanceTip": "U kunt dit zonder account proberen: {{calls}} zoekopdrachten per dag vanaf uw verbinding, met elk maximaal {{rows}} resultaten. Met uw eigen API-sleutel vervalt die limiet en kan uw eigen software dezelfde gegevens gebruiken.",
+      "freeCallTipLabel": "Over gratis zoekopdrachten",
+      "bundleCardsLabel": "Kies wat u nodig hebt",
+      "browseAll": "Of blader door alle {{count}} routes",
+      "routeTipLabel": "Wat is een route?",
+      "routeTip": "Een route is één soort gegevens met een eigen webadres, zoals EU-wetten of het nieuws van een agentschap. De kaarten hierboven zijn het handigste beginpunt; deze lijst bevat alle routes, per instelling gegroepeerd.",
+      "bundleLabel": "Alleen tonen",
+      "allRoutes": "Alles",
+      "idleList": "Druk op Zoeken om hier live resultaten te zien.",
+      "idleItem": "Druk op Openen om dit item hier te zien.",
+      "idleNeedsKey": "Hiervoor is uw eigen API-sleutel nodig, dus de gratis proefversie kan het hier niet tonen.",
+      "idleCost": "Elke zoekopdracht gebruikt 1 van uw {{calls}} gratis zoekopdrachten van vandaag. Kiezen en het formulier invullen kost niets.",
+      "allOptional": "Dit is allemaal optioneel. Laat het leeg om alles te zien.",
+      "moreFilters_one": "Meer filters ({{count}})",
+      "moreFilters_other": "Meer filters ({{count}})",
+      "developerFilters_one": "Voor ontwikkelaars ({{count}})",
+      "developerFilters_other": "Voor ontwikkelaars ({{count}})",
+      "developerFiltersTipLabel": "Wat zijn dit?",
+      "developerFiltersTip": "Filters om een kopie van de gegevens actueel te houden, en oudere namen die behouden blijven zodat bestaande koppelingen blijven werken. U hebt ze niet nodig om te zoeken.",
+      "includeBodyChoice": "Ook de volledige tekst ophalen (trager)",
+      "send": "Zoeken",
+      "sendItem": "Openen",
+      "sending": "Zoeken...",
+      "clear": "Wissen",
+      "usesOneCall": "Gebruikt 1 gratis zoekopdracht.",
+      "freeHere": "Hier gratis, via de openbare proefversie. Geen account nodig.",
+      "needsKey": "Dit zit niet in de gratis proefversie. Hiervoor is uw eigen API-sleutel nodig.",
+      "getKey": "Uw eigen sleutel aanvragen",
+      "sandboxUnavailable": "De gratis proefversie is niet beschikbaar op deze versie van de pagina.",
+      "fillRequired": "Vul in om verder te gaan: {{names}}",
+      "datesReversed": "De begindatum ligt na de einddatum. Wissel ze om.",
+      "defaultChoice": "Standaard: {{value}}",
       "any": "Alle",
-      "defaultValue": "Standaard: {{value}}",
-      "send": "Versturen",
-      "sending": "Versturen...",
-      "fillRequired": "Vul in: {{names}}",
-      "freeHere": "Hier gratis, via de openbare testomgeving.",
-      "ownKeyPrice": "Met je eigen sleutel kost deze oproep EUR {{cost}}.",
-      "needsKey": "Deze route heeft je eigen API-sleutel nodig.",
-      "needsKeyPriced": "Deze route heeft je eigen API-sleutel nodig, voor EUR {{cost}} per oproep.",
-      "getKey": "Vraag je eigen sleutel aan",
-      "sandboxUnavailable": "De openbare testomgeving is niet beschikbaar op deze versie van de pagina.",
-      "response": "Antwoord",
-      "nothingSent": "Nog niets verstuurd. Kies een route en druk op Versturen.",
-      "networkError": "De API kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
+      "yes": "Ja",
+      "no": "Nee",
+      "required": "verplicht",
+      "moreAbout": "Meer over {{name}}",
+      "noFieldHelp": "Een filter op deze gegevens.",
+      "severalInCode": "Hier kiest u er één. In uw eigen code kunt u er meerdere opvragen, gescheiden door komma's.",
+      "nameInAddress": "De naam in de API:",
+      "tryExample": "Probeer:",
+      "hintMoment": "Schrijf de datum als jaar-maand-dag, bijvoorbeeld 2026-11-01.",
+      "hintCelex": "Een CELEX-nummer ziet eruit als 32016R0679. Gebruik Gangbare naam of Zoekwoorden om op naam te zoeken.",
+      "hintProcedure": "Een procedurereferentie ziet eruit als 2021/0106(COD). Gebruik Zoekwoorden om op onderwerp te zoeken.",
+      "hintCountry": "Gebruik een landcode van twee letters, zoals BE, of kies uit de lijst terwijl u typt.",
+      "hintCommittee": "Gebruik een commissiecode, zoals ENVI, of kies uit de lijst terwijl u typt.",
+      "itemNeedsId": "Dit opent één item en heeft dus de referentie van dat item nodig. De makkelijke manier: ga naar de lijst, zoek en druk op Openen bij een resultaat.",
+      "goToList": "Naar de lijst",
+      "backToResults": "Terug naar de resultaten",
+      "about": "Technische details van deze route",
+      "addressNote": "Dit is het webadres dat uw eigen software zou aanroepen. De regel hieronder is deze zoekopdracht zoals u die hebt ingevuld.",
+      "noParameters": "Niets in te vullen: druk gewoon op de knop.",
+      "opening": "Openen... {{seconds}} s",
+      "notAProgrammer": "Geen programmeur? Stuur dit naar wie uw tools bouwt, of koppel Brubru aan uw AI-assistent.",
+      "connectAssistant": "Koppelen aan een AI-assistent",
+      "mostlyEnglish": "De meeste van deze gegevens zijn in het Engels: probeer dezelfde woorden in het Engels.",
+      "askPricing": "Vraag naar de prijzen",
+      "tryOneWord": "Of probeer één woord:",
+      "waiting": "Zoeken... {{seconds}} s",
+      "slowNote": "Sommige zoekopdrachten doorzoeken veel tekst en kunnen tot 30 seconden duren. U kunt wachten of annuleren.",
+      "verySlowNote": "Deze duurt langer dan normaal. U kunt blijven wachten, of annuleren en uw zoekopdracht verfijnen.",
+      "cancel": "Annuleren",
+      "cancelTipLabel": "Wat kost annuleren?",
+      "cancelTip": "De zoekopdracht is meegeteld toen die bij ons aankwam, dus annuleren geeft haar niet terug.",
+      "cancelled": "Geannuleerd. Die zoekopdracht telt toch mee als een van uw gratis zoekopdrachten.",
+      "networkError": "Er is geen antwoord op deze pagina aangekomen. Controleer uw verbinding en probeer het opnieuw. Gebeurt het weer, dan ligt het probleem bij ons.",
+      "notFound": "Niets gevonden met die referentie. Controleer die, of kies er een uit de lijst.",
+      "tooManyCalls": "Te veel zoekopdrachten in korte tijd. Wacht een minuut en probeer het opnieuw.",
+      "serverFault": "Er ging iets mis aan onze kant, niet in wat u hebt ingevoerd. Probeer het opnieuw of wijzig de filters. Vermeld de onderstaande aanvraag-id als u ons schrijft.",
+      "checkFields": "Iets wat u hebt ingevoerd heeft niet de vorm die deze gegevens nodig hebben:",
+      "capVisitor": "U hebt de gratis zoekopdrachten van vandaag gebruikt. Vraag uw eigen sleutel aan om door te gaan.",
+      "capPool": "Het openbare tegoed van vandaag is op. Vraag uw eigen sleutel aan of kom morgen terug.",
       "failedStatus": "De API antwoordde met status {{status}}.",
-      "capVisitor": "Je hebt de gratis oproepen van vandaag gebruikt. Vraag je eigen sleutel aan om door te gaan.",
-      "capPool": "De openbare ruimte van vandaag is op. Vraag je eigen sleutel aan of kom morgen terug.",
-      "milliseconds": "{{ms}} ms",
-      "rowsFound_one": "{{formatted}} rij gevonden",
-      "rowsFound_other": "{{formatted}} rijen gevonden",
-      "zeroRows": "De oproep werkte en vond geen rijen met deze filters. Verruim ze en probeer het opnieuw.",
-      "tabRows": "Rijen",
-      "tabJson": "JSON",
-      "tabCode": "Code",
-      "datapointsNote": "De vijf gegevens die elk item heeft: waar het is gepubliceerd, de tekst en de drie datums.",
-      "moreInJson": "{{shown}} van de {{count}} teruggegeven rijen worden getoond. Het tabblad JSON heeft ze allemaal.",
+      "statusOk": "Gelukt",
+      "statusNotFound": "Niet gevonden",
+      "statusServer": "Mislukt aan onze kant",
+      "statusRefused": "Niet geaccepteerd",
+      "statusTipLabel": "Wat betekent dit?",
+      "statusTip": "De antwoordcode van de API was {{status}}. 200 betekent gelukt; 400 of 422 iets in het formulier; 404 niets met die referentie; 500 een fout aan onze kant.",
+      "seconds": "{{value}} s",
+      "rowsFound_one": "{{formatted}} resultaat gevonden",
+      "rowsFound_other": "{{formatted}} resultaten gevonden",
+      "zeroTitle": "De zoekopdracht is gelukt, maar niets komt overeen.",
+      "zeroWithFilters": "Verwijder hieronder een filter of probeer andere woorden en zoek opnieuw:",
+      "zeroNoFilters": "Deze lijst heeft momenteel niets te tonen.",
+      "removeFilter": "Dit filter verwijderen",
+      "tabRows": "Resultaten",
+      "tabJson": "Ruwe gegevens",
+      "tabCode": "Gebruiken in uw code",
+      "rowsAtLeast": "Minstens {{formatted}} resultaten",
+      "datapointsTitle": "Link, tekst en datums",
+      "datapointsTipLabel": "Wat is dit?",
+      "datapointsNote": "Elk item in de API heeft dezelfde gegevens: waar het is gepubliceerd, de tekst en de drie datums.",
       "emptyValue": "leeg",
       "notRequested": "niet gevraagd",
       "characters_one": "{{formatted}} teken",
       "characters_other": "{{formatted}} tekens",
-      "shortened": "Lange teksten zijn hier ingekort. Kopiëren geeft het hele antwoord.",
+      "fullTextTitle": "Volledige tekst ({{formatted}} tekens)",
+      "openItem": "Openen (gebruikt 1 gratis zoekopdracht)",
+      "openItemKey": "Openen (eigen sleutel nodig)",
+      "officialPage": "Officiële pagina",
+      "nextPage": "Volgende resultaten (gebruikt 1 gratis zoekopdracht)",
+      "lastFreePage": "Verder gaat de gratis proefversie niet.",
+      "moreInJson": "{{shown}} van de {{count}} teruggegeven resultaten getoond. Het tabblad Ruwe gegevens bevat ze allemaal.",
+      "shortened": "Lange teksten worden hier ingekort. Kopiëren geeft het volledige antwoord.",
       "copy": "Kopiëren",
       "copied": "Gekopieerd",
-      "codeNote": "Dezelfde oproep vanuit je eigen code. Vervang YOUR_API_KEY door je sleutel.",
-      "requestId": "Verzoek-id:",
-      "bundleLabel": "Toon",
-      "allRoutes": "Alle routes",
-      "bundleCardsLabel": "Kies wat je nodig hebt"
+      "codeNote": "Dezelfde zoekopdracht vanuit uw eigen software. Vervang YOUR_API_KEY door uw sleutel.",
+      "requestId": "Aanvraag-id:",
+      "tooMany": {
+        "limit": "De gratis proefversie toont maximaal {{top}} resultaten per zoekopdracht. Verlaag dit aantal of gebruik uw eigen sleutel.",
+        "page": "De gratis proefversie gaat tot pagina {{top}}."
+      },
+      "points": {
+        "public_url": "De pagina waar de instelling dit zelf publiceert.",
+        "body_txt": "De volledige tekst, als platte tekst.",
+        "body_html": "De volledige tekst, met opmaak.",
+        "document_date": "De datum op het document zelf, zoals gepubliceerd door de instelling.",
+        "creation_date": "Wanneer Brubru dit item voor het eerst heeft vastgelegd.",
+        "updated_date": "Wanneer Brubru voor het laatst een wijziging van dit item heeft vastgelegd."
+      },
+      "how": {
+        "open": "Hoe het werkt",
+        "title": "Hoe de API-console werkt",
+        "intro": "De Brubru-API geeft software toegang tot live EU-gegevens. Op deze pagina probeert u die eerst met de hand, zonder account en zonder iets te installeren.",
+        "step1Title": "Kies wat u zoekt",
+        "step1Text": "Kies een kaart. Het formulier wordt ingevuld met een echt voorbeeld.",
+        "step2Title": "Verfijn, als u wilt",
+        "step2Text": "Wijzig de woorden of gebruik de filters. Alles is optioneel, tenzij er verplicht staat. De kleine i naast een veld legt het uit.",
+        "step3Title": "Druk op Zoeken en lees de resultaten",
+        "step3Text": "Elk resultaat linkt naar de officiële pagina. Druk op Openen bij een resultaat om het volledig te zien.",
+        "wordsTitle": "Woorden die u tegenkomt",
+        "nextTitle": "Als u hebt gevonden wat u nodig hebt",
+        "nextText": "Het tabblad Gebruiken in uw code toont dezelfde zoekopdracht als een opdracht die uw eigen software kan uitvoeren. Daarvoor hebt u uw eigen sleutel nodig.",
+        "start": "Beginnen met proberen",
+        "close": "Sluiten",
+        "words": {
+          "apiTerm": "API",
+          "apiText": "Een manier waarop het ene programma gegevens opvraagt bij het andere, in plaats van dat iemand een website leest.",
+          "routeTerm": "Route",
+          "routeText": "Eén soort gegevens met een eigen webadres, zoals EU-wetten of het nieuws van een instelling.",
+          "filterTerm": "Filter",
+          "filterText": "Een veld dat de resultaten beperkt, zoals een land of een datum.",
+          "resultTerm": "Resultaat",
+          "resultText": "Eén gevonden item: een wet, een oproep, een nieuwsbericht, een persoon. Ontwikkelaars noemen het ook een rij.",
+          "freeCallTerm": "Gratis zoekopdracht",
+          "freeCallText": "U hebt er {{calls}} per dag, met elk maximaal {{rows}} resultaten. Een item openen telt als één.",
+          "keyTerm": "API-sleutel",
+          "keyText": "Een privéwachtwoord voor uw eigen software. Het heft de daglimiet op. Schrijf voor de prijzen naar hello@beresol.eu.",
+          "fullTextTerm": "Volledige tekst",
+          "fullTextText": "Het hele document, niet alleen de titel. Het maakt een zoekopdracht trager en staat daarom uit tot u erom vraagt."
+        }
+      },
+      "tasks": {
+        "laws": {
+          "title": "Een EU-wet zoeken",
+          "desc": "Aangenomen EU-wetten, op onderwerp of op een gangbare naam zoals GDPR."
+        },
+        "procedures": {
+          "title": "Een wet in wording volgen",
+          "desc": "Lopende wetgevingsdossiers en hoe ver elk daarvan is."
+        },
+        "oj": {
+          "title": "Het Publicatieblad lezen",
+          "desc": "Wat de EU op een bepaalde dag heeft gepubliceerd."
+        },
+        "funding": {
+          "title": "Oproepen en aanbestedingen zoeken",
+          "desc": "EU-financieringsoproepen en openbare aanbestedingen."
+        },
+        "news": {
+          "title": "Het laatste EU-nieuws lezen",
+          "desc": "Nieuws en persberichten van de instellingen en organen van de EU."
+        },
+        "events": {
+          "title": "EU-evenementen bekijken",
+          "desc": "Vergaderingen, hoorzittingen en conferenties bij de instellingen."
+        },
+        "consultations": {
+          "title": "Openbare raadplegingen zoeken",
+          "desc": "Raadplegingen van de Commissie en de agentschappen."
+        },
+        "people": {
+          "title": "Europarlementsleden zoeken",
+          "desc": "Leden van het Europees Parlement, op land, fractie of naam."
+        },
+        "enforcement": {
+          "title": "Inbreukprocedures bekijken",
+          "desc": "Zaken die de Commissie tegen lidstaten heeft geopend."
+        },
+        "research": {
+          "title": "Onderzoek van het Parlement lezen",
+          "desc": "Briefings en studies van de onderzoeksdienst van het Parlement."
+        }
+      },
+      "fields": {
+        "q": {
+          "label": "Zoekwoorden",
+          "help": "De woorden waarnaar u zoekt. Een onderwerp werkt beter dan een hele zin."
+        },
+        "name": {
+          "label": "Naam",
+          "help": "Een deel van de naam van de persoon of organisatie."
+        },
+        "alias": {
+          "label": "Gangbare naam",
+          "help": "De naam die mensen voor een wet gebruiken, zoals GDPR of AI Act."
+        },
+        "doc_type": {
+          "label": "Soort handeling",
+          "help": "Verordening, richtlijn of besluit."
+        },
+        "document_type": {
+          "label": "Soort document",
+          "help": "De soort document."
+        },
+        "in_force": {
+          "label": "Van kracht?",
+          "help": "Of de wet vandaag van toepassing is."
+        },
+        "published_from": {
+          "label": "Gedateerd vanaf",
+          "help": "Alleen items van deze dag of later."
+        },
+        "published_to": {
+          "label": "Gedateerd tot",
+          "help": "Alleen items van deze dag of eerder."
+        },
+        "from": {
+          "label": "Vanaf",
+          "help": "Alleen items van deze dag of later."
+        },
+        "to": {
+          "label": "Tot",
+          "help": "Alleen items van deze dag of eerder."
+        },
+        "since": {
+          "label": "Vanaf",
+          "help": "Alleen items van deze dag of later."
+        },
+        "until": {
+          "label": "Tot",
+          "help": "Alleen items van deze dag of eerder."
+        },
+        "date": {
+          "label": "Datum",
+          "help": "De gewenste dag."
+        },
+        "days": {
+          "label": "In de laatste ... dagen",
+          "help": "Hoe ver terug te zoeken, in dagen."
+        },
+        "committee": {
+          "label": "Parlementaire commissie",
+          "help": "Kies uit de lijst, of typ de code, zoals ENVI."
+        },
+        "status": {
+          "label": "Status",
+          "help": "Hoe ver het item is."
+        },
+        "reference": {
+          "label": "Procedurereferentie",
+          "help": "Het dossiernummer, zoals 2021/0106(COD)."
+        },
+        "procedure": {
+          "label": "Procedurereferentie",
+          "help": "Het dossiernummer, zoals 2021/0106(COD)."
+        },
+        "procedure_ref": {
+          "label": "Procedurereferentie",
+          "help": "Het dossiernummer, zoals 2021/0106(COD)."
+        },
+        "procedure_reference": {
+          "label": "Procedurereferentie",
+          "help": "Het dossiernummer, zoals 2021/0106(COD)."
+        },
+        "series": {
+          "label": "Reeks",
+          "help": "L is wetgeving; C is informatie en mededelingen."
+        },
+        "item_type": {
+          "label": "Soort",
+          "help": "Een aanbesteding om een koper te leveren, of een subsidie of financieringsoproep."
+        },
+        "country": {
+          "label": "Land",
+          "help": "Kies uit de lijst, of typ de naam of de code van twee letters, zoals BE."
+        },
+        "ms": {
+          "label": "EU-land",
+          "help": "Kies uit de lijst, of typ de naam of de code van twee letters, zoals BE."
+        },
+        "member_state": {
+          "label": "EU-land",
+          "help": "Kies uit de lijst, of typ de naam of de code van twee letters, zoals BE."
+        },
+        "programme": {
+          "label": "Financieringsprogramma",
+          "help": "Een deel van de programmanaam, zoals Horizon Europe."
+        },
+        "deadline_from": {
+          "label": "Deadline vanaf",
+          "help": "Alleen items met een deadline op of na deze dag."
+        },
+        "deadline_to": {
+          "label": "Deadline tot",
+          "help": "Alleen items met een deadline op of voor deze dag."
+        },
+        "min_amount_eur": {
+          "label": "Minimumbedrag (EUR)",
+          "help": "Items zonder bedrag in euro worden weggelaten."
+        },
+        "max_amount_eur": {
+          "label": "Maximumbedrag (EUR)",
+          "help": "Items zonder bedrag in euro worden weggelaten."
+        },
+        "body": {
+          "label": "EU-instelling of -orgaan",
+          "help": "Van wie het item afkomstig is."
+        },
+        "family": {
+          "label": "Beleidsterrein",
+          "help": "Een groep EU-organen die op hetzelfde terrein werken."
+        },
+        "kind": {
+          "label": "Soort",
+          "help": "Nieuws, persberichten of publicaties."
+        },
+        "when": {
+          "label": "Wanneer",
+          "help": "Komend, voorbij of alle."
+        },
+        "group": {
+          "label": "Fractie",
+          "help": "De korte naam van de fractie, zoals EPP."
+        },
+        "active": {
+          "label": "Nog open?",
+          "help": "Of de zaak nog open is."
+        },
+        "policy_area": {
+          "label": "Beleidsterrein",
+          "help": "Een onderwerp, zoals milieu."
+        },
+        "publication_type": {
+          "label": "Soort publicatie",
+          "help": "Briefing, studie enzovoort."
+        },
+        "order": {
+          "label": "Sorteren op",
+          "help": "De volgorde van de resultaten."
+        },
+        "limit": {
+          "label": "Resultaten per pagina",
+          "help": "Hoeveel resultaten elke zoekopdracht toont."
+        },
+        "page": {
+          "label": "Pagina",
+          "help": "Welke pagina met resultaten u wilt zien."
+        },
+        "include_body": {
+          "label": "Volledige tekst",
+          "help": "Haalt de hele tekst van elk resultaat op. Trager, en het antwoord is veel groter."
+        },
+        "celex": {
+          "label": "CELEX-nummer",
+          "help": "Het EU-nummer van een wet, zoals 32016R0679 voor de GDPR."
+        },
+        "item_id": {
+          "label": "Referentie van het item",
+          "help": "De referentie van dit item. De lijst geeft die aan u."
+        },
+        "row_id": {
+          "label": "Referentie van het item",
+          "help": "De referentie van dit item. De lijst geeft die aan u."
+        },
+        "document_id": {
+          "label": "Referentie van het document",
+          "help": "De referentie van dit item. De lijst geeft die aan u."
+        },
+        "event_id": {
+          "label": "Referentie van het evenement",
+          "help": "De referentie van dit item. De lijst geeft die aan u."
+        },
+        "updated_from": {
+          "label": "Gewijzigd vanaf",
+          "help": "Alleen items die vanaf dit moment zijn gewijzigd. Om een kopie actueel te houden."
+        },
+        "updated_to": {
+          "label": "Gewijzigd tot",
+          "help": "Alleen items die tot dit moment zijn gewijzigd."
+        },
+        "created_from": {
+          "label": "Eerst vastgelegd vanaf",
+          "help": "Alleen items die Brubru vanaf dit moment voor het eerst heeft vastgelegd."
+        },
+        "created_to": {
+          "label": "Eerst vastgelegd tot",
+          "help": "Alleen items die Brubru tot dit moment voor het eerst heeft vastgelegd."
+        },
+        "year": {
+          "label": "Jaar",
+          "help": "Het jaar, in vier cijfers."
+        },
+        "number": {
+          "label": "Nummer",
+          "help": "Het nummer van de handeling, zonder het jaar."
+        },
+        "author": {
+          "label": "Auteur"
+        },
+        "lang": {
+          "label": "Taal",
+          "help": "De taal, met een korte code zoals en of fr."
+        },
+        "language": {
+          "label": "Taal"
+        },
+        "code": {
+          "label": "Code",
+          "help": "De code van het item. De lijst geeft die."
+        },
+        "source": {
+          "label": "Bron"
+        },
+        "type": {
+          "label": "Soort"
+        },
+        "deadline": {
+          "label": "Deadline"
+        },
+        "submission_deadline": {
+          "label": "Deadline"
+        },
+        "amount_eur": {
+          "label": "Bedrag (EUR)"
+        },
+        "estimated_value": {
+          "label": "Geschatte waarde"
+        },
+        "body_name": {
+          "label": "Van"
+        },
+        "institution": {
+          "label": "Instelling"
+        },
+        "contracting_authority": {
+          "label": "Koper",
+          "help": "Deel van de naam van de koper."
+        },
+        "member_state_name": {
+          "label": "EU-land"
+        },
+        "buyer_country": {
+          "label": "Land van de koper"
+        },
+        "role": {
+          "label": "Rol"
+        },
+        "consultation_type": {
+          "label": "Soort"
+        },
+        "event_type": {
+          "label": "Soort evenement"
+        },
+        "venue": {
+          "label": "Plaats"
+        },
+        "case_type": {
+          "label": "Soort zaak",
+          "help": "Het soort inbreukzaak."
+        },
+        "infringement_number": {
+          "label": "Zaaknummer"
+        },
+        "latest_decision_type": {
+          "label": "Laatste besluit"
+        },
+        "oeil_procedure_ref": {
+          "label": "Procedurereferentie"
+        },
+        "lead_committee": {
+          "label": "Bevoegde commissie",
+          "help": "De bevoegde commissie, met haar code, bijvoorbeeld ENVI."
+        },
+        "committee_code": {
+          "label": "Commissie"
+        },
+        "start_date": {
+          "label": "Begint"
+        },
+        "end_date": {
+          "label": "Eindigt"
+        },
+        "published_date": {
+          "label": "Gepubliceerd"
+        },
+        "publication_date": {
+          "label": "Gepubliceerd"
+        },
+        "feedback_count": {
+          "label": "Reacties"
+        },
+        "active_case": {
+          "label": "Open zaak"
+        },
+        "in_office": {
+          "label": "In functie"
+        },
+        "stage": {
+          "label": "Fase",
+          "help": "De bereikte fase."
+        },
+        "current_status": {
+          "label": "Status"
+        },
+        "document_date": {
+          "label": "Datum"
+        },
+        "adopted_on": {
+          "label": "Aangenomen op"
+        },
+        "oj_reference": {
+          "label": "Verwijzing naar het Publicatieblad"
+        },
+        "is_blocked": {
+          "label": "Geblokkeerd?"
+        },
+        "text_type": {
+          "label": "Soort tekst",
+          "help": "Het soort tekst, bijvoorbeeld resolutie of besluit."
+        },
+        "publication_number": {
+          "label": "Publicatienummer"
+        },
+        "publication_id": {
+          "label": "Publicatiereferentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "families": {
+          "label": "Beleidsterrein"
+        },
+        "policy_areas": {
+          "label": "Beleidsterrein"
+        },
+        "authors": {
+          "label": "Auteurs"
+        },
+        "word_count": {
+          "label": "Woorden"
+        },
+        "topic_id": {
+          "label": "Onderwerp",
+          "help": "De referentie van het financieringsonderwerp. De lijst geeft die."
+        },
+        "acronym": {
+          "label": "Acroniem"
+        },
+        "category": {
+          "label": "Categorie",
+          "help": "De categorie, zoals de lijst die noemt."
+        },
+        "count": {
+          "label": "Aantal"
+        },
+        "updated_end": {
+          "label": "Gewijzigd tot (oude naam)",
+          "help": "De oude naam van Gewijzigd tot. Beide werken."
+        },
+        "published_end": {
+          "label": "Gedateerd tot (oude naam)",
+          "help": "De oude naam van Gedateerd tot. Beide werken."
+        },
+        "council_configuration": {
+          "label": "Raadsformatie",
+          "help": "De exacte Raadsformatie waartoe dit item behoort."
+        },
+        "interinstitutional_ref": {
+          "label": "Interinstitutioneel dossier",
+          "help": "Het exacte dossiernummer, bijvoorbeeld 2021/0106(COD)."
+        },
+        "date_from": {
+          "label": "Van",
+          "help": "Alleen items van deze dag of later."
+        },
+        "date_to": {
+          "label": "Tot",
+          "help": "Alleen items van deze dag of eerder."
+        },
+        "parliamentary_term": {
+          "label": "Zittingsperiode",
+          "help": "De zittingsperiode van het Parlement, bijvoorbeeld 9 of 10."
+        },
+        "related_celex": {
+          "label": "Over welke handeling",
+          "help": "Het EU-nummer van de handeling waarover het advies gaat."
+        },
+        "has_body": {
+          "label": "Volledige tekst beschikbaar?",
+          "help": "Alleen items waarvan we de volledige tekst hebben, of juist zonder."
+        },
+        "type_of_action": {
+          "label": "Soort actie",
+          "help": "Deel van het soort gefinancierde actie, bijvoorbeeld RIA of IA."
+        },
+        "rapporteur_mep_id": {
+          "label": "Nummer van het EP-lid rapporteur",
+          "help": "Het nummer dat het Parlement aan het EP-lid-rapporteur geeft. De ledenlijst toont het."
+        },
+        "entity_type": {
+          "label": "Soort accounthouder",
+          "help": "Wie het account heeft, bijvoorbeeld een instelling of een EP-lid."
+        },
+        "entity_key": {
+          "label": "Accounthouder",
+          "help": "De exacte sleutel van een accounthouder, zoals de accountlijst die geeft."
+        },
+        "framework_programme": {
+          "label": "Kaderprogramma",
+          "help": "Het EU-kaderprogramma voor onderzoek, bijvoorbeeld HORIZON of H2020."
+        },
+        "parent_celex": {
+          "label": "Basishandeling",
+          "help": "Het EU-nummer van de wet waarop deze handeling berust, bijvoorbeeld 32016R0679."
+        },
+        "proposing_dg": {
+          "label": "Voorstellend departement",
+          "help": "Het Commissiedepartement achter de handeling, met zijn afkorting, bijvoorbeeld ENV."
+        },
+        "publisher": {
+          "label": "Uitgever",
+          "help": "Deel van de naam van de uitgever."
+        },
+        "catalogue": {
+          "label": "Catalogus",
+          "help": "De exacte catalogus waaruit de dataset komt."
+        },
+        "ta_reference": {
+          "label": "Referentie aangenomen tekst",
+          "help": "Het nummer van de tekst bij het Parlement, bijvoorbeeld P10_TA(2026)0123. De lijst geeft het."
+        },
+        "rapporteur": {
+          "label": "Rapporteur",
+          "help": "Deel van de naam van de rapporteur."
+        },
+        "has_commission_followup": {
+          "label": "Commissie geantwoord?",
+          "help": "Of de Commissie een vervolg op deze resolutie heeft gepubliceerd."
+        },
+        "interest": {
+          "label": "Interessegebied",
+          "help": "Deel van een belang dat de organisatie opgeeft."
+        },
+        "min_costs": {
+          "label": "Minimale lobbykosten (EUR)",
+          "help": "Alleen organisaties die minstens dit bedrag per jaar opgeven."
+        },
+        "platform": {
+          "label": "Platform",
+          "help": "Het sociale netwerk, bijvoorbeeld bluesky of youtube."
+        },
+        "mnemonic": {
+          "label": "Korte code",
+          "help": "De korte code van de dienst in de EU-gids."
+        },
+        "political_group": {
+          "label": "Fractie",
+          "help": "De fractie van het EP-lid dat het amendement indiende."
+        },
+        "pe_reference": {
+          "label": "EP-documentnummer",
+          "help": "Het PE-nummer van het document met het amendement."
+        },
+        "element_type": {
+          "label": "Wat het wijzigt",
+          "help": "Het deel van de tekst dat het wijzigt, bijvoorbeeld artikel of overweging."
+        },
+        "is_main": {
+          "label": "Plenaire stemming?",
+          "help": "Ja voor stemmingen in de plenaire vergadering, nee voor stemmingen in commissie."
+        },
+        "asking_mep_id": {
+          "label": "Nummer van het vragende EP-lid",
+          "help": "Het nummer dat het Parlement aan het vragende EP-lid geeft. De ledenlijst toont het."
+        },
+        "dg_responsible": {
+          "label": "Verantwoordelijk departement",
+          "help": "Deel van de afkorting van het departement, bijvoorbeeld ENV of CNECT."
+        },
+        "host_uuid": {
+          "label": "Referentie van de gastheer",
+          "help": "De referentie van een gastheer bij de Commissie. Elke vergadering in de lijst toont die."
+        },
+        "host_dg": {
+          "label": "Departement van de gastheer",
+          "help": "De exacte afkorting van het departement, bijvoorbeeld ENV."
+        },
+        "target_dg": {
+          "label": "Betrokken departement",
+          "help": "De exacte afkorting van het departement waaraan het advies is gericht, bijvoorbeeld ENV."
+        },
+        "transparency_register_id": {
+          "label": "Nummer in het transparantieregister",
+          "help": "Het nummer van de organisatie in het EU-transparantieregister."
+        },
+        "section": {
+          "label": "Onderdeel",
+          "help": "Een onderdeel van de inbreukstatistieken van de Commissie."
+        },
+        "month": {
+          "label": "Maand",
+          "help": "Een maand als getal, van 1 tot 12, als deze tabel er een heeft."
+        },
+        "end_year": {
+          "label": "Laatste jaar",
+          "help": "Het laatste jaar van de periode, als deze tabel er een heeft."
+        },
+        "year_range": {
+          "label": "Gedekte jaren",
+          "help": "Hoeveel jaren de tabel dekt, als die keuze er is."
+        },
+        "procedure_stage": {
+          "label": "Fase",
+          "help": "De fase van de zaak waarover het persbericht gaat."
+        },
+        "user_type": {
+          "label": "Wie reageerde",
+          "help": "Het soort respondent, zoals de raadpleging dat vastlegt, bijvoorbeeld COMPANY of NGO."
+        },
+        "case_instrument": {
+          "label": "Soort mededingingszaak",
+          "help": "Het instrument zoals DG COMP dat vastlegt: fusie, antitrust of staatssteun."
+        },
+        "eu_ms_only": {
+          "label": "Alleen EU-landen?",
+          "help": "Ja houdt alleen de lidstaten over."
+        },
+        "level": {
+          "label": "Detailniveau",
+          "help": "2 is een hoofdstuk, 4 een post, 6 een onderverdeling, 8 een volledige goederencode."
+        },
+        "coordinator_country": {
+          "label": "Land van de coördinator",
+          "help": "De tweelettercode van het land van de coördinator."
+        },
+        "start_from": {
+          "label": "Begint vanaf",
+          "help": "Alleen projecten die op of na deze dag beginnen."
+        },
+        "end_to": {
+          "label": "Eindigt uiterlijk op",
+          "help": "Alleen projecten die op of voor deze dag eindigen."
+        },
+        "cpv_main": {
+          "label": "Hoofdcode goederen of diensten",
+          "help": "De hoofd-CPV-code van de aankondiging, exact."
+        },
+        "gi_type": {
+          "label": "Soort bescherming",
+          "help": "BOB, BGA of GA (codes PDO, PGI, GI)."
+        },
+        "product_type": {
+          "label": "Soort product",
+          "help": "Bijvoorbeeld wine (wijn) of cheese (kaas)."
+        },
+        "has_geometry": {
+          "label": "Kaart beschikbaar?",
+          "help": "Of we de omtrek van het beschermde gebied hebben."
+        },
+        "precise_only": {
+          "label": "Alleen precieze kaarten?",
+          "help": "Laat omtrekken weg die alleen van de bredere regio komen."
+        },
+        "tag": {
+          "label": "Label",
+          "help": "Deel van een label van de dataset."
+        },
+        "hvd": {
+          "label": "Dataset met hoge waarde?",
+          "help": "Of het op de EU-lijst van datasets met hoge waarde staat."
+        },
+        "use_ml": {
+          "label": "Getraind model gebruiken?",
+          "help": "Voegt de schatting van het getrainde model aan de tijdlijn toe."
+        },
+        "org_type": {
+          "label": "Soort organisatie",
+          "help": "Een van de lobbysoorten die deze lijst gebruikt."
+        },
+        "eutr_section": {
+          "label": "Registeronderdeel",
+          "help": "Het onderdeel van het transparantieregister, met zijn code."
+        },
+        "for_profit": {
+          "label": "Met winstoogmerk?",
+          "help": "Of de organisatie winst nastreeft."
+        },
+        "has_news": {
+          "label": "Nieuws beschikbaar?",
+          "help": "Of we gedateerd nieuws van de website hebben."
+        },
+        "exclude_global_corp": {
+          "label": "Mondiale bedrijven weglaten?",
+          "help": "Ja laat grote mondiale bedrijven weg."
+        },
+        "ethics_personal_data": {
+          "label": "Persoonsgegevens?",
+          "help": "Uw project verwerkt persoonsgegevens: voegt de bijbehorende eisen toe."
+        },
+        "ethics_special_categories": {
+          "label": "Gevoelige gegevens?",
+          "help": "Uw project verwerkt bijzondere categorieën gegevens."
+        },
+        "ethics_clinical_studies": {
+          "label": "Klinische studies?",
+          "help": "Uw project omvat klinische studies."
+        },
+        "ethics_dual_use": {
+          "label": "Tweeërlei gebruik?",
+          "help": "Uw project heeft mogelijk civiel en militair gebruik."
+        },
+        "ethics_animals": {
+          "label": "Dieren?",
+          "help": "Uw project omvat dieren."
+        },
+        "verified": {
+          "label": "Geverifieerd?",
+          "help": "Of we hebben gecontroleerd dat het account van de houder is."
+        },
+        "posts_limit": {
+          "label": "Getoonde berichten",
+          "help": "Hoeveel recente berichten er worden meegegeven."
+        },
+        "min_fte": {
+          "label": "Minimaal personeel (voltijds)",
+          "help": "Alleen organisaties die minstens zoveel voltijds personeel opgeven."
+        },
+        "ep_accredited_only": {
+          "label": "Alleen met EP-toegang?",
+          "help": "Alleen organisaties met personeel dat bij het Parlement geaccrediteerd is."
+        },
+        "body_threshold": {
+          "label": "Grens korte tekst"
+        },
+        "sector": {
+          "label": "Sector",
+          "help": "De sector of het beleidsgebied waartoe het behoort."
+        },
+        "dg": {
+          "label": "Commissiedepartement"
+        },
+        "project_id": {
+          "label": "Projectnummer",
+          "help": "Het nummer van het project."
+        },
+        "contract_nature": {
+          "label": "Soort opdracht"
+        },
+        "topic": {
+          "label": "Onderwerp"
+        },
+        "collection": {
+          "label": "Collectie"
+        },
+        "theme": {
+          "label": "Thema",
+          "help": "Het thema, zoals de lijst dat noemt."
+        },
+        "decision_from": {
+          "label": "Besluit vanaf",
+          "help": "Alleen die met een besluit op of na deze dag."
+        },
+        "decision_to": {
+          "label": "Besluit tot",
+          "help": "Alleen die met een besluit op of voor deze dag."
+        },
+        "lead_dg": {
+          "label": "Leidend departement"
+        },
+        "department": {
+          "label": "Departement",
+          "help": "Deel van de naam van het departement."
+        },
+        "funding_type": {
+          "label": "Soort financiering"
+        },
+        "call_id": {
+          "label": "Referentie van de oproep"
+        },
+        "organisation": {
+          "label": "Organisatie"
+        },
+        "keyword": {
+          "label": "Trefwoord",
+          "help": "Deel van een van de trefwoorden."
+        },
+        "heading": {
+          "label": "Begrotingsrubriek"
+        },
+        "cluster": {
+          "label": "Cluster"
+        },
+        "coverage": {
+          "label": "Dekking"
+        },
+        "procedure_type": {
+          "label": "Soort procedure",
+          "help": "Het soort procedure, bijvoorbeeld openbaar of niet-openbaar."
+        },
+        "cpv_code": {
+          "label": "Code goederen of diensten"
+        },
+        "include_delegated": {
+          "label": "Gedelegeerde handelingen meenemen?"
+        },
+        "template_id": {
+          "label": "Sjabloon",
+          "help": "De naam van het sjabloon. De lijst geeft die."
+        },
+        "has_transcript": {
+          "label": "Transcriptie beschikbaar?"
+        },
+        "resolution_type": {
+          "label": "Soort resolutie"
+        },
+        "position": {
+          "label": "Functie",
+          "help": "De functie van de persoon of, bij een stemming, hoe die stemde."
+        },
+        "commission_dg": {
+          "label": "Commissiedepartement"
+        },
+        "document_register_category": {
+          "label": "Documentcategorie"
+        },
+        "has_pdf": {
+          "label": "PDF beschikbaar?"
+        },
+        "latest_decision_category": {
+          "label": "Soort laatste besluit"
+        },
+        "decision_category": {
+          "label": "Soort besluit"
+        },
+        "decision_type": {
+          "label": "Woorden in het besluit"
+        },
+        "with_press_release": {
+          "label": "Met persbericht?"
+        },
+        "organisation_met": {
+          "label": "Ontmoete organisatie"
+        },
+        "verdict": {
+          "label": "Advies"
+        },
+        "opinion_type": {
+          "label": "Soort advies"
+        },
+        "notifying_country": {
+          "label": "Aanmeldend land"
+        },
+        "classify": {
+          "label": "Onderwerpen toevoegen?"
+        },
+        "shallow": {
+          "label": "Snel lezen?"
+        },
+        "url": {
+          "label": "Webadres"
+        },
+        "deadline_before": {
+          "label": "Sluit uiterlijk op"
+        },
+        "responsible_department": {
+          "label": "Verantwoordelijk departement"
+        },
+        "coordinator": {
+          "label": "Alleen coördinatoren?"
+        },
+        "vat": {
+          "label": "Btw-nummer"
+        },
+        "disaster_type": {
+          "label": "Soort ramp"
+        },
+        "contract_type": {
+          "label": "Soort opdracht (oude naam)"
+        },
+        "participant_country": {
+          "label": "Land van de deelnemer"
+        },
+        "expertise": {
+          "label": "Aanbod of vraag"
+        },
+        "organisation_type": {
+          "label": "Soort organisatie"
+        },
+        "pic": {
+          "label": "PIC-nummer"
+        },
+        "without_eu_projects": {
+          "label": "Nog geen EU-project?"
+        },
+        "requested_from": {
+          "label": "Aangekondigd vanaf"
+        },
+        "requested_to": {
+          "label": "Aangekondigd tot"
+        },
+        "activity_type": {
+          "label": "Soort activiteit"
+        },
+        "is_sme": {
+          "label": "Mkb?"
+        },
+        "period": {
+          "label": "Begrotingsperiode"
+        },
+        "instrument": {
+          "label": "Soort steun"
+        },
+        "winner": {
+          "label": "Winnaar"
+        },
+        "winner_country": {
+          "label": "Land van de winnaar"
+        },
+        "include_superseded": {
+          "label": "Oude versies meenemen?"
+        },
+        "form_type": {
+          "label": "Fase van de aankondiging"
+        },
+        "notice_subtype": {
+          "label": "Soort aankondiging"
+        },
+        "buyer_level": {
+          "label": "Niveau van de koper"
+        },
+        "buyer_legal_type": {
+          "label": "Rechtsvorm van de koper"
+        },
+        "currency": {
+          "label": "Valuta"
+        },
+        "min_value": {
+          "label": "Minimumwaarde"
+        },
+        "max_value": {
+          "label": "Maximumwaarde"
+        },
+        "text": {
+          "label": "Tekst"
+        },
+        "include_orphans": {
+          "label": "Rijen zonder nummer meenemen?"
+        },
+        "corrects": {
+          "label": "Rectificaties van"
+        },
+        "version": {
+          "label": "Versie"
+        },
+        "chapter": {
+          "label": "Hoofdstuk"
+        },
+        "sectors": {
+          "label": "Sectoren"
+        },
+        "microthesaurus": {
+          "label": "Onderwerpgroep"
+        },
+        "domain": {
+          "label": "Onderwerpdomein"
+        },
+        "priority": {
+          "label": "Prioriteit van de Commissie"
+        },
+        "include_other_sources": {
+          "label": "Andere bronnen meenemen?"
+        },
+        "stale_after_days": {
+          "label": "Oud na (dagen)"
+        },
+        "body_stale_after_days": {
+          "label": "Een orgaan is oud na (dagen)"
+        },
+        "geo": {
+          "label": "Plaatscode"
+        },
+        "time": {
+          "label": "Jaar"
+        },
+        "sex": {
+          "label": "Geslacht"
+        },
+        "include_payload": {
+          "label": "Alle cijfers meenemen?"
+        },
+        "amendment_type": {
+          "label": "Soort amendement"
+        },
+        "upcoming": {
+          "label": "Alleen komende?"
+        },
+        "doc_kind": {
+          "label": "Soort document"
+        },
+        "gepro_code": {
+          "label": "Documentcode van het EP"
+        },
+        "term": {
+          "label": "Zittingsperiode"
+        },
+        "include_former": {
+          "label": "Oud-leden meenemen?"
+        },
+        "question_type": {
+          "label": "Soort vraag"
+        },
+        "answering_institution": {
+          "label": "Beantwoord door"
+        },
+        "result": {
+          "label": "Uitslag"
+        },
+        "report_type": {
+          "label": "Soort verslag"
+        },
+        "legal_family": {
+          "label": "Juridische familie"
+        },
+        "category_en": {
+          "label": "Categorie"
+        },
+        "engine": {
+          "label": "Vertaalmachine"
+        },
+        "detail_level": {
+          "label": "Hoeveel tekst"
+        },
+        "upcoming_only": {
+          "label": "Alleen komende data?"
+        },
+        "include_news": {
+          "label": "Nieuws meenemen?"
+        },
+        "funding_mode": {
+          "label": "Soort financiering"
+        },
+        "sub_instrument": {
+          "label": "Subinstrument"
+        },
+        "include_removed": {
+          "label": "Vertrokken personen meenemen?"
+        },
+        "amendment_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "account_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "transcript_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "vote_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "mep_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "stream_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "guide_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "post_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "question_reference": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "opinion_reference": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "notification_number": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "inf_reference": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "initiative_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "meeting_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "summary_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "tender_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "tender_reference": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "file_number": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "doc_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "slug": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "case_number": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "case_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "decision_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "dataset": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "consultation_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "announcement_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "collection_key": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "socrata_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "dataset_code": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "uuid": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "bundle_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "notation": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "concept_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "carriage_id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "ref": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "table": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        },
+        "id": {
+          "label": "Referentie",
+          "help": "De referentie van dit item. De lijst geeft die."
+        }
+      },
+      "options": {
+        "recent": "Nieuwste eerst",
+        "oldest": "Oudste eerst",
+        "title": "Op titel",
+        "updated_asc": "Laatst gewijzigd, oudste eerst",
+        "updated_desc": "Laatst gewijzigd, nieuwste eerst",
+        "created_asc": "Eerst vastgelegd, oudste eerst",
+        "created_desc": "Eerst vastgelegd, nieuwste eerst",
+        "amount": "Hoogste bedrag eerst",
+        "deadline": "Dichtstbijzijnde deadline eerst",
+        "deadline_desc": "Laatste deadline eerst",
+        "open": "Open",
+        "closed": "Gesloten",
+        "forthcoming": "Binnenkort",
+        "upcoming": "Komend",
+        "cancelled": "Geannuleerd",
+        "unknown": "Onbekend",
+        "all": "Alle",
+        "news": "Nieuws",
+        "press_release": "Persberichten",
+        "publication": "Publicaties",
+        "past": "Voorbij",
+        "tender": "Aanbesteding",
+        "grant": "Subsidie",
+        "cascade_call": "Cascade-oproep",
+        "eoi_call": "Oproep tot het indienen van blijken van belangstelling",
+        "startup_funding": "Financiering voor start-ups",
+        "regulation": "Verordening",
+        "directive": "Richtlijn",
+        "decision": "Besluit",
+        "L": "L: wetgeving",
+        "C": "C: informatie en mededelingen",
+        "announced": "Aangekondigd",
+        "legislative_initiative": "Wetgevingsinitiatief",
+        "tabled": "Ingediend",
+        "close_to_adoption": "Bijna aangenomen",
+        "completed": "Afgerond",
+        "adopted": "Aangenomen",
+        "blocked": "Geblokkeerd",
+        "withdrawn": "Ingetrokken"
+      }
     },
     "bundles": {
       "official-journal": {
@@ -3444,7 +4762,8 @@
       "mintKey": "Maak een API-sleutel",
       "topUp": "Saldo opwaarderen",
       "signIn": "Inloggen",
-      "protocolSpec": "MCP-spec"
+      "protocolSpec": "MCP-spec",
+      "askPricing": "Vraag naar de prijzen"
     },
     "copyBtn": {
       "copy": "Kopieer",
@@ -3460,8 +4779,8 @@
       "step1Title": "Maak een Brubru API-sleutel",
       "step1": "Log in en maak een sleutel op",
       "step2Title": "Vul je saldo aan",
-      "step2": "Voeg minstens € 1 krediet toe op",
-      "step2b": "Elke MCP tool-call kost € 0,005.",
+      "step2": "Voeg tegoed toe op",
+      "step2b": "Schrijf voor de prijzen naar hello@beresol.eu.",
       "step3Title": "Plak de configuratie in je client",
       "step3": "Kies je client hieronder en plak de configuratie. Herstart de client - Brubru's vijftien tools worden beschikbaar voor de AI.",
       "curlLabel": "Sanity-check met curl"
@@ -3527,7 +4846,7 @@
     },
     "tools": {
       "title": "Tools vandaag beschikbaar",
-      "lede": "Vijftien tools. ask_brubru is degene die je nodig hebt; search + fetch voeden Deep-Research-clients; de rest is geavanceerd. Elke aanroep kost €0.005 van je saldo.",
+      "lede": "Vijftien tools. ask_brubru is degene die je nodig hebt; search + fetch voeden Deep-Research-clients; de rest is geavanceerd.",
       "descs": {
         "ask_brubru": "Degene die je nodig hebt. Stel elke vraag over de EU en krijg de bijpassende beleidsgidsen, de relevante wetten (met EUR-Lex-links) en de actuele procedurestatus, in één aanroep.",
         "search_eu_legislation": "Geavanceerd: zoeken op trefwoord in de EU-wetgevingsdatabase. ask_brubru bevat de bijpassende wetten al.",
@@ -3547,8 +4866,8 @@
       }
     },
     "pricing": {
-      "title": "Prijsherinnering",
-      "body": "Brubru's MCP tool-calls worden gefactureerd op dezelfde manier als de REST API:",
+      "title": "Prijzen",
+      "body": "Schrijf voor de prijzen naar hello@beresol.eu. Twee dingen om te weten:",
       "b1": "Elke tool-call kost € 0,005 (5 000 micro-euro), afgeboekt van je saldo.",
       "b2": "Geen gratis registratietegoed; minimum bijvullen € 1. Publieke sandbox dekt evaluatie.",
       "b3": "Als een call mislukt (serverfout), wordt de kost automatisch teruggestort.",

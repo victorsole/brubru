@@ -807,13 +807,15 @@
       "demo": "Demo",
       "about": "Sobre nosaltres",
       "logIn": "Iniciar sessió",
-      "startFree": "Començar gratis"
+      "startFree": "Començar gratis",
+      "api": "API"
     },
     "hero": {
       "title": "El teu assistent IA per a la bombolla de la UE",
       "subtitle": "Analitza legislació. Redacta esmenes. Navega les institucions de la UE.",
       "startTrial": "Prova gratuïta",
-      "logIn": "Iniciar sessió"
+      "logIn": "Iniciar sessió",
+      "apiLink": "Necessites dades de la UE a les teves eines? Prova l'API, gratis"
     },
     "intro": {
       "eyebrow": "Què és Brubru",
@@ -914,20 +916,30 @@
       "terms": "Termes",
       "cookies": "Cookies",
       "contact": "Contacte"
+    },
+    "apiSection": {
+      "eyebrow": "Fes servir les dades a les teves eines",
+      "title": "Totes les dades de la UE darrere de Brubru, a punt per al teu programari",
+      "body": "Lleis, expedients legislatius, convocatòries, notícies, consultes i més, de cada institució i agència de la UE. Una API és la manera com un programa demana dades a un altre. No cal ser desenvolupador per provar-la: cerca aquí, sense compte.",
+      "try": "Prova-la gratis, sense compte",
+      "explore": "Com funciona l'API",
+      "reference": "Referència per a desenvolupadors",
+      "pricing": "Pregunta pels preus"
     }
   },
   "api": {
-    "eyebrow": "Per a desenvolupadors, RegTech i agents d'IA",
+    "eyebrow": "Per a qui necessiti dades de la UE",
     "titlePre": "La UE,",
     "titleAccent": "estructurada",
-    "lede": "Brubru és un proveïdor vertical de dades de la UE. La nostra API REST ja abasta totes les institucions, òrgans i agències de la UE: 1.064 endpoints en 95 carpetes, una carpeta per institució. Tens accés en temps real a 27.103 lleis de la UE amb text complet, més de 2.100 procediments legislatius, el retorn de les consultes en directe, les agendes dels comissaris, les prediccions de resultats legislatius amb IA, el calendari institucional unificat de la UE, el Registre de Transparència i la capa d'intel·ligència sobre el text jurídic que impulsa el mateix chatbot i l'Amendator de Brubru. Brubru és el primer usuari de la seva pròpia API.",
+    "lede": "L'API de Brubru dona al teu programari, o al teu assistent d'IA, accés directe a les dades de la UE: lleis, expedients legislatius, convocatòries, notícies, consultes i més, de cada institució i agència de la UE. Una API és la manera com un programa demana dades a un altre. No cal ser desenvolupador per provar-la: la consola d'aquesta pàgina funciona sense compte.",
     "cta": {
       "reference": "Referència de l'API",
-      "contact": "Parlar amb vendes",
+      "contact": "Parla amb nosaltres",
       "openRef": "Obrir la referència",
       "ping": "/api/v1/ping (públic)",
       "openFullDocs": "Obrir documentació completa",
-      "mcp": "Usar a Claude / ChatGPT / IDE (MCP)"
+      "mcp": "Usar a Claude / ChatGPT / IDE (MCP)",
+      "try": "Prova-la ara, gratis"
     },
     "sections": {
       "quickstart": "Inici ràpid",
@@ -944,9 +956,9 @@
       "onThisPage": "En aquesta pàgina"
     },
     "quickstart": {
-      "intro": "Obté la teva primera resposta de l'API en menys de dos minuts.",
-      "step1Title": "Aconsegueix una subscripció Professional",
-      "step1": "Sol·licita una demo a hello@beresol.eu per acordar el teu pla Professional. La teva clau d'API apareixerà després a la configuració del teu compte.",
+      "intro": "Per a desenvolupadors: la teva primera crida des del teu codi, en uns dos minuts.",
+      "step1Title": "Crea la teva clau",
+      "step1": "Crea un compte gratuït i després una clau a Les teves claus d'API, en aquesta pàgina. Afegeix saldo a la pàgina de facturació.",
       "step2Title": "Fes la teva primera petició",
       "step3Title": "Processa la resposta",
       "step3": "Cada endpoint retorna el mateix sobre paginat. Extreu la matriu data per iterar sobre els resultats. Comprova has_more i next_page per paginar."
@@ -957,7 +969,7 @@
       "mcpDescription": "Brubru exposa un servidor Model Context Protocol (MCP). Connecta'l a Claude, ChatGPT, Gemini, Mistral o qualsevol agent d'IA compatible amb MCP per donar al teu assistent intel·ligència legislativa europea en temps real."
     },
     "auth": {
-      "description": "Cada endpoint /api/v2/* requereix una clau d'API. Envia-la com a Authorization: Bearer <clau> (recomanat) o X-API-Key: <clau>. Les claus les emet l'equip Brubru per a subscriptors Professional. Límit: 60 peticions per minut per clau.",
+      "description": "Cada ruta /api/v2/* necessita una clau, tret de quan proves a la consola de dalt. Passa-la com a Authorization: Bearer <clau> (recomanat) o X-API-Key: <clau>. Tu mateix crees les claus des del teu compte, fins a tres alhora. El límit és de 60 peticions per minut per clau.",
       "note": "X-API-Key també s'accepta per a scripts amb curl. Bearer és l'estàndard a Postman, OpenAPI i SDKs."
     },
     "envelope": {
@@ -969,7 +981,7 @@
       "meaning": "Significat",
       "ok": "Èxit. Consulta X-RateLimit-Remaining per saber quantes trucades et queden a la finestra.",
       "unauthorized": "Clau d'API absent o invàlida.",
-      "forbidden": "Clau vàlida però el titular no té pla Professional.",
+      "forbidden": "Clau vàlida, però no cobreix aquesta ruta.",
       "notFound": "Recurs no trobat.",
       "invalidQuery": "Paràmetre de consulta invàlid.",
       "rateLimited": "Límit superat. Respecta la capçalera Retry-After.",
@@ -994,10 +1006,11 @@
         "reached": "Has arribat al màxim de 3 claus API actives. Revoca una clau no utilitzada per crear-ne una de nova."
       },
       "signedOut": {
-        "title": "Inicia sessió per crear una clau API",
-        "body": "Les claus API es creen des del teu compte de Brubru. Inicia sessió o crea'n un per començar.",
-        "cta": "Iniciar sessió",
-        "signup": "Crear compte"
+        "title": "Aconsegueix la teva pròpia clau",
+        "body": "Una clau permet al teu programari fer servir l'API, sense límit diari. Crea un compte gratuït i després una clau. Provar-la a la consola no requereix res d'això.",
+        "cta": "Inicia sessió",
+        "signup": "Crea un compte gratuït",
+        "pricing": "Pregunta pels preus"
       },
       "list": {
         "name": "Nom",
@@ -1142,67 +1155,1372 @@
     },
     "console": {
       "title": "Consola de l'API",
-      "lede": "Crida l'API des d'aquí, sense compte: tria qualsevol ruta, omple'n el formulari, prem Envia i mira les files reals de la UE que retorna.",
+      "lede": "Consulta dades de la UE en directe en tres passos, sense compte: tria què busques, afina-ho si vols i prem Cerca.",
       "backToApi": "La pàgina de l'API",
       "openFull": "Obre a pantalla completa",
-      "search": "Cerca entre {{count}} rutes",
-      "loading": "Carregant el catàleg...",
+      "search": "Cerca per paraula ({{count}} en total)",
+      "loading": "S'està carregant el catàleg...",
       "loadError": "No s'ha pogut carregar el catàleg.",
       "retry": "Torna-ho a provar",
-      "noMatch": "Cap ruta no coincideix.",
+      "noMatch": "Res no coincideix amb aquesta paraula.",
       "resultCount_one": "{{count}} ruta",
       "resultCount_other": "{{count}} rutes",
-      "firstResults": "Les primeres {{shown}} de {{count}} rutes. Afegeix una paraula per acotar.",
-      "deprecated": "Obsoleta",
-      "start": "Comença aquí:",
-      "startNews": "Últimes notícies de la UE",
-      "startFunding": "Convocatòries i licitacions",
-      "startLaws": "Lleis de la UE",
-      "startProcedures": "Procediments legislatius",
-      "allowance": "{{calls}} crides gratuïtes al dia, fins a {{rows}} files per crida.",
-      "callsLeft_one": "Et queda {{count}} crida gratuïta avui",
-      "callsLeft_other": "Et queden {{count}} crides gratuïtes avui",
-      "about": "Sobre aquesta ruta",
-      "noParameters": "Aquesta ruta no té paràmetres.",
-      "required": "obligatori",
+      "firstResults": "Els primers {{shown}} de {{count}}. Afegeix una paraula per afinar.",
+      "deprecated": "En retirada",
+      "stepChoose": "Què busques?",
+      "stepNarrow": "Afina-ho (opcional)",
+      "stepItem": "Obre un element",
+      "stepResults": "Resultats",
+      "allowance": "{{calls}} cerques gratuïtes al dia",
+      "callsLeft_one": "Et queda {{count}} cerca gratuïta avui",
+      "callsLeft_other": "Et queden {{count}} cerques gratuïtes avui",
+      "allowanceTip": "Ho pots provar sense compte: {{calls}} cerques al dia des de la teva connexió, fins a {{rows}} resultats cadascuna. Amb la teva pròpia clau d'API no hi ha aquest límit i el teu programari pot fer servir les mateixes dades.",
+      "freeCallTipLabel": "Sobre les cerques gratuïtes",
+      "bundleCardsLabel": "Tria el que necessites",
+      "browseAll": "O explora les {{count}} rutes",
+      "routeTipLabel": "Què és una ruta?",
+      "routeTip": "Una ruta és un tipus de dades amb la seva pròpia adreça web, com ara les lleis de la UE o les notícies d'una agència. Les targetes de dalt són el millor punt de partida; aquesta llista conté totes les rutes, agrupades per institució.",
+      "bundleLabel": "Mostra només",
+      "allRoutes": "Tot",
+      "idleList": "Prem Cerca per veure aquí els resultats en directe.",
+      "idleItem": "Prem Obre per veure aquí aquest element.",
+      "idleNeedsKey": "Això necessita la teva pròpia clau d'API, així que la prova gratuïta no ho pot mostrar aquí.",
+      "idleCost": "Cada cerca fa servir 1 de les teves {{calls}} cerques gratuïtes d'avui. Triar i omplir el formulari no en gasta cap.",
+      "allOptional": "Tot això és opcional. Deixa-ho buit per veure-ho tot.",
+      "moreFilters_one": "Més filtres ({{count}})",
+      "moreFilters_other": "Més filtres ({{count}})",
+      "developerFilters_one": "Per a desenvolupadors ({{count}})",
+      "developerFilters_other": "Per a desenvolupadors ({{count}})",
+      "developerFiltersTipLabel": "Què són?",
+      "developerFiltersTip": "Filtres per mantenir al dia una còpia de les dades, i noms antics que es conserven perquè les integracions existents continuïn funcionant. No els necessites per cercar.",
+      "includeBodyChoice": "Porta també el text complet (més lent)",
+      "send": "Cerca",
+      "sendItem": "Obre",
+      "sending": "S'està cercant...",
+      "clear": "Esborra",
+      "usesOneCall": "Fa servir 1 cerca gratuïta.",
+      "freeHere": "Gratuït aquí, amb la prova pública. No cal compte.",
+      "needsKey": "Això no és a la prova gratuïta. Cal la teva pròpia clau d'API.",
+      "getKey": "Aconsegueix la teva clau",
+      "sandboxUnavailable": "La prova gratuïta no està disponible en aquesta versió de la pàgina.",
+      "fillRequired": "Per continuar, omple: {{names}}",
+      "datesReversed": "La data d'inici és posterior a la de final. Inverteix-les.",
+      "defaultChoice": "Per defecte: {{value}}",
       "any": "Qualsevol",
-      "defaultValue": "Per defecte: {{value}}",
-      "send": "Envia",
-      "sending": "Enviant...",
-      "fillRequired": "Omple: {{names}}",
-      "freeHere": "Gratuït aquí, des de l'entorn públic de proves.",
-      "ownKeyPrice": "Amb la teva pròpia clau, aquesta crida costa {{cost}} EUR.",
-      "needsKey": "Aquesta ruta necessita la teva pròpia clau d'API.",
-      "needsKeyPriced": "Aquesta ruta necessita la teva pròpia clau d'API, a {{cost}} EUR per crida.",
-      "getKey": "Aconsegueix la teva pròpia clau",
-      "sandboxUnavailable": "L'entorn públic de proves no està disponible en aquesta versió de la pàgina.",
-      "response": "Resposta",
-      "nothingSent": "Encara no s'ha enviat res. Tria una ruta i prem Envia.",
-      "networkError": "No s'ha pogut connectar amb l'API. Comprova la connexió i torna-ho a provar.",
+      "yes": "Sí",
+      "no": "No",
+      "required": "obligatori",
+      "moreAbout": "Més sobre {{name}}",
+      "noFieldHelp": "Un filtre sobre aquestes dades.",
+      "severalInCode": "Aquí en tries un. Al teu codi en pots demanar diversos, separats per comes.",
+      "nameInAddress": "El seu nom a l'API:",
+      "tryExample": "Prova:",
+      "hintMoment": "Escriu la data com a any-mes-dia, per exemple 2026-11-01.",
+      "hintCelex": "Un número CELEX té aquest aspecte: 32016R0679. Per cercar per nom, fes servir Nom comú o Paraules de cerca.",
+      "hintProcedure": "Una referència de procediment té aquest aspecte: 2021/0106(COD). Per cercar per tema, fes servir Paraules de cerca.",
+      "hintCountry": "Fes servir un codi de país de dues lletres, com ara BE, o tria de la llista mentre escrius.",
+      "hintCommittee": "Fes servir un codi de comissió, com ara ENVI, o tria de la llista mentre escrius.",
+      "itemNeedsId": "Això obre un sol element, així que necessita la seva referència. El més fàcil: ves a la llista, cerca i prem Obre en un resultat.",
+      "goToList": "Ves a la llista",
+      "backToResults": "Torna als resultats",
+      "about": "Detalls tècnics d'aquesta ruta",
+      "addressNote": "Aquesta és l'adreça web que cridaria el teu programari. La línia de sota és aquesta cerca tal com l'has omplerta.",
+      "noParameters": "Res a omplir: només cal prémer el botó.",
+      "opening": "Obrint... {{seconds}} s",
+      "notAProgrammer": "No programes? Envia això a qui crea les teves eines, o connecta Brubru al teu assistent d'IA.",
+      "connectAssistant": "Connecta a un assistent d'IA",
+      "mostlyEnglish": "La majoria d'aquestes dades són en anglès: prova les mateixes paraules en anglès.",
+      "askPricing": "Pregunta pels preus",
+      "tryOneWord": "O prova una sola paraula:",
+      "waiting": "S'està cercant... {{seconds}} s",
+      "slowNote": "Algunes cerques recorren molt de text i poden trigar fins a 30 segons. Pots esperar o cancel·lar.",
+      "verySlowNote": "Aquesta triga més del que és habitual. Pots continuar esperant, o cancel·lar i afinar la cerca.",
+      "cancel": "Cancel·la",
+      "cancelTipLabel": "Què costa cancel·lar?",
+      "cancelTip": "La cerca es va comptar en arribar-nos, així que cancel·lar no la retorna.",
+      "cancelled": "Cancel·lada. Aquesta cerca compta igualment com una de les teves cerques gratuïtes.",
+      "networkError": "No ha arribat cap resposta a aquesta pàgina. Comprova la connexió i torna-ho a provar. Si torna a passar, el problema és nostre.",
+      "notFound": "No s'ha trobat res amb aquesta referència. Comprova-la o tria'n una de la llista.",
+      "tooManyCalls": "Massa cerques en poc temps. Espera un minut i torna-ho a provar.",
+      "serverFault": "Alguna cosa ha fallat per part nostra, no en el que has escrit. Torna-ho a provar o canvia els filtres. Si ens escrius, indica l'identificador de sota.",
+      "checkFields": "Alguna cosa que has escrit no té el format que necessiten aquestes dades:",
+      "capVisitor": "Has fet servir les cerques gratuïtes d'avui. Aconsegueix la teva clau per continuar.",
+      "capPool": "La quota pública d'avui s'ha esgotat. Aconsegueix la teva clau o torna demà.",
       "failedStatus": "L'API ha respost amb l'estat {{status}}.",
-      "capVisitor": "Has fet servir les crides gratuïtes d'avui. Aconsegueix la teva pròpia clau per continuar.",
-      "capPool": "S'ha exhaurit el contingent públic d'avui. Aconsegueix la teva pròpia clau o torna demà.",
-      "milliseconds": "{{ms}} ms",
-      "rowsFound_one": "{{formatted}} fila trobada",
-      "rowsFound_other": "{{formatted}} files trobades",
-      "zeroRows": "La crida ha funcionat i no ha trobat files amb aquests filtres. Amplia'ls i torna-ho a provar.",
-      "tabRows": "Files",
-      "tabJson": "JSON",
-      "tabCode": "Codi",
-      "datapointsNote": "Les cinc dades que porta cada element: on es publica, el text i les tres dates.",
-      "moreInJson": "Es mostren {{shown}} de les {{count}} files retornades. La pestanya JSON les té totes.",
+      "statusOk": "Ha funcionat",
+      "statusNotFound": "No trobat",
+      "statusServer": "Error per part nostra",
+      "statusRefused": "No acceptat",
+      "statusTipLabel": "Què vol dir això?",
+      "statusTip": "El codi de resposta de l'API ha estat {{status}}. 200 vol dir que ha funcionat; 400 o 422, alguna cosa del formulari; 404, res amb aquesta referència; 500, un error per part nostra.",
+      "seconds": "{{value}} s",
+      "rowsFound_one": "{{formatted}} resultat trobat",
+      "rowsFound_other": "{{formatted}} resultats trobats",
+      "zeroTitle": "La cerca ha funcionat, però res no coincideix.",
+      "zeroWithFilters": "Treu un filtre de sota o prova altres paraules i torna a cercar:",
+      "zeroNoFilters": "Aquesta llista no té res a mostrar ara mateix.",
+      "removeFilter": "Treu aquest filtre",
+      "tabRows": "Resultats",
+      "tabJson": "Dades en brut",
+      "tabCode": "Fes-ho servir al teu codi",
+      "rowsAtLeast": "Almenys {{formatted}} resultats",
+      "datapointsTitle": "Enllaç, text i dates",
+      "datapointsTipLabel": "Què és això?",
+      "datapointsNote": "Cada element de l'API porta les mateixes dades: on es publica, el seu text i les seves tres dates.",
       "emptyValue": "buit",
       "notRequested": "no sol·licitat",
       "characters_one": "{{formatted}} caràcter",
       "characters_other": "{{formatted}} caràcters",
-      "shortened": "Aquí els textos llargs s'escurcen. Copia dona la resposta sencera.",
+      "fullTextTitle": "Text complet ({{formatted}} caràcters)",
+      "openItem": "Obre (fa servir 1 cerca gratuïta)",
+      "openItemKey": "Obre (cal la teva clau)",
+      "officialPage": "Pàgina oficial",
+      "nextPage": "Resultats següents (fa servir 1 cerca gratuïta)",
+      "lastFreePage": "La prova gratuïta arriba fins aquí.",
+      "moreInJson": "Es mostren {{shown}} dels {{count}} resultats retornats. La pestanya Dades en brut els té tots.",
+      "shortened": "Els textos llargs s'escurcen aquí. Copiar dona la resposta completa.",
       "copy": "Copia",
       "copied": "Copiat",
-      "codeNote": "La mateixa crida des del teu propi codi. Substitueix YOUR_API_KEY per la teva clau.",
-      "requestId": "Id. de la petició:",
-      "bundleLabel": "Mostra",
-      "allRoutes": "Totes les rutes",
-      "bundleCardsLabel": "Tria el que necessites"
+      "codeNote": "La mateixa cerca des del teu programari. Substitueix YOUR_API_KEY per la teva clau.",
+      "requestId": "Identificador de la sol·licitud:",
+      "tooMany": {
+        "limit": "La prova gratuïta mostra fins a {{top}} resultats per cerca. Abaixa aquest nombre o fes servir la teva clau.",
+        "page": "La prova gratuïta arriba fins a la pàgina {{top}}."
+      },
+      "points": {
+        "public_url": "La pàgina on la mateixa institució ho publica.",
+        "body_txt": "El text complet, com a text pla.",
+        "body_html": "El text complet, amb el seu format.",
+        "document_date": "La data del mateix document, tal com la publica la institució.",
+        "creation_date": "Quan Brubru va registrar aquest element per primera vegada.",
+        "updated_date": "Quan Brubru va registrar per última vegada un canvi en aquest element."
+      },
+      "how": {
+        "open": "Com funciona",
+        "title": "Com funciona la consola de l'API",
+        "intro": "L'API de Brubru dona al programari accés a dades de la UE en directe. Aquesta pàgina et permet provar-la primer a mà, sense compte i sense instal·lar res.",
+        "step1Title": "Tria què busques",
+        "step1Text": "Tria una targeta. El formulari s'omple amb un exemple real.",
+        "step2Title": "Afina-ho, si vols",
+        "step2Text": "Canvia les paraules o fes servir els filtres. Tot és opcional tret que digui obligatori. La petita i al costat d'un camp l'explica.",
+        "step3Title": "Prem Cerca i llegeix els resultats",
+        "step3Text": "Cada resultat enllaça amb la seva pàgina oficial. Prem Obre en un resultat per veure'l complet.",
+        "wordsTitle": "Paraules que veuràs",
+        "nextTitle": "Quan hagis trobat el que necessites",
+        "nextText": "La pestanya Fes-ho servir al teu codi mostra la mateixa cerca com una ordre que el teu programari pot executar. Per això necessites la teva pròpia clau.",
+        "start": "Comença a provar",
+        "close": "Tanca",
+        "words": {
+          "apiTerm": "API",
+          "apiText": "Una manera que un programa demani dades a un altre, en lloc que una persona llegeixi un web.",
+          "routeTerm": "Ruta",
+          "routeText": "Un tipus de dades amb la seva pròpia adreça web, com ara les lleis de la UE o les notícies d'una institució.",
+          "filterTerm": "Filtre",
+          "filterText": "Un camp que afina els resultats, com ara un país o una data.",
+          "resultTerm": "Resultat",
+          "resultText": "Un element trobat: una llei, una convocatòria, una notícia, una persona. Els desenvolupadors també en diuen fila.",
+          "freeCallTerm": "Cerca gratuïta",
+          "freeCallText": "En tens {{calls}} al dia, amb fins a {{rows}} resultats cadascuna. Obrir un element compta com una.",
+          "keyTerm": "Clau d'API",
+          "keyText": "Una contrasenya privada per al teu programari. Elimina el límit diari. Per als preus, escriu a hello@beresol.eu.",
+          "fullTextTerm": "Text complet",
+          "fullTextText": "El document sencer, no només el títol. Fa la cerca més lenta, així que està desactivat fins que el demanis."
+        }
+      },
+      "tasks": {
+        "laws": {
+          "title": "Cerca una llei de la UE",
+          "desc": "Lleis adoptades, per tema o per un nom comú com ara l'RGPD."
+        },
+        "procedures": {
+          "title": "Segueix una llei en tramitació",
+          "desc": "Expedients legislatius en curs i en quin punt és cadascun."
+        },
+        "oj": {
+          "title": "Llegeix el Diari Oficial",
+          "desc": "El que la UE va publicar un dia concret."
+        },
+        "funding": {
+          "title": "Cerca convocatòries i licitacions",
+          "desc": "Convocatòries de finançament de la UE i licitacions públiques."
+        },
+        "news": {
+          "title": "Llegeix les últimes notícies de la UE",
+          "desc": "Notícies i notes de premsa de les institucions i organismes de la UE."
+        },
+        "events": {
+          "title": "Mira els esdeveniments de la UE",
+          "desc": "Reunions, audiències i conferències a les institucions."
+        },
+        "consultations": {
+          "title": "Cerca consultes públiques",
+          "desc": "Consultes de la Comissió i de les agències."
+        },
+        "people": {
+          "title": "Cerca eurodiputats",
+          "desc": "Membres del Parlament Europeu, per país, grup o nom."
+        },
+        "enforcement": {
+          "title": "Consulta procediments d'infracció",
+          "desc": "Casos oberts per la Comissió contra estats membres."
+        },
+        "research": {
+          "title": "Llegeix els estudis del Parlament",
+          "desc": "Informes i estudis del servei d'estudis del Parlament."
+        }
+      },
+      "fields": {
+        "q": {
+          "label": "Paraules de cerca",
+          "help": "Les paraules que busques. Un tema funciona millor que una frase sencera."
+        },
+        "name": {
+          "label": "Nom",
+          "help": "Part del nom de la persona o organització."
+        },
+        "alias": {
+          "label": "Nom comú",
+          "help": "El nom que es fa servir per a una llei, com ara GDPR o AI Act."
+        },
+        "doc_type": {
+          "label": "Tipus d'acte",
+          "help": "Reglament, directiva o decisió."
+        },
+        "document_type": {
+          "label": "Tipus de document",
+          "help": "La mena de document."
+        },
+        "in_force": {
+          "label": "En vigor?",
+          "help": "Si la llei s'aplica avui."
+        },
+        "published_from": {
+          "label": "Amb data des de",
+          "help": "Només elements amb aquesta data o posterior."
+        },
+        "published_to": {
+          "label": "Amb data fins a",
+          "help": "Només elements amb aquesta data o anterior."
+        },
+        "from": {
+          "label": "Des de",
+          "help": "Només elements amb aquesta data o posterior."
+        },
+        "to": {
+          "label": "Fins a",
+          "help": "Només elements amb aquesta data o anterior."
+        },
+        "since": {
+          "label": "Des de",
+          "help": "Només elements amb aquesta data o posterior."
+        },
+        "until": {
+          "label": "Fins a",
+          "help": "Només elements amb aquesta data o anterior."
+        },
+        "date": {
+          "label": "Data",
+          "help": "El dia que vols."
+        },
+        "days": {
+          "label": "En els últims ... dies",
+          "help": "Fins on mirar enrere, en dies."
+        },
+        "committee": {
+          "label": "Comissió parlamentària",
+          "help": "Tria de la llista, o escriu-ne el codi, com ara ENVI."
+        },
+        "status": {
+          "label": "Estat",
+          "help": "En quin punt és l'element."
+        },
+        "reference": {
+          "label": "Referència de procediment",
+          "help": "El número de l'expedient, com ara 2021/0106(COD)."
+        },
+        "procedure": {
+          "label": "Referència de procediment",
+          "help": "El número de l'expedient, com ara 2021/0106(COD)."
+        },
+        "procedure_ref": {
+          "label": "Referència de procediment",
+          "help": "El número de l'expedient, com ara 2021/0106(COD)."
+        },
+        "procedure_reference": {
+          "label": "Referència de procediment",
+          "help": "El número de l'expedient, com ara 2021/0106(COD)."
+        },
+        "series": {
+          "label": "Sèrie",
+          "help": "L és legislació; C, informació i comunicacions."
+        },
+        "item_type": {
+          "label": "Mena",
+          "help": "Una licitació per subministrar a un comprador, o una subvenció o convocatòria de finançament."
+        },
+        "country": {
+          "label": "País",
+          "help": "Tria de la llista, o escriu el nom o el codi de dues lletres, com ara BE."
+        },
+        "ms": {
+          "label": "País de la UE",
+          "help": "Tria de la llista, o escriu el nom o el codi de dues lletres, com ara BE."
+        },
+        "member_state": {
+          "label": "País de la UE",
+          "help": "Tria de la llista, o escriu el nom o el codi de dues lletres, com ara BE."
+        },
+        "programme": {
+          "label": "Programa de finançament",
+          "help": "Part del nom del programa, com ara Horizon Europe."
+        },
+        "deadline_from": {
+          "label": "Termini des de",
+          "help": "Només elements amb termini aquest dia o després."
+        },
+        "deadline_to": {
+          "label": "Termini fins a",
+          "help": "Només elements amb termini aquest dia o abans."
+        },
+        "min_amount_eur": {
+          "label": "Import mínim (EUR)",
+          "help": "S'exclouen els elements sense import en euros."
+        },
+        "max_amount_eur": {
+          "label": "Import màxim (EUR)",
+          "help": "S'exclouen els elements sense import en euros."
+        },
+        "body": {
+          "label": "Institució o organisme de la UE",
+          "help": "De qui prové l'element."
+        },
+        "family": {
+          "label": "Àmbit polític",
+          "help": "Un grup d'organismes de la UE que treballen en el mateix àmbit."
+        },
+        "kind": {
+          "label": "Tipus",
+          "help": "Notícies, notes de premsa o publicacions."
+        },
+        "when": {
+          "label": "Quan",
+          "help": "Propers, passats o tots."
+        },
+        "group": {
+          "label": "Grup polític",
+          "help": "El nom curt del grup, com ara EPP."
+        },
+        "active": {
+          "label": "Encara obert?",
+          "help": "Si el cas encara és obert."
+        },
+        "policy_area": {
+          "label": "Àmbit polític",
+          "help": "Un tema, com ara medi ambient."
+        },
+        "publication_type": {
+          "label": "Tipus de publicació",
+          "help": "Informe, estudi, etc."
+        },
+        "order": {
+          "label": "Ordena per",
+          "help": "L'ordre dels resultats."
+        },
+        "limit": {
+          "label": "Resultats per pàgina",
+          "help": "Quants resultats mostra cada cerca."
+        },
+        "page": {
+          "label": "Pàgina",
+          "help": "Quina pàgina de resultats mostrar."
+        },
+        "include_body": {
+          "label": "Text complet",
+          "help": "Porta el text sencer de cada resultat. Més lent, i la resposta és molt més gran."
+        },
+        "celex": {
+          "label": "Número CELEX",
+          "help": "El número de la UE per a una llei, com ara 32016R0679 per a l'RGPD."
+        },
+        "item_id": {
+          "label": "Referència de l'element",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "row_id": {
+          "label": "Referència de l'element",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "document_id": {
+          "label": "Referència del document",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "event_id": {
+          "label": "Referència de l'esdeveniment",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "updated_from": {
+          "label": "Modificat des de",
+          "help": "Només elements modificats des d'aquest moment. Per mantenir una còpia al dia."
+        },
+        "updated_to": {
+          "label": "Modificat fins a",
+          "help": "Només elements modificats fins a aquest moment."
+        },
+        "created_from": {
+          "label": "Registrat des de",
+          "help": "Només elements que Brubru va registrar per primera vegada des d'aquest moment."
+        },
+        "created_to": {
+          "label": "Registrat fins a",
+          "help": "Només elements que Brubru va registrar per primera vegada fins a aquest moment."
+        },
+        "year": {
+          "label": "Any",
+          "help": "L'any, amb quatre xifres."
+        },
+        "number": {
+          "label": "Número",
+          "help": "El número de l'acte, sense l'any."
+        },
+        "author": {
+          "label": "Autor"
+        },
+        "lang": {
+          "label": "Llengua",
+          "help": "La llengua, amb un codi curt com en o fr."
+        },
+        "language": {
+          "label": "Llengua"
+        },
+        "code": {
+          "label": "Codi",
+          "help": "El codi de l'element. La llista te'l dona."
+        },
+        "source": {
+          "label": "Font"
+        },
+        "type": {
+          "label": "Tipus"
+        },
+        "deadline": {
+          "label": "Termini"
+        },
+        "submission_deadline": {
+          "label": "Termini"
+        },
+        "amount_eur": {
+          "label": "Import (EUR)"
+        },
+        "estimated_value": {
+          "label": "Valor estimat"
+        },
+        "body_name": {
+          "label": "De"
+        },
+        "institution": {
+          "label": "Institució"
+        },
+        "contracting_authority": {
+          "label": "Comprador",
+          "help": "Part del nom del comprador."
+        },
+        "member_state_name": {
+          "label": "País de la UE"
+        },
+        "buyer_country": {
+          "label": "País del comprador"
+        },
+        "role": {
+          "label": "Funció"
+        },
+        "consultation_type": {
+          "label": "Tipus"
+        },
+        "event_type": {
+          "label": "Tipus d'esdeveniment"
+        },
+        "venue": {
+          "label": "Lloc"
+        },
+        "case_type": {
+          "label": "Tipus de cas",
+          "help": "El tipus de cas d'infracció."
+        },
+        "infringement_number": {
+          "label": "Número de cas"
+        },
+        "latest_decision_type": {
+          "label": "Última decisió"
+        },
+        "oeil_procedure_ref": {
+          "label": "Referència de procediment"
+        },
+        "lead_committee": {
+          "label": "Comissió competent",
+          "help": "La comissió competent, pel seu codi, com ara ENVI."
+        },
+        "committee_code": {
+          "label": "Comissió"
+        },
+        "start_date": {
+          "label": "Inici"
+        },
+        "end_date": {
+          "label": "Final"
+        },
+        "published_date": {
+          "label": "Publicat"
+        },
+        "publication_date": {
+          "label": "Publicat"
+        },
+        "feedback_count": {
+          "label": "Respostes"
+        },
+        "active_case": {
+          "label": "Cas obert"
+        },
+        "in_office": {
+          "label": "En el càrrec"
+        },
+        "stage": {
+          "label": "Fase",
+          "help": "La fase assolida."
+        },
+        "current_status": {
+          "label": "Estat"
+        },
+        "document_date": {
+          "label": "Data"
+        },
+        "adopted_on": {
+          "label": "Adoptat el"
+        },
+        "oj_reference": {
+          "label": "Referència del Diari Oficial"
+        },
+        "is_blocked": {
+          "label": "Bloquejat?"
+        },
+        "text_type": {
+          "label": "Tipus de text",
+          "help": "El tipus de text, com ara resolució o decisió."
+        },
+        "publication_number": {
+          "label": "Número de publicació"
+        },
+        "publication_id": {
+          "label": "Referència de la publicació",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "families": {
+          "label": "Àmbit polític"
+        },
+        "policy_areas": {
+          "label": "Àmbit polític"
+        },
+        "authors": {
+          "label": "Autors"
+        },
+        "word_count": {
+          "label": "Paraules"
+        },
+        "topic_id": {
+          "label": "Tema",
+          "help": "La referència del tema de finançament. La llista te la dona."
+        },
+        "acronym": {
+          "label": "Acrònim"
+        },
+        "category": {
+          "label": "Categoria",
+          "help": "La categoria, tal com l'anomena la llista."
+        },
+        "count": {
+          "label": "Quantitat"
+        },
+        "updated_end": {
+          "label": "Modificat fins a (nom antic)",
+          "help": "El nom antic de Modificat fins a. Tots dos funcionen."
+        },
+        "published_end": {
+          "label": "Amb data fins a (nom antic)",
+          "help": "El nom antic d'Amb data fins a. Tots dos funcionen."
+        },
+        "council_configuration": {
+          "label": "Formació del Consell",
+          "help": "La formació exacta del Consell a la qual pertany."
+        },
+        "interinstitutional_ref": {
+          "label": "Expedient interinstitucional",
+          "help": "El número exacte de l'expedient, com ara 2021/0106(COD)."
+        },
+        "date_from": {
+          "label": "Des de",
+          "help": "Només elements amb aquesta data o posterior."
+        },
+        "date_to": {
+          "label": "Fins a",
+          "help": "Només elements amb aquesta data o anterior."
+        },
+        "parliamentary_term": {
+          "label": "Legislatura",
+          "help": "La legislatura del Parlament, com ara 9 o 10."
+        },
+        "related_celex": {
+          "label": "Sobre quin acte",
+          "help": "El número UE de l'acte sobre el qual versa el dictamen."
+        },
+        "has_body": {
+          "label": "Té text complet?",
+          "help": "Només elements amb text complet, o només els que no en tenen."
+        },
+        "type_of_action": {
+          "label": "Tipus d'acció",
+          "help": "Part del tipus d'acció finançada, com ara RIA o IA."
+        },
+        "rapporteur_mep_id": {
+          "label": "Número del diputat ponent",
+          "help": "El número que el Parlament dona al diputat ponent. Apareix a la llista de diputats."
+        },
+        "entity_type": {
+          "label": "Tipus de titular",
+          "help": "Qui té el compte, com ara una institució o un diputat."
+        },
+        "entity_key": {
+          "label": "Titular",
+          "help": "La clau exacta d'un titular, tal com la dona la llista de comptes."
+        },
+        "framework_programme": {
+          "label": "Programa marc",
+          "help": "El programa marc de recerca de la UE, com ara HORIZON o H2020."
+        },
+        "parent_celex": {
+          "label": "Acte de base",
+          "help": "El número UE de la llei en què es basa aquest acte, com ara 32016R0679."
+        },
+        "proposing_dg": {
+          "label": "Departament proponent",
+          "help": "El departament de la Comissió que proposa l'acte, per la seva sigla, com ara ENV."
+        },
+        "publisher": {
+          "label": "Editor",
+          "help": "Part del nom de l'editor."
+        },
+        "catalogue": {
+          "label": "Catàleg",
+          "help": "El catàleg exacte del qual prové el conjunt de dades."
+        },
+        "ta_reference": {
+          "label": "Referència del text aprovat",
+          "help": "El número del text al Parlament, com ara P10_TA(2026)0123. La llista l'indica."
+        },
+        "rapporteur": {
+          "label": "Ponent",
+          "help": "Part del nom del ponent."
+        },
+        "has_commission_followup": {
+          "label": "Ha respost la Comissió?",
+          "help": "Si la Comissió ha publicat un seguiment d'aquesta resolució."
+        },
+        "interest": {
+          "label": "Àmbit d'interès",
+          "help": "Part d'un interès que declara l'organització."
+        },
+        "min_costs": {
+          "label": "Costos mínims de lobby (EUR)",
+          "help": "Només organitzacions que declaren almenys aquesta quantitat l'any."
+        },
+        "platform": {
+          "label": "Plataforma",
+          "help": "La xarxa social, com ara bluesky o youtube."
+        },
+        "mnemonic": {
+          "label": "Codi curt",
+          "help": "El codi curt del departament al directori de la UE."
+        },
+        "political_group": {
+          "label": "Grup polític",
+          "help": "El grup del diputat que va presentar l'esmena."
+        },
+        "pe_reference": {
+          "label": "Número de document del PE",
+          "help": "El número PE del document que conté l'esmena."
+        },
+        "element_type": {
+          "label": "Què modifica",
+          "help": "La part del text que canvia, com ara article o considerant."
+        },
+        "is_main": {
+          "label": "Vot al ple?",
+          "help": "Sí per als vots al ple, no per als vots en comissió."
+        },
+        "asking_mep_id": {
+          "label": "Número del diputat autor",
+          "help": "El número que el Parlament dona al diputat que pregunta. Apareix a la llista de diputats."
+        },
+        "dg_responsible": {
+          "label": "Departament responsable",
+          "help": "Part de la sigla del departament, com ara ENV o CNECT."
+        },
+        "host_uuid": {
+          "label": "Referència de l'amfitrió",
+          "help": "La referència d'un amfitrió de la Comissió. Cada reunió de la llista la mostra."
+        },
+        "host_dg": {
+          "label": "Departament de l'amfitrió",
+          "help": "La sigla exacta del departament, com ara ENV."
+        },
+        "target_dg": {
+          "label": "Departament afectat",
+          "help": "La sigla exacta del departament al qual s'adreça el dictamen, com ara ENV."
+        },
+        "transparency_register_id": {
+          "label": "Número del Registre de Transparència",
+          "help": "El número de l'organització al Registre de Transparència de la UE."
+        },
+        "section": {
+          "label": "Secció",
+          "help": "Una secció de les estadístiques d'infraccions de la Comissió."
+        },
+        "month": {
+          "label": "Mes",
+          "help": "Un mes com a número, de l'1 al 12, si aquesta taula en té."
+        },
+        "end_year": {
+          "label": "Últim any",
+          "help": "L'últim any del període, si aquesta taula en té."
+        },
+        "year_range": {
+          "label": "Anys coberts",
+          "help": "Quants anys cobreix la taula, si permet triar-ho."
+        },
+        "procedure_stage": {
+          "label": "Fase",
+          "help": "La fase del cas a què es refereix el comunicat."
+        },
+        "user_type": {
+          "label": "Qui va respondre",
+          "help": "El tipus de participant, tal com el registra la consulta, com ara COMPANY o NGO."
+        },
+        "case_instrument": {
+          "label": "Tipus de cas de competència",
+          "help": "L'instrument tal com el registra DG COMP: concentració, antimonopoli o ajuda estatal."
+        },
+        "eu_ms_only": {
+          "label": "Només països de la UE?",
+          "help": "Sí deixa només els estats membres."
+        },
+        "level": {
+          "label": "Nivell de detall",
+          "help": "2 és un capítol, 4 una partida, 6 una subpartida, 8 un codi complet."
+        },
+        "coordinator_country": {
+          "label": "País del coordinador",
+          "help": "El codi de dues lletres del país del coordinador."
+        },
+        "start_from": {
+          "label": "Comença des de",
+          "help": "Només projectes que comencen aquest dia o després."
+        },
+        "end_to": {
+          "label": "Acaba abans de",
+          "help": "Només projectes que acaben aquest dia o abans."
+        },
+        "cpv_main": {
+          "label": "Codi principal de béns o serveis",
+          "help": "El codi CPV principal de l'anunci, exacte."
+        },
+        "gi_type": {
+          "label": "Tipus de protecció",
+          "help": "DOP, IGP o IG (codis PDO, PGI, GI)."
+        },
+        "product_type": {
+          "label": "Tipus de producte",
+          "help": "Com ara wine (vi) o cheese (formatge)."
+        },
+        "has_geometry": {
+          "label": "Té mapa?",
+          "help": "Si tenim el traçat de la zona protegida."
+        },
+        "precise_only": {
+          "label": "Només mapes precisos?",
+          "help": "Exclou traçats presos només del límit de la regió."
+        },
+        "tag": {
+          "label": "Etiqueta",
+          "help": "Part d'una etiqueta del conjunt de dades."
+        },
+        "hvd": {
+          "label": "Conjunt d'alt valor?",
+          "help": "Si és a la llista de la UE de conjunts d'alt valor."
+        },
+        "use_ml": {
+          "label": "Fer servir el model entrenat?",
+          "help": "Afegeix l'estimació del model al calendari."
+        },
+        "org_type": {
+          "label": "Tipus d'organització",
+          "help": "Un dels tipus de lobby que fa servir aquesta llista."
+        },
+        "eutr_section": {
+          "label": "Secció del registre",
+          "help": "La secció del Registre de Transparència, pel seu codi."
+        },
+        "for_profit": {
+          "label": "Amb ànim de lucre?",
+          "help": "Si l'organització té ànim de lucre."
+        },
+        "has_news": {
+          "label": "Té notícies?",
+          "help": "Si tenim notícies datades del seu web."
+        },
+        "exclude_global_corp": {
+          "label": "Excloure multinacionals?",
+          "help": "Sí exclou les grans empreses globals."
+        },
+        "ethics_personal_data": {
+          "label": "Dades personals?",
+          "help": "El teu projecte tracta dades personals: afegeix els requisits corresponents."
+        },
+        "ethics_special_categories": {
+          "label": "Dades sensibles?",
+          "help": "El teu projecte tracta categories especials de dades."
+        },
+        "ethics_clinical_studies": {
+          "label": "Estudis clínics?",
+          "help": "El teu projecte inclou estudis clínics."
+        },
+        "ethics_dual_use": {
+          "label": "Doble ús?",
+          "help": "El teu projecte té possibles usos civils i militars."
+        },
+        "ethics_animals": {
+          "label": "Animals?",
+          "help": "El teu projecte implica animals."
+        },
+        "verified": {
+          "label": "Verificat?",
+          "help": "Si hem comprovat que el compte és del seu titular."
+        },
+        "posts_limit": {
+          "label": "Publicacions mostrades",
+          "help": "Quantes publicacions recents portar."
+        },
+        "min_fte": {
+          "label": "Personal mínim (jornada completa)",
+          "help": "Només organitzacions que declaren almenys aquest personal a jornada completa."
+        },
+        "ep_accredited_only": {
+          "label": "Només amb acreditació del PE?",
+          "help": "Només organitzacions amb personal acreditat al Parlament."
+        },
+        "body_threshold": {
+          "label": "Límit de text curt"
+        },
+        "sector": {
+          "label": "Sector",
+          "help": "El sector o àmbit al qual pertany."
+        },
+        "dg": {
+          "label": "Departament de la Comissió"
+        },
+        "project_id": {
+          "label": "Número de projecte",
+          "help": "El número del projecte."
+        },
+        "contract_nature": {
+          "label": "Tipus de contracte"
+        },
+        "topic": {
+          "label": "Tema"
+        },
+        "collection": {
+          "label": "Col·lecció"
+        },
+        "theme": {
+          "label": "Tema",
+          "help": "El tema, tal com l'anomena la llista."
+        },
+        "decision_from": {
+          "label": "Decisió des de",
+          "help": "Només aquells amb una decisió d'aquest dia o posterior."
+        },
+        "decision_to": {
+          "label": "Decisió fins a",
+          "help": "Només aquells amb una decisió d'aquest dia o anterior."
+        },
+        "lead_dg": {
+          "label": "Departament principal"
+        },
+        "department": {
+          "label": "Departament",
+          "help": "Part del nom del departament."
+        },
+        "funding_type": {
+          "label": "Tipus de finançament"
+        },
+        "call_id": {
+          "label": "Referència de la convocatòria"
+        },
+        "organisation": {
+          "label": "Organització"
+        },
+        "keyword": {
+          "label": "Paraula clau",
+          "help": "Part d'una de les seves paraules clau."
+        },
+        "heading": {
+          "label": "Rúbrica pressupostària"
+        },
+        "cluster": {
+          "label": "Clúster"
+        },
+        "coverage": {
+          "label": "Cobertura"
+        },
+        "procedure_type": {
+          "label": "Tipus de procediment",
+          "help": "El tipus de procediment, com ara obert o restringit."
+        },
+        "cpv_code": {
+          "label": "Codi de béns o serveis"
+        },
+        "include_delegated": {
+          "label": "Incloure actes delegats?"
+        },
+        "template_id": {
+          "label": "Plantilla",
+          "help": "El nom de la plantilla. La llista te'l dona."
+        },
+        "has_transcript": {
+          "label": "Té transcripció?"
+        },
+        "resolution_type": {
+          "label": "Tipus de resolució"
+        },
+        "position": {
+          "label": "Càrrec",
+          "help": "El càrrec de la persona o, en un vot, com va votar."
+        },
+        "commission_dg": {
+          "label": "Departament de la Comissió"
+        },
+        "document_register_category": {
+          "label": "Categoria del document"
+        },
+        "has_pdf": {
+          "label": "Té PDF?"
+        },
+        "latest_decision_category": {
+          "label": "Tipus d'última decisió"
+        },
+        "decision_category": {
+          "label": "Tipus de decisió"
+        },
+        "decision_type": {
+          "label": "Paraules de la decisió"
+        },
+        "with_press_release": {
+          "label": "Amb comunicat?"
+        },
+        "organisation_met": {
+          "label": "Organització reunida"
+        },
+        "verdict": {
+          "label": "Dictamen"
+        },
+        "opinion_type": {
+          "label": "Tipus de dictamen"
+        },
+        "notifying_country": {
+          "label": "País notificant"
+        },
+        "classify": {
+          "label": "Afegir temes?"
+        },
+        "shallow": {
+          "label": "Lectura ràpida?"
+        },
+        "url": {
+          "label": "Adreça web"
+        },
+        "deadline_before": {
+          "label": "Tanca abans de"
+        },
+        "responsible_department": {
+          "label": "Departament responsable"
+        },
+        "coordinator": {
+          "label": "Només coordinadors?"
+        },
+        "vat": {
+          "label": "Número d'IVA"
+        },
+        "disaster_type": {
+          "label": "Tipus de catàstrofe"
+        },
+        "contract_type": {
+          "label": "Tipus de contracte (nom antic)"
+        },
+        "participant_country": {
+          "label": "País del participant"
+        },
+        "expertise": {
+          "label": "Oferta o sol·licitud"
+        },
+        "organisation_type": {
+          "label": "Tipus d'organització"
+        },
+        "pic": {
+          "label": "Número PIC"
+        },
+        "without_eu_projects": {
+          "label": "Sense projectes de la UE?"
+        },
+        "requested_from": {
+          "label": "Anunciat des de"
+        },
+        "requested_to": {
+          "label": "Anunciat fins a"
+        },
+        "activity_type": {
+          "label": "Tipus d'activitat"
+        },
+        "is_sme": {
+          "label": "Pime?"
+        },
+        "period": {
+          "label": "Període pressupostari"
+        },
+        "instrument": {
+          "label": "Tipus de suport"
+        },
+        "winner": {
+          "label": "Adjudicatari"
+        },
+        "winner_country": {
+          "label": "País de l'adjudicatari"
+        },
+        "include_superseded": {
+          "label": "Incloure versions anteriors?"
+        },
+        "form_type": {
+          "label": "Fase de l'anunci"
+        },
+        "notice_subtype": {
+          "label": "Tipus d'anunci"
+        },
+        "buyer_level": {
+          "label": "Nivell del comprador"
+        },
+        "buyer_legal_type": {
+          "label": "Tipus jurídic del comprador"
+        },
+        "currency": {
+          "label": "Moneda"
+        },
+        "min_value": {
+          "label": "Valor mínim"
+        },
+        "max_value": {
+          "label": "Valor màxim"
+        },
+        "text": {
+          "label": "Text"
+        },
+        "include_orphans": {
+          "label": "Incloure files sense número?"
+        },
+        "corrects": {
+          "label": "Correccions de"
+        },
+        "version": {
+          "label": "Versió"
+        },
+        "chapter": {
+          "label": "Capítol"
+        },
+        "sectors": {
+          "label": "Sectors"
+        },
+        "microthesaurus": {
+          "label": "Grup de temes"
+        },
+        "domain": {
+          "label": "Àmbit temàtic"
+        },
+        "priority": {
+          "label": "Prioritat de la Comissió"
+        },
+        "include_other_sources": {
+          "label": "Incloure altres fonts?"
+        },
+        "stale_after_days": {
+          "label": "Antic després de (dies)"
+        },
+        "body_stale_after_days": {
+          "label": "Un organisme és antic després de (dies)"
+        },
+        "geo": {
+          "label": "Codi geogràfic"
+        },
+        "time": {
+          "label": "Any"
+        },
+        "sex": {
+          "label": "Sexe"
+        },
+        "include_payload": {
+          "label": "Incloure totes les xifres?"
+        },
+        "amendment_type": {
+          "label": "Tipus d'esmena"
+        },
+        "upcoming": {
+          "label": "Només properes?"
+        },
+        "doc_kind": {
+          "label": "Tipus de document"
+        },
+        "gepro_code": {
+          "label": "Codi de document del PE"
+        },
+        "term": {
+          "label": "Legislatura"
+        },
+        "include_former": {
+          "label": "Incloure antics membres?"
+        },
+        "question_type": {
+          "label": "Tipus de pregunta"
+        },
+        "answering_institution": {
+          "label": "Resposta per"
+        },
+        "result": {
+          "label": "Resultat"
+        },
+        "report_type": {
+          "label": "Tipus d'informe"
+        },
+        "legal_family": {
+          "label": "Família jurídica"
+        },
+        "category_en": {
+          "label": "Categoria"
+        },
+        "engine": {
+          "label": "Motor de traducció"
+        },
+        "detail_level": {
+          "label": "Quant text"
+        },
+        "upcoming_only": {
+          "label": "Només dates properes?"
+        },
+        "include_news": {
+          "label": "Incloure notícies?"
+        },
+        "funding_mode": {
+          "label": "Tipus de finançament"
+        },
+        "sub_instrument": {
+          "label": "Subinstrument"
+        },
+        "include_removed": {
+          "label": "Incloure els qui han marxat?"
+        },
+        "amendment_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "account_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "transcript_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "vote_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "mep_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "stream_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "guide_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "post_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "question_reference": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "opinion_reference": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "notification_number": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "inf_reference": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "initiative_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "meeting_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "summary_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "tender_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "tender_reference": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "file_number": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "doc_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "slug": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "case_number": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "case_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "decision_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "dataset": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "consultation_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "announcement_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "collection_key": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "socrata_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "dataset_code": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "uuid": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "bundle_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "notation": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "concept_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "carriage_id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "ref": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "table": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        },
+        "id": {
+          "label": "Referència",
+          "help": "La referència d'aquest element. La llista te la dona."
+        }
+      },
+      "options": {
+        "recent": "Més recents primer",
+        "oldest": "Més antics primer",
+        "title": "Per títol",
+        "updated_asc": "Última modificació, més antigues primer",
+        "updated_desc": "Última modificació, més recents primer",
+        "created_asc": "Primer registre, més antics primer",
+        "created_desc": "Primer registre, més recents primer",
+        "amount": "Import més alt primer",
+        "deadline": "Termini més proper primer",
+        "deadline_desc": "Termini més llunyà primer",
+        "open": "Obert",
+        "closed": "Tancat",
+        "forthcoming": "Properament",
+        "upcoming": "Propers",
+        "cancelled": "Cancel·lat",
+        "unknown": "Desconegut",
+        "all": "Tots",
+        "news": "Notícies",
+        "press_release": "Notes de premsa",
+        "publication": "Publicacions",
+        "past": "Passats",
+        "tender": "Licitació",
+        "grant": "Subvenció",
+        "cascade_call": "Convocatòria en cascada",
+        "eoi_call": "Convocatòria de manifestacions d'interès",
+        "startup_funding": "Finançament d'empreses emergents",
+        "regulation": "Reglament",
+        "directive": "Directiva",
+        "decision": "Decisió",
+        "L": "L: legislació",
+        "C": "C: informació i comunicacions",
+        "announced": "Anunciat",
+        "legislative_initiative": "Iniciativa legislativa",
+        "tabled": "Presentat",
+        "close_to_adoption": "A punt d'adoptar-se",
+        "completed": "Completat",
+        "adopted": "Adoptat",
+        "blocked": "Bloquejat",
+        "withdrawn": "Retirat"
+      }
     },
     "bundles": {
       "official-journal": {
@@ -4500,7 +5818,8 @@
       "mintKey": "Crear una API key",
       "topUp": "Recarregar saldo",
       "signIn": "Iniciar sessió",
-      "protocolSpec": "Spec MCP"
+      "protocolSpec": "Spec MCP",
+      "askPricing": "Pregunta pels preus"
     },
     "copyBtn": {
       "copy": "Copiar",
@@ -4516,8 +5835,8 @@
       "step1Title": "Crea una clau API de Brubru",
       "step1": "Inicia sessió i crea una clau a",
       "step2Title": "Recarrega el teu saldo",
-      "step2": "Afegeix almenys 1 € de crèdit a",
-      "step2b": "Cada crida a una eina MCP costa 0,005 €.",
+      "step2": "Afegeix saldo a",
+      "step2b": "Per als preus, escriu a hello@beresol.eu.",
       "step3Title": "Enganxa la configuració al teu client",
       "step3": "Tria el teu client a sota i enganxa la configuracio. Reinicia el client: les quinze eines de Brubru queden disponibles per a la IA.",
       "curlLabel": "Verificació amb curl"
@@ -4583,7 +5902,7 @@
     },
     "tools": {
       "title": "Eines disponibles avui",
-      "lede": "Quinze eines. ask_brubru es la que necessites; search + fetch alimenten els clients de Deep Research; la resta son avancades. Cada crida costa €0.005 del teu saldo.",
+      "lede": "Quinze eines. ask_brubru es la que necessites; search + fetch alimenten els clients de Deep Research; la resta son avancades.",
       "descs": {
         "ask_brubru": "La que necessites. Pregunta qualsevol cosa sobre la UE i obtén les guies de política que coincideixen, les lleis rellevants (amb enllaços a EUR-Lex) i l'estat en directe del procediment, en una sola crida.",
         "search_eu_legislation": "Avançat: cerca per paraules clau a la base de dades de legislació de la UE. ask_brubru ja inclou les lleis que coincideixen.",
@@ -4603,8 +5922,8 @@
       }
     },
     "pricing": {
-      "title": "Recordatori de preus",
-      "body": "Les crides a eines MCP de Brubru es facturen igual que l'API REST:",
+      "title": "Preus",
+      "body": "Per als preus, escriu a hello@beresol.eu. Dues coses que cal saber:",
       "b1": "Cada crida a una eina costa 0,005 € (5 000 micro-euros), debitats del teu saldo.",
       "b2": "Sense crèdit gratuït de registre; recàrrega mínima 1 €. El sandbox públic cobreix els avaluadors.",
       "b3": "Si una crida falla (error de servidor), el cost es reemborsa automàticament.",

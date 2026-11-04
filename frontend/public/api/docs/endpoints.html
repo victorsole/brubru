@@ -17,7 +17,7 @@
   <span> &middot; </span>
   <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">get your own key</a>
   <span> &middot; or </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">ask about pricing</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -238,7 +238,7 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 </p>
 
 <div class="callout callout--ok">
-<p><strong>One key, one envelope.</strong> Every call takes the same <code>Authorization: Bearer brubru_live_...</code> header and every list endpoint returns the same paginated <a href="/api/docs/envelope.html">response envelope</a>. Detail endpoints (paths ending in an id, CELEX, reference or slug) return a single object. Base URL: <code>https://brubru.beresol.eu/api/v2</code>.</p>
+<p><strong>One key, one envelope.</strong> Every call takes the same <code>Authorization: Bearer brubru_live_...</code> header and every list endpoint returns the same paginated <a href="/api/docs/envelope.html">response envelope</a>. Detail endpoints (paths ending in an id, CELEX, reference or slug) return a single object. Base URL: <code>https://brubru-production.up.railway.app/api/v2</code>.</p>
 </div>
 
 <p style="font-size:14.5px;color:var(--text-sec);margin:18px 0 8px;"><strong>Jump to a folder:</strong></p>

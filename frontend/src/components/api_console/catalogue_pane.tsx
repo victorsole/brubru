@@ -1,5 +1,6 @@
 // frontend/src/components/api_console/catalogue_pane.tsx
-// Every route the API serves, from the live spec. Typing here only filters the list in the browser: no call is made.
+// Every route the API serves, from the live spec: for people who want more than the starting points. Typing here only
+// filters the list in the browser: no call is made.
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ConsoleCatalogue, ConsoleOperation } from '../../services/api_console';
@@ -23,10 +24,11 @@ const Row = ({ op, active, onSelect }: { op: ConsoleOperation; active: boolean; 
         type="button"
         className={`api-console__route${active ? ' api-console__route--active' : ''}`}
         aria-current={active ? 'true' : undefined}
+        data-route={op.path}
         onClick={() => onSelect(op)}
       >
-        <code>{op.path.replace('/api/v2', '')}</code>
         {op.summary && <span className="api-console__route-summary">{op.summary}</span>}
+        <code>{op.path.replace('/api/v2', '')}</code>
         {op.deprecated && <span className="api-console__badge">{t('api.console.deprecated')}</span>}
       </button>
     </li>

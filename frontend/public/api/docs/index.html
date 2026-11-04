@@ -28,7 +28,7 @@
 <header class="header">
   <div class="header__container">
     <div class="header__brand">
-      <a class="header__logo" href="/subscription">
+      <a class="header__logo" href="/api">
         <img alt="Brubru Logo" class="header__logo-image" src="/assets/brubru_mainlogo.png" width="48" height="48" style="height:48px;width:48px;object-fit:contain;display:block">
         <span class="header__logo-text">Brubru</span>
       </a>
@@ -69,7 +69,7 @@
   <span> &middot; </span>
   <a href="/api#your-keys" style="color:#fff;font-weight:700;text-decoration:underline;">get your own key</a>
   <span> &middot; or </span>
-  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="color:#fff;font-weight:700;text-decoration:underline;">ask about pricing</a>
   <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
 </div>
 <script>
@@ -287,15 +287,20 @@
 <div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1,064 endpoints across 95 EU institution folders</div>
 <h1>The EU, structured.</h1>
 <p class="main__lede">
-Brubru is a vertical EU data provider. Our REST API gives developers, RegTech platforms, public-affairs teams, and AI agents programmatic access to <strong>27,103 adopted EU laws</strong> (30,246 OJ publications with full text), <strong>2,080 legislative files</strong> tracked from proposal to adoption, <strong>16,521 EU officials</strong>, every MEP, <strong>58,399 EP amendments</strong>, the Parliament / Council / European Council / Eurogroup / Commission registers, the European Central Bank and the EU financial institutions, the decentralised EU agencies (medicines, food safety, environment, chemicals, drugs, fundamental rights and more), EU funding and tenders, open data including <strong>12 curated Eurostat sport + fitness-relevant health datasets</strong> served live, the <strong>19 funding-application templates</strong> behind Brubru's Tender Docs product, and Brubru's own proprietary EU intelligence. The same data we use internally is what you call. Brubru is the first customer of its own API.
+The Brubru API gives your software, or your AI assistant, direct access to EU data: <strong>27,103 adopted EU laws</strong>, <strong>2,080 legislative files</strong>, <strong>16,521 EU officials</strong>, every MEP, funding calls and tenders, news and consultations from every EU institution and agency. It is the same data Brubru itself runs on.
 </p>
+<div class="callout callout--ok">
+<p><strong>New to APIs?</strong> An API is how one program asks another for data: your software sends a request, as a browser does, and gets back structured data (JSON). You do not need to be a developer to try it: search it in the API Console, with no account.</p>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:.75rem;margin:1.25rem 0;">
+<a href="/api/try" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#0693e3;color:#fff;">Try it free, no account</a>
+<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing" style="display:inline-block;padding:.65rem 1.1rem;border-radius:6px;font-weight:700;text-decoration:none;background:#fff;color:#0693e3;border:2px solid #0693e3;">Ask about pricing</a>
+</div>
 <p style="margin:1.25rem 0 0;padding:1rem 1.25rem;background:#f3f5fb;border:1px solid #d9def0;border-radius:10px;">
 <strong>One surface, one key.</strong> The API is organised the way the EU is: one folder per institution or body, 95 folders in total, <strong>1,064 endpoints</strong>. Browse the folders below, or open the <a href="/api/docs/reference.html"><strong>full, always-current API reference &rarr;</strong></a>: every deployed endpoint, rendered live from the OpenAPI spec.
 </p>
 
-<div class="callout callout--ok">
-<p><strong>New to APIs?</strong> An API is a way for your software to talk to Brubru's software over the internet. You send an HTTP request (like a web browser does), we send back JSON (structured data). The rest of these docs explain how.</p>
-</div>
 
 <h2>What you get</h2>
 <p>Every folder maps to one EU institution or body. The counts are exact and update as the API grows.</p>
@@ -511,7 +516,7 @@ Brubru is a vertical EU data provider. Our REST API gives developers, RegTech pl
 <p>Every <code>/api/v2/*</code> call requires an API key passed either as a Bearer token or an <code>X-API-Key</code> header:</p>
 
 <pre><code>curl -H "Authorization: Bearer brubru_live_..." \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=5"</code></pre>
 
 <p>Full details on <a href="/api/docs/authentication.html">Authentication</a>.</p>
 
@@ -550,11 +555,11 @@ X-RateLimit-Tier: free</code></pre>
 
 <h2>Quickstart: your first call</h2>
 
-<p><strong>1. Get an API key.</strong> Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> once you're on the Professional subscription. Keys look like <code>brubru_live_</code> followed by 48 hex characters.</p>
+<p><strong>1. Get an API key.</strong> Create a free account, then <a href="/api#your-keys">create a key</a> under Your API keys. You see it once, so copy it then. Add credit on the <a href="/billing">billing page</a>. Keys look like <code>brubru_live_</code> followed by 48 hex characters.</p>
 
 <p><strong>2. Check the service is up.</strong> The health check is public: no key required:</p>
 
-<pre><code>curl "https://brubru.beresol.eu/health"</code></pre>
+<pre><code>curl "https://brubru-production.up.railway.app/health"</code></pre>
 
 <p>Response:</p>
 
@@ -567,7 +572,7 @@ X-RateLimit-Tier: free</code></pre>
 <p><strong>3. Try a real search.</strong></p>
 
 <pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
-  "https://brubru.beresol.eu/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
+  "https://brubru-production.up.railway.app/api/v2/legislative/eur-lex/laws?q=artificial+intelligence&amp;limit=3"</code></pre>
 
 <p>You get a paginated list of EU laws matching "artificial intelligence", with CELEX identifiers, titles, dates, and EUR-Lex URLs. From there every other endpoint follows the same envelope pattern: just change the path.</p>
 
