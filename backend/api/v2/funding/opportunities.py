@@ -34,6 +34,7 @@ from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse
 from api.v1._pagination import stable
 from api.v1._search import text_match
+from api.v1._search import orm_title_first
 from core.database import get_db
 from models.funding_tenders import FtCallForProposals, FtCallForTenders
 from models.tender import Tender
@@ -360,7 +361,10 @@ async def list_opportunities(
         where.append(u.c.amount_eur <= amounts[1])
     # One scan: the page carries the total (a q over every source's text is the slow part). A page past
     # the end has no row to carry it, so only then is it counted on its own.
-    query = select(u.c.src, u.c.rid, func.count().over().label("total")).where(and_(*where)).order_by(*_order_by(u, order))
+    query = select(u.c.src, u.c.rid, func.count().over().label("total")).where(and_(*where))
+    # A search shows what has the words in its title before what only mentions them; a sort asked for by name stays as it is.
+    ordering = _order_by(u, order)
+    query = query.order_by(orm_title_first(q, u.c.title), *ordering) if q and order == "recent" else query.order_by(*ordering)
     rows = db.execute(stable(query, *_tiebreak(u, order)).offset((page - 1) * limit).limit(limit)).fetchall()
     if rows:
         total = rows[0].total

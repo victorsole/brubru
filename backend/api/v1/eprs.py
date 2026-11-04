@@ -5,7 +5,7 @@
 from datetime import date, datetime, time
 from typing import Optional
 
-from api.v1._search import orm_all_words
+from api.v1._search import orm_all_words, orm_title_first
 from api.v1._body import body_from_html_or_text
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
@@ -188,8 +188,10 @@ async def list_eprs(
         order_col = EPRSPublication.last_updated.desc().nullslast()
     else:
         order_col = EPRSPublication.publication_date.desc().nullslast()
+    # A search shows the studies with the words in their title first: the full text mentions nearly everything.
+    order_cols = (orm_title_first(q, EPRSPublication.title), order_col) if q else (order_col,)
     rows = (
-        stable(query.order_by(order_col))
+        stable(query.order_by(*order_cols))
         # full_text is loaded when a body was asked for, and left in the database when it
         # was not. Until 1 October 2026 the list ALWAYS deferred it and served the summary
         # as body_txt while the item route served the whole study, so one field meant two

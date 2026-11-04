@@ -434,6 +434,19 @@ async def list_laws(
             func.to_tsvector("english", EULaw.title).op("@@")(ts_query),
         ))
         total = query.count()
+        # EU law's own word for what everyone calls sanctions: "sanctions Russia" should find 833/2014.
+        eu_words = re.sub(r"\bsanctions?\b", "restrictive measures", q, flags=re.IGNORECASE)
+        if eu_words != q:
+            ts_query = func.plainto_tsquery("english", eu_words)
+            in_eu_words = matching(or_(
+                EULaw.search_vector.op("@@")(ts_query),
+                func.to_tsvector("english", EULaw.title).op("@@")(ts_query),
+            ))
+            words_total = in_eu_words.count()
+            if words_total:
+                query, total = in_eu_words, words_total
+            else:
+                ts_query = func.plainto_tsquery("english", q)
         if not total:
             # Part of a word, or a code the text search splits: only now is the slow read worth it.
             query = matching(EULaw.title.ilike(f"%{q}%"))

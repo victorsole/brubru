@@ -504,12 +504,22 @@ def test_a_search_is_words_not_one_exact_phrase():
     assert search_words(None) == []
 
     params = {}
-    sql = like_all_words("electric cars", ["title", "summary"], params)
+    sql = like_all_words("electric vehicles", ["title", "summary"], params)
     assert sql == "(title ILIKE :q0 OR summary ILIKE :q0) AND (title ILIKE :q1 OR summary ILIKE :q1)"
-    assert params == {"q0": "%electric%", "q1": "%cars%"}
+    assert params == {"q0": "%electric%", "q1": "%vehicles%"}
+
+    # A short word is a whole word: "AI" must not match "certain", nor "Act" match "actions".
+    params = {}
+    sql = like_all_words("AI Act", ["title"], params)
+    assert sql == "(title ~* :q0) AND (title ~* :q1)"
+    assert params == {"q0": r"\yAI\y", "q1": r"\yAct\y"}
+    assert not in_title("AI Act", "Alignment of certain countries with these actions")
+    assert in_title("ai act", "The AI Act enters into force")
 
     params = {}
-    assert title_first("AI Act", params) == "CASE WHEN title ILIKE :tq0 AND title ILIKE :tq1 THEN 0 ELSE 1 END"
+    assert title_first("AI Act", params) == "CASE WHEN title ILIKE :tqphrase THEN 0 WHEN title ~* :tq0 AND title ~* :tq1 THEN 1 ELSE 2 END"
+    assert params["tqphrase"] == "%AI Act%"
+    assert title_first("energy", {}) == "CASE WHEN title ILIKE :tq0 THEN 0 ELSE 1 END"
     assert title_first("", {}) == "0"
     assert in_title("ai act", "The AI Act enters into force")
     assert not in_title("ai act", "Elastic in cash")
