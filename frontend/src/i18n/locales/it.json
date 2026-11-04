@@ -2300,7 +2300,7 @@
       "tooManyCalls": "Troppe ricerche in poco tempo. Attendi un minuto e riprova.",
       "serverFault": "Qualcosa non ha funzionato da parte nostra, non in ciò che hai scritto. Riprova o cambia i filtri. Se ci scrivi, indica l'identificativo qui sotto.",
       "checkFields": "Qualcosa che hai scritto non ha il formato richiesto da questi dati:",
-      "capVisitor": "Hai usato le ricerche gratuite di oggi. Ottieni la tua chiave per continuare.",
+      "capVisitor": "Hai usato le ricerche gratuite di oggi. Tornano domani.",
       "capPool": "La quota pubblica di oggi è esaurita. Ottieni la tua chiave o torna domani.",
       "failedStatus": "L'API ha risposto con lo stato {{status}}.",
       "statusOk": "Riuscita",

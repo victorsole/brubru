@@ -1244,7 +1244,7 @@
       "tooManyCalls": "Trop de recherches en peu de temps. Attendez une minute et réessayez.",
       "serverFault": "Une erreur s'est produite de notre côté, pas dans ce que vous avez saisi. Réessayez ou changez les filtres. Si vous nous écrivez, indiquez l'identifiant ci-dessous.",
       "checkFields": "Une saisie n'a pas le format attendu par ces données :",
-      "capVisitor": "Vous avez utilisé vos recherches gratuites du jour. Obtenez votre clé pour continuer.",
+      "capVisitor": "Vous avez utilisé vos recherches gratuites du jour. Elles reviennent demain.",
       "capPool": "Le quota public du jour est épuisé. Obtenez votre clé ou revenez demain.",
       "failedStatus": "L'API a répondu avec le statut {{status}}.",
       "statusOk": "Réussi",

@@ -1244,7 +1244,7 @@
       "tooManyCalls": "Too many searches in a short time. Wait a minute and try again.",
       "serverFault": "Something failed on our side, not in what you typed. Try again, or change the filters. If you write to us, quote the request id below.",
       "checkFields": "Something you typed is not in the form this data needs:",
-      "capVisitor": "You have used today's free searches. Get your own key to keep going.",
+      "capVisitor": "You have used today's free searches. They come back tomorrow.",
       "capPool": "Today's public allowance has been used up. Get your own key, or come back tomorrow.",
       "failedStatus": "The API answered with status {{status}}.",
       "statusOk": "It worked",

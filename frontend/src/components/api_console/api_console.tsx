@@ -131,9 +131,10 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     setCancelled(false);
     setResponse(null);
     setBodiesOn(bodiesRequested(op, callValues));
-    // The answer must be in view when it arrives, wherever the page was.
-    if (responseRef.current && responseRef.current.getBoundingClientRect().top > window.innerHeight * 0.45) {
-      responseRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // The answer must be in view when it arrives, wherever the page was: below on a phone, above after a long form.
+    if (responseRef.current) {
+      const top = responseRef.current.getBoundingClientRect().top;
+      if (top > window.innerHeight * 0.45 || top < 0) responseRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     try {
       const result = await sendRequest(buildRequestPath(op, callValues), controller.signal);

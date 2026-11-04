@@ -102,9 +102,14 @@ def test_an_unknown_family_is_refused_on_consultations():
 def test_the_pick_lists_answer_with_no_key_and_give_a_name_for_every_code():
     from api.v2 import pick_lists
     from core.database import get_db
-    pick_lists._cache.update(at=0.0, bodies=[])
-    rows = [SimpleNamespace(code="commission", name="European Commission"), SimpleNamespace(code="ecb", name=None)]
-    db = SimpleNamespace(execute=lambda *a, **k: SimpleNamespace(fetchall=lambda: rows))
+    pick_lists._cache.update(at=0.0, bodies=[], consultations_at=0.0, consultations=None)
+    db = _sqlite_session("CREATE TABLE economy_bodies (code TEXT, name TEXT)", [
+        "INSERT INTO economy_bodies VALUES ('commission', 'European Commission'), ('ecb', NULL), ('eba', 'European Banking Authority'), ('edpb', 'EDPB'), ('ema', 'EMA')",
+        "CREATE TABLE public_consultations (source_body TEXT)",
+        "INSERT INTO public_consultations VALUES ('European Commission'), (NULL), ('EBA'), ('JRC')",
+        "CREATE TABLE economy_items (body_code TEXT, item_type TEXT)",
+        "INSERT INTO economy_items VALUES ('edpb', 'consultation'), ('ema', 'news')",
+    ])
     app = FastAPI()
     app.include_router(pick_lists.router)
     app.dependency_overrides[get_db] = lambda: db
@@ -117,6 +122,17 @@ def test_the_pick_lists_answer_with_no_key_and_give_a_name_for_every_code():
     assert {"slug": "climate-energy-environment", "label": "Climate, Energy & Environment"} in body["families"]
     assert any(c["code"] == "ENVI" and c["name"] for c in body["committees"])
     assert "max-age" in response.headers["Cache-Control"]
+    # The consultations form offers only the bodies that have consultations: both sources, and nothing that has only news.
+    only = body["consultations"]
+    assert {b["code"] for b in only["bodies"]} == {"commission", "eba", "edpb", "jrc"}
+    assert {"code": "jrc", "name": "Joint Research Centre"} in only["bodies"]
+    assert "health-life-sciences" not in {f["slug"] for f in only["families"]}
+    assert "finance-economy" in {f["slug"] for f in only["families"]}
+    pick_lists._cache.update(consultations_at=0.0, consultations=None)
+    failing = _sqlite_session("CREATE TABLE economy_bodies (code TEXT, name TEXT)", [])
+    app.dependency_overrides[get_db] = lambda: failing
+    assert TestClient(app).get("/pick-lists").json()["consultations"] == {"bodies": [], "families": []}
+    pick_lists._cache.update(at=0.0, bodies=[], consultations_at=0.0, consultations=None)
 
 
 # ---- A list that reported a total and served nothing: ORDER BY on a column the table does not have ------------------
@@ -534,3 +550,20 @@ def test_gdpr_in_small_letters_finds_the_gdpr():
 
     assert not find_alias_matches("gdpr") or find_alias_matches("gdpr")[0].celex == "32016R0679"
     assert find_alias_matches("GDPR")[0].celex == "32016R0679"
+
+
+def test_a_common_name_is_answered_from_the_list_not_a_scan_of_every_law():
+    """The first search a visitor makes, GDPR, took 8 s: lower(alias) and lower(acronym) have no index."""
+    from sqlalchemy.dialects import postgresql
+
+    from api.v1.laws import metadata_filters
+
+    def sql(name):
+        return " ".join(str(f.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True})) for f in metadata_filters(alias=name))
+
+    for name in ("GDPR", "gdpr", "AI Act", "DORA"):
+        assert "eu_laws.celex IN" in sql(name), name
+    assert "32022R2554" in sql("DORA")
+    assert "lower(eu_laws.alias)" in sql("a name nobody has heard of")
+    # Exact, as this filter always was: a sentence that mentions a law is not its name.
+    assert "lower(eu_laws.alias)" in sql("the scope of GDPR")

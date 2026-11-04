@@ -255,7 +255,7 @@ export const ResponsePane = ({
       {!response && !sending && !failed && !cancelled && (
         <div className="api-console__idle">
           <span className="mdi mdi-text-search" aria-hidden="true" />
-          {servedHere ? (
+          {noCallsLeft ? <p>{t('api.console.capVisitor')}</p> : servedHere ? (
             <>
               <p>{isItemRoute(op) ? t('api.console.idleItem') : t('api.console.idleList')}</p>
               <p className="api-console__idle-small">{t('api.console.idleCost', { calls: callsAllowed ?? 10 })}</p>
@@ -296,7 +296,7 @@ export const ResponsePane = ({
               </span>
             )}
             <span>{t('api.console.seconds', { value: (response.ms / 1000).toLocaleString(i18n.language, { maximumFractionDigits: 1 }) })}</span>
-            {response.sandboxLeft !== null && <span>{t('api.console.callsLeft', { count: response.sandboxLeft })}</span>}
+            {(sandboxLeft ?? response.sandboxLeft) !== null && <span>{t('api.console.callsLeft', { count: sandboxLeft ?? response.sandboxLeft })}</span>}
           </div>
 
           {!ok && (
@@ -312,7 +312,12 @@ export const ResponsePane = ({
                 </ul>
               )}
               {reason.code && !capped && fieldErrors.length === 0 && <p><code>{reason.code}</code></p>}
-              {needsKey && <p><Link to="/api#your-keys">{t('api.console.getKey')}</Link></p>}
+              {needsKey && (
+                <p>
+                  <Link to="/api#your-keys">{t('api.console.getKey')}</Link>{' · '}
+                  <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a>
+                </p>
+              )}
               {status === 404 && listParent && (
                 <button type="button" className="api-console__link-button" onClick={() => onGoToList(listParent)}>
                   <span className="mdi mdi-format-list-bulleted" aria-hidden="true" /> {t('api.console.goToList')}

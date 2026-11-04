@@ -1244,7 +1244,7 @@
       "tooManyCalls": "Massa cerques en poc temps. Espera un minut i torna-ho a provar.",
       "serverFault": "Alguna cosa ha fallat per part nostra, no en el que has escrit. Torna-ho a provar o canvia els filtres. Si ens escrius, indica l'identificador de sota.",
       "checkFields": "Alguna cosa que has escrit no té el format que necessiten aquestes dades:",
-      "capVisitor": "Has fet servir les cerques gratuïtes d'avui. Aconsegueix la teva clau per continuar.",
+      "capVisitor": "Has fet servir les cerques gratuïtes d'avui. Tornen demà.",
       "capPool": "La quota pública d'avui s'ha esgotat. Aconsegueix la teva clau o torna demà.",
       "failedStatus": "L'API ha respost amb l'estat {{status}}.",
       "statusOk": "Ha funcionat",

@@ -73,7 +73,7 @@
 .api-console__panes--browsing { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); }
 .api-console__panes--browsing .api-console__pane--catalogue { grid-column: 1 / -1; height: 340px; }
 .api-console__request-anchor, .api-console__response-anchor { min-width: 0; scroll-margin-top: 90px; }
-.api-console__request-anchor { position: sticky; top: 90px; max-height: calc(100vh - 100px); overflow-y: auto; border-radius: 8px; }
+/* The form moves with the page and Search stays at the foot of the screen. A box of its own trapped the wheel, with Search below the fold. */
 .api-console__pane { background: #fff; border: 1px solid var(--console-line); border-radius: 8px; padding: 14px; min-width: 0; box-sizing: border-box; width: 100%; }
 .api-console__pane--catalogue { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
 .api-console__summary { font-size: 1.05rem; font-weight: 600; margin: 0 0 4px; line-height: 1.3; overflow-wrap: anywhere; }
@@ -330,7 +330,6 @@
 /* ---- Panel on /api: the column is narrow, so the steps run one under the other ---- */
 .api-console--compact .api-console__tasks { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
 .api-console--compact .api-console__panes, .api-console--compact .api-console__panes--browsing { grid-template-columns: minmax(0, 1fr); }
-.api-console--compact .api-console__request-anchor { position: static; max-height: none; overflow: visible; }
 .api-console--compact .api-console__send { position: static; }
 
 /* ---- Page at /api/try ---- */
@@ -364,7 +363,6 @@
 @media (max-width: 1024px) {
   .api-console__tasks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .api-console__panes, .api-console__panes--browsing { grid-template-columns: minmax(0, 1fr); }
-  .api-console__request-anchor { position: static; max-height: none; overflow: visible; }
   .api-console__send { position: static; }
 }
 

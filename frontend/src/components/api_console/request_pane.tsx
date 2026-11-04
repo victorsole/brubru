@@ -327,7 +327,7 @@ export const RequestPane = ({
               </p>
             )}
             {hasSandbox() && served && outOfCalls && (
-              <p className="api-console__needs-key">{t('api.console.capVisitor')} <Link to="/api#your-keys">{t('api.console.getKey')}</Link></p>
+              <p className="api-console__needs-key">{t('api.console.capVisitor')} <Link to="/api#your-keys">{t('api.console.getKey')}</Link>{' · '}<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a></p>
             )}
             {hasSandbox() && served && !outOfCalls && missing.length > 0 && <p>{t('api.console.fillRequired', { names: missingLabels.join(', ') })}</p>}
             {hasSandbox() && served && !outOfCalls && limitProblem && <p className="api-console__needs-key">{t(`api.console.tooMany.${limitProblem.name}`, { top: limitProblem.top })}</p>}

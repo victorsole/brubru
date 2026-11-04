@@ -168,8 +168,18 @@ def metadata_filters(sector=None, year=None, number=None, document_type=None, al
             raise _bad_filter("document_type", document_type, "a CELEX descriptor (R, L, D, E...) or its EUR-Lex label (regulation, directive...)")
         fs.append(or_(*[EULaw.celex.op("~")(rf"^{s or '[0-9CE]'}[0-9]{{4}}{t}[0-9]") for s, t in pairs]))
     if alias:
-        v = alias.strip().lower()
-        fs.append(or_(func.lower(EULaw.alias) == v, func.lower(EULaw.acronym) == v))
+        # The list of common names answers at once, and knows laws these columns do not (REACH, MiFID II). Reading the two
+        # columns for a name scans all 31,000 laws: the first search a visitor makes took 8 s (4 Nov 2026).
+        from services.parsers.law_alias_resolver import find_alias_matches
+        name = alias.strip()
+        hits = find_alias_matches(name) or find_alias_matches(name.upper())
+        # The whole of what was typed is the name: this filter is exact, "the reach of GDPR" is not a name.
+        celexes = [m.celex for m in hits if m.celex and m.end - m.start == len(name)]
+        if celexes:
+            fs.append(EULaw.celex.in_(celexes))
+        else:
+            v = name.lower()
+            fs.append(or_(func.lower(EULaw.alias) == v, func.lower(EULaw.acronym) == v))
     if author:
         fs.append(literal(author.strip().upper()) == any_(EULaw.authors))  # the model's generic ARRAY has no .contains()
     if in_force is not None:

@@ -1244,7 +1244,7 @@
       "tooManyCalls": "Te veel zoekopdrachten in korte tijd. Wacht een minuut en probeer het opnieuw.",
       "serverFault": "Er ging iets mis aan onze kant, niet in wat u hebt ingevoerd. Probeer het opnieuw of wijzig de filters. Vermeld de onderstaande aanvraag-id als u ons schrijft.",
       "checkFields": "Iets wat u hebt ingevoerd heeft niet de vorm die deze gegevens nodig hebben:",
-      "capVisitor": "U hebt de gratis zoekopdrachten van vandaag gebruikt. Vraag uw eigen sleutel aan om door te gaan.",
+      "capVisitor": "U hebt de gratis zoekopdrachten van vandaag gebruikt. Morgen zijn ze er weer.",
       "capPool": "Het openbare tegoed van vandaag is op. Vraag uw eigen sleutel aan of kom morgen terug.",
       "failedStatus": "De API antwoordde met status {{status}}.",
       "statusOk": "Gelukt",

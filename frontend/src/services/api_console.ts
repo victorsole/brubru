@@ -23,6 +23,8 @@ export interface ConsoleParam {
   optionNotes?: Record<string, string>;
   openList?: boolean;
   source?: FieldSource;
+  // A form whose list holds only what this feed has.
+  feed?: 'consultations';
   defaultValue?: string;
 }
 
@@ -51,6 +53,7 @@ export interface PickLists {
   bodies: Array<{ code: string; name: string }>;
   families: Array<{ slug: string; label: string }>;
   committees: Array<{ code: string; name: string }>;
+  consultations?: { bodies: Array<{ code: string; name: string }>; families: Array<{ slug: string; label: string }> };
 }
 
 export interface ConsolePricing {
@@ -164,6 +167,7 @@ export function parseSpec(spec: any): ConsoleCatalogue {
         ...schema,
         ...(schema.kind === 'text' ? parseOptions(description) || {} : {}),
         source: sourceOf(p.name, description, path),
+        feed: /^\/api\/v2\/consultations\//.test(path) ? 'consultations' : undefined,
       });
     }
     params.sort((a, b) => Number(b.required) - Number(a.required));
@@ -361,8 +365,20 @@ export function whatItDoes(op: ConsoleOperation): string {
   const source = match ? match[1] : (op.description || '').split('\n\n')[0];
   const text = source.replace(/[`*]/g, '').replace(/\s+/g, ' ').trim();
   if (!text) return '';
-  const firstStop = text.search(/\.\s/);
+  const firstStop = firstSentenceEnd(text);
   return firstStop > 40 ? text.slice(0, firstStop + 1) : text.slice(0, 260);
+}
+
+// The first full stop that ends a sentence, not the one in "e.g." or "No.". Written as a loop: a lookbehind in a regular
+// expression stops the whole page from loading on Safari before 16.4.
+function firstSentenceEnd(text: string): number {
+  const stops = /\.\s/g;
+  let found = stops.exec(text);
+  while (found) {
+    if (!/(?:^|[\s(])(?:e\.g|i\.e|etc|No|nr|vs|Art)$/.test(text.slice(0, found.index))) return found.index;
+    found = stops.exec(text);
+  }
+  return -1;
 }
 
 export function isItemRoute(op: ConsoleOperation): boolean {
@@ -831,8 +847,10 @@ export function countryChoices(language: string): Array<{ value: string; label: 
 export function choicesOf(param: ConsoleParam, lists: PickLists | null, language: string): Array<{ value: string; label: string }> | null {
   if (param.source === 'countries') return countryChoices(language);
   if (!lists) return null;
-  if (param.source === 'bodies') return lists.bodies.map((b) => ({ value: b.code, label: b.name }));
-  if (param.source === 'families') return lists.families.map((f) => ({ value: f.slug, label: f.label }));
+  // An empty scope means it could not be read: the full list, as before.
+  const scope = param.feed === 'consultations' ? lists.consultations : undefined;
+  if (param.source === 'bodies') return (scope?.bodies.length ? scope.bodies : lists.bodies).map((b) => ({ value: b.code, label: b.name }));
+  if (param.source === 'families') return (scope?.families.length ? scope.families : lists.families).map((f) => ({ value: f.slug, label: f.label }));
   if (param.source === 'committees') return lists.committees.map((c) => ({ value: c.code, label: `${c.code}: ${c.name.replace(/^Committee on (the )?/, '')}` }));
   return null;
 }

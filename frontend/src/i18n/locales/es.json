@@ -1244,7 +1244,7 @@
       "tooManyCalls": "Demasiadas búsquedas en poco tiempo. Espera un minuto y vuelve a intentarlo.",
       "serverFault": "Algo ha fallado por nuestra parte, no en lo que has escrito. Vuelve a intentarlo o cambia los filtros. Si nos escribes, indica el identificador de abajo.",
       "checkFields": "Algo que has escrito no tiene el formato que necesitan estos datos:",
-      "capVisitor": "Has usado las búsquedas gratis de hoy. Consigue tu clave para seguir.",
+      "capVisitor": "Has usado las búsquedas gratis de hoy. Vuelven mañana.",
       "capPool": "El cupo público de hoy se ha agotado. Consigue tu clave o vuelve mañana.",
       "failedStatus": "La API respondió con el estado {{status}}.",
       "statusOk": "Ha funcionado",
