@@ -352,11 +352,14 @@ def test_meps_serve_the_snapshot_when_the_ep_api_is_down(client, ep_down):
     assert [m["id"] for m in client.get(SIX["meps"], params={"country": "ES"}).json()["data"]] == ["1"]
 
 
-def test_a_group_filter_says_so_instead_of_answering_wrongly(client, ep_down):
-    r = client.get(SIX["meps"], params={"group": "EPP"})
-    body = r.json()
-    # The handler flattens `detail` into the body.
-    assert r.status_code == 502 and body["reason_code"] == "upstream_error" and "group" in body["error"]
+def test_a_group_filter_is_answered_from_the_snapshot_when_the_ep_api_is_down(client, ep_down, monkeypatch):
+    """Until 4 Nov 2026 this refused, saying only upstream could map a group. The snapshot's record already names the
+    group, and the refusal also hit a healthy EP API, whose filter answered our names with an empty 204."""
+    snap = api_snapshots.payloads_for(None, None)
+    snap["1"]["group"], snap["2"]["group"] = "EPP", "S&D"
+    assert [m["id"] for m in client.get(SIX["meps"], params={"group": "EPP"}).json()["data"]] == ["1"]
+    assert [m["id"] for m in client.get(SIX["meps"], params={"group": "S-D"}).json()["data"]] == ["2"]
+    assert client.get(SIX["meps"], params={"group": "ECR"}).json()["data"] == []
 
 
 def test_one_stuck_page_does_not_lose_the_whole_list(monkeypatch):
