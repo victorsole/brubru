@@ -31,6 +31,7 @@ from services.economy.body_families import (
     BODY_TO_CAL_INSTITUTION, CAL_INSTITUTION_TO_BODY, CALENDAR_ONLY_BODY_NAMES, body_codes,
 )
 from api.v1._row_dates import row_updated
+from api.v1._search import in_title, like_all_words
 from api.v1._body import plain_summary, body_from_html_or_text, compose_html_from_sections
 
 router = APIRouter(prefix="/events", tags=["v2-events"])
@@ -188,7 +189,7 @@ def _fetch(db, *, codes, since, until, when, q, sources, with_body=False):
         elif when == "past":
             where.append("start_date < :today"); params["today"] = today
         if q:
-            where.append("(title ILIKE :q OR description ILIKE :q)"); params["q"] = f"%{q}%"
+            where.append(like_all_words(q, ["title", "description"], params, "cq"))
         rows = db.execute(text(
             "SELECT id, institution::text AS institution, title, description, source_url, agenda_url, "
             "start_date, start_time, first_seen, last_updated, event_type::text AS event_type, venue "
@@ -395,6 +396,9 @@ async def list_events(
     items = _fetch(db, codes=codes, since=from_, until=to, when=when, q=q, sources=sources)
     keyf, rev = _sort_key(order)
     items.sort(key=keyf, reverse=rev)
+    if q and order != "title":
+        # A search shows what has the words in its title before what only mentions them; the sort above stays within each.
+        items.sort(key=lambda it: 0 if in_title(q, it.get("title")) else 1)
     total = len(items)
     window = items[(page - 1) * limit: (page - 1) * limit + limit]
     if include_body:

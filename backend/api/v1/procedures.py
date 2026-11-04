@@ -12,6 +12,7 @@ from datetime import date, datetime
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from api.v1._search import orm_all_words
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import Text, and_, cast, func, or_
@@ -330,7 +331,7 @@ async def list_procedures(
     if updated_to:
         filters.append(LegislativeCarriage.last_updated <= updated_to)
     if q:
-        filters.append(LegislativeCarriage.title.ilike(f"%{q}%"))
+        filters.append(orm_all_words(q, LegislativeCarriage.title))
 
     if filters:
         query = query.filter(and_(*filters))

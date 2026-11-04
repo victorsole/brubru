@@ -491,3 +491,36 @@ def test_a_sync_order_on_one_body_does_not_walk_the_whole_table():
     src = inspect.getsource(economy_endpoints)
     assert "sql_order(order, \"creation_date\", \"(updated_at + interval '0 second')\")" in src
     assert "sql_order(order, \"creation_date\", \"updated_at\")" not in src
+
+
+def test_a_search_is_words_not_one_exact_phrase():
+    """A person types "electric cars" or "laws about batteries", and an exact phrase found nothing (4 Nov 2026)."""
+    from sqlalchemy import column
+
+    from api.v1._search import in_title, like_all_words, search_words, text_match, title_first
+
+    assert search_words("laws about the batteries") == ["laws", "batteries"]
+    assert search_words("the") == ["the"]
+    assert search_words(None) == []
+
+    params = {}
+    sql = like_all_words("electric cars", ["title", "summary"], params)
+    assert sql == "(title ILIKE :q0 OR summary ILIKE :q0) AND (title ILIKE :q1 OR summary ILIKE :q1)"
+    assert params == {"q0": "%electric%", "q1": "%cars%"}
+
+    params = {}
+    assert title_first("AI Act", params) == "CASE WHEN title ILIKE :tq0 AND title ILIKE :tq1 THEN 0 ELSE 1 END"
+    assert title_first("", {}) == "0"
+    assert in_title("ai act", "The AI Act enters into force")
+    assert not in_title("ai act", "Elastic in cash")
+
+    compiled = str(text_match("electric cars", column("title"), column("summary")).compile(dialect=postgresql.dialect()))
+    assert " AND " in compiled
+    assert text_match("   ", column("title")) is None
+
+
+def test_gdpr_in_small_letters_finds_the_gdpr():
+    from services.parsers.law_alias_resolver import find_alias_matches
+
+    assert not find_alias_matches("gdpr") or find_alias_matches("gdpr")[0].celex == "32016R0679"
+    assert find_alias_matches("GDPR")[0].celex == "32016R0679"

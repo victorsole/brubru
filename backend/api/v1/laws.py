@@ -13,7 +13,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, any_, case, func, literal, or_, text
+from sqlalchemy import Text, and_, any_, case, cast, func, literal, or_, text
 from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
@@ -406,31 +406,46 @@ async def list_laws(
         filters.append(EULaw.created_at <= created["created_to"])
     filters += metadata_filters(sector, year, number, document_type, alias, author, in_force, procedure, corrects)
 
-    ts_query = None
-    alias_celexes: list[str] = []
-    if q:
-        # Full-text match OR title ILIKE, plus any law-nickname alias (GDPR,
-        # AI Act, DSA, ...) resolved to its CELEX, so common-name searches recall
-        # the flagship act even when its title uses the formal long form.
-        ts_query = func.plainto_tsquery("english", q)
-        try:
-            from services.parsers.law_alias_resolver import find_alias_matches
-            alias_celexes = [m.celex for m in find_alias_matches(q) if getattr(m, "celex", None)]
-        except Exception:
-            alias_celexes = []
-        text_match = or_(
-            EULaw.search_vector.op("@@")(ts_query),
-            EULaw.title.ilike(f"%{q}%"),
-        )
-        if alias_celexes:
-            filters.append(or_(text_match, EULaw.celex.in_(alias_celexes)))
-        else:
-            filters.append(text_match)
-
     if filters:
         query = query.filter(and_(*filters))
 
-    total = query.count()
+    ts_query = None
+    alias_celexes: list[str] = []
+    if q:
+        # Full-text match, plus any law-nickname alias (GDPR, AI Act, DSA, ...) resolved to its CELEX, so common-name
+        # searches recall the flagship act even when its title uses the formal long form.
+        ts_query = func.plainto_tsquery("english", q)
+        try:
+            from services.parsers.law_alias_resolver import find_alias_matches
+            # In any case: a person types gdpr as readily as GDPR.
+            hits = find_alias_matches(q) or find_alias_matches(q.upper())
+            alias_celexes = [m.celex for m in hits if getattr(m, "celex", None)]
+        except Exception:
+            alias_celexes = []
+        base = query
+
+        def matching(clause):
+            return base.filter(or_(clause, EULaw.celex.in_(alias_celexes)) if alias_celexes else clause)
+
+        # Both columns have an index, so this answers in milliseconds. `OR title ILIKE` here forced a full scan of the
+        # table, twice per search: a person's first search took 28.9 s (4 Nov 2026). Same counts on 9 of 10 topics read.
+        query = matching(or_(
+            EULaw.search_vector.op("@@")(ts_query),
+            func.to_tsvector("english", EULaw.title).op("@@")(ts_query),
+        ))
+        total = query.count()
+        if not total:
+            # Part of a word, or a code the text search splits: only now is the slow read worth it.
+            query = matching(EULaw.title.ilike(f"%{q}%"))
+            total = query.count()
+        if not total and len(q.split()) > 1:
+            # Every word had to match. "sanctions Russia" finds nothing, because EU law says "restrictive measures":
+            # any of the words, the closest first, beats an empty page.
+            ts_query = func.to_tsquery("english", func.replace(cast(func.plainto_tsquery("english", q), Text), "&", "|"))
+            query = matching(EULaw.search_vector.op("@@")(ts_query))
+            total = query.count()
+    else:
+        total = query.count()
     # Ordering: for a text search, rank by RELEVANCE (alias-matched flagship acts
     # first, then full-text rank), not by date — otherwise recent minor acts that
     # loosely match bury the flagship law. For incremental sync, newest-updated

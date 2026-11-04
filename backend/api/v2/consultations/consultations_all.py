@@ -16,6 +16,7 @@ Scope: read:economy.
 """
 from __future__ import annotations
 
+from api.v1._search import in_title, like_all_words
 from api.v1._row_dates import row_updated
 
 from datetime import date, datetime, timezone
@@ -144,7 +145,7 @@ def _fetch(db, *, codes, institution, status, since, until, q, with_body=False):
     if until:
         where.append(f"{_HYS_END} <= :until"); params["until"] = until
     if q:
-        where.append("(title ILIKE :q OR short_title ILIKE :q OR description ILIKE :q)"); params["q"] = f"%{q}%"
+        where.append(like_all_words(q, ["title", "short_title", "description"], params, "cq"))
     cols = ("id, title, short_title, description, consultation_type, status, dg_responsible, "
             "policy_areas, start_date, published_date, end_date, feedback_start_date, feedback_end_date, "
             "first_seen, last_updated, portal_url, feedback_url, feedback_count, source_body")
@@ -312,6 +313,9 @@ async def consultations_all(
         items.sort(key=lambda it: it.get("end_date") or it["document_date"] or far_future)
     else:
         items.sort(key=lambda it: it.get("end_date") or it["document_date"] or far_past, reverse=True)
+    if q and order != "title":
+        # A search shows what has the words in its title before what only mentions them; the sort above stays within each.
+        items.sort(key=lambda it: 0 if in_title(q, it.get("title")) else 1)
     total = len(items)
     window = items[(page - 1) * limit: (page - 1) * limit + limit]
     names = _body_names(db)

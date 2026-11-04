@@ -14,6 +14,7 @@ from __future__ import annotations
 import re
 
 from api.v1._row_dates import row_updated
+from api.v1._search import like_all_words, title_first
 from api.v1._body import plain_summary, body_from_html_or_text, body_from_pdf_text, compose_html_from_sections, looks_like_html, _strip_html_to_text, strip_active_html
 from services.news.page_widgets import clean_text
 
@@ -388,8 +389,7 @@ def _institutional_sql(codes, kinds, since, until, q, updated_from=None, updated
         # eu_news_items has no tsvector column, so this is ILIKE rather than
         # the FTS the economy half uses. Deliberately not silent about it: see
         # the `search_mode` note in the endpoint description.
-        where.append("(n.title ILIKE :i_q OR coalesce(n.summary,'') ILIKE :i_q)")
-        params["i_q"] = f"%{q}%"
+        where.append(like_all_words(q, ["n.title", "coalesce(n.summary,'')"], params, "i_q"))
     # The change window, matching the economy half. Both halves must apply it or the
     # union would serve a filtered agency feed beside an unfiltered institutional one,
     # which reads as "the filter half-works" and is harder to spot than no filter.
@@ -646,8 +646,10 @@ async def list_news(
     src, params = _news_source_sql(codes, kinds, from_, to, q, updated_from, updated_to, with_body=include_body)
     total = db.execute(text(f"SELECT count(*) FROM {src} u"), params).scalar() or 0
     params2 = {**params, "limit": limit, "offset": (page - 1) * limit}
+    # Newest first, but a search shows what has the words in its title before what only mentions them.
+    ordering = f"{title_first(q, params2)}, {_ORDERS[order]}" if q and order == "recent" else _ORDERS[order]
     rows = db.execute(text(
-        f"SELECT * FROM {src} u ORDER BY {_ORDERS[order]} LIMIT :limit OFFSET :offset"),
+        f"SELECT * FROM {src} u ORDER BY {ordering} LIMIT :limit OFFSET :offset"),
         params2).fetchall()
     names = _body_names(db)
     # Report the window that was actually applied. These envelope fields existed

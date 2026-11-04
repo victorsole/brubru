@@ -22,6 +22,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1._body import plain_summary
+from api.v1._search import title_first
 from api.v1._row_dates import row_updated
 from services.funding.shared_fields import legacy, with_body_names
 from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order,
@@ -231,6 +232,9 @@ def _list_items(db: Session, body_code: str, item_type: str, q, since, until, or
     cols = _DETAIL_COLS if include_body else _LIST_COLS
     if procurement:
         cols += _PROCUREMENT_COLS
+    # A search shows what has the words in its title before what only mentions them.
+    if q and order == "recent":
+        order_sql = f"{title_first(q, params)}, {order_sql}"
     rows = db.execute(
         text(f"SELECT {cols} FROM economy_items WHERE {clause} "
              f"ORDER BY {order_sql} LIMIT :limit OFFSET :offset"), params

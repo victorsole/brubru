@@ -31,7 +31,7 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
-from sqlalchemy import func, literal, or_
+from sqlalchemy import and_, func, literal, or_
 
 # Matching search_guides(): at 4 characters and below, substring noise dominates
 # (`rearm` inside "fiREARMs" is the documented case in the guide ranker).
@@ -49,8 +49,52 @@ def _folded(col: Any):
     return func.brubru_fold(col)
 
 
+# Little words carry no meaning in a search and would only narrow it.
+_LITTLE_WORDS = {"the", "of", "and", "in", "for", "on", "to", "a", "an", "by", "with", "about", "from", "at", "or"}
+MAX_WORDS = 8
+
+
+def search_words(q: Optional[str]) -> list[str]:
+    """The words a person typed, without the little ones. A search of nothing but little words keeps them."""
+    words = (q or "").split()
+    kept = [w for w in words if w.casefold() not in _LITTLE_WORDS]
+    return (kept or words)[:MAX_WORDS]
+
+
+def like_all_words(q: Optional[str], cols: list[str], params: dict, prefix: str = "q") -> str:
+    """SQL for hand-written queries: every word somewhere in these columns, in any order and any case.
+    A person types "electric cars", and as one exact phrase that found nothing (4 Nov 2026)."""
+    clauses = []
+    for i, word in enumerate(search_words(q)):
+        params[f"{prefix}{i}"] = f"%{word}%"
+        clauses.append("(" + " OR ".join(f"{c} ILIKE :{prefix}{i}" for c in cols) + ")")
+    return " AND ".join(clauses) or "TRUE"
+
+
+def title_first(q: Optional[str], params: dict, title_col: str = "title", prefix: str = "tq") -> str:
+    """An ORDER BY term: results with the words in their title before those that only mention them somewhere.
+    Newest-first alone answered "AI Act" with "Elastic in cash, inelastic in repo" (4 Nov 2026)."""
+    clauses = []
+    for i, word in enumerate(search_words(q)):
+        params[f"{prefix}{i}"] = f"%{word}%"
+        clauses.append(f"{title_col} ILIKE :{prefix}{i}")
+    return f"CASE WHEN {' AND '.join(clauses)} THEN 0 ELSE 1 END" if clauses else "0"
+
+
+def in_title(q: Optional[str], title: Optional[str]) -> bool:
+    """The same test, for a list already in memory."""
+    words = search_words(q)
+    folded = (title or "").casefold()
+    return bool(words) and all(w.casefold() in folded for w in words)
+
+
+def orm_all_words(q: Optional[str], *cols: Any):
+    """like_all_words for ORM queries."""
+    return and_(*[or_(*[c.ilike(f"%{w}%") for c in cols]) for w in search_words(q)])
+
+
 def text_match(q: Optional[str], *cols: Any):
-    """An accent-insensitive OR across `cols`, word-bounded for short `q`.
+    """An accent-insensitive OR across `cols`, word-bounded for short `q`. Several words: all of them, in any order.
 
     Returns None when there is nothing to match on, so callers can write
     `cond = text_match(q, A, B); if cond is not None: filters.append(cond)` and a
@@ -62,7 +106,13 @@ def text_match(q: Optional[str], *cols: Any):
     term = q.strip()
     if not term or not cols:
         return None
+    words = search_words(term)
+    if len(words) > 1:
+        return and_(*[_one_term(w, cols) for w in words])
+    return _one_term(words[0], cols)
 
+
+def _one_term(term: str, cols: tuple):
     if len(term) <= SHORT_Q_MAX:
         # \y is a POSIX word boundary in Postgres. Escaping happens BEFORE folding
         # so the backslashes we add are not themselves transformed.

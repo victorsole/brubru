@@ -5,6 +5,7 @@
 from datetime import date, datetime, time
 from typing import Optional
 
+from api.v1._search import orm_all_words
 from api.v1._body import body_from_html_or_text
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
@@ -176,12 +177,9 @@ async def list_eprs(
     if updated_to:
         filters.append(EPRSPublication.last_updated <= updated_to)
     if q:
-        like = f"%{q}%"
         # The full text is searched too, now that it is stored: a study's subject is often
         # named nowhere in its title or its summary.
-        filters.append(or_(EPRSPublication.title.ilike(like),
-                           EPRSPublication.summary.ilike(like),
-                           EPRSPublication.full_text.ilike(like)))
+        filters.append(orm_all_words(q, EPRSPublication.title, EPRSPublication.summary, EPRSPublication.full_text))
     if filters:
         query = query.filter(and_(*filters))
 
