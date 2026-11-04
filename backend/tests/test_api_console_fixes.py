@@ -116,3 +116,131 @@ def test_the_pick_lists_answer_with_no_key_and_give_a_name_for_every_code():
     assert {"slug": "climate-energy-environment", "label": "Climate, Energy & Environment"} in body["families"]
     assert any(c["code"] == "ENVI" and c["name"] for c in body["committees"])
     assert "max-age" in response.headers["Cache-Control"]
+
+
+# ---- A list that reported a total and served nothing: ORDER BY on a column the table does not have ------------------
+def _sqlite_session(ddl, rows):
+    """A real database with the table's real columns, so that a query naming another column fails as it does in production."""
+    from sqlalchemy import create_engine, text
+    from sqlalchemy.orm import Session
+    from sqlalchemy.pool import StaticPool
+    engine = create_engine("sqlite://", poolclass=StaticPool, connect_args={"check_same_thread": False})
+    with engine.begin() as c:
+        c.execute(text("ATTACH DATABASE ':memory:' AS public"))
+        c.execute(text(ddl))
+        for row in rows:
+            c.execute(text(row))
+    return Session(bind=engine)
+
+
+def _eur_lex_client(db):
+    from api.v1._deps import api_user_with_rate_limit
+    from api.v2.legislative import eur_lex
+    from core.database import get_db
+    app = FastAPI()
+    app.include_router(eur_lex.router)
+    app.dependency_overrides[api_user_with_rate_limit] = lambda: SimpleNamespace(id=1, role="admin")
+    app.dependency_overrides[get_db] = lambda: db
+    return TestClient(app), eur_lex
+
+
+def _prefix():
+    from api.v2.legislative import eur_lex
+    return eur_lex.router.prefix
+
+
+def test_the_summaries_list_serves_its_rows():
+    db = _sqlite_session(
+        "CREATE TABLE public.legissum_summaries (slug TEXT, title TEXT, chapter_code TEXT, chapter_title TEXT, url TEXT, celex TEXT, "
+        "summary_text TEXT, summary_html TEXT, text_fetched_at TEXT, created_at TIMESTAMP, updated_at TIMESTAMP)",
+        ["INSERT INTO public.legissum_summaries (slug, title, url, celex) VALUES ('a-law', 'A law', 'https://x/a', '32016R0679')"],
+    )
+    client, _ = _eur_lex_client(db)
+    body = client.get(f"{_prefix()}/laws/summaries", params={"limit": 1, "include_body": "true"}).json()
+    assert body["total"] == 1 and len(body["data"]) == 1, body
+    assert body["data"][0]["summary_id"] == "a-law"
+
+
+def test_the_cross_reference_list_query_runs_on_the_tables_real_columns():
+    # No rows here: the columns are JSON in production, and the test is about the query, which SQLite plans even on an empty table.
+    db = _sqlite_session(
+        "CREATE TABLE public.law_xref (celex TEXT, eli TEXT, oj_reference TEXT, procedure_ref TEXT, resource_type TEXT, in_force BOOLEAN, "
+        "document_date TEXT, eurovoc TEXT, legal_basis TEXT, authors TEXT, relation_counts TEXT, relation_total INT, computed_at TIMESTAMP)",
+        [],
+    )
+    client, _ = _eur_lex_client(db)
+    response = client.get(f"{_prefix()}/xref", params={"limit": 1})
+    assert response.status_code == 200, response.text
+
+
+def test_a_query_that_fails_says_so_instead_of_a_total_with_no_rows():
+    db = _sqlite_session("CREATE TABLE public.legissum_summaries (slug TEXT, title TEXT)", ["INSERT INTO public.legissum_summaries VALUES ('a', 'b')"])
+    client, _ = _eur_lex_client(db)
+    response = client.get(f"{_prefix()}/laws/summaries", params={"limit": 1, "include_body": "true"})
+    assert response.status_code == 503, response.text
+
+
+# ---- The largest lists can leave the full text out, in the query and not only in the answer -------------------------
+
+
+def _captured_sql(monkeypatch, module, call):
+    from sqlalchemy.orm import Query, Session
+
+    class CountZero(Query):
+        def count(self):
+            return 0
+
+    sent = {}
+
+    class Capture:
+        def __init__(self, q):
+            self.q = q
+
+        def offset(self, n):
+            self.q = self.q.offset(n)
+            return self
+
+        def limit(self, n):
+            self.q = self.q.limit(n)
+            return self
+
+        def all(self):
+            sent["sql"] = str(self.q.statement.compile(dialect=postgresql.dialect()))
+            return []
+
+    monkeypatch.setattr(module, "stable", lambda query, *a: Capture(query))
+    call(Session(query_cls=CountZero))
+    return sent["sql"]
+
+
+@pytest.mark.parametrize("include_body,present", [(False, False), (True, True)])
+def test_secondary_acts_read_the_text_only_when_asked(monkeypatch, include_body, present):
+    from api.v1 import w4_endpoints as w4
+    sql = _captured_sql(monkeypatch, w4, lambda db: w4._list_secondary_acts(
+        db, "implementing", None, None, None, None, None, None, None, None, 2, 1, include_body=include_body))
+    assert ("secondary_acts.text_body" in sql) is present and ("secondary_acts.body_html" in sql) is present
+
+
+@pytest.mark.parametrize("path", ["/api/v2/legislative/implementing-acts", "/api/v2/legislative/delegated-acts", "/api/v2/parliament/plenary-tabled-texts", "/api/v2/parliament/texts-submitted"])
+def test_the_largest_lists_offer_to_leave_the_text_out(path):
+    from main import app
+    names = [p["name"] for p in app.openapi()["paths"][path]["get"]["parameters"]]
+    assert "include_body" in names
+
+
+def test_a_secondary_act_without_its_text_never_reads_it():
+    from api.v1.w4_endpoints import _secondary_act_to_item
+
+    fields = dict(id=1, act_type="implementing", status="published", reference="C(2026)1", title="An act", source_url="https://example.org/act", ep_scrutiny={}, council_scrutiny={}, policy_areas=[])
+
+    class Plain:
+        def __init__(self):
+            self.__dict__.update(fields)
+
+        def __getattr__(self, name):
+            if name in ("text_body", "body_html"):
+                raise AssertionError(f"{name} was read")
+            return None
+
+    item = _secondary_act_to_item(Plain(), with_body=False)
+    assert item.body_txt is None and item.body_html is None and item.title == "An act"

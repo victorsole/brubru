@@ -14,7 +14,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
 from models.user import User
@@ -815,12 +815,16 @@ def _scrutiny_period_label(raw: Optional[str]) -> Optional[str]:
 def _secondary_act_to_item(
     r: SecondaryAct,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+    with_body: bool = True,
 ) -> SecondaryActItem:
     # Prefer the cached HTML body when present (Cellar XHTML manifestation,
     # backfilled by scripts/backfill_secondary_acts_body.py); fall back to
     # composing one from text_body for PDF-only sources.
-    cached_html = (r.body_html or "").strip() or None
-    if cached_html:
+    # with_body=False: the query left both columns out, and reading them here would fetch each row's text one by one.
+    cached_html = None if not with_body else (r.body_html or "").strip() or None
+    if not with_body:
+        body_html, body_text, has_body = None, None, False
+    elif cached_html:
         body_html = cached_html
         body_text = r.text_body
         has_body = bool(body_text and len(body_text) >= body_threshold)
@@ -829,7 +833,7 @@ def _secondary_act_to_item(
     # Tier-2 fallback: draft delegated/implementing acts that haven't been
     # published in OJ yet (no CELEX, no text_body) — compose a structured
     # metadata body so the contract never returns empty.
-    if not body_text:
+    if with_body and not body_text:
         import html as _html
         title = r.title or r.reference or "(untitled delegated act)"
         lines = [title]
@@ -914,7 +918,7 @@ def _secondary_act_to_item(
         ep_scrutiny=dict(r.ep_scrutiny or {}),
         council_scrutiny=dict(r.council_scrutiny or {}),
         celex=r.celex, source_url=r.source_url, pdf_url=pdf_url,
-        body_source=getattr(r, "body_source", None) if r.text_body else None,
+        body_source=getattr(r, "body_source", None) if (not with_body or r.text_body) else None,
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
         # 5 mandatory datapoints
@@ -927,9 +931,9 @@ def _secondary_act_to_item(
         creation_date=getattr(r, "first_seen", None),
         updated_date=row_updated(r),
         has_body=has_body,
-        body_html=strip_active_html(body_html),
+        body_html=strip_active_html(body_html) if body_html else None,
         body_txt=body_text,
-        body=deprecated_body(body_text, strip_active_html(body_html)),
+        body=deprecated_body(body_text, strip_active_html(body_html)) if body_html else None,
     )
 
 
@@ -943,6 +947,7 @@ def _list_secondary_acts(
     limit, page,
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
     updated_to=None,
+    include_body: bool = True,
 ) -> PaginatedResponse[SecondaryActItem]:
     # A value outside the enum reached PostgreSQL and answered 500 (`status=scrutiny`,
     # the documented example, 14 Oct 2026). It is the caller's error: say so, and how.
@@ -953,6 +958,9 @@ def _list_secondary_acts(
             "allowed": list(_SECONDARY_STATUSES),
         })
     query = db.query(SecondaryAct).filter(SecondaryAct.act_type == act_type)
+    if not include_body:
+        # An act can run to megabytes: left out of the query, not only out of the answer.
+        query = query.options(defer(SecondaryAct.text_body), defer(SecondaryAct.body_html))
     filters = []
     if celex:
         # The identifier callers actually hold. It was not a declared parameter, so
@@ -983,7 +991,7 @@ def _list_secondary_acts(
         stable(query.order_by(SecondaryAct.publication_date.desc().nullslast()))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [_secondary_act_to_item(r, body_threshold=body_threshold) for r in rows]
+    data = [_secondary_act_to_item(r, body_threshold=body_threshold, with_body=include_body) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from, updated_to=updated_to)
@@ -1044,12 +1052,13 @@ async def list_delegated_acts(
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
+    include_body: bool = Query(True, description="Include each act's full text (default true). An act can run to megabytes: pass false to read a list quickly."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return _list_secondary_acts(db, "delegated", parent_celex, proposing_dg, status, q, celex,
                                 published_from, published_to, updated_from, limit, page,
-                                body_threshold=body_threshold, updated_to=updated_to)
+                                body_threshold=body_threshold, updated_to=updated_to, include_body=include_body)
 
 
 def _secondary_act_detail(
@@ -1201,12 +1210,13 @@ async def list_implementing_acts(
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
+    include_body: bool = Query(True, description="Include each act's full text (default true). An act can run to megabytes: pass false to read a list quickly."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return _list_secondary_acts(db, "implementing", parent_celex, proposing_dg, status, q, celex,
                                 published_from, published_to, updated_from, limit, page,
-                                body_threshold=body_threshold, updated_to=updated_to)
+                                body_threshold=body_threshold, updated_to=updated_to, include_body=include_body)
 
 
 # ============================================================================

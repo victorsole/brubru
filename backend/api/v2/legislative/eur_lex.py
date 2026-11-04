@@ -21,6 +21,7 @@ OJ) are implemented natively and land across the next checkpoints.
 from __future__ import annotations
 
 import json
+import logging
 import re
 from datetime import date, datetime
 from typing import Optional
@@ -46,6 +47,8 @@ from api.v1._deps import api_user_with_rate_limit
 from core.body_sources import body_select
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1.laws import LawItem, LawTextResponse
+
+logger = logging.getLogger(__name__)
 from api.v1.identify import IdentifyResult
 from api.v1.legal_text import (
     DefinedTermsResponse,
@@ -425,18 +428,20 @@ async def list_summaries(
         total = int(db.execute(text(f"SELECT COUNT(*) FROM public.legissum_summaries {where}"), params).scalar() or 0)
         rows = db.execute(
             text(
-                f"SELECT slug, title, celex, url, chapter_code, chapter_title, created_at, "
+                f"SELECT slug, title, celex, url, chapter_code, chapter_title, created_at, updated_at, "
                 + body_select("legissum_summaries", include_body)
-                + f" FROM public.legissum_summaries {where} ORDER BY title, id LIMIT :lim OFFSET :off"
+                + f" FROM public.legissum_summaries {where} ORDER BY title, slug LIMIT :lim OFFSET :off"
             ),
             {**params, "lim": limit, "off": (page - 1) * limit},
         ).mappings().all()
     except Exception:
+        # A failed query must not read as "no rows": this hid an ORDER BY on a column the table does not have.
+        logger.exception("[ERROR] LEGISSUM list query failed")
         try:
             db.rollback()
         except Exception:
             pass
-        rows = []
+        raise HTTPException(status_code=503, detail={"error": "The summaries could not be read. Try again.", "reason_code": "query_failed"})
     items = [
         SummaryItem(
             summary_id=r["slug"],
@@ -1802,16 +1807,17 @@ async def list_xref(
         rows = db.execute(
             text(
                 f"SELECT celex, {', '.join(_XREF_COLS)} FROM public.law_xref {where} "
-                "ORDER BY computed_at DESC NULLS LAST, id DESC LIMIT :lim OFFSET :off"
+                "ORDER BY computed_at DESC NULLS LAST, celex DESC LIMIT :lim OFFSET :off"
             ),
             {**params, "lim": limit, "off": (page - 1) * limit},
         ).mappings().all()
     except Exception:
+        logger.exception("[ERROR] cross-reference list query failed")
         try:
             db.rollback()
         except Exception:
             pass
-        rows = []
+        raise HTTPException(status_code=503, detail={"error": "The cross-references could not be read. Try again.", "reason_code": "query_failed"})
     items = [
         XrefResult(
             celex=r["celex"],

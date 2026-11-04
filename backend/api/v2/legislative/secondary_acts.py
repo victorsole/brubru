@@ -87,13 +87,14 @@ async def list_delegated_acts(
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
+    include_body: bool = Query(True, description="Include each act's full text (default true). An act can run to megabytes: pass false to read a list quickly."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return await _v1.list_delegated_acts(
         request, parent_celex=parent_celex, celex=celex, proposing_dg=proposing_dg, status=status, q=q,
         published_from=published_from, published_to=published_to, updated_from=updated_from,
-        updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
+        updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, include_body=include_body, user=user, db=db,
     )
 
 
@@ -178,13 +179,14 @@ async def list_implementing_acts(
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
+    include_body: bool = Query(True, description="Include each act's full text (default true). An act can run to megabytes: pass false to read a list quickly."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return await _v1.list_implementing_acts(
         request, parent_celex=parent_celex, celex=celex, proposing_dg=proposing_dg, status=status, q=q,
         published_from=published_from, published_to=published_to, updated_from=updated_from,
-        updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db,
+        updated_to=updated_to, limit=limit, page=page, body_threshold=body_threshold, include_body=include_body, user=user, db=db,
     )
 
 

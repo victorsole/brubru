@@ -16,7 +16,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
 from models.text_adopted import PlenaryTabledText, TextAdopted
@@ -89,12 +89,14 @@ def _ta_pdf(ta_reference) -> "str | None":
 def _row_to_item(
     r: TextAdopted,
     body_threshold: int = 500,
+    with_body: bool = True,
 ) -> TextItem:
-    body_html, body_text, has_body = body_from_pdf_text(r.full_text, threshold=body_threshold)
+    # with_body=False: the query left the text out, and reading it here would fetch each row's text one by one.
+    body_html, body_text, has_body = body_from_pdf_text(r.full_text, threshold=body_threshold) if with_body else (None, None, False)
     # Tier-2 fallback when full_text is null (typical for /texts-submitted —
     # tabled but not yet adopted, so no PDF to extract). Compose body from
     # the structured row: title + procedure + committees + rapporteur + dates.
-    if not body_text:
+    if with_body and not body_text:
         import html as _html
         lines_txt = [r.title or "?"]
         parts_html = [f"<h2>{_html.escape(r.title or '?')}</h2>"]
@@ -390,6 +392,7 @@ async def list_texts_submitted(
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
+    include_body: bool = Query(True, description="Include each text's full text (default true). Pass false to read a list quickly."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TextItem]:
@@ -404,6 +407,8 @@ async def list_texts_submitted(
     # Tabled texts live in their own table since 9 Oct 2026 (migration 285). They were
     # rows of texts_adopted without an adoption_date; a report is not an adopted text.
     query = db.query(PlenaryTabledText)
+    if not include_body:
+        query = query.options(defer(PlenaryTabledText.full_text))
     filters = []
     if text_type:
         filters.append(PlenaryTabledText.text_type == text_type.lower())
@@ -432,7 +437,7 @@ async def list_texts_submitted(
     )
 
     return build_envelope(
-        [_row_to_item(r, body_threshold=body_threshold) for r in rows],
+        [_row_to_item(r, body_threshold=body_threshold, with_body=include_body) for r in rows],
         total=total, page=page, limit=limit,
         updated_from=updated_from, updated_to=updated_to,
     )

@@ -159,7 +159,8 @@ async def list_texts_submitted(
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
+    include_body: bool = Query(True, description="Include each text's full text (default true). Pass false to read a list quickly."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TextItem]:
-    return await _v1.list_texts_submitted(request=request, q=q, text_type=text_type, procedure_ref=procedure_ref, parliamentary_term=parliamentary_term, committee=committee, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, body_threshold=body_threshold, user=user, db=db)
+    return await _v1.list_texts_submitted(request=request, q=q, text_type=text_type, procedure_ref=procedure_ref, parliamentary_term=parliamentary_term, committee=committee, updated_from=updated_from, updated_to=updated_to, updated_end=updated_end, limit=limit, page=page, body_threshold=body_threshold, include_body=include_body, user=user, db=db)
