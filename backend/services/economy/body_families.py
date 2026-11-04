@@ -53,6 +53,12 @@ def bodies_for_family(slug: str) -> set[str]:
     return set(FAMILIES.get(slug, {}).get("bodies", []))
 
 
+def unknown_families(family: str | None) -> list[str]:
+    """The slugs of a comma-separated `family=` value that do not exist. An unknown slug adds no bodies, and no bodies
+    means no filter, so without this check `family=climate` answers the whole feed as if it had been filtered."""
+    return [s for s in (x.strip() for x in (family or "").split(",")) if s and s not in FAMILIES]
+
+
 def families_for_body(code: str) -> list[str]:
     return [slug for slug, f in FAMILIES.items() if code in f["bodies"]]
 

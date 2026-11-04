@@ -31,7 +31,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from services.economy.body_families import (
-    FAMILIES, bodies_for_family, body_codes, families_for_body, CALENDAR_ONLY_BODY_NAMES,
+    FAMILIES, bodies_for_family, unknown_families, body_codes, families_for_body, CALENDAR_ONLY_BODY_NAMES,
 )
 
 router = APIRouter()
@@ -301,6 +301,8 @@ async def consultations_all(
         from_ = since
     if to is None and until is not None:
         to = until
+    if unknown_families(family):
+        raise HTTPException(400, f"family must be one of {sorted(FAMILIES)}")
     codes = _resolve_scope(body, family)
     items = _fetch(db, codes=codes, institution=institution, status=status, since=from_, until=to, q=q, with_body=include_body)
     far_past = datetime(1, 1, 1, tzinfo=timezone.utc); far_future = datetime(9999, 1, 1, tzinfo=timezone.utc)

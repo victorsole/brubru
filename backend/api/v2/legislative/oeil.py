@@ -51,7 +51,7 @@ The companion to `/api/v2/legislative/eur-lex/laws` (adopted legislation). Use t
 
 **Try it**
 ```
-GET /api/v2/legislative/oeil/procedures?committee=ENVI&status=in_trilogue
+GET /api/v2/legislative/oeil/procedures?committee=ENVI&status=tabled
 GET /api/v2/legislative/oeil/procedures?reference=2024/0079(COD)
 ```
 
@@ -67,10 +67,10 @@ async def list_procedures(
     reference: Optional[str] = Query(None, description="OEIL procedure reference (e.g. 2025/0726(COD))"),
     committee: Optional[str] = Query(None, description="Lead committee code (e.g. LIBE, ENVI)"),
     rapporteur_mep_id: Optional[str] = Query(None),
-    status: Optional[str] = Query(None, description="Carriage status"),
+    status: Optional[str] = Query(None, description="Where the file stands: announced | legislative_initiative | tabled | close_to_adoption | completed | adopted | blocked | withdrawn."),
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[UpperBoundDatetime] = Query(None),
-    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)"),
+    updated_end: Optional[UpperBoundDatetime] = Query(None, description="Older name of `updated_to`, kept for existing integrations."),
     include_other_sources: bool = Query(
         False,
         description="Also return the EUR-Lex acts and Legislative Train files the mirror holds (not OEIL procedures).",

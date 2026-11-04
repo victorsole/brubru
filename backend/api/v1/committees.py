@@ -9,7 +9,7 @@ from typing import Any, Optional, Tuple
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, func, or_
+from sqlalchemy import Text, and_, cast, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -556,7 +556,7 @@ async def list_committee_work(
     if q:
         query = query.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
     if status:
-        query = query.filter(func.lower(func.cast(CommitteeWorkItem.status, func.TEXT.type)) == status.lower())  # type: ignore
+        query = query.filter(func.lower(cast(CommitteeWorkItem.status, Text)) == status.lower())
     if stage:
         query = query.filter(func.lower(CommitteeWorkItem.stage) == stage.lower())
 

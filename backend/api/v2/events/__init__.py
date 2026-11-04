@@ -27,7 +27,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from services.economy.body_families import (
-    FAMILIES, bodies_for_family, families_for_body, family_label,
+    FAMILIES, bodies_for_family, unknown_families, families_for_body, family_label,
     BODY_TO_CAL_INSTITUTION, CAL_INSTITUTION_TO_BODY, CALENDAR_ONLY_BODY_NAMES, body_codes,
 )
 from api.v1._row_dates import row_updated
@@ -389,6 +389,8 @@ async def list_events(
                 to = date.today() + timedelta(days=days)
         elif from_ is None:
             from_ = date.today() - timedelta(days=days)
+    if unknown_families(family):
+        raise HTTPException(400, f"family must be one of {sorted(FAMILIES)}")
     codes = _resolve_scope(body, family)
     items = _fetch(db, codes=codes, since=from_, until=to, when=when, q=q, sources=sources)
     keyf, rev = _sort_key(order)

@@ -31,7 +31,7 @@ from api.v1._date_bounds import UpperBoundDatetime
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from services.economy.body_families import (
-    FAMILIES, bodies_for_family, body_codes, families_for_body, CALENDAR_ONLY_BODY_NAMES,
+    FAMILIES, bodies_for_family, unknown_families, body_codes, families_for_body, CALENDAR_ONLY_BODY_NAMES,
 )
 
 router = APIRouter(prefix="/news", tags=["v2-news"])
@@ -596,7 +596,7 @@ async def list_news(
     updated_to: Optional[UpperBoundDatetime] = Query(
         None, description="Only items whose record changed on/before this timestamp."),
     updated_end: Optional[UpperBoundDatetime] = Query(
-        None, description="Alias of updated_to (GovClipping-compatible).", include_in_schema=False),
+        None, description="Older name of `updated_to`, kept for existing integrations.", include_in_schema=False),
     order: str = Query("recent", description="recent | oldest | title."),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
@@ -637,6 +637,8 @@ async def list_news(
     if updated_end and not updated_to:
         updated_to = updated_end
     kinds = _NEWS_TYPES if kind == "all" else [kind]
+    if unknown_families(family):
+        raise HTTPException(400, f"family must be one of {sorted(FAMILIES)}")
     codes = _resolve_scope(body, family)
     # Agencies (economy_items) UNION institutions (eu_news_items) -- see
     # _INSTITUTIONAL_NEWS. Before 25 Aug 2026 this read economy_items alone and

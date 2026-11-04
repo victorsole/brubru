@@ -31,7 +31,7 @@ AGENCY_FOLDERS = (
 
 # Routes that are not data and so sit in no bundle: the spec and its page, the lists of prices and bundles, and the
 # tool that fetches any page live.
-NOT_IN_A_BUNDLE = ("/api/v2/docs", "/api/v2/openapi.json", "/api/v2/pricing", "/api/v2/bundles", "/api/v2/extract")
+NOT_IN_A_BUNDLE = ("/api/v2/docs", "/api/v2/openapi.json", "/api/v2/pricing", "/api/v2/pick-lists", "/api/v2/bundles", "/api/v2/extract")
 
 
 @dataclass(frozen=True)

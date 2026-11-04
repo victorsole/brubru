@@ -24,7 +24,7 @@ def test_every_route_has_a_bundle_and_nothing_else_is_left_out():
 
 
 def test_what_is_not_data_sits_in_no_bundle():
-    for path in ("/api/v2/extract", "/api/v2/pricing", "/api/v2/bundles", "/api/v2/openapi.json"):
+    for path in ("/api/v2/extract", "/api/v2/pricing", "/api/v2/pick-lists", "/api/v2/bundles", "/api/v2/openapi.json"):
         assert bundles_of(path) == [], path
 
 
