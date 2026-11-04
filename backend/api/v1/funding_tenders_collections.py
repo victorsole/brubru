@@ -640,8 +640,9 @@ def _consortium_clause(organisation: Optional[str], role: Optional[str], partici
             raise HTTPException(status_code=400, detail=f"role must be one of {sorted(_ROLES.values())}")
         elem.append("o->>'role' = :role")
         params["role"] = contains["role"] = canonical
-        if canonical != "coordinator":
-            coord.append("false")
+        # The coordinator of a programme with no consortium list is, by definition, the coordinator. Without this,
+        # role=coordinator alone left "... = 0 AND " with nothing after it, and the query failed.
+        coord.append("true" if canonical == "coordinator" else "false")
     if participant_country:
         # CORDIS writes the EU style code (EL, UK); the coordinators of the other programmes either.
         elem.append("o->>'country' = :pc")

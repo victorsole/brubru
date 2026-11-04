@@ -128,6 +128,16 @@ def group_acronym(org: Optional[str]) -> Optional[str]:
     label = org_label(org)
     return _GROUP_EN.get(label, label) if label else None
 CURRENT_TERM = 10
+GROUP_HELP = "The political group: EPP, S&D, PfE, ECR, Renew, Greens/EFA, The Left, ESN or NI."
+# The EP's filter takes its own codes for these (read at the source 4 Nov 2026: PPE and S-D answer rows; EPP and S&D an empty 204).
+_EP_GROUP_CODE = {"epp": "PPE", "sd": "S-D"}
+_GROUP_SPELLINGS = {"ppe": "epp", "vertsale": "greensefa", "guengl": "theleft", "theleftguengl": "theleft"}
+
+
+def group_key(group: Optional[str]) -> str:
+    """One spelling for a group, whichever was typed: S&D and S-D, Greens/EFA and VERTS-ALE, EPP and PPE."""
+    letters = "".join(ch for ch in (group or "").casefold() if ch.isalnum())
+    return _GROUP_SPELLINGS.get(letters, letters)
 
 
 async def _ep_get(hc: httpx.AsyncClient, path: str, params: Dict[str, Any], patient: bool = False) -> httpx.Response:
@@ -726,7 +736,7 @@ Read from data.europarl.europa.eu (the EP's Open Data REST API v2). For the curr
 async def list_meps(
     request: Request,
     country: Optional[str] = Query(None, min_length=2, max_length=2),
-    group: Optional[str] = Query(None),
+    group: Optional[str] = Query(None, description=GROUP_HELP),
     name: Optional[str] = Query(None, description="Part of the member's name, accent- and case-insensitive. `q` is an accepted alias."),
     q: Optional[str] = Query(None, description="Alias for `name`, the free-text parameter every other v2 list endpoint uses. An undeclared parameter is silently ignored, so a caller following that convention got the unfiltered first page and no error."),
     term: int = Query(10, ge=1, le=10, description="Parliamentary term (default 10 — current). Pass term=9 for previous, etc."),
@@ -794,24 +804,23 @@ async def _list_from_full(db: Session, *, country, group, name, term, window, or
             "reason_code": "dates_current_term_only",
             "message": f"Change dates are kept for the current term ({CURRENT_TERM}) only; drop the date window or the sync order for term={term}.",
         })
-    raw = await _fetch_all(country=country, group=group, term=term)
     stored: Dict[str, Dict[str, Any]] = {}
     if term == CURRENT_TERM:
         try:
             stored = api_snapshots.payloads_for(db, SNAPSHOT_DATASET)
         except Exception as exc:  # noqa: BLE001
             logger.warning("[meps] snapshot unavailable: %s", exc)
+    # The current term's group is read from the snapshot, by name. Sent upstream, most names came back as an empty 204,
+    # which read as "the EP API is not answering" (EPP, S&D, Renew, PfE, 4 Nov 2026).
+    group_here = bool(group and term == CURRENT_TERM and stored)
+    upstream_group = None if group_here else _EP_GROUP_CODE.get(group_key(group), group)
+    raw = await _fetch_all(country=country, group=upstream_group, term=term)
     if raw is None:
         # The EP API is down or throttled. We hold every current-term MEP from the
         # daily snapshot, so serve that rather than an empty Parliament (23 Sep 2026:
         # an overloaded EP API answered HTTP 200 with an error body and /meps served 0).
         if term != CURRENT_TERM or not stored:
             raise _upstream_down()
-        if group:
-            # The snapshot stores the EP's group URI (org/7018); the filter takes a
-            # code (EPP). Only upstream can map them, and upstream is down.
-            raise _upstream_down("`group` filtering needs the EP API, which is not answering. "
-                                 "Retry, or filter by country instead.")
         items = [MEPItem(**p) for p in stored.values()]
         if country:
             want = _iso3(country)
@@ -820,6 +829,9 @@ async def _list_from_full(db: Session, *, country, group, name, term, window, or
     else:
         items = [_normalise(r) for r in raw]
         source_is_snapshot = False
+    if group_here:
+        wanted = group_key(group)
+        items = [i for i in items if group_key(group_acronym((stored.get(i.id or "") or {}).get("group"))) == wanted]
     if term == CURRENT_TERM:
         current = await _fetch_current_ids()
         for i in items:

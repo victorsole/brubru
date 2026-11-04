@@ -42,7 +42,7 @@ Every EP committee meeting webstream URL discovered by Brubru's daily scrape of 
 
 **Input**
 - `committee` — EP committee code (LIBE, ENVI, ECON, IMCO, …).
-- `status` — `PENDING | COMPLETED | FAILED | NOT_AVAILABLE` (transcription status, not the meeting itself).
+- `status` — `PENDING | DOWNLOADING | TRANSCRIBING | PROCESSING | COMPLETED | FAILED` (transcription status, not the meeting itself).
 - `has_transcript` — true to filter to rows with a transcript already extracted.
 - `procedure_ref` — OEIL reference (e.g. `2024/0123(COD)`) to filter to meetings discussing that file.
 - `q` — substring on title.
@@ -67,7 +67,7 @@ Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams
 async def list_webstreams(
     request: Request,
     committee: Optional[str] = Query(None, description="EP committee code (LIBE, ENVI, ECON, ...)"),
-    status: Optional[str] = Query(None, description="PENDING | COMPLETED | FAILED | NOT_AVAILABLE"),
+    status: Optional[str] = Query(None, description="PENDING | DOWNLOADING | TRANSCRIBING | PROCESSING | COMPLETED | FAILED"),
     has_transcript: Optional[bool] = Query(None, description="If true, only rows with transcript_text"),
     procedure_ref: Optional[str] = Query(None, description="Filter to streams linked to a procedure"),
     q: Optional[str] = Query(None, description="Substring on title"),

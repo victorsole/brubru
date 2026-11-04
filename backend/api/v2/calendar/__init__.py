@@ -28,6 +28,7 @@ from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
 from api.v1 import calendar as _v1
+from api.v1.calendar import EVENT_TYPE_HELP, INSTITUTION_HELP
 from api.v1.calendar import CalendarEventItem
 
 router = APIRouter(prefix="/calendar")
@@ -111,7 +112,7 @@ To track when the institutions are meeting on the files you follow. Filter by `i
 
 **Try it**
 ```
-GET /api/v2/calendar/events?institution=EP&event_type=PLENARY
+GET /api/v2/calendar/events?institution=EP&event_type=plenary_session
 GET /api/v2/calendar/events?date_from=2026-06-15&date_to=2026-06-30
 ```
 
@@ -123,8 +124,8 @@ Synced from the institutions' agendas (EP doceo, Council, College agenda, agency
 )
 async def list_calendar_events(
     request: Request,
-    institution: Optional[str] = Query(None, description="EP | COUNCIL | EUROPEAN_COUNCIL | COMMISSION | ECJ | ECB | ESMA | EMA | EBA | EIOPA | COR | EESC"),
-    event_type: Optional[str] = Query(None, description="PLENARY | COMMITTEE_MEETING | COUNCIL_MEETING | COLLEGE_MEETING | ..."),
+    institution: Optional[str] = Query(None, description=INSTITUTION_HELP),
+    event_type: Optional[str] = Query(None, description=EVENT_TYPE_HELP),
     committee: Optional[str] = Query(None, description="EP committee code"),
     commission_dg: Optional[str] = Query(None, description="e.g. AGRI, CNECT, ENV"),
     date_from: Optional[date] = Query(None),

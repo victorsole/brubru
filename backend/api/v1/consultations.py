@@ -12,6 +12,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from ._enum_filter import enum_choice
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, or_
@@ -392,9 +393,9 @@ async def list_consultations(
     query = db.query(PublicConsultation)
     filters = []
     if status:
-        filters.append(PublicConsultation.status == status.lower())
+        filters.append(PublicConsultation.status == enum_choice(PublicConsultation.status, status, "status"))
     if consultation_type:
-        filters.append(PublicConsultation.consultation_type == consultation_type.lower())
+        filters.append(PublicConsultation.consultation_type == enum_choice(PublicConsultation.consultation_type, consultation_type, "consultation_type"))
     if dg_responsible:
         filters.append(PublicConsultation.dg_responsible == dg_responsible.upper())
     if policy_area:

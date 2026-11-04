@@ -39,7 +39,7 @@ EPRS publications are the highest-quality non-partisan policy briefings on EU fi
 
 **Input**
 - `q` — substring on title + summary.
-- `publication_type` — `BRIEFING` / `STUDY` / `IN_DEPTH_ANALYSIS` / `AT_A_GLANCE` / `EU_LEGISLATION_IN_PROGRESS` / `INITIAL_APPRAISAL` / `EX_POST_EVALUATION` / etc.
+- `publication_type` — briefing | study | in_depth_analysis | at_a_glance | blog_post | other.
 - `committee` — committee code.
 - `procedure_ref` — OEIL reference.
 - `celex` — legal identifier cross-link.
@@ -49,7 +49,7 @@ EPRS publications are the highest-quality non-partisan policy briefings on EU fi
 
 **Try it**
 ```
-GET /api/v2/parliament/eprs?committee=ENVI&publication_type=BRIEFING
+GET /api/v2/parliament/eprs?committee=ENVI&publication_type=briefing
 GET /api/v2/parliament/eprs?q=CBAM&published_from=2026-01-01
 ```
 
@@ -62,7 +62,7 @@ Synced every 12 hours (02:00 / 14:00 UTC, warm tier) from the EP Think Tank port
 async def list_eprs(
     request: Request,
     q: Optional[str] = Query(None, description="Substring search on title + summary"),
-    publication_type: Optional[str] = Query(None, description="BRIEFING | STUDY | IN_DEPTH_ANALYSIS | AT_A_GLANCE | EU_LEGISLATION_IN_PROGRESS | ..."),
+    publication_type: Optional[str] = Query(None, description="briefing | study | in_depth_analysis | at_a_glance | blog_post | other."),
     committee: Optional[str] = Query(None, description="Committee code (LIBE, ENVI, ECON, ...)"),
     procedure_ref: Optional[str] = Query(None, description="OEIL procedure reference"),
     celex: Optional[str] = Query(None),

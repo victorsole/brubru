@@ -14,6 +14,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from ._enum_filter import enum_choice
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, or_
@@ -234,7 +235,7 @@ async def list_commission_register_documents(
     query = db.query(CommissionDocument)
     filters = []
     if doc_type:
-        filters.append(CommissionDocument.doc_type == doc_type.upper())
+        filters.append(CommissionDocument.doc_type == enum_choice(CommissionDocument.doc_type, doc_type, "doc_type"))
     if document_register_category:
         filters.append(CommissionDocument.document_register_category == document_register_category.upper())
     if dg_responsible:

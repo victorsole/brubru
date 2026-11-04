@@ -39,7 +39,7 @@ Drive an MEP picker UI, find all MEPs from a country (`country=ES`), filter to o
 
 **Input**
 - `country` — ISO-3166-1 alpha-2 (exact 2 chars).
-- `group` — political group code (`EPP`, `S-D`, `RENEW`, `VERTS-ALE`, `ECR`, `PFE`, `ESN`, `GUE-NGL`, `NI`). Note: the EP API uses hyphens (S-D) but our `/political-groups` returns slugs (sd) — both are accepted.
+- `group` — the political group: `EPP`, `S&D`, `PfE`, `ECR`, `Renew`, `Greens/EFA`, `The Left`, `ESN` or `NI`, in any case. The EP's own spellings work too (`S-D`, `VERTS-ALE`).
 - `name` (or `q`, its alias) — part of the full name, accent- and case-insensitive (`sole` finds `Solé`).
 - `term` — parliamentary term (default 10 = current, valid range 1-10).
 - `include_former` — current term only. By default the list holds the MEPs sitting today; `true` adds the members elected or seated this term who have since left (`in_office: false`). Any `updated_` window includes them too, so a sync sees a departure as a change.
@@ -62,7 +62,7 @@ Read from data.europarl.europa.eu (the EP's Open Data REST API v2). For the curr
 async def list_meps(
     request: Request,
     country: Optional[str] = Query(None, min_length=2, max_length=2),
-    group: Optional[str] = Query(None),
+    group: Optional[str] = Query(None, description=_v1.GROUP_HELP),
     name: Optional[str] = Query(None, description="Part of the member's name, accent- and case-insensitive. `q` is an accepted alias."),
     q: Optional[str] = Query(None, description="Alias for `name`, the free-text parameter every other v2 list endpoint uses. An undeclared parameter is silently ignored, so a caller following that convention got the unfiltered first page and no error."),
     term: int = Query(10, ge=1, le=10, description="Parliamentary term (default 10 — current). Pass term=9 for previous, etc."),

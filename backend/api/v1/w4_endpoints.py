@@ -12,6 +12,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from ._enum_filter import enum_choice
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session, defer
@@ -182,7 +183,7 @@ async def list_parliamentary_questions(
     query = db.query(ParliamentaryQuestion)
     filters = []
     if question_type:
-        filters.append(ParliamentaryQuestion.question_type == question_type.lower())
+        filters.append(ParliamentaryQuestion.question_type == enum_choice(ParliamentaryQuestion.question_type, question_type, "question_type"))
     if parliamentary_term is not None:
         filters.append(ParliamentaryQuestion.parliamentary_term == parliamentary_term)
     if asking_mep_id:
@@ -587,7 +588,7 @@ async def list_rsb_opinions(
     if procedure_ref:
         filters.append(RSBOpinion.procedure_ref == procedure_ref)
     if verdict:
-        filters.append(RSBOpinion.verdict == verdict.lower())
+        filters.append(RSBOpinion.verdict == enum_choice(RSBOpinion.verdict, verdict, "verdict"))
     if opinion_type:
         filters.append(RSBOpinion.opinion_type == opinion_type)
     if q:

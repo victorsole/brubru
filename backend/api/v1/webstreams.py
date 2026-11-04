@@ -22,7 +22,7 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from models.committee_meeting_transcript import CommitteeMeetingTranscript
+from models.committee_meeting_transcript import CommitteeMeetingTranscript, TranscriptStatusEnum
 from models.user import User
 
 from ._deps import api_user_with_rate_limit
@@ -47,7 +47,7 @@ class WebstreamItem(BaseModel):
     duration_seconds: Optional[int] = None
     speaker_count: Optional[int] = None
     word_count: Optional[int] = None
-    status: Optional[str] = None  # PENDING | COMPLETED | FAILED | NOT_AVAILABLE
+    status: Optional[str] = None  # PENDING | DOWNLOADING | TRANSCRIBING | PROCESSING | COMPLETED | FAILED
     related_procedure_refs: list = Field(default_factory=list)
     transcribed_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
@@ -149,7 +149,7 @@ Every EP committee meeting webstream URL discovered by Brubru's daily scrape of 
 
 **Input**
 - `committee` — EP committee code (LIBE, ENVI, ECON, IMCO, …).
-- `status` — `PENDING | COMPLETED | FAILED | NOT_AVAILABLE` (transcription status, not the meeting itself).
+- `status` — `PENDING | DOWNLOADING | TRANSCRIBING | PROCESSING | COMPLETED | FAILED` (transcription status, not the meeting itself).
 - `has_transcript` — true to filter to rows with a transcript already extracted.
 - `procedure_ref` — OEIL reference (e.g. `2024/0123(COD)`) to filter to meetings discussing that file.
 - `q` — substring on title.
@@ -174,7 +174,7 @@ Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams
 async def list_webstreams(
     request: Request,
     committee: Optional[str] = Query(None, description="EP committee code (LIBE, ENVI, ECON, ...)"),
-    status: Optional[str] = Query(None, description="PENDING | COMPLETED | FAILED | NOT_AVAILABLE"),
+    status: Optional[str] = Query(None, description="PENDING | DOWNLOADING | TRANSCRIBING | PROCESSING | COMPLETED | FAILED"),
     has_transcript: Optional[bool] = Query(None, description="If true, only rows with transcript_text"),
     procedure_ref: Optional[str] = Query(None, description="Filter to streams linked to a procedure"),
     q: Optional[str] = Query(None, description="Substring on title"),
@@ -204,12 +204,16 @@ async def list_webstreams(
     if updated_end and not updated_to:
         updated_to = updated_end
 
+    # A value outside the enum reached PostgreSQL and answered 500, and the documentation listed one.
+    if status and status.strip().upper() not in TranscriptStatusEnum.__members__:
+        raise HTTPException(status_code=400, detail=f"status must be one of {sorted(TranscriptStatusEnum.__members__)}")
+
     query = db.query(CommitteeMeetingTranscript)
     filters = []
     if committee:
         filters.append(CommitteeMeetingTranscript.committee_code == committee.upper())
     if status:
-        filters.append(CommitteeMeetingTranscript.status == status.upper())
+        filters.append(CommitteeMeetingTranscript.status == status.strip().upper())
     if has_transcript is True:
         filters.append(CommitteeMeetingTranscript.transcript_text.isnot(None))
     elif has_transcript is False:

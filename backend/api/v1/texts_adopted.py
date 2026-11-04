@@ -13,6 +13,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from ._enum_filter import enum_choice
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, or_
@@ -250,7 +251,7 @@ async def list_texts_adopted(
     query = db.query(TextAdopted).filter(TextAdopted.adoption_date.isnot(None))
     filters = []
     if text_type:
-        filters.append(TextAdopted.text_type == text_type.lower())
+        filters.append(TextAdopted.text_type == enum_choice(TextAdopted.text_type, text_type, "text_type"))
     if procedure_ref:
         filters.append(TextAdopted.procedure_ref == procedure_ref)
     if parliamentary_term is not None:
@@ -411,7 +412,7 @@ async def list_texts_submitted(
         query = query.options(defer(PlenaryTabledText.full_text))
     filters = []
     if text_type:
-        filters.append(PlenaryTabledText.text_type == text_type.lower())
+        filters.append(PlenaryTabledText.text_type == enum_choice(PlenaryTabledText.text_type, text_type, "text_type"))
     if procedure_ref:
         filters.append(PlenaryTabledText.procedure_ref == procedure_ref)
     if parliamentary_term is not None:

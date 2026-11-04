@@ -22,6 +22,28 @@ from api.v1._pagination import stable
 router = APIRouter(prefix="/calendar", tags=["v1-calendar"])
 
 
+# The names this route's own documentation used until 4 Nov 2026 (`event_type=PLENARY` was its example). Kept as aliases.
+_EVENT_TYPE_ALIASES = {"plenary": "plenary_session", "college_meeting": "commission_college_meeting"}
+EVENT_TYPE_HELP = " | ".join(e.value for e in EventTypeEnum)
+INSTITUTION_HELP = " | ".join(e.value for e in InstitutionEnum)
+
+
+def event_type_value(value: str) -> EventTypeEnum:
+    """The column's own value, or a refusal naming the choices. A value outside the enum reached PostgreSQL and answered 500."""
+    name = value.strip().lower()
+    try:
+        return EventTypeEnum(_EVENT_TYPE_ALIASES.get(name, name))
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"event_type must be one of {sorted(e.value for e in EventTypeEnum)}")
+
+
+def institution_value(value: str) -> InstitutionEnum:
+    try:
+        return InstitutionEnum(value.strip().upper())
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"institution must be one of {sorted(e.value for e in InstitutionEnum)}")
+
+
 class CalendarEventItem(BaseModel):
     id: str
     institution: str
@@ -184,8 +206,8 @@ Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from 6+ sourc
 )
 async def list_calendar_events(
     request: Request,
-    institution: Optional[str] = Query(None, description="EP | COUNCIL | EUROPEAN_COUNCIL | COMMISSION | ECJ | ECB | ESMA | EMA | EBA | EIOPA | COR | EESC"),
-    event_type: Optional[str] = Query(None, description="PLENARY | COMMITTEE_MEETING | COUNCIL_MEETING | COLLEGE_MEETING | ..."),
+    institution: Optional[str] = Query(None, description=INSTITUTION_HELP),
+    event_type: Optional[str] = Query(None, description=EVENT_TYPE_HELP),
     committee: Optional[str] = Query(None, description="EP committee code"),
     commission_dg: Optional[str] = Query(None, description="e.g. AGRI, CNECT, ENV"),
     date_from: Optional[date] = Query(None),
@@ -220,18 +242,9 @@ async def list_calendar_events(
     query = db.query(EUCalendarEvent)
     filters = []
     if institution:
-        # DB stores InstitutionEnum values in UPPERCASE (e.g. 'EP', 'COUNCIL').
-        try:
-            filters.append(EUCalendarEvent.institution == InstitutionEnum(institution.upper()))
-        except ValueError:
-            filters.append(EUCalendarEvent.institution == institution.upper())
+        filters.append(EUCalendarEvent.institution == institution_value(institution))
     if event_type:
-        # DB stores EventTypeEnum values in lowercase (e.g. 'committee_meeting').
-        et_lower = event_type.lower()
-        try:
-            filters.append(EUCalendarEvent.event_type == EventTypeEnum(et_lower))
-        except ValueError:
-            filters.append(EUCalendarEvent.event_type == et_lower)
+        filters.append(EUCalendarEvent.event_type == event_type_value(event_type))
     if committee:
         filters.append(func.upper(EUCalendarEvent.ep_committee_code) == committee.upper())
     if commission_dg:

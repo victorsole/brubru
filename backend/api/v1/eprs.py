@@ -13,7 +13,7 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session, defer
 
 from core.database import get_db
-from models.eprs_publication import EPRSPublication
+from models.eprs_publication import EPRSPublication, EPRSPublicationTypeEnum
 from models.user import User
 
 from ._row_dates import row_created, row_updated
@@ -71,7 +71,7 @@ EPRS publications are the highest-quality non-partisan policy briefings on EU fi
 
 **Input**
 - `q` — substring on title + summary.
-- `publication_type` — `BRIEFING` / `STUDY` / `IN_DEPTH_ANALYSIS` / `AT_A_GLANCE` / `EU_LEGISLATION_IN_PROGRESS` / `INITIAL_APPRAISAL` / `EX_POST_EVALUATION` / etc.
+- `publication_type` — briefing | study | in_depth_analysis | at_a_glance | blog_post | other.
 - `committee` — committee code.
 - `procedure_ref` — OEIL reference.
 - `celex` — legal identifier cross-link.
@@ -81,7 +81,7 @@ EPRS publications are the highest-quality non-partisan policy briefings on EU fi
 
 **Try it**
 ```
-GET /api/v1/eprs?committee=ENVI&publication_type=BRIEFING
+GET /api/v1/eprs?committee=ENVI&publication_type=briefing
 GET /api/v1/eprs?q=CBAM&published_from=2026-01-01
 ```
 
@@ -94,7 +94,7 @@ Synced every 12 hours (02:00 / 14:00 UTC, warm tier) from the EP Think Tank port
 async def list_eprs(
     request: Request,
     q: Optional[str] = Query(None, description="Substring search on title + summary"),
-    publication_type: Optional[str] = Query(None, description="BRIEFING | STUDY | IN_DEPTH_ANALYSIS | AT_A_GLANCE | EU_LEGISLATION_IN_PROGRESS | ..."),
+    publication_type: Optional[str] = Query(None, description="briefing | study | in_depth_analysis | at_a_glance | blog_post | other."),
     committee: Optional[str] = Query(None, description="Committee code (LIBE, ENVI, ECON, ...)"),
     procedure_ref: Optional[str] = Query(None, description="OEIL procedure reference"),
     celex: Optional[str] = Query(None),
@@ -152,11 +152,15 @@ async def list_eprs(
             },
         )
 
+    # A value outside the enum reached PostgreSQL and answered 500, and the documentation listed some.
+    if publication_type and publication_type.strip().lower() not in {e.value for e in EPRSPublicationTypeEnum}:
+        raise HTTPException(status_code=400, detail=f"publication_type must be one of {sorted(e.value for e in EPRSPublicationTypeEnum)}")
+
     query = db.query(EPRSPublication)
     filters = []
     if publication_type:
         # DB stores lowercase enum values ('briefing', 'study', 'at_a_glance', ...)
-        filters.append(EPRSPublication.publication_type == publication_type.lower())
+        filters.append(EPRSPublication.publication_type == publication_type.strip().lower())
     if committee:
         filters.append(EPRSPublication.committees.any(committee.upper()))
     if procedure_ref:
