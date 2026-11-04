@@ -62,38 +62,37 @@ async def list_a2m_countries(
     "/products",
     response_model=PaginatedResponse[ProductItem],
     tags=["v2-commission"],
-    summary="Access2Markets Combined Nomenclature (CN) products",
+    summary="The 21 sections of the EU's goods classification (Access2Markets)",
     description="""**What it does**
-Returns the Combined Nomenclature (CN) product tree used by Access2Markets — the goods classification underpinning EU tariffs and trade rules.
+Returns the 21 top-level sections of the Combined Nomenclature (CN), as the Access2Markets public list serves them — the goods classification underpinning EU tariffs and trade rules.
 
 **When to use it**
-To find the CN code for a product before querying tariffs / rules of origin. Filter by `q` (description substring) and `level` (CN tree depth).
+To see how goods are grouped and which chapters each section covers. For the codes themselves, use `/api/v2/commission/taric-tariffs`.
 
 **Input**
-`q`, `level` (2-10), `limit` (max 500), `page`.
+`q` (words in the section's description), `limit` (max 500), `page`.
 
 **Try it**
 ```
-GET /api/v2/commission/access2markets/products?q=wine&level=4
+GET /api/v2/commission/access2markets/products?q=animal
 ```
 
 **You get back**
-A paginated list of CN nodes with code, description, level and parent code.
+A paginated list of sections: `code` (SECTION I), `description`, and `chapters` (01-05).
 
 **Data freshness**
 Live pass-through from the Access2Markets nomenclature API.""",
 )
 async def list_a2m_products(
     request: Request,
-    q: Optional[str] = Query(None),
-    level: Optional[int] = Query(None, ge=2, le=10),
+    q: Optional[str] = Query(None, description="Words in the section's description."),
     limit: int = Query(100, ge=1, le=500),
     page: int = Query(1, ge=1),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[ProductItem]:
     return await _v1.list_products(
-        request=request, q=q, level=level, limit=limit, page=page,
+        request=request, q=q, level=None, limit=limit, page=page,
         body_threshold=body_threshold, user=user)
 
 

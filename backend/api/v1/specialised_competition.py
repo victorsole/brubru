@@ -16,6 +16,7 @@ backfill, and the upstream API is fast (sub-second response) and stable.
 from __future__ import annotations
 
 import json
+import re
 import logging
 from datetime import date, datetime
 from typing import Any, Optional
@@ -95,9 +96,9 @@ class CompetitionCaseItem(BaseModel):
     case_title: Optional[str] = None
     case_instrument: Optional[str] = Field(None, description="SA / M / AT — state aid, merger, antitrust.")
     case_dg: Optional[str] = None
-    member_state: Optional[str] = None
+    member_state: Optional[str] = Field(None, description="The country, as its ISO-3 code, e.g. FRA.")
     case_aid_category: Optional[str] = None
-    case_objectives: Optional[list[str]] = None
+    case_objectives: Optional[list[str]] = Field(None, description="The objective codes the Commission records for the case.")
     case_simplified_procedure: Optional[bool] = None
     case_cartel: Optional[bool] = None
     case_initiation_date: Optional[datetime] = None
@@ -149,10 +150,39 @@ def _to_bool(s: Any) -> Optional[bool]:
     return None
 
 
+def _no_highlight(value: Optional[str]) -> Optional[str]:
+    """The search marks what matched: a case looked up by number came back as <b>SA.102592</b> (4 Nov 2026)."""
+    return re.sub(r"</?(?:b|em|strong)>", "", value).strip() if isinstance(value, str) else value
+
+
+def _member_state(value: Optional[str]) -> Optional[str]:
+    """CountryFRA as the upstream writes it; FRA, the ISO-3 code the rest of the API uses."""
+    if isinstance(value, str) and value.startswith("Country") and len(value) == 10:
+        return value[len("Country"):]
+    return value
+
+
+def _objectives(value: Any) -> Optional[list[str]]:
+    """Each objective arrives as a string of JSON, {"items":[{"code":"...","isPrimary":"true"}]}: its codes, as a list."""
+    if not isinstance(value, list):
+        return None
+    codes: list[str] = []
+    for entry in value:
+        try:
+            items = json.loads(entry).get("items") or []
+            codes += [i["code"] for i in items if isinstance(i, dict) and i.get("code")]
+        except (TypeError, ValueError, AttributeError):
+            if isinstance(entry, str) and entry:
+                codes.append(entry)
+    return codes
+
+
 def _row_from_search_hit(hit: dict) -> CompetitionCaseItem:
     meta = hit.get("metadata") or {}
-    case_number = _flatten(meta.get("caseNumber") or [hit.get("groupById")])
-    title = _flatten(meta.get("caseTitle")) or _flatten(meta.get("caseOriginalTitle"))
+    case_number = _no_highlight(_flatten(meta.get("caseNumber") or [hit.get("groupById")]))
+    title = _no_highlight(_flatten(meta.get("caseTitle")) or _flatten(meta.get("caseOriginalTitle")))
+    member_state = _member_state(_flatten(meta.get("caseMemberState")))
+    objectives = _objectives(meta.get("caseObjectives"))
     last_upd = _to_dt(meta.get("caseLastUpdateDate"))
     initiation = _to_dt(meta.get("caseInitiationDate"))
     import html as _html
@@ -162,9 +192,9 @@ def _row_from_search_hit(hit: dict) -> CompetitionCaseItem:
         ("Case number", case_number),
         ("Instrument", _flatten(meta.get("caseInstrument"))),
         ("DG", _flatten(meta.get("caseDg"))),
-        ("Member state", _flatten(meta.get("caseMemberState"))),
+        ("Member state", member_state),
         ("Aid category", _flatten(meta.get("caseAidCategory"))),
-        ("Objectives", ", ".join(meta.get("caseObjectives") or []) if isinstance(meta.get("caseObjectives"), list) else None),
+        ("Objectives", ", ".join(objectives) if objectives else None),
         ("Initiation date", initiation),
         ("Last update", last_upd),
     ]:
@@ -176,9 +206,9 @@ def _row_from_search_hit(hit: dict) -> CompetitionCaseItem:
         case_title=title,
         case_instrument=_flatten(meta.get("caseInstrument")),
         case_dg=_flatten(meta.get("caseDg")),
-        member_state=_flatten(meta.get("caseMemberState")),
+        member_state=member_state,
         case_aid_category=_flatten(meta.get("caseAidCategory")),
-        case_objectives=meta.get("caseObjectives") if isinstance(meta.get("caseObjectives"), list) else None,
+        case_objectives=objectives,
         case_simplified_procedure=_to_bool(meta.get("caseSimplifiedProcedure")),
         case_cartel=_to_bool(meta.get("caseCartel")),
         case_initiation_date=initiation,

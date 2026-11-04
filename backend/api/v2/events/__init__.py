@@ -31,7 +31,7 @@ from services.economy.body_families import (
     BODY_TO_CAL_INSTITUTION, CAL_INSTITUTION_TO_BODY, CALENDAR_ONLY_BODY_NAMES, body_codes,
 )
 from api.v1._row_dates import row_updated
-from api.v1._body import body_from_html_or_text, compose_html_from_sections
+from api.v1._body import plain_summary, body_from_html_or_text, compose_html_from_sections
 
 router = APIRouter(prefix="/events", tags=["v2-events"])
 
@@ -279,7 +279,7 @@ def _to_item(it, names, *, with_body):
     return EventItem(
         id=it["id"], body_code=it["body_code"], body_name=names.get(it["body_code"]),
         families=families_for_body(it["body_code"]), source=it["source"],
-        title=it["title"], summary=it["summary"], event_type=it["event_type"], venue=it["venue"],
+        title=it["title"], summary=plain_summary(it["summary"]), event_type=it["event_type"], venue=it["venue"],
         public_url=it["public_url"], document_date=it["document_date"], creation_date=it["creation_date"],
         updated_date=row_updated(it),
         body_txt=body_txt, body_html=body_html,

@@ -24,7 +24,7 @@ from urllib import error as urllib_error
 from urllib import request as urllib_request
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pydantic import BaseModel, ConfigDict, Field
 
 from models.user import User
@@ -97,10 +97,21 @@ class ProductItem(BaseModel):
     description: Optional[str] = None
     level: Optional[int] = None
     parent_code: Optional[str] = None
+    chapters: Optional[str] = Field(None, description="The chapters this section covers, e.g. 01-05.")
 
 
 class FreshnessInfo(BaseModel):
     last_update: Optional[str] = None
+
+
+def _moment(value: Any) -> Optional[str]:
+    """The source gives a bare count of milliseconds (1792101600000); the route promises an ISO-8601 timestamp."""
+    if value is None:
+        return None
+    text = str(value).strip()
+    if text.isdigit() and len(text) >= 12:
+        return datetime.fromtimestamp(int(text) / 1000, tz=timezone.utc).isoformat()
+    return text
 
 
 # ─────────────────────── endpoints ───────────────────────────────────────
@@ -202,6 +213,12 @@ A paginated envelope of `ProductItem` rows.
 **Data freshness**
 Live pass-through (no cache; hits webgate.ec.europa.eu/nomen/public/v2/nomenclature/products on every request). The Combined Nomenclature is updated annually by DG TAXUD (a new CN regulation each year, applicable from 1 January).""",
 )
+def _chapters(section: Optional[dict]) -> Optional[str]:
+    if not section or not section.get("chapterFrom"):
+        return None
+    return f"{section['chapterFrom']}-{section.get('chapterTo') or section['chapterFrom']}"
+
+
 async def list_products(
     request: Request,
     q: Optional[str] = Query(None),
@@ -212,7 +229,8 @@ async def list_products(
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[ProductItem]:
     raw = _get(f"{NOMEN_BASE}/nomenclature/products?lang=EN")
-    # Response is a list of nodes with {code, description, level, parentCode}
+    # The public list holds the 21 sections, each {code: null, description, section: {description, chapterFrom, chapterTo}}.
+    # Read for {code, level, parentCode}, every row answered "?" and no level ever matched (found 4 Nov 2026).
     nodes = raw if isinstance(raw, list) else (raw.get("nodes") or [])
 
     def matches(n: dict) -> bool:
@@ -227,10 +245,11 @@ async def list_products(
     offset = (page - 1) * limit
     items = [
         ProductItem(
-            code=n.get("code") or "?",
+            code=n.get("code") or (n.get("section") or {}).get("description") or "?",
             description=n.get("description"),
             level=n.get("level"),
             parent_code=n.get("parentCode"),
+            chapters=_chapters(n.get("section")),
         )
         for n in filtered[offset:offset + limit]
     ]
@@ -269,4 +288,4 @@ async def last_update(
     user: User = Depends(api_user_with_rate_limit),
 ) -> FreshnessInfo:
     raw = _get(f"{FLOWS_BASE}/lastupdate")
-    return FreshnessInfo(last_update=str(raw) if not isinstance(raw, dict) else raw.get("lastUpdate"))
+    return FreshnessInfo(last_update=_moment(raw.get("lastUpdate") if isinstance(raw, dict) else raw))

@@ -9,6 +9,7 @@ Source-URL discipline: every row is required to have a row-specific source_url
 query layer so they cannot leak into responses.
 """
 
+import html
 from datetime import date, datetime, time
 from typing import Any, List, Optional
 
@@ -65,6 +66,11 @@ class InfringementItem(BaseModel):
     updated_date: Optional[datetime] = Field(None, description="When this record last changed, for incremental sync. Null when the source table keeps no change signal.")
 
 
+def _plain(text: Optional[str]) -> Optional[str]:
+    """Stored as the press corner writes it: &nbsp; in the middle of a sentence reached the reader (4 Nov 2026)."""
+    return " ".join(html.unescape(text).replace("\xa0", " ").split()) if text else text
+
+
 def _infringement_to_item(r: InfringementProcedure) -> InfringementItem:
     return InfringementItem(
         id=str(r.id),
@@ -72,8 +78,8 @@ def _infringement_to_item(r: InfringementProcedure) -> InfringementItem:
         member_state=r.member_state,
         procedure_stage=r.procedure_stage,
         sector=r.sector,
-        title=r.title,
-        summary=r.summary,
+        title=_plain(r.title),
+        summary=_plain(r.summary),
         decision_date=r.decision_date,
         source_url=r.source_url,
         pdf_url=r.pdf_url,
@@ -81,10 +87,11 @@ def _infringement_to_item(r: InfringementProcedure) -> InfringementItem:
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
         public_url=r.source_url or r.pdf_url,
-        body_txt=r.summary,
+        body_txt=_plain(r.summary),
         body_html=None,
         document_date=r.decision_date,
         creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
+        updated_date=r.last_updated,
     )
 
 

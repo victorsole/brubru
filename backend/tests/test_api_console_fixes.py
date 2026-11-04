@@ -421,3 +421,56 @@ def test_every_route_title_reads_as_a_heading():
         if re.search(r"\b(advisorie|entrie|serie)\b|one new\b|one (\w+ )?calls\b|one opinions|one surveys", title):
             bad.append((route.path, "plural", title))
     assert not bad, bad[:10]
+
+
+def test_a_competition_case_is_not_the_raw_search_hit():
+    """<b>SA.102592</b>, CountryFRA and a string of JSON all reached the console (4 Nov 2026)."""
+    from api.v1.specialised_competition import _row_from_search_hit
+
+    item = _row_from_search_hit({"metadata": {
+        "caseNumber": ["<b>SA.102592</b>"], "caseTitle": ["Tarif <b>r\u00e9duit</b>"], "caseMemberState": ["CountryFRA"],
+        "caseObjectives": ['{"items":[{"code":"StateAidObjectiveGberArt44","isPrimary":"false"}]}'],
+    }})
+    assert item.case_number == "SA.102592"
+    assert item.case_title == "Tarif r\u00e9duit"
+    assert item.member_state == "FRA"
+    assert item.case_objectives == ["StateAidObjectiveGberArt44"]
+    assert "{" not in item.body_txt and "<b>" not in item.body_html
+
+
+def test_the_goods_sections_answer_with_their_own_names(monkeypatch):
+    """Every row of /access2markets/products read "?": the list has sections, not the codes the route expected."""
+    from types import SimpleNamespace as NS
+
+    from api.v1 import specialised_a2m
+
+    monkeypatch.setattr(specialised_a2m, "_get", lambda url: [
+        {"id": -1, "code": None, "description": "Live animals; animal products", "hasChildren": True,
+         "section": {"description": "SECTION I", "chapterFrom": "01", "chapterTo": "05"}}])
+    page = asyncio.run(specialised_a2m.list_products(request=NS(url="http://t/x"), q=None, level=None, limit=5, page=1, body_threshold=500, user=None))
+    assert page.data[0].code == "SECTION I"
+    assert page.data[0].chapters == "01-05"
+
+
+def test_a_press_release_carries_no_html_entities():
+    from api.v1.infringements_funding import _plain
+
+    assert _plain("decided to refer&nbsp;Spain to the&#160;Court &amp; so on") == "decided to refer Spain to the Court & so on"
+    assert _plain(None) is None
+
+
+def test_the_freshness_route_answers_a_moment_not_a_count_of_milliseconds():
+    from api.v1.specialised_a2m import _moment
+
+    assert _moment(1792101600000).startswith("2026-")
+    assert _moment("2026-10-14T00:00:00Z") == "2026-10-14T00:00:00Z"
+    assert _moment(None) is None
+
+
+def test_a_summary_is_words_not_markup():
+    from api.v1._body import plain_summary
+
+    assert plain_summary("<p>PFAS are everywhere &amp; here.</p>") == "PFAS are everywhere & here."
+    assert plain_summary("< 2% inflation") == "< 2% inflation"
+    assert plain_summary("Plain words") == "Plain words"
+    assert plain_summary(None) is None

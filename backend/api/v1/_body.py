@@ -120,6 +120,13 @@ def body_from_html(
 _HTML_TAG_RE = re.compile(r"<(p|div|article|section|span|h[1-6]|ul|ol|li|table|br)\b", re.I)
 
 
+def plain_summary(value: Optional[str]) -> Optional[str]:
+    """A summary as words. 115 news rows from AMLA, EFSA and ESDC stored it as <p>...</p> (found 4 Nov 2026)."""
+    if not value or ("<" not in value and "&" not in value):
+        return value
+    return _strip_html_to_text(value) if looks_like_html(value) or "&" in value else value
+
+
 def looks_like_html(value: Optional[str]) -> bool:
     """True when the string really carries HTML markup.
 

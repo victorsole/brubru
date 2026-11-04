@@ -14,7 +14,7 @@ from __future__ import annotations
 import re
 
 from api.v1._row_dates import row_updated
-from api.v1._body import body_from_html_or_text, body_from_pdf_text, compose_html_from_sections, looks_like_html, _strip_html_to_text, strip_active_html
+from api.v1._body import plain_summary, body_from_html_or_text, body_from_pdf_text, compose_html_from_sections, looks_like_html, _strip_html_to_text, strip_active_html
 from services.news.page_widgets import clean_text
 
 from datetime import date, datetime, timedelta
@@ -513,7 +513,7 @@ def _to_item(r, names, *, with_body):
     body_txt, body_html = _news_body(r, names.get(r.body_code)) if with_body else (None, None)
     return NewsItem(
         id=_coerce_id(r.id), body_code=r.body_code, body_name=names.get(r.body_code),
-        families=families_for_body(r.body_code), kind=r.item_type, title=r.title, summary=r.summary,
+        families=families_for_body(r.body_code), kind=r.item_type, title=r.title, summary=plain_summary(r.summary),
         public_url=r.public_url, document_date=r.document_date, creation_date=r.creation_date,
         updated_date=row_updated(r),
         body_txt=body_txt, body_html=body_html,

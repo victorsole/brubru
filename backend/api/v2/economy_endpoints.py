@@ -21,6 +21,7 @@ from core.database import get_db
 from models.user import User
 from api.v1._deps import api_user_with_rate_limit
 from api.v1._envelope import PaginatedResponse, build_envelope
+from api.v1._body import plain_summary
 from api.v1._row_dates import row_updated
 from services.funding.shared_fields import legacy, with_body_names
 from api.v1._change_window import (SYNC_ORDERS, SYNC_PARAMS_DOC, UpperBoundDatetime, sql_order,
@@ -171,7 +172,7 @@ def _row_to_item(r, *, with_body: bool, procurement: bool = False) -> EconomyIte
         )
     return EconomyItem(
         id=r.id, body_code=r.body_code, item_type=r.item_type, title=r.title,
-        summary=r.summary, source_kind=r.source_kind,
+        summary=plain_summary(r.summary), source_kind=r.source_kind,
         public_url=r.public_url,
         body_txt=(r.body_txt if with_body else None),
         body_html=(r.body_html if with_body else None),
