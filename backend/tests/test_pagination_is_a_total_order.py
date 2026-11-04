@@ -162,8 +162,10 @@ def _raw_sql_paginated_order_bys():
 #   eu_geographical_indications.gi_identifier  6,147
 # catalan_translations.celex is NOT unique (41,740 rows, 41,370 distinct) and is only a
 # valid tiebreaker where the query GROUPs BY it.
+# legissum_summaries.slug and law_xref.celex, verified 4 November 2026 (4,457 and 3, rows == distinct). Those two tables
+# have no id column: both queries once ended in `id`, this test passed, and the route served a total with no rows.
 _UNIQUE_TAILS = ("id", "celex", "concept_uri", "uri", "document_reference", "gi_identifier",
-                 "mep_id", "code", "item_type", "ind_code")
+                 "mep_id", "code", "item_type", "ind_code", "slug")
 
 
 def test_every_raw_sql_page_query_ends_on_a_unique_column():

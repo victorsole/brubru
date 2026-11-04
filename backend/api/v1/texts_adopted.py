@@ -407,7 +407,7 @@ async def list_texts_submitted(
     # Tabled texts live in their own table since 9 Oct 2026 (migration 285). They were
     # rows of texts_adopted without an adoption_date; a report is not an adopted text.
     query = db.query(PlenaryTabledText)
-    if not include_body:
+    if include_body is False:
         query = query.options(defer(PlenaryTabledText.full_text))
     filters = []
     if text_type:
@@ -437,7 +437,7 @@ async def list_texts_submitted(
     )
 
     return build_envelope(
-        [_row_to_item(r, body_threshold=body_threshold, with_body=include_body) for r in rows],
+        [_row_to_item(r, body_threshold=body_threshold, with_body=include_body is not False) for r in rows],
         total=total, page=page, limit=limit,
         updated_from=updated_from, updated_to=updated_to,
     )

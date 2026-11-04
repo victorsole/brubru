@@ -958,7 +958,7 @@ def _list_secondary_acts(
             "allowed": list(_SECONDARY_STATUSES),
         })
     query = db.query(SecondaryAct).filter(SecondaryAct.act_type == act_type)
-    if not include_body:
+    if include_body is False:
         # An act can run to megabytes: left out of the query, not only out of the answer.
         query = query.options(defer(SecondaryAct.text_body), defer(SecondaryAct.body_html))
     filters = []
@@ -991,7 +991,7 @@ def _list_secondary_acts(
         stable(query.order_by(SecondaryAct.publication_date.desc().nullslast()))
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [_secondary_act_to_item(r, body_threshold=body_threshold, with_body=include_body) for r in rows]
+    data = [_secondary_act_to_item(r, body_threshold=body_threshold, with_body=include_body is not False) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from, updated_to=updated_to)

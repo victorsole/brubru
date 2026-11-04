@@ -115,7 +115,7 @@ def test_labelling_existing_texts_does_not_move_the_change_signal():
 def test_the_api_says_where_the_text_came_from():
     from api.v1 import w4_endpoints as api
     assert "body_source" in api.SecondaryActItem.model_fields
-    assert 'body_source=getattr(r, "body_source", None) if r.text_body else None' in \
+    assert 'body_source=getattr(r, "body_source", None) if (not with_body or r.text_body) else None' in \
         (BACKEND / "api" / "v1" / "w4_endpoints.py").read_text(encoding="utf-8")
 
 
