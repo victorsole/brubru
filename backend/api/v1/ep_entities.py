@@ -133,7 +133,8 @@ def _enrich_doc_title(
     1,908 ep-documents served that template on 16 Oct 2026, 43 with an empty slot)."""
     if procedure_ref and procedure_ref in lc_lookup and lc_lookup[procedure_ref].title:
         return lc_lookup[procedure_ref].title
-    return doc_title_from_text(text_body) or re.sub(r"\s{2,}", " ", raw_title_template.replace(" for  (", " ("))
+    words = re.sub(r"\s{2,}", " ", raw_title_template.replace(" for  (", " (")).replace("draft_", "Draft ")
+    return doc_title_from_text(text_body) or words[:1].upper() + words[1:]
 
 
 amendments_router = APIRouter(prefix="/amendments", tags=["v1-amendments"])
@@ -1445,6 +1446,17 @@ async def list_reports(
             document_url=r.doceo_url,
             total_amendments=r.total_amendments,
             last_updated=r.scraped_at,
+            public_url=r.doceo_url,
+            body_txt=(getattr(r, "text_body", None) or _ep_doc_body(fallback, [
+                ("Committee", r.committee_code), ("Procedure", r.procedure_reference),
+                ("PE reference", r.pe_reference), ("Rapporteur", r.rapporteur_name),
+                ("Date", r.document_date), ("Amendments", r.total_amendments)])[0]),
+            body_html=(getattr(r, "body_html", None) or _ep_doc_body(fallback, [
+                ("Committee", r.committee_code), ("Procedure", r.procedure_reference),
+                ("PE reference", r.pe_reference), ("Rapporteur", r.rapporteur_name),
+                ("Date", r.document_date), ("Amendments", r.total_amendments)])[1]),
+            creation_date=r.scraped_at,
+            updated_date=row_updated(r),
         ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to)

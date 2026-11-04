@@ -474,3 +474,20 @@ def test_a_summary_is_words_not_markup():
     assert plain_summary("< 2% inflation") == "< 2% inflation"
     assert plain_summary("Plain words") == "Plain words"
     assert plain_summary(None) is None
+
+
+def test_a_report_with_no_procedure_still_has_a_readable_title():
+    from api.v1.ep_entities import _enrich_doc_title
+
+    assert _enrich_doc_title("draft_report for  (LIBE)", "", {}, None) == "Draft report (LIBE)"
+
+
+def test_a_sync_order_on_one_body_does_not_walk_the_whole_table():
+    """A 33-second query, and a timeout, on order=updated_asc: the sort must not be able to use the table-wide index."""
+    import inspect
+
+    from api.v2 import economy_endpoints
+
+    src = inspect.getsource(economy_endpoints)
+    assert "sql_order(order, \"creation_date\", \"(updated_at + interval '0 second')\")" in src
+    assert "sql_order(order, \"creation_date\", \"updated_at\")" not in src

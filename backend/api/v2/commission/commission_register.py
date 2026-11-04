@@ -40,7 +40,7 @@ The single most useful surface for College-of-Commissioners tracking. Filter by 
 **Input**
 - `q` — substring on title + reference.
 - `doc_type` — `COM` / `SWD` / `SEC` / `C` / `JOIN` / `OJ` / `PV`.
-- `document_register_category` — `AGENDA_COM_MEETING` / `TENTAT_AGENDA_COM_MEETING` / `PV` / `OPIN_IMPACT_ASSESS` / `IMPACT_ASSESS` / `OJ`.
+- `document_register_category` — `COM` / `SWD` / `JOIN` / `Decision` / `Regulation` / `Directive` / `Budget` / `TENTAT_AGENDA_COM_MEETING`.
 - `dg_responsible` — DG code.
 - `procedure_ref` — OEIL reference for cross-linked documents.
 - `celex` — legal identifier cross-link.
@@ -64,7 +64,7 @@ async def list_commission_register_documents(
     request: Request,
     q: Optional[str] = Query(None, description="Substring on title + reference"),
     doc_type: Optional[str] = Query(None, description="COM | SWD | SEC | C | JOIN | OJ | PV"),
-    document_register_category: Optional[str] = Query(None, description="AGENDA_COM_MEETING | TENTAT_AGENDA_COM_MEETING | PV | OPIN_IMPACT_ASSESS | IMPACT_ASSESS | OJ"),
+    document_register_category: Optional[str] = Query(None, description="COM | SWD | JOIN | Decision | Regulation | Directive | Budget | TENTAT_AGENDA_COM_MEETING"),
     dg_responsible: Optional[str] = Query(None),
     procedure_ref: Optional[str] = Query(None),
     celex: Optional[str] = Query(None),

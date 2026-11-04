@@ -200,7 +200,9 @@ def _list_items(db: Session, body_code: str, item_type: str, q, since, until, or
     # updated_date and none could be filtered on it, so a partner re-read whole lists to
     # find what changed. updated_at is the change-only signal (brubru_touch_if_changed)
     # and is set on every row; creation_date is when Brubru first stored the row.
-    order_sql = (sql_order(order, "creation_date", "updated_at")
+    # An expression on purpose: on the bare column the planner walks the whole table's updated_at index and filters it
+    # down to this body (33 s, and a timeout on /financial-sanctions). This reads the body's own rows and sorts them.
+    order_sql = (sql_order(order, "creation_date", "(updated_at + interval '0 second')")
                  or (_PROC_ORDER_SQL if procurement else _ORDER_SQL)[order])
     if window:
         sql_window(where, params, window, "creation_date", "updated_at")

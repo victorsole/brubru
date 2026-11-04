@@ -18,4 +18,4 @@ def test_the_cover_gives_the_title():
 def test_the_template_is_the_last_resort_and_has_no_empty_slot():
     assert _enrich_doc_title("draft_report for 2026/2055(INI) (FEMM)", "2026/2055(INI)", {}, COVER).startswith(
         "Draft report on menopause")
-    assert _enrich_doc_title("draft_report for  (FEMM)", None, {}, None) == "draft_report (FEMM)"
+    assert _enrich_doc_title("draft_report for  (FEMM)", None, {}, None) == "Draft report (FEMM)"

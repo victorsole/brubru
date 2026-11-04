@@ -17,7 +17,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from ._enum_filter import enum_choice
 from api.v1._date_bounds import UpperBoundDatetime
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -47,7 +47,7 @@ class CommissionRegisterItem(BaseModel):
     reference: str
     title: str
     doc_type: str
-    document_register_category: Optional[str] = None  # AGENDA_COM_MEETING / TENTAT_AGENDA_COM_MEETING / PV / OPIN_IMPACT_ASSESS / OJ
+    document_register_category: Optional[str] = None  # COM / SWD / JOIN / Decision / Regulation / Directive / Budget / TENTAT_AGENDA_COM_MEETING
     dg_responsible: Optional[str] = None
     procedure_ref: Optional[str] = None
     celex: Optional[str] = None
@@ -176,7 +176,7 @@ The single most useful surface for College-of-Commissioners tracking. Filter by 
 **Input**
 - `q` — substring on title + reference.
 - `doc_type` — `COM` / `SWD` / `SEC` / `C` / `JOIN` / `OJ` / `PV`.
-- `document_register_category` — `AGENDA_COM_MEETING` / `TENTAT_AGENDA_COM_MEETING` / `PV` / `OPIN_IMPACT_ASSESS` / `IMPACT_ASSESS` / `OJ`.
+- `document_register_category` — `COM` / `SWD` / `JOIN` / `Decision` / `Regulation` / `Directive` / `Budget` / `TENTAT_AGENDA_COM_MEETING`.
 - `dg_responsible` — DG code.
 - `procedure_ref` — OEIL reference for cross-linked documents.
 - `celex` — legal identifier cross-link.
@@ -200,7 +200,7 @@ async def list_commission_register_documents(
     request: Request,
     q: Optional[str] = Query(None, description="Substring on title + reference"),
     doc_type: Optional[str] = Query(None, description="COM | SWD | SEC | C | JOIN | OJ | PV"),
-    document_register_category: Optional[str] = Query(None, description="AGENDA_COM_MEETING | TENTAT_AGENDA_COM_MEETING | PV | OPIN_IMPACT_ASSESS | IMPACT_ASSESS | OJ"),
+    document_register_category: Optional[str] = Query(None, description="COM | SWD | JOIN | Decision | Regulation | Directive | Budget | TENTAT_AGENDA_COM_MEETING"),
     dg_responsible: Optional[str] = Query(None),
     procedure_ref: Optional[str] = Query(None),
     celex: Optional[str] = Query(None),
@@ -237,7 +237,7 @@ async def list_commission_register_documents(
     if doc_type:
         filters.append(CommissionDocument.doc_type == enum_choice(CommissionDocument.doc_type, doc_type, "doc_type"))
     if document_register_category:
-        filters.append(CommissionDocument.document_register_category == document_register_category.upper())
+        filters.append(func.lower(CommissionDocument.document_register_category) == document_register_category.strip().lower())
     if dg_responsible:
         filters.append(CommissionDocument.dg_responsible == dg_responsible.upper())
     if procedure_ref:

@@ -40,7 +40,7 @@ For advocacy planning — find open consultations to submit feedback on, track u
 **Input**
 - `q` — substring on title + description.
 - `status` — `open` / `upcoming` / `closed` / `outcome_published` / `withdrawn`.
-- `consultation_type` — `public_consultation` / `call_for_evidence` / `feedback` / `roadmap` / `initiative`.
+- `consultation_type` — `public_consultation` / `call_for_evidence` / `initiative`.
 - Date + DG filters as standard.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
@@ -60,7 +60,7 @@ async def list_consultations(
     request: Request,
     q: Optional[str] = Query(None, description="Substring match on title + description"),
     status: Optional[str] = Query(None, description="open | upcoming | closed | outcome_published | withdrawn"),
-    consultation_type: Optional[str] = Query(None, description="public_consultation | call_for_evidence | feedback | roadmap | initiative"),
+    consultation_type: Optional[str] = Query(None, description="public_consultation | call_for_evidence | initiative"),
     dg_responsible: Optional[str] = Query(None, description="DG code, e.g. CNECT, JUST"),
     policy_area: Optional[str] = Query(None, description="Single policy area tag"),
     published_from: Optional[date] = Query(None, description="document_date >= value"),
