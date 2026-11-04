@@ -403,7 +403,9 @@ def _attach_dates(db: Session, items: List["MEPItem"], term: int, with_office: b
                 item.in_office = snap.get("in_office")
 
 
-async def _fetch_profile(mep_id: str, patient: bool = False) -> Optional[Dict[str, Any]]:
+async def _read_profile(mep_id: str, patient: bool = False) -> Optional[Dict[str, Any]]:
+    """One MEP's profile. None means the EP says there is no such person; EPUnavailable means the EP did not say.
+    Read as "not found", its rate limit told a person that an MEP the list had just shown does not exist (4 Nov 2026)."""
     key = f"profile:{mep_id}"
     cached = _cached(key)
     if cached is not None:
@@ -411,21 +413,26 @@ async def _fetch_profile(mep_id: str, patient: bool = False) -> Optional[Dict[st
     try:
         async with httpx.AsyncClient(timeout=15.0) as hc:
             r = await _ep_get(hc, f"/meps/{mep_id}", {"format": "application/ld+json"}, patient=patient)
-            if r.status_code == 404:
+            if r.status_code in (204, 404):
                 return None
             r.raise_for_status()
             data = r.json()
-    except Exception:
-        return None
-    try:
-        rows = _rows(data)
-    except EPUnavailable as exc:
-        logger.warning("[meps] profile %s unavailable: %s", mep_id, exc)
-        return None
+    except Exception as exc:  # noqa: BLE001
+        raise EPUnavailable(f"{type(exc).__name__}: {exc}"[:200]) from exc
+    rows = _rows(data)
     if not rows:
         return None
     _put(key, rows[0])
     return rows[0]
+
+
+async def _fetch_profile(mep_id: str, patient: bool = False) -> Optional[Dict[str, Any]]:
+    """The same for filling in a list: a profile the EP did not give leaves the row as it is."""
+    try:
+        return await _read_profile(mep_id, patient=patient)
+    except EPUnavailable as exc:
+        logger.warning("[meps] profile %s unavailable: %s", mep_id, exc)
+        return None
 
 
 def _extract_country(profile: Dict[str, Any]) -> Optional[str]:
@@ -904,7 +911,21 @@ async def get_mep(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> MEPItem:
-    profile = await _fetch_profile(mep_id)
+    try:
+        profile = await _read_profile(mep_id)
+    except EPUnavailable as exc:
+        # The list answers from the daily snapshot when the EP is busy, and offered this row: the same copy answers here.
+        logger.warning("[meps] profile %s unavailable, trying the snapshot: %s", mep_id, exc)
+        try:
+            payload = api_snapshots.payloads_for(db, SNAPSHOT_DATASET).get(mep_id)
+        except Exception as snapshot_exc:  # noqa: BLE001
+            logger.warning("[meps] snapshot unavailable: %s", snapshot_exc)
+            payload = None
+        if not payload:
+            raise _upstream_down() from exc
+        item = MEPItem(**payload)
+        _attach_dates(db, [item], CURRENT_TERM, with_office=True)
+        return item
     if not profile:
         raise HTTPException(
             status_code=404,

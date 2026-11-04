@@ -146,7 +146,7 @@ def test_meps_list_returns_envelope_or_upstream_error(auth_headers):
 @pytest.mark.live
 def test_mep_profile_not_found(auth_headers):
     with patch(
-        "api.v1.meps._fetch_profile",
+        "api.v1.meps._read_profile",
         new=AsyncMock(return_value=None),
     ):
         r = TestClient(app).get("/api/v1/meps/999999999", headers=auth_headers)

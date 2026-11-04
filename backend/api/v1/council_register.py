@@ -237,8 +237,8 @@ async def list_council_meetings(
 @meetings_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Council meeting by id — full body (agenda + outcomes)",
-    description="Fetch a single Council meeting by its Brubru UUID. Returns the same shape as the list endpoint with the five datapoints filled. 404 with `reason_code: not_found` if absent.",
+    summary="One Council meeting by id — full text (agenda + outcomes)",
+    description="Fetch a single Council meeting by the reference the list gives it. Returns the same shape as the list endpoint with the five datapoints filled. 404 with `reason_code: not_found` if absent.",
 )
 async def get_council_meeting(
     item_id: str,
@@ -285,8 +285,8 @@ async def list_council_voting_results(
 @votes_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Council voting result by id — full body",
-    description="Fetch a single Council voting-result document by its Brubru UUID. Returns the five datapoints; the per-member-state tally is in the linked PDF. 404 if absent.",
+    summary="One Council voting result by id — full text",
+    description="Fetch a single Council voting-result document by the reference the list gives it. Returns the five datapoints; the per-member-state tally is in the linked PDF. 404 if absent.",
 )
 async def get_council_voting_result(
     item_id: str,
@@ -333,8 +333,8 @@ async def list_council_register(
 @register_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Council register document by id — full body",
-    description="Fetch a single Council public-register document by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Council register document by id — full text",
+    description="Fetch a single Council public-register document by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_council_register_document(
     item_id: str,
@@ -381,8 +381,8 @@ async def list_council_oj_agendas(
 @oj_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Council OJ agenda by id — full body",
-    description="Fetch a single Council OJ meeting-agenda document by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Council OJ agenda by id — full text",
+    description="Fetch a single Council OJ meeting-agenda document by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_council_oj_agenda(
     item_id: str,
@@ -429,8 +429,8 @@ async def list_council_preparatory_bodies(
 @prep_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Council preparatory-body meeting by id — full body",
-    description="Fetch a single Council preparatory-body (COREPER / working party) meeting by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Council preparatory-body meeting by id — full text",
+    description="Fetch a single Council preparatory-body (COREPER / working party) meeting by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_council_preparatory_body(
     item_id: str,
@@ -478,7 +478,7 @@ async def list_council_press_releases(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
     summary="One Council press release by id — full text",
-    description="Fetch a single Council press release by its Brubru UUID. The body is the full press-release text. Returns the five datapoints. 404 if absent.",
+    description="Fetch a single Council press release by the reference the list gives it. The body is the full press-release text. Returns the five datapoints. 404 if absent.",
 )
 async def get_council_press_release(
     item_id: str,
@@ -525,8 +525,8 @@ async def list_council_research_papers(
 @research_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Council research paper by id — full body",
-    description="Fetch a single Council ART research paper by its Brubru UUID. Returns the five datapoints; `pdf_url` is the paper PDF. 404 if absent.",
+    summary="One Council research paper by id — full text",
+    description="Fetch a single Council ART research paper by the reference the list gives it. Returns the five datapoints; `pdf_url` is the paper PDF. 404 if absent.",
 )
 async def get_council_research_paper(
     item_id: str,
@@ -573,8 +573,8 @@ async def list_council_treaties_agreements(
 @treaties_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Council treaties/agreements entry by id — full body",
-    description="Fetch a single Council treaties-&-agreements entry by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Council treaties/agreements entry by id — full text",
+    description="Fetch a single Council treaties-&-agreements entry by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_council_treaty_agreement(
     item_id: str,

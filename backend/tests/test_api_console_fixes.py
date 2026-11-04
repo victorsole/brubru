@@ -1,6 +1,7 @@
 """What the walk through the API Console found on 4 Nov 2026: each test calls the route, because a test that reads the
 source cannot see a crash."""
 import asyncio
+import re
 from types import SimpleNamespace
 
 import pytest
@@ -351,3 +352,72 @@ def test_a_typed_value_reaches_the_columns_own_label_and_nonsense_is_refused(mod
     with pytest.raises(HTTPException) as refused:
         enum_choice(col, "zzz", column)
     assert refused.value.status_code == 400 and label in refused.value.detail
+
+
+def test_the_parliament_being_busy_is_not_an_mep_who_does_not_exist(monkeypatch):
+    """Pressing Open on the MEP list answered "not found" for a sitting MEP: the EP's rate limit was read as absence."""
+    import httpx
+    from fastapi import HTTPException
+
+    from api.v1 import meps
+    from services import api_snapshots
+
+    def answering(status):
+        async def fake(hc, path, params, patient=False):
+            return httpx.Response(status, request=httpx.Request("GET", "https://ep.test" + path))
+        return fake
+
+    stored = {"1": meps.MEPItem(id="1", full_name="Test MEP").model_dump(mode="json", exclude={"creation_date", "updated_date"})}
+    monkeypatch.setattr(meps, "_CACHE", {})
+    monkeypatch.setattr(api_snapshots, "dates_for", lambda db, ds, keys=None: {})
+    monkeypatch.setattr(api_snapshots, "payloads_for", lambda db, ds: stored)
+
+    def read(mep_id):
+        return asyncio.run(meps.get_mep(mep_id=mep_id, user=None, db=None))
+
+    for busy in (429, 500, 503):
+        monkeypatch.setattr(meps, "_ep_get", answering(busy))
+        assert read("1").full_name == "Test MEP"
+        with pytest.raises(HTTPException) as refused:
+            read("2")
+        assert refused.value.status_code == 502
+        assert refused.value.detail["reason_code"] == "upstream_error"
+
+    for absent in (204, 404):
+        monkeypatch.setattr(meps, "_ep_get", answering(absent))
+        with pytest.raises(HTTPException) as refused:
+            read("1")
+        assert refused.value.status_code == 404
+
+
+@pytest.mark.parametrize("plural, one", [
+    ("news items", "news item"), ("news", "news item"), ("security advisories", "security advisory"),
+    ("agri-food data series", "agri-food data series"), ("case-law entries", "case-law entry"),
+    ("surveys and data tools", "survey or data tool"), ("calls for proposals", "call for proposal"),
+    ("calls for tenders", "call for tender"), ("EMA calls for expression of interest", "EMA call for expression of interest"),
+    ("EIB calls for tender", "EIB call for tender"), ("opinions for use outside the EU", "opinion for use outside the EU"),
+    ("press material", "press material"), ("topic pages", "topic page"), ("analysis", "analysis"),
+])
+def test_one_of_these_is_written_in_english(plural, one):
+    from api.v2.economy_endpoints import singular
+    assert singular(plural) == one
+
+
+def test_every_route_title_reads_as_a_heading():
+    """The heading of each route on the console: no half-cut plurals, no "(full body)", no small letter at the start."""
+    from fastapi.routing import APIRoute
+
+    from main import app
+
+    bad = []
+    for route in app.routes:
+        if not isinstance(route, APIRoute) or not route.path.startswith("/api/v2/"):
+            continue
+        title = route.summary or ""
+        if not title or not (title[0].isupper() or title[0].isdigit() or title.startswith(("[Deprecated]", "eu-LISA"))):
+            bad.append((route.path, "start", title))
+        if "(full body)" in title:
+            bad.append((route.path, "full body", title))
+        if re.search(r"\b(advisorie|entrie|serie)\b|one new\b|one (\w+ )?calls\b|one opinions|one surveys", title):
+            bad.append((route.path, "plural", title))
+    assert not bad, bad[:10]

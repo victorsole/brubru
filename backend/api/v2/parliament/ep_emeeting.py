@@ -81,7 +81,7 @@ async def list_emeeting_agendas(
     response_model=EmeetingAgendaItem,
     summary="One EP eMeeting agenda by id — full item/document tree",
     description="""**What it does**
-Fetches a single EP committee agenda by its Brubru UUID, with the complete item/document tree: every agenda item, its OEIL procedure reference and rapporteur(s), and all attached documents with their multi-language PDF URLs.
+Fetches a single EP committee agenda by the reference the list gives it, with the complete item/document tree: every agenda item, its OEIL procedure reference and rapporteur(s), and all attached documents with their multi-language PDF URLs.
 
 **When to use it**
 After locating an agenda via the list endpoint, to pull every document URL (draft reports, amendments, voting lists, compromise amendments) for that committee meeting.
@@ -166,7 +166,7 @@ async def list_emeeting_documents(
     response_model=EmeetingDocumentItem,
     summary="One EP eMeeting document by id — all-language PDF URLs",
     description="""**What it does**
-Fetches a single EP committee document by its Brubru UUID, with every language PDF URL and the full linking metadata (committee, meeting date, OEIL procedure ref, rapporteurs, dossier).
+Fetches a single EP committee document by the reference the list gives it, with every language PDF URL and the full linking metadata (committee, meeting date, OEIL procedure ref, rapporteurs, dossier).
 
 **Input**
 - `item_id` (path) — the Brubru-internal UUID from the list endpoint's `id`.

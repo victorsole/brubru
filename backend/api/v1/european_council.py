@@ -104,8 +104,8 @@ async def list_euco_conclusions(
 @conclusions_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One European Council conclusions document by id — full body",
-    description="Fetch a single European Council conclusions document by its Brubru UUID. Returns the five datapoints. 404 with `reason_code: not_found` if absent.",
+    summary="One European Council conclusions document by id — full text",
+    description="Fetch a single European Council conclusions document by the reference the list gives it. Returns the five datapoints. 404 with `reason_code: not_found` if absent.",
 )
 async def get_euco_conclusion(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -137,8 +137,8 @@ async def list_euco_meetings(
 @meetings_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One European Council meeting by id — full body",
-    description="Fetch a single European Council meeting by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One European Council meeting by id — full text",
+    description="Fetch a single European Council meeting by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_euco_meeting(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -170,8 +170,8 @@ async def list_euco_euro_summit(
 @euro_summit_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Euro Summit entry by id — full body",
-    description="Fetch a single Euro Summit entry by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Euro Summit entry by id — full text",
+    description="Fetch a single Euro Summit entry by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_euco_euro_summit(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -203,8 +203,8 @@ async def list_euco_strategic_agenda(
 @strategic_agenda_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Strategic Agenda entry by id — full body",
-    description="Fetch the Strategic Agenda entry by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Strategic Agenda entry by id — full text",
+    description="Fetch the Strategic Agenda entry by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_euco_strategic_agenda(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -236,8 +236,8 @@ async def list_euco_members(
 @members_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One European Council members entry by id — full body",
-    description="Fetch the European Council members entry by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One European Council members entry by id — full text",
+    description="Fetch the European Council members entry by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_euco_member(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -269,8 +269,8 @@ async def list_euco_about(
 @about_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One European Council reference page by id — full body",
-    description="Fetch a single European Council reference page by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One European Council reference page by id — full text",
+    description="Fetch a single European Council reference page by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_euco_about(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),

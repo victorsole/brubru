@@ -1099,7 +1099,7 @@ def _secondary_act_detail(
 @delegated_router.get(
     "/{reference:path}",
     response_model=SecondaryActItem,
-    summary="One delegated act, by its Commission number, CELEX or id",
+    summary="One delegated act, by its Commission number, EU law number or id",
     description="""**What it does**
 Returns one delegated act, with everything the list gives: its scrutiny, its dates and its full text.
 
@@ -1133,7 +1133,7 @@ async def get_delegated_detail(
 @implementing_router.get(
     "/{reference:path}",
     response_model=SecondaryActItem,
-    summary="One implementing act, by its Commission number, CELEX or id",
+    summary="One implementing act, by its Commission number, EU law number or id",
     description="""**What it does**
 Returns one implementing act, with its dates and its full text.
 

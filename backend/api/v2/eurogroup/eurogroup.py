@@ -53,8 +53,8 @@ async def list_eurogroup_meetings(
 @meetings_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Eurogroup meeting by id — full body (agenda + outcomes)",
-    description="Fetch a single Eurogroup meeting by its Brubru UUID. Returns the five datapoints. 404 with `reason_code: not_found` if absent.",
+    summary="One Eurogroup meeting by id — full text (agenda + outcomes)",
+    description="Fetch a single Eurogroup meeting by the reference the list gives it. Returns the five datapoints. 404 with `reason_code: not_found` if absent.",
 )
 async def get_eurogroup_meeting(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -83,8 +83,8 @@ async def list_eurogroup_documents(
 @documents_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Eurogroup document by id — full body",
-    description="Fetch a single Eurogroup document by its Brubru UUID. Returns the five datapoints; `pdf_url` is the document PDF. 404 if absent.",
+    summary="One Eurogroup document by id — full text",
+    description="Fetch a single Eurogroup document by the reference the list gives it. Returns the five datapoints; `pdf_url` is the document PDF. 404 if absent.",
 )
 async def get_eurogroup_document(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -113,8 +113,8 @@ async def list_eurogroup_work_programme(
 @work_programme_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Eurogroup work-programme entry by id — full body",
-    description="Fetch the Eurogroup work-programme entry by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Eurogroup work-programme entry by id — full text",
+    description="Fetch the Eurogroup work-programme entry by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_eurogroup_work_programme(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -143,8 +143,8 @@ async def list_eurogroup_members(
 @members_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Eurogroup members entry by id — full body",
-    description="Fetch a single Eurogroup members entry by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Eurogroup members entry by id — full text",
+    description="Fetch a single Eurogroup members entry by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_eurogroup_member(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -173,8 +173,8 @@ async def list_eurogroup_about(
 @about_router.get(
     "/{item_id}",
     response_model=CouncilRegisterItemModel,
-    summary="One Eurogroup reference page by id — full body",
-    description="Fetch a single Eurogroup reference page by its Brubru UUID. Returns the five datapoints. 404 if absent.",
+    summary="One Eurogroup reference page by id — full text",
+    description="Fetch a single Eurogroup reference page by the reference the list gives it. Returns the five datapoints. 404 if absent.",
 )
 async def get_eurogroup_about(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),

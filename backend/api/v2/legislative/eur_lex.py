@@ -223,7 +223,7 @@ class ResolveResult(_DataPoints):
 @router.get(
     "/laws/resolve",
     response_model=ResolveResult,
-    summary="Resolve any identifier to the canonical CELEX + ELI",
+    summary="Find a law from any of its names or numbers",
     description="""**What it does**
 Accepts any EU identifier — a CELEX, an ELI URI, an ECLI, a COM/OJ reference, an OEIL procedure reference, or a law nickname (GDPR, DSA, AI Act) — and normalises it to the canonical CELEX + ELI, with the recognised type and the matching Brubru endpoint. The productised join key: one identifier in, every other name out.
 
@@ -937,7 +937,7 @@ async def identify_scan(
 @router.get(
     "/verify-citation/{ref:path}",
     response_model=VerifyCitationResponse,
-    summary="Verify any EU legal reference — confirm it exists + return its full body and dates",
+    summary="Verify any EU legal reference — confirm it exists + return its full text and dates",
     description="""**What it does**
 Given any EU legal reference, tells you whether it points at a real document on EUR-Lex / OEIL, and returns the canonical URLs plus the document's body and dates. Accepts CELEX (`32024R1689`), COM number (`COM(2021) 206`, auto-converted to CELEX), or OEIL procedure (`2021/0106(COD)`).
 
@@ -974,7 +974,7 @@ async def verify_citation(
 @router.get(
     "/recent",
     response_model=PaginatedResponse[CellarRecentItem],
-    summary="Recently published EU acts (live from the Publications Office Cellar)",
+    summary="Recently published EU acts (live from the Publications Office)",
     description="""**What it does**
 Live discovery of EU acts published in a date range, queried directly against the Publications Office Cellar SPARQL endpoint — covers the full corpus (incl. case law + proposals not in the local `eu_laws` mirror). Metadata-only by default; pass `include_body=true` for a concurrent body fetch (limit capped at 10).
 

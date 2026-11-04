@@ -251,7 +251,7 @@ async def funding_startups(
 
 
 @router.get("/startups/{topic_id:path}", response_model=StartupFundingItem, tags=["v2-funding"],
-            summary="EU startup funding — one call (full body), by its F&T topic_id",
+            summary="EU startup funding — one call (full text), by its topic reference",
             description="""**What it does**
 Fetches a single startup-funding call by its EU topic_id, with the full body and the derived `stage` / `instrument` tags.
 

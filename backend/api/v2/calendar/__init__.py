@@ -154,7 +154,7 @@ async def list_calendar_events(
     "/events/{event_id}",
     response_model=CalendarEventV2,
     tags=["v2-calendar"],
-    summary="Look up one calendar event by its Brubru-internal id (full body)",
+    summary="One calendar event, by the reference the list gives it (full text)",
     description="""**What it does**
 Returns one EU calendar event in full, including the composed `body_txt` / `body_html` and all 5 datapoints.
 

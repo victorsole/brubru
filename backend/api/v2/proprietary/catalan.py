@@ -126,7 +126,7 @@ async def catalan_stats(
     "/{celex}",
     response_model=CatalanTranslationDetail,
     response_model_exclude_none=False,
-    summary="One Catalan translation by CELEX — optional inlined body",
+    summary="One Catalan translation, by the law's EU number, with its text if you ask",
     description="""**What it does**
 Returns one Catalan-translated EU act by its CELEX number, optionally with the full rendered body inlined.
 

@@ -520,7 +520,7 @@ async def list_council_documents(
 @router.get(
     "/{doc_id}",
     response_model=CouncilDocumentItem,
-    summary="One Council document or meeting by id — full body (text + HTML)",
+    summary="One Council document or meeting by id — full text (text + HTML)",
     description="""**What it does**
 Fetches a single Council of the EU item by its Brubru-internal UUID: a register document, a press release, or a Council / European Council meeting from the calendar. Returns the same shape as the list endpoint: `public_url`, `body_txt`, `body_html`, `document_date`, `creation_date`, `updated_date`.
 

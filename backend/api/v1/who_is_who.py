@@ -160,7 +160,7 @@ async def list_departments(
     "/{item_id}",
     response_model=WhoIsWhoDepartmentItem,
     summary="One EU department by id",
-    description="Fetch a single EU department by its Brubru UUID. 404 with `reason_code: not_found` if absent.",
+    description="Fetch a single EU department by the reference the list gives it. 404 with `reason_code: not_found` if absent.",
 )
 async def get_department(item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db)) -> WhoIsWhoDepartmentItem:
     row = db.query(WhoIsWhoDepartment).filter(WhoIsWhoDepartment.id == item_id).first()
@@ -232,7 +232,7 @@ async def list_officials(
     "/{item_id}",
     response_model=WhoIsWhoOfficialItem,
     summary="One EU official by id",
-    description="Fetch a single EU official by its Brubru UUID. 404 with `reason_code: not_found` if absent.",
+    description="Fetch a single EU official by the reference the list gives it. 404 with `reason_code: not_found` if absent.",
 )
 async def get_official(item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db)) -> WhoIsWhoOfficialItem:
     row = db.query(WhoIsWhoOfficial).filter(WhoIsWhoOfficial.id == item_id).first()

@@ -975,7 +975,7 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
 
 
 @router.get("/{item_id}", response_model=NewsItem, tags=["v2-news"],
-            summary="One news item (full body)",
+            summary="One news item (full text)",
             description=(
                 "**What it does**\nReturns one news item in full, including `body_txt` / `body_html`.\n\n"
                 "**When to use it**\nAfter finding an id on `/api/v2/news/all`.\n\n**Input**\n`item_id` — "

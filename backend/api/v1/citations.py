@@ -477,7 +477,7 @@ Cached 30 days on success, 24h on broken refs, 1h on transient errors. The body 
 @router.get(
     "/{ref:path}",
     response_model=VerifyCitationResponse,
-    summary="Verify any EU legal reference — confirm it exists + return its full body and dates",
+    summary="Verify any EU legal reference — confirm it exists + return its full text and dates",
     description=_OPENAPI_DESC,
 )
 async def verify_citation(

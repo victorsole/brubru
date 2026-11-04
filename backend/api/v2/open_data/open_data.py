@@ -65,7 +65,7 @@ async def list_datasets(
     "/{item_id}",
     response_model=OpenDataDatasetItem,
     summary="One EU open dataset by id — full metadata + download links",
-    description="Fetch a single data.europa.eu dataset by its Brubru UUID, with the full DCAT metadata and all distribution download URLs. 404 with `reason_code: not_found` if absent.",
+    description="Fetch a single data.europa.eu dataset by the reference the list gives it, with the full DCAT metadata and all distribution download URLs. 404 with `reason_code: not_found` if absent.",
 )
 async def get_dataset(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -130,7 +130,7 @@ async def list_data_catalogues(
     "/{item_id}",
     response_model=OpenDataCatalogueItem,
     summary="One EU open-data catalogue by id",
-    description="Fetch a single data.europa.eu catalogue by its Brubru UUID. 404 with `reason_code: not_found` if absent.",
+    description="Fetch a single data.europa.eu catalogue by the reference the list gives it. 404 with `reason_code: not_found` if absent.",
 )
 async def get_data_catalogue(
     item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),

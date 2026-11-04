@@ -128,7 +128,7 @@ def _register(slug, item_type, noun, noun_singular, verb):
                          tags=["v2-interoperable"], summary=f"Interoperable Europe — {noun} (newest first, filter by collection)",
                          description=_LIST_DESC.format(noun=noun, verb=verb, slug=slug))
     router.add_api_route(f"/{slug}/{{item_id}}", detail_ep, methods=["GET"], response_model=EconomyItem,
-                         tags=["v2-interoperable"], summary=f"Interoperable Europe — one {noun_singular} (full body)",
+                         tags=["v2-interoperable"], summary=f"Interoperable Europe — one {noun_singular} (full text)",
                          description=_DETAIL_DESC.format(noun_singular=noun_singular, slug=slug))
 
 

@@ -8,6 +8,7 @@ List endpoints return metadata + the datapoint contract with bodies nulled
 """
 from __future__ import annotations
 
+import re
 from datetime import date, datetime
 from typing import Optional
 
@@ -244,8 +245,33 @@ def _get_item(db: Session, body_code: str, item_type: str, item_id: int, procure
     return _row_to_item(r, with_body=True, procurement=procurement) if r else None
 
 
+def singular(noun: str) -> str:
+    """One of these, in English. Taking off the last letter wrote "one security advisorie", "one agri-food data serie",
+    "one new" and "one EMA calls for expression of interest" (4 Nov 2026)."""
+    words = noun.strip()
+    if words == "news":
+        return "news item"
+    if words.endswith("series") or words.endswith("sis") or words.endswith("ss"):
+        return words
+    if words.endswith(" and data tools"):
+        return words.replace("surveys and data tools", "survey or data tool")
+    plural_head = re.search(r"\b(\w+)s for (.+)$", words)
+    if plural_head:
+        tail = plural_head.group(2)
+        tail = tail[:-1] if tail in ("proposals", "tenders") else tail
+        return f"{words[:plural_head.start()]}{plural_head.group(1)} for {tail}"
+    if words.endswith("ies"):
+        return words[:-3] + "y"
+    return words[:-1] if words.endswith("s") else words
+
+
+def _heading(name: str) -> str:
+    """A body's name at the start of a heading: "the Comitology register" reads "The Comitology register"."""
+    return name[:1].upper() + name[1:]
+
+
 _DESC_LIST = """**What it does**
-Lists {body}'s {noun}, newest first. {extra}
+The {noun} this body publishes, newest first. {extra}
 
 **When to use it**
 Track what {acro} is publishing without scraping its website. Filter by free text or date, page through the archive, then call the detail endpoint for an item's full body.
@@ -272,7 +298,7 @@ _BODIES_ON = ("`body_txt` / `body_html` are on every item by default (the fundin
 _DESC_LIST = _DESC_LIST.replace("<<SYNC_PARAMS>>", SYNC_PARAMS_DOC)
 
 _DESC_DETAIL = """**What it does**
-Returns one {body} {noun_singular} in full, including `body_txt` and `body_html`.
+Returns one {noun_singular} in full, including `body_txt` and `body_html`.
 
 **When to use it**
 After finding an item id on the list endpoint, fetch the complete record (full body + all 5 datapoints).
@@ -378,7 +404,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     if funding_standard:
         FUNDING_LISTS[(body_code, item_type)] = {"procurement": procurement, "reference_name": reference_name}
     filters = (_funding_procurement_filters if procurement else _funding_filters) if funding_standard else _no_filters
-    noun_singular = noun.rstrip("s") if noun.endswith("s") else noun
+    noun_singular = singular(noun)
     path_hint = slug if slug.startswith("/") else f"/{slug}"
     if funding_standard:
         item_model = FundingGrantItem if reference_name else FundingProcurementItem if procurement else FundingEconomyItem
@@ -441,7 +467,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     ):
         item = _get_item(db, body_code, item_type, item_id, procurement=procurement)
         if item is None:
-            raise HTTPException(status_code=404, detail=f"No {body_name} {noun_singular} with id {item_id}")
+            raise HTTPException(status_code=404, detail=f"No {noun_singular} with id {item_id} ({body_name})")
         return _as_funding(db, [item], procurement, reference_name)[0] if funding_standard else item
     # What this item route serves, so an aggregate (/funding/all) can point each of its rows at
     # its own route without a second copy of the slug table (core.self_links.item_route_for).
@@ -450,7 +476,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     router.add_api_route(
         path_hint, list_ep, methods=["GET"],
         response_model=PaginatedResponse[item_model], tags=[tag], deprecated=deprecated or None,
-        summary=f"{body_name} — {noun} (newest first)",
+        summary=f"{_heading(body_name)} — {noun} (newest first)",
         description=_DESC_LIST.format(body=body_name, noun=noun, acro=acronym, path=path_hint,
                                       source=source, extra=extra,
                                       limits=f"default {limit_default}, max {limit_max}",
@@ -463,7 +489,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     router.add_api_route(
         f"{path_hint}/{{item_id}}", detail_ep, methods=["GET"],
         response_model=item_model, tags=[tag], deprecated=deprecated or None,
-        summary=f"{body_name} — one {noun_singular} (full body)",
+        summary=f"{_heading(body_name)} — one {noun_singular} (full text)",
         description=_DESC_DETAIL.format(body=body_name, noun_singular=noun_singular, path=path_hint,
                                         source=source),
     )
@@ -476,7 +502,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
             {"id": item_id, "bc": body_code, "it": item_type},
         ).fetchone()
         if hit is None:
-            raise HTTPException(status_code=404, detail=f"No {body_name} {noun_singular} with id {item_id}")
+            raise HTTPException(status_code=404, detail=f"No {noun_singular} with id {item_id} ({body_name})")
 
     def _doc_self(request: Request, doc_id: str) -> str:
         # Built from the path that was called, so it cannot disagree with the mount.
@@ -522,19 +548,19 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
             {"i": item_id, "d": document_id},
         ).fetchone()
         if r is None:
-            raise HTTPException(status_code=404, detail=f"No document {document_id} on {body_name} {noun_singular} {item_id}")
+            raise HTTPException(status_code=404, detail=f"No document {document_id} on {noun_singular} {item_id} ({body_name})")
         return _row_to_document(r, with_body=True, self_url=_doc_self(request, r.id))
 
     router.add_api_route(
         f"{path_hint}/{{item_id}}/documents", documents_ep, methods=["GET"],
         response_model=PaginatedResponse[ProcurementDocument], tags=[tag],
-        summary=f"{body_name} — the files of one procedure, with their text",
+        summary=f"{_heading(body_name)} — the files of one procedure, with their text",
         description=_DESC_DOCS.format(body=body_name, noun_singular=noun_singular, path=path_hint),
     )
     router.add_api_route(
         f"{path_hint}/{{item_id}}/documents/{{document_id}}", document_ep, methods=["GET"],
         response_model=ProcurementDocument, tags=[tag],
-        summary=f"{body_name} — one file of a procedure (full text)",
+        summary=f"{_heading(body_name)} — one file of a procedure (full text)",
         description=_DESC_DOC.format(body=body_name, noun_singular=noun_singular, path=path_hint),
     )
 

@@ -98,7 +98,7 @@ async def list_general_publications(
     "/{item_id}",
     response_model=GeneralPublicationItem,
     summary="One EU general publication by id",
-    description="Fetch a single EU general publication by its Brubru UUID. 404 with `reason_code: not_found` if absent.",
+    description="Fetch a single EU general publication by the reference the list gives it. 404 with `reason_code: not_found` if absent.",
 )
 async def get_general_publication(item_id: str, user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db)) -> GeneralPublicationItem:
     row = db.query(EuGeneralPublication).filter(EuGeneralPublication.id == item_id).first()

@@ -345,7 +345,7 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
 
 
 @router.get("/{consultation_id}", response_model=ConsultationItem, tags=["v2-consultations"],
-            summary="One public consultation (full body)",
+            summary="One public consultation (full text)",
             description=(
                 "**What it does**\nReturns one consultation in full, including objectives and outcome "
                 "summary where the register has them.\n\n**When to use it**\nAfter finding an id on "

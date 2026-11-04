@@ -477,7 +477,7 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
 
 
 @router.get("/{event_id}", response_model=EventItem, tags=["v2-events"],
-            summary="One event (full body)",
+            summary="One event (full text)",
             description=(
                 "**What it does**\nReturns one event in full, including `body_txt` / `body_html` where "
                 "the source provides them.\n\n**When to use it**\nAfter finding an event id on "
