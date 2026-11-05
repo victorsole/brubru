@@ -59,6 +59,11 @@ Usage (from backend/):
     python3.12 scripts/sync_eu_laws_from_cellar.py                 # dry-run, last 14 days
     python3.12 scripts/sync_eu_laws_from_cellar.py --apply
     python3.12 scripts/sync_eu_laws_from_cellar.py --since 2025-11-01 --apply   # backfill
+    python3.12 scripts/sync_eu_laws_from_cellar.py --celex 32006R1907 --apply   # one named act, of any age
+
+--celex (5 Nov 2026) loads named acts whatever their date. REACH itself had no row: the export describes it but has no text
+for it, so it was never loaded, and the common name REACH found nothing. Older acts carry no OJ date at Cellar, so such a row
+starts without an OJ reference and fill_eu_laws_oj_reference.py gives it one.
 """
 
 from __future__ import annotations
@@ -193,6 +198,39 @@ def discover(since: date, until: date) -> List[Dict[str, str]]:
     return list(out.values())
 
 
+def discover_celex(celexes: List[str]) -> List[Dict[str, str]]:
+    """Named acts, whatever their date. By the typed literal: a FILTER on the string took 4.5 s an act and more."""
+    out: Dict[str, Dict[str, str]] = {}
+    for celex in celexes:
+        rows = _sparql(f"""
+        PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+        SELECT ?work ?pub ?ojn ?ojy ?docdate ?title ?eea ?dg WHERE {{
+          ?work cdm:resource_legal_id_celex "{celex}"^^<http://www.w3.org/2001/XMLSchema#string> .
+          OPTIONAL {{ ?work cdm:official-journal-act_date_publication ?pub . }}
+          OPTIONAL {{ ?work cdm:official-journal-act_number ?ojn . }}
+          OPTIONAL {{ ?work cdm:official-journal-act_year ?ojy . }}
+          OPTIONAL {{ ?work cdm:work_date_document ?docdate . }}
+          OPTIONAL {{ ?work cdm:resource_legal_eea ?eea . }}
+          OPTIONAL {{ ?work cdm:resource_legal_responsibility_of_agent ?dg . }}
+          OPTIONAL {{
+            ?expr cdm:expression_belongs_to_work ?work ;
+                  cdm:expression_uses_language
+                  <http://publications.europa.eu/resource/authority/language/ENG> ;
+                  cdm:expression_title ?title .
+          }}
+        }}
+        LIMIT 20
+        """)
+        for r in rows:
+            r["celex"] = celex
+            prev = out.get(celex)
+            if prev is None or (not prev.get("title") and r.get("title")):
+                out[celex] = r
+        if not rows:
+            log.warning(f"[WARN] {celex}: Cellar does not know this act")
+    return list(out.values())
+
+
 def relations(works: List[str]) -> Dict[str, Dict[str, List[str]]]:
     """amends / based_on CELEX lists per work, in batches."""
     rel: Dict[str, Dict[str, List[str]]] = {}
@@ -242,10 +280,12 @@ def doc_type_from_title(title: str, type_letter: str, celex: Optional[str] = Non
     return normalized_type(celex, title) if celex else "Other"
 
 
-def oj_reference(celex: str, pub: str, oj_number: Optional[str] = None, oj_year: Optional[str] = None) -> str:
+def oj_reference(celex: str, pub: str, oj_number: Optional[str] = None, oj_year: Optional[str] = None) -> Optional[str]:
     """"OJ L, YYYY/N, d.m.yyyy" (services/oj_citation.py, the form of every writer of the column). The Official
     Journal's own number when Cellar states it: a corrigendum is published under a number of its own
     (32026D1106R(01) is OJ L 2026/90858), not its act's."""
+    if not pub:  # An older act: Cellar states no OJ date for it, so this leaves it to fill_eu_laws_oj_reference.py.
+        return None
     m = CELEX_RE.match(celex)
     y, n = m.group(1), int(m.group(3))
     if oj_number and str(oj_number).isdigit():
@@ -302,7 +342,7 @@ def build_row(r: Dict[str, str], rel: Dict[str, List[str]], classify, facts: Opt
         "doc_type_normalized": normalized_type(celex, title),
         "title": title,
         "date": doc_date,
-        "oj": oj_reference(celex, r["pub"], r.get("ojn"), r.get("ojy")),
+        "oj": oj_reference(celex, r.get("pub", ""), r.get("ojn"), r.get("ojy")),
         "area": classify(title, rel.get("amends", []) + rel.get("based_on", [])),
         "basis": [],
         "xml": f"cellar://publications.europa.eu/resource/celex/{celex}",
@@ -438,6 +478,7 @@ def main() -> int:
     ap.add_argument("--days", type=int, default=14, help="Rolling window when --since is not given")
     ap.add_argument("--since", type=str, help="YYYY-MM-DD, OJ publication date (backfill)")
     ap.add_argument("--until", type=str, help="YYYY-MM-DD, default today")
+    ap.add_argument("--celex", action="append", help="A named act of any age, instead of the window. Repeat for more.")
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
 
@@ -450,8 +491,8 @@ def main() -> int:
     try:
         from scripts.eu_law_policy_keywords import AGGRESSIVE_KEYWORDS
 
-        found = discover(since, until)
-        log.info(f"Cellar: {len(found)} OJ L acts (R/L/D) in window")
+        found = discover_celex(args.celex) if args.celex else discover(since, until)
+        log.info(f"Cellar: {len(found)} OJ L acts (R/L/D) in window" if not args.celex else f"Cellar: {len(found)} of {len(args.celex)} named acts")
 
         existing = set()
         celexes = [r["celex"] for r in found]
@@ -497,6 +538,10 @@ def main() -> int:
         if len(rows) > 15:
             log.info(f"  ... and {len(rows) - 15} more")
 
+        if not args.apply and args.celex:
+            log.info("[DRY-RUN] nothing written. Re-run with --apply")
+            return 0
+
         if not args.apply:
             try:
                 catch_up(db, oeil, False, budget)
@@ -519,6 +564,9 @@ def main() -> int:
         log.info(f"[OK] inserted {inserted}; {persisted}/{len(rows)} of this run's acts now present")
         if persisted != len(rows):
             raise RuntimeError(f"persisted {persisted} of {len(rows)} rows")
+
+        if args.celex:  # By hand, for named acts: it is not the day's run, so it records no run and leaves the catch-up to it.
+            return 0
 
         try:
             filled = catch_up(db, oeil, True, budget)

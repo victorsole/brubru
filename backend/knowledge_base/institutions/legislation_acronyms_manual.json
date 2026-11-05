@@ -146,20 +146,6 @@
       "year": 2008,
       "full_name": "Classification, Labelling and Packaging"
     },
-    "PACT Act": {
-      "celex": "32024R1828",
-      "full_title": "Regulation (EU) 2024/1828 on the packaging and packaging waste (Packaging and Packaging Waste Regulation)",
-      "type": "Regulation",
-      "year": 2024,
-      "full_name": "Packaging and Packaging Waste Regulation"
-    },
-    "TDI": {
-      "celex": "32024L0900",
-      "full_title": "Directive (EU) 2024/900 amending the Taxpayers' Rights Directive",
-      "type": "Directive",
-      "year": 2024,
-      "full_name": "Tax Dispute Resolution Directive"
-    },
     "MiFID II": {
       "celex": "32014L0065",
       "full_title": "Directive 2014/65/EU on markets in financial instruments",

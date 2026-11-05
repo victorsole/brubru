@@ -19,6 +19,7 @@ Bounded and resumable: --limit rows per run, unfetched first then stalest, so a
 
     python3.12 scripts/fetch_eu_law_bodies.py --limit 20 --rehearse
     python3.12 scripts/fetch_eu_law_bodies.py --limit 2000 --apply
+    python3.12 scripts/fetch_eu_law_bodies.py --celex 32006R1907 --apply   # named acts only
 """
 from __future__ import annotations
 
@@ -74,6 +75,8 @@ PICK = text(
      LIMIT :lim
     """
 )
+
+PICK_NAMED = text("SELECT id, celex FROM eu_laws WHERE celex = ANY(:names) AND body_fetched_at IS NULL ORDER BY celex")
 
 STORE = text(
     """
@@ -260,6 +263,7 @@ def main() -> int:
     g.add_argument("--apply", action="store_true")
     ap.add_argument("--limit", type=int, default=500)
     ap.add_argument("--pause", type=float, default=0.3)
+    ap.add_argument("--celex", action="append", help="Only these acts, if their text is not yet fetched. Repeat for more.")
     args = ap.parse_args()
 
     engine = create_engine(
@@ -269,7 +273,7 @@ def main() -> int:
     )
     with engine.connect() as conn:
         before = conn.execute(PROGRESS, {"floor": 200}).one()
-        rows = list(conn.execute(PICK, {"lim": args.limit}))
+        rows = list(conn.execute(PICK_NAMED, {"names": args.celex}) if args.celex else conn.execute(PICK, {"lim": args.limit}))
 
     print(f"[INFO] laws with a CELEX : {before.total}")
     print(f"[INFO] already fetched   : {before.fetched}  (real bodies {before.real_bodies}, avg {before.avg_chars} chars)")
