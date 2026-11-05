@@ -65,6 +65,28 @@ def test_short_key_does_not_delete_the_longer_acts_true_number(
     )
 
 
+@pytest.mark.parametrize("text", [
+    "Under REACH (Regulation (EC) No 1907/2006), registration applies.",
+    "Under REACH (Regulation (EC) 1907/2006), registration applies.",
+    "CLP (Regulation (EC) No 1272/2008) sets the labels.",
+    "SIS II (Regulation (EC) No 1987/2006) sets the rules.",
+])
+def test_an_act_before_2015_keeps_its_true_number_in_the_old_form(svc, text):
+    """Before 2015 an act is cited number/year. On 5 Nov 2026 each of these lost its true number."""
+    assert svc._strip_contradicting_act_numbers(text) == text
+
+
+@pytest.mark.parametrize("text,kept", [
+    ("Under REACH (Regulation (EC) 2019/785), registration applies.", "Under REACH, registration applies."),
+    ("Under REACH (Regulation (EC) No 1272/2008), registration applies.", "Under REACH, registration applies."),
+    ("The AI Act (Regulation (EU) 2019/785) applies.", "The AI Act applies."),
+    # From 2015 the year comes first, so the reversed form names no act.
+    ("The AI Act (Regulation (EU) 1689/2024) applies.", "The AI Act applies."),
+])
+def test_a_number_that_contradicts_the_act_still_goes(svc, text, kept):
+    assert svc._strip_contradicting_act_numbers(text) == kept
+
+
 def test_cra_the_confirmed_production_case(svc):
     """The exact sentence that shipped corrupted on 26 August 2026."""
     text = ("Under Article 14 of the Cyber Resilience Act (Regulation (EU) 2024/2847), "

@@ -5550,6 +5550,15 @@ USER QUESTION: {user_message}
                 return None
             return f"{m.group(1)}/{int(m.group(2))}"
 
+        def _same_act(asserted: str, canonical: str) -> bool:
+            """An act from before 2015 is cited number/year: Regulation (EC) No 1907/2006 is 32006R1907. Only year/number was
+            known here, so the true number of REACH and CLP read as a contradiction and was deleted (5 Nov 2026). From 2015 the
+            year comes first, so there the reversed form is still a wrong number."""
+            if asserted == canonical:
+                return True
+            year, number = canonical.split("/")
+            return int(year) < 2015 and asserted == f"{number}/{year}"
+
         # Build the candidate list ONCE, longest name first (audit P2, 27 Aug
         # 2026). The linkifier has sorted this way since it shipped; this
         # function iterated `acronyms.items()` in dict order, so a short key
@@ -5606,7 +5615,7 @@ USER QUESTION: {user_message}
                     if not appos:
                         continue
                     asserted = f"{appos.group(1)}/{int(appos.group(2))}"
-                    if asserted == canonical:
+                    if _same_act(asserted, canonical):
                         continue
                     pending = (name, asserted, canonical, appos.start(), appos.end())
                     break

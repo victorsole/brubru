@@ -50,10 +50,12 @@ def test_a_dated_act_still_gets_its_reference():
     assert row["oj"] == "OJ L, 2025/40, 22.1.2025"
 
 
-def test_discover_celex_keeps_the_row_with_a_title_and_says_when_cellar_knows_nothing(monkeypatch, caplog):
+def test_discover_celex_keeps_the_row_with_a_title_and_says_when_cellar_knows_nothing(monkeypatch):
     sync = _load_sync()
+    warned = []
+    monkeypatch.setattr(sync.log, "warning", warned.append)
     answers = {"32006R1907": [{"work": "w1"}, {"work": "w1", "title": "REACH"}], "32024L0900": []}
     monkeypatch.setattr(sync, "_sparql", lambda q: answers["32006R1907" if "32006R1907" in q else "32024L0900"])
     found = sync.discover_celex(["32006R1907", "32024L0900"])
     assert [(r["celex"], r.get("title")) for r in found] == [("32006R1907", "REACH")]
-    assert any("32024L0900" in m for m in caplog.messages)
+    assert any("32024L0900" in m for m in warned)
