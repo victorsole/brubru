@@ -34,32 +34,32 @@ LANGS = {
     "fr": {
         "name": "French", "you": "vous",
         "heads": {"What it does": "Ce que cela fait", "When to use it": "Quand l'utiliser", "Input": "Paramètres", "Try it": "Essayer", "You get back": "Ce que vous obtenez", "Data freshness": "Fraîcheur des données"},
-        "terms": "body of a document, body text, full body = texte intégral (never corps); an EU body = un organe; scraping = extraction de données; feed = flux; to call the API, a call = appeler, un appel; delegated act = acte délégué; implementing act = acte d'exécution; Official Journal = Journal officiel; Court of Justice = Cour de justice; rapporteur = rapporteur; tender = marché public; call for proposals = appel à propositions; infringement = infraction; endpoint = route; item = élément",
-        "bad": r"actes? d'impl[ée]mentation|point de terminaison", "stop": {"le", "la", "les", "des", "du", "une", "et", "pour", "dans", "sur", "avec"},
+        "terms": "this body publishes = que cet organe publie; integer id = identifiant numérique; European Commission = Commission européenne; European Parliament = Parlement européen; European Council = Conseil européen; Council of the European Union = Conseil de l'Union européenne; Council of the EU = Conseil de l'UE; Court of Justice of the European Union = Cour de justice de l'Union européenne; European Central Bank = Banque centrale européenne; European Court of Auditors = Cour des comptes européenne; European Investment Bank = Banque européenne d'investissement; European Ombudsman = Médiateur européen; European Committee of the Regions = Comité européen des régions; European Economic and Social Committee = Comité économique et social européen; Publications Office = Office des publications; Eurogroup = Eurogroupe; body of a document, body text, full body = texte intégral (never corps); an EU body = un organe; scraping = extraction de données; feed = flux; to call the API, a call = appeler, un appel; delegated act = acte délégué; implementing act = acte d'exécution; Official Journal = Journal officiel; Court of Justice = Cour de justice; rapporteur = rapporteur; tender = marché public; call for proposals = appel à propositions; infringement = infraction; endpoint = route; item = élément",
+        "bad": r"\bcorps\b(?! europ)|actes? d'impl[ée]mentation|point de terminaison", "stop": {"le", "la", "les", "des", "du", "une", "et", "pour", "dans", "sur", "avec"},
     },
     "nl": {
         "name": "Dutch", "you": "u",
         "heads": {"What it does": "Wat het doet", "When to use it": "Wanneer te gebruiken", "Input": "Invoer", "Try it": "Probeer het", "You get back": "Wat u terugkrijgt", "Data freshness": "Actualiteit van de gegevens"},
-        "terms": "body of a document, body text, full body = volledige tekst (never lichaam); an EU body = een orgaan; scraping = gegevens ophalen; feed = feed; to call the API, a call = aanroepen, een aanroep; delegated act = gedelegeerde handeling; implementing act = uitvoeringshandeling; Official Journal = Publicatieblad; Court of Justice = Hof van Justitie; rapporteur = rapporteur; tender = aanbesteding; call for proposals = oproep tot het indienen van voorstellen; infringement = inbreuk; endpoint = route; item = item",
-        "bad": r"implementatiehandeling|eindpunt", "stop": {"de", "het", "een", "en", "van", "voor", "met", "op", "in", "aan"},
+        "terms": "this body publishes = die dit orgaan publiceert; integer id = numeriek id; European Commission = Europese Commissie; European Parliament = Europees Parlement; European Council = Europese Raad; Council of the European Union = Raad van de Europese Unie; Council of the EU = Raad van de EU; Court of Justice of the European Union = Hof van Justitie van de Europese Unie; European Central Bank = Europese Centrale Bank; European Court of Auditors = Europese Rekenkamer; European Investment Bank = Europese Investeringsbank; European Ombudsman = Europese Ombudsman; European Committee of the Regions = Europees Comité van de Regio's; European Economic and Social Committee = Europees Economisch en Sociaal Comité; Publications Office = Publicatiebureau; Eurogroup = Eurogroep; body of a document, body text, full body = volledige tekst (never lichaam); an EU body = een orgaan; scraping = gegevens ophalen; feed = feed; to call the API, a call = aanroepen, een aanroep; delegated act = gedelegeerde handeling; implementing act = uitvoeringshandeling; Official Journal = Publicatieblad; Court of Justice = Hof van Justitie; rapporteur = rapporteur; tender = aanbesteding; call for proposals = oproep tot het indienen van voorstellen; infringement = inbreuk; endpoint = route; item = item",
+        "bad": r"\blichaam\b|implementatiehandeling|eindpunt", "stop": {"de", "het", "een", "en", "van", "voor", "met", "op", "in", "aan"},
     },
     "es": {
         "name": "Spanish", "you": "tú",
         "heads": {"What it does": "Qué hace", "When to use it": "Cuándo usarlo", "Input": "Parámetros", "Try it": "Pruébalo", "You get back": "Qué obtienes", "Data freshness": "Actualidad de los datos"},
-        "terms": "body of a document, body text, full body = texto completo (never cuerpo); an EU body = un organismo; scraping = extraer datos; feed = canal; to call the API, a call = llamar, una llamada; delegated act = acto delegado; implementing act = acto de ejecución; Official Journal = Diario Oficial; Court of Justice = Tribunal de Justicia; rapporteur = ponente; tender = licitación; call for proposals = convocatoria de propuestas; infringement = infracción; endpoint = ruta; item = elemento",
-        "bad": r"actos? de implementaci[óo]n|punto final", "stop": {"el", "la", "los", "las", "de", "del", "una", "un", "y", "para", "con", "en"},
+        "terms": "this body publishes = que publica este organismo; integer id = identificador numérico; European Commission = Comisión Europea; European Parliament = Parlamento Europeo; European Council = Consejo Europeo; Council of the European Union = Consejo de la Unión Europea; Council of the EU = Consejo de la UE; Court of Justice of the European Union = Tribunal de Justicia de la Unión Europea; European Central Bank = Banco Central Europeo; European Court of Auditors = Tribunal de Cuentas Europeo; European Investment Bank = Banco Europeo de Inversiones; European Ombudsman = Defensor del Pueblo Europeo; European Committee of the Regions = Comité Europeo de las Regiones; European Economic and Social Committee = Comité Económico y Social Europeo; Publications Office = Oficina de Publicaciones; Eurogroup = Eurogrupo; body of a document, body text, full body = texto completo (never cuerpo); an EU body = un organismo; scraping = extraer datos; feed = canal; to call the API, a call = llamar, una llamada; delegated act = acto delegado; implementing act = acto de ejecución; Official Journal = Diario Oficial; Court of Justice = Tribunal de Justicia; rapporteur = ponente; tender = licitación; call for proposals = convocatoria de propuestas; infringement = infracción; endpoint = ruta; item = elemento",
+        "bad": r"\bcuerpos?\b(?! europeo)|actos? de implementaci[óo]n|punto final", "stop": {"el", "la", "los", "las", "de", "del", "una", "un", "y", "para", "con", "en"},
     },
     "ca": {
         "name": "Catalan", "you": "tu",
         "heads": {"What it does": "Què fa", "When to use it": "Quan fer-lo servir", "Input": "Paràmetres", "Try it": "Prova-ho", "You get back": "Què obtens", "Data freshness": "Actualitat de les dades"},
-        "terms": "body of a document, body text, full body = text complet (never cos); an EU body = un organisme; scraping = extreure dades (never raspallar); feed = canal; to call the API, a call = cridar, una crida; delegated act = acte delegat; implementing act = acte d'execució; Official Journal = Diari Oficial; Court of Justice = Tribunal de Justícia; rapporteur = ponent; tender = licitació; call for proposals = convocatòria de propostes; infringement = infracció; endpoint = ruta; item = element; Brussels = Brussel·les; regulation = reglament. Write correct Catalan with all its accents, never Spanish",
-        "bad": r"actes? d'implementaci[óo]|punt final|\bel qual\b.*\bdel que\b", "stop": {"el", "la", "els", "les", "de", "del", "una", "un", "i", "per", "amb", "en"},
+        "terms": "this body publishes = que publica aquest organisme; call for tender = licitació; call for expression of interest = convocatòria de manifestacions d'interès; integer id = identificador numèric; in full = complet; funding application = sol·licitud de finançament; Returns, at the start of a description = Retorna (never Torna); European Commission = Comissió Europea; European Parliament = Parlament Europeu; European Council = Consell Europeu; Council of the European Union = Consell de la Unió Europea; Council of the EU = Consell de la UE; Court of Justice of the European Union = Tribunal de Justícia de la Unió Europea; European Central Bank = Banc Central Europeu; European Court of Auditors = Tribunal de Comptes Europeu; European Investment Bank = Banc Europeu d'Inversions; European Ombudsman = Defensor del Poble Europeu; European Committee of the Regions = Comitè Europeu de les Regions; European Economic and Social Committee = Comitè Econòmic i Social Europeu; Publications Office = Oficina de Publicacions; Eurogroup = Eurogrup; body of a document, body text, full body = text complet (never cos); an EU body = un organisme; scraping = extreure dades (never raspallar); feed = canal; to call the API, a call = cridar, una crida; delegated act = acte delegat; implementing act = acte d'execució; Official Journal = Diari Oficial; Court of Justice = Tribunal de Justícia; rapporteur = ponent; tender = licitació; call for proposals = convocatòria de propostes; infringement = infracció; endpoint = ruta; item = element; Brussels = Brussel·les; regulation = reglament. Write correct Catalan with all its accents, never Spanish",
+        "bad": r"\bcos\b(?! europeu)|\bcossos\b|raspall|id enter|actes? d'implementaci[óo]|punt final|\bel qual\b.*\bdel que\b", "stop": {"el", "la", "els", "les", "de", "del", "una", "un", "i", "per", "amb", "en"},
     },
     "it": {
         "name": "Italian", "you": "tu",
         "heads": {"What it does": "Cosa fa", "When to use it": "Quando usarlo", "Input": "Parametri", "Try it": "Provalo", "You get back": "Cosa ottieni", "Data freshness": "Aggiornamento dei dati"},
-        "terms": "body of a document, body text, full body = testo completo (never corpo); an EU body = un organismo; scraping = estrarre dati; feed = flusso; to call the API, a call = chiamare, una chiamata; delegated act = atto delegato; implementing act = atto di esecuzione; Official Journal = Gazzetta ufficiale; Court of Justice = Corte di giustizia; rapporteur = relatore; tender = appalto; call for proposals = invito a presentare proposte; infringement = infrazione; endpoint = percorso; item = elemento",
-        "bad": r"atti? di implementazione|punto finale", "stop": {"il", "lo", "la", "le", "gli", "di", "del", "della", "una", "un", "e", "per", "con"},
+        "terms": "this body publishes = che questo organismo pubblica; integer id = identificativo numerico; European Commission = Commissione europea; European Parliament = Parlamento europeo; European Council = Consiglio europeo; Council of the European Union = Consiglio dell'Unione europea; Council of the EU = Consiglio dell'UE; Court of Justice of the European Union = Corte di giustizia dell'Unione europea; European Central Bank = Banca centrale europea; European Court of Auditors = Corte dei conti europea; European Investment Bank = Banca europea per gli investimenti; European Ombudsman = Mediatore europeo; European Committee of the Regions = Comitato europeo delle regioni; European Economic and Social Committee = Comitato economico e sociale europeo; Publications Office = Ufficio delle pubblicazioni; Eurogroup = Eurogruppo; body of a document, body text, full body = testo completo (never corpo); an EU body = un organismo; scraping = estrarre dati; feed = flusso; to call the API, a call = chiamare, una chiamata; delegated act = atto delegato; implementing act = atto di esecuzione; Official Journal = Gazzetta ufficiale; Court of Justice = Corte di giustizia; rapporteur = relatore; tender = appalto; call for proposals = invito a presentare proposte; infringement = infrazione; endpoint = percorso; item = elemento",
+        "bad": r"\bcorpo\b(?! europeo)|\bcorpi\b|atti? di implementazione|punto finale", "stop": {"il", "lo", "la", "le", "gli", "di", "del", "della", "una", "un", "e", "per", "con"},
     },
 }
 # These stay in the visitor's language; every other EU body keeps the name the console shows it under.
@@ -106,6 +106,17 @@ def worth_sending(block: str) -> bool:
     return bool(b) and not b.startswith("```") and bool(re.search(r"[A-Za-z]{3}", re.sub(r"`[^`]*`", "", b)))
 
 
+def mask(text: str) -> str:
+    for i, name in enumerate(BODY_NAMES):
+        if name in text:
+            text = text.replace(name, f"{{B{i}}}")
+    return text
+
+
+def unmask(text: str) -> str:
+    return re.sub(r"\{B(\d+)\}", lambda m: BODY_NAMES[int(m.group(1))] if int(m.group(1)) < len(BODY_NAMES) else m.group(0), text)
+
+
 def gate(source: str, target: str, lang: dict) -> str:
     """Why this translation fails, or an empty string. Each test compares it with its source."""
     if not isinstance(target, str) or not target.strip():
@@ -127,10 +138,7 @@ def gate(source: str, target: str, lang: dict) -> str:
         return "em dash"
     if len(source) > 40 and not 0.45 <= len(target) / len(source) <= 2.6:
         return f"length ratio {len(target) / len(source):.2f}"
-    judged = bare_t
-    for name in BODY_NAMES:
-        judged = judged.replace(name, " ")
-    words = re.findall(r"[^\W\d_]+", judged.lower())
+    words = re.findall(r"[^\W\d_]+", re.sub(r"\{B\d+\}", " ", bare_t).lower())
     if len(words) >= 5:
         if target.strip() == source.strip():
             return "not translated"
@@ -138,9 +146,6 @@ def gate(source: str, target: str, lang: dict) -> str:
         own = sum(w in lang["stop"] for w in words) / len(words)
         if english > 0.10 or english > own:
             return f"still English ({english:.2f} against {own:.2f})"
-    for name in BODY_NAMES:
-        if name in source and name not in target:
-            return f"changed a name: {name}"
     if re.search(lang["bad"], target, re.I):
         return "not the EU's official term"
     return ""
@@ -156,53 +161,70 @@ def ask(key: str, code: str, lang: dict, items: dict) -> dict:
         f"- Never change anything inside backticks. Never change web addresses, paths, parameter names, placeholders in braces, "
         f"HTML tags, numbers, dates, or codes such as CELEX, ECLI, COM(2024) 12 and COD.\n"
         f"- Keep every acronym and product name as it is (ENISA, EFSA, TED, CORDIS, OEIL, EUR-Lex, Brubru).\n"
-        f"- Keep the full names of EU agencies and bodies in English, exactly as written, such as European Securities and Markets Authority. "
-        f"Translate only: {', '.join(sorted(TRANSLATED_BODIES))}.\n"
         f"- Use these words: {lang['terms']}.\n- These headings are always written so: {heads}.\n"
         f"- Address the reader as '{lang['you']}'. Plain words. Never use an em dash: use a colon or a comma."
     )
-    while ask.lane < len(MODELS):
-        model = MODELS[ask.lane]
+    while True:
+        alive = [m for m in MODELS if m not in ask.dead]
+        if not alive:
+            raise DayIsOver()
+        now = time.time()
+        for m in alive:
+            if now >= ask.reset.get(m, 0):
+                ask.left[m] = 8000
+        model = alive[0]  # The first model read better on the Catalan sample: the next is for when it has run out for the day.
+        if ask.left.get(model, 8000) < 3000:
+            time.sleep(max(1.0, ask.reset.get(model, 0) - now))
+            continue
         extra = {"reasoning_effort": "none"} if model.startswith("qwen") else {"reasoning_effort": "low"}
         body = json.dumps({"model": model, "temperature": 0.1, "response_format": {"type": "json_object"}, "reasoning_format": "hidden", **extra, "messages": [
             {"role": "system", "content": system}, {"role": "user", "content": json.dumps(items, ensure_ascii=False)},
         ]}).encode()
         req = urllib.request.Request("https://api.groq.com/openai/v1/chat/completions", data=body, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent": "brubru-console-words"})
-        for attempt in range(5):
-            try:
-                with urllib.request.urlopen(req, timeout=180, context=CTX) as r:
-                    reply = json.load(r)
-                    left = int(r.headers.get("x-ratelimit-remaining-tokens") or 8000)
-                ask.tokens[0] += reply.get("usage", {}).get("prompt_tokens", 0)
-                ask.tokens[1] += reply.get("usage", {}).get("completion_tokens", 0)
-                if left < 2500:  # Wait out the minute instead of being refused.
-                    time.sleep(20)
-                return json.loads(re.sub(r"(?s)<think>.*?</think>", "", reply["choices"][0]["message"]["content"]))
-            except urllib.error.HTTPError as e:
-                text = e.read().decode("utf-8", "replace")
-                if e.code == 429 and ("per day" in text or "TPD" in text or "RPD" in text):
-                    print(f"[INFO] {model}: the day's limit is reached, next model", flush=True)
-                    ask.lane += 1
-                    break
-                if e.code == 400 and "json" in text.lower():
-                    time.sleep(2)  # The model wrote invalid JSON: ask again.
-                    continue
-                if e.code not in (429, 500, 502, 503, 504):
-                    print(f"[ERROR] {model}: {e.code} {text[:200]}", flush=True)
-                    raise
-                time.sleep(float(e.headers.get("retry-after") or 0) or min(60, 4 * 2 ** attempt))
-            except (json.JSONDecodeError, KeyError, TimeoutError, urllib.error.URLError):
-                time.sleep(min(30, 2 * 2 ** attempt))
-        else:
+        try:
+            with urllib.request.urlopen(req, timeout=180, context=CTX) as r:
+                reply = json.load(r)
+                ask.left[model] = int(r.headers.get("x-ratelimit-remaining-tokens") or 8000)
+                ask.reset[model] = time.time() + seconds(r.headers.get("x-ratelimit-reset-tokens") or "1s")
+            ask.tokens[0] += reply.get("usage", {}).get("prompt_tokens", 0)
+            ask.tokens[1] += reply.get("usage", {}).get("completion_tokens", 0)
+            ask.calls[model] = ask.calls.get(model, 0) + 1
+            return json.loads(re.sub(r"(?s)<think>.*?</think>", "", reply["choices"][0]["message"]["content"]))
+        except urllib.error.HTTPError as e:
+            text = e.read().decode("utf-8", "replace")
+            if e.code == 429 and ("per day" in text or "TPD" in text or "RPD" in text):
+                print(f"[INFO] {model}: the day's limit is reached: {re.sub(r'Organization [^ ]+ ', '', text)[:220]}", flush=True)
+                ask.dead.add(model)
+                continue
+            if e.code == 429:
+                ask.left[model] = 0
+                ask.reset[model] = time.time() + (float(e.headers.get("retry-after") or 0) or 20)
+                continue
+            if e.code == 400 and "json" in text.lower():
+                return {}  # The model wrote invalid JSON: the items go again one at a time.
+            if e.code in (500, 502, 503, 504):
+                time.sleep(10)
+                continue
+            print(f"[ERROR] {model}: {e.code} {text[:200]}", flush=True)
+            raise
+        except (json.JSONDecodeError, KeyError, TimeoutError, urllib.error.URLError):
+            time.sleep(5)
             return {}
-    raise DayIsOver()
+
+
+def seconds(text: str) -> float:
+    """Groq's reset: 15.24s, 607ms, 1m2.5s."""
+    total = 0.0
+    for value, unit in re.findall(r"([\d.]+)(ms|s|m|h)", text):
+        total += float(value) * {"ms": 0.001, "s": 1, "m": 60, "h": 3600}[unit]
+    return total or 1.0
 
 
 class DayIsOver(Exception):
     """Both models have used up the day: keep what is done, and carry on tomorrow."""
 
 
-ask.lane = 0
+ask.left, ask.reset, ask.calls, ask.dead = {}, {}, {}, set()
 ask.tokens = [0, 0]
 
 
@@ -223,33 +245,28 @@ def translate_all(key: str, code: str, lang: dict, texts: list, memory: dict) ->
     todo = [t for t in dict.fromkeys(texts) if t not in memory]
     failures = collections.Counter()
     print(f"[INFO] {code}: {len(todo)} new segments of {len(set(texts))}, {sum(map(len, todo)):,} characters", flush=True)
-    for n, batch in enumerate(batches(todo), 1):
+    for n, batch in enumerate(batches([mask(x) for x in todo]), 1):
         reply = ask(key, code, lang, batch)
         retry = []
         for k, source in batch.items():
             why = gate(source, reply.get(k), lang) if k in reply else "no answer"
             if why:
-                retry.append((source, why))
+                retry.append((k, source, why))
             else:
-                memory[source] = reply[k]
-        for source, first_why in retry:  # One at a time, twice: a batch can fail on its neighbour.
-            why = first_why
-            for _ in range(2):
-                one = ask(key, code, lang, {"0": source})
-                why = gate(source, one.get("0"), lang) if "0" in one else "no answer"
-                if not why:
-                    memory[source] = one["0"]
-                    break
-                time.sleep(1.1)
+                memory[unmask(source)] = unmask(reply[k])
+        for k, source, first_why in retry:  # One at a time, once: a batch can fail on its neighbour.
+            one = ask(key, code, lang, {"0": source})
+            why = gate(source, one.get("0"), lang) if "0" in one else "no answer"
             if why:
-                failures[why.split(":")[0]] += 1
+                failures[why.split(":")[0].split(" (")[0]] += 1
                 MEMORY.mkdir(parents=True, exist_ok=True)
                 with open(MEMORY / f"{code}_failed.txt", "a") as f:
-                    f.write(f"{why} || {source[:300]!r}\n")
-        if n % 20 == 0:
-            print(f"[INFO] {code}: batch {n}, tokens {ask.tokens}, failed so far {sum(failures.values())}", flush=True)
-            save_memory(code, memory)
-        time.sleep(1.1)
+                    f.write(f"{why} || {unmask(source)[:300]!r}\n")
+            else:
+                memory[unmask(source)] = unmask(one["0"])
+        save_memory(code, memory)
+        if n % 5 == 0:
+            print(f"[INFO] {code}: batch {n}, tokens {ask.tokens}, calls {ask.calls}, failed {sum(failures.values())}", flush=True)
     return memory, failures
 
 
@@ -262,6 +279,7 @@ def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--lang", action="append", choices=sorted(LANGS))
     p.add_argument("--part", choices=("short", "full", "all"), default="all", help="short: summary and first sentence. full: the long description")
+    p.add_argument("--revalidate", action="store_true", help="judge every route again, not only those whose English changed")
     p.add_argument("--limit", type=int, help="only this many routes, picked evenly: for trying a language")
     p.add_argument("--sample", type=int, default=0, help="print this many segments beside their source")
     p.add_argument("--dry-run", action="store_true", help="write no file in the repo")
@@ -294,9 +312,15 @@ def main() -> None:
         small = json.loads(path_small.read_text()) if path_small.exists() else {}
         full = json.loads(path_full.read_text()) if path_full.exists() else {}
         want_short, want_full = a.part in ("short", "all"), a.part in ("full", "all")
-        changed = [r for r in routes if (want_short and small.get(r["path"], {}).get("k") != r["key"]) or (want_full and full.get(r["path"], {}).get("k") != r["key"])]
+        changed = routes if a.revalidate else [r for r in routes if (want_short and small.get(r["path"], {}).get("k") != r["key"]) or (want_full and full.get(r["path"], {}).get("k") != r["key"])]
         memory_file = MEMORY / f"{code}.json"
         memory = json.loads(memory_file.read_text()) if memory_file.exists() else {}
+        # Today's gate judges what is stored too: a rule learned from reading the last run clears what it let through.
+        stale = [s for s, x in memory.items() if gate(mask(s), mask(x), lang)]
+        for s in stale:
+            del memory[s]
+        if stale:
+            print(f"[INFO] {code}: {len(stale)} stored segments fail today's gate, sent again", flush=True)
         texts = []
         for r in changed:
             if want_short:

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>All endpoints: Brubru EU Data API</title>
-<meta name="description" content="Every endpoint of the Brubru EU Data API v2: 1,064 REST endpoints across 95 EU institution folders. One API key, one response envelope.">
+<meta name="description" content="Every endpoint of the Brubru EU Data API v2: 1,065 REST endpoints across 96 EU institution folders. One API key, one response envelope.">
 <link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
 <link rel="stylesheet" href="/api/docs/_assets/docs.css?v=20260811">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
@@ -40,7 +40,7 @@
     <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
     <li><a href="/api/try"><strong>API Console</strong>: try any route, no account</a></li>
     <li><a href="/api/docs/bundles.html" data-nav="bundles"><strong>Bundles</strong>: routes by what you want</a></li>
-    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 1,064 endpoints</a></li>
+    <li><a href="/api/docs/reference.html" data-nav="api-reference"><strong>Full API reference</strong>: all 1,065 endpoints</a></li>
     <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
     <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
     <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
@@ -231,7 +231,7 @@
 
 <main class="main">
 
-<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1,064 endpoints across 95 EU institution folders</div>
+<div class="main__eyebrow">Brubru EU Data API &middot; v2 &middot; 1,065 endpoints across 96 EU institution folders</div>
 <h1>All endpoints</h1>
 <p class="main__lede">
 The complete Brubru EU Data API surface, organised one folder per EU institution or body. Every endpoint below is on the v2 API and authenticated with a single API key. This list is hand-grouped for browsing; the <a href="/api/docs/reference.html">live API reference</a> renders the same endpoints directly from the OpenAPI spec, so it is always exactly in sync with what is deployed.
@@ -912,15 +912,15 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/amif/outcomes/{row_id}</code></td><td>Look up one AMIF achievement indicator in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/amif/{row_id}</code></td><td>Look up one AMIF allocation row in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-calls</code></td><td>Cedefop — Cedefop calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-calls/{item_id}</code></td><td>Cedefop — one Cedefop calls for expression of interest (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-calls/{item_id}</code></td><td>Cedefop — one Cedefop call for expression of interest (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-calls/{item_id}/documents</code></td><td>Cedefop — the files of one procedure, with their text</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-calls/{item_id}/documents/{document_id}</code></td><td>Cedefop — one file of a procedure (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-grants</code></td><td>Cedefop — Cedefop calls for proposals (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-grants/{item_id}</code></td><td>Cedefop — one Cedefop calls for proposal (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-grants/{item_id}</code></td><td>Cedefop — one Cedefop call for proposal (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-grants/{item_id}/documents</code></td><td>Cedefop — the files of one procedure, with their text</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-grants/{item_id}/documents/{document_id}</code></td><td>Cedefop — one file of a procedure (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-tenders</code></td><td>Cedefop — Cedefop calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-tenders/{item_id}</code></td><td>Cedefop — one Cedefop calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-tenders/{item_id}</code></td><td>Cedefop — one Cedefop call for tender (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-tenders/{item_id}/documents</code></td><td>Cedefop — the files of one procedure, with their text</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cedefop-tenders/{item_id}/documents/{document_id}</code></td><td>Cedefop — one file of a procedure (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/cohesion-fund</code></td><td>Cohesion Fund (CF) — 2021-2027 financial plan by programme</td></tr>
@@ -931,65 +931,65 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eafrd/{row_id}</code></td><td>Look up one EAFRD Member State payment row in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eagf</code></td><td>European Agricultural Guarantee Fund (EAGF) — EU payments by Member State (2023-2027)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eagf/{row_id}</code></td><td>Look up one EAGF Member State payment row in full</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders</code></td><td>the European Centre for Disease Prevention and Control — ECDC calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders/{item_id}</code></td><td>the European Centre for Disease Prevention and Control — one ECDC calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders/{item_id}/documents</code></td><td>the European Centre for Disease Prevention and Control — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders/{item_id}/documents/{document_id}</code></td><td>the European Centre for Disease Prevention and Control — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls</code></td><td>the European Chemicals Agency — ECHA calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls/{item_id}</code></td><td>the European Chemicals Agency — one ECHA calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls/{item_id}/documents</code></td><td>the European Chemicals Agency — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls/{item_id}/documents/{document_id}</code></td><td>the European Chemicals Agency — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders</code></td><td>the European Chemicals Agency — ECHA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders/{item_id}</code></td><td>the European Chemicals Agency — one ECHA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders/{item_id}/documents</code></td><td>the European Chemicals Agency — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders/{item_id}/documents/{document_id}</code></td><td>the European Chemicals Agency — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders</code></td><td>the European Environment Agency — EEA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders/{item_id}</code></td><td>the European Environment Agency — one EEA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders/{item_id}/documents</code></td><td>the European Environment Agency — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders/{item_id}/documents/{document_id}</code></td><td>the European Environment Agency — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls</code></td><td>the European Fisheries Control Agency — EFCA calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls/{item_id}</code></td><td>the European Fisheries Control Agency — one EFCA calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-tenders</code></td><td>the European Fisheries Control Agency — EFCA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-tenders/{item_id}</code></td><td>the European Fisheries Control Agency — one EFCA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders</code></td><td>the European Food Safety Authority — EFSA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders/{item_id}</code></td><td>the European Food Safety Authority — one EFSA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders/{item_id}/documents</code></td><td>the European Food Safety Authority — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders/{item_id}/documents/{document_id}</code></td><td>the European Food Safety Authority — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-calls</code></td><td>the European Investment Bank — EIB calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-calls/{item_id}</code></td><td>the European Investment Bank — one EIB calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-tenders</code></td><td>the European Investment Bank — EIB calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-tenders/{item_id}</code></td><td>the European Investment Bank — one EIB calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls</code></td><td>the European Institute for Gender Equality — EIGE calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls/{item_id}</code></td><td>the European Institute for Gender Equality — one EIGE calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls/{item_id}/documents</code></td><td>the European Institute for Gender Equality — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls/{item_id}/documents/{document_id}</code></td><td>the European Institute for Gender Equality — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders</code></td><td>the European Institute for Gender Equality — EIGE calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders/{item_id}</code></td><td>the European Institute for Gender Equality — one EIGE calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders/{item_id}/documents</code></td><td>the European Institute for Gender Equality — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders/{item_id}/documents/{document_id}</code></td><td>the European Institute for Gender Equality — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls</code></td><td>the European Medicines Agency — EMA calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls/{item_id}</code></td><td>the European Medicines Agency — one EMA calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls/{item_id}/documents</code></td><td>the European Medicines Agency — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls/{item_id}/documents/{document_id}</code></td><td>the European Medicines Agency — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders</code></td><td>the European Medicines Agency — EMA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders/{item_id}</code></td><td>the European Medicines Agency — one EMA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders/{item_id}/documents</code></td><td>the European Medicines Agency — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders/{item_id}/documents/{document_id}</code></td><td>the European Medicines Agency — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders</code></td><td>The European Centre for Disease Prevention and Control — ECDC calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders/{item_id}</code></td><td>The European Centre for Disease Prevention and Control — one ECDC call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders/{item_id}/documents</code></td><td>The European Centre for Disease Prevention and Control — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ecdc-tenders/{item_id}/documents/{document_id}</code></td><td>The European Centre for Disease Prevention and Control — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls</code></td><td>The European Chemicals Agency — ECHA calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls/{item_id}</code></td><td>The European Chemicals Agency — one ECHA call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls/{item_id}/documents</code></td><td>The European Chemicals Agency — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-calls/{item_id}/documents/{document_id}</code></td><td>The European Chemicals Agency — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders</code></td><td>The European Chemicals Agency — ECHA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders/{item_id}</code></td><td>The European Chemicals Agency — one ECHA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders/{item_id}/documents</code></td><td>The European Chemicals Agency — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/echa-tenders/{item_id}/documents/{document_id}</code></td><td>The European Chemicals Agency — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders</code></td><td>The European Environment Agency — EEA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders/{item_id}</code></td><td>The European Environment Agency — one EEA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders/{item_id}/documents</code></td><td>The European Environment Agency — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eea-tenders/{item_id}/documents/{document_id}</code></td><td>The European Environment Agency — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls</code></td><td>The European Fisheries Control Agency — EFCA calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-calls/{item_id}</code></td><td>The European Fisheries Control Agency — one EFCA call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-tenders</code></td><td>The European Fisheries Control Agency — EFCA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efca-tenders/{item_id}</code></td><td>The European Fisheries Control Agency — one EFCA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders</code></td><td>The European Food Safety Authority — EFSA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders/{item_id}</code></td><td>The European Food Safety Authority — one EFSA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders/{item_id}/documents</code></td><td>The European Food Safety Authority — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/efsa-tenders/{item_id}/documents/{document_id}</code></td><td>The European Food Safety Authority — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-calls</code></td><td>The European Investment Bank — EIB calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-calls/{item_id}</code></td><td>The European Investment Bank — one EIB call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-tenders</code></td><td>The European Investment Bank — EIB calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eib-tenders/{item_id}</code></td><td>The European Investment Bank — one EIB call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls</code></td><td>The European Institute for Gender Equality — EIGE calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls/{item_id}</code></td><td>The European Institute for Gender Equality — one EIGE call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls/{item_id}/documents</code></td><td>The European Institute for Gender Equality — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-calls/{item_id}/documents/{document_id}</code></td><td>The European Institute for Gender Equality — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders</code></td><td>The European Institute for Gender Equality — EIGE calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders/{item_id}</code></td><td>The European Institute for Gender Equality — one EIGE call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders/{item_id}/documents</code></td><td>The European Institute for Gender Equality — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eige-tenders/{item_id}/documents/{document_id}</code></td><td>The European Institute for Gender Equality — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls</code></td><td>The European Medicines Agency — EMA calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls/{item_id}</code></td><td>The European Medicines Agency — one EMA call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls/{item_id}/documents</code></td><td>The European Medicines Agency — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-calls/{item_id}/documents/{document_id}</code></td><td>The European Medicines Agency — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders</code></td><td>The European Medicines Agency — EMA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders/{item_id}</code></td><td>The European Medicines Agency — one EMA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders/{item_id}/documents</code></td><td>The European Medicines Agency — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ema-tenders/{item_id}/documents/{document_id}</code></td><td>The European Medicines Agency — one file of a procedure (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/emfaf</code></td><td>European Maritime, Fisheries and Aquaculture Fund (EMFAF) — 2021-2027 financial plan by programme</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/emfaf/outcomes</code></td><td>European Maritime, Fisheries and Aquaculture Fund (EMFAF) — 2021-2027 achievement indicators (outputs &amp; results)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/emfaf/outcomes/{row_id}</code></td><td>Look up one EMFAF achievement indicator in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/emfaf/{row_id}</code></td><td>Look up one EMFAF allocation row in full</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls</code></td><td>the EU Agency for Cybersecurity — ENISA calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls/{item_id}</code></td><td>the EU Agency for Cybersecurity — one ENISA calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls/{item_id}/documents</code></td><td>the EU Agency for Cybersecurity — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls/{item_id}/documents/{document_id}</code></td><td>the EU Agency for Cybersecurity — one file of a procedure (full text)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders</code></td><td>the EU Agency for Cybersecurity — ENISA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders/{item_id}</code></td><td>the EU Agency for Cybersecurity — one ENISA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders/{item_id}/documents</code></td><td>the EU Agency for Cybersecurity — the files of one procedure, with their text</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders/{item_id}/documents/{document_id}</code></td><td>the EU Agency for Cybersecurity — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls</code></td><td>The EU Agency for Cybersecurity — ENISA calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls/{item_id}</code></td><td>The EU Agency for Cybersecurity — one ENISA call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls/{item_id}/documents</code></td><td>The EU Agency for Cybersecurity — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-calls/{item_id}/documents/{document_id}</code></td><td>The EU Agency for Cybersecurity — one file of a procedure (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders</code></td><td>The EU Agency for Cybersecurity — ENISA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders/{item_id}</code></td><td>The EU Agency for Cybersecurity — one ENISA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders/{item_id}/documents</code></td><td>The EU Agency for Cybersecurity — the files of one procedure, with their text</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/enisa-tenders/{item_id}/documents/{document_id}</code></td><td>The EU Agency for Cybersecurity — one file of a procedure (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/entrepreneur-instruments</code></td><td>EU financial instruments for entrepreneurs, by delivery intermediary</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/era-tenders</code></td><td>the European Union Agency for Railways — ERA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/era-tenders/{item_id}</code></td><td>the European Union Agency for Railways — one ERA calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/era-tenders</code></td><td>The European Union Agency for Railways — ERA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/era-tenders/{item_id}</code></td><td>The European Union Agency for Railways — one ERA call for tender (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/erdf</code></td><td>European Regional Development Fund (ERDF) — 2021-2027 financial plan by programme</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/erdf/outcomes</code></td><td>European Regional Development Fund (ERDF) — 2021-2027 achievement indicators (outputs &amp; results)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/erdf/outcomes/{row_id}</code></td><td>Look up one ERDF achievement indicator in full</td></tr>
@@ -998,34 +998,34 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/esf-plus/outcomes</code></td><td>European Social Fund Plus (ESF+) — 2021-2027 achievement indicators (outputs &amp; results)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/esf-plus/outcomes/{row_id}</code></td><td>Look up one ESF+ achievement indicator in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/esf-plus/{row_id}</code></td><td>Look up one ESF allocation row in full</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/etf-tenders</code></td><td>the European Training Foundation — ETF calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/etf-tenders/{item_id}</code></td><td>the European Training Foundation — one ETF calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-calls</code></td><td>the European Agency for Safety and Health at Work — EU-OSHA calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-calls/{item_id}</code></td><td>the European Agency for Safety and Health at Work — one EU-OSHA calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-tenders</code></td><td>the European Agency for Safety and Health at Work — EU-OSHA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-tenders/{item_id}</code></td><td>the European Agency for Safety and Health at Work — one EU-OSHA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euaa-calls</code></td><td>the European Union Agency for Asylum — EUAA calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euaa-calls/{item_id}</code></td><td>the European Union Agency for Asylum — one EUAA calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euda-tenders</code></td><td>the European Union Drugs Agency — EUDA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euda-tenders/{item_id}</code></td><td>the European Union Drugs Agency — one EUDA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-calls</code></td><td>the European Foundation for the Improvement of Living and Working Conditions — Eurofound calls for expression of interest (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-calls/{item_id}</code></td><td>the European Foundation for the Improvement of Living and Working Conditions — one Eurofound calls for expression of interest (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-tenders</code></td><td>the European Foundation for the Improvement of Living and Working Conditions — Eurofound calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-tenders/{item_id}</code></td><td>the European Foundation for the Improvement of Living and Working Conditions — one Eurofound calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/etf-tenders</code></td><td>The European Training Foundation — ETF calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/etf-tenders/{item_id}</code></td><td>The European Training Foundation — one ETF call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-calls</code></td><td>The European Agency for Safety and Health at Work — EU-OSHA calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-calls/{item_id}</code></td><td>The European Agency for Safety and Health at Work — one EU-OSHA call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-tenders</code></td><td>The European Agency for Safety and Health at Work — EU-OSHA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eu-osha-tenders/{item_id}</code></td><td>The European Agency for Safety and Health at Work — one EU-OSHA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euaa-calls</code></td><td>The European Union Agency for Asylum — EUAA calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euaa-calls/{item_id}</code></td><td>The European Union Agency for Asylum — one EUAA call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euda-tenders</code></td><td>The European Union Drugs Agency — EUDA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/euda-tenders/{item_id}</code></td><td>The European Union Drugs Agency — one EUDA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-calls</code></td><td>The European Foundation for the Improvement of Living and Working Conditions — Eurofound calls for expression of interest (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-calls/{item_id}</code></td><td>The European Foundation for the Improvement of Living and Working Conditions — one Eurofound call for expression of interest (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-tenders</code></td><td>The European Foundation for the Improvement of Living and Working Conditions — Eurofound calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurofound-tenders/{item_id}</code></td><td>The European Foundation for the Improvement of Living and Working Conditions — one Eurofound call for tender (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurojust-tenders</code></td><td>Eurojust — Eurojust calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurojust-tenders/{item_id}</code></td><td>Eurojust — one Eurojust calls for tender (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eurojust-tenders/{item_id}</code></td><td>Eurojust — one Eurojust call for tender (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eusf</code></td><td>EU Solidarity Fund (EUSF) — disaster cases 2002-2021</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/eusf/{row_id}</code></td><td>Look up one EU Solidarity Fund case in full</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/fra-tenders</code></td><td>the European Union Agency for Fundamental Rights — FRA calls for tender (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/fra-tenders/{item_id}</code></td><td>the European Union Agency for Fundamental Rights — one FRA calls for tender (full body)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-events</code></td><td>the EU Funding &amp; Tenders Portal — events (newest first) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-events/{item_id}</code></td><td>the EU Funding &amp; Tenders Portal — one event (full body) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-news</code></td><td>the EU Funding &amp; Tenders Portal — news items (newest first) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-news/{item_id}</code></td><td>the EU Funding &amp; Tenders Portal — one news item (full body) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/fra-tenders</code></td><td>The European Union Agency for Fundamental Rights — FRA calls for tender (newest first)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/fra-tenders/{item_id}</code></td><td>The European Union Agency for Fundamental Rights — one FRA call for tender (full text)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-events</code></td><td>The EU Funding &amp; Tenders Portal — events (newest first) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-events/{item_id}</code></td><td>The EU Funding &amp; Tenders Portal — one event (full text) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-news</code></td><td>The EU Funding &amp; Tenders Portal — news items (newest first) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/ft-news/{item_id}</code></td><td>The EU Funding &amp; Tenders Portal — one news item (full text) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/funding-opportunities</code></td><td>EU funding opportunities — open + forthcoming calls across programmes (alternate view) <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/funding-opportunities/{topic_id}</code></td><td>Look up one EU funding opportunity by its topic_id <span style="color:var(--text-mut);">(deprecated)</span></td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/innovation-fund</code></td><td>Innovation Fund — funding calls (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/innovation-fund/{item_id}</code></td><td>Innovation Fund — one funding call (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/innovation-fund/{item_id}</code></td><td>Innovation Fund — one funding call (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/international-cooperation</code></td><td>EU international cooperation awards — NDICI, IPA III, Humanitarian (who won what, where)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/international-cooperation/{item_id}</code></td><td>One EU international-cooperation award (full FTS record)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/interreg</code></td><td>Interreg (European Territorial Cooperation) (INTERREG) — 2021-2027 financial plan by programme</td></tr>
@@ -1041,13 +1041,13 @@ The complete Brubru EU Data API surface, organised one folder per EU institution
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/jtf/outcomes/{row_id}</code></td><td>Look up one JTF achievement indicator in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/jtf/{row_id}</code></td><td>Look up one JTF allocation row in full</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/justice</code></td><td>Justice Programme — funding calls (newest first)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/justice/{item_id}</code></td><td>Justice Programme — one funding call (full body)</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/justice/{item_id}</code></td><td>Justice Programme — one funding call (full text)</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partner-announcements</code></td><td>Partner announcements — organisations looking for partners on the F&amp;T Portal</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/partner-announcements/{announcement_id}</code></td><td>One partner announcement — an organisation's offer or request for a topic</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes</code></td><td>EU funding programmes directory — the EC classification + Brubru coverage</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/programmes/{acronym}</code></td><td>Look up one EU funding programme in the classification</td></tr>
 <tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups</code></td><td>EU startup, scale-up &amp; SME funding — EIC, COSME/EISMEA, Innovation Fund (stage-tagged)</td></tr>
-<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups/{topic_id}</code></td><td>EU startup funding — one call (full body), by its F&amp;T topic_id</td></tr>
+<tr><td><span class="badge badge--get">GET</span></td><td><code>/api/v2/funding/startups/{topic_id}</code></td><td>EU startup funding — one call (full text), by its topic reference</td></tr>
 </tbody>
 </table>
 
