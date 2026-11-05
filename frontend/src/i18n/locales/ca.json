@@ -1583,24 +1583,28 @@
           "help": "El número de l'acte, sense l'any."
         },
         "author": {
-          "label": "Autor"
+          "label": "Autor",
+          "help": "L'òrgan que va redactar l'acte, com a codi: COM, CONSIL, EP o un departament com ara SANTE."
         },
         "lang": {
           "label": "Llengua",
           "help": "La llengua, amb un codi curt com en o fr."
         },
         "language": {
-          "label": "Llengua"
+          "label": "Llengua",
+          "help": "La llengua dels títols o etiquetes, com a codi, per exemple ENG o en."
         },
         "code": {
           "label": "Codi",
           "help": "El codi de l'element. La llista te'l dona."
         },
         "source": {
-          "label": "Font"
+          "label": "Font",
+          "help": "D'on vénen els elements. Deixa-ho buit per al conjunt habitual."
         },
         "type": {
-          "label": "Tipus"
+          "label": "Tipus",
+          "help": "El tipus d'element que vols veure. Les opcions depenen de la llista."
         },
         "deadline": {
           "label": "Termini"
@@ -1618,7 +1622,8 @@
           "label": "De"
         },
         "institution": {
-          "label": "Institució"
+          "label": "Institució",
+          "help": "La institució o agència de la UE, pel nom o el codi."
         },
         "contracting_authority": {
           "label": "Comprador",
@@ -1628,16 +1633,20 @@
           "label": "País de la UE"
         },
         "buyer_country": {
-          "label": "País del comprador"
+          "label": "País del comprador",
+          "help": "El país del comprador, com a codi de dues lletres, per exemple BE."
         },
         "role": {
-          "label": "Funció"
+          "label": "Funció",
+          "help": "El paper d'aquesta organització en el projecte, com ara coordinador o soci."
         },
         "consultation_type": {
-          "label": "Tipus"
+          "label": "Tipus",
+          "help": "Consulta pública, convocatòria de dades o iniciativa."
         },
         "event_type": {
-          "label": "Tipus d'esdeveniment"
+          "label": "Tipus d'esdeveniment",
+          "help": "El tipus d'esdeveniment, com ara una sessió plenària o una reunió de comissió."
         },
         "venue": {
           "label": "Lloc"
@@ -1647,7 +1656,8 @@
           "help": "El tipus de cas d'infracció."
         },
         "infringement_number": {
-          "label": "Número de cas"
+          "label": "Número de cas",
+          "help": "El número d'un cas, com ara INFR(2026)0352."
         },
         "latest_decision_type": {
           "label": "Última decisió"
@@ -1707,7 +1717,8 @@
           "help": "El tipus de text, com ara resolució o decisió."
         },
         "publication_number": {
-          "label": "Número de publicació"
+          "label": "Número de publicació",
+          "help": "El número de l'anunci a TED, el diari de licitacions de la UE, com ara 351840-2025."
         },
         "publication_id": {
           "label": "Referència de la publicació",
@@ -1730,7 +1741,8 @@
           "help": "La referència del tema de finançament. La llista te la dona."
         },
         "acronym": {
-          "label": "Acrònim"
+          "label": "Acrònim",
+          "help": "El nom curt del programa, com ara ERDF."
         },
         "category": {
           "label": "Categoria",
@@ -2016,27 +2028,32 @@
           "help": "Només organitzacions amb personal acreditat al Parlament."
         },
         "body_threshold": {
-          "label": "Límit de text curt"
+          "label": "Límit de text curt",
+          "help": "Com de curt pot ser un text perquè encara compti com a text complet."
         },
         "sector": {
           "label": "Sector",
           "help": "El sector o àmbit al qual pertany."
         },
         "dg": {
-          "label": "Departament de la Comissió"
+          "label": "Departament de la Comissió",
+          "help": "El departament de la Comissió, pel codi o part del nom, com ara CNECT."
         },
         "project_id": {
           "label": "Número de projecte",
           "help": "El número del projecte."
         },
         "contract_nature": {
-          "label": "Tipus de contracte"
+          "label": "Tipus de contracte",
+          "help": "Obres, subministraments o serveis."
         },
         "topic": {
-          "label": "Tema"
+          "label": "Tema",
+          "help": "El codi del tema del projecte, o el seu inici, com ara HORIZON-CL5-2026."
         },
         "collection": {
-          "label": "Col·lecció"
+          "label": "Col·lecció",
+          "help": "Una col·lecció temàtica d'aquesta font."
         },
         "theme": {
           "label": "Tema",
@@ -2051,285 +2068,372 @@
           "help": "Només aquells amb una decisió d'aquest dia o anterior."
         },
         "lead_dg": {
-          "label": "Departament principal"
+          "label": "Departament principal",
+          "help": "El departament de la Comissió que porta el cas, com a codi, per exemple ENV."
         },
         "department": {
           "label": "Departament",
           "help": "Part del nom del departament."
         },
         "funding_type": {
-          "label": "Tipus de finançament"
+          "label": "Tipus de finançament",
+          "help": "La forma del finançament, com ara subvenció o contractació."
         },
         "call_id": {
-          "label": "Referència de la convocatòria"
+          "label": "Referència de la convocatòria",
+          "help": "El número de referència de la convocatòria, tal com es va publicar."
         },
         "organisation": {
-          "label": "Organització"
+          "label": "Organització",
+          "help": "El nom d'una organització, o part d'aquest."
         },
         "keyword": {
           "label": "Paraula clau",
           "help": "Part d'una de les seves paraules clau."
         },
         "heading": {
-          "label": "Rúbrica pressupostària"
+          "label": "Rúbrica pressupostària",
+          "help": "La part del pressupost a llarg termini de la UE, o paraules del seu nom."
         },
         "cluster": {
-          "label": "Clúster"
+          "label": "Clúster",
+          "help": "El grup del programa, o paraules del seu nom."
         },
         "coverage": {
-          "label": "Cobertura"
+          "label": "Cobertura",
+          "help": "Fins a quin punt les dades de Brubru cobreixen el programa: cobert, llacuna o omès."
         },
         "procedure_type": {
           "label": "Tipus de procediment",
           "help": "El tipus de procediment, com ara obert o restringit."
         },
         "cpv_code": {
-          "label": "Codi de béns o serveis"
+          "label": "Codi de béns o serveis",
+          "help": "El codi de la UE del que es compra, o el seu inici, com ara 45 per a la construcció."
         },
         "include_delegated": {
-          "label": "Incloure actes delegats?"
+          "label": "Incloure actes delegats?",
+          "help": "Mostra també els actes delegats i d'execució encara en preparació."
         },
         "template_id": {
           "label": "Plantilla",
           "help": "El nom de la plantilla. La llista te'l dona."
         },
         "has_transcript": {
-          "label": "Té transcripció?"
+          "label": "Té transcripció?",
+          "help": "Només els elements que tenen una transcripció escrita."
         },
         "resolution_type": {
-          "label": "Tipus de resolució"
+          "label": "Tipus de resolució",
+          "help": "El tipus de procediment: informe d'iniciativa pròpia (INI), iniciativa legislativa (INL), resolució sobre temes d'actualitat (RSP) o altres."
         },
         "position": {
           "label": "Càrrec",
           "help": "El càrrec de la persona o, en un vot, com va votar."
         },
         "commission_dg": {
-          "label": "Departament de la Comissió"
+          "label": "Departament de la Comissió",
+          "help": "El departament de la Comissió, com a codi, per exemple AGRI o ENV."
         },
         "document_register_category": {
-          "label": "Categoria del document"
+          "label": "Categoria del document",
+          "help": "El tipus de document, com ara COM, SWD, decisió o reglament."
         },
         "has_pdf": {
-          "label": "Té PDF?"
+          "label": "Té PDF?",
+          "help": "Només els elements amb PDF."
         },
         "latest_decision_category": {
-          "label": "Tipus d'última decisió"
+          "label": "Tipus d'última decisió",
+          "help": "L'últim pas del cas, com a codi, per exemple LFN (carta d'emplaçament) o RO (dictamen motivat)."
         },
         "decision_category": {
-          "label": "Tipus de decisió"
+          "label": "Tipus de decisió",
+          "help": "El tipus de pas, com a codi, per exemple LFN (carta d'emplaçament), RO (dictamen motivat) o RTC (remissió al Tribunal)."
         },
         "decision_type": {
-          "label": "Paraules de la decisió"
+          "label": "Paraules de la decisió",
+          "help": "Paraules del nom de la decisió, com ara 260(3)."
         },
         "with_press_release": {
-          "label": "Amb comunicat?"
+          "label": "Amb comunicat?",
+          "help": "Només les decisions anunciades en un comunicat de premsa."
         },
         "organisation_met": {
-          "label": "Organització reunida"
+          "label": "Organització reunida",
+          "help": "Una paraula del nom de l'organització amb qui es van reunir."
         },
         "verdict": {
-          "label": "Dictamen"
+          "label": "Dictamen",
+          "help": "El dictamen del comitè: positiu, positiu amb reserves o negatiu."
         },
         "opinion_type": {
-          "label": "Tipus de dictamen"
+          "label": "Tipus de dictamen",
+          "help": "El que va examinar el comitè: una avaluació d'impacte, una avaluació o un control d'adequació."
         },
         "notifying_country": {
-          "label": "País notificant"
+          "label": "País notificant",
+          "help": "El país que va enviar la notificació, com a codi de dues lletres, per exemple FR."
         },
         "classify": {
-          "label": "Afegir temes?"
+          "label": "Afegir temes?",
+          "help": "Etiqueta també cada element amb termes temàtics de la UE. Triga més."
         },
         "shallow": {
-          "label": "Lectura ràpida?"
+          "label": "Lectura ràpida?",
+          "help": "Una llista més ràpida que no obre cada element, de manera que els textos complets i algunes dates queden buits."
         },
         "url": {
-          "label": "Adreça web"
+          "label": "Adreça web",
+          "help": "L'adreça de la pàgina de la UE que es vol llegir."
         },
         "deadline_before": {
-          "label": "Tanca abans de"
+          "label": "Tanca abans de",
+          "help": "Només les convocatòries que tanquen en aquesta data o abans."
         },
         "responsible_department": {
-          "label": "Departament responsable"
+          "label": "Departament responsable",
+          "help": "El departament de la Comissió. Igual que el filtre de departament de la Comissió."
         },
         "coordinator": {
-          "label": "Només coordinadors?"
+          "label": "Només coordinadors?",
+          "help": "Sí mostra només els coordinadors; No mostra els altres beneficiaris."
         },
         "vat": {
-          "label": "Número d'IVA"
+          "label": "Número d'IVA",
+          "help": "El número d'IVA exacte. Els espais no importen."
         },
         "disaster_type": {
-          "label": "Tipus de catàstrofe"
+          "label": "Tipus de catàstrofe",
+          "help": "Una paraula per al tipus de catàstrofe, com ara flood (inundació)."
         },
         "contract_type": {
-          "label": "Tipus de contracte (nom antic)"
+          "label": "Tipus de contracte (nom antic)",
+          "help": "El nom antic de «Tipus de contracte»: obres, subministraments o serveis."
         },
         "participant_country": {
-          "label": "País del participant"
+          "label": "País del participant",
+          "help": "El país d'aquesta organització, com a codi de dues lletres."
         },
         "expertise": {
-          "label": "Oferta o sol·licitud"
+          "label": "Oferta o sol·licitud",
+          "help": "Si l'organització ofereix coneixements o en demana."
         },
         "organisation_type": {
-          "label": "Tipus d'organització"
+          "label": "Tipus d'organització",
+          "help": "El tipus d'organització, com ara petita o mitjana empresa, o recerca."
         },
         "pic": {
-          "label": "Número PIC"
+          "label": "Número PIC",
+          "help": "El número que el portal de finançament de la UE dona a cada organització."
         },
         "without_eu_projects": {
-          "label": "Sense projectes de la UE?"
+          "label": "Sense projectes de la UE?",
+          "help": "Només les organitzacions que encara no tenen cap projecte de la UE."
         },
         "requested_from": {
-          "label": "Anunciat des de"
+          "label": "Anunciat des de",
+          "help": "Anunciat en aquesta data o després."
         },
         "requested_to": {
-          "label": "Anunciat fins a"
+          "label": "Anunciat fins a",
+          "help": "Anunciat en aquesta data o abans."
         },
         "activity_type": {
-          "label": "Tipus d'activitat"
+          "label": "Tipus d'activitat",
+          "help": "El tipus d'organització en el projecte, com a codi: HES (ensenyament superior), REC (recerca), PRC (empresa), PUB (organisme públic) o OTH (altres)."
         },
         "is_sme": {
-          "label": "Pime?"
+          "label": "Pime?",
+          "help": "Només petites o mitjanes empreses, tal com les registra la base de dades de recerca de la UE."
         },
         "period": {
-          "label": "Període pressupostari"
+          "label": "Període pressupostari",
+          "help": "El període pressupostari, com ara 2021-2027."
         },
         "instrument": {
-          "label": "Tipus de suport"
+          "label": "Tipus de suport",
+          "help": "La forma de l'ajut: subvenció, finançament mixt, capital o premi."
         },
         "winner": {
-          "label": "Adjudicatari"
+          "label": "Adjudicatari",
+          "help": "El nom d'un adjudicatari, o part d'aquest."
         },
         "winner_country": {
-          "label": "País de l'adjudicatari"
+          "label": "País de l'adjudicatari",
+          "help": "El país d'un adjudicatari, com a codi de dues lletres."
         },
         "include_superseded": {
-          "label": "Incloure versions anteriors?"
+          "label": "Incloure versions anteriors?",
+          "help": "Mostra també les versions anteriors dels anuncis modificats."
         },
         "form_type": {
-          "label": "Fase de l'anunci"
+          "label": "Fase de l'anunci",
+          "help": "En quin punt és l'anunci: planificació, licitació, resultat o modificació d'un contracte."
         },
         "notice_subtype": {
-          "label": "Tipus d'anunci"
+          "label": "Tipus d'anunci",
+          "help": "El tipus exacte d'anunci, com a codi, per exemple cn-standard."
         },
         "buyer_level": {
-          "label": "Nivell del comprador"
+          "label": "Nivell del comprador",
+          "help": "Si el comprador és local, regional, nacional, de la UE o internacional."
         },
         "buyer_legal_type": {
-          "label": "Tipus jurídic del comprador"
+          "label": "Tipus jurídic del comprador",
+          "help": "La forma jurídica del comprador, com a codi, per exemple la (autoritat local)."
         },
         "currency": {
-          "label": "Moneda"
+          "label": "Moneda",
+          "help": "La moneda del valor estimat, com a codi, per exemple EUR."
         },
         "min_value": {
-          "label": "Valor mínim"
+          "label": "Valor mínim",
+          "help": "Només els anuncis d'almenys aquest import, en la moneda de l'anunci."
         },
         "max_value": {
-          "label": "Valor màxim"
+          "label": "Valor màxim",
+          "help": "Només els anuncis de com a màxim aquest import, en la moneda de l'anunci."
         },
         "text": {
-          "label": "Text"
+          "label": "Text",
+          "help": "El text on buscar referències a lleis de la UE i afers judicials."
         },
         "include_orphans": {
-          "label": "Incloure files sense número?"
+          "label": "Incloure files sense número?",
+          "help": "Mostra també les files sense número de llei, com ara els annexos separats."
         },
         "corrects": {
-          "label": "Correccions de"
+          "label": "Correccions de",
+          "help": "El número d'una llei (CELEX): mostra les correccions d'aquesta llei."
         },
         "version": {
-          "label": "Versió"
+          "label": "Versió",
+          "help": "El text consolidat més recent, o l'acte tal com es va adoptar."
         },
         "chapter": {
-          "label": "Capítol"
+          "label": "Capítol",
+          "help": "El codi del capítol o paraules del seu títol."
         },
         "sectors": {
-          "label": "Sectors"
+          "label": "Sectors",
+          "help": "Els tipus de document, com a codis de sector CELEX separats per comes, per exemple 3,5."
         },
         "microthesaurus": {
-          "label": "Grup de temes"
+          "label": "Grup de temes",
+          "help": "El número d'un grup de temes a EuroVoc, la llista de temes de la UE, com ara 2826."
         },
         "domain": {
-          "label": "Àmbit temàtic"
+          "label": "Àmbit temàtic",
+          "help": "El número d'un àmbit a EuroVoc, la llista de temes de la UE, com ara 28."
         },
         "priority": {
-          "label": "Prioritat de la Comissió"
+          "label": "Prioritat de la Comissió",
+          "help": "Una de les prioritats polítiques de la Comissió, per la seva etiqueta."
         },
         "include_other_sources": {
-          "label": "Incloure altres fonts?"
+          "label": "Incloure altres fonts?",
+          "help": "Mostra també els actes d'EUR-Lex i els expedients del Tren Legislatiu, que no són procediments."
         },
         "stale_after_days": {
-          "label": "Antic després de (dies)"
+          "label": "Antic després de (dies)",
+          "help": "Quants dies sense notícies abans que tot el canal s'indiqui com a antic."
         },
         "body_stale_after_days": {
-          "label": "Un organisme és antic després de (dies)"
+          "label": "Un organisme és antic després de (dies)",
+          "help": "Quants dies sense notícies abans que un organisme s'indiqui com a antic."
         },
         "geo": {
-          "label": "Codi geogràfic"
+          "label": "Codi geogràfic",
+          "help": "El lloc, com a codi d'Eurostat, per exemple ES, FR o EU27_2020."
         },
         "time": {
-          "label": "Any"
+          "label": "Any",
+          "help": "Un any, com ara 2023."
         },
         "sex": {
-          "label": "Sexe"
+          "label": "Sexe",
+          "help": "T per al total, F per a dones, M per a homes."
         },
         "include_payload": {
-          "label": "Incloure totes les xifres?"
+          "label": "Incloure totes les xifres?",
+          "help": "Inclou també totes les xifres, en el format estadístic JSON-stat. La resposta és més gran."
         },
         "amendment_type": {
-          "label": "Tipus d'esmena"
+          "label": "Tipus d'esmena",
+          "help": "El que fa l'esmena: canvia, suprimeix o afegeix text."
         },
         "upcoming": {
-          "label": "Només properes?"
+          "label": "Només properes?",
+          "help": "Només els ordres del dia amb data d'avui o posterior."
         },
         "doc_kind": {
-          "label": "Tipus de document"
+          "label": "Tipus de document",
+          "help": "El tipus de document, com ara projecte d'informe, esmena, llista de votació o ordre del dia."
         },
         "gepro_code": {
-          "label": "Codi de document del PE"
+          "label": "Codi de document del PE",
+          "help": "El codi curt del Parlament per al document, com ara PR (projecte d'informe) o AM (esmena)."
         },
         "term": {
-          "label": "Legislatura"
+          "label": "Legislatura",
+          "help": "La legislatura. 10 és l'actual."
         },
         "include_former": {
-          "label": "Incloure antics membres?"
+          "label": "Incloure antics membres?",
+          "help": "Mostra també els diputats que han deixat el Parlament des de les eleccions."
         },
         "question_type": {
-          "label": "Tipus de pregunta"
+          "label": "Tipus de pregunta",
+          "help": "Escrita, oral, prioritària o torn de preguntes."
         },
         "answering_institution": {
-          "label": "Resposta per"
+          "label": "Resposta per",
+          "help": "Qui respon la pregunta: Comissió, Consell o Banc Central Europeu."
         },
         "result": {
-          "label": "Resultat"
+          "label": "Resultat",
+          "help": "Si la votació va aprovar o rebutjar el text."
         },
         "report_type": {
-          "label": "Tipus d'informe"
+          "label": "Tipus d'informe",
+          "help": "Entrada de l'EU Canon o anàlisi en profunditat. Deixa-ho buit per a tots dos."
         },
         "legal_family": {
-          "label": "Família jurídica"
+          "label": "Família jurídica",
+          "help": "Un grup de lleis relacionades, per la seva etiqueta, com ara eu_pharmaceutical."
         },
         "category_en": {
-          "label": "Categoria"
+          "label": "Categoria",
+          "help": "La categoria de Brubru, pel seu nom en anglès."
         },
         "engine": {
-          "label": "Motor de traducció"
+          "label": "Motor de traducció",
+          "help": "Quin motor de traducció va produir el text: Softcatalà o Sonnet."
         },
         "detail_level": {
-          "label": "Quant text"
+          "label": "Quant text",
+          "help": "Resum dona una mostra de 500 caràcters; Complet dona la guia sencera."
         },
         "upcoming_only": {
-          "label": "Només dates properes?"
+          "label": "Només dates properes?",
+          "help": "Només les fites amb data d'avui o posterior."
         },
         "include_news": {
-          "label": "Incloure notícies?"
+          "label": "Incloure notícies?",
+          "help": "Inclou també notícies recents sobre envasos i economia circular."
         },
         "funding_mode": {
-          "label": "Tipus de finançament"
+          "label": "Tipus de finançament",
+          "help": "Subvenció, només capital o finançament mixt."
         },
         "sub_instrument": {
-          "label": "Subinstrument"
+          "label": "Subinstrument",
+          "help": "Una part del programa de finançament, pel seu nom."
         },
         "include_removed": {
-          "label": "Incloure els qui han marxat?"
+          "label": "Incloure els qui han marxat?",
+          "help": "Mostra també els funcionaris que ja no són al directori."
         },
         "amendment_id": {
           "label": "Referència",
@@ -2523,7 +2627,8 @@
       },
       "cardsNote": "Prem una targeta per veure resultats reals a l'instant. Fa servir 1 cerca gratuïta; tornar a una targeta ja vista no en gasta cap.",
       "refine": "Afina aquesta cerca",
-      "capShort": "Avui ja no et queden cerques gratuïtes."
+      "capShort": "Avui ja no et queden cerques gratuïtes.",
+      "aboutInEnglish": "Aquesta descripció és en anglès."
     },
     "bundles": {
       "official-journal": {

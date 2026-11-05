@@ -1583,24 +1583,28 @@
           "help": "Het nummer van de handeling, zonder het jaar."
         },
         "author": {
-          "label": "Auteur"
+          "label": "Auteur",
+          "help": "Het orgaan dat de handeling heeft opgesteld, als code: COM, CONSIL, EP of een dienst zoals SANTE."
         },
         "lang": {
           "label": "Taal",
           "help": "De taal, met een korte code zoals en of fr."
         },
         "language": {
-          "label": "Taal"
+          "label": "Taal",
+          "help": "De taal van titels of labels, als code, zoals ENG of en."
         },
         "code": {
           "label": "Code",
           "help": "De code van het item. De lijst geeft die."
         },
         "source": {
-          "label": "Bron"
+          "label": "Bron",
+          "help": "Waar de items vandaan komen. Laat leeg voor de gebruikelijke set."
         },
         "type": {
-          "label": "Soort"
+          "label": "Soort",
+          "help": "Het soort item om te tonen. De keuzes hangen af van de lijst."
         },
         "deadline": {
           "label": "Deadline"
@@ -1618,7 +1622,8 @@
           "label": "Van"
         },
         "institution": {
-          "label": "Instelling"
+          "label": "Instelling",
+          "help": "De EU-instelling of het EU-agentschap, op naam of code."
         },
         "contracting_authority": {
           "label": "Koper",
@@ -1628,16 +1633,20 @@
           "label": "EU-land"
         },
         "buyer_country": {
-          "label": "Land van de koper"
+          "label": "Land van de koper",
+          "help": "Het land van de koper, als code van twee letters, zoals BE."
         },
         "role": {
-          "label": "Rol"
+          "label": "Rol",
+          "help": "De rol van die organisatie in het project, zoals coördinator of partner."
         },
         "consultation_type": {
-          "label": "Soort"
+          "label": "Soort",
+          "help": "Openbare raadpleging, oproep tot het indienen van input of initiatief."
         },
         "event_type": {
-          "label": "Soort evenement"
+          "label": "Soort evenement",
+          "help": "Het soort evenement, zoals een plenaire vergadering of een commissievergadering."
         },
         "venue": {
           "label": "Plaats"
@@ -1647,7 +1656,8 @@
           "help": "Het soort inbreukzaak."
         },
         "infringement_number": {
-          "label": "Zaaknummer"
+          "label": "Zaaknummer",
+          "help": "Het nummer van één zaak, zoals INFR(2026)0352."
         },
         "latest_decision_type": {
           "label": "Laatste besluit"
@@ -1707,7 +1717,8 @@
           "help": "Het soort tekst, bijvoorbeeld resolutie of besluit."
         },
         "publication_number": {
-          "label": "Publicatienummer"
+          "label": "Publicatienummer",
+          "help": "Het nummer van de aankondiging op TED, het EU-publicatieblad voor aanbestedingen, zoals 351840-2025."
         },
         "publication_id": {
           "label": "Publicatiereferentie",
@@ -1730,7 +1741,8 @@
           "help": "De referentie van het financieringsonderwerp. De lijst geeft die."
         },
         "acronym": {
-          "label": "Acroniem"
+          "label": "Acroniem",
+          "help": "De korte naam van het programma, zoals ERDF."
         },
         "category": {
           "label": "Categorie",
@@ -2016,27 +2028,32 @@
           "help": "Alleen organisaties met personeel dat bij het Parlement geaccrediteerd is."
         },
         "body_threshold": {
-          "label": "Grens korte tekst"
+          "label": "Grens korte tekst",
+          "help": "Hoe kort een tekst mag zijn om nog als volledige tekst te gelden."
         },
         "sector": {
           "label": "Sector",
           "help": "De sector of het beleidsgebied waartoe het behoort."
         },
         "dg": {
-          "label": "Commissiedepartement"
+          "label": "Commissiedepartement",
+          "help": "De dienst van de Commissie, op code of een deel van de naam, zoals CNECT."
         },
         "project_id": {
           "label": "Projectnummer",
           "help": "Het nummer van het project."
         },
         "contract_nature": {
-          "label": "Soort opdracht"
+          "label": "Soort opdracht",
+          "help": "Werken, leveringen of diensten."
         },
         "topic": {
-          "label": "Onderwerp"
+          "label": "Onderwerp",
+          "help": "De themacode van het project, of het begin ervan, zoals HORIZON-CL5-2026."
         },
         "collection": {
-          "label": "Collectie"
+          "label": "Collectie",
+          "help": "Eén thematische collectie van deze bron."
         },
         "theme": {
           "label": "Thema",
@@ -2051,285 +2068,372 @@
           "help": "Alleen die met een besluit op of voor deze dag."
         },
         "lead_dg": {
-          "label": "Leidend departement"
+          "label": "Leidend departement",
+          "help": "De dienst van de Commissie die de zaak leidt, als code, zoals ENV."
         },
         "department": {
           "label": "Departement",
           "help": "Deel van de naam van het departement."
         },
         "funding_type": {
-          "label": "Soort financiering"
+          "label": "Soort financiering",
+          "help": "De vorm van de financiering, zoals subsidie of aanbesteding."
         },
         "call_id": {
-          "label": "Referentie van de oproep"
+          "label": "Referentie van de oproep",
+          "help": "Het referentienummer van de oproep, precies zoals gepubliceerd."
         },
         "organisation": {
-          "label": "Organisatie"
+          "label": "Organisatie",
+          "help": "De naam van een organisatie, of een deel ervan."
         },
         "keyword": {
           "label": "Trefwoord",
           "help": "Deel van een van de trefwoorden."
         },
         "heading": {
-          "label": "Begrotingsrubriek"
+          "label": "Begrotingsrubriek",
+          "help": "Het onderdeel van de langetermijnbegroting van de EU, of woorden uit de naam."
         },
         "cluster": {
-          "label": "Cluster"
+          "label": "Cluster",
+          "help": "Het cluster van het programma, of woorden uit de naam."
         },
         "coverage": {
-          "label": "Dekking"
+          "label": "Dekking",
+          "help": "Hoe ver de gegevens van Brubru het programma dekken: gedekt, leemte of overgeslagen."
         },
         "procedure_type": {
           "label": "Soort procedure",
           "help": "Het soort procedure, bijvoorbeeld openbaar of niet-openbaar."
         },
         "cpv_code": {
-          "label": "Code goederen of diensten"
+          "label": "Code goederen of diensten",
+          "help": "De EU-code voor wat wordt gekocht, of het begin ervan, zoals 45 voor de bouw."
         },
         "include_delegated": {
-          "label": "Gedelegeerde handelingen meenemen?"
+          "label": "Gedelegeerde handelingen meenemen?",
+          "help": "Ook gedelegeerde en uitvoeringshandelingen tonen die nog in voorbereiding zijn."
         },
         "template_id": {
           "label": "Sjabloon",
           "help": "De naam van het sjabloon. De lijst geeft die."
         },
         "has_transcript": {
-          "label": "Transcriptie beschikbaar?"
+          "label": "Transcriptie beschikbaar?",
+          "help": "Alleen items met een geschreven transcriptie."
         },
         "resolution_type": {
-          "label": "Soort resolutie"
+          "label": "Soort resolutie",
+          "help": "Het soort procedure: initiatiefverslag (INI), wetgevingsinitiatief (INL), resolutie over een actueel onderwerp (RSP) of anders."
         },
         "position": {
           "label": "Functie",
           "help": "De functie van de persoon of, bij een stemming, hoe die stemde."
         },
         "commission_dg": {
-          "label": "Commissiedepartement"
+          "label": "Commissiedepartement",
+          "help": "De dienst van de Commissie, als code, zoals AGRI of ENV."
         },
         "document_register_category": {
-          "label": "Documentcategorie"
+          "label": "Documentcategorie",
+          "help": "Het soort document, zoals COM, SWD, besluit of verordening."
         },
         "has_pdf": {
-          "label": "PDF beschikbaar?"
+          "label": "PDF beschikbaar?",
+          "help": "Alleen items met een pdf."
         },
         "latest_decision_category": {
-          "label": "Soort laatste besluit"
+          "label": "Soort laatste besluit",
+          "help": "De laatste stap in de zaak, als code, zoals LFN (aanmaningsbrief) of RO (met redenen omkleed advies)."
         },
         "decision_category": {
-          "label": "Soort besluit"
+          "label": "Soort besluit",
+          "help": "Het soort stap, als code, zoals LFN (aanmaningsbrief), RO (met redenen omkleed advies) of RTC (verwijzing naar het Hof)."
         },
         "decision_type": {
-          "label": "Woorden in het besluit"
+          "label": "Woorden in het besluit",
+          "help": "Woorden uit de naam van het besluit, zoals 260(3)."
         },
         "with_press_release": {
-          "label": "Met persbericht?"
+          "label": "Met persbericht?",
+          "help": "Alleen besluiten die in een persbericht zijn aangekondigd."
         },
         "organisation_met": {
-          "label": "Ontmoete organisatie"
+          "label": "Ontmoete organisatie",
+          "help": "Een woord uit de naam van de ontmoete organisatie."
         },
         "verdict": {
-          "label": "Advies"
+          "label": "Advies",
+          "help": "Het advies van de raad: positief, positief met voorbehoud of negatief."
         },
         "opinion_type": {
-          "label": "Soort advies"
+          "label": "Soort advies",
+          "help": "Wat de raad heeft bekeken: een effectbeoordeling, een evaluatie of een geschiktheidscontrole."
         },
         "notifying_country": {
-          "label": "Aanmeldend land"
+          "label": "Aanmeldend land",
+          "help": "Het land dat de kennisgeving heeft gestuurd, als code van twee letters, zoals FR."
         },
         "classify": {
-          "label": "Onderwerpen toevoegen?"
+          "label": "Onderwerpen toevoegen?",
+          "help": "Elk item ook van EU-onderwerpstermen voorzien. Dat duurt langer."
         },
         "shallow": {
-          "label": "Snel lezen?"
+          "label": "Snel lezen?",
+          "help": "Een snellere lijst die niet elk item opent, dus volledige teksten en sommige datums blijven leeg."
         },
         "url": {
-          "label": "Webadres"
+          "label": "Webadres",
+          "help": "Het adres van de EU-pagina om te lezen."
         },
         "deadline_before": {
-          "label": "Sluit uiterlijk op"
+          "label": "Sluit uiterlijk op",
+          "help": "Alleen oproepen die op of vóór deze datum sluiten."
         },
         "responsible_department": {
-          "label": "Verantwoordelijk departement"
+          "label": "Verantwoordelijk departement",
+          "help": "De dienst van de Commissie. Hetzelfde als de filter voor de dienst van de Commissie."
         },
         "coordinator": {
-          "label": "Alleen coördinatoren?"
+          "label": "Alleen coördinatoren?",
+          "help": "Ja toont alleen coördinatoren; Nee toont de andere ontvangers."
         },
         "vat": {
-          "label": "Btw-nummer"
+          "label": "Btw-nummer",
+          "help": "Het exacte btw-nummer. Spaties maken niet uit."
         },
         "disaster_type": {
-          "label": "Soort ramp"
+          "label": "Soort ramp",
+          "help": "Een woord voor het soort ramp, zoals flood (overstroming)."
         },
         "contract_type": {
-          "label": "Soort opdracht (oude naam)"
+          "label": "Soort opdracht (oude naam)",
+          "help": "De oudere naam van 'Soort contract': werken, leveringen of diensten."
         },
         "participant_country": {
-          "label": "Land van de deelnemer"
+          "label": "Land van de deelnemer",
+          "help": "Het land van die organisatie, als code van twee letters."
         },
         "expertise": {
-          "label": "Aanbod of vraag"
+          "label": "Aanbod of vraag",
+          "help": "Of de organisatie expertise aanbiedt of vraagt."
         },
         "organisation_type": {
-          "label": "Soort organisatie"
+          "label": "Soort organisatie",
+          "help": "Het soort organisatie, zoals klein of middelgroot bedrijf, of onderzoek."
         },
         "pic": {
-          "label": "PIC-nummer"
+          "label": "PIC-nummer",
+          "help": "Het nummer dat het financieringsportaal van de EU aan elke organisatie geeft."
         },
         "without_eu_projects": {
-          "label": "Nog geen EU-project?"
+          "label": "Nog geen EU-project?",
+          "help": "Alleen organisaties die nog geen EU-project hebben."
         },
         "requested_from": {
-          "label": "Aangekondigd vanaf"
+          "label": "Aangekondigd vanaf",
+          "help": "Aangekondigd op of na deze datum."
         },
         "requested_to": {
-          "label": "Aangekondigd tot"
+          "label": "Aangekondigd tot",
+          "help": "Aangekondigd op of vóór deze datum."
         },
         "activity_type": {
-          "label": "Soort activiteit"
+          "label": "Soort activiteit",
+          "help": "Het soort organisatie in het project, als code: HES (hoger onderwijs), REC (onderzoek), PRC (bedrijf), PUB (overheidsinstantie) of OTH (overig)."
         },
         "is_sme": {
-          "label": "Mkb?"
+          "label": "Mkb?",
+          "help": "Alleen kleine of middelgrote bedrijven, zoals de onderzoeksdatabank van de EU ze vermeldt."
         },
         "period": {
-          "label": "Begrotingsperiode"
+          "label": "Begrotingsperiode",
+          "help": "De begrotingsperiode, zoals 2021-2027."
         },
         "instrument": {
-          "label": "Soort steun"
+          "label": "Soort steun",
+          "help": "De vorm van steun: subsidie, gemengde financiering, eigen vermogen of prijs."
         },
         "winner": {
-          "label": "Winnaar"
+          "label": "Winnaar",
+          "help": "De naam van een winnaar, of een deel ervan."
         },
         "winner_country": {
-          "label": "Land van de winnaar"
+          "label": "Land van de winnaar",
+          "help": "Het land van een winnaar, als code van twee letters."
         },
         "include_superseded": {
-          "label": "Oude versies meenemen?"
+          "label": "Oude versies meenemen?",
+          "help": "Ook eerdere versies tonen van aankondigingen die zijn gewijzigd."
         },
         "form_type": {
-          "label": "Fase van de aankondiging"
+          "label": "Fase van de aankondiging",
+          "help": "Hoe ver de aankondiging is: planning, aanbesteding, resultaat of wijziging van een contract."
         },
         "notice_subtype": {
-          "label": "Soort aankondiging"
+          "label": "Soort aankondiging",
+          "help": "Het precieze soort aankondiging, als code, zoals cn-standard."
         },
         "buyer_level": {
-          "label": "Niveau van de koper"
+          "label": "Niveau van de koper",
+          "help": "Of de koper lokaal, regionaal, nationaal, Europees of internationaal is."
         },
         "buyer_legal_type": {
-          "label": "Rechtsvorm van de koper"
+          "label": "Rechtsvorm van de koper",
+          "help": "De rechtsvorm van de koper, als code, zoals la (lokale overheid)."
         },
         "currency": {
-          "label": "Valuta"
+          "label": "Valuta",
+          "help": "De munteenheid van de geraamde waarde, als code, zoals EUR."
         },
         "min_value": {
-          "label": "Minimumwaarde"
+          "label": "Minimumwaarde",
+          "help": "Alleen aankondigingen van minstens dit bedrag, in de munteenheid van de aankondiging."
         },
         "max_value": {
-          "label": "Maximumwaarde"
+          "label": "Maximumwaarde",
+          "help": "Alleen aankondigingen van hoogstens dit bedrag, in de munteenheid van de aankondiging."
         },
         "text": {
-          "label": "Tekst"
+          "label": "Tekst",
+          "help": "De tekst om te doorzoeken op verwijzingen naar EU-wetten en rechtszaken."
         },
         "include_orphans": {
-          "label": "Rijen zonder nummer meenemen?"
+          "label": "Rijen zonder nummer meenemen?",
+          "help": "Ook rijen zonder wetsnummer tonen, zoals losse bijlagen."
         },
         "corrects": {
-          "label": "Rectificaties van"
+          "label": "Rectificaties van",
+          "help": "Het nummer van een wet (CELEX): toont de rectificaties van die wet."
         },
         "version": {
-          "label": "Versie"
+          "label": "Versie",
+          "help": "De nieuwste geconsolideerde tekst, of de handeling zoals oorspronkelijk vastgesteld."
         },
         "chapter": {
-          "label": "Hoofdstuk"
+          "label": "Hoofdstuk",
+          "help": "De code van het hoofdstuk of woorden uit de titel."
         },
         "sectors": {
-          "label": "Sectoren"
+          "label": "Sectoren",
+          "help": "De soorten documenten, als CELEX-sectorcodes gescheiden door komma's, zoals 3,5."
         },
         "microthesaurus": {
-          "label": "Onderwerpgroep"
+          "label": "Onderwerpgroep",
+          "help": "Het nummer van een onderwerpsgroep in EuroVoc, de onderwerpenlijst van de EU, zoals 2826."
         },
         "domain": {
-          "label": "Onderwerpdomein"
+          "label": "Onderwerpdomein",
+          "help": "Het nummer van een onderwerpsdomein in EuroVoc, de onderwerpenlijst van de EU, zoals 28."
         },
         "priority": {
-          "label": "Prioriteit van de Commissie"
+          "label": "Prioriteit van de Commissie",
+          "help": "Een van de politieke prioriteiten van de Commissie, op label."
         },
         "include_other_sources": {
-          "label": "Andere bronnen meenemen?"
+          "label": "Andere bronnen meenemen?",
+          "help": "Ook EUR-Lex-handelingen en dossiers van de Legislative Train tonen, die geen procedures zijn."
         },
         "stale_after_days": {
-          "label": "Oud na (dagen)"
+          "label": "Oud na (dagen)",
+          "help": "Hoeveel dagen zonder nieuws voordat de hele feed als oud wordt gemeld."
         },
         "body_stale_after_days": {
-          "label": "Een orgaan is oud na (dagen)"
+          "label": "Een orgaan is oud na (dagen)",
+          "help": "Hoeveel dagen zonder nieuws voordat één orgaan als oud wordt gemeld."
         },
         "geo": {
-          "label": "Plaatscode"
+          "label": "Plaatscode",
+          "help": "De plaats, als Eurostat-code, zoals ES, FR of EU27_2020."
         },
         "time": {
-          "label": "Jaar"
+          "label": "Jaar",
+          "help": "Eén jaar, zoals 2023."
         },
         "sex": {
-          "label": "Geslacht"
+          "label": "Geslacht",
+          "help": "T voor totaal, F voor vrouwen, M voor mannen."
         },
         "include_payload": {
-          "label": "Alle cijfers meenemen?"
+          "label": "Alle cijfers meenemen?",
+          "help": "Ook alle cijfers opnemen, in het statistiekformaat JSON-stat. Het antwoord wordt groter."
         },
         "amendment_type": {
-          "label": "Soort amendement"
+          "label": "Soort amendement",
+          "help": "Wat het amendement doet: tekst wijzigen, schrappen of toevoegen."
         },
         "upcoming": {
-          "label": "Alleen komende?"
+          "label": "Alleen komende?",
+          "help": "Alleen agenda's van vandaag of later."
         },
         "doc_kind": {
-          "label": "Soort document"
+          "label": "Soort document",
+          "help": "Het soort document, zoals ontwerpverslag, amendement, stemlijst of agenda."
         },
         "gepro_code": {
-          "label": "Documentcode van het EP"
+          "label": "Documentcode van het EP",
+          "help": "De eigen korte code van het Parlement voor het document, zoals PR (ontwerpverslag) of AM (amendement)."
         },
         "term": {
-          "label": "Zittingsperiode"
+          "label": "Zittingsperiode",
+          "help": "De zittingsperiode. 10 is de huidige."
         },
         "include_former": {
-          "label": "Oud-leden meenemen?"
+          "label": "Oud-leden meenemen?",
+          "help": "Ook leden tonen die het Parlement sinds de verkiezingen hebben verlaten."
         },
         "question_type": {
-          "label": "Soort vraag"
+          "label": "Soort vraag",
+          "help": "Schriftelijk, mondeling, prioritair of vragenuur."
         },
         "answering_institution": {
-          "label": "Beantwoord door"
+          "label": "Beantwoord door",
+          "help": "Wie de vraag beantwoordt: Commissie, Raad of Europese Centrale Bank."
         },
         "result": {
-          "label": "Uitslag"
+          "label": "Uitslag",
+          "help": "Of de stemming de tekst heeft aangenomen of verworpen."
         },
         "report_type": {
-          "label": "Soort verslag"
+          "label": "Soort verslag",
+          "help": "EU Canon-artikel of diepteanalyse. Laat leeg voor beide."
         },
         "legal_family": {
-          "label": "Juridische familie"
+          "label": "Juridische familie",
+          "help": "Een groep verwante wetten, op label, zoals eu_pharmaceutical."
         },
         "category_en": {
-          "label": "Categorie"
+          "label": "Categorie",
+          "help": "De categorie van Brubru, op de Engelse naam."
         },
         "engine": {
-          "label": "Vertaalmachine"
+          "label": "Vertaalmachine",
+          "help": "Welke vertaalmachine de tekst heeft gemaakt: Softcatalà of Sonnet."
         },
         "detail_level": {
-          "label": "Hoeveel tekst"
+          "label": "Hoeveel tekst",
+          "help": "Samenvatting geeft een voorbeeld van 500 tekens; Volledig geeft de hele gids."
         },
         "upcoming_only": {
-          "label": "Alleen komende data?"
+          "label": "Alleen komende data?",
+          "help": "Alleen mijlpalen van vandaag of later."
         },
         "include_news": {
-          "label": "Nieuws meenemen?"
+          "label": "Nieuws meenemen?",
+          "help": "Ook recent nieuws over verpakkingen en de circulaire economie opnemen."
         },
         "funding_mode": {
-          "label": "Soort financiering"
+          "label": "Soort financiering",
+          "help": "Subsidie, alleen eigen vermogen of gemengde financiering."
         },
         "sub_instrument": {
-          "label": "Subinstrument"
+          "label": "Subinstrument",
+          "help": "Een onderdeel van het financieringsprogramma, op naam."
         },
         "include_removed": {
-          "label": "Vertrokken personen meenemen?"
+          "label": "Vertrokken personen meenemen?",
+          "help": "Ook ambtenaren tonen die niet meer in de gids staan."
         },
         "amendment_id": {
           "label": "Referentie",
@@ -2523,7 +2627,8 @@
       },
       "cardsNote": "Druk op een kaart om meteen echte resultaten te zien. Dat gebruikt 1 gratis zoekopdracht; teruggaan naar een kaart die u al zag niet.",
       "refine": "Deze zoekopdracht verfijnen",
-      "capShort": "Vandaag geen gratis zoekopdrachten meer."
+      "capShort": "Vandaag geen gratis zoekopdrachten meer.",
+      "aboutInEnglish": "Deze beschrijving is in het Engels."
     },
     "bundles": {
       "official-journal": {

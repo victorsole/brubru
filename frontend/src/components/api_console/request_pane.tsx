@@ -1,14 +1,14 @@
 // frontend/src/components/api_console/request_pane.tsx
 // Step 2: the form, in plain words, with what most people need first and the rest folded away. Typing makes no call:
 // a call follows the button or the Enter key, and the words beside the button say what it uses.
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import type { ConsoleOperation, ConsoleParam, ConsolePricing, ConsoleTask, PickLists } from '../../services/api_console';
+import type { ConsoleOperation, ConsoleParam, ConsolePricing, ConsoleTask, PickLists, RouteWordsMap } from '../../services/api_console';
 import {
   ROUTE_EXAMPLES, buildRequestPath, choicesOf, codeForTyped, dateRangeProblem, fieldHint, groupFields, hasSandbox, humanise, isItemRoute,
-  missingRequired, recentWorkingDays, sandboxLimitProblem, sandboxServes, whatItDoes,
+  loadRouteWords, missingRequired, recentWorkingDays, sandboxLimitProblem, sandboxServes, summaryIn, whatItDoesIn, wordsFor,
 } from '../../services/api_console';
 import { ConsoleTip } from './console_tip';
 
@@ -172,7 +172,7 @@ const Field = ({ param, value, examples, fixedOptions, lists, showHelp, error, o
         {param.required && <span className="api-console__required">{t('api.console.required')}</span>}
         <ConsoleTip label={t('api.console.moreAbout', { name: label })}>
           {plainHelp && <p>{plainHelp}</p>}
-          {param.description && <p className="api-console-pop__source">{param.description}</p>}
+          {param.description && (!plainHelp || i18n.language.startsWith('en')) && <p className="api-console-pop__source">{param.description}</p>}
           {!plainHelp && !param.description && <p>{t('api.console.noFieldHelp')}</p>}
           {(param.source === 'bodies' || param.source === 'families') && <p>{t('api.console.severalInCode')}</p>}
           <p className="api-console-pop__name">{t('api.console.nameInAddress')} <code>{param.name}</code></p>
@@ -203,6 +203,7 @@ interface Props {
   fieldErrors: Record<string, string>;
   pricing: ConsolePricing | null;
   lists: PickLists | null;
+  routeWords: RouteWordsMap;
   sending: boolean;
   sandboxLeft: number | null;
   listParent: ConsoleOperation | null;
@@ -216,10 +217,24 @@ interface Props {
 }
 
 export const RequestPane = ({
-  op, task, values, fieldErrors, pricing, lists, sending, sandboxLeft, listParent, canGoBack, onBack, onChange, onExample, onClear, onSend, onGoToList,
+  op, task, values, fieldErrors, pricing, lists, routeWords, sending, sandboxLeft, listParent, canGoBack, onBack, onChange, onExample, onClear, onSend, onGoToList,
 }: Props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const groups = useMemo(() => groupFields(op), [op]);
+  // The long descriptions are read only when someone opens them.
+  const [fullWords, setFullWords] = useState<RouteWordsMap>({});
+  const [aboutOpen, setAboutOpen] = useState(false);
+  useEffect(() => {
+    if (!aboutOpen) return undefined;
+    let current = true;
+    loadRouteWords(i18n.language, true).then((words) => {
+      if (current) setFullWords(words);
+    });
+    return () => {
+      current = false;
+    };
+  }, [aboutOpen, i18n.language]);
+  const ownDescription = wordsFor(op, fullWords)?.d;
   const missing = missingRequired(op, values);
   const missingLabels = missing.map((name) => t(`api.console.fields.${name}.label`, { defaultValue: humanise(name) }));
   const requestPath = buildRequestPath(op, values);
@@ -271,9 +286,9 @@ export const RequestPane = ({
           <span className="mdi mdi-arrow-left" aria-hidden="true" /> {t('api.console.backToResults')}
         </button>
       )}
-      <h3 className="api-console__summary">{taskWords || op.summary || op.path}</h3>
+      <h3 className="api-console__summary">{taskWords || summaryIn(op, routeWords) || op.path}</h3>
       {task && <p className="api-console__task-desc">{t(`api.console.tasks.${task.id}.desc`)}</p>}
-      {!task && whatItDoes(op) && <p className="api-console__task-desc">{whatItDoes(op)}</p>}
+      {!task && whatItDoesIn(op, routeWords) && <p className="api-console__task-desc">{whatItDoesIn(op, routeWords)}</p>}
       {op.deprecated && <span className="api-console__badge">{t('api.console.deprecated')}</span>}
 
       {item && !canGoBack && (
@@ -344,7 +359,7 @@ export const RequestPane = ({
         </div>
       </form>
 
-      <details className="api-console__about">
+      <details className="api-console__about" onToggle={(e) => setAboutOpen((e.target as HTMLDetailsElement).open)}>
         <summary>{t('api.console.about')}</summary>
         <div className="api-console__address">
           <span className="api-console__method">GET</span>
@@ -352,7 +367,8 @@ export const RequestPane = ({
         </div>
         <p className="api-console__address-note">{t('api.console.addressNote')}</p>
         <div className="api-console__url"><code>{requestPath}</code></div>
-        {op.description && <Description text={op.description} />}
+        {op.description && !i18n.language.startsWith('en') && !ownDescription && <p className="api-console__address-note">{t('api.console.aboutInEnglish')}</p>}
+        {op.description && <Description text={ownDescription || op.description} />}
       </details>
     </div>
   );

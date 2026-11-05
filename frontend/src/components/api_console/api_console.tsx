@@ -6,9 +6,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import type { ConsoleCatalogue, ConsoleOperation, ConsolePricing, ConsoleResponse, ConsoleTask, PickLists } from '../../services/api_console';
+import type { ConsoleCatalogue, ConsoleOperation, ConsolePricing, ConsoleResponse, ConsoleTask, PickLists, RouteWordsMap } from '../../services/api_console';
 import {
-  BUNDLE_ORDER, TASKS, bodiesRequested, buildRequestPath, cardCanSend, fieldErrorsOf, initialValues, loadCatalogue, loadPickLists, loadPricing, parentList,
+  BUNDLE_ORDER, TASKS, bodiesRequested, buildRequestPath, cardCanSend, fieldErrorsOf, initialValues, loadCatalogue, loadPickLists, loadPricing, loadRouteWords, parentList,
   rememberCallsLeft, rememberedCallsLeft, sandboxServes, sendRequest, startOfBundle, taskOf,
 } from '../../services/api_console';
 import { CataloguePane } from './catalogue_pane';
@@ -53,6 +53,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
   const [loadFailed, setLoadFailed] = useState(false);
   const [pricing, setPricing] = useState<ConsolePricing | null>(null);
   const [lists, setLists] = useState<PickLists | null>(null);
+  const [routeWords, setRouteWords] = useState<RouteWordsMap>({});
   const [selected, setSelected] = useState<ConsoleOperation | null>(null);
   const [values, setValues] = useState<Record<string, string>>({});
   const [response, setResponse] = useState<ConsoleResponse | null>(null);
@@ -104,6 +105,18 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     // Not while the page is being pre-rendered at build time: the static page keeps its empty state.
     if (wanted && !navigator.webdriver) load();
   }, [wanted, load]);
+
+  useEffect(() => {
+    if (!wanted || navigator.webdriver) return undefined;
+    let current = true;
+    setRouteWords({});
+    loadRouteWords(i18n.language).then((words) => {
+      if (current) setRouteWords(words);
+    });
+    return () => {
+      current = false;
+    };
+  }, [wanted, i18n.language]);
 
   useEffect(() => {
     if (!catalogue || selected) return;
@@ -353,7 +366,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
       {catalogue && selected && (
         <div className={`api-console__panes${browsing ? ' api-console__panes--browsing' : ''}`}>
           {browsing && (
-            <CataloguePane catalogue={catalogue} selected={selected} onSelect={(op) => select(op, true)} bundle={bundle} onBundle={chooseBundle} />
+            <CataloguePane catalogue={catalogue} selected={selected} onSelect={(op) => select(op, true)} bundle={bundle} onBundle={chooseBundle} routeWords={routeWords} />
           )}
           <div ref={requestRef} className="api-console__request-anchor">
             <RequestPane
@@ -363,6 +376,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
               fieldErrors={fieldErrors}
               pricing={pricing}
               lists={lists}
+              routeWords={routeWords}
               sending={sending}
               sandboxLeft={sandboxLeft}
               listParent={listParent}

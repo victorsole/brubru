@@ -3,8 +3,8 @@
 // filters the list in the browser: no call is made.
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ConsoleCatalogue, ConsoleOperation } from '../../services/api_console';
-import { BUNDLE_ORDER, bundleCount, searchOperations } from '../../services/api_console';
+import type { ConsoleCatalogue, ConsoleOperation, RouteWordsMap } from '../../services/api_console';
+import { BUNDLE_ORDER, bundleCount, searchOperations, summaryIn } from '../../services/api_console';
 
 const MAX_RESULTS = 100;
 
@@ -14,9 +14,10 @@ interface Props {
   onSelect: (op: ConsoleOperation) => void;
   bundle: string;
   onBundle: (bundle: string) => void;
+  routeWords: RouteWordsMap;
 }
 
-const Row = ({ op, active, onSelect }: { op: ConsoleOperation; active: boolean; onSelect: (op: ConsoleOperation) => void }) => {
+const Row = ({ op, active, onSelect, routeWords }: { op: ConsoleOperation; active: boolean; onSelect: (op: ConsoleOperation) => void; routeWords: RouteWordsMap }) => {
   const { t } = useTranslation();
   return (
     <li>
@@ -27,7 +28,7 @@ const Row = ({ op, active, onSelect }: { op: ConsoleOperation; active: boolean; 
         data-route={op.path}
         onClick={() => onSelect(op)}
       >
-        {op.summary && <span className="api-console__route-summary">{op.summary}</span>}
+        {op.summary && <span className="api-console__route-summary">{summaryIn(op, routeWords)}</span>}
         <code>{op.path.replace('/api/v2', '')}</code>
         {op.deprecated && <span className="api-console__badge">{t('api.console.deprecated')}</span>}
       </button>
@@ -35,13 +36,13 @@ const Row = ({ op, active, onSelect }: { op: ConsoleOperation; active: boolean; 
   );
 };
 
-export const CataloguePane = ({ catalogue, selected, onSelect, bundle, onBundle }: Props) => {
+export const CataloguePane = ({ catalogue, selected, onSelect, bundle, onBundle, routeWords }: Props) => {
   const { t, i18n } = useTranslation();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<string | null>(selected?.folder ?? null);
   const results = useMemo(
-    () => searchOperations(catalogue, query).filter((op) => !bundle || op.bundles.includes(bundle)),
-    [catalogue, query, bundle],
+    () => searchOperations(catalogue, query, routeWords).filter((op) => !bundle || op.bundles.includes(bundle)),
+    [catalogue, query, bundle, routeWords],
   );
   const folders = useMemo(() => (
     bundle
@@ -97,7 +98,7 @@ export const CataloguePane = ({ catalogue, selected, onSelect, bundle, onBundle 
             </p>
             <ul className="api-console__routes">
               {results.slice(0, MAX_RESULTS).map((op) => (
-                <Row key={op.path} op={op} active={selected?.path === op.path} onSelect={onSelect} />
+                <Row key={op.path} op={op} active={selected?.path === op.path} onSelect={onSelect} routeWords={routeWords} />
               ))}
             </ul>
           </>
@@ -119,7 +120,7 @@ export const CataloguePane = ({ catalogue, selected, onSelect, bundle, onBundle 
                 {isOpen && (
                   <ul className="api-console__routes">
                     {folder.operations.map((op) => (
-                      <Row key={op.path} op={op} active={selected?.path === op.path} onSelect={onSelect} />
+                      <Row key={op.path} op={op} active={selected?.path === op.path} onSelect={onSelect} routeWords={routeWords} />
                     ))}
                   </ul>
                 )}

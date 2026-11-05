@@ -1583,24 +1583,28 @@
           "help": "The act's number, without its year."
         },
         "author": {
-          "label": "Author"
+          "label": "Author",
+          "help": "The body that wrote the act, as a code: COM, CONSIL, EP or a department such as SANTE."
         },
         "lang": {
           "label": "Language",
           "help": "The language, as a short code such as en or fr."
         },
         "language": {
-          "label": "Language"
+          "label": "Language",
+          "help": "The language for titles or labels, as a code such as ENG or en."
         },
         "code": {
           "label": "Code",
           "help": "The item's code. The list gives it to you."
         },
         "source": {
-          "label": "Source"
+          "label": "Source",
+          "help": "Where the items come from. Leave it empty for the usual set."
         },
         "type": {
-          "label": "Type"
+          "label": "Type",
+          "help": "The kind of item to show. What it offers depends on the list."
         },
         "deadline": {
           "label": "Deadline"
@@ -1618,7 +1622,8 @@
           "label": "From"
         },
         "institution": {
-          "label": "Institution"
+          "label": "Institution",
+          "help": "The EU institution or agency, by name or code."
         },
         "contracting_authority": {
           "label": "Buyer",
@@ -1628,16 +1633,20 @@
           "label": "EU country"
         },
         "buyer_country": {
-          "label": "Buyer's country"
+          "label": "Buyer's country",
+          "help": "The country of the body buying, as a two-letter code such as BE."
         },
         "role": {
-          "label": "Role"
+          "label": "Role",
+          "help": "That organisation's part in the project, such as coordinator or partner."
         },
         "consultation_type": {
-          "label": "Type"
+          "label": "Type",
+          "help": "Public consultation, call for evidence or initiative."
         },
         "event_type": {
-          "label": "Type of event"
+          "label": "Type of event",
+          "help": "The kind of event, such as a plenary session or a committee meeting."
         },
         "venue": {
           "label": "Place"
@@ -1647,7 +1656,8 @@
           "help": "The kind of infringement case."
         },
         "infringement_number": {
-          "label": "Case number"
+          "label": "Case number",
+          "help": "One case's number, such as INFR(2026)0352."
         },
         "latest_decision_type": {
           "label": "Latest decision"
@@ -1707,7 +1717,8 @@
           "help": "The kind of text, such as resolution or decision."
         },
         "publication_number": {
-          "label": "Publication number"
+          "label": "Publication number",
+          "help": "The notice's number on TED, the EU's tenders journal, such as 351840-2025."
         },
         "publication_id": {
           "label": "Publication reference",
@@ -1730,7 +1741,8 @@
           "help": "The funding topic's reference. The list gives it to you."
         },
         "acronym": {
-          "label": "Acronym"
+          "label": "Acronym",
+          "help": "The programme's short name, such as ERDF."
         },
         "category": {
           "label": "Category",
@@ -2016,27 +2028,32 @@
           "help": "Only organisations with staff accredited at the Parliament."
         },
         "body_threshold": {
-          "label": "Short-text limit"
+          "label": "Short-text limit",
+          "help": "How short a text can be and still count as a full text."
         },
         "sector": {
           "label": "Sector",
           "help": "The sector or policy field it belongs to."
         },
         "dg": {
-          "label": "Commission department"
+          "label": "Commission department",
+          "help": "The Commission department, by code or part of its name, such as CNECT."
         },
         "project_id": {
           "label": "Project number",
           "help": "The project's number."
         },
         "contract_nature": {
-          "label": "Kind of contract"
+          "label": "Kind of contract",
+          "help": "Works, supplies or services."
         },
         "topic": {
-          "label": "Topic"
+          "label": "Topic",
+          "help": "The project's topic code, or the start of it, such as HORIZON-CL5-2026."
         },
         "collection": {
-          "label": "Collection"
+          "label": "Collection",
+          "help": "One thematic collection of this source."
         },
         "theme": {
           "label": "Theme",
@@ -2051,285 +2068,372 @@
           "help": "Only those whose decision falls on or before this day."
         },
         "lead_dg": {
-          "label": "Lead department"
+          "label": "Lead department",
+          "help": "The Commission department leading the case, as a code such as ENV."
         },
         "department": {
           "label": "Department",
           "help": "Part of the department's name."
         },
         "funding_type": {
-          "label": "Kind of funding"
+          "label": "Kind of funding",
+          "help": "The form of the money, such as grant or procurement."
         },
         "call_id": {
-          "label": "Call reference"
+          "label": "Call reference",
+          "help": "The call's reference number, exactly as published."
         },
         "organisation": {
-          "label": "Organisation"
+          "label": "Organisation",
+          "help": "An organisation's name, or part of it."
         },
         "keyword": {
           "label": "Keyword",
           "help": "Part of one of its keywords."
         },
         "heading": {
-          "label": "Budget heading"
+          "label": "Budget heading",
+          "help": "The part of the EU's long-term budget, or words from its name."
         },
         "cluster": {
-          "label": "Cluster"
+          "label": "Cluster",
+          "help": "The programme's cluster, or words from its name."
         },
         "coverage": {
-          "label": "Coverage"
+          "label": "Coverage",
+          "help": "How far Brubru's data covers the programme: covered, gap or skipped."
         },
         "procedure_type": {
           "label": "Procedure type",
           "help": "The kind of procedure, such as open or restricted."
         },
         "cpv_code": {
-          "label": "Goods or service code"
+          "label": "Goods or service code",
+          "help": "The EU's code for what is being bought, or the start of it, such as 45 for construction."
         },
         "include_delegated": {
-          "label": "Include delegated acts?"
+          "label": "Include delegated acts?",
+          "help": "Also show delegated and implementing acts still being prepared."
         },
         "template_id": {
           "label": "Template",
           "help": "The template's name. The list gives it to you."
         },
         "has_transcript": {
-          "label": "Has a transcript?"
+          "label": "Has a transcript?",
+          "help": "Only items that have a written transcript."
         },
         "resolution_type": {
-          "label": "Kind of resolution"
+          "label": "Kind of resolution",
+          "help": "The kind of procedure: own-initiative report (INI), legislative initiative (INL), topical resolution (RSP) or other."
         },
         "position": {
           "label": "Position",
           "help": "The person's post or, on a vote, how they voted."
         },
         "commission_dg": {
-          "label": "Commission department"
+          "label": "Commission department",
+          "help": "The Commission department, as a code such as AGRI or ENV."
         },
         "document_register_category": {
-          "label": "Document category"
+          "label": "Document category",
+          "help": "The kind of document, such as COM, SWD, Decision or Regulation."
         },
         "has_pdf": {
-          "label": "Has a PDF?"
+          "label": "Has a PDF?",
+          "help": "Only items with a PDF."
         },
         "latest_decision_category": {
-          "label": "Latest decision, kind"
+          "label": "Latest decision, kind",
+          "help": "The latest step in the case, as a code such as LFN (letter of formal notice) or RO (reasoned opinion)."
         },
         "decision_category": {
-          "label": "Kind of decision"
+          "label": "Kind of decision",
+          "help": "The kind of step, as a code such as LFN (letter of formal notice), RO (reasoned opinion) or RTC (referral to the Court)."
         },
         "decision_type": {
-          "label": "Words in the decision"
+          "label": "Words in the decision",
+          "help": "Words from the decision's name, such as 260(3)."
         },
         "with_press_release": {
-          "label": "With a press release?"
+          "label": "With a press release?",
+          "help": "Only decisions announced in a press release."
         },
         "organisation_met": {
-          "label": "Organisation met"
+          "label": "Organisation met",
+          "help": "A word from the name of the organisation they met."
         },
         "verdict": {
-          "label": "Opinion"
+          "label": "Opinion",
+          "help": "The board's opinion: positive, positive with reservations or negative."
         },
         "opinion_type": {
-          "label": "Kind of opinion"
+          "label": "Kind of opinion",
+          "help": "What the board looked at: an impact assessment, an evaluation or a fitness check."
         },
         "notifying_country": {
-          "label": "Notifying country"
+          "label": "Notifying country",
+          "help": "The country that sent the notification, as a two-letter code such as FR."
         },
         "classify": {
-          "label": "Add subject tags?"
+          "label": "Add subject tags?",
+          "help": "Also tag each item with EU subject terms. It takes longer."
         },
         "shallow": {
-          "label": "Quick read?"
+          "label": "Quick read?",
+          "help": "A faster list that skips opening each item, so full texts and some dates stay empty."
         },
         "url": {
-          "label": "Web address"
+          "label": "Web address",
+          "help": "The address of the EU page to read."
         },
         "deadline_before": {
-          "label": "Closing by"
+          "label": "Closing by",
+          "help": "Only calls closing on or before this date."
         },
         "responsible_department": {
-          "label": "Responsible department"
+          "label": "Responsible department",
+          "help": "The Commission department. The same as the Commission department filter."
         },
         "coordinator": {
-          "label": "Coordinators only?"
+          "label": "Coordinators only?",
+          "help": "Yes shows only coordinators; No shows the other recipients."
         },
         "vat": {
-          "label": "VAT number"
+          "label": "VAT number",
+          "help": "The VAT number, exactly. Spaces do not matter."
         },
         "disaster_type": {
-          "label": "Kind of disaster"
+          "label": "Kind of disaster",
+          "help": "A word for the kind of disaster, such as flood."
         },
         "contract_type": {
-          "label": "Kind of contract (older name)"
+          "label": "Kind of contract (older name)",
+          "help": "The older name of Kind of contract: works, supplies or services."
         },
         "participant_country": {
-          "label": "Participant's country"
+          "label": "Participant's country",
+          "help": "That organisation's country, as a two-letter code."
         },
         "expertise": {
-          "label": "Offer or request"
+          "label": "Offer or request",
+          "help": "Whether the organisation offers expertise or is asking for it."
         },
         "organisation_type": {
-          "label": "Kind of organisation"
+          "label": "Kind of organisation",
+          "help": "The kind of organisation, such as small or medium-sized business, or research."
         },
         "pic": {
-          "label": "PIC number"
+          "label": "PIC number",
+          "help": "The number the EU's funding portal gives each organisation."
         },
         "without_eu_projects": {
-          "label": "New to EU projects?"
+          "label": "New to EU projects?",
+          "help": "Only organisations with no EU project yet."
         },
         "requested_from": {
-          "label": "Announced from"
+          "label": "Announced from",
+          "help": "Announced on or after this date."
         },
         "requested_to": {
-          "label": "Announced until"
+          "label": "Announced until",
+          "help": "Announced on or before this date."
         },
         "activity_type": {
-          "label": "Kind of activity"
+          "label": "Kind of activity",
+          "help": "The kind of organisation in the project, as a code: HES (higher education), REC (research), PRC (company), PUB (public body) or OTH (other)."
         },
         "is_sme": {
-          "label": "Small business?"
+          "label": "Small business?",
+          "help": "Only small or medium-sized businesses, as the EU's research database records them."
         },
         "period": {
-          "label": "Budget period"
+          "label": "Budget period",
+          "help": "The budget period, such as 2021-2027."
         },
         "instrument": {
-          "label": "Kind of support"
+          "label": "Kind of support",
+          "help": "The form of support: grant, blended, equity or prize."
         },
         "winner": {
-          "label": "Winner"
+          "label": "Winner",
+          "help": "A winner's name, or part of it."
         },
         "winner_country": {
-          "label": "Winner's country"
+          "label": "Winner's country",
+          "help": "A winner's country, as a two-letter code."
         },
         "include_superseded": {
-          "label": "Include older versions?"
+          "label": "Include older versions?",
+          "help": "Also show earlier versions of notices that were changed."
         },
         "form_type": {
-          "label": "Stage of the notice"
+          "label": "Stage of the notice",
+          "help": "How far along the notice is: planning, competition, result or change to a contract."
         },
         "notice_subtype": {
-          "label": "Kind of notice"
+          "label": "Kind of notice",
+          "help": "The exact type of notice, as a code such as cn-standard."
         },
         "buyer_level": {
-          "label": "Buyer's level"
+          "label": "Buyer's level",
+          "help": "Whether the buyer is local, regional, national, EU or international."
         },
         "buyer_legal_type": {
-          "label": "Buyer's legal type"
+          "label": "Buyer's legal type",
+          "help": "The buyer's legal form, as a code such as la (local authority)."
         },
         "currency": {
-          "label": "Currency"
+          "label": "Currency",
+          "help": "The currency of the estimated value, as a code such as EUR."
         },
         "min_value": {
-          "label": "Minimum value"
+          "label": "Minimum value",
+          "help": "Only notices worth at least this much, in the notice's own currency."
         },
         "max_value": {
-          "label": "Maximum value"
+          "label": "Maximum value",
+          "help": "Only notices worth at most this much, in the notice's own currency."
         },
         "text": {
-          "label": "Text"
+          "label": "Text",
+          "help": "The text to scan for references to EU laws and court cases."
         },
         "include_orphans": {
-          "label": "Include unnumbered rows?"
+          "label": "Include unnumbered rows?",
+          "help": "Also show rows with no law number, such as separate annexes."
         },
         "corrects": {
-          "label": "Corrections of"
+          "label": "Corrections of",
+          "help": "A law's number (CELEX): shows the corrections to that law."
         },
         "version": {
-          "label": "Version"
+          "label": "Version",
+          "help": "The newest consolidated text, or the act as first adopted."
         },
         "chapter": {
-          "label": "Chapter"
+          "label": "Chapter",
+          "help": "The chapter's code or words from its title."
         },
         "sectors": {
-          "label": "Sectors"
+          "label": "Sectors",
+          "help": "The kinds of document, as CELEX sector codes separated by commas, such as 3,5."
         },
         "microthesaurus": {
-          "label": "Subject group"
+          "label": "Subject group",
+          "help": "The number of a subject group in EuroVoc, the EU's list of subjects, such as 2826."
         },
         "domain": {
-          "label": "Subject domain"
+          "label": "Subject domain",
+          "help": "The number of a subject domain in EuroVoc, the EU's list of subjects, such as 28."
         },
         "priority": {
-          "label": "Commission priority"
+          "label": "Commission priority",
+          "help": "One of the Commission's political priorities, by its tag."
         },
         "include_other_sources": {
-          "label": "Include other sources?"
+          "label": "Include other sources?",
+          "help": "Also show EUR-Lex acts and Legislative Train files, which are not procedures."
         },
         "stale_after_days": {
-          "label": "Old after (days)"
+          "label": "Old after (days)",
+          "help": "How many days with no news before the whole feed is reported as old."
         },
         "body_stale_after_days": {
-          "label": "A body is old after (days)"
+          "label": "A body is old after (days)",
+          "help": "How many days with no news before one body is reported as old."
         },
         "geo": {
-          "label": "Place code"
+          "label": "Place code",
+          "help": "The place, as a Eurostat code such as ES, FR or EU27_2020."
         },
         "time": {
-          "label": "Year"
+          "label": "Year",
+          "help": "One year, such as 2023."
         },
         "sex": {
-          "label": "Sex"
+          "label": "Sex",
+          "help": "T for total, F for women, M for men."
         },
         "include_payload": {
-          "label": "Include all the figures?"
+          "label": "Include all the figures?",
+          "help": "Also include every figure, in the statistics format JSON-stat. It makes the answer larger."
         },
         "amendment_type": {
-          "label": "Kind of amendment"
+          "label": "Kind of amendment",
+          "help": "What the amendment does: changes, deletes or adds text."
         },
         "upcoming": {
-          "label": "Coming only?"
+          "label": "Coming only?",
+          "help": "Only agendas dated today or later."
         },
         "doc_kind": {
-          "label": "Kind of document"
+          "label": "Kind of document",
+          "help": "The kind of document, such as draft report, amendment, voting list or agenda."
         },
         "gepro_code": {
-          "label": "Parliament's document code"
+          "label": "Parliament's document code",
+          "help": "Parliament's own short code for the document, such as PR (draft report) or AM (amendment)."
         },
         "term": {
-          "label": "Parliamentary term"
+          "label": "Parliamentary term",
+          "help": "The parliamentary term. 10 is the current one."
         },
         "include_former": {
-          "label": "Include former members?"
+          "label": "Include former members?",
+          "help": "Also list members who have left Parliament since the election."
         },
         "question_type": {
-          "label": "Kind of question"
+          "label": "Kind of question",
+          "help": "Written, oral, priority or question time."
         },
         "answering_institution": {
-          "label": "Answered by"
+          "label": "Answered by",
+          "help": "Who answers the question: Commission, Council or European Central Bank."
         },
         "result": {
-          "label": "Result"
+          "label": "Result",
+          "help": "Whether the vote adopted or rejected the text."
         },
         "report_type": {
-          "label": "Kind of report"
+          "label": "Kind of report",
+          "help": "EU Canon entry or deep dive. Leave it empty for both."
         },
         "legal_family": {
-          "label": "Legal family"
+          "label": "Legal family",
+          "help": "A group of related laws, by its tag, such as eu_pharmaceutical."
         },
         "category_en": {
-          "label": "Category"
+          "label": "Category",
+          "help": "Brubru's category, by its English name."
         },
         "engine": {
-          "label": "Translation engine"
+          "label": "Translation engine",
+          "help": "Which translation engine produced the text: Softcatalà or Sonnet."
         },
         "detail_level": {
-          "label": "How much text"
+          "label": "How much text",
+          "help": "Summary gives a 500-character preview; Full gives the whole guide."
         },
         "upcoming_only": {
-          "label": "Coming dates only?"
+          "label": "Coming dates only?",
+          "help": "Only milestones dated today or later."
         },
         "include_news": {
-          "label": "Include news?"
+          "label": "Include news?",
+          "help": "Also include recent news on packaging and the circular economy."
         },
         "funding_mode": {
-          "label": "Kind of funding"
+          "label": "Kind of funding",
+          "help": "Grant, equity only or blended."
         },
         "sub_instrument": {
-          "label": "Sub-instrument"
+          "label": "Sub-instrument",
+          "help": "A part of the funding programme, by name."
         },
         "include_removed": {
-          "label": "Include people who left?"
+          "label": "Include people who left?",
+          "help": "Also list officials no longer in the directory."
         },
         "amendment_id": {
           "label": "Reference",
@@ -2523,7 +2627,8 @@
       },
       "cardsNote": "Press a card to see real results straight away. That uses 1 free search; going back to a card you have seen does not.",
       "refine": "Narrow this search",
-      "capShort": "No free searches left today."
+      "capShort": "No free searches left today.",
+      "aboutInEnglish": "This description is in English."
     },
     "bundles": {
       "official-journal": {

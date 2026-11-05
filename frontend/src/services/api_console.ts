@@ -36,6 +36,7 @@ export interface ConsoleOperation {
   deprecated: boolean;
   params: ConsoleParam[];
   searchText: string;
+  wordsKey: string;
   bundles: string[];
 }
 
@@ -84,6 +85,17 @@ export function normaliseText(text: string): string {
 
 // House style has no long dashes; 922 route summaries in the spec still do (register O144). Until the source is
 // rewritten, the public page shows them plainly.
+// Made from the route's English words, the same way as frontend/scripts/translate_console_words.py makes it: when the English
+// changes, the key no longer matches and the console shows English until the translation is run again.
+export function routeWordsKey(summary: string, description: string): string {
+  let h = 0x811c9dc5;
+  for (const ch of `${summary}\n${description}`) {
+    h ^= ch.codePointAt(0) as number;
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+
 function plainDashes(text: string): string {
   return text.replace(/\s*\u2014\s*/g, ': ');
 }
@@ -182,6 +194,7 @@ export function parseSpec(spec: any): ConsoleCatalogue {
       deprecated: get.deprecated === true,
       params,
       searchText: normaliseText(`${path} ${summary} ${description}`),
+      wordsKey: routeWordsKey(get.summary || '', get.description || ''),
       bundles: Array.isArray(get['x-brubru-bundles']) ? get['x-brubru-bundles'] : [],
     });
   }
@@ -408,10 +421,53 @@ export function startOfBundle(catalogue: ConsoleCatalogue, bundle: string): Cons
     || inside[0];
 }
 
-export function searchOperations(catalogue: ConsoleCatalogue, query: string): ConsoleOperation[] {
+export function searchOperations(catalogue: ConsoleCatalogue, query: string, routeWords: RouteWordsMap = {}): ConsoleOperation[] {
   const words = normaliseText(query).split(/\s+/).filter(Boolean);
   if (words.length === 0) return [];
-  return catalogue.operations.filter((op) => words.every((w) => op.searchText.includes(w)));
+  // In the visitor's language too: "leyes" should find what "laws" finds.
+  return catalogue.operations.filter((op) => {
+    const own = wordsFor(op, routeWords);
+    const text = own ? `${op.searchText} ${normaliseText(`${own.s || ''} ${own.w || ''}`)}` : op.searchText;
+    return words.every((w) => text.includes(w));
+  });
+}
+
+export interface RouteWords { k: string; s?: string; w?: string; d?: string }
+export type RouteWordsMap = Record<string, RouteWords>;
+
+// This route's translation, if there is one and it was made from the English the route has now.
+export function wordsFor(op: ConsoleOperation, routeWords: RouteWordsMap): RouteWords | null {
+  const own = routeWords[op.path];
+  return own && own.k === op.wordsKey ? own : null;
+}
+
+export function summaryIn(op: ConsoleOperation, routeWords: RouteWordsMap): string {
+  return wordsFor(op, routeWords)?.s || op.summary;
+}
+
+export function whatItDoesIn(op: ConsoleOperation, routeWords: RouteWordsMap): string {
+  return wordsFor(op, routeWords)?.w || whatItDoes(op);
+}
+
+const routeWordsPromises = new Map<string, Promise<RouteWordsMap>>();
+
+// Each language's words, read once. Static files beside the page: if one does not arrive, the console stays in English.
+// `full` is the long descriptions, read only when someone opens them.
+export function loadRouteWords(language: string, full = false): Promise<RouteWordsMap> {
+  const code = language.slice(0, 2);
+  if (!['fr', 'nl', 'es', 'ca', 'it'].includes(code)) return Promise.resolve({});
+  const name = full ? `${code}_full` : code;
+  let found = routeWordsPromises.get(name);
+  if (!found) {
+    found = fetch(`/api/console_words/${name}.json`)
+      .then((r) => (r.ok ? r.json() : {}))
+      .catch(() => {
+        routeWordsPromises.delete(name);
+        return {};
+      });
+    routeWordsPromises.set(name, found as Promise<RouteWordsMap>);
+  }
+  return found as Promise<RouteWordsMap>;
 }
 
 function isoDaysAgo(days: number, today: Date): string {
