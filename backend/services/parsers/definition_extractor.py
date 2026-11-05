@@ -41,7 +41,7 @@ import re
 # "means" in the languages Brubru serves plus Latin-ish coverage for fallback.
 # If we hit a language not here, the pattern still matches "means"/"signifie" etc.
 # in the English version of the act (EUR-Lex ships all-EN versions too).
-_MEANS = r"(?:means|signifie|significa|designa|betekent|bedeutet|vuol\s+dire|vol\s+dir|mitjan[cç]ant)"
+_MEANS = r"(?:shall\s+mean|means|signifie|significa|designa|betekent|bedeutet|vuol\s+dire|vol\s+dir|mitjan[cç]ant)"
 
 # Character-class contents (no outer brackets -- inserted where needed)
 _QOPEN_CHARS = r"\"'‘“«"
@@ -58,7 +58,7 @@ _POINT_DEF_RE = re.compile(
     # the SECOND quote, stored only "SME" and lost the point number.
     rf"(?:\s*(?:or|,)\s*[{_QOPEN_CHARS}](?P<alt>[^{_QCLOSE_CHARS}\n]{{1,40}}?)[{_QCLOSE_CHARS}])?"
     rf"\s*{_MEANS}\s+"
-    rf"(?P<body>[^;]{{5,2000}}?);",
+    rf"(?P<body>[^;]{{5,2000}}?)(?:;|\.\s*$)",  # the article's last point ends with a full stop (Regulation 765/2008)
     re.IGNORECASE | re.DOTALL,
 )
 
@@ -75,6 +75,23 @@ _SEGMENT_RE = re.compile(
     rf"(?:\s*(?:or|,)\s*[{_QOPEN_CHARS}](?P<alt>[^{_QCLOSE_CHARS}\n]{{1,40}}?)[{_QCLOSE_CHARS}])?"
     rf"(?P<qual>,?\s+[^{_QOPEN_CHARS}{_QCLOSE_CHARS};:\n]{{1,80}}?,?)?"  # "'subject', for the purpose of real-world testing, means"
     rf"\s*{_MEANS}\s*:?\s+(?P<body>.{{5,3000}})$",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+# Older acts write the term bare (5 Nov 2026). REACH Art 3: "1. substance: means a chemical element ...", 41 points of which the
+# quoted patterns read 1. Directive 2001/83 Art 1 and Directive 2000/31 Art 2 have no verb at all: "2. Medicinal product : ...",
+# "(a) 'service provider' : ...". There the colon is only a definition when the lead-in says so, or "1. This Regulation applies
+# to: ..." would become a term.
+_LEAD_IN_RE = re.compile(r"\b(?:shall\s+bear\s+the\s+following\s+meanings?|the\s+following\s+definitions\s+shall\s+apply)\b", re.IGNORECASE)
+_PLAIN_POINT_RE = re.compile(r"(?:^|(?<=[:;.,]\s))(?P<point>\d{1,3}[a-z]?)\.\s+(?=\S)", re.MULTILINE)
+_PLAIN_SEGMENT_RE = re.compile(
+    rf"^(?![{_QOPEN_CHARS}])(?P<term>[^:;\n]{{1,100}}?)\s*(?:(?::\s*)?{_MEANS}\s*:?\s+|(?P<colon>:)\s+)(?P<body>.{{5,3000}})$",
+    re.IGNORECASE | re.DOTALL,
+)
+_QUOTED_COLON_RE = re.compile(
+    rf"(?:\((?P<point>[\da-z]{{1,4}})\)\s*)?[{_QOPEN_CHARS}](?P<term>[^{_QCLOSE_CHARS}\n]{{1,100}}?)[{_QCLOSE_CHARS}]\s*:\s+"
+    rf"(?P<body>[^;]{{5,2000}}?)(?:;|\.\s*$)",
     re.IGNORECASE | re.DOTALL,
 )
 
@@ -156,6 +173,48 @@ def _html_to_text(html: str) -> str:
     return s.strip()
 
 
+def _trimmed(text: str) -> str:
+    text = re.sub(r"\s+", " ", text).strip()
+    return re.sub(r"(?:;\s*(?:and|or)?|\.)\s*$", "", text).strip()
+
+
+def _plain_points(body: str, akey: str) -> list["DefinitionEntry"]:
+    """Numbered points with the term bare. A number only opens a point if it follows the last one, so "Article 3. 4." inside a
+    definition cannot cut it in two. A gap is allowed only when the next number never comes: a consolidated act keeps the
+    numbers of its deleted points."""
+    found = list(_PLAIN_POINT_RE.finditer(body))
+    numbers = [int(re.match(r"\d+", m.group("point")).group()) for m in found]
+    marks, last = [], None
+    for i, m in enumerate(found):
+        n = numbers[i]
+        if last is None or n in (last, last + 1) or (n > last and last + 1 not in numbers[i + 1:]):
+            marks.append(m)
+            last = n
+    colon_counts = bool(_LEAD_IN_RE.search(body))
+    out = []
+    for i, m in enumerate(marks):
+        end = marks[i + 1].start() if i + 1 < len(marks) else len(body)
+        sm = _PLAIN_SEGMENT_RE.match(body[m.end():end].strip())
+        if not sm or (sm.group("colon") and not colon_counts):
+            continue
+        term, text = sm.group("term").strip().strip(","), _trimmed(sm.group("body"))
+        if term and len(term.split()) <= 12 and len(text) >= 5:
+            out.append(DefinitionEntry(term=term, definition=text, article=akey, point=m.group("point")))
+    return out
+
+
+def _quoted_colon_points(body: str, akey: str) -> list["DefinitionEntry"]:
+    """"(b) 'service provider' : any natural or legal person ...", only under a lead-in that says the terms bear these meanings."""
+    if not _LEAD_IN_RE.search(body):
+        return []
+    out = []
+    for m in _QUOTED_COLON_RE.finditer(body):
+        term, text = m.group("term").strip().strip(","), _trimmed(m.group("body"))
+        if term and len(text) >= 5:
+            out.append(DefinitionEntry(term=term, definition=text, article=akey, point=m.group("point") or None))
+    return out
+
+
 def _is_definition_article(article: Any) -> bool:
     title = (getattr(article, "title", None) or "").lower()
     number = str(getattr(article, "number", "") or "").strip().lower()
@@ -164,10 +223,13 @@ def _is_definition_article(article: Any) -> bool:
             return True
         # Article numbered 2/3/4 but title empty: probe body for "means"
         body = _article_text(article).lower()
-        if "means" in body or "signifie" in body or "significa" in body:
+        if "means" in body or "shall mean" in body or "signifie" in body or "significa" in body:
             return True
     # Title explicitly says Definitions regardless of number
-    return any(kw in title for kw in _DEFINITION_ARTICLE_KEYWORDS)
+    if any(kw in title for kw in _DEFINITION_ARTICLE_KEYWORDS):
+        return True
+    # No title, any number, but its opening says what it is (Directive 2001/83, Article 1).
+    return bool(_LEAD_IN_RE.search(_article_text(article)[:300]))
 
 
 def extract_definitions(parsed_law: Any) -> list[DefinitionEntry]:
@@ -202,6 +264,7 @@ def extract_definitions(parsed_law: Any) -> list[DefinitionEntry]:
         if len(parsed) >= 3:
             out.extend(parsed)
             continue
+        quoted = []
         for m in _POINT_DEF_RE.finditer(body):
             term = m.group("term").strip().strip(",")
             body_text = m.group("body").strip().rstrip(";,.")
@@ -209,11 +272,17 @@ def extract_definitions(parsed_law: Any) -> list[DefinitionEntry]:
             if not term or len(body_text) < 5:
                 continue
             point = m.group("point") or None
-            out.append(DefinitionEntry(term=term, definition=body_text, article=akey, point=point))
+            quoted.append(DefinitionEntry(term=term, definition=body_text, article=akey, point=point))
             alt = (m.group("alt") or "").strip().strip(",")
             if alt and alt.lower() != term.lower():
                 # The short form is a defined term in its own right ("SME").
-                out.append(DefinitionEntry(term=alt, definition=body_text, article=akey, point=point))
+                quoted.append(DefinitionEntry(term=alt, definition=body_text, article=akey, point=point))
+        # Whichever reading found more: one quoted term inside a bare definition must not hide the other forty (REACH). That
+        # quoted term is still a definition ("monomer unit", inside "polymer"), so it stays too.
+        best = max((quoted, _plain_points(body, akey), _quoted_colon_points(body, akey)), key=len)
+        seen = {e.term.lower() for e in best}
+        out.extend(best)
+        out.extend(e for e in quoted if e.term.lower() not in seen)
     return out
 
 

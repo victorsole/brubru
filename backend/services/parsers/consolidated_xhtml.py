@@ -23,7 +23,8 @@ from typing import List
 
 from bs4 import BeautifulSoup
 
-_MARKERS = re.compile(r"[▼►◄][A-Z]\d*")
+# The closing mark usually stands alone ("2. mixture ◄ : means"): a letter was required, so 11 stayed in REACH Article 3.
+_MARKERS = re.compile(r"[▼►][A-Z]\d*|◄(?:[A-Z]\d*(?=\s|$))?")
 
 
 @dataclass

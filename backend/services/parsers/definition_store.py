@@ -127,7 +127,7 @@ def get_or_compute_map(
 # ---------------------------------------------------------------------------
 CONSOLIDATED_KEY = "defined_terms_consolidated"
 # Bump when the XHTML parse or the extractor changes what a consolidated entry holds.
-CONSOLIDATED_PARSER_VERSION = 2  # 2: point-by-point parsing (GDPR 23 -> 26, AI Act 69 -> 72)
+CONSOLIDATED_PARSER_VERSION = 3  # 2: point-by-point parsing (GDPR 23 -> 26, AI Act 69 -> 72). 3: terms written bare (REACH 1 -> 41)
 _LATEST_TTL_SECONDS = 6 * 3600
 _latest_cache: dict[str, tuple[float, Optional[dict[str, Any]]]] = {}
 
