@@ -17,6 +17,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    poppler-utils \
     build-essential \
     libpq-dev \
     curl \

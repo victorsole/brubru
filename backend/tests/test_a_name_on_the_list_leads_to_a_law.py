@@ -111,3 +111,38 @@ def test_a_page_with_its_tables_never_asks_for_the_pdf(monkeypatch):
 
     monkeypatch.setattr(fetcher, "_fetch_pdf", no_pdf)
     assert "Article 1" in fetcher._fetch("32016R0679", None)[1]
+
+
+class _Done:
+    def __init__(self, out, code=0):
+        self.stdout, self.returncode = out, code
+
+
+def test_a_pdf_is_read_with_pdftotext_where_the_machine_has_it(monkeypatch):
+    fetcher = _load_fetcher()
+    monkeypatch.setattr(fetcher.shutil, "which", lambda name: "/usr/bin/pdftotext")
+    seen = []
+    monkeypatch.setattr(fetcher.subprocess, "run", lambda cmd, **k: seen.append(cmd) or _Done("the substance shall".encode()))
+    assert fetcher._pdf_text(b"%PDF-") == "the substance shall"
+    assert seen[0][0] == "pdftotext"
+
+
+def test_pypdf_is_the_fallback_when_pdftotext_is_missing_or_fails(monkeypatch):
+    fetcher = _load_fetcher()
+    import pypdf
+
+    class _Reader:
+        def __init__(self, stream):
+            self.pages = [type("P", (), {"extract_text": lambda self: "from pypdf"})()]
+
+    monkeypatch.setattr(pypdf, "PdfReader", _Reader)
+    monkeypatch.setattr(fetcher.shutil, "which", lambda name: None)
+    assert fetcher._pdf_text(b"%PDF-") == "from pypdf"
+    monkeypatch.setattr(fetcher.shutil, "which", lambda name: "/usr/bin/pdftotext")
+    monkeypatch.setattr(fetcher.subprocess, "run", lambda cmd, **k: _Done(b"", 1))
+    assert fetcher._pdf_text(b"%PDF-") == "from pypdf"
+
+
+def test_the_image_installs_pdftotext():
+    assert "poppler-utils" in (BACKEND / "Dockerfile").read_text()
+

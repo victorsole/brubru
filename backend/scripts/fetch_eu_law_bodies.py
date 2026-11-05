@@ -29,8 +29,11 @@ import io
 import os
 import pathlib
 import re
+import shutil
 import ssl
+import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.parse
@@ -80,6 +83,7 @@ PICK = text(
 )
 
 PICK_NAMED = text("SELECT id, celex FROM eu_laws WHERE celex = ANY(:names) AND body_fetched_at IS NULL ORDER BY celex")
+PICK_AGAIN = text("SELECT id, celex FROM eu_laws WHERE celex = ANY(:names) ORDER BY celex")
 
 STORE = text(
     """
@@ -200,15 +204,33 @@ def _fetch_pdf(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
     return got
 
 
-def _fetch_pdf_as(celex: str, ctx: ssl.SSLContext, accept: str) -> tuple[str, str] | str:
-    import html as _h, io
+def _pdf_text(data: bytes) -> str:
+    """A PDF's words. pdftotext where the machine has it: on REACH, measured against the act's own clean text, pypdf broke
+    2,781 words ("sh all", "subs tance") and pdftotext 7, and on the merger regulation only pdftotext rejoined words hyphenated
+    across lines (170 against 0). A search cannot find a broken word. pypdf is the fallback, so a machine without poppler still works."""
+    if shutil.which("pdftotext"):
+        try:
+            with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
+                f.write(data)
+                f.flush()
+                done = subprocess.run(["pdftotext", "-enc", "UTF-8", f.name, "-"], capture_output=True, timeout=300)
+            text = done.stdout.decode("utf-8", "ignore")
+            if done.returncode == 0 and text.strip():
+                return text
+        except (OSError, subprocess.SubprocessError):
+            pass
     from pypdf import PdfReader
+    return "\n".join((pg.extract_text() or "") for pg in PdfReader(io.BytesIO(data)).pages)
+
+
+def _fetch_pdf_as(celex: str, ctx: ssl.SSLContext, accept: str) -> tuple[str, str] | str:
+    import html as _h
     hdrs = {"Accept": accept, "Accept-Language": "eng"}
     try:
         req = urllib.request.Request(_cellar_url(celex), headers=hdrs)
         with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
             data = r.read()
-        pages = [(pg.extract_text() or "") for pg in PdfReader(io.BytesIO(data)).pages]
+        pages = [_pdf_text(data)]
     except urllib.error.HTTPError as e:
         if e.code != 300:
             return f"http_{e.code}"
@@ -224,7 +246,7 @@ def _fetch_pdf_as(celex: str, ctx: ssl.SSLContext, accept: str) -> tuple[str, st
             for url, _n in docs:
                 req = urllib.request.Request(url.replace("http://", "https://", 1), headers=hdrs)
                 with urllib.request.urlopen(req, timeout=60, context=ctx) as r:
-                    pages += [(pg.extract_text() or "") for pg in PdfReader(io.BytesIO(r.read())).pages]
+                    pages.append(_pdf_text(r.read()))
         except Exception as e2:
             return "pdf_" + type(e2).__name__
     except Exception as e:
@@ -273,6 +295,7 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=500)
     ap.add_argument("--pause", type=float, default=0.3)
     ap.add_argument("--celex", action="append", help="Only these acts, if their text is not yet fetched. Repeat for more.")
+    ap.add_argument("--again", action="store_true", help="With --celex: read them again though they hold a text, to replace it.")
     args = ap.parse_args()
 
     engine = create_engine(
@@ -282,7 +305,7 @@ def main() -> int:
     )
     with engine.connect() as conn:
         before = conn.execute(PROGRESS, {"floor": 200}).one()
-        rows = list(conn.execute(PICK_NAMED, {"names": args.celex}) if args.celex else conn.execute(PICK, {"lim": args.limit}))
+        rows = list(conn.execute(PICK_AGAIN if args.again else PICK_NAMED, {"names": args.celex}) if args.celex else conn.execute(PICK, {"lim": args.limit}))
 
     print(f"[INFO] laws with a CELEX : {before.total}")
     print(f"[INFO] already fetched   : {before.fetched}  (real bodies {before.real_bodies}, avg {before.avg_chars} chars)")
