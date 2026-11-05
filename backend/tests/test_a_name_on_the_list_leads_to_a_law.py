@@ -59,3 +59,55 @@ def test_discover_celex_keeps_the_row_with_a_title_and_says_when_cellar_knows_no
     found = sync.discover_celex(["32006R1907", "32024L0900"])
     assert [(r["celex"], r.get("title")) for r in found] == [("32006R1907", "REACH")]
     assert any("32024L0900" in m for m in warned)
+
+
+def _load_fetcher():
+    spec = importlib.util.spec_from_file_location("fetch_eu_law_bodies", BACKEND / "scripts/fetch_eu_law_bodies.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class _Page:
+    def __init__(self, body):
+        self.body = body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def read(self):
+        return self.body.encode()
+
+
+PAGE = "<html><body><p>" + "Article 1 of the act. " * 60 + "</p><p>ANNEX Correlation table &gt;TABLE&gt;</p></body></html>"
+CLEAN = "<html><body><p>" + "Article 1 of the act. " * 60 + "</p></body></html>"
+
+
+def test_a_page_that_lost_its_tables_gives_way_to_the_pdf(monkeypatch):
+    fetcher = _load_fetcher()
+    monkeypatch.setattr(fetcher.urllib.request, "urlopen", lambda *a, **k: _Page(PAGE))
+    monkeypatch.setattr(fetcher, "_fetch_pdf", lambda c, ctx: ("<p>from the pdf</p>", "x" * 5000))
+    assert fetcher._fetch("32004R0139", None)[0] == "<p>from the pdf</p>"
+
+
+def test_the_page_stays_if_the_pdf_is_missing_or_clearly_shorter(monkeypatch):
+    fetcher = _load_fetcher()
+    monkeypatch.setattr(fetcher.urllib.request, "urlopen", lambda *a, **k: _Page(PAGE))
+    monkeypatch.setattr(fetcher, "_fetch_pdf", lambda c, ctx: "http_404")
+    assert "TABLE" in fetcher._fetch("32004R0139", None)[1]
+    monkeypatch.setattr(fetcher, "_fetch_pdf", lambda c, ctx: ("<p>short</p>", "too short"))
+    assert "TABLE" in fetcher._fetch("32004R0139", None)[1]
+
+
+def test_a_page_with_its_tables_never_asks_for_the_pdf(monkeypatch):
+    fetcher = _load_fetcher()
+    monkeypatch.setattr(fetcher.urllib.request, "urlopen", lambda *a, **k: _Page(CLEAN))
+
+    def no_pdf(c, ctx):
+        raise AssertionError("the PDF was asked for")
+
+    monkeypatch.setattr(fetcher, "_fetch_pdf", no_pdf)
+    assert "Article 1" in fetcher._fetch("32016R0679", None)[1]

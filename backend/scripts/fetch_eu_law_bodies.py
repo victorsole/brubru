@@ -64,6 +64,9 @@ MIN_CHARS = 600
 OJ_MASTHEAD = "Official Journal of the European Union"
 
 
+TABLE_LOST = re.compile(r"(?:>|&gt;)\s*TABLE\s*(?:>|&gt;)")
+
+
 def _too_short(txt: str) -> bool:
     return len(txt) < MIN_CHARS and not (len(txt) >= 200 and OJ_MASTHEAD in txt)
 
@@ -253,6 +256,12 @@ def _fetch(celex: str, ctx: ssl.SSLContext) -> tuple[str, str] | str:
     if _too_short(txt):
         # Not an act: a challenge, a stub or a nav fragment. Never stored.
         return f"too_short_{len(txt)}"
+    # An old page marks each table it lost: the PDF of the same act has them, so it is the fuller text. If the PDF is not
+    # there, or is clearly shorter, the page is still the act.
+    if TABLE_LOST.search(raw) or TABLE_LOST.search(txt):
+        pdf = _fetch_pdf(celex, ctx)
+        if not isinstance(pdf, str) and len(pdf[1]) >= len(txt) * 0.9:
+            return pdf
     return _clean_html(raw, txt), txt
 
 
