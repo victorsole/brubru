@@ -2628,7 +2628,30 @@
       "cardsNote": "Appuyez sur une carte pour voir aussitôt de vrais résultats. Cela utilise 1 recherche gratuite ; revenir à une carte déjà vue n'en utilise aucune.",
       "refine": "Affiner cette recherche",
       "capShort": "Plus de recherches gratuites aujourd'hui.",
-      "aboutInEnglish": "Cette description est en anglais."
+      "aboutInEnglish": "Cette description est en anglais.",
+      "ownKey": {
+        "open": "Utiliser votre clé",
+        "label": "Votre clé d'API",
+        "placeholder": "Collez votre clé ici",
+        "use": "Utiliser cette clé",
+        "cancel": "Annuler",
+        "remember": "La mémoriser sur ce navigateur",
+        "note": "Elle reste dans ce navigateur et n'est envoyée qu'à l'API de Brubru. Les recherches sont débitées de votre solde.",
+        "noKey": "Pas encore de clé ?",
+        "tooShort": "Cela ne ressemble pas à une clé complète. Vérifiez que vous l'avez copiée en entier.",
+        "active": "Clé utilisée : se termine par {{end}}",
+        "stop": "Ne plus l'utiliser",
+        "cardsNote": "Avec votre clé, une carte remplit le formulaire et rien n'est débité. Une recherche est débitée quand vous appuyez sur Rechercher.",
+        "charged": "Débité de votre solde.",
+        "chargedPrice": "Cette recherche est débitée de votre solde : {{price}}.",
+        "cost": "Coût : {{cost}}",
+        "balance": "Solde : {{balance}}",
+        "rejected": "Cette clé n'a pas été acceptée. Vérifiez que vous l'avez copiée en entier, ou cessez de l'utiliser.",
+        "noBalance": "Votre solde est insuffisant pour cette recherche.",
+        "topUp": "Recharger",
+        "openItem": "Ouvrir (débité de votre solde)",
+        "idle": "Appuyez sur Rechercher pour voir ici les résultats en direct. La recherche est débitée de votre solde."
+      }
     },
     "bundles": {
       "official-journal": {

@@ -72,6 +72,8 @@ export interface ConsoleResponse {
   json: unknown;
   sandboxLeft: number | null;
   requestId: string | null;
+  costEur: string | null;
+  balanceEur: string | null;
 }
 
 const FOLDER_ORDER = ['news', 'events', 'legislative', 'parliament', 'commission', 'council', 'funding'];
@@ -614,11 +616,11 @@ export function loadPickLists(): Promise<PickLists | null> {
   return pickListsPromise;
 }
 
-export async function sendRequest(requestPath: string, signal?: AbortSignal): Promise<ConsoleResponse> {
+export async function sendRequest(requestPath: string, signal?: AbortSignal, ownKey = ''): Promise<ConsoleResponse> {
   const url = `${API_ORIGIN}${requestPath}`;
   const started = performance.now();
   const response = await fetch(url, {
-    headers: { 'X-API-Key': SANDBOX_KEY, Accept: 'application/json' },
+    headers: { 'X-API-Key': ownKey || SANDBOX_KEY, Accept: 'application/json' },
     signal,
   });
   const text = await response.text();
@@ -638,7 +640,55 @@ export async function sendRequest(requestPath: string, signal?: AbortSignal): Pr
     json,
     sandboxLeft: left === null ? null : Number(left),
     requestId: response.headers.get('X-Request-Id'),
+    costEur: response.headers.get('X-Brubru-Cost-Eur'),
+    balanceEur: response.headers.get('X-Brubru-Balance-Eur'),
   };
+}
+
+// ---- your own key ------------------------------------------------------------------------------------------
+
+// For this tab only, unless the person asks to be remembered. A key remembered here or on /api/docs/reference.html is the same
+// key: that page keeps it under this name.
+const KEY_THIS_TAB = 'brubru_console_key';
+const KEY_REMEMBERED = 'brubru_api_key';
+
+export function savedOwnKey(): string {
+  try {
+    return (sessionStorage.getItem(KEY_THIS_TAB) || localStorage.getItem(KEY_REMEMBERED) || '').trim();
+  } catch {
+    return '';
+  }
+}
+
+export function keepOwnKey(key: string, remember: boolean): void {
+  try {
+    sessionStorage.setItem(KEY_THIS_TAB, key);
+    if (remember) localStorage.setItem(KEY_REMEMBERED, key);
+  } catch {
+    // Blocked storage: the key lasts until the page closes.
+  }
+}
+
+export function forgetOwnKey(): void {
+  try {
+    sessionStorage.removeItem(KEY_THIS_TAB);
+    localStorage.removeItem(KEY_REMEMBERED);
+  } catch {
+    // Nothing was kept.
+  }
+}
+
+// Only that it could be a whole key: the API decides, on the first search the person chooses to make.
+export function keyLooksWhole(key: string): boolean {
+  return key.length >= 16 && !/\s/.test(key);
+}
+
+export function keyEnding(key: string): string {
+  return key.slice(-4);
+}
+
+export function formatEuro(value: string | number, language: string): string {
+  return Number(value).toLocaleString(language, { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 6 });
 }
 
 // ---- reading a response ------------------------------------------------------------------------------------

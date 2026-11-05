@@ -3684,7 +3684,30 @@
       "cardsNote": "Premi una scheda per vedere subito risultati reali. Usa 1 ricerca gratuita; tornare a una scheda già vista non ne consuma.",
       "refine": "Restringi questa ricerca",
       "capShort": "Oggi non hai più ricerche gratuite.",
-      "aboutInEnglish": "Questa descrizione è in inglese."
+      "aboutInEnglish": "Questa descrizione è in inglese.",
+      "ownKey": {
+        "open": "Usa la tua chiave",
+        "label": "La tua chiave API",
+        "placeholder": "Incolla qui la tua chiave",
+        "use": "Usa questa chiave",
+        "cancel": "Annulla",
+        "remember": "Ricordala su questo browser",
+        "note": "Resta in questo browser e va solo all'API di Brubru. Le ricerche con la chiave sono addebitate sul tuo saldo.",
+        "noKey": "Non hai ancora una chiave?",
+        "tooShort": "Non sembra una chiave completa. Controlla di averla copiata per intero.",
+        "active": "Stai usando la chiave che termina con {{end}}",
+        "stop": "Smetti di usarla",
+        "cardsNote": "Con la tua chiave, una scheda compila il modulo e non viene addebitato nulla. La ricerca è addebitata quando premi Cerca.",
+        "charged": "Addebitato sul tuo saldo.",
+        "chargedPrice": "Questa ricerca è addebitata sul tuo saldo: {{price}}.",
+        "cost": "Costo: {{cost}}",
+        "balance": "Saldo: {{balance}}",
+        "rejected": "Quella chiave non è stata accettata. Controlla di averla copiata per intero, o smetti di usarla.",
+        "noBalance": "Il tuo saldo non basta per questa ricerca.",
+        "topUp": "Ricarica",
+        "openItem": "Apri (addebitato sul tuo saldo)",
+        "idle": "Premi Cerca per vedere qui i risultati in tempo reale. È addebitato sul tuo saldo."
+      }
     },
     "bundles": {
       "official-journal": {

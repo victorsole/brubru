@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import type { ConsoleOperation, ConsoleParam, ConsolePricing, ConsoleTask, PickLists, RouteWordsMap } from '../../services/api_console';
 import {
   ROUTE_EXAMPLES, buildRequestPath, choicesOf, codeForTyped, dateRangeProblem, fieldHint, groupFields, hasSandbox, humanise, isItemRoute,
-  loadRouteWords, missingRequired, recentWorkingDays, sandboxLimitProblem, sandboxServes, summaryIn, whatItDoesIn, wordsFor,
+  formatEuro, loadRouteWords, missingRequired, priceOf, recentWorkingDays, sandboxLimitProblem, sandboxServes, summaryIn, whatItDoesIn, wordsFor,
 } from '../../services/api_console';
 import { ConsoleTip } from './console_tip';
 
@@ -204,6 +204,7 @@ interface Props {
   pricing: ConsolePricing | null;
   lists: PickLists | null;
   routeWords: RouteWordsMap;
+  ownKey: boolean;
   sending: boolean;
   sandboxLeft: number | null;
   listParent: ConsoleOperation | null;
@@ -217,7 +218,7 @@ interface Props {
 }
 
 export const RequestPane = ({
-  op, task, values, fieldErrors, pricing, lists, routeWords, sending, sandboxLeft, listParent, canGoBack, onBack, onChange, onExample, onClear, onSend, onGoToList,
+  op, task, values, fieldErrors, pricing, lists, routeWords, ownKey, sending, sandboxLeft, listParent, canGoBack, onBack, onChange, onExample, onClear, onSend, onGoToList,
 }: Props) => {
   const { t, i18n } = useTranslation();
   const groups = useMemo(() => groupFields(op), [op]);
@@ -240,11 +241,12 @@ export const RequestPane = ({
   const requestPath = buildRequestPath(op, values);
   // Priced on the route, so an empty path parameter does not hide that a route is heavy.
   const pathOnly = op.path.replace(/\{[^}]+\}/g, 'x');
-  const served = sandboxServes(pathOnly, pricing);
+  const served = ownKey || sandboxServes(pathOnly, pricing);
   const outOfCalls = sandboxLeft === 0;
-  const limitProblem = sandboxLimitProblem(values, pricing);
+  const limitProblem = ownKey ? null : sandboxLimitProblem(values, pricing);
   const rangeProblem = dateRangeProblem(values);
-  const canSend = hasSandbox() && served && missing.length === 0 && !sending && !outOfCalls && !limitProblem && !rangeProblem;
+  const canSend = (ownKey || hasSandbox()) && served && missing.length === 0 && !sending && !outOfCalls && !limitProblem && !rangeProblem;
+  const price = ownKey ? priceOf(pathOnly, pricing) : null;
   const item = isItemRoute(op);
   const moreCount = groups.more.length + groups.developer.length;
   const movedOpen = [...groups.more, ...groups.developer].some((p) => Boolean(values[p.name]) && !['limit', 'include_body'].includes(p.name) && task?.prefill[p.name] !== values[p.name]);
@@ -333,21 +335,26 @@ export const RequestPane = ({
             <button type="button" className="api-console__link-button" onClick={onClear}>{t('api.console.clear')}</button>
           </div>
           <div className="api-console__cost">
-            {!hasSandbox() && <p>{t('api.console.sandboxUnavailable')}</p>}
-            {hasSandbox() && !served && (
+            {ownKey && missing.length > 0 && <p>{t('api.console.fillRequired', { names: missingLabels.join(', ') })}</p>}
+            {ownKey && rangeProblem && <p className="api-console__needs-key">{t('api.console.datesReversed')}</p>}
+            {ownKey && missing.length === 0 && !rangeProblem && (
+              <p data-own-key-price>{price === null ? t('api.console.ownKey.charged') : t('api.console.ownKey.chargedPrice', { price: formatEuro(price, i18n.language) })}</p>
+            )}
+            {!ownKey && !hasSandbox() && <p>{t('api.console.sandboxUnavailable')}</p>}
+            {!ownKey && hasSandbox() && !served && (
               <p className="api-console__needs-key">
                 {t('api.console.needsKey')}{' '}
                 <Link to="/api#your-keys">{t('api.console.getKey')}</Link>{' '}
                 <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a>
               </p>
             )}
-            {hasSandbox() && served && outOfCalls && (
+            {!ownKey && hasSandbox() && served && outOfCalls && (
               <p className="api-console__needs-key">{t('api.console.capShort')} <Link to="/api#your-keys">{t('api.console.getKey')}</Link>{' · '}<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a></p>
             )}
-            {hasSandbox() && served && !outOfCalls && missing.length > 0 && <p>{t('api.console.fillRequired', { names: missingLabels.join(', ') })}</p>}
-            {hasSandbox() && served && !outOfCalls && limitProblem && <p className="api-console__needs-key">{t(`api.console.tooMany.${limitProblem.name}`, { top: limitProblem.top })}</p>}
-            {hasSandbox() && served && !outOfCalls && rangeProblem && <p className="api-console__needs-key">{t('api.console.datesReversed')}</p>}
-            {hasSandbox() && served && !outOfCalls && missing.length === 0 && !limitProblem && !rangeProblem && (
+            {!ownKey && hasSandbox() && served && !outOfCalls && missing.length > 0 && <p>{t('api.console.fillRequired', { names: missingLabels.join(', ') })}</p>}
+            {!ownKey && hasSandbox() && served && !outOfCalls && limitProblem && <p className="api-console__needs-key">{t(`api.console.tooMany.${limitProblem.name}`, { top: limitProblem.top })}</p>}
+            {!ownKey && hasSandbox() && served && !outOfCalls && rangeProblem && <p className="api-console__needs-key">{t('api.console.datesReversed')}</p>}
+            {!ownKey && hasSandbox() && served && !outOfCalls && missing.length === 0 && !limitProblem && !rangeProblem && (
               <p>
                 {t('api.console.usesOneCall')}{' '}
                 <ConsoleTip label={t('api.console.freeCallTipLabel')}>

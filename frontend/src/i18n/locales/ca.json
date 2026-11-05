@@ -2628,7 +2628,30 @@
       "cardsNote": "Prem una targeta per veure resultats reals a l'instant. Fa servir 1 cerca gratuïta; tornar a una targeta ja vista no en gasta cap.",
       "refine": "Afina aquesta cerca",
       "capShort": "Avui ja no et queden cerques gratuïtes.",
-      "aboutInEnglish": "Aquesta descripció és en anglès."
+      "aboutInEnglish": "Aquesta descripció és en anglès.",
+      "ownKey": {
+        "open": "Fes servir la teva clau",
+        "label": "La teva clau d'API",
+        "placeholder": "Enganxa aquí la teva clau",
+        "use": "Fes servir aquesta clau",
+        "cancel": "Cancel·la",
+        "remember": "Recorda-la en aquest navegador",
+        "note": "Es queda en aquest navegador i només va a l'API de Brubru. Les cerques amb la clau es carreguen al teu saldo.",
+        "noKey": "Encara no tens clau?",
+        "tooShort": "No sembla una clau completa. Comprova que l'has copiada sencera.",
+        "active": "S'està fent servir la teva clau acabada en {{end}}",
+        "stop": "Deixa de fer-la servir",
+        "cardsNote": "Amb la teva clau, una targeta omple el formulari i no es cobra res. La cerca es cobra quan prems Cerca.",
+        "charged": "Es carrega al teu saldo.",
+        "chargedPrice": "Aquesta cerca es carrega al teu saldo: {{price}}.",
+        "cost": "Cost: {{cost}}",
+        "balance": "Saldo: {{balance}}",
+        "rejected": "No s'ha acceptat aquesta clau. Comprova que l'has copiada sencera, o deixa de fer-la servir.",
+        "noBalance": "El teu saldo no és suficient per a aquesta cerca.",
+        "topUp": "Recarrega",
+        "openItem": "Obre (es carrega al teu saldo)",
+        "idle": "Prem Cerca per veure aquí els resultats en directe. Es carrega al teu saldo."
+      }
     },
     "bundles": {
       "official-journal": {

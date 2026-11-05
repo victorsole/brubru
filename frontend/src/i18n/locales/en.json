@@ -2628,7 +2628,30 @@
       "cardsNote": "Press a card to see real results straight away. That uses 1 free search; going back to a card you have seen does not.",
       "refine": "Narrow this search",
       "capShort": "No free searches left today.",
-      "aboutInEnglish": "This description is in English."
+      "aboutInEnglish": "This description is in English.",
+      "ownKey": {
+        "open": "Use your own key",
+        "label": "Your API key",
+        "placeholder": "Paste your key here",
+        "use": "Use this key",
+        "cancel": "Cancel",
+        "remember": "Remember it on this browser",
+        "note": "It stays in this browser and goes only to the Brubru API. Searches with it are charged to your balance.",
+        "noKey": "No key yet?",
+        "tooShort": "That does not look like a whole key. Check that you copied all of it.",
+        "active": "Using your key ending {{end}}",
+        "stop": "Stop using it",
+        "cardsNote": "With your key, a card fills in the form and nothing is charged. A search is charged when you press Search.",
+        "charged": "Charged to your balance.",
+        "chargedPrice": "This search is charged to your balance: {{price}}.",
+        "cost": "Cost: {{cost}}",
+        "balance": "Balance: {{balance}}",
+        "rejected": "That key was not accepted. Check that you copied all of it, or stop using it.",
+        "noBalance": "Your balance is too low for this search.",
+        "topUp": "Top up",
+        "openItem": "Open (charged to your balance)",
+        "idle": "Press Search to see live results here. It is charged to your balance."
+      }
     },
     "bundles": {
       "official-journal": {

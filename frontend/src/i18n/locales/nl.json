@@ -2628,7 +2628,30 @@
       "cardsNote": "Druk op een kaart om meteen echte resultaten te zien. Dat gebruikt 1 gratis zoekopdracht; teruggaan naar een kaart die u al zag niet.",
       "refine": "Deze zoekopdracht verfijnen",
       "capShort": "Vandaag geen gratis zoekopdrachten meer.",
-      "aboutInEnglish": "Deze beschrijving is in het Engels."
+      "aboutInEnglish": "Deze beschrijving is in het Engels.",
+      "ownKey": {
+        "open": "Uw eigen sleutel gebruiken",
+        "label": "Uw API-sleutel",
+        "placeholder": "Plak hier uw sleutel",
+        "use": "Deze sleutel gebruiken",
+        "cancel": "Annuleren",
+        "remember": "Onthouden in deze browser",
+        "note": "Hij blijft in deze browser en gaat alleen naar de Brubru-API. Zoekopdrachten ermee worden van uw saldo afgeschreven.",
+        "noKey": "Nog geen sleutel?",
+        "tooShort": "Dat lijkt geen volledige sleutel. Controleer of u alles hebt gekopieerd.",
+        "active": "Uw sleutel eindigend op {{end}} is in gebruik",
+        "stop": "Niet meer gebruiken",
+        "cardsNote": "Met uw sleutel vult een kaart het formulier in en wordt er niets afgeschreven. Een zoekopdracht wordt afgeschreven als u op Zoeken drukt.",
+        "charged": "Afgeschreven van uw saldo.",
+        "chargedPrice": "Deze zoekopdracht wordt van uw saldo afgeschreven: {{price}}.",
+        "cost": "Kosten: {{cost}}",
+        "balance": "Saldo: {{balance}}",
+        "rejected": "Die sleutel is niet geaccepteerd. Controleer of u alles hebt gekopieerd, of gebruik hem niet meer.",
+        "noBalance": "Uw saldo is te laag voor deze zoekopdracht.",
+        "topUp": "Opwaarderen",
+        "openItem": "Openen (afgeschreven van uw saldo)",
+        "idle": "Druk op Zoeken om hier live resultaten te zien. Dit wordt van uw saldo afgeschreven."
+      }
     },
     "bundles": {
       "official-journal": {

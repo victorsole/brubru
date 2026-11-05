@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import type { ConsoleCatalogue, ConsoleOperation, ConsolePricing, ConsoleResponse } from '../../services/api_console';
 import {
+  formatEuro,
   curlSnippet, fieldErrorsOf, humanise, isDateRefusal, isItemRoute, isList, isOurAddress, itemOfRow, pageInfo, pythonSnippet, reasonOf, rowFacts, rowsOf, rowText, rowTitle,
   safeHttpUrl, sandboxServes, shortenedJson, totalIsEstimate, totalOf,
 } from '../../services/api_console';
@@ -83,11 +84,12 @@ interface RowProps {
   catalogue: ConsoleCatalogue;
   op: ConsoleOperation;
   noCallsLeft: boolean;
+  ownKey: boolean;
   pricing: ConsolePricing | null;
   onOpen: (target: { op: ConsoleOperation; values: Record<string, string> }) => void;
 }
 
-const RowCard = ({ row, bodiesRequested, single, catalogue, op, noCallsLeft, pricing, onOpen }: RowProps) => {
+const RowCard = ({ row, bodiesRequested, single, catalogue, op, noCallsLeft, ownKey, pricing, onOpen }: RowProps) => {
   const { t, i18n } = useTranslation();
   const title = rowTitle(row);
   const url = isOurAddress(row.public_url) ? null : safeHttpUrl(row.public_url);
@@ -98,7 +100,7 @@ const RowCard = ({ row, bodiesRequested, single, catalogue, op, noCallsLeft, pri
   const fullText = typeof row.body_txt === 'string' ? row.body_txt : '';
   const target = single ? null : itemOfRow(catalogue, row, op);
   // A row whose full item is not in the free trial opens on the form that says so, without a call.
-  const targetFree = target ? sandboxServes(target.op.path.replace(/\{[^}]+\}/g, 'x'), pricing) : true;
+  const targetFree = target ? ownKey || sandboxServes(target.op.path.replace(/\{[^}]+\}/g, 'x'), pricing) : true;
 
   const factWords = (value: string | boolean | number, key?: string) => {
     // A policy area's code: finance-economy.
@@ -149,7 +151,7 @@ const RowCard = ({ row, bodiesRequested, single, catalogue, op, noCallsLeft, pri
       <div className="api-console__row-actions">
         {target && (
           <button type="button" className="api-console__row-open" disabled={noCallsLeft && targetFree} onClick={() => onOpen(target)}>
-            <span className="mdi mdi-open-in-app" aria-hidden="true" /> {targetFree ? t('api.console.openItem') : t('api.console.openItemKey')}
+            <span className="mdi mdi-open-in-app" aria-hidden="true" /> {ownKey ? t('api.console.ownKey.openItem') : targetFree ? t('api.console.openItem') : t('api.console.openItemKey')}
           </button>
         )}
         {url && !single && (
@@ -173,6 +175,7 @@ interface Props {
   cancelled: boolean;
   bodiesRequested: boolean;
   callsAllowed: number | null;
+  ownKey: boolean;
   sandboxLeft: number | null;
   maxPage: number | null;
   pricing: ConsolePricing | null;
@@ -186,11 +189,12 @@ interface Props {
   onRemoveFilter: (name: string) => void;
   onGoToList: (op: ConsoleOperation) => void;
   onRefine: () => void;
+  onStopKey: () => void;
 }
 
 export const ResponsePane = ({
-  catalogue, op, values, response, sending, failed, cancelled, bodiesRequested, callsAllowed, sandboxLeft, maxPage, pricing, listParent, canGoBack, onBack, onTryWord,
-  onCancel, onOpen, onNextPage, onRemoveFilter, onGoToList, onRefine,
+  catalogue, op, values, response, sending, failed, cancelled, bodiesRequested, callsAllowed, ownKey, sandboxLeft, maxPage, pricing, listParent, canGoBack, onBack, onTryWord,
+  onCancel, onOpen, onNextPage, onRemoveFilter, onGoToList, onRefine, onStopKey,
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [tab, setTab] = useState<Tab>('rows');
@@ -221,9 +225,12 @@ export const ResponsePane = ({
   }, [sending]);
 
   const capped = reason.code === 'sandbox_ip_capped' || reason.code === 'sandbox_global_capped';
-  const needsKey = capped || reason.code.startsWith('sandbox_') || response?.status === 401 || response?.status === 403;
+  const noBalance = reason.code === 'insufficient_balance' || response?.status === 402;
+  const needsKey = !ownKey && (capped || reason.code.startsWith('sandbox_') || response?.status === 401 || response?.status === 403);
   const status = response?.status ?? 0;
   const refusalText = () => {
+    if (ownKey && status === 401) return t('api.console.ownKey.rejected');
+    if (ownKey && noBalance) return t('api.console.ownKey.noBalance');
     if (reason.code === 'sandbox_ip_capped') return t('api.console.capVisitor');
     if (reason.code === 'sandbox_global_capped') return t('api.console.capPool');
     if (status === 404) return reason.message || t('api.console.notFound');
@@ -237,7 +244,7 @@ export const ResponsePane = ({
   const noCallsLeft = sandboxLeft === 0;
   // Two words that never meet may each find plenty.
   const words = (values.q || '').split(/\s+/).filter((w) => w.length > 2).slice(0, 5);
-  const servedHere = sandboxServes(op.path.replace(/\{[^}]+\}/g, 'x'), pricing);
+  const servedHere = ownKey || sandboxServes(op.path.replace(/\{[^}]+\}/g, 'x'), pricing);
 
   const statusWords = () => {
     if (ok) return t('api.console.statusOk');
@@ -258,8 +265,8 @@ export const ResponsePane = ({
           <span className="mdi mdi-text-search" aria-hidden="true" />
           {noCallsLeft ? <p>{t('api.console.capVisitor')}</p> : servedHere ? (
             <>
-              <p>{isItemRoute(op) ? t('api.console.idleItem') : t('api.console.idleList')}</p>
-              <p className="api-console__idle-small">{t('api.console.idleCost', { calls: callsAllowed ?? 10 })}</p>
+              <p>{ownKey ? t('api.console.ownKey.idle') : isItemRoute(op) ? t('api.console.idleItem') : t('api.console.idleList')}</p>
+              {!ownKey && <p className="api-console__idle-small">{t('api.console.idleCost', { calls: callsAllowed ?? 10 })}</p>}
             </>
           ) : <p>{t('api.console.idleNeedsKey')}</p>}
         </div>
@@ -297,7 +304,9 @@ export const ResponsePane = ({
               </span>
             )}
             <span>{t('api.console.seconds', { value: (response.ms / 1000).toLocaleString(i18n.language, { maximumFractionDigits: 1 }) })}</span>
-            {(sandboxLeft ?? response.sandboxLeft) !== null && <span>{t('api.console.callsLeft', { count: sandboxLeft ?? response.sandboxLeft })}</span>}
+            {!ownKey && (sandboxLeft ?? response.sandboxLeft) !== null && <span>{t('api.console.callsLeft', { count: sandboxLeft ?? response.sandboxLeft })}</span>}
+            {ownKey && response.costEur !== null && <span data-own-key-cost>{t('api.console.ownKey.cost', { cost: formatEuro(response.costEur, i18n.language) })}</span>}
+            {ownKey && response.balanceEur !== null && <span data-own-key-balance>{t('api.console.ownKey.balance', { balance: formatEuro(response.balanceEur, i18n.language) })}</span>}
           </div>
           {!isItemRoute(op) && (
             <button type="button" className="api-console__link-button api-console__refine" onClick={onRefine}>
@@ -317,13 +326,17 @@ export const ResponsePane = ({
                   ))}
                 </ul>
               )}
-              {reason.code && !capped && fieldErrors.length === 0 && <p><code>{reason.code}</code></p>}
+              {reason.code && !capped && fieldErrors.length === 0 && !(ownKey && (status === 401 || noBalance)) && <p><code>{reason.code}</code></p>}
+              {ownKey && status === 401 && (
+                <p><button type="button" className="api-console__link-button" onClick={onStopKey}>{t('api.console.ownKey.stop')}</button></p>
+              )}
               {needsKey && (
                 <p>
                   <Link to="/api#your-keys">{t('api.console.getKey')}</Link>{' · '}
                   <a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a>
                 </p>
               )}
+              {ownKey && noBalance && <p><Link to="/api/billing">{t('api.console.ownKey.topUp')}</Link>{' · '}<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a></p>}
               {status === 404 && listParent && (
                 <button type="button" className="api-console__link-button" onClick={() => onGoToList(listParent)}>
                   <span className="mdi mdi-format-list-bulleted" aria-hidden="true" /> {t('api.console.goToList')}
@@ -377,6 +390,7 @@ export const ResponsePane = ({
                   catalogue={catalogue}
                   op={op}
                   noCallsLeft={noCallsLeft}
+                  ownKey={ownKey}
                   pricing={pricing}
                   onOpen={onOpen}
                 />

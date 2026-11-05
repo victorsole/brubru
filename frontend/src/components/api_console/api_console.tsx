@@ -8,12 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import type { ConsoleCatalogue, ConsoleOperation, ConsolePricing, ConsoleResponse, ConsoleTask, PickLists, RouteWordsMap } from '../../services/api_console';
 import {
-  BUNDLE_ORDER, TASKS, bodiesRequested, buildRequestPath, cardCanSend, fieldErrorsOf, initialValues, loadCatalogue, loadPickLists, loadPricing, loadRouteWords, parentList,
-  rememberCallsLeft, rememberedCallsLeft, sandboxServes, sendRequest, startOfBundle, taskOf,
+  BUNDLE_ORDER, TASKS, bodiesRequested, buildRequestPath, cardCanSend, fieldErrorsOf, forgetOwnKey, formatEuro, initialValues, keepOwnKey, keyEnding, loadCatalogue,
+  loadPickLists, loadPricing, loadRouteWords, parentList, rememberCallsLeft, rememberedCallsLeft, sandboxServes, savedOwnKey, sendRequest, startOfBundle, taskOf,
 } from '../../services/api_console';
 import { CataloguePane } from './catalogue_pane';
 import { ConsoleTip } from './console_tip';
 import { HowItWorks } from './how_it_works';
+import { OwnKeyPanel } from './own_key_panel';
 import { RequestPane } from './request_pane';
 import { ResponsePane } from './response_pane';
 import './api_console.css';
@@ -64,6 +65,9 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
   const [sandboxLeft, setSandboxLeft] = useState<number | null>(() => rememberedCallsLeft());
   const [browsing, setBrowsing] = useState(Boolean(initialRoute && !taskOf(initialRoute)) || Boolean(initialBundle));
   const [howOpen, setHowOpen] = useState(false);
+  const [ownKey, setOwnKey] = useState(() => savedOwnKey());
+  const [keyPanelOpen, setKeyPanelOpen] = useState(false);
+  const [balance, setBalance] = useState<string | null>(null);
   const [history, setHistory] = useState<Snapshot[]>([]);
 
   // The panel on /api waits until it is near the screen, so the page does not pay for the whole spec up front.
@@ -172,9 +176,10 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     setBodiesOn(bodiesRequested(op, callValues));
     showResults();
     try {
-      const result = await sendRequest(buildRequestPath(op, callValues), controller.signal);
+      const result = await sendRequest(buildRequestPath(op, callValues), controller.signal, ownKey);
       if (controller.signal.aborted) return null;
       setResponse(result);
+      if (result.balanceEur !== null) setBalance(result.balanceEur);
       if (result.sandboxLeft !== null) {
         setSandboxLeft(result.sandboxLeft);
         rememberCallsLeft(result.sandboxLeft);
@@ -186,17 +191,18 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     } finally {
       if (!controller.signal.aborted) setSending(false);
     }
-  }, [showResults]);
+  }, [showResults, ownKey]);
 
   // Pressing a card runs its example, so the first press shows real results. A card seen a moment ago shows them again with
-  // no call. With no free search left, or on a route that needs a key, it opens the form, which says why.
+  // no call. With no free search left, or on a route that needs a key, it opens the form, which says why. With your own key it
+  // only opens the form: a search there spends real money, so it follows the button with the price beside it.
   const chooseTask = useCallback((task: ConsoleTask) => {
     const op = catalogue?.operations.find((o) => o.path === task.path);
     if (!op) return;
     if (bundle && !op.bundles.includes(bundle)) setBundle('');
     const example = initialValues(op, new Date(), lists?.oj_days);
     const asked = JSON.stringify(example);
-    const seen = cardAnswers.current.get(task.id);
+    const seen = ownKey ? undefined : cardAnswers.current.get(task.id);
     if (seen && seen.values === asked && Date.now() - seen.at < CARD_ANSWER_MS) {
       select(op);
       setResponse(seen.response);
@@ -204,7 +210,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
       showResults();
       return;
     }
-    if (!cardCanSend(op, example, pricing, sandboxLeft)) {
+    if (ownKey || !cardCanSend(op, example, pricing, sandboxLeft)) {
       select(op, true);
       return;
     }
@@ -213,7 +219,33 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     run(op, example).then((result) => {
       if (result && result.status >= 200 && result.status < 300) cardAnswers.current.set(task.id, { at: Date.now(), values: asked, response: result });
     });
-  }, [catalogue, bundle, lists, pricing, sandboxLeft, select, run, showResults]);
+  }, [catalogue, bundle, lists, pricing, sandboxLeft, ownKey, select, run, showResults]);
+
+  // A change of key clears what is on screen: it was read with another key, or from the free trial.
+  const useKey = useCallback((key: string, remember: boolean) => {
+    keepOwnKey(key, remember);
+    abortRef.current?.abort();
+    cardAnswers.current.clear();
+    setOwnKey(key);
+    setKeyPanelOpen(false);
+    setBalance(null);
+    setResponse(null);
+    setFailed(false);
+    setCancelled(false);
+    setSending(false);
+  }, []);
+
+  const stopUsingKey = useCallback(() => {
+    forgetOwnKey();
+    abortRef.current?.abort();
+    cardAnswers.current.clear();
+    setOwnKey('');
+    setBalance(null);
+    setResponse(null);
+    setFailed(false);
+    setCancelled(false);
+    setSending(false);
+  }, []);
 
   // A card's answer is on the page: take the second look now that the rows have their height.
   useEffect(() => {
@@ -240,8 +272,8 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     select(target.op, false, true);
     setHistory((h) => [...h, snapshot]);
     setValues(next);
-    if (sandboxServes(target.op.path.replace(/\{[^}]+\}/g, 'x'), pricing)) run(target.op, next);
-  }, [selected, values, response, bodiesOn, pricing, select, run]);
+    if (ownKey || sandboxServes(target.op.path.replace(/\{[^}]+\}/g, 'x'), pricing)) run(target.op, next);
+  }, [selected, values, response, bodiesOn, pricing, ownKey, select, run]);
 
   const goBack = useCallback(() => {
     const last = history[history.length - 1];
@@ -302,7 +334,15 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
           {t('api.console.stepChoose')}
         </h2>
         <div className="api-console__allowance">
-          {allowance && (
+          {ownKey && (
+            <span className="api-console__allowance-count api-console__allowance-count--key">
+              <span className="mdi mdi-key-variant" aria-hidden="true" /> {t('api.console.ownKey.active', { end: keyEnding(ownKey) })}
+              {balance !== null && <> · {t('api.console.ownKey.balance', { balance: formatEuro(balance, i18n.language) })}</>}
+              {' · '}
+              <button type="button" className="api-console__link-button" onClick={stopUsingKey}>{t('api.console.ownKey.stop')}</button>
+            </span>
+          )}
+          {!ownKey && allowance && (
             <span className="api-console__allowance-count">
               {sandboxLeft !== null
                 ? t('api.console.callsLeft', { count: sandboxLeft })
@@ -311,6 +351,11 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
                 <p>{t('api.console.allowanceTip', { calls: allowance.calls_per_visitor_per_day, rows: allowance.max_limit })}</p>
               </ConsoleTip>
             </span>
+          )}
+          {!ownKey && (
+            <button type="button" className="api-console__how" aria-expanded={keyPanelOpen} onClick={() => setKeyPanelOpen(!keyPanelOpen)}>
+              <span className="mdi mdi-key-variant" aria-hidden="true" /> {t('api.console.ownKey.open')}
+            </button>
           )}
           <button type="button" className="api-console__how" onClick={() => setHowOpen(true)}>
             <span className="mdi mdi-help-circle-outline" aria-hidden="true" /> {t('api.console.how.open')}
@@ -322,6 +367,8 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
           )}
         </div>
       </div>
+
+      {keyPanelOpen && !ownKey && <OwnKeyPanel onUse={useKey} onCancel={() => setKeyPanelOpen(false)} />}
 
       {starters.length > 0 && (
         <div className="api-console__tasks" role="group" aria-label={t('api.console.bundleCardsLabel')}>
@@ -343,7 +390,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
           ))}
         </div>
       )}
-      {starters.length > 0 && <p className="api-console__note api-console__cards-note">{t('api.console.cardsNote')}</p>}
+      {starters.length > 0 && <p className="api-console__note api-console__cards-note">{ownKey ? t('api.console.ownKey.cardsNote') : t('api.console.cardsNote')}</p>}
 
       {loadFailed && (
         <div className="api-console__problem">
@@ -377,8 +424,9 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
               pricing={pricing}
               lists={lists}
               routeWords={routeWords}
+              ownKey={Boolean(ownKey)}
               sending={sending}
-              sandboxLeft={sandboxLeft}
+              sandboxLeft={ownKey ? null : sandboxLeft}
               listParent={listParent}
               canGoBack={history.length > 0}
               onBack={goBack}
@@ -411,8 +459,9 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
               cancelled={cancelled}
               bodiesRequested={bodiesOn}
               callsAllowed={allowance?.calls_per_visitor_per_day ?? null}
-              sandboxLeft={sandboxLeft}
-              maxPage={allowance?.max_page ?? null}
+              ownKey={Boolean(ownKey)}
+              sandboxLeft={ownKey ? null : sandboxLeft}
+              maxPage={ownKey ? null : allowance?.max_page ?? null}
               pricing={pricing}
               canGoBack={history.length > 0}
               onBack={goBack}
@@ -429,6 +478,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
               onRemoveFilter={removeFilter}
               onGoToList={goToList}
               onRefine={refine}
+              onStopKey={stopUsingKey}
             />
           </div>
         </div>

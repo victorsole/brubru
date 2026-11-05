@@ -382,6 +382,15 @@
   .api-console__fields { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* Your own key: the form, and what says it is in use. */
+.api-console__own-key { border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; background: #f8fafc; }
+.api-console__own-key-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 6px 0 8px; }
+.api-console__own-key-row input { flex: 1 1 260px; min-width: 0; min-height: 40px; padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 8px; font: inherit; }
+.api-console__own-key-row button { min-height: 40px; }
+.api-console__own-key-remember { display: block; margin-bottom: 8px; font-size: 0.9rem; }
+.api-console__own-key .api-console__note { margin: 4px 0 0; }
+.api-console__allowance-count--key .api-console__link-button { display: inline; padding: 0; }
+
 /* What pressing a card does, said beside the cards. */
 .api-console__cards-note { margin: 0 0 12px; }
 

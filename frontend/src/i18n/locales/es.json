@@ -2628,7 +2628,30 @@
       "cardsNote": "Pulsa una tarjeta para ver resultados reales al instante. Usa 1 búsqueda gratis; volver a una tarjeta ya vista no gasta ninguna.",
       "refine": "Afinar esta búsqueda",
       "capShort": "No te quedan búsquedas gratis hoy.",
-      "aboutInEnglish": "Esta descripción está en inglés."
+      "aboutInEnglish": "Esta descripción está en inglés.",
+      "ownKey": {
+        "open": "Usar tu propia clave",
+        "label": "Tu clave de API",
+        "placeholder": "Pega aquí tu clave",
+        "use": "Usar esta clave",
+        "cancel": "Cancelar",
+        "remember": "Recordarla en este navegador",
+        "note": "Se queda en este navegador y solo va a la API de Brubru. Las búsquedas con ella se cargan a tu saldo.",
+        "noKey": "¿Aún no tienes clave?",
+        "tooShort": "No parece una clave completa. Comprueba que la has copiado entera.",
+        "active": "Usando tu clave terminada en {{end}}",
+        "stop": "Dejar de usarla",
+        "cardsNote": "Con tu clave, una tarjeta rellena el formulario y no se cobra nada. La búsqueda se cobra cuando pulsas Buscar.",
+        "charged": "Se carga a tu saldo.",
+        "chargedPrice": "Esta búsqueda se carga a tu saldo: {{price}}.",
+        "cost": "Coste: {{cost}}",
+        "balance": "Saldo: {{balance}}",
+        "rejected": "No se ha aceptado esa clave. Comprueba que la has copiado entera, o deja de usarla.",
+        "noBalance": "Tu saldo no es suficiente para esta búsqueda.",
+        "topUp": "Recargar",
+        "openItem": "Abrir (se carga a tu saldo)",
+        "idle": "Pulsa Buscar para ver aquí los resultados en directo. Se carga a tu saldo."
+      }
     },
     "bundles": {
       "official-journal": {
