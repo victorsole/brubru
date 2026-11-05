@@ -129,7 +129,6 @@ When interpreting a specific article and you need its explanatory recitals autom
 
 **Input**
 - `celex` (path) — legal identifier of the act.
-- `force_recompute` (query, default false) — set true (local dev only) to bypass the cache and recompute.
 
 **Try it**
 ```
@@ -146,7 +145,6 @@ Cached at computation time; deterministic for a given act (the underlying text d
 )
 def recital_article_map(
     celex: str,
-    force_recompute: bool = Query(False),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> RecitalArticleMapResponse:
@@ -154,7 +152,7 @@ def recital_article_map(
     # any failure surfaces as a clean 503 instead of an unhandled 500.
     try:
         from services.parsers.recital_article_store import get_or_compute_map
-        mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
+        mapping = get_or_compute_map(db, celex)
     except HTTPException:
         raise
     except Exception as exc:  # noqa: BLE001
@@ -203,7 +201,6 @@ When you need to know exactly how a law defines terms like "very large online pl
 **Input**
 - `celex` (path) — legal identifier of the act (the base act, e.g. `32024R1689`).
 - `version` (query, default `latest`) — `latest` reads the newest consolidated text; `original` reads the act as adopted.
-- `force_recompute` (query, default false) — bypass the cache.
 - `body_threshold` (default 500) — minimum body chars for `has_body=true`.
 
 **Try it**
@@ -223,14 +220,13 @@ def defined_terms(
     celex: str,
     version: str = Query("latest", pattern="^(latest|original)$",
                          description="`latest` (default): the newest consolidated text. `original`: the act as adopted."),
-    force_recompute: bool = Query(False),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> DefinedTermsResponse:
     from services.parsers.definition_store import get_defined_terms
 
-    result = get_defined_terms(db, celex, version=version, force_recompute=force_recompute)
+    result = get_defined_terms(db, celex, version=version)
     if result is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

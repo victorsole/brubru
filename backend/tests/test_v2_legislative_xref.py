@@ -145,11 +145,10 @@ def test_xref_aggregates_and_caches(client: TestClient, fresh_user):
     _, token = fresh_user
     key = _mint(client, token, ["read:laws"])
     h = {"X-API-Key": key}
-    # Force a fresh compute (write-through), then read the cache.
-    first = client.get(f"{V2}/laws/32016R0679/xref?refresh=true", headers=h)
+    # The first call computes and writes through, unless the row is stored already; a standard key cannot force it.
+    first = client.get(f"{V2}/laws/32016R0679/xref", headers=h)
     assert first.status_code == 200, first.text
     assert first.json()["celex"] == "32016R0679"
-    assert first.json()["cached"] is False
     assert first.json()["relation_total"] >= 0
 
     second = client.get(f"{V2}/laws/32016R0679/xref", headers=h)
@@ -181,7 +180,7 @@ def test_xref_browse_all_lists_index(client: TestClient, fresh_user):
     key = _mint(client, token, ["read:laws"])
     h = {"X-API-Key": key}
     # Ensure at least one row exists in the index.
-    client.get(f"{V2}/laws/32016R0679/xref?refresh=true", headers=h)
+    client.get(f"{V2}/laws/32016R0679/xref", headers=h)
     r = client.get(f"{V2}/xref?limit=50", headers=h)
     assert r.status_code == 200, r.text
     body = r.json()

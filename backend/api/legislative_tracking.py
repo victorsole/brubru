@@ -226,7 +226,6 @@ async def get_progress_summary(
 @router.get("/{celex}/recital-article-map")
 def get_recital_article_map(
     celex: str,
-    force_recompute: bool = Query(False, description="Recompute instead of reading cached map"),
     db: Session = Depends(get_db),
 ):
     """
@@ -245,15 +244,15 @@ def get_recital_article_map(
         }
 
     The map is computed on first access (from the local Formex archive) and
-    cached in `eu_laws.extra_metadata.recital_article_map`. Pass
-    `force_recompute=true` to rebuild.
+    cached in `eu_laws.extra_metadata.recital_article_map`. Rebuild it with
+    scripts/precompute_recital_article_maps.py: this route takes no login.
 
     Uses TF-IDF cosine similarity between article text and recital text.
     See `services/parsers/recital_article_linker.py`.
     """
     from services.parsers.recital_article_store import get_or_compute_map
 
-    mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
+    mapping = get_or_compute_map(db, celex)
     if mapping is None:
         # No Formex source for this CELEX (e.g. Commission proposals, which are
         # not in the adopted-acquis archive). This is a "no map available" state,
@@ -266,7 +265,6 @@ def get_recital_article_map(
 @router.get("/{celex}/defined-terms")
 def get_defined_terms(
     celex: str,
-    force_recompute: bool = Query(False),
     db: Session = Depends(get_db),
 ):
     """
@@ -290,7 +288,7 @@ def get_defined_terms(
     """
     from services.parsers.definition_store import get_or_compute_map as _get_defs
 
-    mapping = _get_defs(db, celex, force_recompute=force_recompute)
+    mapping = _get_defs(db, celex)
     if mapping is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

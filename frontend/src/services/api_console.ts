@@ -350,9 +350,6 @@ const GENERIC_MAIN = [
 const MAX_GENERIC_MAIN = 6;
 
 // Which group a field sits in on this route. Every field of the route is in exactly one group.
-// Switches that make the server redo its work: they help whoever runs it, and nobody trying the API.
-const NOT_FOR_PEOPLE = new Set(['force_recompute', 'refresh']);
-
 export function groupFields(op: ConsoleOperation): Record<FieldGroup, ConsoleParam[]> {
   const task = taskOf(op.path);
   const hasPublished = op.params.some((p) => p.name === 'published_from');
@@ -368,7 +365,7 @@ export function groupFields(op: ConsoleOperation): Record<FieldGroup, ConsolePar
   const body = op.params.find((p) => p.name === 'include_body');
   if (body && !main.includes(body)) main.push(body);
   const developer = op.params.filter((p) => !main.includes(p) && (DEVELOPER_FIELDS.has(p.name) || isAlias(p)));
-  const more = op.params.filter((p) => !main.includes(p) && !developer.includes(p) && !NOT_FOR_PEOPLE.has(p.name));
+  const more = op.params.filter((p) => !main.includes(p) && !developer.includes(p));
   // How many results comes last among the rest.
   more.sort((a, b) => Number(['limit', 'page'].includes(a.name)) - Number(['limit', 'page'].includes(b.name)));
   return { main, more, developer };

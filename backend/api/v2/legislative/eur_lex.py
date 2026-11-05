@@ -136,6 +136,12 @@ _XREF_COLS = (
 )
 
 
+def _admin_asks_to_refresh(request: Request, user: User) -> bool:
+    """Re-reading Cellar and rewriting the stored row, past the cache. For whoever runs the server, so it is not a public
+    filter: any key could otherwise make the server redo work and spend Cellar's patience at will (register O201)."""
+    return request.query_params.get("refresh", "").lower() in ("1", "true") and getattr(user, "role", None) == "admin"
+
+
 def _read_law_xref(db: Session, celex: str) -> Optional[dict]:
     try:
         row = db.execute(
@@ -563,7 +569,7 @@ To find specific acts ("the AI Act"), enumerate laws by topic, or feed a partner
 - `updated_from`, `updated_to` — when the law's record last changed (incremental sync).
 - `created_from`, `created_to` — when Brubru first stored the law (`creation_date`); a bare date as `created_to` covers the whole day.
 - `sector`, `year`, `number`, `document_type`: the parts of the CELEX. Every law here is a legal act, CELEX sector `3`. `sector=3&year=2024&document_type=R` lists 2024 regulations; `document_type` takes the descriptor (`R`, `L`, `D`, `H`...) or its EUR-Lex label (`regulation`). A corrigendum carries its act's descriptor, so `document_type=R` lists the corrections of regulations too (`corrected_act` names their act).
-- `alias`: a name or acronym from Brubru's curated list (`GDPR`, `Digital Services Act`), exact and case-insensitive; the list is short, so search by name with `q`.
+- `alias`: a name or acronym from Brubru's curated list (`GDPR`, `Digital Services Act`), exact and case-insensitive. A name that belongs to a proposal finds nothing here, since a proposal is not yet a law: look in `/api/v2/legislative/oeil/procedures`. The list is short, so search by name with `q`.
 - `author`: creating body (`COM`, `CONSIL`, `EP`, `SANTE`...). `in_force`: `true` or `false` (false: not yet or no longer in force). `procedure`: `2021/0106` (a type such as `(COD)` and a trailing letter are accepted). `corrects`: a CELEX, returns its corrigenda.
 - `limit` (default 50, max 100), `page` (1-indexed).
 
@@ -739,7 +745,6 @@ When interpreting a specific article and you need its explanatory recitals autom
 
 **Input**
 - `celex` (path) — legal identifier.
-- `force_recompute` (query, default false) — local dev only; bypass the cache.
 
 **Try it**
 ```
@@ -754,11 +759,10 @@ Cached deterministically; the underlying text doesn't change after adoption.""",
 )
 def recital_article_map(
     celex: str,
-    force_recompute: bool = Query(False),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> RecitalArticleMapResponse:
-    return _v1_legal_text.recital_article_map(celex, force_recompute=force_recompute, user=user, db=db)
+    return _v1_legal_text.recital_article_map(celex, user=user, db=db)
 
 
 @router.get(
@@ -774,7 +778,6 @@ When you need to know exactly how a law defines terms like "very large online pl
 **Input**
 - `celex` (path) — legal identifier of the base act.
 - `version` (query, default `latest`) — `latest` reads the newest consolidated text; `original` reads the act as adopted.
-- `force_recompute` (query, default false) — bypass the cache.
 - `body_threshold` (default 500) — minimum body chars for `has_body=true`.
 
 **Try it**
@@ -793,13 +796,12 @@ def defined_terms(
     celex: str,
     version: str = Query("latest", pattern="^(latest|original)$",
                          description="`latest` (default): the newest consolidated text. `original`: the act as adopted."),
-    force_recompute: bool = Query(False),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> DefinedTermsResponse:
     return _v1_legal_text.defined_terms(
-        celex, version=version, force_recompute=force_recompute, body_threshold=body_threshold, user=user, db=db
+        celex, version=version, body_threshold=body_threshold, user=user, db=db
     )
 
 
@@ -1159,7 +1161,6 @@ When you have one identifier and need the others, or to join a law across EUR-Le
 
 **Input**
 - `celex` (path) — the real CELEX (call `/laws/resolve` first if you hold a different identifier).
-- `refresh` (query, default false) — bypass the cache and recompute.
 
 **Try it**
 ```
@@ -1175,13 +1176,12 @@ Cache-first: served from law_xref when present, else aggregated live from Cellar
 async def law_xref(
     request: Request,
     celex: str = Path(..., description="CELEX number, e.g. 32016R0679"),
-    refresh: bool = Query(False, description="Bypass the cache and recompute."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> XrefResult:
     celex = celex.upper()
 
-    if not refresh:
+    if not _admin_asks_to_refresh(request, user):
         # Look up created_at BEFORE the raw law_xref SELECT (ORM query after a
         # raw db.execute on the same session can come back empty).
         cd = _law_created_at(db, celex)
