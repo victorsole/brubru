@@ -382,5 +382,20 @@
   .api-console__fields { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* What pressing a card does, said beside the cards. */
+.api-console__cards-note { margin: 0 0 12px; }
+
+/* Back up to the form, only where the form is not beside the results. */
+.api-console__link-button.api-console__refine { display: none; margin-bottom: 0.75rem; }
+.api-console--compact .api-console__link-button.api-console__refine { display: inline-flex; }
+@media (max-width: 1024px) {
+  .api-console__link-button.api-console__refine { display: inline-flex; }
+  /* The header takes more height as it wraps: 109px at 768, 138px on a phone. */
+  .api-console__request-anchor, .api-console__response-anchor { scroll-margin-top: 120px; }
+}
+@media (max-width: 767px) {
+  .api-console__request-anchor, .api-console__response-anchor { scroll-margin-top: 148px; }
+}
+
 /* The way back from one item, beside what it is reading. */
 .api-console__results-back { margin-bottom: 0.75rem; }

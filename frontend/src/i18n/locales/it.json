@@ -2211,7 +2211,7 @@
     },
     "console": {
       "title": "Console API",
-      "lede": "Consulta dati UE in tempo reale in tre passaggi, senza account: scegli cosa cerchi, restringi se vuoi e premi Cerca.",
+      "lede": "Consulta dati UE in tempo reale, senza account: premi una scheda e compaiono i risultati. Poi restringi se vuoi.",
       "backToApi": "La pagina dell'API",
       "openFull": "Apri a schermo intero",
       "search": "Cerca per parola ({{count}} in tutto)",
@@ -2238,10 +2238,10 @@
       "routeTip": "Un percorso è un tipo di dati con il proprio indirizzo web, come le leggi dell'UE o le notizie di un'agenzia. Le schede qui sopra sono il punto di partenza migliore; questo elenco contiene tutti i percorsi, raggruppati per istituzione.",
       "bundleLabel": "Mostra solo",
       "allRoutes": "Tutto",
-      "idleList": "Premi Cerca per vedere qui i risultati in tempo reale.",
+      "idleList": "Premi una scheda qui sopra, o Cerca, per vedere qui i risultati in tempo reale.",
       "idleItem": "Premi Apri per vedere qui questo elemento.",
       "idleNeedsKey": "Questo richiede la tua chiave API, quindi la prova gratuita non può mostrarlo qui.",
-      "idleCost": "Ogni ricerca usa 1 delle tue {{calls}} ricerche gratuite di oggi. Scegliere e compilare il modulo non ne consuma.",
+      "idleCost": "Ogni ricerca usa 1 delle tue {{calls}} ricerche gratuite di oggi. Compilare il modulo non ne consuma.",
       "allOptional": "È tutto facoltativo. Lascia vuoto per vedere tutto.",
       "moreFilters_one": "Altri filtri ({{count}})",
       "moreFilters_other": "Altri filtri ({{count}})",
@@ -2356,10 +2356,10 @@
         "title": "Come funziona la console API",
         "intro": "L'API di Brubru dà al software accesso a dati UE in tempo reale. Questa pagina ti permette di provarla prima a mano, senza account e senza installare nulla.",
         "step1Title": "Scegli cosa cerchi",
-        "step1Text": "Scegli una scheda. Il modulo si compila con un esempio reale.",
+        "step1Text": "Scegli una scheda. Avvia subito un esempio reale e mostra i risultati. Usa 1 ricerca gratuita.",
         "step2Title": "Restringi, se vuoi",
-        "step2Text": "Cambia le parole o usa i filtri. Tutto è facoltativo salvo dove è indicato obbligatorio. La piccola i accanto a un campo lo spiega.",
-        "step3Title": "Premi Cerca e leggi i risultati",
+        "step2Text": "Cambia le parole o usa i filtri e premi Cerca. Tutto è facoltativo salvo dove è indicato obbligatorio. La piccola i accanto a un campo lo spiega.",
+        "step3Title": "Leggi i risultati",
         "step3Text": "Ogni risultato rimanda alla sua pagina ufficiale. Premi Apri su un risultato per vederlo per intero.",
         "wordsTitle": "Parole che vedrai",
         "nextTitle": "Quando hai trovato ciò che ti serve",
@@ -3576,7 +3576,10 @@
         "adopted": "Adottato",
         "blocked": "Bloccato",
         "withdrawn": "Ritirato"
-      }
+      },
+      "cardsNote": "Premi una scheda per vedere subito risultati reali. Usa 1 ricerca gratuita; tornare a una scheda già vista non ne consuma.",
+      "refine": "Restringi questa ricerca",
+      "capShort": "Oggi non hai più ricerche gratuite."
     },
     "bundles": {
       "official-journal": {

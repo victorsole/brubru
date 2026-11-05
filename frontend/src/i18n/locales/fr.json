@@ -1155,7 +1155,7 @@
     },
     "console": {
       "title": "Console API",
-      "lede": "Consultez des données européennes en direct en trois étapes, sans compte : choisissez ce que vous cherchez, affinez si vous le souhaitez, puis appuyez sur Rechercher.",
+      "lede": "Consultez des données européennes en direct, sans compte : appuyez sur une carte et les résultats s'affichent. Affinez ensuite si vous le souhaitez.",
       "backToApi": "La page de l'API",
       "openFull": "Ouvrir en plein écran",
       "search": "Chercher par mot ({{count}} au total)",
@@ -1182,10 +1182,10 @@
       "routeTip": "Une route est un type de données avec sa propre adresse web, comme les lois de l'UE ou les actualités d'une agence. Les cartes ci-dessus sont les meilleurs points de départ ; cette liste contient toutes les routes, classées par institution.",
       "bundleLabel": "Afficher seulement",
       "allRoutes": "Tout",
-      "idleList": "Appuyez sur Rechercher pour voir ici les résultats en direct.",
+      "idleList": "Appuyez sur une carte ci-dessus, ou sur Rechercher, pour voir ici les résultats en direct.",
       "idleItem": "Appuyez sur Ouvrir pour voir cet élément ici.",
       "idleNeedsKey": "Cet élément nécessite votre propre clé API : l'essai gratuit ne peut pas l'afficher ici.",
-      "idleCost": "Chaque recherche utilise 1 de vos {{calls}} recherches gratuites du jour. Choisir et remplir le formulaire n'en utilise aucune.",
+      "idleCost": "Chaque recherche utilise 1 de vos {{calls}} recherches gratuites du jour. Remplir le formulaire n'en utilise aucune.",
       "allOptional": "Tous ces champs sont facultatifs. Laissez-les vides pour tout voir.",
       "moreFilters_one": "Plus de filtres ({{count}})",
       "moreFilters_other": "Plus de filtres ({{count}})",
@@ -1300,10 +1300,10 @@
         "title": "Comment fonctionne la console API",
         "intro": "L'API Brubru donne aux logiciels accès à des données européennes en direct. Cette page vous permet de l'essayer d'abord à la main, sans compte et sans rien installer.",
         "step1Title": "Choisissez ce que vous cherchez",
-        "step1Text": "Choisissez une carte. Le formulaire se remplit avec un exemple réel.",
+        "step1Text": "Choisissez une carte. Elle lance aussitôt un exemple réel et affiche les résultats. Cela utilise 1 recherche gratuite.",
         "step2Title": "Affinez, si vous le souhaitez",
-        "step2Text": "Modifiez les mots ou utilisez les filtres. Tout est facultatif, sauf mention contraire. Le petit i à côté d'un champ l'explique.",
-        "step3Title": "Appuyez sur Rechercher et lisez les résultats",
+        "step2Text": "Modifiez les mots ou utilisez les filtres, puis appuyez sur Rechercher. Tout est facultatif, sauf mention contraire. Le petit i à côté d'un champ l'explique.",
+        "step3Title": "Lisez les résultats",
         "step3Text": "Chaque résultat renvoie à sa page officielle. Appuyez sur Ouvrir sur un résultat pour le voir en entier.",
         "wordsTitle": "Les mots que vous verrez",
         "nextTitle": "Quand vous avez trouvé ce qu'il vous faut",
@@ -2520,7 +2520,10 @@
         "adopted": "Adopté",
         "blocked": "Bloqué",
         "withdrawn": "Retiré"
-      }
+      },
+      "cardsNote": "Appuyez sur une carte pour voir aussitôt de vrais résultats. Cela utilise 1 recherche gratuite ; revenir à une carte déjà vue n'en utilise aucune.",
+      "refine": "Affiner cette recherche",
+      "capShort": "Plus de recherches gratuites aujourd'hui."
     },
     "bundles": {
       "official-journal": {

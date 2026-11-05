@@ -1,13 +1,14 @@
 // frontend/src/components/api_console/api_console.tsx
 // The API Console: choose what you want, narrow it down, read the results. Used full screen at /api/try and as the panel
 // on /api. The catalogue, the prices and the pick lists are free and load when the console comes into view; a metered call
-// only ever follows something a person pressed, and the words beside it say that it uses a free call.
+// only ever follows something a person pressed, and the words beside it say that it uses a free call. Pressing a card is
+// such a press: the first thing a person does should show results, not one more form to fill in.
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import type { ConsoleCatalogue, ConsoleOperation, ConsolePricing, ConsoleResponse, ConsoleTask, PickLists } from '../../services/api_console';
 import {
-  BUNDLE_ORDER, TASKS, bodiesRequested, buildRequestPath, fieldErrorsOf, initialValues, loadCatalogue, loadPickLists, loadPricing, parentList,
+  BUNDLE_ORDER, TASKS, bodiesRequested, buildRequestPath, cardCanSend, fieldErrorsOf, initialValues, loadCatalogue, loadPickLists, loadPricing, parentList,
   rememberCallsLeft, rememberedCallsLeft, sandboxServes, sendRequest, startOfBundle, taskOf,
 } from '../../services/api_console';
 import { CataloguePane } from './catalogue_pane';
@@ -25,6 +26,13 @@ interface Snapshot {
   bodiesOn: boolean;
 }
 
+// A visitor who asked for less motion gets the jump without the glide.
+const glide = (): ScrollBehavior => (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+
+// How long a card's answer is shown again without another call: going back to a card must not cost a free search, and
+// after this the data may have moved.
+const CARD_ANSWER_MS = 15 * 60 * 1000;
+
 interface Props {
   compact?: boolean;
   initialRoute?: string | null;
@@ -37,6 +45,8 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
   const requestRef = useRef<HTMLDivElement>(null);
   const responseRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const cardAnswers = useRef(new Map<string, { at: number; values: string; response: ConsoleResponse }>());
+  const cardWaiting = useRef(false);
   const [wanted, setWanted] = useState(!compact);
   const [bundle, setBundle] = useState(BUNDLE_ORDER.includes(initialBundle || '') ? (initialBundle as string) : '');
   const [catalogue, setCatalogue] = useState<ConsoleCatalogue | null>(null);
@@ -71,7 +81,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
   const select = useCallback((op: ConsoleOperation, scroll = false, keepHistory = false) => {
     abortRef.current?.abort();
     setSelected(op);
-    setValues(initialValues(op));
+    setValues(initialValues(op, new Date(), lists?.oj_days));
     setResponse(null);
     setFailed(false);
     setCancelled(false);
@@ -79,9 +89,9 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     if (!keepHistory) setHistory([]);
     // After a choice, the form must be in view: below the cards on a laptop, a long way down on a phone.
     if (scroll && requestRef.current && requestRef.current.getBoundingClientRect().top > window.innerHeight * 0.45) {
-      requestRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      requestRef.current.scrollIntoView({ behavior: glide(), block: 'start' });
     }
-  }, []);
+  }, [lists]);
 
   const load = useCallback(() => {
     setLoadFailed(false);
@@ -104,6 +114,14 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     if (first) select(first);
   }, [catalogue, selected, initialRoute, bundle, select]);
 
+  // The days the Journal came out can arrive after its form opened on a day worked out from the calendar.
+  useEffect(() => {
+    const lastIssue = lists?.oj_days?.[0];
+    if (!lastIssue || !selected?.path.endsWith('/oj/daily') || response || sending) return;
+    const fromCalendar = initialValues(selected).date;
+    setValues((v) => (v.date === fromCalendar ? { ...v, date: lastIssue } : v));
+  }, [lists, selected, response, sending]);
+
   // Choosing a bundle makes no call: it narrows the list, and moves off a route that is not in it.
   const chooseBundle = useCallback((next: string) => {
     setBundle(next);
@@ -112,17 +130,25 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     if (start) select(start);
   }, [catalogue, selected, select]);
 
-  const chooseTask = useCallback((task: ConsoleTask) => {
-    const op = catalogue?.operations.find((o) => o.path === task.path);
-    if (!op) return;
-    if (bundle && !op.bundles.includes(bundle)) setBundle('');
-    select(op, true);
-  }, [catalogue, bundle, select]);
-
   useEffect(() => () => abortRef.current?.abort(), []);
 
+  // The answer must be in view when it arrives, wherever the page was: below on a phone, above after a long form. Measured
+  // on the next frame: a card changes the form above the results, and the old height would land the page in the wrong place.
+  // `arrived` is the second look: while an answer is on its way the page is short and the scroll stops early (a phone landed
+  // 130px low), so once a card's answer is in, the results go right up under the header.
+  const showResults = useCallback((arrived = false) => {
+    requestAnimationFrame(() => {
+      const el = responseRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      const header = parseFloat(window.getComputedStyle(el).scrollMarginTop) || 0;
+      const tooLow = arrived ? top > header + 30 : top > window.innerHeight * 0.45;
+      if (tooLow || top < header - 20) el.scrollIntoView({ behavior: glide(), block: 'start' });
+    });
+  }, []);
+
   // Every call goes through here, with what it is about passed in: a row's "Open" asks for a route not yet in the state.
-  const run = useCallback(async (op: ConsoleOperation, callValues: Record<string, string>) => {
+  const run = useCallback(async (op: ConsoleOperation, callValues: Record<string, string>): Promise<ConsoleResponse | null> => {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -131,27 +157,60 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
     setCancelled(false);
     setResponse(null);
     setBodiesOn(bodiesRequested(op, callValues));
-    // The answer must be in view when it arrives, wherever the page was: below on a phone, above after a long form.
-    if (responseRef.current) {
-      const top = responseRef.current.getBoundingClientRect().top;
-      if (top > window.innerHeight * 0.45 || top < 0) responseRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    showResults();
     try {
       const result = await sendRequest(buildRequestPath(op, callValues), controller.signal);
-      if (controller.signal.aborted) return;
+      if (controller.signal.aborted) return null;
       setResponse(result);
       if (result.sandboxLeft !== null) {
         setSandboxLeft(result.sandboxLeft);
         rememberCallsLeft(result.sandboxLeft);
       }
+      return result;
     } catch (e) {
       if ((e as Error).name !== 'AbortError') setFailed(true);
+      return null;
     } finally {
       if (!controller.signal.aborted) setSending(false);
     }
-  }, []);
+  }, [showResults]);
+
+  // Pressing a card runs its example, so the first press shows real results. A card seen a moment ago shows them again with
+  // no call. With no free search left, or on a route that needs a key, it opens the form, which says why.
+  const chooseTask = useCallback((task: ConsoleTask) => {
+    const op = catalogue?.operations.find((o) => o.path === task.path);
+    if (!op) return;
+    if (bundle && !op.bundles.includes(bundle)) setBundle('');
+    const example = initialValues(op, new Date(), lists?.oj_days);
+    const asked = JSON.stringify(example);
+    const seen = cardAnswers.current.get(task.id);
+    if (seen && seen.values === asked && Date.now() - seen.at < CARD_ANSWER_MS) {
+      select(op);
+      setResponse(seen.response);
+      setBodiesOn(bodiesRequested(op, example));
+      showResults();
+      return;
+    }
+    if (!cardCanSend(op, example, pricing, sandboxLeft)) {
+      select(op, true);
+      return;
+    }
+    select(op);
+    cardWaiting.current = true;
+    run(op, example).then((result) => {
+      if (result && result.status >= 200 && result.status < 300) cardAnswers.current.set(task.id, { at: Date.now(), values: asked, response: result });
+    });
+  }, [catalogue, bundle, lists, pricing, sandboxLeft, select, run, showResults]);
+
+  // A card's answer is on the page: take the second look now that the rows have their height.
+  useEffect(() => {
+    if (!response || !cardWaiting.current) return;
+    cardWaiting.current = false;
+    showResults(true);
+  }, [response, showResults]);
 
   const send = useCallback(() => {
+    cardWaiting.current = false;
     if (selected && !sending) run(selected, values);
   }, [selected, values, sending, run]);
 
@@ -213,6 +272,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
   }, [selected, values]);
 
   const goToList = useCallback((op: ConsoleOperation) => select(op, true), [select]);
+  const refine = useCallback(() => requestRef.current?.scrollIntoView({ behavior: glide(), block: 'start' }), []);
 
   const starters = catalogue ? TASKS.filter((task) => catalogue.operations.some((op) => op.path === task.path)) : [];
   const allowance = pricing?.sandbox;
@@ -270,6 +330,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
           ))}
         </div>
       )}
+      {starters.length > 0 && <p className="api-console__note api-console__cards-note">{t('api.console.cardsNote')}</p>}
 
       {loadFailed && (
         <div className="api-console__problem">
@@ -353,6 +414,7 @@ export const ApiConsole = ({ compact = false, initialRoute = null, initialBundle
               onNextPage={nextPage}
               onRemoveFilter={removeFilter}
               onGoToList={goToList}
+              onRefine={refine}
             />
           </div>
         </div>

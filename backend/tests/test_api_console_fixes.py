@@ -99,6 +99,38 @@ def test_an_unknown_family_is_refused_on_consultations():
     assert response.status_code == 400, response.text
 
 
+def test_the_pick_lists_name_only_days_the_journal_came_out():
+    """A holiday has no issue: a day worked out from the calendar spent a free search on an empty answer (2 Nov 2026)."""
+    import datetime as dt
+    from api.v2 import pick_lists
+    from core.database import get_db
+
+    today = dt.date.today()
+    def ago(n):
+        return (today - dt.timedelta(days=n)).isoformat()
+    pick_lists._cache.update(at=0.0, bodies=[], consultations_at=0.0, consultations=None, oj_days_at=0.0, oj_days=None)
+    db = _sqlite_session("CREATE TABLE economy_bodies (code TEXT, name TEXT)", [
+        "CREATE TABLE public_consultations (source_body TEXT)",
+        "CREATE TABLE economy_items (body_code TEXT, item_type TEXT)",
+        "CREATE TABLE oj_entries (oj_date TEXT, series TEXT)",
+        # Two acts on one day; no issue 2 days ago; a C-only day; a day in the future; a day too old to offer.
+        f"INSERT INTO oj_entries VALUES ('{ago(1)}', 'L'), ('{ago(1)}', 'L'), ('{ago(3)}', 'L'), ('{ago(4)}', 'C'), ('{ago(-2)}', 'L'), ('{ago(30)}', 'L')",
+        f"INSERT INTO oj_entries VALUES ('{ago(5)}', 'L'), ('{ago(6)}', 'L'), ('{ago(7)}', 'L')",
+    ])
+    app = FastAPI()
+    app.include_router(pick_lists.router)
+    app.dependency_overrides[get_db] = lambda: db
+    assert TestClient(app).get("/pick-lists").json()["oj_days"] == [ago(1), ago(3), ago(5), ago(6)]
+
+    # With no table to read, the answer still comes, and the form falls back on the calendar.
+    pick_lists._cache.update(at=0.0, bodies=[], consultations_at=0.0, consultations=None, oj_days_at=0.0, oj_days=None)
+    bare = _sqlite_session("CREATE TABLE economy_bodies (code TEXT, name TEXT)", [])
+    app.dependency_overrides[get_db] = lambda: bare
+    response = TestClient(app).get("/pick-lists")
+    assert response.status_code == 200 and response.json()["oj_days"] == []
+    pick_lists._cache.update(at=0.0, bodies=[], consultations_at=0.0, consultations=None, oj_days_at=0.0, oj_days=None)
+
+
 def test_the_pick_lists_answer_with_no_key_and_give_a_name_for_every_code():
     from api.v2 import pick_lists
     from core.database import get_db

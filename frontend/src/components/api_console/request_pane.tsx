@@ -232,7 +232,7 @@ export const RequestPane = ({
   const canSend = hasSandbox() && served && missing.length === 0 && !sending && !outOfCalls && !limitProblem && !rangeProblem;
   const item = isItemRoute(op);
   const moreCount = groups.more.length + groups.developer.length;
-  const movedOpen = [...groups.more, ...groups.developer].some((p) => Boolean(values[p.name]) && !['limit', 'include_body'].includes(p.name));
+  const movedOpen = [...groups.more, ...groups.developer].some((p) => Boolean(values[p.name]) && !['limit', 'include_body'].includes(p.name) && task?.prefill[p.name] !== values[p.name]);
   const developerOpen = groups.developer.some((p) => Boolean(values[p.name]));
   const taskWords = task ? t(`api.console.tasks.${task.id}.title`) : '';
 
@@ -242,7 +242,7 @@ export const RequestPane = ({
   };
 
   const field = (param: ConsoleParam, showHelp: boolean) => {
-    const dates = param.name === 'date' && op.path.endsWith('/oj/daily') ? recentWorkingDays(4) : [];
+    const dates = param.name === 'date' && op.path.endsWith('/oj/daily') ? (lists?.oj_days?.length ? lists.oj_days : recentWorkingDays(4)) : [];
     const examples = ROUTE_EXAMPLES[op.path]?.[param.name] || task?.examples?.[param.name] || (dates.length ? dates : GENERIC_EXAMPLES[param.name]) || [];
     return (
       <Field
@@ -327,7 +327,7 @@ export const RequestPane = ({
               </p>
             )}
             {hasSandbox() && served && outOfCalls && (
-              <p className="api-console__needs-key">{t('api.console.capVisitor')} <Link to="/api#your-keys">{t('api.console.getKey')}</Link>{' · '}<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a></p>
+              <p className="api-console__needs-key">{t('api.console.capShort')} <Link to="/api#your-keys">{t('api.console.getKey')}</Link>{' · '}<a href="mailto:hello@beresol.eu?subject=Brubru%20API%20pricing">{t('api.console.askPricing')}</a></p>
             )}
             {hasSandbox() && served && !outOfCalls && missing.length > 0 && <p>{t('api.console.fillRequired', { names: missingLabels.join(', ') })}</p>}
             {hasSandbox() && served && !outOfCalls && limitProblem && <p className="api-console__needs-key">{t(`api.console.tooMany.${limitProblem.name}`, { top: limitProblem.top })}</p>}

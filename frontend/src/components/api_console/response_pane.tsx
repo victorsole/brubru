@@ -185,11 +185,12 @@ interface Props {
   onNextPage: () => void;
   onRemoveFilter: (name: string) => void;
   onGoToList: (op: ConsoleOperation) => void;
+  onRefine: () => void;
 }
 
 export const ResponsePane = ({
   catalogue, op, values, response, sending, failed, cancelled, bodiesRequested, callsAllowed, sandboxLeft, maxPage, pricing, listParent, canGoBack, onBack, onTryWord,
-  onCancel, onOpen, onNextPage, onRemoveFilter, onGoToList,
+  onCancel, onOpen, onNextPage, onRemoveFilter, onGoToList, onRefine,
 }: Props) => {
   const { t, i18n } = useTranslation();
   const [tab, setTab] = useState<Tab>('rows');
@@ -298,6 +299,11 @@ export const ResponsePane = ({
             <span>{t('api.console.seconds', { value: (response.ms / 1000).toLocaleString(i18n.language, { maximumFractionDigits: 1 }) })}</span>
             {(sandboxLeft ?? response.sandboxLeft) !== null && <span>{t('api.console.callsLeft', { count: sandboxLeft ?? response.sandboxLeft })}</span>}
           </div>
+          {!isItemRoute(op) && (
+            <button type="button" className="api-console__link-button api-console__refine" onClick={onRefine}>
+              <span className="mdi mdi-tune-variant" aria-hidden="true" /> {t('api.console.refine')}
+            </button>
+          )}
 
           {!ok && (
             <div className="api-console__problem">

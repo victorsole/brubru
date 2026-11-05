@@ -1155,7 +1155,7 @@
     },
     "console": {
       "title": "API Console",
-      "lede": "See live EU data in three steps, with no account: choose what you are looking for, narrow it down if you like, then press Search.",
+      "lede": "See live EU data with no account: press a card and the results appear. Then narrow it down if you like.",
       "backToApi": "The API page",
       "openFull": "Open full screen",
       "search": "Search by word ({{count}} in all)",
@@ -1182,10 +1182,10 @@
       "routeTip": "A route is one kind of data with its own web address, such as EU laws or one agency's news. The cards above are the most useful places to start; this list holds every route, grouped by institution.",
       "bundleLabel": "Show only",
       "allRoutes": "Everything",
-      "idleList": "Press Search to see live results here.",
+      "idleList": "Press a card above, or Search, to see live results here.",
       "idleItem": "Press Open to see this item here.",
       "idleNeedsKey": "This one needs your own API key, so the free trial cannot show it here.",
-      "idleCost": "Each search uses 1 of your {{calls}} free searches today. Choosing and filling in the form uses none.",
+      "idleCost": "Each search uses 1 of your {{calls}} free searches today. Filling in the form uses none.",
       "allOptional": "All of these are optional. Leave them empty to see everything.",
       "moreFilters_one": "More filters ({{count}})",
       "moreFilters_other": "More filters ({{count}})",
@@ -1300,10 +1300,10 @@
         "title": "How the API Console works",
         "intro": "The Brubru API gives software access to live EU data. This page lets you try it by hand first, with no account and nothing to install.",
         "step1Title": "Choose what you are looking for",
-        "step1Text": "Pick a card. The form fills in with a real example.",
+        "step1Text": "Pick a card. It runs a real example straight away and shows the results. That uses 1 free search.",
         "step2Title": "Narrow it down, if you like",
-        "step2Text": "Change the words or use the filters. Everything is optional unless it says required. The small i beside a field explains it.",
-        "step3Title": "Press Search and read the results",
+        "step2Text": "Change the words or use the filters, then press Search. Everything is optional unless it says required. The small i beside a field explains it.",
+        "step3Title": "Read the results",
         "step3Text": "Each result links to its official page. Press Open on a result to see it in full.",
         "wordsTitle": "Words you will see",
         "nextTitle": "When you have found what you need",
@@ -2520,7 +2520,10 @@
         "adopted": "Adopted",
         "blocked": "Blocked",
         "withdrawn": "Withdrawn"
-      }
+      },
+      "cardsNote": "Press a card to see real results straight away. That uses 1 free search; going back to a card you have seen does not.",
+      "refine": "Narrow this search",
+      "capShort": "No free searches left today."
     },
     "bundles": {
       "official-journal": {

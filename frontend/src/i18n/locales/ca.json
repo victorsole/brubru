@@ -1155,7 +1155,7 @@
     },
     "console": {
       "title": "Consola de l'API",
-      "lede": "Consulta dades de la UE en directe en tres passos, sense compte: tria què busques, afina-ho si vols i prem Cerca.",
+      "lede": "Consulta dades de la UE en directe, sense compte: prem una targeta i apareixen els resultats. Després afina-ho si vols.",
       "backToApi": "La pàgina de l'API",
       "openFull": "Obre a pantalla completa",
       "search": "Cerca per paraula ({{count}} en total)",
@@ -1182,10 +1182,10 @@
       "routeTip": "Una ruta és un tipus de dades amb la seva pròpia adreça web, com ara les lleis de la UE o les notícies d'una agència. Les targetes de dalt són el millor punt de partida; aquesta llista conté totes les rutes, agrupades per institució.",
       "bundleLabel": "Mostra només",
       "allRoutes": "Tot",
-      "idleList": "Prem Cerca per veure aquí els resultats en directe.",
+      "idleList": "Prem una targeta de dalt, o Cerca, per veure aquí els resultats en directe.",
       "idleItem": "Prem Obre per veure aquí aquest element.",
       "idleNeedsKey": "Això necessita la teva pròpia clau d'API, així que la prova gratuïta no ho pot mostrar aquí.",
-      "idleCost": "Cada cerca fa servir 1 de les teves {{calls}} cerques gratuïtes d'avui. Triar i omplir el formulari no en gasta cap.",
+      "idleCost": "Cada cerca fa servir 1 de les teves {{calls}} cerques gratuïtes d'avui. Omplir el formulari no en gasta cap.",
       "allOptional": "Tot això és opcional. Deixa-ho buit per veure-ho tot.",
       "moreFilters_one": "Més filtres ({{count}})",
       "moreFilters_other": "Més filtres ({{count}})",
@@ -1300,10 +1300,10 @@
         "title": "Com funciona la consola de l'API",
         "intro": "L'API de Brubru dona al programari accés a dades de la UE en directe. Aquesta pàgina et permet provar-la primer a mà, sense compte i sense instal·lar res.",
         "step1Title": "Tria què busques",
-        "step1Text": "Tria una targeta. El formulari s'omple amb un exemple real.",
+        "step1Text": "Tria una targeta. Llança a l'instant un exemple real i mostra els resultats. Fa servir 1 cerca gratuïta.",
         "step2Title": "Afina-ho, si vols",
-        "step2Text": "Canvia les paraules o fes servir els filtres. Tot és opcional tret que digui obligatori. La petita i al costat d'un camp l'explica.",
-        "step3Title": "Prem Cerca i llegeix els resultats",
+        "step2Text": "Canvia les paraules o fes servir els filtres i prem Cerca. Tot és opcional tret que digui obligatori. La petita i al costat d'un camp l'explica.",
+        "step3Title": "Llegeix els resultats",
         "step3Text": "Cada resultat enllaça amb la seva pàgina oficial. Prem Obre en un resultat per veure'l complet.",
         "wordsTitle": "Paraules que veuràs",
         "nextTitle": "Quan hagis trobat el que necessites",
@@ -2520,7 +2520,10 @@
         "adopted": "Adoptat",
         "blocked": "Bloquejat",
         "withdrawn": "Retirat"
-      }
+      },
+      "cardsNote": "Prem una targeta per veure resultats reals a l'instant. Fa servir 1 cerca gratuïta; tornar a una targeta ja vista no en gasta cap.",
+      "refine": "Afina aquesta cerca",
+      "capShort": "Avui ja no et queden cerques gratuïtes."
     },
     "bundles": {
       "official-journal": {

@@ -1155,7 +1155,7 @@
     },
     "console": {
       "title": "Consola de la API",
-      "lede": "Consulta datos de la UE en directo en tres pasos, sin cuenta: elige lo que buscas, afina si quieres y pulsa Buscar.",
+      "lede": "Consulta datos de la UE en directo, sin cuenta: pulsa una tarjeta y aparecen los resultados. Después afina si quieres.",
       "backToApi": "La página de la API",
       "openFull": "Abrir a pantalla completa",
       "search": "Buscar por palabra ({{count}} en total)",
@@ -1182,10 +1182,10 @@
       "routeTip": "Una ruta es un tipo de datos con su propia dirección web, como las leyes de la UE o las noticias de una agencia. Las tarjetas de arriba son el mejor punto de partida; esta lista contiene todas las rutas, agrupadas por institución.",
       "bundleLabel": "Mostrar solo",
       "allRoutes": "Todo",
-      "idleList": "Pulsa Buscar para ver aquí los resultados en directo.",
+      "idleList": "Pulsa una tarjeta de arriba, o Buscar, para ver aquí los resultados en directo.",
       "idleItem": "Pulsa Abrir para ver aquí este elemento.",
       "idleNeedsKey": "Esto necesita tu propia clave de API, así que la prueba gratis no puede mostrarlo aquí.",
-      "idleCost": "Cada búsqueda usa 1 de tus {{calls}} búsquedas gratis de hoy. Elegir y rellenar el formulario no gasta ninguna.",
+      "idleCost": "Cada búsqueda usa 1 de tus {{calls}} búsquedas gratis de hoy. Rellenar el formulario no gasta ninguna.",
       "allOptional": "Todo esto es opcional. Déjalo vacío para verlo todo.",
       "moreFilters_one": "Más filtros ({{count}})",
       "moreFilters_other": "Más filtros ({{count}})",
@@ -1300,10 +1300,10 @@
         "title": "Cómo funciona la consola de la API",
         "intro": "La API de Brubru da al software acceso a datos de la UE en directo. Esta página te permite probarla antes a mano, sin cuenta y sin instalar nada.",
         "step1Title": "Elige lo que buscas",
-        "step1Text": "Elige una tarjeta. El formulario se rellena con un ejemplo real.",
+        "step1Text": "Elige una tarjeta. Lanza al instante un ejemplo real y muestra los resultados. Usa 1 búsqueda gratis.",
         "step2Title": "Afina, si quieres",
-        "step2Text": "Cambia las palabras o usa los filtros. Todo es opcional salvo que ponga obligatorio. La pequeña i junto a un campo lo explica.",
-        "step3Title": "Pulsa Buscar y lee los resultados",
+        "step2Text": "Cambia las palabras o usa los filtros y pulsa Buscar. Todo es opcional salvo que ponga obligatorio. La pequeña i junto a un campo lo explica.",
+        "step3Title": "Lee los resultados",
         "step3Text": "Cada resultado enlaza con su página oficial. Pulsa Abrir en un resultado para verlo completo.",
         "wordsTitle": "Palabras que verás",
         "nextTitle": "Cuando hayas encontrado lo que necesitas",
@@ -2520,7 +2520,10 @@
         "adopted": "Adoptado",
         "blocked": "Bloqueado",
         "withdrawn": "Retirado"
-      }
+      },
+      "cardsNote": "Pulsa una tarjeta para ver resultados reales al instante. Usa 1 búsqueda gratis; volver a una tarjeta ya vista no gasta ninguna.",
+      "refine": "Afinar esta búsqueda",
+      "capShort": "No te quedan búsquedas gratis hoy."
     },
     "bundles": {
       "official-journal": {

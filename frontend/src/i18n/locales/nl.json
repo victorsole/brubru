@@ -1155,7 +1155,7 @@
     },
     "console": {
       "title": "API-console",
-      "lede": "Bekijk live EU-gegevens in drie stappen, zonder account: kies wat u zoekt, verfijn het als u wilt en druk op Zoeken.",
+      "lede": "Bekijk live EU-gegevens, zonder account: druk op een kaart en de resultaten verschijnen. Verfijn daarna als u wilt.",
       "backToApi": "De API-pagina",
       "openFull": "Volledig scherm",
       "search": "Zoeken op woord ({{count}} in totaal)",
@@ -1182,10 +1182,10 @@
       "routeTip": "Een route is één soort gegevens met een eigen webadres, zoals EU-wetten of het nieuws van een agentschap. De kaarten hierboven zijn het handigste beginpunt; deze lijst bevat alle routes, per instelling gegroepeerd.",
       "bundleLabel": "Alleen tonen",
       "allRoutes": "Alles",
-      "idleList": "Druk op Zoeken om hier live resultaten te zien.",
+      "idleList": "Druk op een kaart hierboven, of op Zoeken, om hier live resultaten te zien.",
       "idleItem": "Druk op Openen om dit item hier te zien.",
       "idleNeedsKey": "Hiervoor is uw eigen API-sleutel nodig, dus de gratis proefversie kan het hier niet tonen.",
-      "idleCost": "Elke zoekopdracht gebruikt 1 van uw {{calls}} gratis zoekopdrachten van vandaag. Kiezen en het formulier invullen kost niets.",
+      "idleCost": "Elke zoekopdracht gebruikt 1 van uw {{calls}} gratis zoekopdrachten van vandaag. Het formulier invullen kost niets.",
       "allOptional": "Dit is allemaal optioneel. Laat het leeg om alles te zien.",
       "moreFilters_one": "Meer filters ({{count}})",
       "moreFilters_other": "Meer filters ({{count}})",
@@ -1300,10 +1300,10 @@
         "title": "Hoe de API-console werkt",
         "intro": "De Brubru-API geeft software toegang tot live EU-gegevens. Op deze pagina probeert u die eerst met de hand, zonder account en zonder iets te installeren.",
         "step1Title": "Kies wat u zoekt",
-        "step1Text": "Kies een kaart. Het formulier wordt ingevuld met een echt voorbeeld.",
+        "step1Text": "Kies een kaart. Die voert meteen een echt voorbeeld uit en toont de resultaten. Dat gebruikt 1 gratis zoekopdracht.",
         "step2Title": "Verfijn, als u wilt",
-        "step2Text": "Wijzig de woorden of gebruik de filters. Alles is optioneel, tenzij er verplicht staat. De kleine i naast een veld legt het uit.",
-        "step3Title": "Druk op Zoeken en lees de resultaten",
+        "step2Text": "Wijzig de woorden of gebruik de filters en druk dan op Zoeken. Alles is optioneel, tenzij er verplicht staat. De kleine i naast een veld legt het uit.",
+        "step3Title": "Lees de resultaten",
         "step3Text": "Elk resultaat linkt naar de officiële pagina. Druk op Openen bij een resultaat om het volledig te zien.",
         "wordsTitle": "Woorden die u tegenkomt",
         "nextTitle": "Als u hebt gevonden wat u nodig hebt",
@@ -2520,7 +2520,10 @@
         "adopted": "Aangenomen",
         "blocked": "Geblokkeerd",
         "withdrawn": "Ingetrokken"
-      }
+      },
+      "cardsNote": "Druk op een kaart om meteen echte resultaten te zien. Dat gebruikt 1 gratis zoekopdracht; teruggaan naar een kaart die u al zag niet.",
+      "refine": "Deze zoekopdracht verfijnen",
+      "capShort": "Vandaag geen gratis zoekopdrachten meer."
     },
     "bundles": {
       "official-journal": {

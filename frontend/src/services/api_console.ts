@@ -54,6 +54,7 @@ export interface PickLists {
   families: Array<{ slug: string; label: string }>;
   committees: Array<{ code: string; name: string }>;
   consultations?: { bodies: Array<{ code: string; name: string }>; families: Array<{ slug: string; label: string }> };
+  oj_days?: string[];
 }
 
 export interface ConsolePricing {
@@ -274,7 +275,7 @@ export const TASKS: ConsoleTask[] = [
   {
     id: 'events', icon: 'mdi-calendar-month-outline', path: '/api/v2/events/all', bundle: 'news-events',
     main: ['q', 'when', 'body', 'family', 'from', 'to'],
-    prefill: { when: 'upcoming' },
+    prefill: { when: 'upcoming', order: 'soonest' },
     examples: { q: ['hearing', 'conference', 'plenary'] },
   },
   {
@@ -429,17 +430,18 @@ function workingDaysAgo(days: number, today: Date): string {
 }
 
 // The first values of a form. A small page: the sandbox serves 25 rows at most, and five show the shape.
-// A required date is filled in, or the Official Journal would open on a form with nothing to try. Three working days
-// back: the Journal's store is a day behind, and the days before may be holidays (2 Nov 2026 had none). Full texts run to
-// megabytes and make a list slow, and a sandbox answer over 3 MB is refused, so a list starts without them. One item keeps
-// its text: that is what opening it is for.
-export function initialValues(op: ConsoleOperation, today: Date = new Date()): Record<string, string> {
+// A required date is filled in, or the Official Journal would open on a form with nothing to try: the last day it came out,
+// from `ojDays`. Until that has loaded, three working days back, which a holiday can make an empty day (2 Nov 2026 had no
+// issue). Full texts run to megabytes and make a list slow, and a sandbox answer over 3 MB is refused, so a list starts
+// without them. One item keeps its text: that is what opening it is for.
+export function initialValues(op: ConsoleOperation, today: Date = new Date(), ojDays: string[] = []): Record<string, string> {
   const values: Record<string, string> = {};
   for (const p of op.params) {
     if (p.in !== 'query') continue;
     if (p.name === 'limit') values.limit = '5';
     else if (p.required && (p.kind === 'date' || p.name === 'date')) {
-      values[p.name] = p.name === 'date' ? workingDaysAgo(3, today) : isoDaysAgo(7, today);
+      const lastIssue = op.path.endsWith('/oj/daily') ? ojDays[0] : undefined;
+      values[p.name] = p.name === 'date' ? lastIssue || workingDaysAgo(3, today) : isoDaysAgo(7, today);
     }
   }
   if (!isItemRoute(op) && op.params.some((p) => p.name === 'include_body')) values.include_body = 'false';
@@ -503,6 +505,11 @@ export function sandboxServes(pathOnly: string, pricing: ConsolePricing | null):
 
 export function hasSandbox(): boolean {
   return Boolean(SANDBOX_KEY);
+}
+
+// Whether pressing a card can run its example now. If not, the card opens its form, and the form says why.
+export function cardCanSend(op: ConsoleOperation, values: Record<string, string>, pricing: ConsolePricing | null, sandboxLeft: number | null): boolean {
+  return hasSandbox() && sandboxLeft !== 0 && sandboxServes(op.path.replace(/\{[^}]+\}/g, 'x'), pricing) && missingRequired(op, values).length === 0;
 }
 
 let cataloguePromise: Promise<ConsoleCatalogue> | null = null;
