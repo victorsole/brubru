@@ -356,6 +356,18 @@ async def fetch_trade_defence_universe(days: Optional[int] = None) -> list[dict]
     return matches
 
 
+def cellar_in_force(meta: dict) -> Optional[bool]:
+    """Cellar's resource_legal_in-force, read from the RAW literal of get_celex_metadata.
+
+    The literal is the string '1' or '0', so bool() of it is always True: until 6 Nov 2026
+    (register O234) every act Cellar marks '0' was stored as in force (31995R0823, ended
+    14 Oct 1995). '1' is True, '0' is False, anything else (no property, or no metadata
+    because the query failed) is None: unknown, which the upsert never writes over a value.
+    """
+    raw = str((meta or {}).get("inForce") or "").strip()
+    return True if raw == "1" else False if raw == "0" else None
+
+
 async def hydrate_metadata(celex: str) -> dict:
     sys.path.insert(0, str(ROOT / "backend"))
     from services.api_clients.cellar_sparql_client import CellarSPARQLClient
@@ -373,9 +385,9 @@ async def hydrate_metadata(celex: str) -> dict:
         "title": meta.get("title"),
         "document_date": meta.get("date"),
         "work_uri": meta.get("work"),
-        "in_force": bool(meta.get("inForce", False)),
+        "in_force": cellar_in_force(meta),
         "date_in_force": meta.get("dateInForce"),
-        "date_end_validity": meta.get("dateEndValidity"),
+        "date_end_validity": meta.get("dateEnd"),
         "resource_type_uri": meta.get("resourceTypeUri"),
         "resource_type_label": type_label,
         "available_languages": languages,
@@ -416,7 +428,7 @@ ON CONFLICT (celex) DO UPDATE SET
     product = COALESCE(EXCLUDED.product, eu_trade_defence_measures.product),
     resource_type_uri = COALESCE(EXCLUDED.resource_type_uri, eu_trade_defence_measures.resource_type_uri),
     resource_type_label = COALESCE(EXCLUDED.resource_type_label, eu_trade_defence_measures.resource_type_label),
-    in_force = EXCLUDED.in_force,
+    in_force = COALESCE(EXCLUDED.in_force, eu_trade_defence_measures.in_force),
     date_in_force = COALESCE(EXCLUDED.date_in_force, eu_trade_defence_measures.date_in_force),
     date_end_validity = COALESCE(EXCLUDED.date_end_validity, eu_trade_defence_measures.date_end_validity),
     available_languages = EXCLUDED.available_languages,
@@ -431,10 +443,18 @@ ON CONFLICT (celex) DO UPDATE SET
 """
 
 
+# Cellar writes these where it has no date (e.g. an agreement signed but not yet in force has
+# entry-into-force 1001-01-01): they are not dates, so they are stored as NULL (as the LEG export
+# code does). 9999-12-31 is kept: it is Cellar's and EUR-Lex's "no end of validity".
+CELLAR_PLACEHOLDER_DATES = frozenset({"1001-01-01", "1002-02-02"})
+
+
 def to_iso(value: Any) -> Optional[str]:
     if not value:
         return None
     s = str(value).split("T")[0]
+    if s in CELLAR_PLACEHOLDER_DATES:
+        return None
     return s if re.match(r"^\d{4}-\d{2}-\d{2}$", s) else None
 
 

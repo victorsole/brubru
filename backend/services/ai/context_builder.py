@@ -10805,7 +10805,8 @@ class ContextBuilder:
                     title = (r.get("title") or "")[:120]
                     partner = r.get("partner") or "?"
                     atype = r.get("agreement_type") or "?"
-                    inf = "in force" if r.get("in_force") else "historical"
+                    # Three states (O234, 6 Nov 2026): NULL means Cellar records no status, never "historical".
+                    inf = {True: "in force", False: "historical"}.get(r.get("in_force"), "in-force status not recorded")
                     dt = str(r.get("document_date") or "?")[:10]
                     lines.append(f"  - [{celex}] {title}")
                     lines.append(f"      type {atype} | partner {partner} | {inf} | date {dt}")
@@ -10903,7 +10904,8 @@ class ContextBuilder:
                     ds = r.get("duty_status") or "?"
                     tc = r.get("target_country") or "?"
                     prod = (r.get("product") or "?")[:50]
-                    inf = "in force" if r.get("in_force") else "historical"
+                    # Three states (O234, 6 Nov 2026): NULL means Cellar records no status, never "historical".
+                    inf = {True: "in force", False: "historical"}.get(r.get("in_force"), "in-force status not recorded")
                     dt = str(r.get("document_date") or "?")[:10]
                     lines.append(f"  - [{celex}] {title}")
                     lines.append(f"      {mt} {ds} | target {tc} | product {prod} | {inf} | {dt}")
