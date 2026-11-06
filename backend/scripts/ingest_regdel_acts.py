@@ -714,6 +714,194 @@ def read_scrutiny(conn, register: "Register", max_seconds: float,
     return out
 
 
+def only_if_changed(set_clause: str, table: str = "secondary_acts") -> str:
+    """The WHERE that lets ON CONFLICT DO UPDATE skip a record that would change nothing.
+
+    Without it every run rewrote all ~8,500 acts, changed or not (O236, 6 Nov 2026): a new
+    row version in all 12 indexes, and the touch trigger rebuilds the row with its text
+    bodies, so each act cost ~150 KB of write log. 6,638 upserts in two hours made 1.02 GB
+    of the database's 1.19 GB of WAL, for ONE row that had actually changed, and the
+    table grew to 865 MB for 8,486 rows. The trigger already kept `last_updated` for an
+    unchanged row; it could not stop the rewrite itself.
+
+    Built from the SET list it guards, so the two cannot drift: the row is written only
+    when some target column differs from what its SET expression would store (the same
+    CASE guards and COALESCEs), compared null-safely. `last_updated = NOW()` is left out:
+    it always differs, and the trigger owns it. A skipped record returns no row, so the
+    caller counts it as unchanged.
+    """
+    body, depth, quoted, items, cur = set_clause, 0, False, [], []
+    i = 0
+    while i < len(body):
+        ch = body[i]
+        if not quoted and body.startswith("--", i):      # a comment runs to the end of its line
+            i = body.find("\n", i)
+            i = len(body) if i < 0 else i
+            continue
+        if ch == "'":
+            quoted = not quoted                          # '' inside a literal toggles twice
+        elif not quoted and ch == "(":
+            depth += 1
+        elif not quoted and ch == ")":
+            depth -= 1
+        elif not quoted and depth == 0 and ch == ",":
+            items.append("".join(cur))
+            cur = []
+            i += 1
+            continue
+        cur.append(ch)
+        i += 1
+    items.append("".join(cur))
+    if depth or quoted:
+        raise ValueError("unbalanced SET clause")
+    cols, exprs = [], []
+    for item in items:
+        col, expr = item.split("=", 1)
+        col = col.strip()
+        if not re.fullmatch(r"[a-z_]+", col):
+            raise ValueError(f"not a column: {col!r}")
+        if col == "last_updated":
+            continue
+        cols.append(f"{table}.{col}")
+        exprs.append(expr.strip())
+    return f"""
+            WHERE ({", ".join(cols)})
+                  IS DISTINCT FROM
+                  ({", ".join(exprs)})"""
+
+
+# Two upsert paths, chosen by whether the act has a CELEX.
+#
+# CELEX is the identity. `reference` (the C(YYYY)NNNN code) is a LABEL the Commission
+# can re-issue for the same act, so conflicting on it lets a second row in for a CELEX
+# we already hold. That produced 783 duplicate pairs once, was cleaned up without
+# changing this line, and produced 80 more by 30 Sep 2026. Migration 258 adds the
+# partial unique index that backs the ON CONFLICT (celex) target.
+#
+# 731 acts have no CELEX yet (adopted but not published, or draft). For those the
+# C-number is the only stable handle we have, so they keep the reference path.
+#
+# Every updated column is wrapped in COALESCE(EXCLUDED.x, secondary_acts.x): a later
+# export with an empty cell must not blank a value we already hold. The old statement
+# assigned EXCLUDED.celex directly, so one empty cell would have erased a good CELEX.
+SET_CLAUSE = (r"""
+              -- The export serves one record's title as the draft on one day and the
+              -- final one the next. A title that names the act's own number ("(EU)
+              -- 2024/2638 of 9 October 2024") outranks one that does not, whichever
+              -- the export sends today: the 14 Oct guard only knew drafts spelt
+              -- "(EU) …/...", and drafts spelt "COMMISSION IMPLEMENTING DECISION on
+              -- ..." or "(EU)  / amending" still overwrote 17 published titles in one
+              -- night, in both directions (16 Oct 2026). The number must follow the
+              -- act type at the head of the title: an amending title cites other
+              -- acts' numbers further on, and those do not count. Same regex as
+              -- NUMBERED_TITLE, tested in Python. A title that differs only in
+              -- spacing, the register's no-break spaces included, is the same title.
+              title        = CASE WHEN secondary_acts.title ~* '%(numbered)s'
+                                   AND EXCLUDED.title !~* '%(numbered)s'
+                                  THEN secondary_acts.title
+                                  WHEN EXCLUDED.title ~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
+                                   AND secondary_acts.title !~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
+                                  THEN secondary_acts.title
+                                  WHEN btrim(regexp_replace(translate(EXCLUDED.title, chr(160), ' '), '\s+', ' ', 'g'))
+                                     = btrim(regexp_replace(translate(secondary_acts.title, chr(160), ' '), '\s+', ' ', 'g'))
+                                  THEN secondary_acts.title
+                                  ELSE COALESCE(EXCLUDED.title, secondary_acts.title) END,
+              parent_celex = CASE WHEN %(parent_from_register)s
+                                  THEN COALESCE(EXCLUDED.parent_celex, secondary_acts.parent_celex)
+                                  ELSE COALESCE(secondary_acts.parent_celex, EXCLUDED.parent_celex) END,
+              -- The Official Journal outranks a register that has not caught up: an
+              -- act we hold with a CELEX and as published is not sent back to an
+              -- earlier stage (C(2025)885 is Regulation 2025/1190, published 18 Jun
+              -- 2025, and still 'Scrutiny finished' in the register on 14 Oct 2026).
+              status       = CASE WHEN secondary_acts.status = 'published'
+                                   AND coalesce(secondary_acts.celex, '') <> ''
+                                   AND EXCLUDED.status IN ('adopted', 'scrutiny_finished', 'notified')
+                                  THEN secondary_acts.status ELSE EXCLUDED.status END,
+              proposing_dg = COALESCE(EXCLUDED.proposing_dg, secondary_acts.proposing_dg),
+              source_url   = COALESCE(EXCLUDED.source_url, secondary_acts.source_url),
+              policy_areas = COALESCE(EXCLUDED.policy_areas, secondary_acts.policy_areas),
+              planned_adoption_period = EXCLUDED.planned_adoption_period,
+              regdel_id    = COALESCE(EXCLUDED.regdel_id, secondary_acts.regdel_id),
+              parent_procedure_ref = COALESCE(EXCLUDED.parent_procedure_ref, secondary_acts.parent_procedure_ref),
+              description  = COALESCE(EXCLUDED.description, secondary_acts.description),
+              scrutiny_period = COALESCE(EXCLUDED.scrutiny_period, secondary_acts.scrutiny_period),
+              regdel_updated_at = COALESCE(EXCLUDED.regdel_updated_at, secondary_acts.regdel_updated_at),
+              last_updated = NOW()
+""").replace("%(numbered)s", NUMBERED_TITLE)   # not %-formatting: the clause keeps %(parent_from_register)s for psycopg2
+
+INSERT_HEAD = """
+            INSERT INTO secondary_acts
+              (id, act_type, reference, title, parent_celex, celex, status,
+               proposing_dg, source_url, policy_areas, planned_adoption_period,
+               regdel_id, parent_procedure_ref, description, scrutiny_period,
+               regdel_updated_at,
+               scraped_at, first_seen, last_updated)
+            VALUES
+              (%(id)s, %(act_type)s, %(reference)s, %(title)s, %(parent_celex)s,
+               %(celex)s, %(status)s, %(proposing_dg)s, %(source_url)s, %(policy_areas)s,
+               %(planned_adoption_period)s, %(regdel_id)s, %(parent_procedure_ref)s,
+               %(description)s, %(scrutiny_period)s,
+               %(regdel_updated_at)s, NOW(), NOW(), NOW())
+"""
+
+# On the CELEX path `reference` is deliberately NOT overwritten. When RegDel hands us
+# a different C-number for an act we already hold, we cannot tell from the export
+# which one is right -- and in 3 of the 7 cases found on 30 Sep the number we already
+# had contradicted its own adoption year, so the incoming one was the better value.
+# Keeping both, one in `reference` and the other in merged_from, leaves the evidence
+# for a human instead of silently picking. The @> guard stops the same alternative
+# being appended on every daily run.
+# A row whose reference is only its own CELEX (91 delegated acts, 87 of which the
+# register numbers) takes the register's C-number, the label the field documents,
+# unless another row already holds that number. The CELEX stays in `celex`, and the
+# item route answers to either.
+TAKES_C_NUMBER = """secondary_acts.reference = secondary_acts.celex
+                 AND EXCLUDED.reference ~ '^C\\(\\d{4}\\)\\d+$'
+                 AND NOT EXISTS (SELECT 1 FROM secondary_acts o WHERE o.reference = EXCLUDED.reference)"""
+
+_CELEX_SET = SET_CLAUSE + """,
+              reference = CASE WHEN """ + TAKES_C_NUMBER + """
+                               THEN EXCLUDED.reference ELSE secondary_acts.reference END,
+              merged_from = CASE
+                WHEN """ + TAKES_C_NUMBER + """ THEN secondary_acts.merged_from
+                WHEN secondary_acts.reference IS DISTINCT FROM EXCLUDED.reference
+                 AND NOT (COALESCE(secondary_acts.merged_from, '[]'::jsonb)
+                          @> jsonb_build_array(jsonb_build_object(
+                               'reference', EXCLUDED.reference)))
+                THEN COALESCE(secondary_acts.merged_from, '[]'::jsonb)
+                     || jsonb_build_array(jsonb_build_object(
+                          'reference', EXCLUDED.reference,
+                          'source', 'regdel_alternative_ccode',
+                          'seen', NOW()::text))
+                ELSE secondary_acts.merged_from END"""
+
+SQL_BY_CELEX = INSERT_HEAD + """
+            ON CONFLICT (celex) WHERE celex IS NOT NULL AND celex <> ''
+            DO UPDATE SET
+""" + _CELEX_SET + only_if_changed(_CELEX_SET) + """
+            RETURNING (xmax = 0) AS was_inserted
+"""
+
+_REFERENCE_SET = SET_CLAUSE + """,
+              celex = COALESCE(EXCLUDED.celex, secondary_acts.celex)"""
+SQL_BY_REFERENCE = INSERT_HEAD + """
+            ON CONFLICT (reference) DO UPDATE SET
+""" + _REFERENCE_SET + only_if_changed(_REFERENCE_SET) + """
+            RETURNING (xmax = 0) AS was_inserted
+"""
+
+# Same as above but the CELEX WE hold wins. Used only on the fallback path, where the
+# export's CELEX has already been shown to disagree with a row we corrected against
+# Cellar. COALESCE order is reversed on purpose: ours first, theirs only if we have none.
+_KEEP_CELEX_SET = SET_CLAUSE + """,
+              celex = COALESCE(secondary_acts.celex, EXCLUDED.celex)"""
+SQL_BY_REFERENCE_KEEP_CELEX = INSERT_HEAD + """
+            ON CONFLICT (reference) DO UPDATE SET
+""" + _KEEP_CELEX_SET + only_if_changed(_KEEP_CELEX_SET) + """
+            RETURNING (xmax = 0) AS was_inserted
+"""
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
@@ -813,132 +1001,8 @@ def main() -> int:
     # If fixture rows ever need removing again, match them on what makes them fixtures
     # (their fabricated titles), never on an identifier the source controls.
 
-    # Two upsert paths, chosen by whether the act has a CELEX.
-    #
-    # CELEX is the identity. `reference` (the C(YYYY)NNNN code) is a LABEL the Commission
-    # can re-issue for the same act, so conflicting on it lets a second row in for a CELEX
-    # we already hold. That produced 783 duplicate pairs once, was cleaned up without
-    # changing this line, and produced 80 more by 30 Sep 2026. Migration 258 adds the
-    # partial unique index that backs the ON CONFLICT (celex) target.
-    #
-    # 731 acts have no CELEX yet (adopted but not published, or draft). For those the
-    # C-number is the only stable handle we have, so they keep the reference path.
-    #
-    # Every updated column is wrapped in COALESCE(EXCLUDED.x, secondary_acts.x): a later
-    # export with an empty cell must not blank a value we already hold. The old statement
-    # assigned EXCLUDED.celex directly, so one empty cell would have erased a good CELEX.
-    SET_CLAUSE = (r"""
-                  -- The export serves one record's title as the draft on one day and the
-                  -- final one the next. A title that names the act's own number ("(EU)
-                  -- 2024/2638 of 9 October 2024") outranks one that does not, whichever
-                  -- the export sends today: the 14 Oct guard only knew drafts spelt
-                  -- "(EU) …/...", and drafts spelt "COMMISSION IMPLEMENTING DECISION on
-                  -- ..." or "(EU)  / amending" still overwrote 17 published titles in one
-                  -- night, in both directions (16 Oct 2026). The number must follow the
-                  -- act type at the head of the title: an amending title cites other
-                  -- acts' numbers further on, and those do not count. Same regex as
-                  -- NUMBERED_TITLE, tested in Python. A title that differs only in
-                  -- spacing, the register's no-break spaces included, is the same title.
-                  title        = CASE WHEN secondary_acts.title ~* '%(numbered)s'
-                                       AND EXCLUDED.title !~* '%(numbered)s'
-                                      THEN secondary_acts.title
-                                      WHEN EXCLUDED.title ~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
-                                       AND secondary_acts.title !~ '(…|\.{2,})\s*/\s*(…|\.{2,})'
-                                      THEN secondary_acts.title
-                                      WHEN btrim(regexp_replace(translate(EXCLUDED.title, chr(160), ' '), '\s+', ' ', 'g'))
-                                         = btrim(regexp_replace(translate(secondary_acts.title, chr(160), ' '), '\s+', ' ', 'g'))
-                                      THEN secondary_acts.title
-                                      ELSE COALESCE(EXCLUDED.title, secondary_acts.title) END,
-                  parent_celex = CASE WHEN %(parent_from_register)s
-                                      THEN COALESCE(EXCLUDED.parent_celex, secondary_acts.parent_celex)
-                                      ELSE COALESCE(secondary_acts.parent_celex, EXCLUDED.parent_celex) END,
-                  -- The Official Journal outranks a register that has not caught up: an
-                  -- act we hold with a CELEX and as published is not sent back to an
-                  -- earlier stage (C(2025)885 is Regulation 2025/1190, published 18 Jun
-                  -- 2025, and still 'Scrutiny finished' in the register on 14 Oct 2026).
-                  status       = CASE WHEN secondary_acts.status = 'published'
-                                       AND coalesce(secondary_acts.celex, '') <> ''
-                                       AND EXCLUDED.status IN ('adopted', 'scrutiny_finished', 'notified')
-                                      THEN secondary_acts.status ELSE EXCLUDED.status END,
-                  proposing_dg = COALESCE(EXCLUDED.proposing_dg, secondary_acts.proposing_dg),
-                  source_url   = COALESCE(EXCLUDED.source_url, secondary_acts.source_url),
-                  policy_areas = COALESCE(EXCLUDED.policy_areas, secondary_acts.policy_areas),
-                  planned_adoption_period = EXCLUDED.planned_adoption_period,
-                  regdel_id    = COALESCE(EXCLUDED.regdel_id, secondary_acts.regdel_id),
-                  parent_procedure_ref = COALESCE(EXCLUDED.parent_procedure_ref, secondary_acts.parent_procedure_ref),
-                  description  = COALESCE(EXCLUDED.description, secondary_acts.description),
-                  scrutiny_period = COALESCE(EXCLUDED.scrutiny_period, secondary_acts.scrutiny_period),
-                  regdel_updated_at = COALESCE(EXCLUDED.regdel_updated_at, secondary_acts.regdel_updated_at),
-                  last_updated = NOW()
-    """).replace("%(numbered)s", NUMBERED_TITLE)   # not %-formatting: the clause keeps %(parent_from_register)s for psycopg2
-
-    INSERT_HEAD = """
-                INSERT INTO secondary_acts
-                  (id, act_type, reference, title, parent_celex, celex, status,
-                   proposing_dg, source_url, policy_areas, planned_adoption_period,
-                   regdel_id, parent_procedure_ref, description, scrutiny_period,
-                   regdel_updated_at,
-                   scraped_at, first_seen, last_updated)
-                VALUES
-                  (%(id)s, %(act_type)s, %(reference)s, %(title)s, %(parent_celex)s,
-                   %(celex)s, %(status)s, %(proposing_dg)s, %(source_url)s, %(policy_areas)s,
-                   %(planned_adoption_period)s, %(regdel_id)s, %(parent_procedure_ref)s,
-                   %(description)s, %(scrutiny_period)s,
-                   %(regdel_updated_at)s, NOW(), NOW(), NOW())
-    """
-
-    # On the CELEX path `reference` is deliberately NOT overwritten. When RegDel hands us
-    # a different C-number for an act we already hold, we cannot tell from the export
-    # which one is right -- and in 3 of the 7 cases found on 30 Sep the number we already
-    # had contradicted its own adoption year, so the incoming one was the better value.
-    # Keeping both, one in `reference` and the other in merged_from, leaves the evidence
-    # for a human instead of silently picking. The @> guard stops the same alternative
-    # being appended on every daily run.
-    # A row whose reference is only its own CELEX (91 delegated acts, 87 of which the
-    # register numbers) takes the register's C-number, the label the field documents,
-    # unless another row already holds that number. The CELEX stays in `celex`, and the
-    # item route answers to either.
-    TAKES_C_NUMBER = """secondary_acts.reference = secondary_acts.celex
-                     AND EXCLUDED.reference ~ '^C\\(\\d{4}\\)\\d+$'
-                     AND NOT EXISTS (SELECT 1 FROM secondary_acts o WHERE o.reference = EXCLUDED.reference)"""
-
-    SQL_BY_CELEX = INSERT_HEAD + """
-                ON CONFLICT (celex) WHERE celex IS NOT NULL AND celex <> ''
-                DO UPDATE SET
-    """ + SET_CLAUSE + """,
-                  reference = CASE WHEN """ + TAKES_C_NUMBER + """
-                                   THEN EXCLUDED.reference ELSE secondary_acts.reference END,
-                  merged_from = CASE
-                    WHEN """ + TAKES_C_NUMBER + """ THEN secondary_acts.merged_from
-                    WHEN secondary_acts.reference IS DISTINCT FROM EXCLUDED.reference
-                     AND NOT (COALESCE(secondary_acts.merged_from, '[]'::jsonb)
-                              @> jsonb_build_array(jsonb_build_object(
-                                   'reference', EXCLUDED.reference)))
-                    THEN COALESCE(secondary_acts.merged_from, '[]'::jsonb)
-                         || jsonb_build_array(jsonb_build_object(
-                              'reference', EXCLUDED.reference,
-                              'source', 'regdel_alternative_ccode',
-                              'seen', NOW()::text))
-                    ELSE secondary_acts.merged_from END
-                RETURNING (xmax = 0) AS was_inserted
-    """
-
-    SQL_BY_REFERENCE = INSERT_HEAD + """
-                ON CONFLICT (reference) DO UPDATE SET
-    """ + SET_CLAUSE + """,
-                  celex = COALESCE(EXCLUDED.celex, secondary_acts.celex)
-                RETURNING (xmax = 0) AS was_inserted
-    """
-
-    # Same as above but the CELEX WE hold wins. Used only on the fallback path, where the
-    # export's CELEX has already been shown to disagree with a row we corrected against
-    # Cellar. COALESCE order is reversed on purpose: ours first, theirs only if we have none.
-    SQL_BY_REFERENCE_KEEP_CELEX = INSERT_HEAD + """
-                ON CONFLICT (reference) DO UPDATE SET
-    """ + SET_CLAUSE + """,
-                  celex = COALESCE(secondary_acts.celex, EXCLUDED.celex)
-                RETURNING (xmax = 0) AS was_inserted
-    """
+    # The upsert statements are module constants (SQL_BY_CELEX and the two reference
+    # paths, above main) so a test can run them against a real table.
 
     # Counted from what the database RETURNS, not from how many statements were sent.
     # The old loop incremented `inserted` once per attempt, so an update and an insert
@@ -952,7 +1016,7 @@ def main() -> int:
         print(f"[INFO] {len(dropped)} register record(s) duplicate an act already listed and "
               f"were not stored over it: " + ", ".join(sorted(r["reference"] for r in dropped)[:20]))
 
-    inserted = updated = errors = celex_kept = 0
+    inserted = updated = unchanged = errors = celex_kept = 0
     for n, r in enumerate(all_rows, 1):
         # SAVEPOINT per row. conn.rollback() discards every uncommitted row in the
         # batch, not just the one that failed, so a single bad record used to throw
@@ -975,7 +1039,9 @@ def main() -> int:
                 cur.execute(SQL_BY_REFERENCE_KEEP_CELEX, r)
                 celex_kept += 1
             row = cur.fetchone()
-            if row and row[0]:
+            if row is None:
+                unchanged += 1      # only_if_changed found nothing to write: no row version, no WAL
+            elif row[0]:
                 inserted += 1
             else:
                 updated += 1
@@ -1021,7 +1087,7 @@ def main() -> int:
         print(f"[INFO] {len(retired)} announced act(s) the register no longer announces, retired: "
               + "; ".join(f"{t} {st} {title!r}" for _, t, st, title in retired[:15]))
 
-    print(f"[DONE] inserted={inserted} updated={updated} errors={errors} "
+    print(f"[DONE] inserted={inserted} updated={updated} unchanged={unchanged} errors={errors} "
           f"of {len(all_rows)} record(s)")
 
     # Scrutiny events, on a fresh connection: the upserts above hold theirs for minutes.
@@ -1063,11 +1129,11 @@ def main() -> int:
     if not all_rows:
         print("[FATAL] the RegDel export yielded no usable rows")
         return 1
-    if errors and inserted + updated == 0:
+    if errors and inserted + updated + unchanged == 0:
         print(f"[FATAL] every row failed ({errors} error(s))")
         return 1
     if errors:
-        print(f"[DEGRADED] {errors} row(s) rejected, {inserted + updated} stored")
+        print(f"[DEGRADED] {errors} row(s) rejected, {inserted + updated} stored, {unchanged} unchanged")
         return 0
     return 0
 
