@@ -215,6 +215,9 @@ def cache_structure_counts(db: Session, celex: str, counts: Tuple[int, int]) -> 
         "source": "comparator_structure_extractor",
     }
     try:
+        from core.change_signal import keep_change_signal
+
+        keep_change_signal(db)  # counts read from the act's own text: not a change of the law (O230)
         db.execute(
             text(
                 """

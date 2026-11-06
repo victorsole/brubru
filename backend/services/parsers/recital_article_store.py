@@ -54,6 +54,9 @@ def write_map(db: Session, celex: str, mapping: dict[str, Any]) -> bool:
     Merge `mapping` into eu_laws.extra_metadata under METADATA_KEY and commit.
     Returns True if a row was updated.
     """
+    from core.change_signal import keep_change_signal
+
+    keep_change_signal(db)  # a cache of the act's own text: not a change of the law (O230)
     # jsonb_set is safe for null root; we coalesce to '{}' to handle missing metadata
     result = db.execute(
         sqla_text(

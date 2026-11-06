@@ -57,7 +57,9 @@ def read_map(db: Session, celex: str) -> Optional[dict[str, Any]]:
 
 def write_map(db: Session, celex: str, mapping: dict[str, Any]) -> bool:
     import json
+    from core.change_signal import keep_change_signal
 
+    keep_change_signal(db)  # a cache of the act's own text: not a change of the law (O230)
     result = db.execute(
         sqla_text(
             """
@@ -186,7 +188,9 @@ def _read_consolidated(db: Session, celex: str, consolidated_celex: str) -> Opti
 
 def _write_consolidated(db: Session, celex: str, consolidated_celex: str, entry: dict[str, Any]) -> None:
     import json
+    from core.change_signal import keep_change_signal
 
+    keep_change_signal(db)  # a cache of the act's own text: not a change of the law (O230)
     db.execute(
         sqla_text(
             """
