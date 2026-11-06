@@ -12,6 +12,7 @@
 - **Workforce training**: the **EPIET/EUPHEM Fellowship Programme**, a two-year scheme with two paths, field epidemiology (EPIET) and public health microbiology (EUPHEM), for EU/EEA nationals.
 - **Flagship conference**: **ESCAIDE** (European Scientific Conference on Applied Infectious Disease Epidemiology), ECDC's annual scientific conference; the 2026 edition (20th) runs 18-20 November as a hybrid event in Stockholm.
 - **Related work**: supports the **Health Security Committee** and **HERA** under the Health Union framework, and leads EU-level surveillance on **antimicrobial resistance (AMR)**.
+- EPRS Briefing (5 November 2026): "West Nile virus in Europe" -- mosquito-borne zoonotic disease spreading in Europe. Ref: EPRS_BRI(2026)797021
 
 ## Context
 

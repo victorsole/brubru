@@ -52,6 +52,7 @@
 - Fusion energy (19 March 2026): EU to invest EUR 330 million to accelerate fusion energy and support nuclear technologies/skills
 - Middle East energy disruption (23 March 2026): Commission calls on Member States to prepare for winter amid Strait of Hormuz disruption (see `iran_strait_hormuz_eu_response.md`)
 - Fit for 55: 14 energy-related acts adopted 2023-2024
+- EPRS Briefing (5 November 2026): "Clean electrification" -- electrification as the way to avoid energy and cost-of-living crises driven by imported fossil fuels. Ref: EPRS_BRI(2026)797024
 
 ## Overview
 

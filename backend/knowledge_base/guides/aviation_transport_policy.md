@@ -1,6 +1,7 @@
 # EU Aviation and Air Transport Policy
 
 ## QUICK FACTS
+- **LATEST (Wednesday 4 November 2026): the 2027 work programme lists the airport slots Regulation proposal 2011/0391(COD) for WITHDRAWAL as obsolete** (a fitness check will decide the way forward) and announces a **review of RefuelEU Aviation (Q2 2027)** and a transport simplification package (Q1 2027). Listed, NOT yet withdrawn. See `commission_work_programme_2027`.
 - Lead DG: DG MOVE (Mobility and Transport), Directorate E (Aviation)
 - Director: Filip Cornelis (filip.cornelis@ec.europa.eu)
 - Lead EP committee: TRAN (Transport and Tourism)

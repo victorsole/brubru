@@ -14,6 +14,7 @@
 - Live dossier to watch: the universal PFAS restriction. RAC has adopted its final opinion; SEAC's draft opinion was open for consultation and a final SEAC opinion is expected by the end of 2026, after which both opinions go to the Commission for a restriction decision
 
 ECHA is the EU's chemicals safety agency. Most people know it only through REACH, but its remit now spans classification and labelling, biocides, hazardous chemical trade, persistent pollutants, and a new EU-wide data infrastructure for chemical safety assessments.
+- EPRS At a Glance (5 November 2026): "New basic regulation for the European Chemicals Agency" -- Parliament votes in the November I plenary on the provisional agreement of June 2026 with the Council. Ref: EPRS_ATA(2026)797018
 
 ## What ECHA does
 

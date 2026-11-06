@@ -1,6 +1,7 @@
 # Late Payments Regulation
 
 ## QUICK FACTS
+- **LATEST (Wednesday 4 November 2026): the Commission's 2027 work programme (COM(2026) 710, Annex III) lists the Late Payment Regulation proposal 2023/0323(COD) for WITHDRAWAL within six months**: 'pending with co-legislators more than three years and a sizeable number of Member States opposes further work'. **Status: listed for withdrawal, NOT yet withdrawn** (Parliament and Council can give their views first). See `commission_work_programme_2027`.
 - **Infringement action (OJ C of 3 November 2026): C-1018/26 Commission v Romania**, lodged 16 September 2026: the national health insurance fund allegedly pays pharmacies late, systematically and persistently, against the CURRENT Directive 2011/7/EU, Article 4(4)(b). **PENDING.** This is the current Directive, NOT the proposed Regulation below.
 - Full name: Regulation on combating late payment in commercial transactions (replacing Directive 2011/7/EU)
 - Commission proposal: COM(2023)533, 12 September 2023

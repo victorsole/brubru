@@ -1,6 +1,7 @@
 # MiCA (Regulation (EU) 2023/1114, Markets in Crypto-Assets)
 
 ## QUICK FACTS
+- **LATEST (EBA, 14 October 2026, first recorded by Brubru 5 November): the EBA classified USDC as the FIRST significant e-money token in the EU** under MiCA. Consequence under MiCA: additional obligations and EBA involvement, including a consultative supervisory college for the issuer **Circle Internet Financial Europe SAS** (MiCA Article 119); EBA Decision EBA/DC/683 of 21 October 2026 names Ruta Merkeviciute (Head of the EBA Digital Finance Unit) as Chair of that college.
 
 - **LATEST (30 Sep 2026): MiCA review answers, no proposal yet.** ESMA: curb influencer marketing, block fraud sites, freeze assets, DeFi criteria. ESRB: bar third-country multi-issuer stablecoins.
 - **Short name:** MiCA / Markets in Crypto-Assets Regulation / 2023/1114

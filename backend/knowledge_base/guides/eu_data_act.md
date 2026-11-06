@@ -1,6 +1,7 @@
 # EU Data Act — Regulation (EU) 2023/2854
 
 ## QUICK FACTS
+- **LATEST (OJ L, Friday 6 November 2026): Commission Recommendation (EU) 2026/2394 of 29 October 2026 on non-binding model contractual terms (MCTs) on data access and use and non-binding standard contractual clauses (SCCs) for cloud computing contracts** (CELEX 32026H2394; adopted under Data Act Article 41). **NOT binding:** use is at the parties' discretion; drafted mainly for business-to-business contracts (consumer contracts need extra mandatory clauses); the Commission is not liable for their use and may review them.
 - **Full name:** Regulation (EU) 2023/2854 on harmonised rules on fair access to and use of data (Data Act)
 - **CELEX:** 32023R2854 · **ELI:** http://data.europa.eu/eli/reg/2023/2854/oj
 - **THE FOUR DATES, and there are only four.** Quote them; do not compute, merge or extend them.

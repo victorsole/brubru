@@ -20,6 +20,7 @@
 - **Lead DG**: DG ECHO (Directorate-General for European Civil Protection and Humanitarian Aid Operations)
 - **Commissioner**: civil protection sits under Commissioner **Hadja Lahbib** (Preparedness, Crisis Management and Equality, von der Leyen II Commission, since 1 December 2024)
 - **EP lead committee**: ENVI (Environment, Public Health and Food Safety) has legislative lead on UCPM revisions; Council configuration is the Justice and Home Affairs Council / General Affairs Council depending on the file
+- EPRS At a Glance (5 November 2026): "Union Civil Protection Mechanism, 2028-2034" -- Parliament votes its position in the November I plenary. Ref: EPRS_ATA(2026)797016
 
 ## What the UCPM does
 

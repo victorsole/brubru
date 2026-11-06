@@ -1,6 +1,7 @@
 # EU Pharmaceutical Legislation Reform
 
 ## QUICK FACTS
+- **LATEST (eMeeting, 6 November 2026): SANT votes on Monday 9 November 2026 on the AGREED TEXTS of the pharmaceutical package**: PE792.227 (Regulation, 2023/0131(COD)) and PE792.228 (Directive, 2023/0132(COD)). A committee vote on the trilogue outcome: NOT adopted until plenary and the Council both approve. Result: not known before the vote.
 - Two files: Directive 2023/0132(COD) + Regulation 2023/0131(COD)
 - Commission proposals: COM(2023)192 (Directive) + COM(2023)193 (Regulation), 26 April 2023
 - Replaces: Directive 2001/83/EC (medicinal products code) + Regulation (EC) 726/2004 (centralised procedure)

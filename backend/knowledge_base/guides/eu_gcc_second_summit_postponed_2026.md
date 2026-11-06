@@ -9,3 +9,4 @@
 - Search words (other languages): cumbre UE-CCG aplazada; cumbre UE Golfo Riad aplazada; sommet UE-CCG reporté; sommet UE Golfe Riyad reporté; cimera UE-CCG ajornada; vertice UE-CCG rinviato; top EU-GCC uitgesteld; EU Gulf summit postponed.
 - Sources: https://ec.europa.eu/commission/presscorner/detail/en/statement_26_2172 ; https://www.consilium.europa.eu/en/press/press-releases/2026/10/15/postponement-of-the-second-eu-gcc-summit/
 - Related: `dg_mena_overview`.
+- EPRS Briefing (3 November 2026): "EU-Gulf Cooperation Council (GCC) trade and investment relations" -- EU-GCC goods trade stabilised at about EUR 166 billion in 2025 (EPRS's figure). Ref: EPRS_BRI(2026)791530

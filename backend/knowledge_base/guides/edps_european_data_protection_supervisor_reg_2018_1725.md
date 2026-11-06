@@ -13,6 +13,7 @@
 - Not to be confused with: the EDPB (the board of all 27 national DPAs plus the EDPS, ensuring consistent GDPR application across the EU) or national DPAs (supervise private and public-sector processing inside member states under GDPR). The EDPS supervises only the EU's own institutions, bodies, offices and agencies.
 
 The EDPS is the EU's internal data-protection watchdog: it does for the Commission, Parliament, Council, agencies and other EU bodies what national data protection authorities do for governments and companies inside member states. It is also, increasingly, a binding actor beyond classic data protection: secretariat to the EDPB, co-supervisor of major EU databases (SIS, VIS, Eurodac, Europol systems), and market surveillance authority for AI deployed by EU institutions themselves.
+- EPRS Briefing (4 November 2026): "Consolidating data protection rules of EU justice and home affairs bodies" -- on the Commission's proposal of 23 June 2026 to streamline data protection rules for EU law-enforcement and judicial cooperation bodies. Ref: EPRS_BRI(2026)797020
 
 ## Legal basis and mandate
 

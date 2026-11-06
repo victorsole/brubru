@@ -22,6 +22,7 @@
 - PSLF (Public Sector Loan Facility): Just Transition Mechanism Pillar 3; first call results published 14 April 2026
 - Priorities for reallocation (MTR focus areas): defence, housing, water resilience, clean energy transition, skills for industrial transformation, migration management (border regions), civil protection
 - Flexibility instrument: up to 20% of each programme can be reallocated between specific objectives without major Commission amendment procedure (full CPR amendment procedure required beyond 20%)
+- EP Research for REGI At a Glance (4 November 2026): "The Right to Stay: Young Women in the EU's Remote and Rural Areas" -- recommendations for post-2027 cohesion policy. Ref: CASP_ATA(2026)776036. ('Right to stay' is also a 2027 work programme initiative, Q1 2027.)
 
 ## Policy Drivers
 

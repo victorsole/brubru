@@ -18,6 +18,7 @@
   - Critical Raw Materials Act — Regulation (EU) 2024/1252, CELEX 32024R1252
   - Net-Zero Industry Act — Regulation (EU) 2024/1735, CELEX 32024R1735
 - Brubru cross-links: `eu_waste_shipment_regulation_diwass`, `battery_regulation_removability_consultation`, `eu_energy_policy`, `28th_regime_innovation_act` (single-market angle), `terrible_ten_single_market_barriers`
+- EP Policy Department Study and At a Glance (5 November 2026, for IMCO): "Enablers of the Single Market for second-hand products and secondary raw materials" -- barriers to EU markets for second-hand goods and secondary raw materials. Refs: ECTI_STU(2026)772662, ECTI_ATA(2026)772663
 
 ## Goal of the high-level dialogue (30 April 2026)
 

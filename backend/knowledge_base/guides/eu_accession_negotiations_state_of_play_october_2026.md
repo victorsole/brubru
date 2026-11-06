@@ -1,6 +1,7 @@
 # EU accession negotiations, October 2026: Montenegro closes chapters 17 to 19, accession conferences of 13 October
 
 ## QUICK FACTS
+- **LATEST (Wednesday 4 November 2026): 2026 Enlargement Package**: Montenegro could provisionally close all remaining chapters by the end of 2026 (subject to Member States' agreement); indicative roadmaps for Montenegro, Albania, Moldova and Ukraine. Detail: `eu_enlargement_package_2026`.
 - **Montenegro, 12 October 2026 (Council press release, 18:50):** at the second Intergovernmental Conference for Montenegro under the Irish presidency, the EU and Montenegro **provisionally closed three more chapters: 17 (economic and monetary policy), 18 (statistics) and 19 (social policy and employment)**. Montenegro has **opened all 33 chapters; 21 of 33 are now provisionally closed**. The previous conference, 14 July 2026, closed chapter 8 (competition policy) and chapter 29 (customs union).
 - **"Provisionally" is the Council's word and it matters:** agreement on single chapters is **not final until an overall agreement on all chapters**; never say a country has "closed" chapters without "provisionally".
 - **13 October 2026, Luxembourg: the three accession conferences.** Albania's release was read in full; Ukraine's was read on 15 October in its EEAS copy; the Moldova and GAC conclusions releases were NOT read (Council bot check):

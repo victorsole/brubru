@@ -1,6 +1,7 @@
 # European Innovation Council (EIC) — Programme Overview
 
 ## QUICK FACTS
+- **LATEST (Thursday 5 November 2026, IP/26/2352): EIC Work Programme 2027 adopted, EUR 1.8 billion**, the last EIC package under Horizon Europe 2021-2027: completes funding for the Scaleup Europe Fund, continues the EIC STEP Scale Up scheme (including dual-use and defence technologies), simpler access and help for EIC companies to win first customers, including through public procurement.
 - The EIC is Horizon Europe's deeptech/breakthrough-innovation arm — Pillar III "Innovative Europe" of Regulation (EU) 2021/695.
 - Total Horizon Europe 2021-2027 envelope for the EIC: ~EUR 10.1 billion (commitments to date EUR 6.5 billion).
 - 2026 EIC Work Programme (Commission Decision C(2026) 4080, current version of 17 June 2026): **over EUR 2.1 billion in total (estimated EUR 2,125.1 million)**, including EUR 600 million for the Scaleup Europe Fund, Prizes and Business Acceleration Services.

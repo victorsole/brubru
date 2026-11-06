@@ -1,6 +1,7 @@
 # Monitoring and Controlling Drug Precursors (2025/0384(COD))
 
 ## QUICK FACTS
+- **LATEST (Wednesday 4 November 2026): BOTH co-legislators now have a position.** Parliament's joint INTA-LIBE committee adopted its report **by 85 votes to 4, 6 abstentions** (EP press release 20261103IPR48617; rapporteurs Nicolas Bay, ECR, INTA, and Bartłomiej Sienkiewicz, EPP, LIBE): registration for all suppliers of certain higher-risk chemicals above set quantities (not only external trade), a ban on designer precursors with research exceptions, online marketplaces to verify sellers' authorisations and remove listings (with penalties), reporting of suspicious transactions and thefts of unlisted precursors. **The Council agreed its negotiating position the same day** (Council press release, 4 November 2026). Proposal COM(2025) 747. **Status: NOT adopted;** trilogues can start once Parliament confirms its mandate.
 - **LATEST (Thursday 21 May 2026 — JOINT INTA + LIBE DRAFT REPORT TABLED)**: The joint Committee on International Trade (INTA) + Committee on Civil Liberties, Justice and Home Affairs (LIBE) under **Rule 58 of the EP Rules of Procedure** (joint committee responsible) tabled the draft report on procedure 2025/0384(COD) — "Monitoring and controlling drug precursors". Source: EP committees portal — joint INTA+LIBE listing (21 May 2026).
 - **Procedure**: **2025/0384(COD)** — Ordinary Legislative Procedure, first reading; joint INTA+LIBE under EP RoP Rule 58
 - **Commission proposal**: **COM(2025) 747**

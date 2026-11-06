@@ -16,6 +16,7 @@
 - **Supervisor anchor**: ESMA (European Securities and Markets Authority), Paris-based ESA
 - **Council configuration**: ECOFIN
 - **EP lead committee**: ECON (Economic and Monetary Affairs)
+- EPRS At a Glance notes (5 November 2026): "Union retail investor protection rules" (EPRS_ATA(2026)797023) and "Modernisation of the key information document" (EPRS_ATA(2026)797022) -- Parliament is due to vote in the November I plenary session on the provisional agreements with the Council on the retail investment package (two proposals). Status before that vote: NOT adopted.
 
 ## Why the SIU rebrand from CMU matters
 

@@ -13,6 +13,7 @@ Treaty basis: Article 127 TFEU, Protocol No. 4 (Statute of the ESCB and ECB)
 President: Christine Lagarde (since November 2019)
 Governing Council: 6 Executive Board members + 20 national central bank governors (euro area)
 Legal framework: CELEX 12016E127 (TFEU Art. 127), CELEX 12016HP04 (Statute)
+- EP Policy Department Briefings (5 November 2026): "Communicating monetary policy in high uncertainty: Lessons from the ECB" (ECTI_BRI(2026)795831) and "The evolution of central banks' communication" (ECTI_BRI(2026)795832) -- forward guidance versus meeting-by-meeting, data-dependent communication.
 
 ## Current Interest Rates
 

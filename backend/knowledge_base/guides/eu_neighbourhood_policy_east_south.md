@@ -28,6 +28,7 @@
 The ENP is the EU's primary policy framework for managing relations with the 16 countries that share its land or maritime borders but are not pursuing EU membership -- with the important contemporary exception that three Eastern partners (Ukraine, Moldova, Georgia) have candidate status, creating an unprecedented overlap between the neighbourhood and enlargement tracks.
 
 ---
+- EPRS Briefing (3 November 2026): "Association with the EU" -- how association agreements give third countries and organisations a privileged treaty-based relationship with the EU. Ref: EPRS_BRI(2026)797015
 
 ## 1. ENP Origin, 2015 Review, and Post-2024 Reorganisation
 

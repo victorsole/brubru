@@ -1,6 +1,7 @@
 # Banking Union Reform Package (2nd Reading, March 2026)
 
 ## QUICK FACTS
+- **LATEST (Wednesday 4 November 2026): the 2027 work programme (COM(2026) 710, Annex III) lists the European Deposit Insurance Scheme proposal 2015/0270(COD) for WITHDRAWAL**: pending over 10 years, 'to be replaced by the proposals on banking competitiveness in Q1 2027'. Also listed: the Financial Data Access Regulation (FIDA) 2023/0205(COD). **Listed, NOT yet withdrawn.** See `commission_work_programme_2027`.
 - **ECTI Study (26 October 2026): "State intervention powers in bank M&As"** (ECTI_STU(2026)784069, https://www.europarl.europa.eu/thinktank/en/document/ECTI_STU(2026)784069) and **ECTI Briefing: "State intervention powers in financial sector M&A"** (ECTI_BRI(2026)784065) -- findings not read: cite title and reference only.
 - Package: Banking Union legislative package (CMDI -- Crisis Management and Deposit Insurance)
 - Components: SRM Regulation reform, BRRD revision, DGSD revision
