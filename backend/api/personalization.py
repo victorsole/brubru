@@ -371,7 +371,7 @@ def _compute_user_hooks(
 
 
 @router.get("/greeting", response_model=GreetingResponse)
-async def get_greeting(
+def get_greeting(
     previous_last_login: Optional[str] = Query(
         None,
         description="ISO datetime of user's previous login (from login response)",
@@ -424,7 +424,7 @@ async def get_greeting(
 
 
 @router.get("/greeting/public", response_model=GreetingResponse)
-async def get_public_greeting(
+def get_public_greeting(
     pre_user_id: Optional[str] = Query(
         None,
         description="Browser-generated pre_user_id (UUID from localStorage). When provided, the greeting reads the user's onboarding Q1 answer and personalises the message.",

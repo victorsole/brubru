@@ -1277,7 +1277,7 @@ async def get_resolution_leading_indicators(
 
 
 @router.get("/calibration/{procedure_ref:path}", summary="Actual roll-call vs prediction (calibration)")
-async def get_calibration(
+def get_calibration(
     procedure_ref: str,
     current_user: User = Depends(get_current_user),
 ):

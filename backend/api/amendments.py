@@ -69,7 +69,7 @@ router = APIRouter(
     summary="Create amendment",
     description="Create a new legislative amendment"
 )
-async def create_amendment(
+def create_amendment(
     amendment: AmendmentCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -124,7 +124,7 @@ async def create_amendment(
     summary="Create multiple amendments",
     description="Create multiple amendments at once (batch operation)"
 )
-async def create_amendments_batch(
+def create_amendments_batch(
     batch: AmendmentBatchCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -311,7 +311,7 @@ async def list_amendments(
     summary="Get amendment",
     description="Get a specific amendment by ID"
 )
-async def get_amendment(
+def get_amendment(
     amendment_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -352,7 +352,7 @@ async def get_amendment(
     summary="Update amendment",
     description="Update an existing amendment"
 )
-async def update_amendment(
+def update_amendment(
     amendment_id: UUID,
     amendment_update: AmendmentUpdate,
     current_user: User = Depends(get_current_user),
@@ -452,7 +452,7 @@ async def delete_amendment(
     summary="Get amendment statistics",
     description="Get statistics about user's amendments"
 )
-async def get_amendment_stats(
+def get_amendment_stats(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> AmendmentStats:
@@ -505,7 +505,7 @@ async def get_amendment_stats(
     summary="Export amendments to DOCX",
     description="Export all amendments for a document to DOCX format"
 )
-async def export_amendments(
+def export_amendments(
     document_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -654,7 +654,7 @@ async def get_law_for_amendment(
     summary="Resolve CELEX citations",
     description="Extract and resolve CELEX references from text"
 )
-async def resolve_citations(
+def resolve_citations(
     text: str = Query(..., description="Text containing CELEX references"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

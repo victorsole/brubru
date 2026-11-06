@@ -60,7 +60,7 @@ class AlertSubscriptionResponse(AlertSubscriptionBase):
 
 
 @router.get("/subscriptions", response_model=List[AlertSubscriptionResponse])
-async def list_subscriptions(
+def list_subscriptions(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -86,7 +86,7 @@ async def list_subscriptions(
     response_model=AlertSubscriptionResponse,
     status_code=status.HTTP_201_CREATED,
 )
-async def create_subscription(
+def create_subscription(
     payload: AlertSubscriptionBase,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -136,7 +136,7 @@ async def create_subscription(
     "/subscriptions/{subscription_id}",
     response_model=AlertSubscriptionResponse,
 )
-async def update_subscription(
+def update_subscription(
     subscription_id: UUID,
     payload: AlertSubscriptionBase,
     current_user: User = Depends(get_current_user),
@@ -186,7 +186,7 @@ async def update_subscription(
     "/subscriptions/{subscription_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-async def delete_subscription(
+def delete_subscription(
     subscription_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -202,7 +202,7 @@ async def delete_subscription(
 
 
 @router.post("/run-now")
-async def run_now(
+def run_now(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):

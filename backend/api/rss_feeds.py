@@ -178,7 +178,7 @@ async def get_rss_processor(db: Session = Depends(get_db)) -> RSSProcessor:
     summary="List all RSS feeds",
     description="Get list of all monitored RSS feeds"
 )
-async def list_feeds(
+def list_feeds(
     source: Optional[str] = Query(None, description="Filter by source institution"),
     category: Optional[str] = Query(None, description="Filter by category"),
     is_active: bool = Query(True, description="Show only active feeds"),
@@ -226,7 +226,7 @@ async def list_feeds(
     summary="Get feed by ID",
     description="Get detailed information about specific RSS feed"
 )
-async def get_feed(
+def get_feed(
     feed_id: UUID,
     db: Session = Depends(get_db)
 ) -> RSSFeedInfo:
@@ -262,7 +262,7 @@ async def get_feed(
     summary="Get latest RSS entries",
     description="Get latest entries from all feeds"
 )
-async def get_entries(
+def get_entries(
     hours: int = Query(24, ge=1, le=168, description="Time window in hours"),
     source: Optional[str] = Query(None, description="Filter by source"),
     category: Optional[str] = Query(None, description="Filter by category"),
@@ -328,7 +328,7 @@ async def get_entries(
     summary="Get entry by ID",
     description="Get detailed RSS entry"
 )
-async def get_entry(
+def get_entry(
     entry_id: UUID,
     db: Session = Depends(get_db)
 ) -> RSSEntryInfo:
@@ -369,7 +369,7 @@ async def get_entry(
     summary="Subscribe to RSS feed",
     description="Add new RSS feed to monitoring"
 )
-async def subscribe_feed(
+def subscribe_feed(
     request: SubscribeRequest,
     db: Session = Depends(get_db)
 ) -> SubscribeResponse:
@@ -427,7 +427,7 @@ async def subscribe_feed(
     summary="Unsubscribe from RSS feed",
     description="Remove RSS feed from monitoring"
 )
-async def unsubscribe_feed(
+def unsubscribe_feed(
     request: UnsubscribeRequest,
     db: Session = Depends(get_db)
 ) -> UnsubscribeResponse:

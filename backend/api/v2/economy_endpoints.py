@@ -418,7 +418,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
     else:
         item_model = ProcurementItem if procurement else EconomyItem
 
-    async def list_ep(
+    def list_ep(
         request: Request,
         db: Session = Depends(get_db),
         user: User = Depends(api_user_with_rate_limit),
@@ -466,7 +466,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
         return build_envelope(items, total, page, limit,
                               updated_from=window["updated_from"], updated_to=window["updated_to"])
 
-    async def detail_ep(
+    def detail_ep(
         request: Request,
         item_id: int = PathParam(..., description="Brubru item id from the list endpoint."),
         db: Session = Depends(get_db),
@@ -518,7 +518,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
             path = path.rsplit("/", 1)[0]
         return f"{str(request.base_url).rstrip('/')}{path}/{doc_id}"
 
-    async def documents_ep(
+    def documents_ep(
         request: Request,
         item_id: int = PathParam(..., description="Brubru id of the procedure, from the list endpoint."),
         db: Session = Depends(get_db),
@@ -541,7 +541,7 @@ def register_resource(router, *, body_code, item_type, slug, noun, body_name, ac
                                   self_url=_doc_self(request, r.id)) for r in rows]
         return build_envelope(items, total, page, limit)
 
-    async def document_ep(
+    def document_ep(
         request: Request,
         item_id: int = PathParam(..., description="Brubru id of the procedure."),
         document_id: str = PathParam(..., description="Document id (UUID) from the documents list."),
@@ -598,7 +598,7 @@ def make_single_body_folder(*, body_code, prefix, body_name, acronym, tag, resou
         website: Optional[str] = None
         item_counts: dict = _F(default_factory=dict)
 
-    async def _directory(
+    def _directory(
         request: Request,
         db: Session = Depends(get_db),
         user: User = Depends(api_user_with_rate_limit),

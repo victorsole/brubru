@@ -336,7 +336,7 @@ def get_events_in_range(
 
 
 @router.get("/events/today", response_model=TodayDigestResponse)
-async def get_today_digest(
+def get_today_digest(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -387,7 +387,7 @@ async def get_today_digest(
 
 
 @router.get("/events/{event_id}", response_model=CalendarEventResponse)
-async def get_event(
+def get_event(
     event_id: UUID,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
@@ -436,7 +436,7 @@ async def list_bodies():
 # ============================================================================
 
 @router.post("/sync", response_model=SyncAllResultResponse)
-async def trigger_sync(
+def trigger_sync(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):

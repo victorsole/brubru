@@ -171,7 +171,7 @@ def get_items(
     summary="Get text detail",
     description="Get full details of a specific adopted text"
 )
-async def get_item(
+def get_item(
     item_id: UUID,
     current_user: Optional[User] = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -213,7 +213,7 @@ async def get_item(
     summary="Get by TA reference",
     description="Get an adopted text by its TA reference"
 )
-async def get_by_reference(
+def get_by_reference(
     ta_ref: str,
     current_user: Optional[User] = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -298,7 +298,7 @@ def get_tracked_texts(
     summary="Track a text",
     description="Start tracking an adopted text"
 )
-async def track_text(
+def track_text(
     item_id: UUID,
     request: TrackTextRequest = None,
     current_user: User = Depends(get_current_user),
@@ -349,7 +349,7 @@ async def track_text(
     summary="Untrack a text",
     description="Stop tracking an adopted text"
 )
-async def untrack_text(
+def untrack_text(
     item_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -385,7 +385,7 @@ async def untrack_text(
     summary="Get parliamentary terms",
     description="Get available parliamentary terms with text counts"
 )
-async def get_terms(
+def get_terms(
     db: Session = Depends(get_db)
 ) -> TermsListResponse:
     """Get available parliamentary terms."""

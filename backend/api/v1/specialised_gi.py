@@ -174,7 +174,7 @@ A paginated envelope of `GiListItem` rows: GI identifier, protected names, file 
 Synced once per week (Sunday 03:00 UTC) from eAmbrosia Geographical Indications (ec.europa.eu/info/food-farming-fisheries/food-safety-and-quality/certification/quality-labels/geographical-indications-register). DG AGRI adds a handful of PDO/PGI/TSG entries per month.
 """,
 )
-async def list_gi(
+def list_gi(
     request: Request,
     gi_type: Optional[str] = Query(None),
     product_type: Optional[str] = Query(None),
@@ -313,7 +313,7 @@ A flat list of `GiTypeCount` objects sorted by count descending.
 Synced once per week (Sunday 03:00 UTC) from eAmbrosia Geographical Indications (ec.europa.eu/info/food-farming-fisheries/food-safety-and-quality/certification/quality-labels/geographical-indications-register). DG AGRI adds a handful of PDO/PGI/TSG entries per month.
 """,
 )
-async def list_types(
+def list_types(
     request: Request,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -367,7 +367,7 @@ A `GiDetail` object with all stored fields plus body fields when a summary sheet
 Synced once per week (Sunday 03:00 UTC) from eAmbrosia Geographical Indications (ec.europa.eu/info/food-farming-fisheries/food-safety-and-quality/certification/quality-labels/geographical-indications-register). DG AGRI adds a handful of PDO/PGI/TSG entries per month.
 """,
 )
-async def get_gi(
+def get_gi(
     request: Request,
     gi_id: str = Path(..., description="GI identifier, e.g. EUGI00000000021."),
     body_threshold: int = Depends(body_threshold_param),

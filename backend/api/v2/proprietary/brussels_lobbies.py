@@ -186,7 +186,7 @@ A `PaginatedResponse[BrusselsLobby]`. Each item: identification code, name, acro
 **Data freshness**
 Profiles refresh daily from the Transparency Register XML; news detection runs on a tiered crawl (RSS / Atom / sitemap / validated path probe).""",
 )
-async def list_brussels_lobbies(
+def list_brussels_lobbies(
     request: Request,
     q: Optional[str] = Query(None),
     org_type: Optional[str] = Query(None),
@@ -298,7 +298,7 @@ A flat list of `OrgTypeFacet` (org_type, eutr_section, organisations, with_news)
 **Data freshness**
 Recomputed live from brussels_lobby_profiles.""",
 )
-async def list_types(
+def list_types(
     request: Request,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -347,7 +347,7 @@ A `PaginatedResponse[LobbyNewsItem]`: title, summary, item URL, published_at, so
 **Data freshness**
 Refreshed on the tiered news-detection crawl.""",
 )
-async def get_lobby_news(
+def get_lobby_news(
     request: Request,
     code: str = PathParam(..., description="Transparency Register identification code."),
     since: Optional[date] = Query(None),

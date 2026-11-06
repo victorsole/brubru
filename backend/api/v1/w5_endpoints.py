@@ -98,7 +98,7 @@ A `PaginatedResponse[ResearchPublicationItem]` envelope. Each item carries `sour
 **Data freshness**
 Synced once per week (Sunday 05:00 UTC, weekly tier) — STOA/JRC/ART publish a handful of pieces per week each. EPRS is currently fully populated; STOA/JRC/ART/ECA are tracked via the `source` field as ingestion ships. Backed by `backend/scripts/sync_eprs_publications.py` + future `sync_research.py`.""",
 )
-async def list_research_publications(
+def list_research_publications(
     request: Request,
     source: Optional[str] = Query(None, description="eprs | stoa | jrc | art | eca"),
     q: Optional[str] = Query(None),
@@ -389,7 +389,7 @@ A single `OfficialItem` (same shape as the list endpoint's `data[i]`), or HTTP 4
 **Data freshness**
 Same as the list endpoint — monthly 1st-of-month 02:00 UTC sync from op.europa.eu/en/web/who-is-who.""",
 )
-async def get_official_detail(
+def get_official_detail(
     slug: str,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),

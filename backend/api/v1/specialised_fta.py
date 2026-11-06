@@ -151,7 +151,7 @@ A paginated envelope of `FtaListItem` rows: CELEX, title, document_date, agreeme
 Synced once per week (Sunday 03:00 UTC) from Cellar SPARQL sector-2 (international agreements). New trade agreements are rare (1-3 per year). Weekly catches drafts + initialled + signed.
 """,
 )
-async def list_fta(
+def list_fta(
     request: Request,
     agreement_type: Optional[str] = Query(None, description="Filter to one Brubru-derived class."),
     partner: Optional[str] = Query(None, description="Case-insensitive substring on partner."),
@@ -287,7 +287,7 @@ A flat list of `AgreementTypeCount` objects sorted by total descending.
 Synced once per week (Sunday 03:00 UTC) from Cellar SPARQL sector-2 (international agreements). New trade agreements are rare (1-3 per year). Weekly catches drafts + initialled + signed.
 """,
 )
-async def list_types(
+def list_types(
     request: Request,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -345,7 +345,7 @@ An `FtaDetail` object with the agreement title, work URI, resource type, in-forc
 Synced once per week (Sunday 03:00 UTC) from Cellar SPARQL sector-2 (international agreements). New trade agreements are rare (1-3 per year). Weekly catches drafts + initialled + signed.
 """,
 )
-async def get_fta(
+def get_fta(
     request: Request,
     celex: str = Path(..., description="CELEX number, e.g. 22018A1227(01)."),
     body_threshold: int = Depends(body_threshold_param),

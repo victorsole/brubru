@@ -1243,6 +1243,7 @@
       "notFound": "Niets gevonden met die referentie. Controleer die, of kies er een uit de lijst.",
       "tooManyCalls": "Te veel zoekopdrachten in korte tijd. Wacht een minuut en probeer het opnieuw.",
       "serverFault": "Er ging iets mis aan onze kant, niet in wat u hebt ingevoerd. Probeer het opnieuw of wijzig de filters. Vermeld de onderstaande aanvraag-id als u ons schrijft.",
+      "tooSlow": "Deze zoekopdracht duurde te lang en is gestopt. Maak hem kleiner: een kortere periode, een filter of een kleinere pagina. Met uw eigen sleutel ligt de grens hoger.",
       "checkFields": "Iets wat u hebt ingevoerd heeft niet de vorm die deze gegevens nodig hebben:",
       "capVisitor": "U hebt de gratis zoekopdrachten van vandaag gebruikt. Morgen zijn ze er weer.",
       "capPool": "Het openbare tegoed van vandaag is op. Vraag uw eigen sleutel aan of kom morgen terug.",

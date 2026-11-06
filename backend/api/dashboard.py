@@ -1032,7 +1032,7 @@ def _profile_completeness(db: Session, user: User) -> ProfileCompleteness:
         "Never returns mock data."
     ),
 )
-async def get_dashboard_tiles(
+def get_dashboard_tiles(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> DashboardResponse:
@@ -1072,7 +1072,7 @@ async def get_dashboard_tiles(
         "path, and a few items; plus `has_tracked_files`."
     ),
 )
-async def get_workspace_digest(
+def get_workspace_digest(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):

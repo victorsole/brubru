@@ -1243,6 +1243,7 @@
       "notFound": "No s'ha trobat res amb aquesta referència. Comprova-la o tria'n una de la llista.",
       "tooManyCalls": "Massa cerques en poc temps. Espera un minut i torna-ho a provar.",
       "serverFault": "Alguna cosa ha fallat per part nostra, no en el que has escrit. Torna-ho a provar o canvia els filtres. Si ens escrius, indica l'identificador de sota.",
+      "tooSlow": "Aquesta cerca ha trigat massa i s'ha aturat. Acota-la: un període més curt, un filtre o una pàgina més petita. Amb la teva pròpia clau, el límit és més alt.",
       "checkFields": "Alguna cosa que has escrit no té el format que necessiten aquestes dades:",
       "capVisitor": "Has fet servir les cerques gratuïtes d'avui. Tornen demà.",
       "capPool": "La quota pública d'avui s'ha esgotat. Aconsegueix la teva clau o torna demà.",

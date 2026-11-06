@@ -72,7 +72,7 @@ class ProactivePendingResponse(BaseModel):
         "has nothing to surface — never fabricates."
     ),
 )
-async def get_pending_proactive(
+def get_pending_proactive(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> ProactivePendingResponse:

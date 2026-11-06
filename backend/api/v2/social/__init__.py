@@ -176,7 +176,7 @@ async def directory(db: Session = Depends(get_db), user: User = Depends(api_user
 **Try it**: `GET /api/v2/social/posts?entity_type=commissioner&platform=x&limit=20`
 
 **You get back**: a `PaginatedResponse[SocialPost]`. Each item: entity, platform, engagement counts, and the 5 datapoints (post URL as public_url, published date). The post text is null on the list by default -- pass `include_body=true` to get it in bulk, or call the detail endpoint for one post.""")
-async def list_posts(db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit),
+def list_posts(db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit),
                      platform: Optional[str] = Query(None), entity_type: Optional[str] = Query(None),
                      entity_key: Optional[str] = Query(None), account_id: Optional[int] = Query(None),
                      since: Optional[str] = Query(None, description="ISO date; posts on/after this"),
@@ -208,7 +208,7 @@ async def list_posts(db: Session = Depends(get_db), user: User = Depends(api_use
 **Try it**: `GET /api/v2/social/posts/12345`
 
 **You get back**: a `SocialPost` with all 5 datapoints populated: public_url, body_txt + body_html (full text), document_date (published), creation_date (fetched).""")
-async def get_post(post_id: int = PathParam(...), db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
+def get_post(post_id: int = PathParam(...), db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
     r = db.execute(text(f"SELECT {_POST_COLS} FROM social_posts p JOIN social_accounts a ON a.id=p.account_id WHERE p.id=:i"), {"i": post_id}).mappings().first()
     if not r:
         raise HTTPException(404, "post not found")
@@ -225,7 +225,7 @@ async def get_post(post_id: int = PathParam(...), db: Session = Depends(get_db),
 **Try it**: `GET /api/v2/social/accounts?entity_type=mep&platform=bluesky&verified=true`
 
 **You get back**: a `PaginatedResponse[SocialAccount]`. Each item: entity, platform, scope, handle, status/verified, discovery source, and the 5 datapoints (account URL as public_url, composed profile on detail, last-checked date).""")
-async def list_accounts(db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit),
+def list_accounts(db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit),
                         entity_type: Optional[str] = Query(None), platform: Optional[str] = Query(None),
                         verified: Optional[bool] = Query(None), q: Optional[str] = Query(None),
                         page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=200)):
@@ -252,7 +252,7 @@ async def list_accounts(db: Session = Depends(get_db), user: User = Depends(api_
 **Try it**: `GET /api/v2/social/accounts/7145`
 
 **You get back**: a `SocialAccount` with all 5 datapoints: public_url, body_txt + body_html (composed profile), document_date (last checked), creation_date (first mapped).""")
-async def get_account(account_id: int = PathParam(...), db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
+def get_account(account_id: int = PathParam(...), db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
     r = db.execute(text(f"SELECT {_ACC_COLS} FROM social_accounts WHERE id=:i"), {"i": account_id}).mappings().first()
     if not r:
         raise HTTPException(404, "account not found")
@@ -269,7 +269,7 @@ async def get_account(account_id: int = PathParam(...), db: Session = Depends(ge
 **Try it**: `GET /api/v2/social/entity/commissioner/maros_sefcovic`
 
 **You get back**: `{entity_type, entity_key, entity_name, accounts: [SocialAccount], recent_posts: [SocialPost]}` — accounts with composed profiles, posts with full body.""")
-async def entity_footprint(entity_type: str = PathParam(...), entity_key: str = PathParam(...),
+def entity_footprint(entity_type: str = PathParam(...), entity_key: str = PathParam(...),
                            posts_limit: int = Query(20, ge=1, le=100),
                            db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
     accs = db.execute(text(f"SELECT {_ACC_COLS} FROM social_accounts WHERE entity_type=:t AND entity_key=:k ORDER BY platform"),

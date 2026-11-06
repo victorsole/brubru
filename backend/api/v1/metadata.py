@@ -799,7 +799,7 @@ A `_GenericListResponse` with `total: ~15-20` (varies as the mirror grows) and `
 **Data freshness**
 Live aggregate query over the `eu_laws` table. Reflects whatever is currently in the DB; recomputed on every request. As the EUR-Lex sync (hot tier, every 6h) adds new acts, the counts shift accordingly.""",
 )
-async def list_document_types(
+def list_document_types(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> _GenericListResponse:
@@ -840,7 +840,7 @@ A `_GenericListResponse` with `total: ~30-50` (varies as the mirror grows) and `
 **Data freshness**
 Live aggregate query over the `eu_laws` table. Reflects whatever is currently in the DB; recomputed on every request. As the EUR-Lex sync (hot tier, every 6h) tags new acts, the counts shift accordingly.""",
 )
-async def list_policy_areas(
+def list_policy_areas(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> _GenericListResponse:

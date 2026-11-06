@@ -223,7 +223,7 @@ def get_all_users(
 
 
 @router.get("/users/{user_id}", response_model=UserManagementResponse)
-async def get_user_detail(
+def get_user_detail(
     user_id: UUID,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -238,7 +238,7 @@ async def get_user_detail(
 
 
 @router.patch("/users/{user_id}", response_model=UserManagementResponse)
-async def update_user(
+def update_user(
     user_id: UUID,
     updates: UserUpdateRequest,
     admin: User = Depends(get_current_admin_user),
@@ -294,7 +294,7 @@ async def update_user(
 
 
 @router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(
+def delete_user(
     user_id: UUID,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -393,7 +393,7 @@ def get_all_feeds(
 
 
 @router.post("/feeds", response_model=FeedManagementResponse, status_code=status.HTTP_201_CREATED)
-async def create_feed(
+def create_feed(
     feed_data: FeedCreateRequest,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -446,7 +446,7 @@ async def create_feed(
 
 
 @router.patch("/feeds/{feed_id}", response_model=FeedManagementResponse)
-async def update_feed(
+def update_feed(
     feed_id: UUID,
     updates: FeedUpdateRequest,
     admin: User = Depends(get_current_admin_user),
@@ -497,7 +497,7 @@ async def update_feed(
 
 
 @router.delete("/feeds/{feed_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_feed(
+def delete_feed(
     feed_id: UUID,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -531,7 +531,7 @@ async def delete_feed(
 # ============================================================================
 
 @router.get("/stats", response_model=SystemStatsResponse)
-async def get_system_stats(
+def get_system_stats(
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
@@ -714,7 +714,7 @@ def get_subscriptions_overview(
 
 
 @router.get("/activity-log")
-async def get_admin_activity_log(
+def get_admin_activity_log(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     action_type: Optional[str] = Query(None),
@@ -834,7 +834,7 @@ async def _run_sync_tier_background(tier: str, admin_id: str):
 
 
 @router.post("/sync/run/{tier}")
-async def trigger_sync_tier(
+def trigger_sync_tier(
     tier: str,
     background_tasks: BackgroundTasks,
     admin: User = Depends(get_current_admin_user),
@@ -893,7 +893,7 @@ class EmailCampaignResponse(BaseModel):
 
 
 @router.post("/email/re-engagement", response_model=EmailCampaignResponse)
-async def send_reengagement_emails(
+def send_reengagement_emails(
     request: EmailCampaignRequest,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)

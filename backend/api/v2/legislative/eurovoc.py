@@ -292,7 +292,7 @@ A `PaginatedResponse[EuroVocTaxonomyConcept]`: each concept's stable `uri` (== `
 @router.get("/taxonomy/domains", response_model=PaginatedResponse[EuroVocTaxonomyConcept],
             summary="EuroVoc top level — the 21 subject domains (Politics, Law, Environment, ...)",
             description=_TX_DESC.format(level="the 21 top domains", inp="", ex="domains"))
-async def taxonomy_domains(
+def taxonomy_domains(
     request: Request,
     lang: str = Query("en", description="Label language (en|es|fr|it|nl|ca)"),
     limit: int = Query(50, ge=1, le=200), page: int = Query(1, ge=1),
@@ -306,7 +306,7 @@ async def taxonomy_domains(
             description=_TX_DESC.format(level="the 127 microthesauri, optionally filtered to one domain",
                                         inp="`domain` — a domain notation like `28` to list only that domain's microthesauri. ",
                                         ex="microthesauri?domain=28"))
-async def taxonomy_microthesauri(
+def taxonomy_microthesauri(
     request: Request,
     domain: Optional[str] = Query(None, description="Domain notation (e.g. 28) to filter"),
     lang: str = Query("en"), limit: int = Query(200, ge=1, le=200), page: int = Query(1, ge=1),
@@ -324,7 +324,7 @@ async def taxonomy_microthesauri(
             description=_TX_DESC.format(level="the descriptors, filtered by microthesaurus and/or a label search",
                                         inp="`microthesaurus` — a microthesaurus notation (e.g. 2826); `q` — substring match on the label in `lang`. ",
                                         ex="descriptors?microthesaurus=2826"))
-async def taxonomy_descriptors(
+def taxonomy_descriptors(
     request: Request,
     microthesaurus: Optional[str] = Query(None, description="Microthesaurus notation (e.g. 2826)"),
     q: Optional[str] = Query(None, description="Label substring search (in `lang`)"),
@@ -358,7 +358,7 @@ Resolve a EuroVoc code to its multilingual labels and place in the tree.
 
 **You get back**
 A `PaginatedResponse[EuroVocTaxonomyConcept]` whose `data` is the concept followed by its ancestors, root-last.""")
-async def taxonomy_concept(
+def taxonomy_concept(
     request: Request,
     notation: str = Path(..., description="EuroVoc notation (e.g. 1764, 2826, 28)"),
     lang: str = Query("en"),
@@ -430,7 +430,7 @@ To render subject tags on a translated act page, so a Catalan reader sees what t
 **You get back**
 A `PaginatedResponse[CatalanActConcept]`: each subject's `notation`, `concept_uri` (stable, links back to EUR-Lex EuroVoc), Catalan `label_ca`, `label_en`, and `relation`.""",
 )
-async def catalan_law_concepts(
+def catalan_law_concepts(
     request: Request,
     celex: str = Path(..., description="Act CELEX, e.g. 32016R0679"),
     user: User = Depends(api_user_with_rate_limit), db: Session = Depends(get_db),
@@ -467,7 +467,7 @@ Power a subject navigator over the Catalan acquis: pick a EuroVocCat topic, get 
 **You get back**
 A `PaginatedResponse[CatalanLinkedAct]`: each act's `celex`, Catalan title `title_ca`, `url` (live page), `category`, and `relation`.""",
 )
-async def catalan_concept_acts(
+def catalan_concept_acts(
     request: Request,
     notation: str = Path(..., description="EuroVoc notation (descriptor/MT/domain), e.g. 2826"),
     limit: int = Query(50, ge=1, le=200), page: int = Query(1, ge=1),

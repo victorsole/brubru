@@ -74,7 +74,7 @@ router = APIRouter(prefix="/api/mep-amendments", tags=["MEP Amendments"])
         "to 'My interests'. Powers the PI-aligned MEP Amendments picker."
     ),
 )
-async def get_procedures_by_committee(
+def get_procedures_by_committee(
     current_user: Optional[User] = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
@@ -186,7 +186,7 @@ async def fetch_amendments(
     response_model=MEPAmendmentCrossRefResponse,
     summary="Search amendments by MEP author across all procedures"
 )
-async def get_amendments_by_author(
+def get_amendments_by_author(
     author: str = Query(..., min_length=2, description="MEP name to search for"),
     group: Optional[str] = Query(None, description="Filter by political group"),
     element_type: Optional[str] = Query(None, description="Filter by element type"),
@@ -271,7 +271,7 @@ async def get_amendments_by_author(
     response_model=SyncStatusResponse,
     summary="Get bulk amendment sync status"
 )
-async def get_sync_status(
+def get_sync_status(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> SyncStatusResponse:
@@ -318,7 +318,7 @@ async def _run_bulk_sync(db: Session, request: BulkSyncRequest):
     status_code=202,
     summary="Trigger bulk amendment sync from EP Open Data API"
 )
-async def trigger_bulk_sync(
+def trigger_bulk_sync(
     body: Optional[BulkSyncRequest] = None,
     background_tasks: BackgroundTasks = BackgroundTasks(),
     current_user: User = Depends(get_current_user),
@@ -401,7 +401,7 @@ async def score_alignment(
     response_model=ComparisonResponse,
     summary="Get comparative analysis from cached alignment scores"
 )
-async def get_comparison(
+def get_comparison(
     procedure_ref: str,
     policy_position_hash: str = Query(..., description="Hash from alignment scoring response"),
     current_user: User = Depends(get_current_user),

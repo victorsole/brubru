@@ -187,7 +187,7 @@ TED's search API and each notice's XML, read every day for the last 14 days of n
 @router.get("/tender-awards", response_model=PaginatedResponse[TenderAwardItem], tags=["v2-funding"],
             summary="Tender awards — who won the contracts EU institutions and agencies awarded (TED)",
             description=_DESC)
-async def list_tender_awards(
+def list_tender_awards(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
@@ -292,7 +292,7 @@ One item with the list's fields, `body_txt` and `body_html` included, or 404 whe
 
 **Data freshness**
 As the list: read every day for the last 14 days of notices.""")
-async def get_tender_award(
+def get_tender_award(
     request: Request,
     publication_number: str = PathParam(..., description="TED publication number, e.g. 351840-2025."),
     db: Session = Depends(get_db),

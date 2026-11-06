@@ -414,7 +414,7 @@ Funded projects read every Sunday (CORDIS, the F&T Portal); FTS files for 2024 a
 
 @router.get("/partners", response_model=PaginatedResponse[PartnerItem], tags=["v2-funding"],
             summary="Partners — organisations found by what they were funded, paid or contracted for", description=_DESC)
-async def list_partners(
+def list_partners(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
@@ -487,7 +487,7 @@ One organisation, the same fields as the list, `matches` up to 50, or 404.
 
 **Data freshness**
 As the list.""")
-async def get_partner(
+def get_partner(
     request: Request,
     id: str = PathParam(..., description="pic:<PIC>, vat:<VAT number> or name:<country>:<name>."),
     db: Session = Depends(get_db),

@@ -71,7 +71,7 @@ The FTS files for 2024 and 2025 (ec.europa.eu/budget/financial-transparency-syst
 @router.get("/eu-funding-recipients", response_model=PaginatedResponse[_fts.FtsItem], tags=["v2-funding"],
             summary="EU funding recipients — who received EU money, how much, for what (FTS)",
             description=_DESC)
-async def list_recipients(
+def list_recipients(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),

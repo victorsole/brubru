@@ -118,7 +118,7 @@ def search_publications(
     summary="Find EPRS publications for a legislative procedure",
     description="Returns EPRS briefings and analyses related to a specific procedure"
 )
-async def get_by_procedure(
+def get_by_procedure(
     procedure_ref: str,
     limit: int = Query(10, ge=1, le=50),
     db: Session = Depends(get_db),

@@ -235,6 +235,8 @@ export const ResponsePane = ({
     if (reason.code === 'sandbox_global_capped') return t('api.console.capPool');
     if (status === 404) return reason.message || t('api.console.notFound');
     if (status === 429) return t('api.console.tooManyCalls');
+    // O213 (6 Nov 2026): a free-trial statement stops after 20 s; the search was too heavy, nothing broke.
+    if (reason.code === 'query_timeout') return t('api.console.tooSlow');
     if (status === 502 || status === 503) return reason.message || t('api.console.serverFault');
     if (status >= 500) return t('api.console.serverFault');
     if (fieldErrors.length > 0) return t('api.console.checkFields');
@@ -249,6 +251,7 @@ export const ResponsePane = ({
   const statusWords = () => {
     if (ok) return t('api.console.statusOk');
     if (status === 404) return t('api.console.statusNotFound');
+    if (status === 504) return t('api.console.statusRefused');
     if (status >= 500) return t('api.console.statusServer');
     return t('api.console.statusRefused');
   };

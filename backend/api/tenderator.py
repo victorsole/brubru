@@ -297,7 +297,7 @@ async def create_profile(
     summary="Update tender profile",
     description="Update your tender matching profile"
 )
-async def update_profile(
+def update_profile(
     profile_data: TenderProfileUpdate,
     background_tasks: BackgroundTasks,
     current_user: User = Depends(require_blue_tier),
@@ -2939,7 +2939,7 @@ class _PipelineUpdate(_PydanticBaseModel):
         "a single pipeline column. Blue tier only."
     ),
 )
-async def list_pipeline(
+def list_pipeline(
     status_filter: Optional[str] = Query(None, alias="status", description="lead | drafting | submitted | awarded | executing | paid | lost | cancelled"),
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db),
@@ -2980,7 +2980,7 @@ async def list_pipeline(
         "opportunity_id updates the snapshot fields instead of erroring."
     ),
 )
-async def add_to_pipeline(
+def add_to_pipeline(
     body: _PipelineCreate,
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db),
@@ -3052,7 +3052,7 @@ async def add_to_pipeline(
     summary="Update a pipeline row",
     description="Partial update of status / next step / assignee / notes.",
 )
-async def update_pipeline(
+def update_pipeline(
     pipeline_id: int,
     body: _PipelineUpdate,
     current_user: User = Depends(require_blue_tier),
@@ -3094,7 +3094,7 @@ async def update_pipeline(
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Remove a pipeline row",
 )
-async def delete_pipeline(
+def delete_pipeline(
     pipeline_id: int,
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db),
@@ -3122,7 +3122,7 @@ async def delete_pipeline(
         "Blue tier can call it."
     ),
 )
-async def get_bodies(
+def get_bodies(
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db),
 ):
@@ -3621,7 +3621,7 @@ async def get_tender_by_publication(
     summary="Get EU procurement legal framework",
     description="Get relevant EU laws for public procurement"
 )
-async def get_procurement_legal_framework(
+def get_procurement_legal_framework(
     sector: Optional[str] = None,
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db)
@@ -4283,7 +4283,7 @@ async def dismiss_match(
     summary="Update match",
     description="Update match notes or rating"
 )
-async def update_match(
+def update_match(
     match_id: int,
     update_data: TenderMatchUpdate,
     current_user: User = Depends(require_blue_tier),
@@ -4331,7 +4331,7 @@ async def update_match(
     summary="Get legal requirements for tender",
     description="Get applicable EU law requirements for a specific tender"
 )
-async def get_tender_legal_requirements(
+def get_tender_legal_requirements(
     tender_id: int,
     current_user: User = Depends(require_blue_tier),
     db: Session = Depends(get_db)

@@ -67,7 +67,7 @@ router = APIRouter(
     summary="Create document",
     description="Create a new document (amendment, analysis, strategy, or note)"
 )
-async def create_document(
+def create_document(
     document: UserDocumentCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -254,7 +254,7 @@ async def get_document(
     summary="Update document",
     description="Update document fields"
 )
-async def update_document(
+def update_document(
     document_id: UUID,
     updates: UserDocumentUpdate,
     current_user: User = Depends(get_current_user),
@@ -367,7 +367,7 @@ async def delete_document(
     summary="Create new version",
     description="Create a new version of the document"
 )
-async def create_document_version(
+def create_document_version(
     document_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -417,7 +417,7 @@ async def create_document_version(
     summary="Get document versions",
     description="Get all versions of a document"
 )
-async def get_document_versions(
+def get_document_versions(
     document_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -471,7 +471,7 @@ async def get_document_versions(
     summary="Get document statistics",
     description="Get statistics about user's documents"
 )
-async def get_document_stats(
+def get_document_stats(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> DocumentStatsResponse:
@@ -564,7 +564,7 @@ def _safe_filename(title: str, ext: str) -> str:
     summary="Export document",
     description="Download a saved document as DOCX or PDF"
 )
-async def export_document(
+def export_document(
     document_id: UUID,
     fmt: str = Query("docx", alias="format", pattern="^(docx|pdf)$"),
     current_user: User = Depends(get_current_user),
@@ -843,7 +843,7 @@ def _render_pptx_poster(title: str, markdown: str) -> bytes:
     summary="Export presentation or poster as PPTX",
     description="Render a saved presentation (slides) or event poster (single A3 slide) as a real .pptx file",
 )
-async def export_document_pptx(
+def export_document_pptx(
     document_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),

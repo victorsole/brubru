@@ -403,7 +403,7 @@ def get_consultations(
     response_model=DGListResponse,
     summary="List Directorate-Generals"
 )
-async def get_dgs(db: Session = Depends(get_db)) -> DGListResponse:
+def get_dgs(db: Session = Depends(get_db)) -> DGListResponse:
     """DGs present in the consultations data, named via the SHARED Commission
     registry (knowledge_base/eu_calendar_institutions.COMMISSION_DG_NAME) so the
     filter taxonomy matches the Calendar / Transcripts Institution->Body lists.
@@ -620,7 +620,7 @@ async def trigger_sync(
     response_model=ConsultationDetailResponse,
     summary="Get consultation details"
 )
-async def get_consultation(
+def get_consultation(
     consultation_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -718,7 +718,7 @@ async def get_consultation(
     status_code=status.HTTP_201_CREATED,
     summary="Track a consultation"
 )
-async def track_consultation(
+def track_consultation(
     consultation_id: UUID,
     request: TrackConsultationRequest = None,
     current_user: User = Depends(get_current_user),
@@ -781,7 +781,7 @@ async def track_consultation(
     "/{consultation_id}/track",
     summary="Untrack a consultation"
 )
-async def untrack_consultation(
+def untrack_consultation(
     consultation_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -815,7 +815,7 @@ async def untrack_consultation(
     "/{consultation_id}/track",
     summary="Update tracking preferences"
 )
-async def update_tracking(
+def update_tracking(
     consultation_id: UUID,
     request: UpdateTrackingRequest,
     current_user: User = Depends(get_current_user),

@@ -147,7 +147,7 @@ def _entry_dict(e: OjEntry, keywords: List[str], tracked_procs: set = frozenset(
 @router.get("/dates", summary="Available OJ dates",
             description="The OJ publication dates Brubru has ingested, newest first. "
                         "The 'My OJ' tab defaults to the latest.")
-async def oj_dates(db: Session = Depends(get_db)):
+def oj_dates(db: Session = Depends(get_db)):
     rows = (db.query(OjEntry.oj_date, func.count(OjEntry.id))
             .group_by(OjEntry.oj_date).order_by(OjEntry.oj_date.desc()).all())
     return {"dates": [{"date": d.isoformat(), "count": int(n)} for d, n in rows if d]}

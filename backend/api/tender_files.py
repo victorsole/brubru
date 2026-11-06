@@ -225,7 +225,7 @@ def _embed_documents(db: Session, tender_file: TenderFile) -> List[Dict[str, Any
         "The tender_file row + the seeded document (if seed_first_doc=true)."
     ),
 )
-async def create_tender_file(
+def create_tender_file(
     payload: TenderFileCreate,
     lang: Optional[str] = Query(None, description=_LANG_DESC),
     db: Session = Depends(get_db),
@@ -323,7 +323,7 @@ def list_tender_files(
     response_model=TenderFileResponse,
     summary="Get a Tender File with embedded documents + template",
 )
-async def get_tender_file(
+def get_tender_file(
     file_id: UUID,
     lang: Optional[str] = Query(None, description=_LANG_DESC),
     db: Session = Depends(get_db),
@@ -346,7 +346,7 @@ async def get_tender_file(
     response_model=TenderFileResponse,
     summary="Update a Tender File (title / status / funding_mode / deadline / topic)",
 )
-async def patch_tender_file(
+def patch_tender_file(
     file_id: UUID,
     patch: TenderFilePatch,
     db: Session = Depends(get_db),
@@ -398,7 +398,7 @@ async def patch_tender_file(
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete a Tender File (its docs are detached, not deleted)",
 )
-async def delete_tender_file(
+def delete_tender_file(
     file_id: UUID,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -417,7 +417,7 @@ async def delete_tender_file(
     "/{file_id}/documents",
     summary="Attach an additional document kind to a Tender File from its template",
 )
-async def add_document_to_file(
+def add_document_to_file(
     file_id: UUID,
     payload: DocumentAddRequest,
     db: Session = Depends(get_db),

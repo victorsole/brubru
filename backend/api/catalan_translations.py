@@ -87,7 +87,7 @@ def list_translations(
     summary="Category summary",
     description="Returns each category with its translation count"
 )
-async def get_categories(db: Session = Depends(get_db)):
+def get_categories(db: Session = Depends(get_db)):
     """Get categories with counts for the landing page."""
     rows = (
         db.query(
@@ -117,7 +117,7 @@ async def get_categories(db: Session = Depends(get_db)):
     summary="Subcategory summary",
     description="Returns each subcategory with its translation count, optionally filtered by category"
 )
-async def get_subcategories(
+def get_subcategories(
     category: Optional[str] = Query(None, description="Filter subcategories by parent category"),
     db: Session = Depends(get_db),
 ):
@@ -188,7 +188,7 @@ async def get_stats(db: Session = Depends(get_db)):
     summary="Get translation metadata",
     description="Returns metadata for a single translated act by CELEX number"
 )
-async def get_translation(celex: str, db: Session = Depends(get_db)):
+def get_translation(celex: str, db: Session = Depends(get_db)):
     """Get a single translation by CELEX."""
     translation = (
         db.query(CatalanTranslation)

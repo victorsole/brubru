@@ -135,7 +135,7 @@ A `PaginatedResponse[CohesionFinanceItem]` envelope sorted by total allocation. 
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`, dataset 9qee-iv7c).""",
     )
-    async def list_fund(  # noqa: ANN202
+    def list_fund(  # noqa: ANN202
         request: Request,
         ms: Optional[str] = Query(None, description="Member State ISO code"),
         country: Optional[str] = Query(None, description="The Member State, ISO-2 (EL and GR, UK and GB are the same); the same as `ms`."),

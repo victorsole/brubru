@@ -72,7 +72,7 @@ class ImpactBlockResponse(BaseModel):
         "rows — never fabricated."
     ),
 )
-async def get_impact_for_file(
+def get_impact_for_file(
     procedure_ref: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),

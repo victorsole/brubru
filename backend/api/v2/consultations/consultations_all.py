@@ -330,7 +330,7 @@ async def consultations_all(
                 "count).\n\n**When to use it**\nTo build a picker.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\n"
                 "GET /api/v2/consultations/bodies\n```\n\n**You get back**\n`{bodies: [...], families: [...]}`.\n\n"
                 "**Data freshness**\nLive."))
-async def bodies_facet(request: Request, db: Session = Depends(get_db),
+def bodies_facet(request: Request, db: Session = Depends(get_db),
                        user: User = Depends(api_user_with_rate_limit)):
     items = _fetch(db, codes=None, institution=None, status=None, since=None, until=None, q=None)
     names = _body_names(db)
@@ -356,7 +356,7 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
                 "`/api/v2/consultations/all`.\n\n**Input**\n`consultation_id` — the source-prefixed "
                 "aggregator id (`h<uuid>` or `e<n>`).\n\n**Try it**\n```\nGET /api/v2/consultations/h<uuid>\n```\n\n"
                 "**You get back**\nA single consultation with the full record.\n\n**Data freshness**\nLive."))
-async def get_consultation(request: Request,
+def get_consultation(request: Request,
                            consultation_id: str = PathParam(..., description="Prefixed id: 'h<uuid>' or 'e<n>'."),
                            db: Session = Depends(get_db),
                            user: User = Depends(api_user_with_rate_limit)):

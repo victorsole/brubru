@@ -751,7 +751,7 @@ _COVERAGE_NOTE = (
                 "verdict; `body_stale_after_days` (default 30) governs the per-body one. They are "
                 "deliberately different: 3 days answers 'is the feed current', 30 answers 'is this "
                 "body broken', and many EU agencies publish monthly.\n\n**Data freshness**\nLive."))
-async def latest_news(request: Request,
+def latest_news(request: Request,
                       stale_after_days: int = Query(
                           3, ge=1, le=60,
                           description="Age in days beyond which the CORPUS is reported as stale."),
@@ -950,7 +950,7 @@ async def latest_news(request: Request,
                 "**When to use it**\nTo build a picker, or to see what `family=` expands to.\n\n**Input**\n"
                 "No parameters.\n\n**Try it**\n```\nGET /api/v2/news/bodies\n```\n\n**You get back**\n"
                 "`{bodies: [...], families: [...]}`.\n\n**Data freshness**\nLive, across both news stores."))
-async def bodies_facet(request: Request, db: Session = Depends(get_db),
+def bodies_facet(request: Request, db: Session = Depends(get_db),
                        user: User = Depends(api_user_with_rate_limit)):
     # Same union: a body the picker cannot show is a body nobody can filter to.
     src, src_params = _news_source_sql(None, _NEWS_TYPES, None, None, None)
@@ -984,7 +984,7 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
                 "the Brubru item id from the list endpoint.\n\n**Try it**\n```\nGET /api/v2/news/12345\n```\n\n"
                 "**You get back**\nA single item with the full 5-datapoint contract.\n\n**Data freshness**\n"
                 "Live."))
-async def get_news(request: Request,
+def get_news(request: Request,
                    item_id: str = PathParam(..., description=(
                        "Brubru item id from the list endpoint: an integer for an item from "
                        "the agency store, a UUID for an item from the institutional news store.")),

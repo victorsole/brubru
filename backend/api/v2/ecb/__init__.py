@@ -60,7 +60,7 @@ Two body records, each with acronym, name, mandate, website and an `item_counts`
 **Data freshness**
 Counts are live from the database.""",
 )
-async def ecb_directory(
+def ecb_directory(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),

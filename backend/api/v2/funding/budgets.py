@@ -155,7 +155,7 @@ As each fund's list: every Sunday from the Commission's Cohesion Open Data platf
 @router.get("/budgets", response_model=PaginatedResponse[BudgetItem], tags=["v2-funding"],
             summary="The EU budget money by fund: cohesion allocations, Solidarity Fund cases and CAP payments in one list",
             description=_DESC)
-async def list_budgets(
+def list_budgets(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),

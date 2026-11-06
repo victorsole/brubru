@@ -21,7 +21,11 @@ def _client(monkeypatch, is_sandbox, role="admin", pool=(True, "", 7, 90)):
     from api.v1 import _deps
     from api.v1._billing_middleware import BillingRefundMiddleware
     from core.database import get_db
-    calls = {"pool": 0, "debit": 0}
+    calls = {"pool": 0, "debit": 0, "sql": []}
+
+    class _Db:  # records what the gate asks the database itself to do (O213: the sandbox's statement timeout)
+        def execute(self, stmt, *a, **k):
+            calls["sql"].append(str(stmt))
 
     def fake_pool(db, ip):
         calls["pool"] += 1
@@ -52,14 +56,14 @@ def _client(monkeypatch, is_sandbox, role="admin", pool=(True, "", 7, 90)):
         request.state.api_key_is_sandbox = is_sandbox
         return SimpleNamespace(id=1, role=role, subscription_tier="blue")
     app.dependency_overrides[_deps.get_api_user] = fake_user
-    app.dependency_overrides[get_db] = lambda: None
+    app.dependency_overrides[get_db] = lambda: _Db()
     return TestClient(app), calls
 
 
 def test_the_sandbox_key_is_capped_though_an_admin_owns_it(monkeypatch):
     c, calls = _client(monkeypatch, is_sandbox=True, role="admin")
     r = c.get("/api/v2/news/all?limit=5")
-    assert r.status_code == 200 and calls == {"pool": 1, "debit": 0}
+    assert r.status_code == 200 and (calls["pool"], calls["debit"]) == (1, 0)
     assert r.headers["X-Brubru-Sandbox-Remaining"] == "7"
     assert r.headers["X-Brubru-Sandbox-Pool-Remaining"] == "90"
     assert r.headers["X-Brubru-Cost-Eur"] == "0"
@@ -68,13 +72,13 @@ def test_the_sandbox_key_is_capped_though_an_admin_owns_it(monkeypatch):
 def test_an_admin_key_stays_exempt_and_says_so(monkeypatch):
     c, calls = _client(monkeypatch, is_sandbox=False, role="admin")
     r = c.get("/api/v2/news/all")
-    assert r.status_code == 200 and calls == {"pool": 0, "debit": 0} and r.headers["X-Brubru-Cost-Eur"] == "0"
+    assert r.status_code == 200 and (calls["pool"], calls["debit"]) == (0, 0) and r.headers["X-Brubru-Cost-Eur"] == "0"
 
 
 def test_a_paying_key_is_told_the_price_and_the_balance(monkeypatch):
     c, calls = _client(monkeypatch, is_sandbox=False, role="user")
     r = c.get("/api/v2/news/all")
-    assert r.status_code == 200 and calls == {"pool": 0, "debit": 1}
+    assert r.status_code == 200 and (calls["pool"], calls["debit"]) == (0, 1)
     assert r.headers["X-Brubru-Cost-Eur"] == "0.001" and r.headers["X-Brubru-Balance-Eur"] == "1.99"
     assert "X-Brubru-Sandbox-Remaining" not in r.headers
     assert c.get("/api/v2/predictions/2025-0001/outcome").headers["X-Brubru-Cost-Eur"] == "0.005"
@@ -189,3 +193,49 @@ def test_the_price_route_tells_the_raised_pool():
     from main import app
     d = TestClient(app).get("/api/v2/pricing").json()["sandbox"]
     assert d["calls_per_day_in_total"] == 1000 and d["calls_per_visitor_per_day"] == 10
+
+
+# O213 (6 Nov 2026): one heavy filter or sort from a stranger held a database connection, and with it the whole
+# API, for a minute. Each sandbox statement now stops after SANDBOX_STATEMENT_TIMEOUT_MS; nobody else's does.
+@pytest.mark.parametrize("is_sandbox, role, timed", [(True, "admin", True), (False, "admin", False), (False, "user", False)])
+def test_only_the_sandbox_gets_a_statement_timeout(monkeypatch, is_sandbox, role, timed):
+    from api.v1 import _deps
+    c, calls = _client(monkeypatch, is_sandbox=is_sandbox, role=role)
+    assert c.get("/api/v2/news/all?limit=5").status_code == 200
+    expected = [f"SET LOCAL statement_timeout = {_deps.SANDBOX_STATEMENT_TIMEOUT_MS}"] if timed else []
+    assert calls["sql"] == expected
+
+
+def test_a_refused_sandbox_call_sets_nothing(monkeypatch):
+    c, calls = _client(monkeypatch, is_sandbox=True, pool=(False, "sandbox_ip_capped", 0, 0))
+    assert c.get("/api/v2/news/all").status_code == 429 and calls["sql"] == []
+
+
+def _timeout_app(pgcode):
+    from sqlalchemy.exc import OperationalError
+    from api.v1._errors import register_v1_error_handlers
+
+    class _Orig(Exception):
+        pass
+    orig = _Orig("canceling statement due to statement timeout")
+    orig.pgcode = pgcode
+    app = FastAPI()
+    register_v1_error_handlers(app)
+
+    @app.get("/api/v2/slow")
+    @app.get("/api/chat/slow")
+    def slow():
+        raise OperationalError("SELECT 1", {}, orig)
+    return TestClient(app, raise_server_exceptions=False)
+
+
+def test_a_statement_stopped_by_the_timeout_answers_504_and_says_why():
+    r = _timeout_app("57014").get("/api/v2/slow")
+    assert r.status_code == 504 and r.json()["reason_code"] == "query_timeout"
+    assert "took too long" in r.json()["error"] and r.headers.get("X-Request-Id")
+    assert _timeout_app("57014").get("/api/chat/slow").status_code == 504
+
+
+def test_any_other_database_error_stays_a_500():
+    r = _timeout_app("08006").get("/api/v2/slow")
+    assert r.status_code == 500 and "query_timeout" not in r.text

@@ -138,7 +138,7 @@ the portal's page for the call, `document_date` = its publication date, `opening
 **Data freshness**
 Read daily from the portal's search service (every cascade call, closed ones included).""",
 )
-async def list_cascade_calls(
+def list_cascade_calls(
     request: Request,
     q: Optional[str] = Query(None, description="Words in the title or the text."),
     status: Optional[str] = Query(None, description="Comma list: forthcoming, open, closed."),
@@ -221,7 +221,7 @@ GET /api/v2/funding/ft-cascade-calls/1
 **You get back**
 A single `CascadeCallItem`, or HTTP 404 with `reason_code: not_found`.""",
 )
-async def get_cascade_call(
+def get_cascade_call(
     item_id: int = Path(..., description="Brubru id from the list."),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),

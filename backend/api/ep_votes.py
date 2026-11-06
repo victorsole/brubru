@@ -170,7 +170,7 @@ def _list(level, db, user, my_interests, committees, search, sort_by, limit, off
                 "`sort_by` in date|margin|dissent|title.\n\n"
                 "**You get back**\nVote cards: outcome, for/against/abstentions, "
                 "group breakdown, and whether a plenary delta is available."))
-async def list_committee(
+def list_committee(
     my_interests: bool = Query(False),
     my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
@@ -198,7 +198,7 @@ async def list_committee(
                 "**Input**\nSame filters as the committee endpoint.\n\n"
                 "**You get back**\nVote cards with outcome + group breakdown; "
                 "`has_delta=true` means a matching committee vote exists."))
-async def list_plenary(
+def list_plenary(
     my_interests: bool = Query(False),
     my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
@@ -297,7 +297,7 @@ def _voting_list_card(r: dict, my_committees: List[str], tracked_procs: set, tra
                 "track; `committees=AGRI,PECH`; `search`.\n\n"
                 "**You get back**\nVoting-list cards: committee, meeting date, dossier, "
                 "rapporteur, and a direct PDF link."))
-async def list_voting_lists(
+def list_voting_lists(
     my_interests: bool = Query(False),
     my_files: bool = Query(False),
     committees: Optional[str] = Query(None),
@@ -386,7 +386,7 @@ def _records_payload(db: Session, vote: EpVote) -> dict:
                 "**Input**\nThe vote id.\n\n"
                 "**You get back**\nThe vote summary plus every MEP's choice "
                 "(+/-/0) and political group."))
-async def vote_detail(
+def vote_detail(
     vote_id: str,
     current_user: Optional[User] = Depends(get_current_user_optional),
     db: Session = Depends(get_db),
@@ -417,7 +417,7 @@ async def vote_detail(
                 "**Input**\nThe OEIL procedure reference, e.g. `2025/0413(NLE)`.\n\n"
                 "**You get back**\n`committee`, `plenary` (either may be null), and "
                 "a `delta` summary when both exist."))
-async def procedure_votes(
+def procedure_votes(
     procedure_ref: str,
     current_user: Optional[User] = Depends(get_current_user_optional),
     db: Session = Depends(get_db),

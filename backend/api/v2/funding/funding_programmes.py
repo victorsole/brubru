@@ -165,7 +165,7 @@ A `PaginatedResponse[ProgrammeItem]`. Each item carries `id` (the acronym, the k
 **Data freshness**
 Static reference, updated when the Commission's programme list changes (config: `funding_programmes.json`).""",
 )
-async def list_programmes(
+def list_programmes(
     request: Request,
     heading: Optional[str] = Query(None, description="EC heading substring"),
     cluster: Optional[str] = Query(None, description="EC cluster substring"),
@@ -238,7 +238,7 @@ GET /api/v2/funding/programmes/ERDF
 **You get back**
 A single `ProgrammeItem` with the body populated, or HTTP 404 with `reason_code: not_found`.""",
 )
-async def get_programme(
+def get_programme(
     acronym: str = PathParam(..., description="Programme acronym, e.g. ERDF"),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),

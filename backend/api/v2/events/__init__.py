@@ -462,7 +462,7 @@ async def list_ft_portal_events(
                 "to see what `family=` expands to.\n\n**Input**\nNo parameters.\n\n**Try it**\n```\n"
                 "GET /api/v2/events/bodies\n```\n\n**You get back**\n`{bodies: [...], families: [...]}`.\n\n"
                 "**Data freshness**\nLive."))
-async def bodies_facet(request: Request, db: Session = Depends(get_db),
+def bodies_facet(request: Request, db: Session = Depends(get_db),
                        user: User = Depends(api_user_with_rate_limit)):
     items = _fetch(db, codes=None, since=None, until=None, when="all", q=None, sources={"economy", "calendar"})
     names = _body_names(db)
@@ -489,7 +489,7 @@ async def bodies_facet(request: Request, db: Session = Depends(get_db),
                 "`e12345` or `c<uuid>`).\n\n**Try it**\n```\nGET /api/v2/events/e12345\n```\n\n"
                 "**You get back**\nA single event with the full 5-datapoint contract.\n\n"
                 "**Data freshness**\nLive."))
-async def get_event(request: Request,
+def get_event(request: Request,
                     event_id: str = PathParam(..., description="Prefixed aggregator id: 'e<n>' or 'c<uuid>'."),
                     db: Session = Depends(get_db),
                     user: User = Depends(api_user_with_rate_limit)):

@@ -222,7 +222,7 @@ def get_items(
     summary="Get document detail",
     description="Get full details of a specific Commission document"
 )
-async def get_item(
+def get_item(
     item_id: UUID,
     current_user: Optional[User] = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -307,7 +307,7 @@ def get_tracked_documents(
     summary="Track a document",
     description="Start tracking a Commission document"
 )
-async def track_document(
+def track_document(
     item_id: UUID,
     request: TrackCommissionDocRequest = None,
     current_user: User = Depends(get_current_user),
@@ -359,7 +359,7 @@ async def track_document(
     summary="Untrack a document",
     description="Stop tracking a Commission document"
 )
-async def untrack_document(
+def untrack_document(
     item_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

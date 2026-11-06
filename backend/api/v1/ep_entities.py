@@ -1293,7 +1293,7 @@ A `PaginatedResponse[PressReleaseItem]` envelope. Each item carries `institution
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from 26+ institutional RSS feeds. Same backing data as `/api/v1/publications`; this endpoint is just a filtered view restricted to category ∈ {press_release, news, press}.""",
 )
-async def list_press_releases(
+def list_press_releases(
     request: Request,
     institution_slug: Optional[str] = Query(None),
     q: Optional[str] = Query(None),

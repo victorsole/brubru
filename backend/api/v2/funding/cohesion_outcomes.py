@@ -130,7 +130,7 @@ A `PaginatedResponse[CohesionOutcomeItem]` envelope. Each item carries `id`, `pu
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from `cohesiondata.ec.europa.eu`, dataset xi3a-zddk (latest TOD cycle only).""",
     )
-    async def list_outcomes(  # noqa: ANN202
+    def list_outcomes(  # noqa: ANN202
         request: Request,
         ms: Optional[str] = Query(None, description="Member State ISO code"),
         country: Optional[str] = Query(None, description="The Member State, ISO-2 (EL and GR, UK and GB are the same); the same as `ms`."),
@@ -211,7 +211,7 @@ A single `CohesionOutcomeItem` with `body_txt` + `body_html` populated, or HTTP 
 **Data freshness**
 Same weekly sync as the list endpoint.""",
     )
-    async def get_outcome_row(  # noqa: ANN202
+    def get_outcome_row(  # noqa: ANN202
         row_id: int = Path(..., description="Brubru row id from the list endpoint"),
         user: User = Depends(api_user_with_rate_limit),
         db: Session = Depends(get_db),

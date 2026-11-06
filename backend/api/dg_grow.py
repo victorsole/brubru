@@ -32,7 +32,7 @@ router = APIRouter(prefix="/api/dg-grow", tags=["DG GROW Databases"])
 # --- Statistics ---
 
 @router.get("/stats")
-async def get_dg_grow_stats(
+def get_dg_grow_stats(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
@@ -44,7 +44,7 @@ async def get_dg_grow_stats(
 # --- NANDO: Notified Bodies ---
 
 @router.get("/notified-bodies")
-async def list_notified_bodies(
+def list_notified_bodies(
     country: Optional[str] = Query(None, description="ISO alpha-2 country code"),
     directive: Optional[str] = Query(None, description="EU directive reference"),
     cpv: Optional[str] = Query(None, description="CPV code (first 2 digits for category)"),
@@ -77,7 +77,7 @@ async def list_notified_bodies(
 
 
 @router.get("/notified-bodies/for-tender/{cpv_code}")
-async def get_notified_bodies_for_tender(
+def get_notified_bodies_for_tender(
     cpv_code: str,
     country: Optional[str] = Query(None),
     db: Session = Depends(get_db),
@@ -217,7 +217,7 @@ def list_ecosystem_data(
 # --- Risk Assessment for Tenderator ---
 
 @router.get("/regulatory-risks/{cpv_code}")
-async def get_regulatory_risks(
+def get_regulatory_risks(
     cpv_code: str,
     country: Optional[str] = Query(None),
     db: Session = Depends(get_db),

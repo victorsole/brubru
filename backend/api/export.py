@@ -21,7 +21,7 @@ router = APIRouter(prefix="/api/export", tags=["Data Export"])
 
 
 @router.get("/documents/csv")
-async def export_documents_csv(
+def export_documents_csv(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -51,7 +51,7 @@ async def export_documents_csv(
 
 
 @router.get("/reading-list/csv")
-async def export_reading_list_csv(
+def export_reading_list_csv(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -113,7 +113,7 @@ async def export_analytics_json(
 
 
 @router.get("/full-data/json")
-async def export_full_data_json(
+def export_full_data_json(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -151,7 +151,7 @@ async def export_full_data_json(
 
 
 @router.get("/documents/text")
-async def export_documents_text(
+def export_documents_text(
     document_type: Optional[str] = Query(None, description="Filter by document type"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

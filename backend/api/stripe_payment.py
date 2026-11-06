@@ -69,7 +69,7 @@ PLAN_TO_TIER = {
 
 
 @router.post("/create-checkout-session")
-async def create_checkout_session(
+def create_checkout_session(
     request: UpgradeRequest,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -154,7 +154,7 @@ async def create_checkout_session(
 
 
 @router.post("/create-portal-session")
-async def create_portal_session(
+def create_portal_session(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

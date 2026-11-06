@@ -56,7 +56,7 @@ class UnreadCountResponse(BaseModel):
 # Endpoints
 
 @router.get("", response_model=NotificationListResponse)
-async def get_notifications(
+def get_notifications(
     unread_only: bool = Query(False, description="Only return unread notifications"),
     limit: int = Query(50, ge=1, le=100, description="Maximum number of notifications"),
     current_user: User = Depends(get_current_user),
@@ -149,7 +149,7 @@ async def mark_as_read(
 
 
 @router.post("/read-all", status_code=status.HTTP_200_OK)
-async def mark_all_as_read(
+def mark_all_as_read(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -177,7 +177,7 @@ async def mark_all_as_read(
 
 
 @router.delete("/{notification_id}", status_code=status.HTTP_200_OK)
-async def delete_notification(
+def delete_notification(
     notification_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

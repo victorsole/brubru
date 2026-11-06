@@ -70,7 +70,7 @@ def _load_rows(db: Session) -> List[Dict[str, Any]]:
         "data portal. Catalogue IRI: " + catalog_uri()
     ),
 )
-async def datasets_ttl(db: Session = Depends(get_db)) -> Response:
+def datasets_ttl(db: Session = Depends(get_db)) -> Response:
     rows = _load_rows(db)
     payload = serialize(rows, format="turtle")
     return Response(content=payload, media_type="text/turtle; charset=utf-8")
@@ -81,7 +81,7 @@ async def datasets_ttl(db: Session = Depends(get_db)) -> Response:
     response_class=Response,
     summary="Brubru DCAT-AP self-catalogue (RDF/XML)",
 )
-async def datasets_rdf(db: Session = Depends(get_db)) -> Response:
+def datasets_rdf(db: Session = Depends(get_db)) -> Response:
     rows = _load_rows(db)
     payload = serialize(rows, format="xml")
     return Response(content=payload, media_type="application/rdf+xml; charset=utf-8")
@@ -92,7 +92,7 @@ async def datasets_rdf(db: Session = Depends(get_db)) -> Response:
     response_class=Response,
     summary="Brubru DCAT-AP self-catalogue (JSON-LD)",
 )
-async def datasets_jsonld(db: Session = Depends(get_db)) -> Response:
+def datasets_jsonld(db: Session = Depends(get_db)) -> Response:
     rows = _load_rows(db)
     payload = serialize(rows, format="json-ld")
     return Response(content=payload, media_type="application/ld+json; charset=utf-8")

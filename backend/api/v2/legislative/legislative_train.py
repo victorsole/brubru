@@ -115,7 +115,7 @@ A `PaginatedResponse[TrainCarriage]` (id, title, oeil_procedure_ref, current_sta
 **Data freshness**
 Synced every 6 hours (hot tier) from OEIL; priority mapping refreshed with the Legislative Train schedule.""",
 )
-async def list_carriages(
+def list_carriages(
     request: Request,
     priority: Optional[str] = Query(None, description="Commission priority tag (matched against ec_priority_ids)"),
     committee: Optional[str] = Query(None, description="Lead committee code (e.g. ENVI)"),
@@ -183,7 +183,7 @@ A `TrainCarriage` including `status_history[]` and `oeil_key_events[]`. HTTP 404
 **Data freshness**
 Synced every 6 hours (hot tier) from OEIL.""",
 )
-async def get_carriage(
+def get_carriage(
     carriage_id: str = Path(..., description="Internal carriage id or OEIL procedure reference"),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),

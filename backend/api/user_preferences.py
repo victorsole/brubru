@@ -43,7 +43,7 @@ class PreferencesResponse(BaseModel):
 # Endpoints
 
 @router.get("/preferences", response_model=PreferencesResponse)
-async def get_preferences(
+def get_preferences(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -54,7 +54,7 @@ async def get_preferences(
 
 
 @router.patch("/preferences", response_model=PreferencesResponse)
-async def update_preferences(
+def update_preferences(
     update: PreferencesUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -71,7 +71,7 @@ async def update_preferences(
 
 
 @router.get("/tour-progress", response_model=TourProgressResponse)
-async def get_tour_progress(
+def get_tour_progress(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -86,7 +86,7 @@ async def get_tour_progress(
 
 
 @router.patch("/tour-progress", response_model=TourProgressResponse)
-async def update_tour_progress(
+def update_tour_progress(
     update: TourProgressUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -123,7 +123,7 @@ async def update_tour_progress(
 
 
 @router.delete("/tour-progress/{tour_key}")
-async def reset_tour(
+def reset_tour(
     tour_key: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

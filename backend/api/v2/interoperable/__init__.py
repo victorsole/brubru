@@ -103,7 +103,7 @@ Rendered from the item's own page on interoperable-europe.ec.europa.eu."""
 
 
 def _register(slug, item_type, noun, noun_singular, verb):
-    async def list_ep(request: Request, db: Session = Depends(get_db),
+    def list_ep(request: Request, db: Session = Depends(get_db),
                       user: User = Depends(api_user_with_rate_limit),
                       collection: Optional[str] = Query(None, description="Filter to one thematic collection (its slug, e.g. open-source-observatory-osor, eugovtech, semic-support-centre)."),
                       q: Optional[str] = Query(None), since: Optional[date] = Query(None),
@@ -117,7 +117,7 @@ def _register(slug, item_type, noun, noun_singular, verb):
                              include_body=include_body)
         return build_envelope(items, total, page, limit)
 
-    async def detail_ep(request: Request, item_id: int = PathParam(...),
+    def detail_ep(request: Request, item_id: int = PathParam(...),
                         db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):
         item = _detail(db, item_type, item_id)
         if item is None:
@@ -199,7 +199,7 @@ A paginated envelope of collection snapshots, each with the 5 datapoints (`publi
 
 **Data freshness**
 Rendered from the portal, refreshed regularly.""")
-async def list_collections(request: Request, db: Session = Depends(get_db),
+def list_collections(request: Request, db: Session = Depends(get_db),
                            user: User = Depends(api_user_with_rate_limit),
                            q: Optional[str] = Query(None), order: str = Query("title"),
                            page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=100),
@@ -241,7 +241,7 @@ GET /api/v2/interoperable/collections/open-source-observatory-osor
 
 **Data freshness**
 Rendered from the portal, refreshed regularly.""")
-async def collection_footprint(collection_key: str = PathParam(..., description="Collection slug."),
+def collection_footprint(collection_key: str = PathParam(..., description="Collection slug."),
                                limit: int = Query(15, ge=1, le=50),
                                include_body: bool = Query(True, description="Return `body_txt` / `body_html` on every item. ON by default: both are part of the five datapoints every item is contracted to carry, and fetching them one detail call PER ITEM is not a usable way to ingest a feed. Pass `include_body=false` for a light list of titles and dates only."),
                                db: Session = Depends(get_db), user: User = Depends(api_user_with_rate_limit)):

@@ -236,7 +236,7 @@ A `PaginatedResponse[ResearchProjectItem]` envelope. Each item carries `cordis_i
 **Data freshness**
 Synced once per week (Sunday 05:00 UTC, weekly tier) from CORDIS quarterly bulk exports (https://cordis.europa.eu/data/cordis-{HORIZON,h2020,fp7}projects-csv.zip). The CORDIS bulk-export cadence is the upstream limit; we re-pull weekly to catch any inter-quarter updates.""",
 )
-async def find_projects(
+def find_projects(
     request: Request,
     topic: Optional[str] = Query(None, min_length=2, description="Free-text search on title + objective + keywords"),
     framework: Optional[str] = Query(None, description="HORIZON / H2020 / FP7"),
@@ -326,7 +326,7 @@ A `ConsortiumPayload` object — see `organisations[]` for the per-org records, 
 Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
 """,
 )
-async def project_consortium(
+def project_consortium(
     request: Request,
     cordis_id: str = Path(..., description="CORDIS project numeric id, e.g. 101131342"),
     user: User = Depends(api_user_with_rate_limit),
@@ -386,7 +386,7 @@ A `DeliverablesPayload` — see `web_links[]` for the published URLs and `note` 
 Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
 """,
 )
-async def project_deliverables(
+def project_deliverables(
     request: Request,
     cordis_id: str = Path(..., description="CORDIS project numeric id"),
     user: User = Depends(api_user_with_rate_limit),
@@ -447,7 +447,7 @@ A `FundingPayload` — see `eu_contribution` for the headline figure, `legal_bas
 Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
 """,
 )
-async def project_funding(
+def project_funding(
     request: Request,
     cordis_id: str = Path(..., description="CORDIS project numeric id"),
     user: User = Depends(api_user_with_rate_limit),
@@ -527,7 +527,7 @@ Paginated envelope of `ResearchProjectItem` rows. Each row has `public_url` poin
 Synced once per week (Sunday 03:00 UTC) from EURIO Cellar SPARQL (research projects, organisations, deliverables). Horizon Europe results update on a slower cadence than legislation.
 """,
 )
-async def org_projects(
+def org_projects(
     request: Request,
     org_name: str = Path(..., description="Organisation name (full or partial; case-insensitive)"),
     framework: Optional[str] = Query(None, description="HORIZON / H2020 / FP7"),

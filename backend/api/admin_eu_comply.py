@@ -83,7 +83,7 @@ def get_clusters_stats(
 
 
 @router.post("/clusters/{cluster_id}/extract")
-async def trigger_requirement_extraction(
+def trigger_requirement_extraction(
     cluster_id: int,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
@@ -241,7 +241,7 @@ async def run_extraction_with_tracking(cluster_id: int):
 # ============================================================================
 
 @router.post("/clusters/{cluster_id}/build-index")
-async def build_semantic_index(
+def build_semantic_index(
     cluster_id: int,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
@@ -325,7 +325,7 @@ async def search_requirements(
 
 
 @router.get("/requirements/{requirement_id}/similar")
-async def find_similar_requirements(
+def find_similar_requirements(
     requirement_id: int,
     top_k: int = Query(10, description="Number of results to return"),
     min_score: float = Query(0.6, description="Minimum similarity score"),
@@ -390,7 +390,7 @@ async def get_available_models(
 
 
 @router.post("/clusters/{cluster_id}/extract-with-model")
-async def extract_with_model(
+def extract_with_model(
     cluster_id: int,
     model: str = Query("gpt-4", description="Model to use for extraction"),
     max_laws: Optional[int] = Query(None, description="Limit number of laws to process"),
@@ -540,7 +540,7 @@ async def run_extraction_with_model(
 # ============================================================================
 
 @router.post("/chatbot/ask")
-async def ask_chatbot(
+def ask_chatbot(
     question: str = Query(..., description="Question to ask"),
     cluster_id: Optional[int] = Query(None, description="Focus on specific cluster"),
     top_k: int = Query(5, description="Number of requirements to retrieve"),

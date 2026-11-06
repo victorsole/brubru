@@ -102,9 +102,23 @@ def _page_sql(order: str, clause: str, q: bool, changed: bool = False) -> str:
     serves its order: the FTS lines' date order is an index range), then the three merged in the same
     total order. Sorting the whole union instead read every FTS row (60-90 s, 30 Oct 2026)."""
     o = _order_sql(order)
-    sides = " UNION ALL ".join(f"(SELECT * FROM ({_side(src, q, changed)}) s{clause} ORDER BY {o} LIMIT :side_limit)"
-                               for src, _ in _SIDES)
+    sides = " UNION ALL ".join(_side_page(src, q, changed, clause, order, o) for src, _ in _SIDES)
     return f"SELECT src, rid FROM ({sides}) aw ORDER BY {o} LIMIT :limit OFFSET :offset"
+
+
+def _side_page(src: str, q: bool, changed: bool, clause: str, order: str, o: str) -> str:
+    """One source's first offset + limit rows in the page's order.
+
+    O213 (6 Nov 2026): `oldest` on the FTS lines read and sorted all 116,823 of them (40.8 s on the database,
+    39.6 s of it this side), because their date index runs DESC NULLS LAST and ASC NULLS LAST is not its
+    reverse. Rows with a date are now read ASC NULLS FIRST (the index read backwards; with no NULL among
+    them the order is the same) and the undated rows separately, so the merge above still puts them last."""
+    base = f"SELECT * FROM ({_side(src, q, changed)}) s{clause}"
+    if order == "oldest" and src == "fts":
+        glue = " AND " if clause else " WHERE "
+        return (f"({base}{glue}document_date IS NOT NULL ORDER BY document_date ASC NULLS FIRST, src ASC, rid ASC LIMIT :side_limit)"
+                f" UNION ALL ({base}{glue}document_date IS NULL ORDER BY src ASC, rid ASC LIMIT :side_limit)")
+    return f"({base} ORDER BY {o} LIMIT :side_limit)"
 
 
 def _count_sql(clause: str, q: bool, changed: bool = False) -> str:
@@ -193,7 +207,7 @@ As each source: projects every Sunday from 1 November 2026 (until then last read
 @router.get("/awards", response_model=PaginatedResponse[AwardItem], tags=["v2-funding"],
             summary="Who was awarded EU money: funded projects, FTS beneficiaries and TED contract awards in one list",
             description=_DESC)
-async def list_awards(
+def list_awards(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),

@@ -44,7 +44,7 @@ router = APIRouter(prefix="/api/feedback", tags=["feedback"])
 # User Endpoints
 
 @router.post("/submit", response_model=FeedbackResponse, status_code=status.HTTP_201_CREATED)
-async def submit_feedback(
+def submit_feedback(
     feedback: FeedbackCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -89,7 +89,7 @@ async def submit_feedback(
 
 
 @router.get("/my-feedback", response_model=FeedbackListResponse)
-async def get_my_feedback(
+def get_my_feedback(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     status_filter: Optional[str] = Query(None),
@@ -126,7 +126,7 @@ async def get_my_feedback(
 
 
 @router.get("/{feedback_id}", response_model=FeedbackResponse)
-async def get_feedback_detail(
+def get_feedback_detail(
     feedback_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -152,7 +152,7 @@ async def get_feedback_detail(
 
 
 @router.post("/{feedback_id}/comments", response_model=CommentResponse, status_code=status.HTTP_201_CREATED)
-async def add_comment(
+def add_comment(
     feedback_id: UUID,
     comment: CommentCreate,
     current_user: User = Depends(get_current_user),
@@ -243,7 +243,7 @@ def get_all_feedback_admin(
 
 
 @router.patch("/admin/{feedback_id}", response_model=FeedbackResponse)
-async def update_feedback_admin(
+def update_feedback_admin(
     feedback_id: UUID,
     updates: FeedbackUpdate,
     admin: User = Depends(get_current_admin_user),
@@ -289,7 +289,7 @@ async def update_feedback_admin(
 
 
 @router.get("/admin/stats", response_model=FeedbackStats)
-async def get_feedback_stats(
+def get_feedback_stats(
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
@@ -340,7 +340,7 @@ async def get_feedback_stats(
 
 
 @router.delete("/admin/{feedback_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_feedback_admin(
+def delete_feedback_admin(
     feedback_id: UUID,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -376,7 +376,7 @@ async def delete_feedback_admin(
 # Chat Feedback Endpoint
 
 @router.post("/chat", response_model=ChatFeedbackResponse, status_code=status.HTTP_201_CREATED)
-async def submit_chat_feedback(
+def submit_chat_feedback(
     feedback: ChatFeedbackCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

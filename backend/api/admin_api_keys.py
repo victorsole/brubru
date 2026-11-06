@@ -57,7 +57,7 @@ class ApiKeySummary(BaseModel):
     response_model=MintResponse,
     status_code=status.HTTP_201_CREATED,
 )
-async def mint_api_key(
+def mint_api_key(
     user_id: UUID,
     body: MintRequest,
     db: Session = Depends(get_db),
@@ -92,7 +92,7 @@ async def mint_api_key(
     "/users/{user_id}/api-keys",
     response_model=List[ApiKeySummary],
 )
-async def list_api_keys(
+def list_api_keys(
     user_id: UUID,
     db: Session = Depends(get_db),
     admin: User = Depends(get_current_admin_user),
@@ -122,7 +122,7 @@ async def list_api_keys(
     "/api-keys/{key_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-async def revoke_api_key(
+def revoke_api_key(
     key_id: UUID,
     db: Session = Depends(get_db),
     admin: User = Depends(get_current_admin_user),

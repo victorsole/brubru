@@ -128,7 +128,7 @@ async def get_available_plans():
 
 
 @router.get("/usage", response_model=UsageStats)
-async def get_usage_stats(
+def get_usage_stats(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -153,7 +153,7 @@ async def get_usage_stats(
 
 
 @router.post("/upgrade")
-async def upgrade_subscription(
+def upgrade_subscription(
     upgrade_request: UpgradeRequest,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

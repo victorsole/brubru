@@ -103,7 +103,7 @@ async def get_my_interest_keywords(
     summary="Get train statistics",
     description="Get comprehensive statistics for a specific train"
 )
-async def get_train_statistics(
+def get_train_statistics(
     train_id: UUID,
     db: Session = Depends(get_db)
 ) -> TrainStatistics:
@@ -220,7 +220,7 @@ def get_carriages(
     summary="Get carriage details",
     description="Get full details for a legislative file with enrichment data"
 )
-async def get_carriage_details(
+def get_carriage_details(
     carriage_id: UUID,
     include_related: bool = Query(True, description="Include related carriages"),
     include_prediction: bool = Query(True, description="Include timeline prediction"),
@@ -284,7 +284,7 @@ async def get_carriage_details(
     summary="Get blocked files",
     description="Find legislative files blocked for 9+ months"
 )
-async def get_blocked_files(
+def get_blocked_files(
     min_days: int = Query(270, ge=1, description="Minimum days to consider blocked"),
     db: Session = Depends(get_db)
 ) -> List[BlockedFileAlert]:
@@ -306,7 +306,7 @@ async def get_blocked_files(
     summary="Get committee workload",
     description="Analyze workload for a specific committee"
 )
-async def get_committee_workload(
+def get_committee_workload(
     committee_code: str,
     db: Session = Depends(get_db)
 ) -> CommitteeWorkload:
@@ -333,7 +333,7 @@ async def get_committee_workload(
     summary="Predict timeline",
     description="Predict completion timeline for a legislative file"
 )
-async def predict_carriage_timeline(
+def predict_carriage_timeline(
     carriage_id: UUID,
     db: Session = Depends(get_db)
 ) -> TimelinePrediction:
@@ -363,7 +363,7 @@ async def predict_carriage_timeline(
     summary="Track legislative file by procedure reference",
     description="Subscribe to status updates using OEIL procedure reference (e.g., 2021/0106(COD))"
 )
-async def track_carriage_by_procedure(
+def track_carriage_by_procedure(
     procedure_ref: str = Query(..., description="OEIL procedure reference"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -423,7 +423,7 @@ async def track_carriage_by_procedure(
     summary="Track legislative file by ID",
     description="Subscribe to status updates for a legislative file by carriage UUID"
 )
-async def track_carriage(
+def track_carriage(
     carriage_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -464,7 +464,7 @@ async def track_carriage(
     summary="Track legislative file by CELEX number",
     description="Find a legislative carriage whose celex_numbers array contains this CELEX, then track it."
 )
-async def track_carriage_by_celex(
+def track_carriage_by_celex(
     celex: str = Query(..., description="CELEX number (e.g. 52026PC0321)"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -502,7 +502,7 @@ async def track_carriage_by_celex(
     summary="Untrack legislative file by procedure reference",
     description="Unsubscribe from status updates using OEIL procedure reference"
 )
-async def untrack_carriage_by_procedure(
+def untrack_carriage_by_procedure(
     procedure_ref: str = Query(..., description="OEIL procedure reference"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -550,7 +550,7 @@ async def untrack_carriage_by_procedure(
     summary="Untrack legislative file",
     description="Unsubscribe from status updates"
 )
-async def untrack_carriage(
+def untrack_carriage(
     carriage_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -585,7 +585,7 @@ async def untrack_carriage(
         "Idempotent, never duplicates an existing track."
     ),
 )
-async def sync_from_interests(
+def sync_from_interests(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -656,7 +656,7 @@ def get_tracked_carriages(
     summary="Hot files this week",
     description="Top legislative files with recent activity (last 14 days). Used by My EU Bubble dashboard widget."
 )
-async def get_hot_this_week_carriages(
+def get_hot_this_week_carriages(
     db: Session = Depends(get_db),
     limit: int = 10
 ):
@@ -1669,7 +1669,7 @@ async def track_oeil_procedure(
     summary="Get amendments for carriage",
     description="Get all user amendments linked to a specific legislative file"
 )
-async def get_carriage_amendments(
+def get_carriage_amendments(
     carriage_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -1705,7 +1705,7 @@ async def get_carriage_amendments(
         "EU Calendar — see the eMeeting routing.)"
     ),
 )
-async def get_carriage_emeeting_documents(
+def get_carriage_emeeting_documents(
     carriage_id: UUID,
     db: Session = Depends(get_db),
 ):
@@ -1756,7 +1756,7 @@ def _journey_payload(row: Optional[dict], current_hash: Optional[str]) -> dict:
         "`stale=true` means new committee documents have arrived since it was built."
     ),
 )
-async def get_carriage_journey(
+def get_carriage_journey(
     carriage_id: UUID,
     db: Session = Depends(get_db),
 ):
@@ -1811,7 +1811,7 @@ async def generate_carriage_journey(
     summary="Get amendment counts for tracked files",
     description="Get the number of amendments for each tracked legislative file"
 )
-async def get_tracked_amendment_counts(
+def get_tracked_amendment_counts(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

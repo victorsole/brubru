@@ -90,7 +90,7 @@ from api.v1._deps import api_user_with_rate_limit  # noqa: E402
                 "**You get back**\nA summary. Then `/api/v2/consultations/all`, `/api/v2/consultations/bodies`, "
                 "or `/api/v2/consultations/{id}`.\n\n**Data freshness**\nLive union of the Have Your Say "
                 "register + agency consultations."))
-async def _consultations_directory(request: Request, db: Session = Depends(get_db),
+def _consultations_directory(request: Request, db: Session = Depends(get_db),
                                    user: User = Depends(api_user_with_rate_limit)):
     return _consultations_all.build_directory(db)
 

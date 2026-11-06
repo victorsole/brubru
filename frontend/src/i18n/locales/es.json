@@ -1243,6 +1243,7 @@
       "notFound": "No se ha encontrado nada con esa referencia. Compruébala o elige una de la lista.",
       "tooManyCalls": "Demasiadas búsquedas en poco tiempo. Espera un minuto y vuelve a intentarlo.",
       "serverFault": "Algo ha fallado por nuestra parte, no en lo que has escrito. Vuelve a intentarlo o cambia los filtros. Si nos escribes, indica el identificador de abajo.",
+      "tooSlow": "Esta búsqueda ha tardado demasiado y se ha detenido. Acótala: un periodo más corto, un filtro o una página más pequeña. Con tu propia clave, el límite es más alto.",
       "checkFields": "Algo que has escrito no tiene el formato que necesitan estos datos:",
       "capVisitor": "Has usado las búsquedas gratis de hoy. Vuelven mañana.",
       "capPool": "El cupo público de hoy se ha agotado. Consigue tu clave o vuelve mañana.",

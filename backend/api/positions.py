@@ -148,7 +148,7 @@ def _carriage_to_item(c: LegislativeCarriage, *, is_tracked: bool, is_pi_match: 
 
 
 @router.get("/", response_model=PositionListResponse, summary="List files with positions: tracked + suggested for your interests")
-async def list_positions(
+def list_positions(
     my_interests: bool = Query(True),
     limit: int = Query(40, ge=1, le=120),
     current_user: User = Depends(get_current_user),
@@ -296,7 +296,7 @@ async def upsert_user_position(
 
 
 @router.get("/{carriage_id}/lobbying", summary="Who is lobbying this file (EP rapporteur/shadow meetings)")
-async def get_lobbying(
+def get_lobbying(
     carriage_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -363,7 +363,7 @@ async def get_lobbying(
 
 
 @router.get("/{carriage_id}/alignment", summary="Tier-1 outcome alignment: lobbying orgs' stated consultation positions vs the file outcome")
-async def get_alignment(
+def get_alignment(
     carriage_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -469,7 +469,7 @@ async def get_alignment(
 
 
 @router.get("/{carriage_id}/actual-vote", summary="Actual roll-call result vs prediction")
-async def get_actual_vote(
+def get_actual_vote(
     carriage_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),

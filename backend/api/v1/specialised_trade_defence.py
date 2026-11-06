@@ -151,7 +151,7 @@ A paginated envelope of `TradeDefenceListItem` rows: CELEX, title, document_date
 Synced once per day at 04:00 UTC from OJ L-series for anti-dumping / CV / safeguard regulations. DG TRADE publishes definitive duties + reviews on a steady cadence.
 """,
 )
-async def list_trade_defence(
+def list_trade_defence(
     request: Request,
     measure_type: Optional[str] = Query(None),
     duty_status: Optional[str] = Query(None),
@@ -286,7 +286,7 @@ A flat list of `TypeCount` objects, sorted by total descending.
 Synced once per day at 04:00 UTC from OJ L-series for anti-dumping / CV / safeguard regulations. DG TRADE publishes definitive duties + reviews on a steady cadence.
 """,
 )
-async def list_types(
+def list_types(
     request: Request,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -346,7 +346,7 @@ A `TradeDefenceDetail` object with all metadata plus body fields.
 Synced once per day at 04:00 UTC from OJ L-series for anti-dumping / CV / safeguard regulations. DG TRADE publishes definitive duties + reviews on a steady cadence.
 """,
 )
-async def get_trade_defence(
+def get_trade_defence(
     request: Request,
     celex: str = Path(..., description="CELEX number, e.g. 32024R3193."),
     body_threshold: int = Depends(body_threshold_param),

@@ -266,7 +266,7 @@ def get_tender_detail(
 
 
 @router.put("/{tender_id}")
-async def update_tender(
+def update_tender(
     tender_id: int,
     updates: TenderAdminUpdate,
     admin: User = Depends(get_current_admin_user),
@@ -299,7 +299,7 @@ async def update_tender(
 
 
 @router.delete("/{tender_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_tender(
+def delete_tender(
     tender_id: int,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -434,7 +434,7 @@ async def trigger_sparql_fetch(
 
 
 @router.get("/fetch-logs")
-async def get_fetch_logs(
+def get_fetch_logs(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     status_filter: Optional[str] = Query(None),
@@ -670,7 +670,7 @@ def list_all_profiles(
 # ============================================================================
 
 @router.get("/stats", response_model=AdminTenderStats)
-async def get_admin_stats(
+def get_admin_stats(
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
@@ -747,7 +747,7 @@ async def get_admin_stats(
 
 
 @router.get("/settings")
-async def get_settings(
+def get_settings(
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
 ):
@@ -770,7 +770,7 @@ async def get_settings(
 
 
 @router.put("/settings")
-async def update_settings(
+def update_settings(
     settings_data: TenderatorSettings,
     admin: User = Depends(get_current_admin_user),
     db: Session = Depends(get_db)
@@ -819,7 +819,7 @@ async def update_settings(
 # ============================================================================
 
 @router.get("/export")
-async def export_tenders(
+def export_tenders(
     format: str = Query("csv", description="csv or json"),
     status_filter: Optional[str] = Query(None),
     country: Optional[str] = Query(None),

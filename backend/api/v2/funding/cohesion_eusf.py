@@ -118,7 +118,7 @@ A `PaginatedResponse[EUSFCase]` envelope sorted by EUSF grant paid (largest firs
 **Data freshness**
 Synced weekly (Sunday 05:00 UTC) from the DG REGIO Cohesion Open Data Platform (`cohesiondata.ec.europa.eu`, dataset 7a49-av34).""",
 )
-async def list_eusf(
+def list_eusf(
     request: Request,
     country: Optional[str] = Query(None, description="Applicant country ISO code"),
     disaster_type: Optional[str] = Query(None, description="Disaster type substring"),

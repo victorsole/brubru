@@ -273,7 +273,7 @@ A paginated envelope of `SanctionListItem` rows: entity logical id, EU reference
 Synced once per day at 04:00 UTC from EU Consolidated Sanctions List (sanctionsmap.eu) + OJ L-series. Council adopts sanctions packages on quarterly cycles + ad-hoc.
 """,
 )
-async def list_sanctions(
+def list_sanctions(
     request: Request,
     programme: Optional[str] = Query(None, description="Sanctions programme code (e.g. UKR, IRN, BLR)."),
     subject_type: Optional[str] = Query(None, regex="^[PE]$", description="P = person, E = entity."),
@@ -367,7 +367,7 @@ A flat list of `ProgrammeCount` objects: programme, persons, entities, total. So
 Synced once per day at 04:00 UTC from EU Consolidated Sanctions List (sanctionsmap.eu) + OJ L-series. Council adopts sanctions packages on quarterly cycles + ad-hoc.
 """,
 )
-async def list_programmes(
+def list_programmes(
     request: Request,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -424,7 +424,7 @@ A `SanctionDetail` object with all canonical fields plus the JSON arrays for ali
 Synced once per day at 04:00 UTC from EU Consolidated Sanctions List (sanctionsmap.eu) + OJ L-series. Council adopts sanctions packages on quarterly cycles + ad-hoc.
 """,
 )
-async def get_sanction(
+def get_sanction(
     request: Request,
     eu_ref_num: str = Path(..., description="EU reference number (e.g. EU.27.28)."),
     body_threshold: int = Depends(body_threshold_param),

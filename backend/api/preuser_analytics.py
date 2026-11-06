@@ -61,7 +61,7 @@ class PreUserEventRequest(BaseModel):
 
 
 @router.post("/api/analytics/preuser-event", status_code=204)
-async def track_preuser_event(
+def track_preuser_event(
     request: PreUserEventRequest,
     db: Session = Depends(get_db),
 ):
@@ -100,7 +100,7 @@ class PreUserEmailRequest(BaseModel):
 
 
 @router.post("/api/analytics/preuser-email", status_code=204)
-async def capture_preuser_email(
+def capture_preuser_email(
     request: PreUserEmailRequest,
     db: Session = Depends(get_db),
 ):
@@ -138,7 +138,7 @@ async def capture_preuser_email(
 # ---------- GET: admin funnel report ----------
 
 @router.get("/api/admin/analytics/preuser-funnel")
-async def preuser_funnel_report(
+def preuser_funnel_report(
     days: int = Query(default=7, ge=1, le=90),
     db: Session = Depends(get_db),
     admin=Depends(get_current_admin_user),

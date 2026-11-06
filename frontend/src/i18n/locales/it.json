@@ -2299,6 +2299,7 @@
       "notFound": "Nessun risultato con quel riferimento. Controllalo o scegline uno dall'elenco.",
       "tooManyCalls": "Troppe ricerche in poco tempo. Attendi un minuto e riprova.",
       "serverFault": "Qualcosa non ha funzionato da parte nostra, non in ciò che hai scritto. Riprova o cambia i filtri. Se ci scrivi, indica l'identificativo qui sotto.",
+      "tooSlow": "Questa ricerca ha richiesto troppo tempo ed è stata interrotta. Restringila: un periodo più breve, un filtro o una pagina più piccola. Con la tua chiave il limite è più alto.",
       "checkFields": "Qualcosa che hai scritto non ha il formato richiesto da questi dati:",
       "capVisitor": "Hai usato le ricerche gratuite di oggi. Tornano domani.",
       "capPool": "La quota pubblica di oggi è esaurita. Ottieni la tua chiave o torna domani.",

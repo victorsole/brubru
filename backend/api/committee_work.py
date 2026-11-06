@@ -167,7 +167,7 @@ def get_work_items(
     summary="Get work item details",
     description="Get full details of a specific work item"
 )
-async def get_work_item(
+def get_work_item(
     item_id: UUID,
     current_user: Optional[User] = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -211,7 +211,7 @@ async def get_work_item(
     summary="Get items by procedure reference",
     description="Get all work items for a procedure (may appear in multiple committees)"
 )
-async def get_by_procedure_ref(
+def get_by_procedure_ref(
     procedure_ref: str,
     db: Session = Depends(get_db)
 ) -> List[CommitteeWorkItemResponse]:
@@ -311,7 +311,7 @@ def get_tracked_items(
     summary="Track a work item",
     description="Start tracking a work item for updates"
 )
-async def track_work_item(
+def track_work_item(
     item_id: UUID,
     request: TrackWorkItemRequest = None,
     current_user: User = Depends(get_current_user),
@@ -372,7 +372,7 @@ async def track_work_item(
     summary="Untrack a work item",
     description="Stop tracking a work item"
 )
-async def untrack_work_item(
+def untrack_work_item(
     item_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -405,7 +405,7 @@ async def untrack_work_item(
     summary="Update tracking preferences",
     description="Update notification preferences for a tracked item"
 )
-async def update_tracking(
+def update_tracking(
     item_id: UUID,
     request: UpdateTrackingRequest,
     current_user: User = Depends(get_current_user),

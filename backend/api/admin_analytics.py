@@ -23,7 +23,7 @@ router = APIRouter(prefix="/api/admin/analytics", tags=["admin-analytics"])
 
 
 @router.get("/dashboard")
-async def get_dashboard_metrics(
+def get_dashboard_metrics(
     days: int = Query(default=7, ge=1, le=90, description="Number of days to include"),
     db: Session = Depends(get_db),
     current_user = Depends(get_current_admin_user)
@@ -132,7 +132,7 @@ async def get_dashboard_metrics(
 
 
 @router.get("/conversations")
-async def get_conversation_quality_list(
+def get_conversation_quality_list(
     days: int = Query(default=7, ge=1, le=90),
     min_score: Optional[float] = Query(default=None, description="Minimum quality score"),
     max_score: Optional[float] = Query(default=None, description="Maximum quality score"),
@@ -188,7 +188,7 @@ async def get_conversation_quality_list(
 
 
 @router.get("/export")
-async def export_analytics(
+def export_analytics(
     days: int = Query(default=30, ge=1, le=365),
     format: str = Query(default="json", regex="^(json|csv)$"),
     db: Session = Depends(get_db),
@@ -233,7 +233,7 @@ async def export_analytics(
 # Phase E2: Quality Scoring Endpoints
 
 @router.get("/quality/conversation/{conversation_id}")
-async def get_conversation_quality(
+def get_conversation_quality(
     conversation_id: str,
     db: Session = Depends(get_db),
     current_user = Depends(get_current_admin_user)
@@ -256,7 +256,7 @@ async def get_conversation_quality(
 
 
 @router.get("/quality/aggregate")
-async def get_quality_aggregate(
+def get_quality_aggregate(
     days: int = Query(default=7, ge=1, le=90),
     db: Session = Depends(get_db),
     current_user = Depends(get_current_admin_user)
@@ -274,7 +274,7 @@ async def get_quality_aggregate(
 
 
 @router.get("/quality/low-scoring")
-async def get_low_scoring_conversations(
+def get_low_scoring_conversations(
     days: int = Query(default=7, ge=1, le=90),
     threshold: float = Query(default=4.0, ge=0, le=10, description="Score threshold"),
     limit: int = Query(default=20, ge=1, le=100),

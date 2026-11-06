@@ -88,7 +88,7 @@ router = APIRouter(
     summary="Subscribe to RSS feed",
     description="Subscribe user to an RSS feed for My EU Bubble"
 )
-async def subscribe_to_feed(
+def subscribe_to_feed(
     subscription: UserFeedSubscriptionCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -202,7 +202,7 @@ def list_subscriptions(
     summary="Update subscription",
     description="Update subscription settings"
 )
-async def update_subscription(
+def update_subscription(
     subscription_id: UUID,
     is_active: Optional[bool] = None,
     notification_enabled: Optional[bool] = None,
@@ -251,7 +251,7 @@ async def update_subscription(
     summary="Unsubscribe from feed",
     description="Remove feed subscription"
 )
-async def unsubscribe_from_feed(
+def unsubscribe_from_feed(
     subscription_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -299,7 +299,7 @@ async def unsubscribe_from_feed(
     summary="Get user's feed entries",
     description="Get RSS entries from user's subscribed feeds with read/unread status"
 )
-async def get_user_feeds(
+def get_user_feeds(
     sources: Optional[List[str]] = Query(None, description="Filter by sources"),
     unread_only: bool = Query(False, description="Show only unread entries"),
     from_date: Optional[datetime] = Query(None, description="Filter from date"),
@@ -411,7 +411,7 @@ async def get_user_feeds(
     summary="Mark entry as read",
     description="Mark RSS entry as read by user"
 )
-async def mark_entry_as_read(
+def mark_entry_as_read(
     entry_id: UUID,
     read_data: Optional[MarkAsReadRequest] = None,
     current_user: User = Depends(get_current_user),
@@ -481,7 +481,7 @@ async def mark_entry_as_read(
     summary="Save/bookmark entry",
     description="Save RSS entry to user's collection"
 )
-async def save_entry(
+def save_entry(
     entry_id: UUID,
     save_data: SaveEntryRequest,
     current_user: User = Depends(get_current_user),
@@ -604,7 +604,7 @@ def get_saved_entries(
     summary="Update saved entry",
     description="Update notes, tags, or collection for saved entry"
 )
-async def update_saved_entry(
+def update_saved_entry(
     saved_id: UUID,
     update_data: UpdateSavedEntryRequest,
     current_user: User = Depends(get_current_user),
@@ -656,7 +656,7 @@ async def update_saved_entry(
     summary="Remove saved entry",
     description="Remove entry from saved collection"
 )
-async def delete_saved_entry(
+def delete_saved_entry(
     saved_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -707,7 +707,7 @@ async def delete_saved_entry(
     summary="Get user engagement statistics",
     description="Get statistics about user's RSS feed engagement"
 )
-async def get_user_stats(
+def get_user_stats(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> UserEngagementStats:
@@ -802,7 +802,7 @@ async def get_user_stats(
     summary="Get available feed sources",
     description="Get list of unique institutions from subscribed feeds"
 )
-async def get_available_sources(
+def get_available_sources(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ) -> List[str]:
@@ -1412,7 +1412,7 @@ def get_legislative_trains(
     summary="Get legislative file details",
     description="Fetch detailed information about a specific legislative file"
 )
-async def get_legislative_file(
+def get_legislative_file(
     file_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

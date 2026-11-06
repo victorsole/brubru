@@ -116,7 +116,7 @@ A `PaginatedResponse[TenderComplyClusterItem]`. Per item: `id`, `name`, `descrip
 **Data freshness**
 Clusters are Brubru-curated (53 today). Refreshed when laws move between clusters or when new comply_target labels enter the template catalogue.""",
 )
-async def list_comply_clusters(
+def list_comply_clusters(
     request: Request,
     template_id: str = Query(..., description="Funding template slug (see /templates for the catalogue)."),
     funding_mode: Optional[str] = Query(None, description="'grant' (default), 'equity-only', or 'blended': equity/blended add finance clusters."),

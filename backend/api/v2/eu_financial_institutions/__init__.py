@@ -67,7 +67,7 @@ One record per available body, with acronym, name, family, mandate, website and 
 **Data freshness**
 Counts are live from the database.""",
 )
-async def fin_directory(
+def fin_directory(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),

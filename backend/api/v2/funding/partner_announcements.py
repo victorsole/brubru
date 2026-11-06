@@ -154,7 +154,7 @@ The portal's search index, read every day: the announcements of the last 14 days
 @router.get("/partner-announcements", response_model=PaginatedResponse[PartnerAnnouncementItem], tags=["v2-funding"],
             summary="Partner announcements — organisations looking for partners on the F&T Portal",
             description=_DESC)
-async def list_partner_announcements(
+def list_partner_announcements(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),
@@ -261,7 +261,7 @@ One item with the list's fields, `body_txt` and `body_html` included, or 404 whe
 
 **Data freshness**
 As the list: read every day, every announcement again each week.""")
-async def get_partner_announcement(
+def get_partner_announcement(
     request: Request,
     announcement_id: str = PathParam(..., description="The announcement's id, e.g. 197771."),
     db: Session = Depends(get_db),

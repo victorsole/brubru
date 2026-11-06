@@ -391,7 +391,7 @@ def clusters_for_me(
 
 
 @router.get("/clusters/{cluster_id}")
-async def get_cluster_details(
+def get_cluster_details(
     cluster_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -479,7 +479,7 @@ async def get_cluster_details(
 
 
 @router.get("/clusters/{cluster_id}/requirements")
-async def get_cluster_requirements(
+def get_cluster_requirements(
     cluster_id: int,
     criticality: Optional[str] = None,
     db: Session = Depends(get_db),
@@ -637,7 +637,7 @@ def get_cluster_cascade(
 # ============================================================================
 
 @router.get("/suggest-clusters")
-async def suggest_clusters(
+def suggest_clusters(
     description: str,
     limit: int = 5,
     db: Session = Depends(get_db),
@@ -798,7 +798,7 @@ async def search_laws(
 # celex="stats" and returned 404 -- the stats endpoint was unreachable in production.
 # Any new literal /laws/<word> route goes above the {celex} one too.
 @router.get("/laws/stats")
-async def get_law_stats(
+def get_law_stats(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -1201,7 +1201,7 @@ async def create_compliance_analysis(
 
 
 @router.get("/analysis/{analysis_id}")
-async def get_analysis_results(
+def get_analysis_results(
     analysis_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -1326,7 +1326,7 @@ async def get_analysis_results(
 
 
 @router.post("/analysis/{analysis_id}/export")
-async def export_analysis_report(
+def export_analysis_report(
     analysis_id: int,
     export_format: str = 'docx',
     db: Session = Depends(get_db),
@@ -1430,7 +1430,7 @@ async def export_analysis_report(
 
 
 @router.get("/history")
-async def get_user_analysis_history(
+def get_user_analysis_history(
     limit: int = 10,
     offset: int = 0,
     db: Session = Depends(get_db),
@@ -1522,7 +1522,7 @@ async def get_user_analysis_history(
         "not that they were right."
     ),
 )
-async def verify_analysis(
+def verify_analysis(
     analysis_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -1627,7 +1627,7 @@ def list_workspaces(
         "`POST /analyze` as `reuse_document_ids`, comma separated."
     ),
 )
-async def list_reusable_documents(
+def list_reusable_documents(
     cluster_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -2030,7 +2030,7 @@ from services.compliance.proposal_preview import (  # noqa: E402
         "real classification."
     ),
 )
-async def get_future_comply_preview(
+def get_future_comply_preview(
     procedure_ref: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -2086,7 +2086,7 @@ from services.compliance.regulatory_cascade import (  # noqa: E402
         "ingest. Never fabricates: empty branches stay empty."
     ),
 )
-async def get_regulatory_cascade(
+def get_regulatory_cascade(
     procedure_ref: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -2146,7 +2146,7 @@ from api.v1._pagination import stable
         "empty-state messaging when the user is brand new."
     ),
 )
-async def get_compliance_maturity(
+def get_compliance_maturity(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -2178,7 +2178,7 @@ async def get_compliance_maturity(
         "showing why each one surfaced (template / ethics_flag)."
     ),
 )
-async def clusters_by_topic(
+def clusters_by_topic(
     template_id: str,
     funding_mode: Optional[str] = None,
     ethics_personal_data: bool = False,

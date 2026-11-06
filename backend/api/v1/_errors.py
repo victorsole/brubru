@@ -36,6 +36,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import OperationalError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
@@ -103,6 +104,20 @@ def register_v1_error_handlers(app: FastAPI) -> None:
         rid = _request_id(request)
         body = _unwrap_detail(exc.detail, exc.status_code, rid)
         return JSONResponse(status_code=exc.status_code, content=body, headers=dict(exc.headers or {}))
+
+    @app.exception_handler(OperationalError)
+    async def _statement_timeout_handler(request: Request, exc: OperationalError):
+        # O213 (6 Nov 2026): a statement stopped by statement_timeout (Postgres code 57014, query_canceled) is
+        # the caller's query being too heavy, not a crash: say so with a 504. Any other database error goes
+        # on to the default handler (a logged 500), exactly as before.
+        if getattr(getattr(exc, "orig", None), "pgcode", None) != "57014":
+            raise exc
+        if not request.url.path.startswith(("/api/v1/", "/api/v2/")):
+            return JSONResponse(status_code=504, content={"detail": "The query took too long and was stopped."})
+        rid = _request_id(request)
+        return JSONResponse(status_code=504, content=_build_error_body(
+            "This query took too long and was stopped. Narrow it (a date window, a filter, a smaller limit) "
+            "or use your own API key.", "query_timeout", rid))
 
     @app.exception_handler(RequestValidationError)
     async def _validation_exc_handler(request: Request, exc: RequestValidationError):

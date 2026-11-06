@@ -356,7 +356,7 @@ _SOCIAL_ENTITY_LABEL = {
                 "permalink, platform, engagement), each flagged against your interests, plus "
                 "an actor-type facet. Reposts are excluded: an amplification is not this "
                 "actor's statement. A post is a SIGNAL, never a citable fact."))
-async def list_social_news(
+def list_social_news(
     my_interests: bool = Query(False),
     institution: Optional[str] = Query(None, description="Actor type (commissioner, mep, institution, eu_agency, eu_influencer, ec_official)."),
     search: Optional[str] = Query(None),
@@ -464,7 +464,7 @@ async def list_social_news(
                 "**You get back**\nThe same News-card shape (title, summary, date, "
                 "source = org name, link), each flagged against your interests, plus an "
                 "org-type facet."))
-async def list_stakeholder_news(
+def list_stakeholder_news(
     my_interests: bool = Query(False),
     institution: Optional[str] = Query(None, description="Normalised org type (ngo, trade_association, ...)."),
     search: Optional[str] = Query(None),

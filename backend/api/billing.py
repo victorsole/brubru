@@ -118,7 +118,7 @@ class BalanceResponse(BaseModel):
         "for `payment_intent.succeeded` fires."
     ),
 )
-async def create_topup(
+def create_topup(
     body: TopupRequest,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -301,7 +301,7 @@ def _u_to_e(u: int) -> float:
         "top-ups. Useful as the data source for the /api/billing dashboard."
     ),
 )
-async def get_balance(
+def get_balance(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> BalanceResponse:
@@ -373,7 +373,7 @@ async def get_balance(
         "payment method. Both threshold and amount are required if enabled=true."
     ),
 )
-async def set_auto_topup(
+def set_auto_topup(
     body: AutoTopupRequest,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),

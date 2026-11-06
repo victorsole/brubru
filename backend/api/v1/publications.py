@@ -96,7 +96,7 @@ A `PaginatedResponse[PublicationItem]` envelope. Each item carries `institution_
 **Data freshness**
 Synced every 6 hours (00:00 / 06:00 / 12:00 / 18:00 UTC, hot tier) from 26+ institutional RSS feeds. Press releases typically appear in the feed within minutes of being posted on the institutional site; the 6h sync cadence catches them inside a quarter-day.""",
 )
-async def list_publications(
+def list_publications(
     request: Request,
     q: Optional[str] = Query(None, description="Full-text search on title + summary"),
     institution_slug: Optional[str] = Query(None, description="e.g. european_commission, ecb, ema, frontex"),
@@ -285,7 +285,7 @@ A JSON object with `total_sources` (integer) and `sources` (array of `{source_sl
 **Data freshness**
 Live aggregate query over the `institutional_publications` table — recomputed on each request. Reflects what's currently in the DB; updated by the publications sync every 6 hours.""",
 )
-async def list_sources(
+def list_sources(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ):
@@ -355,7 +355,7 @@ A single `PublicationItem` (same shape as the list endpoint's `data[i]`), or HTT
 **Data freshness**
 Same as the list endpoint — synced every 6 hours from 26+ institutional RSS feeds.""",
 )
-async def get_publication_detail(
+def get_publication_detail(
     publication_id: str,
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),

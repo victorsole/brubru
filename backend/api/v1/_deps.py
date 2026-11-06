@@ -14,6 +14,7 @@ Order of checks (fail-fast):
 """
 
 from fastapi import Depends, HTTPException, Request, status
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from api.auth_api_key import get_api_user
@@ -30,6 +31,11 @@ from services.billing.api_meter import (
 )
 from services.rate_limiter.global_rate_limiter import get_rate_limiter
 from api.v1._query_guard import check_query_params
+
+# O213 (6 Nov 2026): a stranger on the public sandbox (the API Console's free trial) could hold a database
+# connection for a minute or more with one filter or sort on a big list. Each of their statements now stops
+# after this long; the caller gets a 504 that says so (api/v1/_errors.py), never a hung page.
+SANDBOX_STATEMENT_TIMEOUT_MS = 20_000
 
 
 async def api_user_with_rate_limit(
@@ -185,5 +191,10 @@ async def api_user_with_rate_limit(
     request.state.billing_is_sandbox = is_sandbox
     request.state.billing_user_id = str(api_key.user_id)
     request.state.billing_balance_micro = balance_micro
+
+    if is_sandbox:
+        # SET LOCAL lasts until this request's transaction ends: record_usage has committed above, so it binds
+        # the route's own queries on the same session and never reaches the next user of the pooled connection.
+        db.execute(text(f"SET LOCAL statement_timeout = {int(SANDBOX_STATEMENT_TIMEOUT_MS)}"))
 
     return user

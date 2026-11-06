@@ -1243,6 +1243,7 @@
       "notFound": "Nothing found with that reference. Check it, or pick one from the list.",
       "tooManyCalls": "Too many searches in a short time. Wait a minute and try again.",
       "serverFault": "Something failed on our side, not in what you typed. Try again, or change the filters. If you write to us, quote the request id below.",
+      "tooSlow": "This search took too long and was stopped. Narrow it: a shorter date window, a filter or a smaller page. With your own key the limit is higher.",
       "checkFields": "Something you typed is not in the form this data needs:",
       "capVisitor": "You have used today's free searches. They come back tomorrow.",
       "capPool": "Today's public allowance has been used up. Get your own key, or come back tomorrow.",

@@ -64,7 +64,7 @@ One body record with acronym, name, mandate, website and an `item_counts` map (e
 **Data freshness**
 Counts are live from the database.""",
 )
-async def esm_directory(
+def esm_directory(
     request: Request,
     db: Session = Depends(get_db),
     user: User = Depends(api_user_with_rate_limit),

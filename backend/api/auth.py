@@ -182,7 +182,7 @@ async def get_current_user(
 
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-async def signup(user_data: UserCreate, db: Session = Depends(get_db)):
+def signup(user_data: UserCreate, db: Session = Depends(get_db)):
     """Register new user with email and password"""
 
     # Check if email already exists
@@ -462,7 +462,7 @@ async def linkedin_callback(
 # ---------------------------------------------------------------------------
 
 @router.get("/claim/{token}", response_model=ClaimInfoResponse)
-async def claim_info(token: str, db: Session = Depends(get_db)):
+def claim_info(token: str, db: Session = Depends(get_db)):
     """Look up the dormant pre-provisioned profile behind a claim link.
 
     Returns a public-safe preview so the frontend can render
@@ -485,7 +485,7 @@ async def claim_info(token: str, db: Session = Depends(get_db)):
 
 
 @router.post("/claim/{token}/password", response_model=Token)
-async def claim_with_password(
+def claim_with_password(
     token: str,
     body: ClaimPasswordRequest,
     db: Session = Depends(get_db),
@@ -585,7 +585,7 @@ def _lookup_reset_token(db: Session, raw_token: str) -> tuple[PasswordResetToken
 
 
 @router.post("/forgot-password", response_model=MessageResponse)
-async def forgot_password(
+def forgot_password(
     body: ForgotPasswordRequest,
     request: Request,
     db: Session = Depends(get_db),
@@ -681,7 +681,7 @@ async def forgot_password(
 
 
 @router.get("/reset-password/{token}", response_model=ResetTokenCheckResponse)
-async def check_reset_token(token: str, db: Session = Depends(get_db)):
+def check_reset_token(token: str, db: Session = Depends(get_db)):
     """Report whether a reset link is still good.
 
     Lets the page say "this link has expired" before asking for a new password,
@@ -694,7 +694,7 @@ async def check_reset_token(token: str, db: Session = Depends(get_db)):
 
 
 @router.post("/reset-password", response_model=Token)
-async def reset_password(
+def reset_password(
     body: ResetPasswordRequest,
     db: Session = Depends(get_db),
 ):
@@ -776,7 +776,7 @@ def touch_last_seen(db: Session, user: User) -> None:
 
 
 @router.get("/me", response_model=UserResponse)
-async def get_current_user_info(
+def get_current_user_info(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -786,7 +786,7 @@ async def get_current_user_info(
 
 
 @router.patch("/me", response_model=UserResponse)
-async def update_user_profile(
+def update_user_profile(
     update_data: UserUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -878,7 +878,7 @@ async def refresh_token(
 
 
 @router.post("/link-preuser")
-async def link_preuser_chats(
+def link_preuser_chats(
     data: dict,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),

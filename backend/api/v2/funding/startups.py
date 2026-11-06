@@ -177,7 +177,7 @@ Daily sync from the EU Funding & Tenders Portal (SEDIA)."""
 @router.get("/startups", response_model=PaginatedResponse[StartupFundingItem], tags=["v2-funding"],
             summary="EU startup, scale-up & SME funding — EIC, COSME/EISMEA, Innovation Fund (stage-tagged)",
             description=_DESC)
-async def funding_startups(
+def funding_startups(
     request: Request,
     stage: Optional[str] = Query(None, description="idea | seed | growth | scale-up | sme"),
     instrument: Optional[str] = Query(None, description="grant | blended | equity | prize"),
@@ -271,7 +271,7 @@ A single `StartupFundingItem` (same shape as a list row, with the full body), or
 
 **Data freshness**
 Daily sync from the EU Funding & Tenders Portal (SEDIA).""")
-async def get_startup_funding(
+def get_startup_funding(
     topic_id: str = Path(..., description="The EU topic_id of the call."),
     body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),

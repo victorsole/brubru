@@ -195,7 +195,7 @@ def _count_recent_mints(db: Session, user_id: UUID) -> int:
         "anti-spam cap."
     ),
 )
-async def mint_my_api_key(
+def mint_my_api_key(
     body: CreateKeyRequest,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
@@ -301,7 +301,7 @@ async def mint_my_api_key(
         "only the 4-character prefix for human display."
     ),
 )
-async def list_my_api_keys(
+def list_my_api_keys(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> List[ApiKeySummary]:
@@ -343,7 +343,7 @@ def _summary(r: ApiKey) -> ApiKeySummary:
         "the current user."
     ),
 )
-async def revoke_my_api_key(
+def revoke_my_api_key(
     key_id: UUID,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),

@@ -401,7 +401,7 @@ A `PaginatedResponse[SummaryItem]` (`summary_id` = slug, `celex`, `title`, `lsu_
 **Data freshness**
 Read from the LEGISSUM catalogue harvested from EUR-Lex (sync via `scripts/sync_legissum.py`). Empty only until the first sync runs.""",
 )
-async def list_summaries(
+def list_summaries(
     request: Request,
     q: Optional[str] = Query(None, description="Free-text search over summary titles"),
     chapter: Optional[str] = Query(None, description="Filter by chapter code (e.g. 03) or chapter title substring"),
@@ -1318,7 +1318,7 @@ A `ViewsResult` with `celex`, `eli` (from cache when present), `views{}` (the li
 **Data freshness**
 Live: deterministic URL construction (ELI is read from the law_xref cache when available).""",
 )
-async def law_views(
+def law_views(
     celex: str,
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
@@ -1724,7 +1724,7 @@ A `PaginatedResponse[LawItem]` of the acts carrying that reference, each as `/la
 **Data freshness**
 Synced every 6 hours (hot tier) from EUR-Lex + Cellar.""",
 )
-async def oj_by_reference(
+def oj_by_reference(
     request: Request,
     series: str,
     year: int,
@@ -1785,7 +1785,7 @@ A `PaginatedResponse[XrefResult]`, newest-computed first — each item is the sa
 **Data freshness**
 Reads the `law_xref` cache, which grows as `/laws/{celex}/xref` is called and via bulk backfill.""",
 )
-async def list_xref(
+def list_xref(
     request: Request,
     q: Optional[str] = Query(None, description="Filter by CELEX prefix (e.g. 32024)"),
     limit: int = Query(50, ge=1, le=200),
