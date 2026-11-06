@@ -275,7 +275,10 @@ export const PrivacyPage = () => {
           <h3>8.8 Right to Lodge a Complaint</h3>
           <p>
             You have the right to lodge a complaint with your national data protection authority
-            if you believe we have violated GDPR. In Belgium, this is the Data Protection Authority
+            if you believe we have violated GDPR. Beresol BV is established in the Netherlands, so the authority
+            that supervises us is the Dutch Autoriteit Persoonsgegevens
+            (<a href="https://www.autoriteitpersoonsgegevens.nl" target="_blank" rel="noopener noreferrer" className="policy-page__link">autoriteitpersoonsgegevens.nl</a>).
+            You may also complain in the EU country where you live or work; in Belgium, this is the Data Protection Authority
             (<a href="https://www.dataprotectionauthority.be" target="_blank" rel="noopener noreferrer" className="policy-page__link">dataprotectionauthority.be</a>).
           </p>
 
