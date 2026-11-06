@@ -27,7 +27,10 @@ import uuid
 _REPO_ROOT = str(pathlib.Path(__file__).resolve().parents[2])
 sys.path.insert(0, _REPO_ROOT + "/backend")
 
-_LINE = re.compile(r"(\d{2})/(\d{2})\s*\(([OJ])\)\s*:\s*(.+?)\s*\((C-\d+/\d{2}(?:\s*(?:and|,)\s*C-\d+/\d{2})*)\)")
+# A case is C- (Court of Justice) or T- (General Court), an appeal adds " P", and a joined line can end
+# "& 6 others" (6 Nov 2026: T-523/24, C-826/24 P and "C-442/23 & 6 others" all parsed to nothing).
+_CASE = r"(?:C|T)-\d+/\d{2}(?:\s*P)?"
+_LINE = re.compile(r"(\d{2})/(\d{2})\s*\(([OJ])\)\s*:\s*(.+?)\s*\((" + _CASE + r"(?:\s*(?:and|,|&)\s*(?:" + _CASE + r"|\d+\s+others?))*)\)")
 _KIND = {"O": "Advocate General's opinion", "J": "judgment"}
 
 
@@ -39,6 +42,7 @@ def parse_post(content: str, posted: dt.date) -> list[dict]:
     out = []
     for dd, mm, kind, what, case in _LINE.findall(text):
         what = re.sub(r"[^\w\s.,;:'?!()/%&-]", "", what).strip()
+        what = re.sub(r"\s{2,}", " ", what)
         year = posted.year
         day = dt.date(year, int(mm), int(dd))
         if (day - posted).days < -180:
@@ -75,7 +79,8 @@ def main() -> int:
             if item["date"] < today:
                 continue
             found += 1
-            title = f"Court of Justice {_KIND[item['kind']]}: {item['what']} ({item['case']})"
+            court = "General Court" if item["case"].startswith("T-") else "Court of Justice"
+            title = f"{court} {_KIND[item['kind']]}: {item['what']} ({item['case']})"
             ext = f"curia_highlight_{item['case'].lower().replace('/', '_').replace(' ', '')}_{item['date'].isoformat()}"
             exists = db.execute(text("SELECT 1 FROM eu_calendar_events WHERE external_id = :x"), {"x": ext}).first()
             print(("SKIP " if exists else "ADD  "), item["date"], title[:95])

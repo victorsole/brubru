@@ -29,3 +29,13 @@ def test_a_january_line_posted_in_december_is_next_year():
 
 def test_a_post_with_no_lines_gives_nothing():
     assert parse_post("Could your next career move be at the # ECJ ?", dt.date(2026, 11, 2)) == []
+
+
+def test_general_court_appeal_and_joined_cases_are_read():
+    """6 Nov 2026: three lines that the C-only pattern dropped."""
+    post = ("# ECJHighlights ⚖️ 11/11 (J): # SmokeFlavourings in food 🇪🇺 (T-523/24) "
+            "⚖️ 12/11 (J): Poland challenges EU # FitFor55 measures # climate 🇵🇱 (C-442/23 & 6 others) "
+            "⚖️ 12/11 (O): Google # AdSense – abuse of dominant position appeal 🇪🇺 (C-826/24 P)")
+    rows = parse_post(post, dt.date(2026, 11, 6))
+    assert [(r["date"].isoformat(), r["kind"], r["case"]) for r in rows] == [
+        ("2026-11-11", "J", "T-523/24"), ("2026-11-12", "J", "C-442/23 & 6 others"), ("2026-11-12", "O", "C-826/24 P")]
