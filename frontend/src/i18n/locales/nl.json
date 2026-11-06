@@ -3410,6 +3410,8 @@
     "outcome": "Uitkomst",
     "timeline": "Tijdlijn",
     "epVote": "EP-stemming",
+    "epVoteNoRecord": "Schatting, geen stemgedrag",
+    "epVoteBasisBaseline": "EP-stemming: geschat op basis van de zetels van elke fractie en haar gebruikelijke standpunten, niet op hoe haar leden hebben gestemd.",
     "council": "Raad",
     "committee": "Commissie",
     "plenary": "Plenaire",

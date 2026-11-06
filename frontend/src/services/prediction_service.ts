@@ -84,6 +84,9 @@ export interface PlenaryVotePrediction {
   total_meps: number;
   group_predictions: GroupPositionPrediction[];
   swing_groups: string[];
+  // What the vote estimate rests on (O221, 6 Nov 2026): 'policy_baseline_only' when no roll-call record was found,
+  // so the margin is group seats times usual positions. Older answers may lack it.
+  basis?: 'voting_record' | 'policy_baseline_only';
 }
 
 export interface StagnationAlert {

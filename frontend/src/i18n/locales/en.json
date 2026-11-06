@@ -4466,6 +4466,8 @@
     "outcome": "Outcome",
     "timeline": "Timeline",
     "epVote": "EP Vote",
+    "epVoteNoRecord": "Estimate, no voting record",
+    "epVoteBasisBaseline": "EP vote: estimated from each group's seats and usual policy positions, not from how its members have voted.",
     "council": "Council",
     "committee": "Committee",
     "plenary": "Plenary",

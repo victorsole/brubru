@@ -375,6 +375,9 @@ const PredictionCard: React.FC<{
     }
   }, [prediction.is_expanded, prediction.procedure_ref, prediction.title, resolutionData, isLoadingResolutions]);
 
+  // O221 (6 Nov 2026): a margin built from seats and usual positions, with no voting record behind it, says so.
+  const epVoteBaselineOnly = prediction.ep_vote?.basis === 'policy_baseline_only';
+
   // Get EP vote margin display
   const epVoteMargin = prediction.ep_vote
     ? prediction.ep_vote.predicted_margin >= 0
@@ -463,6 +466,11 @@ const PredictionCard: React.FC<{
           <div className="prediction-card__metric-label">{t('predictionsTab.epVote')}</div>
           <div className="prediction-card__metric-value">{epVoteMargin}</div>
           <ConfidenceDots confidence={prediction.ep_vote?.confidence || 0.5} />
+          {epVoteBaselineOnly && (
+            <div className="prediction-card__basis-note" title={t('predictionsTab.epVoteBasisBaseline') as string}>
+              {t('predictionsTab.epVoteNoRecord')}
+            </div>
+          )}
         </div>
 
         <div className="prediction-card__metric">
@@ -488,6 +496,12 @@ const PredictionCard: React.FC<{
         <Icon path={mdiInformationOutline} size={0.6} />
         <span>{t('predictionsTab.forecastBasis', 'Forecast basis')}: {provenance}</span>
       </div>
+      {epVoteBaselineOnly && (
+        <div className="prediction-card__provenance prediction-card__provenance--vote">
+          <Icon path={mdiInformationOutline} size={0.6} />
+          <span>{t('predictionsTab.epVoteBasisBaseline')}</span>
+        </div>
+      )}
 
       <div className="prediction-card__footer">
         <span className="prediction-card__date">{t('predictionsTab.predicted', { date: predictedDate })}</span>

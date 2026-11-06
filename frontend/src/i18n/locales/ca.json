@@ -4466,6 +4466,8 @@
     "outcome": "Resultat",
     "timeline": "Cronograma",
     "epVote": "Vot del PE",
+    "epVoteNoRecord": "Estimació, sense historial de vots",
+    "epVoteBasisBaseline": "Vot del PE: estimat a partir dels escons de cada grup i de les seves posicions habituals, no de com n'han votat els membres.",
     "council": "Consell",
     "committee": "Comissió",
     "plenary": "Ple",
