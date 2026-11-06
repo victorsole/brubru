@@ -152,3 +152,40 @@ def test_a_page_may_read_the_cost_headers():
     mw = next(m for m in app.user_middleware if "CORS" in str(m.cls))
     for h in ("X-Brubru-Cost-Eur", "X-Brubru-Balance-Eur", "X-Brubru-Sandbox-Remaining", "X-RateLimit-Remaining", "X-Request-Id"):
         assert h in mw.kwargs["expose_headers"]
+
+
+class _PoolDb:
+    """Stands in for the database in sandbox_consume_counted: the visitor's own row comes back at `ip_count`; the
+    day's total is whatever the query computes from `rows`, so the test reads the SQL the function really sends."""
+
+    def __init__(self, ip_count, rows):
+        self.ip_count, self.rows, self.total_sql = ip_count, rows, None
+
+    def execute(self, clause, params):
+        sql = str(clause)
+        if sql.lstrip().startswith("INSERT"):
+            return SimpleNamespace(fetchone=lambda: (self.ip_count,))
+        self.total_sql, cap = sql, params.get("cap")
+        assert "SUM(" in sql and params.get("d")
+        counted = [min(n, cap) if "LEAST(count_today, :cap)" in sql and cap is not None else n for n in self.rows]
+        return SimpleNamespace(scalar=lambda: sum(counted))
+
+    def commit(self):
+        pass
+
+
+def test_a_visitors_refused_presses_do_not_use_up_everyones_pool():
+    """Victor, 6 Nov 2026: raise the pool before the console is marketed. A visitor whose own 10 are spent keeps
+    pressing: on 4 Nov one connection's 11 presses all counted against the shared pool."""
+    assert api_meter.SANDBOX_GLOBAL_CAP == 1000 and api_meter.SANDBOX_IP_CAP == 10
+    db = _PoolDb(ip_count=1, rows=[40, 1])  # one visitor pressed 40 times, a new one presses once
+    ok, reason, ip_left, pool_left = api_meter.sandbox_consume_counted(db, "198.51.100.2")
+    assert (ok, reason, ip_left) == (True, "", 9)
+    assert pool_left == 1000 - 11, db.total_sql
+    assert "LEAST(count_today, :cap)" in db.total_sql
+
+
+def test_the_price_route_tells_the_raised_pool():
+    from main import app
+    d = TestClient(app).get("/api/v2/pricing").json()["sandbox"]
+    assert d["calls_per_day_in_total"] == 1000 and d["calls_per_visitor_per_day"] == 10

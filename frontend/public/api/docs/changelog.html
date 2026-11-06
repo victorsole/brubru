@@ -259,6 +259,11 @@ Every change to <code>/api/v2/*</code>: endpoint additions, response shape tweak
 
 <h2>2026</h2>
 
+<h3>6 November 2026: a larger public sandbox</h3>
+<ul>
+<li><strong>Sandbox limits:</strong> 1,000 calls a day in total (was 100); still 10 a day per visitor. A visitor counts at most 10 towards the total, so presses refused after their own 10 no longer use up the day for everyone. <code>/api/v2/pricing</code> reports <code>calls_per_day_in_total: 1000</code>.</li>
+</ul>
+
 <h3>3 November 2026: bundles, the API Console, and a standard key opens every route</h3>
 <p><a href="/api/docs/bundles.html">Bundles</a> group the routes by what you want: Official Journal, laws, funding and procurement, news and events, agencies and bodies, people and organisations, consultations, enforcement and markets, research and data. A new key can be limited to the bundles you choose. <code>GET /api/v2/bundles</code> lists them.</p>
 <p>The <a href="/api/try">API Console</a> calls the API from the browser: every route, a form built from its parameters, and the live rows that come back. No account is needed: it uses the public sandbox.</p>

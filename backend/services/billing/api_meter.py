@@ -23,7 +23,7 @@ Public surface:
         Returns (ok, reason_code). reason_code is one of:
             ""                    — success
             "sandbox_ip_capped"   — 10/day per IP
-            "sandbox_global_capped" — 100/day total
+            "sandbox_global_capped" — 1,000/day total (a visitor counts at most 10)
 
 Race-safety:
     All debits use atomic UPDATE WHERE balance >= cost RETURNING. No locks.
@@ -50,7 +50,9 @@ logger = logging.getLogger(__name__)
 
 # Sandbox daily caps (CLI tools that need to adjust these stay in this module).
 SANDBOX_IP_CAP = 10
-SANDBOX_GLOBAL_CAP = 100
+# Raised from 100 on Victor's word, 6 Nov 2026, before the console is marketed: 100 visitors pressing one card
+# each would have closed it for everyone. A console search averaged 0.29 MB as sent (ten cards, read 6 Nov).
+SANDBOX_GLOBAL_CAP = 1000
 # The console lets anyone call the API with no account (Victor, 3 Nov 2026), so a sandbox call is small:
 # deep pages and big pages are what cost database egress. Live fetches and the heavy routes need a key.
 SANDBOX_MAX_LIMIT = 25
@@ -277,7 +279,8 @@ def sandbox_consume_counted(db: Session, ip: str) -> Tuple[bool, str, int, int]:
     Algorithm:
         1. UPSERT today's row for the given IP, incrementing count_today.
         2. If the IP row's new count > SANDBOX_IP_CAP, return False/ip_capped.
-        3. SUM all rows for today; if > SANDBOX_GLOBAL_CAP, return False/global_capped.
+        3. SUM all rows for today, each counted up to SANDBOX_IP_CAP; if > SANDBOX_GLOBAL_CAP, return
+           False/global_capped. A visitor's refused presses after their own cap must not use up everyone's pool.
         4. Otherwise True.
 
     Both checks happen post-increment, so the cap is inclusive (the 10th call
@@ -309,8 +312,8 @@ def sandbox_consume_counted(db: Session, ip: str) -> Tuple[bool, str, int, int]:
 
     # Step 2 — global cap.
     total = db.execute(
-        text("SELECT COALESCE(SUM(count_today),0) FROM public.api_sandbox_pool WHERE pool_date = :d"),
-        {"d": today},
+        text("SELECT COALESCE(SUM(LEAST(count_today, :cap)),0) FROM public.api_sandbox_pool WHERE pool_date = :d"),
+        {"d": today, "cap": SANDBOX_IP_CAP},
     ).scalar() or 0
     pool_left = max(0, SANDBOX_GLOBAL_CAP - int(total))
     if int(total) > SANDBOX_GLOBAL_CAP:
