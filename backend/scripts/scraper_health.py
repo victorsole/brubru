@@ -65,9 +65,14 @@ SEVERITY = {"BROKEN": 0, "ERROR": 0, "STALE-MARKER": 1, "CRON-GAP": 1, "STALE": 
 
 
 def _db_state(db):
+    # The last READ of each feed: the later of its newest row's fetched_at and the feed's own
+    # row in economy_feed_reads (O237, 9 Nov 2026). sync_economy no longer rewrites items that
+    # did not change, so fetched_at alone would make a working scraper on a quiet feed look stale.
     rows = db.execute(text(
-        "SELECT body_code, item_type, count(*) n, max(fetched_at) f "
-        "FROM economy_items GROUP BY body_code, item_type")).fetchall()
+        "SELECT e.body_code, e.item_type, e.n, greatest(e.f, r.scraped_at) AS f "
+        "FROM (SELECT body_code, item_type, count(*) n, max(fetched_at) f "
+        "      FROM economy_items GROUP BY body_code, item_type) e "
+        "LEFT JOIN economy_feed_reads r USING (body_code, item_type)")).fetchall()
     return {(r.body_code, r.item_type): (r.n, r.f) for r in rows}
 
 

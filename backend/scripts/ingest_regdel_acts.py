@@ -41,6 +41,11 @@ from typing import Any, Dict, List, Optional
 import xlrd
 import psycopg2
 
+# The upsert guard is shared with sync_economy.py (O236, O237): one builder, so the two feeds'
+# WHERE clauses cannot drift apart. services/ is a namespace package: importing it runs nothing.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from services.sql_upsert_guard import only_if_changed  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
 ENV = ROOT / ".env"
 USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0) Chrome/151.0.0.0"
@@ -714,62 +719,6 @@ def read_scrutiny(conn, register: "Register", max_seconds: float,
     return out
 
 
-def only_if_changed(set_clause: str, table: str = "secondary_acts") -> str:
-    """The WHERE that lets ON CONFLICT DO UPDATE skip a record that would change nothing.
-
-    Without it every run rewrote all ~8,500 acts, changed or not (O236, 6 Nov 2026): a new
-    row version in all 12 indexes, and the touch trigger rebuilds the row with its text
-    bodies, so each act cost ~150 KB of write log. 6,638 upserts in two hours made 1.02 GB
-    of the database's 1.19 GB of WAL, for ONE row that had actually changed, and the
-    table grew to 865 MB for 8,486 rows. The trigger already kept `last_updated` for an
-    unchanged row; it could not stop the rewrite itself.
-
-    Built from the SET list it guards, so the two cannot drift: the row is written only
-    when some target column differs from what its SET expression would store (the same
-    CASE guards and COALESCEs), compared null-safely. `last_updated = NOW()` is left out:
-    it always differs, and the trigger owns it. A skipped record returns no row, so the
-    caller counts it as unchanged.
-    """
-    body, depth, quoted, items, cur = set_clause, 0, False, [], []
-    i = 0
-    while i < len(body):
-        ch = body[i]
-        if not quoted and body.startswith("--", i):      # a comment runs to the end of its line
-            i = body.find("\n", i)
-            i = len(body) if i < 0 else i
-            continue
-        if ch == "'":
-            quoted = not quoted                          # '' inside a literal toggles twice
-        elif not quoted and ch == "(":
-            depth += 1
-        elif not quoted and ch == ")":
-            depth -= 1
-        elif not quoted and depth == 0 and ch == ",":
-            items.append("".join(cur))
-            cur = []
-            i += 1
-            continue
-        cur.append(ch)
-        i += 1
-    items.append("".join(cur))
-    if depth or quoted:
-        raise ValueError("unbalanced SET clause")
-    cols, exprs = [], []
-    for item in items:
-        col, expr = item.split("=", 1)
-        col = col.strip()
-        if not re.fullmatch(r"[a-z_]+", col):
-            raise ValueError(f"not a column: {col!r}")
-        if col == "last_updated":
-            continue
-        cols.append(f"{table}.{col}")
-        exprs.append(expr.strip())
-    return f"""
-            WHERE ({", ".join(cols)})
-                  IS DISTINCT FROM
-                  ({", ".join(exprs)})"""
-
-
 # Two upsert paths, chosen by whether the act has a CELEX.
 #
 # CELEX is the identity. `reference` (the C(YYYY)NNNN code) is a LABEL the Commission
@@ -878,7 +827,7 @@ _CELEX_SET = SET_CLAUSE + """,
 SQL_BY_CELEX = INSERT_HEAD + """
             ON CONFLICT (celex) WHERE celex IS NOT NULL AND celex <> ''
             DO UPDATE SET
-""" + _CELEX_SET + only_if_changed(_CELEX_SET) + """
+""" + _CELEX_SET + only_if_changed(_CELEX_SET, "secondary_acts") + """
             RETURNING (xmax = 0) AS was_inserted
 """
 
@@ -886,7 +835,7 @@ _REFERENCE_SET = SET_CLAUSE + """,
               celex = COALESCE(EXCLUDED.celex, secondary_acts.celex)"""
 SQL_BY_REFERENCE = INSERT_HEAD + """
             ON CONFLICT (reference) DO UPDATE SET
-""" + _REFERENCE_SET + only_if_changed(_REFERENCE_SET) + """
+""" + _REFERENCE_SET + only_if_changed(_REFERENCE_SET, "secondary_acts") + """
             RETURNING (xmax = 0) AS was_inserted
 """
 
@@ -897,7 +846,7 @@ _KEEP_CELEX_SET = SET_CLAUSE + """,
               celex = COALESCE(secondary_acts.celex, EXCLUDED.celex)"""
 SQL_BY_REFERENCE_KEEP_CELEX = INSERT_HEAD + """
             ON CONFLICT (reference) DO UPDATE SET
-""" + _KEEP_CELEX_SET + only_if_changed(_KEEP_CELEX_SET) + """
+""" + _KEEP_CELEX_SET + only_if_changed(_KEEP_CELEX_SET, "secondary_acts") + """
             RETURNING (xmax = 0) AS was_inserted
 """
 

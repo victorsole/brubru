@@ -44,6 +44,7 @@ from ingest_funding_sedia import get_env
 from pathlib import Path as _Path  # noqa: E402
 sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
 from services.tenders.country_codes import normalise_country  # noqa: E402
+from services.sql_upsert_guard import only_if_changed  # noqa: E402
 
 PORTAL = ("https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/"
           "opportunities/projects-results?order=DESC&pageNumber=1&pageSize=50&sortBy=es_SortDate")
@@ -223,18 +224,12 @@ def normalise(result: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     }
 
 
-UPSERT = """
-INSERT INTO ft_funded_projects
-    (project_id, project_acronym, title, objective, framework_programme,
-     coordinator_name, coordinator_country, coordinator_pic, status, source_status, start_date, end_date,
-     eu_contribution, total_cost,
-     cost_currency, source_url, is_test, published_at, scraped_at, last_updated)
-VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s,
-        %(framework_programme)s, %(coordinator_name)s, %(coordinator_country)s,
-        %(coordinator_pic)s, 'unknown', %(source_status)s, %(start_date)s,
-        %(end_date)s, %(eu_contribution)s, %(total_cost)s, 'EUR', %(source_url)s,
-        false, %(published_at)s, NOW(), NOW())
-ON CONFLICT (project_id) DO UPDATE SET
+# Skip a project this read would not change (O237, 9 Nov 2026): every run rewrote every project it
+# read (560,344 updates on 115,437 rows since 18 Oct), which kept the table's visibility map
+# stale, so the awards total's index-only count fetched 26,383 heap rows (5.5 s). Built from the
+# SET list itself (services/sql_upsert_guard.py). scraped_at and last_updated always differ
+# (NOW()); nothing reads scraped_at, and the touch trigger owns last_updated.
+_PROJECT_SET = """
     title=EXCLUDED.title, objective=EXCLUDED.objective,
     framework_programme=EXCLUDED.framework_programme,
     -- The source word only; the served status is services/funding/project_status.py's (23 Oct 2026).
@@ -248,8 +243,23 @@ ON CONFLICT (project_id) DO UPDATE SET
     coordinator_country=COALESCE(EXCLUDED.coordinator_country, ft_funded_projects.coordinator_country),
     coordinator_pic=COALESCE(EXCLUDED.coordinator_pic, ft_funded_projects.coordinator_pic),
     scraped_at=NOW(),
-    last_updated=NOW()
-"""
+    last_updated=NOW()"""
+
+UPSERT = """
+INSERT INTO ft_funded_projects
+    (project_id, project_acronym, title, objective, framework_programme,
+     coordinator_name, coordinator_country, coordinator_pic, status, source_status, start_date, end_date,
+     eu_contribution, total_cost,
+     cost_currency, source_url, is_test, published_at, scraped_at, last_updated)
+VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s,
+        %(framework_programme)s, %(coordinator_name)s, %(coordinator_country)s,
+        %(coordinator_pic)s, 'unknown', %(source_status)s, %(start_date)s,
+        %(end_date)s, %(eu_contribution)s, %(total_cost)s, 'EUR', %(source_url)s,
+        false, %(published_at)s, NOW(), NOW())
+ON CONFLICT (project_id) DO UPDATE SET
+""" + _PROJECT_SET + only_if_changed(
+    _PROJECT_SET, "ft_funded_projects", skip=("scraped_at", "last_updated")) + "\n"
+
 
 
 def _fetch(page, pnum, size, query):

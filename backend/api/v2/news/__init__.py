@@ -737,7 +737,7 @@ _COVERAGE_NOTE = (
                 "these two to see the whole date gap), `by_body_truncated` (always "
                 "false), and `by_body`: EVERY body, stalest first, never truncated. Each body "
                 "carries `latest_date` + `age_days` (its newest published item), `last_fetched` "
-                "+ `fetch_age_days` (when the cron last touched the body, from `fetched_at`), "
+                "+ `fetch_age_days` (when the cron last read the body: its newest item's `fetched_at`, or the feed's last read if later), "
                 "`first_seen` (when its newest item was first captured), `undated_items`, a "
                 "three-state `state` (fresh | stale | undated) and `likely_cause`.\n\n"
                 "The two dates are the point, and `likely_cause` says WHOSE problem it is: "
@@ -832,7 +832,13 @@ def latest_news(request: Request,
     per_body = db.execute(text(
         "SELECT body_code, "
         "       max(document_date) FILTER (WHERE document_date <= now()) AS latest, "
-        "       max(fetched_at) AS last_fetched, "
+        # The later of the newest row's fetched_at and the agency feed's own read
+        # (economy_feed_reads, O237 9 Nov 2026): sync_economy no longer rewrites items that
+        # did not change, so a quiet feed's rows keep their old fetched_at. Only feeds whose
+        # item type is a news kind, the same rule that put their rows in this union.
+        "       greatest(max(fetched_at), (SELECT max(r.scraped_at) FROM economy_feed_reads r "
+        "                WHERE r.body_code = u.body_code "
+        "                  AND brubru_news_kind_of('economy_items', r.item_type) IS NOT NULL)) AS last_fetched, "
         "       max(creation_date) AS first_seen, "
         "       count(*) AS n, "
         "       count(*) FILTER (WHERE document_date IS NULL) AS undated "

@@ -31,7 +31,7 @@ def _targets(set_sql: str) -> list:
 
 @pytest.mark.parametrize("path", SETS)
 def test_the_guard_compares_every_column_the_update_writes_except_last_updated(path):
-    guard = job.only_if_changed(SETS[path])
+    guard = job.only_if_changed(SETS[path], "secondary_acts")
     cols = re.search(r"WHERE \((.*?)\)\s+IS DISTINCT FROM", guard, re.S).group(1)
     compared = [c.strip().removeprefix("secondary_acts.") for c in cols.split(",")]
     expected = [c for c in _targets(SETS[path]) if c != "last_updated"]
@@ -43,7 +43,7 @@ def test_the_guard_compares_every_column_the_update_writes_except_last_updated(p
 @pytest.mark.parametrize("path", SETS)
 def test_each_compared_expression_is_the_set_expression_verbatim(path):
     set_sql = SETS[path]
-    guard = job.only_if_changed(set_sql)
+    guard = job.only_if_changed(set_sql, "secondary_acts")
     for col in ("title", "status", "parent_celex", "regdel_updated_at"):
         # the SET's own CASE/COALESCE text appears in the guard unchanged (no copy that could drift)
         expr = re.search(rf"^\s*{col}\s*=\s*(.*?)(?=,\s*\n\s*(?:--|[a-z_]+\s*=)|\Z)", set_sql, re.M | re.S).group(1).strip()
@@ -53,7 +53,7 @@ def test_each_compared_expression_is_the_set_expression_verbatim(path):
 @pytest.mark.parametrize("path", STATEMENTS)
 def test_every_upsert_carries_its_guard_between_set_and_returning(path):
     sql = STATEMENTS[path]
-    guard = job.only_if_changed(SETS[path])
+    guard = job.only_if_changed(SETS[path], "secondary_acts")
     assert guard in sql
     assert sql.index("DO UPDATE SET") < sql.index(guard) < sql.index("RETURNING (xmax = 0) AS was_inserted")
 
@@ -73,9 +73,9 @@ def test_the_splitter_respects_quotes_parentheses_and_comments():
     assert "(t.a, t.b)" in guard
     assert "CASE WHEN x ~ '(a|b), c' THEN f(x, y) ELSE 'it''s, (fine' END, COALESCE(EXCLUDED.b, t.b))" in guard
     with pytest.raises(ValueError):
-        job.only_if_changed("a = f(x")
+        job.only_if_changed("a = f(x", "t")
     with pytest.raises(ValueError):
-        job.only_if_changed("NOT A COLUMN = 1")
+        job.only_if_changed("NOT A COLUMN = 1", "t")
 
 
 def test_a_skipped_record_is_counted_as_unchanged_not_as_updated():

@@ -52,6 +52,9 @@ import psycopg2.extras
 # .env only, which Railway does not have (the same bug ingest_funding_sedia.get_env documents).
 from ingest_funding_sedia import get_env
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from services.sql_upsert_guard import only_if_changed  # noqa: E402
+
 USER_AGENT = "Mozilla/5.0 (compatible; BrubruIngest/1.0; +https://brubru.beresol.eu)"
 
 DUMPS = {
@@ -257,24 +260,12 @@ def normalise(
     }
 
 
-_UPSERT_SQL = """
-    INSERT INTO ft_funded_projects
-        (project_id, project_acronym, title, objective, keywords, topic_code, grant_doi,
-         framework_programme, type_of_action,
-         coordinator_name, coordinator_country, start_date, end_date, total_cost,
-         eu_contribution, cost_currency, status, source_status, source_url, published_at, coordinator_pic,
-         organisations, topics, euroscivoc, legal_basis_details, web_links,
-         scraped_at, last_updated)
-    VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s, %(keywords)s,
-            %(topic_code)s, %(grant_doi)s,
-            %(framework_programme)s, %(type_of_action)s, %(coordinator_name)s,
-            %(coordinator_country)s, %(start_date)s, %(end_date)s, %(total_cost)s,
-            %(eu_contribution)s, %(cost_currency)s, 'unknown', %(source_status)s, %(source_url)s,
-            %(published_at)s, %(coordinator_pic)s,
-            %(organisations)s, %(topics)s, %(euroscivoc)s,
-            %(legal_basis_details)s, %(web_links)s,
-            NOW(), NOW())
-    ON CONFLICT (project_id) DO UPDATE SET
+# Skip a project this read would not change (O237, 9 Nov 2026): every run rewrote every project it
+# read (560,344 updates on 115,437 rows since 18 Oct), which kept the table's visibility map
+# stale, so the awards total's index-only count fetched 26,383 heap rows (5.5 s). Built from the
+# SET list itself (services/sql_upsert_guard.py). scraped_at and last_updated always differ
+# (NOW()); nothing reads scraped_at, and the touch trigger owns last_updated.
+_PROJECT_SET = """
         title = EXCLUDED.title,
         objective = EXCLUDED.objective,
         keywords = EXCLUDED.keywords,
@@ -296,8 +287,29 @@ _UPSERT_SQL = """
         legal_basis_details = EXCLUDED.legal_basis_details,
         web_links = EXCLUDED.web_links,
         scraped_at = NOW(),
-        last_updated = NOW()
-"""
+        last_updated = NOW()"""
+
+_UPSERT_SQL = """
+    INSERT INTO ft_funded_projects
+        (project_id, project_acronym, title, objective, keywords, topic_code, grant_doi,
+         framework_programme, type_of_action,
+         coordinator_name, coordinator_country, start_date, end_date, total_cost,
+         eu_contribution, cost_currency, status, source_status, source_url, published_at, coordinator_pic,
+         organisations, topics, euroscivoc, legal_basis_details, web_links,
+         scraped_at, last_updated)
+    VALUES (%(project_id)s, %(project_acronym)s, %(title)s, %(objective)s, %(keywords)s,
+            %(topic_code)s, %(grant_doi)s,
+            %(framework_programme)s, %(type_of_action)s, %(coordinator_name)s,
+            %(coordinator_country)s, %(start_date)s, %(end_date)s, %(total_cost)s,
+            %(eu_contribution)s, %(cost_currency)s, 'unknown', %(source_status)s, %(source_url)s,
+            %(published_at)s, %(coordinator_pic)s,
+            %(organisations)s, %(topics)s, %(euroscivoc)s,
+            %(legal_basis_details)s, %(web_links)s,
+            NOW(), NOW())
+    ON CONFLICT (project_id) DO UPDATE SET
+""" + _PROJECT_SET + only_if_changed(
+    _PROJECT_SET, "ft_funded_projects", skip=("scraped_at", "last_updated")) + "\n"
+
 
 
 def _params_for(rec: dict) -> dict:

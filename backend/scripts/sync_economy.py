@@ -32,6 +32,7 @@ from psycopg2.extras import execute_values  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from services.scrapers.economy_common import SourceBlocked  # noqa: E402
+from services.sql_upsert_guard import only_if_changed  # noqa: E402
 from services.scrapers import economy_ecb as e          # noqa: E402
 from services.scrapers import economy_eba as eba        # noqa: E402
 from services.scrapers import economy_esma as esma      # noqa: E402
@@ -482,6 +483,62 @@ INGESTORS.update({("ema", _c["item_type"]): ema.EMA_DATASET_INGESTORS[_c["item_t
 INGESTORS.update({("efsa", _c["item_type"]): efsa.EFSA_DATASET_INGESTORS[_c["item_type"]]
                   for _c in efsa.EFSA_DATASETS})
 
+_SET_CLAUSE = """
+  -- Content columns NEVER regress to empty. A scrape that comes back without a
+  -- body or a date is almost always a transient fetch failure, a PDF we cannot
+  -- parse, or a fetch_bodies=False discovery run -- not the publisher retracting
+  -- the text. Overwriting unconditionally made every backfill temporary: the
+  -- 8 Sep run composed 215 bodies and one night of crons had already destroyed
+  -- 18 of them, and it silently re-nulled document_date on rows whose date had
+  -- been recovered from the item's own page.
+  --
+  -- COALESCE keeps the stored value when the incoming one is empty; a scrape that
+  -- HAS a value still overwrites normally, so genuine updates are not blocked.
+  -- creation_date was already protected this way; the content columns were the gap.
+  title         = COALESCE(NULLIF(btrim(EXCLUDED.title), ''), economy_items.title),
+  summary       = COALESCE(NULLIF(btrim(EXCLUDED.summary), ''), economy_items.summary),
+  -- The LONGER body wins, which is not the same rule as "not empty wins".
+  -- The backfill fetched 348 EEA articles in full; this sync ran at 15:01 the same day
+  -- and put the 490-character RSS teaser back over every one of them, because a teaser
+  -- is non-empty and COALESCE asks nothing else. A feed summary must never displace the
+  -- article it summarises. The cost of this rule is a genuinely SHORTENED article keeping
+  -- its longer previous text; that is rare, visible in the next fetch, and far cheaper
+  -- than silently undoing every backfill each night.
+  body_txt      = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
+                          > length(COALESCE(economy_items.body_txt, ''))
+                       THEN btrim(EXCLUDED.body_txt) ELSE economy_items.body_txt END,
+  body_html     = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), ''))
+                          > length(COALESCE(economy_items.body_html, ''))
+                       THEN btrim(EXCLUDED.body_html) ELSE economy_items.body_html END,
+  document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
+  -- Keep source_kind describing the body we actually hold: if we retained the
+  -- stored body, relabelling it with this run's kind would misreport provenance.
+  -- source_kind must describe the body we actually KEPT, so it follows the same test.
+  source_kind   = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
+                          > length(COALESCE(economy_items.body_txt, ''))
+                       THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
+  guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
+  -- Procurement fields (migration 256). Never regress to empty, like the content
+  -- columns above; a run that did not re-read a procedure sends NULL and keeps them.
+  tender_reference = COALESCE(NULLIF(btrim(EXCLUDED.tender_reference), ''), economy_items.tender_reference),
+  status        = COALESCE(EXCLUDED.status, economy_items.status),
+  deadline      = COALESCE(EXCLUDED.deadline, economy_items.deadline),
+  creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
+  -- fetched_at moves only with a write: the guard below skips a row this run would
+  -- not change (O237, 9 Nov 2026). "The cron read this feed" is recorded once per
+  -- feed in economy_feed_reads (_record_feed_reads), which /api/v2/news/latest and
+  -- scraper_health.py read beside max(fetched_at).
+  fetched_at    = now()"""
+
+# Skip a row this run would not change (O237, 9 Nov 2026). Every run used to rewrite every item
+# it read, because fetched_at = now() made each row "different": a new version in 14 indexes, the
+# touch and tsvector triggers re-run over the full text, 30 KB of write log per item, about half
+# of the database's WAL over a weekend (1,079 batches, ~16.7 GB). Built from _SET_CLAUSE itself
+# (services/sql_upsert_guard.py), so a column added to the SET is compared without anyone
+# remembering to. fetched_at is left out on purpose: it always differs.
+_GUARD = only_if_changed(_SET_CLAUSE, "economy_items", skip=("fetched_at",))
+
+
 _UPSERT = """
 INSERT INTO economy_items
   (body_code, item_type, title, summary, public_url, body_txt, body_html,
@@ -490,51 +547,8 @@ VALUES
   (%(body_code)s, %(item_type)s, %(title)s, %(summary)s, %(public_url)s, %(body_txt)s,
    %(body_html)s, %(document_date)s, %(creation_date)s, %(source_kind)s, %(guid)s,
    %(tender_reference)s, %(status)s, %(deadline)s)
-ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
-  -- Content columns NEVER regress to empty. A scrape that comes back without a
-  -- body or a date is almost always a transient fetch failure, a PDF we cannot
-  -- parse, or a fetch_bodies=False discovery run -- not the publisher retracting
-  -- the text. Overwriting unconditionally made every backfill temporary: the
-  -- 8 Sep run composed 215 bodies and one night of crons had already destroyed
-  -- 18 of them, and it silently re-nulled document_date on rows whose date had
-  -- been recovered from the item's own page.
-  --
-  -- COALESCE keeps the stored value when the incoming one is empty; a scrape that
-  -- HAS a value still overwrites normally, so genuine updates are not blocked.
-  -- creation_date was already protected this way; the content columns were the gap.
-  title         = COALESCE(NULLIF(btrim(EXCLUDED.title), ''), economy_items.title),
-  summary       = COALESCE(NULLIF(btrim(EXCLUDED.summary), ''), economy_items.summary),
-  -- The LONGER body wins, which is not the same rule as "not empty wins".
-  -- The backfill fetched 348 EEA articles in full; this sync ran at 15:01 the same day
-  -- and put the 490-character RSS teaser back over every one of them, because a teaser
-  -- is non-empty and COALESCE asks nothing else. A feed summary must never displace the
-  -- article it summarises. The cost of this rule is a genuinely SHORTENED article keeping
-  -- its longer previous text; that is rare, visible in the next fetch, and far cheaper
-  -- than silently undoing every backfill each night.
-  body_txt      = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
-                          > length(COALESCE(economy_items.body_txt, ''))
-                       THEN btrim(EXCLUDED.body_txt) ELSE economy_items.body_txt END,
-  body_html     = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), ''))
-                          > length(COALESCE(economy_items.body_html, ''))
-                       THEN btrim(EXCLUDED.body_html) ELSE economy_items.body_html END,
-  document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
-  -- Keep source_kind describing the body we actually hold: if we retained the
-  -- stored body, relabelling it with this run's kind would misreport provenance.
-  -- source_kind must describe the body we actually KEPT, so it follows the same test.
-  source_kind   = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
-                          > length(COALESCE(economy_items.body_txt, ''))
-                       THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
-  guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
-  -- Procurement fields (migration 256). Never regress to empty, like the content
-  -- columns above; a run that did not re-read a procedure sends NULL and keeps them.
-  tender_reference = COALESCE(NULLIF(btrim(EXCLUDED.tender_reference), ''), economy_items.tender_reference),
-  status        = COALESCE(EXCLUDED.status, economy_items.status),
-  deadline      = COALESCE(EXCLUDED.deadline, economy_items.deadline),
-  creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
-  -- fetched_at is the INGESTION anchor and must still move every run, even when
-  -- nothing changed: /api/v2/news/latest reads it to tell "cron not reaching this
-  -- body" from "publisher has gone quiet".
-  fetched_at    = now();
+ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET""" + _SET_CLAUSE + _GUARD + """
+RETURNING (xmax = 0) AS inserted;
 """
 
 
@@ -543,51 +557,8 @@ INSERT INTO economy_items
   (body_code, item_type, title, summary, public_url, body_txt, body_html,
    document_date, creation_date, source_kind, guid, tender_reference, status, deadline)
 VALUES %s
-ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET
-  -- Content columns NEVER regress to empty. A scrape that comes back without a
-  -- body or a date is almost always a transient fetch failure, a PDF we cannot
-  -- parse, or a fetch_bodies=False discovery run -- not the publisher retracting
-  -- the text. Overwriting unconditionally made every backfill temporary: the
-  -- 8 Sep run composed 215 bodies and one night of crons had already destroyed
-  -- 18 of them, and it silently re-nulled document_date on rows whose date had
-  -- been recovered from the item's own page.
-  --
-  -- COALESCE keeps the stored value when the incoming one is empty; a scrape that
-  -- HAS a value still overwrites normally, so genuine updates are not blocked.
-  -- creation_date was already protected this way; the content columns were the gap.
-  title         = COALESCE(NULLIF(btrim(EXCLUDED.title), ''), economy_items.title),
-  summary       = COALESCE(NULLIF(btrim(EXCLUDED.summary), ''), economy_items.summary),
-  -- The LONGER body wins, which is not the same rule as "not empty wins".
-  -- The backfill fetched 348 EEA articles in full; this sync ran at 15:01 the same day
-  -- and put the 490-character RSS teaser back over every one of them, because a teaser
-  -- is non-empty and COALESCE asks nothing else. A feed summary must never displace the
-  -- article it summarises. The cost of this rule is a genuinely SHORTENED article keeping
-  -- its longer previous text; that is rare, visible in the next fetch, and far cheaper
-  -- than silently undoing every backfill each night.
-  body_txt      = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
-                          > length(COALESCE(economy_items.body_txt, ''))
-                       THEN btrim(EXCLUDED.body_txt) ELSE economy_items.body_txt END,
-  body_html     = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), ''))
-                          > length(COALESCE(economy_items.body_html, ''))
-                       THEN btrim(EXCLUDED.body_html) ELSE economy_items.body_html END,
-  document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
-  -- Keep source_kind describing the body we actually hold: if we retained the
-  -- stored body, relabelling it with this run's kind would misreport provenance.
-  -- source_kind must describe the body we actually KEPT, so it follows the same test.
-  source_kind   = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
-                          > length(COALESCE(economy_items.body_txt, ''))
-                       THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
-  guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
-  -- Procurement fields (migration 256). Never regress to empty, like the content
-  -- columns above; a run that did not re-read a procedure sends NULL and keeps them.
-  tender_reference = COALESCE(NULLIF(btrim(EXCLUDED.tender_reference), ''), economy_items.tender_reference),
-  status        = COALESCE(EXCLUDED.status, economy_items.status),
-  deadline      = COALESCE(EXCLUDED.deadline, economy_items.deadline),
-  creation_date = COALESCE(economy_items.creation_date, EXCLUDED.creation_date),
-  -- fetched_at is the INGESTION anchor and must still move every run, even when
-  -- nothing changed: /api/v2/news/latest reads it to tell "cron not reaching this
-  -- body" from "publisher has gone quiet".
-  fetched_at    = now();
+ON CONFLICT (body_code, item_type, public_url) DO UPDATE SET""" + _SET_CLAUSE + _GUARD + """
+RETURNING (xmax = 0) AS inserted;
 """
 
 
@@ -884,13 +855,16 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
     # Batched multi-row upsert via execute_values — orders of magnitude fewer
     # round-trips than row-by-row (essential for large datasets like FTS ~118k).
     batch = 500
-    n = 0
+    n = written = 0
     for i in range(0, len(rows), batch):
         chunk = rows[i:i + batch]
         for attempt in range(3):
             try:
-                execute_values(db.cur, _UPSERT_BATCH, chunk, page_size=batch)
+                # RETURNING gives one row per item inserted or changed; an item the guard
+                # skipped returns nothing (O237).
+                written_now = len(execute_values(db.cur, _UPSERT_BATCH, chunk, page_size=batch, fetch=True))
                 db.commit()
+                written += written_now
                 break
             except (psycopg2.OperationalError, psycopg2.InterfaceError):
                 # Supabase dropped the connection — reconnect and retry the chunk.
@@ -906,8 +880,41 @@ def _run_one(db: ChunkedDb, body: str, itype: str, *, fetch_bodies: bool, legal_
         n += len(chunk)
         if n % 5000 == 0 or i + batch >= len(rows):
             print(f"    {body}/{itype}: {n}/{len(rows)} upserted", flush=True)
-    print(f"[OK] {body}/{itype}: upserted {n} items", flush=True)
+    _record_feed_reads(db, rows)
+    print(f"[OK] {body}/{itype}: upserted {n} items ({written} written, {n - written} unchanged)", flush=True)
     return n
+
+
+def _record_feed_reads(db: ChunkedDb, rows: list) -> None:
+    """Record that this run read each (body_code, item_type) it upserted (O237, 9 Nov 2026).
+
+    fetched_at used to move on every row every run, and two readers take max(fetched_at) per
+    feed to tell a scraper that stopped from a publisher that went quiet: /api/v2/news/latest
+    (`last_fetched`, `fetch_age_days`) and scripts/scraper_health.py. Rows the guard skips keep
+    their fetched_at now, so the read is recorded here, one small row per feed, and both readers
+    take the later of the two. Only feeds that returned items: a run that read nothing must go
+    stale, exactly as its rows' fetched_at used to.
+    """
+    counts: dict = {}
+    for r in rows:
+        counts[(r[0], r[1])] = counts.get((r[0], r[1]), 0) + 1
+    if not counts:
+        return
+    try:
+        execute_values(db.cur, """
+            INSERT INTO economy_feed_reads (body_code, item_type, items_read)
+            VALUES %s
+            ON CONFLICT (body_code, item_type) DO UPDATE
+               SET scraped_at = now(), items_read = EXCLUDED.items_read, last_updated = now()""",
+            [(b, t, c) for (b, t), c in counts.items()])
+        db.commit()
+    except psycopg2.Error as exc:
+        # Not silent: without this row a quiet feed reads as stale (its items are no longer
+        # rewritten), so the run says so and the tier records it as degraded.
+        db.rollback()
+        print(f"[SYNC_STATUS] degraded: feed read not recorded for "
+              f"{', '.join(f'{b}/{t}' for b, t in counts)} ({exc.__class__.__name__}: {str(exc).strip().splitlines()[0]})",
+              flush=True)
 
 
 class _OutOfTime(BaseException):
