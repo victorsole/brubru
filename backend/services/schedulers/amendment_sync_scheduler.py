@@ -48,7 +48,9 @@ async def _daily_amendment_sync():
             f"{result.documents_skipped} skipped, "
             f"{result.documents_failed} failed, "
             f"{result.documents_unsupported} unsupported format, "
-            f"{result.documents_not_found} not found "
+            f"{result.documents_not_found} not found, "
+            f"{result.documents_deferred} left for the next run; "
+            f"listed {result.documents_listed_by_type} "
             f"({result.duration_seconds}s)"
         )
         # A run that discovered nothing is not a quiet day. EP Open Data answers 200
@@ -60,6 +62,13 @@ async def _daily_amendment_sync():
         elif result.documents_discovered == 0:
             status = "failed"
             result.errors.append("discovered 0 documents: the source is down or changed")
+        elif result.documents_listed_by_type.get("AM", 0) == 0 and started.timetuple().tm_yday > 45:
+            # The committees table amendments all year round. Until 11 Nov 2026 a run
+            # could find draft reports only and still say success: 15 of the year's 839
+            # amendment documents were held, none dated after 6 July. (The list is per
+            # year, so the first weeks of a year may truly hold none.)
+            status = "failed"
+            result.errors.append("listed 0 amendment documents (AM): the list is down or changed")
         elif result.documents_failed:
             status = "degraded"
         else:
@@ -69,6 +78,9 @@ async def _daily_amendment_sync():
         # was also a run error, so `degraded` could never be reached and 41 documents kept
         # the job red for two weeks while it stored amendments normally.
         notes = list(result.errors) + list(result.document_errors)
+        if result.documents_deferred:
+            notes.insert(0, f"{result.documents_deferred} listed document(s) not read yet "
+                            f"(limit a run); listed {result.documents_listed_by_type}")
         record_run(
             db, source_key="ep_amendments", tier="warm", status=status,
             items_added=result.amendments_stored,

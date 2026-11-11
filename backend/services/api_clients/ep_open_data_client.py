@@ -11,7 +11,8 @@ Rate limit: 500 requests per 5 minutes (~0.6s per request).
 
 Key findings from API exploration (Feb 2026):
 - The /documents endpoint contains both plenary (A-10-...) and committee (COMM-AM-...)
-  amendment lists, but does NOT support server-side work-type filtering.
+  amendment lists. In Feb 2026 it had no server-side filter; since at least 11 Nov 2026
+  it filters by `year` and `work-type` (1,528 AMENDMENT_LIST documents for 2026).
 - The /committee-documents endpoint has PR and PA docs with COMMITTEE-TYPE-PENUMBER IDs.
 - Committee AM docs (e.g. JURI-AM-753448) are discoverable via /documents.
 - Doceo URL pattern: https://www.europarl.europa.eu/doceo/document/{identifier}_EN.docx
@@ -70,7 +71,11 @@ API_WORK_TYPE_MAP = {
 # Regex patterns
 RE_PROCEDURE_REF = re.compile(r'(\d{4}/\d{4}\([A-Z]{3}\))')
 RE_PE_NUMBER = re.compile(r'PE[\s_-]?(\d{3})[.\s_-]?(\d{3})')
-RE_COMMITTEE_CODE = re.compile(r'^([A-Z]{4})-')
+# Four characters: a committee (ECON) or a joint committee (CJ13).
+RE_COMMITTEE_CODE = re.compile(r'^([A-Z][A-Z0-9]{3})-')
+# A committee's amendment document, as EP Open Data lists it: ECON-AM-789865, CJ13-AM-797588.
+# Plenary amendments (A-10-2026-0001-AM-001-243) are another corpus and are not read here.
+RE_COMMITTEE_AM_ID = re.compile(r'^[A-Z][A-Z0-9]{3}-AM-\d{6}$')
 # Committee AM docs: COMM-AM-NNNNNN (6-digit PE-like number)
 RE_COMMITTEE_AM = re.compile(r'^[A-Z]{4}-AM-\d{6}')
 # Committee PR/PA docs: COMM-PR-NNNNNN or COMM-PA-NNNNNN
@@ -117,16 +122,21 @@ class EPOpenDataClient:
         endpoint: str,
         offset: int = 0,
         limit: int = 100,
+        filters: Optional[Dict[str, Any]] = None,
+        empty_ok: bool = False,
     ) -> List[Dict[str, Any]]:
         """
         Fetch a page from a list endpoint.
 
-        The EP Open Data API does NOT support server-side filtering by
-        work-type or year. We paginate and filter client-side.
+        `filters` are extra query parameters. /documents filters on the server by `year`
+        and `work-type` (read 11 Nov 2026; in February 2026 it did not);
+        /committee-documents is still filtered client-side. `empty_ok` is for a filtered
+        list that may truly hold nothing (a year with no document yet): its 204 at
+        offset 0 is then an empty list, not a fault.
         """
         client = await self._get_client()
         url = f"{self.BASE_URL}/{endpoint}"
-        params = {"offset": offset, "limit": min(limit, 100)}
+        params = {**(filters or {}), "offset": offset, "limit": min(limit, 100)}
 
         last_error = None
         for attempt in range(1, 4):
@@ -173,7 +183,7 @@ class EPOpenDataClient:
             # 29 and 30 Oct). Past the first page that is the end of the list; at offset 0 it would
             # say the whole list is empty, which is never true, so there it stays an upstream fault.
             if response.status_code == 204:
-                if offset > 0:
+                if offset > 0 or empty_ok:
                     return []
                 raise EPOpenDataUpstreamError(f"{endpoint} offset=0: HTTP 204, no list at all")
             response.raise_for_status()
@@ -306,6 +316,12 @@ class EPOpenDataClient:
             elif isinstance(title_dict, str):
                 result["title"] = title_dict
 
+        # /documents keeps the title on the work itself, in every language.
+        if not result["title"]:
+            titles = data.get("title_dcterms")
+            if isinstance(titles, dict):
+                result["title"] = titles.get("en", "") or next(iter(titles.values()), "")
+
         # Extract procedure reference from title
         if result["title"]:
             proc_match = RE_PROCEDURE_REF.search(result["title"])
@@ -314,6 +330,10 @@ class EPOpenDataClient:
 
         # Also check foresees_change_of for parent doc link
         foresees = data.get("foresees_change_of", "")
+        if isinstance(foresees, list):
+            foresees = foresees[0] if foresees else ""
+        # The document these amendments are tabled to: eli/dl/doc/TRAN-PA-796508.
+        result["parent_identifier"] = foresees.rsplit("/", 1)[-1] if isinstance(foresees, str) else ""
         if isinstance(foresees, str) and not result["procedure_reference"]:
             proc_match = RE_PROCEDURE_REF.search(foresees)
             if proc_match:
@@ -330,7 +350,6 @@ class EPOpenDataClient:
         work_types: Optional[List[str]] = None,
         years: Optional[List[int]] = None,
         progress_callback: Optional[Callable[[int, int, str], None]] = None,
-        max_am_probe: int = 120,
     ) -> List[Dict[str, Any]]:
         """
         Discover amendment-related documents from the EP Open Data API.
@@ -341,11 +360,11 @@ class EPOpenDataClient:
 
         Strategy:
         - /committee-documents: paginate for PR and PA docs (~2500 items, ~20s)
-        - For AM docs: probe COMM-AM-{pe_number} doceo URLs derived from PRs
+        - AM docs: /documents?year=&work-type=AMENDMENT_LIST, committee identifiers only
 
         Args:
             work_types: Shortcodes to fetch (defaults to AM + PR)
-            years: Filter by year (from label/identifier heuristics)
+            years: Years whose amendment documents are listed (default: this year)
             progress_callback: Optional callback(current, total, message)
 
         Returns:
@@ -380,12 +399,11 @@ class EPOpenDataClient:
         if progress_callback:
             progress_callback(0, len(all_docs), f"Discovered {len(all_docs)} PR/PA documents")
 
-        # Phase 2: Probe for AM docs derived from PR identifiers
+        # Phase 2: the committees' amendment documents, from the list EP publishes.
         if WORK_TYPE_AMENDMENTS in work_types:
-            am_docs = await self._probe_am_documents(
-                all_docs, progress_callback, max_am_probe=max_am_probe)
+            am_docs = await self.list_amendment_documents(years, progress_callback)
             all_docs.extend(am_docs)
-            logger.info(f"[INFO] Probed {len(am_docs)} AM docs")
+            logger.info(f"[INFO] Listed {len(am_docs)} AM docs")
 
         logger.info(f"[OK] Total discovered: {len(all_docs)} documents")
 
@@ -428,101 +446,41 @@ class EPOpenDataClient:
 
         return doc
 
-    async def _probe_am_documents(
+    async def list_amendment_documents(
         self,
-        pr_docs: List[Dict[str, Any]],
+        years: Optional[List[int]] = None,
         progress_callback: Optional[Callable] = None,
-        max_am_probe: int = 120,
     ) -> List[Dict[str, Any]]:
         """
-        Probe for AM documents based on discovered PR documents.
+        Every committee amendment document EP Open Data lists for `years` (default: this year).
 
-        For each PR doc like JURI-PR-751881, check if JURI-AM-{nearby PE numbers}
-        exists on doceo. Committee AMs typically have PE numbers close to
-        (but slightly higher than) the parent PR's PE number.
+        Until 11 Nov 2026 these were GUESSED: for the 120 newest draft reports, PE number
+        +1 to +5 was tried at doceo. Committees number their amendment documents far from
+        the report and table them weeks later, so the guess found 15 of the 839 documents
+        of 2026, none dated after 6 July, and a run that found none recorded success.
+        /documents?year=&work-type=AMENDMENT_LIST lists them all.
+
+        A year that cannot be listed raises: a short list is never returned as the whole one.
         """
-        am_docs: List[Dict[str, Any]] = []
-        probed: set = set()
-
-        # Newest PE numbers first, and bounded. Every candidate costs a browser fetch
-        # now that doceo can only be read past its WAF, so probing 5 deltas across all
-        # 1,127 PRs would be ~5,600 fetches in a job that has to finish daily. The new
-        # amendments are attached to the newest reports, and an older PR that gains an
-        # AM later is picked up by a full run (max_am_probe=0).
-        pr_list = [d for d in pr_docs if d.get("document_type") == "PR"]
-        pr_list.sort(key=lambda d: d.get("pe_reference", ""), reverse=True)
-        if max_am_probe:
-            pr_list = pr_list[:max_am_probe]
-        logger.info(f"[INFO] Probing AM docs for {len(pr_list)} PR documents...")
-
-        # Build every candidate first, then ask the browser. doceo answers plain HTTP
-        # with 202 and an empty body whether or not the document exists, so the old
-        # HEAD probe saw 202 (never 200), treated it as "no AM at this PE" and broke
-        # out of the range immediately: it discovered ZERO amendment documents on every
-        # run. Only a browser that has cleared the host's challenge sees the true
-        # status, which is what separates a real document from a 404.
-        candidates: List[tuple] = []
-        for pr in pr_list:
-            committee = pr.get("committee_code", "")
-            pe_ref = pr.get("pe_reference", "")
-            if not committee or not pe_ref:
-                continue
-            pe_match = re.match(r'PE(\d{3})\.(\d{3})', pe_ref)
-            if not pe_match:
-                continue
-            pe_num = int(pe_match.group(1) + pe_match.group(2))
-            for delta in range(1, 6):
-                am_id = f"{committee}-AM-{pe_num + delta}"
-                if am_id in probed:
+        from datetime import datetime as _dt
+        docs: List[Dict[str, Any]] = []
+        seen: set = set()
+        for year in (years or [_dt.now().year]):
+            stubs = await self._paginate_endpoint(
+                "documents",
+                filter_identifier_pattern=RE_COMMITTEE_AM_ID,
+                filters={"year": year, "work-type": "AMENDMENT_LIST"},
+                empty_ok=True,
+                progress_callback=progress_callback,
+            )
+            for stub in stubs:
+                identifier = stub["identifier"]
+                if identifier in seen:
                     continue
-                probed.add(am_id)
-                candidates.append((am_id, f"{DOCEO_BASE}/{am_id}_EN.docx",
-                                   pr.get("procedure_reference", "")))
-
-        if not candidates:
-            return am_docs
-
-        try:
-            import importlib.util
-            import sys as _sys
-            from pathlib import Path as _Path
-            spec = importlib.util.spec_from_file_location(
-                "waf_browser_fetcher",
-                str(_Path(__file__).resolve().parents[1] / "scrapers" / "waf_browser_fetcher.py"))
-            waf = importlib.util.module_from_spec(spec)
-            _sys.modules["waf_browser_fetcher"] = waf
-            spec.loader.exec_module(waf)
-        except Exception as e:  # noqa: BLE001
-            raise EPOpenDataUpstreamError(
-                f"doceo is behind a WAF and the browser fetcher is unavailable ({e}), "
-                f"so no amendment document can be discovered") from e
-
-        by_url = {url: (am_id, proc) for am_id, url, proc in candidates}
-        urls = list(by_url)
-        logger.info(f"[INFO] Probing {len(urls)} candidate AM URLs through the browser")
-        found = 0
-        for start in range(0, len(urls), 25):
-            batch = urls[start:start + 25]
-            try:
-                out = await asyncio.to_thread(
-                    waf.fetch_bytes_isolated, batch,
-                    warm_url="https://www.europarl.europa.eu/doceo/", timeout_s=600.0)
-            except Exception as e:  # noqa: BLE001
-                logger.warning(f"[WARN] AM probe batch {start}: {e}")
-                continue
-            for url, (status, body, err) in out.items():
-                if status == 200 and body[:2] == b"PK":
-                    am_id, proc = by_url[url]
-                    doc = self._stub_to_doc(am_id)
-                    doc["procedure_reference"] = proc
-                    am_docs.append(doc)
-                    found += 1
-            if progress_callback:
-                progress_callback(start + len(batch), len(urls),
-                                  f"AM probe: {found} found")
-        logger.info(f"[OK] AM probe: {found} real documents out of {len(urls)} candidates")
-
-        return am_docs
+                seen.add(identifier)
+                docs.append(self._stub_to_doc(identifier))
+            logger.info(f"[INFO] {year}: {len(stubs)} committee amendment documents listed")
+        return docs
 
     async def _paginate_endpoint(
         self,
@@ -531,9 +489,12 @@ class EPOpenDataClient:
         filter_identifier_pattern: Optional[re.Pattern] = None,
         max_pages: int = 200,
         progress_callback: Optional[Callable] = None,
+        filters: Optional[Dict[str, Any]] = None,
+        empty_ok: bool = False,
     ) -> List[Dict[str, Any]]:
         """
-        Paginate through an endpoint, filtering items client-side.
+        Paginate through an endpoint, filtering items client-side (after any server
+        `filters`).
 
         Returns list of stubs: {identifier, work_type, endpoint, label}
         """
@@ -545,7 +506,8 @@ class EPOpenDataClient:
         while page < max_pages:
             try:
                 await asyncio.sleep(self.RATE_LIMIT_DELAY)
-                items = await self._list_endpoint(endpoint, offset=offset, limit=page_size)
+                items = await self._list_endpoint(
+                    endpoint, offset=offset, limit=page_size, filters=filters, empty_ok=empty_ok)
 
                 if not items:
                     break

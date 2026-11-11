@@ -53,6 +53,9 @@ class BulkSyncResult:
     documents_failed: int = 0
     documents_unsupported: int = 0  # legacy Word .doc: a format, not a failure
     documents_not_found: int = 0    # HTTP 404 at doceo
+    # Listed and not yet read: left for the next run by the per-run limit. Never silent.
+    documents_deferred: int = 0
+    documents_listed_by_type: Dict[str, int] = field(default_factory=dict)
     amendments_stored: int = 0
     # `errors` is the RUN failing (the listing could not be read). A document that could
     # not be read goes to `document_errors`: 41 such documents made every nightly run
@@ -75,6 +78,9 @@ class DocumentNotFound(ValueError):
 OLE2_MAGIC = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"
 # A document doceo answers 404 for is asked again after this many days, not every night.
 NOT_FOUND_RETRY_DAYS = 7
+# Documents the nightly run reads at most. Each is a browser fetch past doceo's WAF and a
+# DOCX parse inside the API's own container; the rest wait for the next night, newest first.
+NIGHTLY_DOCUMENT_LIMIT = 60
 
 
 class BulkAmendmentSyncService:
@@ -101,6 +107,7 @@ class BulkAmendmentSyncService:
         work_types: Optional[List[str]] = None,
         force_refetch: bool = False,
         progress_callback: Optional[Callable[[int, int, str], None]] = None,
+        max_documents: Optional[int] = None,
     ) -> BulkSyncResult:
         """
         Full bulk sync: enumerate documents from EP Open Data API,
@@ -111,6 +118,9 @@ class BulkAmendmentSyncService:
             work_types: Document types (defaults to AM + PR)
             force_refetch: Re-parse even if already done
             progress_callback: Optional callback(current, total, message)
+            max_documents: Read at most this many documents that are not settled, the
+                highest PE numbers (the newest) first; the others are counted in
+                `documents_deferred` and read by a later run. None reads them all.
 
         Returns:
             BulkSyncResult with counts and errors
@@ -142,7 +152,23 @@ class BulkAmendmentSyncService:
             return result
 
         result.documents_discovered = len(documents)
-        logger.info(f"[INFO] Discovered {len(documents)} documents")
+        for d in documents:
+            t = d.get("document_type") or "?"
+            result.documents_listed_by_type[t] = result.documents_listed_by_type.get(t, 0) + 1
+        logger.info(f"[INFO] Discovered {len(documents)} documents {result.documents_listed_by_type}")
+
+        # What this run reads. Settled documents cost nothing and stay in the list (they
+        # are counted as skipped below); the open ones are taken newest first up to the limit.
+        if max_documents is not None and not force_refetch:
+            open_docs = [d for d in documents
+                         if d.get("identifier") and not self._is_settled(d["identifier"])]
+            open_docs.sort(key=lambda d: d.get("pe_reference", ""), reverse=True)
+            left = {d["identifier"] for d in open_docs[max_documents:]}
+            if left:
+                result.documents_deferred = len(left)
+                documents = [d for d in documents if d.get("identifier") not in left]
+                logger.info(f"[INFO] {len(left)} document(s) left for the next run "
+                            f"(limit {max_documents} a run)")
 
         # Phase 1b: doceo answers plain HTTP with 202 and an EMPTY body for every
         # document, so the old code handed 0 bytes to the parser (raise_for_status
@@ -277,6 +303,7 @@ class BulkAmendmentSyncService:
             years=[current_year],
             work_types=[WORK_TYPE_AMENDMENTS, WORK_TYPE_DRAFT_REPORTS],
             force_refetch=False,
+            max_documents=NIGHTLY_DOCUMENT_LIMIT,
         )
 
     def get_sync_status(self) -> Dict[str, Any]:
@@ -361,6 +388,15 @@ class BulkAmendmentSyncService:
             return age.days < NOT_FOUND_RETRY_DAYS
         return False
 
+    def _procedure_of(self, ep_identifier: str) -> str:
+        """The procedure reference stored for a document already held, or ''."""
+        row = (
+            self.db.query(AmendmentDocument.procedure_reference)
+            .filter(AmendmentDocument.ep_identifier == ep_identifier)
+            .first()
+        )
+        return (row[0] or "") if row else ""
+
     def _is_already_parsed(self, ep_identifier: str) -> bool:
         """Check if a document with this EP identifier is already parsed."""
         exists = (
@@ -434,8 +470,18 @@ class BulkAmendmentSyncService:
         date_str = doc.get("date", "")
         if not date_str:
             try:
+                # An amendment document lives under /documents (it 404s under
+                # /committee-documents, so until 11 Nov 2026 every one was stored undated).
                 detail = await self.client.get_document_detail(
-                    ep_id, endpoint="committee-documents")
+                    ep_id, endpoint="documents" if doc_type == "AM" else "committee-documents")
+                # Its procedure is its parent's: the report or opinion it amends.
+                parent = detail.get("parent_identifier") if isinstance(detail, dict) else ""
+                if not procedure_ref and isinstance(detail, dict):
+                    procedure_ref = detail.get("procedure_reference") or ""
+                if not procedure_ref and parent:
+                    procedure_ref = self._procedure_of(parent)
+                if procedure_ref and not doc.get("procedure_reference"):
+                    doc["procedure_reference"] = procedure_ref
                 # Verified against the live endpoint: the field is "date"
                 # (AFCO-PR-630640 -> 2018-11-23). The others are tried in case a
                 # document type carries a different one. AM documents 404 here, since
