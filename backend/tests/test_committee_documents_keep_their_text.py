@@ -301,7 +301,11 @@ class _Query:
         return " AND ".join(str(c.compile(dialect=postgresql.dialect())) for c in self.criteria)
 
     def all(self):
-        self.s.candidate_sql = self._sql()
+        sql = self._sql()
+        if "text_body, %(coalesce_1)s) !=" in sql or "!= " in sql.split(" AND ")[0]:
+            self.s.procedure_sql = sql                       # the rows held with text and no procedure
+            return list(self.s.held_with_text)
+        self.s.candidate_sql = sql
         return list(self.s.rows)
 
     def scalar(self):
@@ -315,6 +319,7 @@ class _Query:
 class _Session:
     def __init__(self, rows, remaining=0):
         self.rows, self.remaining, self.commits, self.amendment_updates = rows, remaining, 0, []
+        self.held_with_text = []
 
     def query(self, *entities):
         return _Query(self, entities)
@@ -379,6 +384,31 @@ def test_a_pdf_only_document_held_without_procedure_takes_its_parents(monkeypatc
     out, s, _ = _fill([row], {"TEST-AM-768235": {"files": {"pdf": "p1"}, "parent_identifier": "TEST-PR-780000"}},
                       {"p1": b"%PDF-bytes"}, monkeypatch, parents={"TEST-PR-780000": PROC})
     assert out["filled"] == 1 and row.procedure_reference == PROC and len(s.db.amendment_updates) == 1
+
+
+def test_a_document_held_with_its_text_and_no_procedure_takes_its_covers(monkeypatch):
+    def held(identifier, text):
+        r = _row(identifier)
+        r.text_body = text
+        return r
+    cover = text_mod.text_from_docx(_cover())[0]
+    a, b, c, d = (held("TEST-PR-796160", cover), held("TEST-AM-757208", "AM\\1297712EN.docx PE758.950 " + PROC),
+                  held("TEST-PR-796161", f"{PROC}\n\n{OTHER}"), held("TEST-PR-796162", "0000/0000(INI)"))
+    s, _ = _svc({}, {})
+    s.db = _Session([])
+    s.db.held_with_text = [a, b, c, d]
+    assert s.fill_missing_procedures() == 1 and s.db.commits == 1
+    assert a.procedure_reference == PROC                                           # its own cover
+    assert (b.procedure_reference, c.procedure_reference, d.procedure_reference) == ("", "", "")   # a PDF, two named, a placeholder
+    (values, params), = s.db.amendment_updates
+    assert values == {"procedure_reference": PROC} and params[0] == "PE796.160"
+    sql = s.db.procedure_sql
+    assert "text_body" in sql and "procedure_reference" in sql and "status =" in sql
+
+
+def test_the_fill_also_names_procedures_from_held_text(monkeypatch):
+    out, s, _ = _fill([], {}, {}, monkeypatch)
+    assert hasattr(s.db, "procedure_sql") and out == {"filled": 0, "unread": 0, "remaining": 0}
 
 
 def test_the_documents_asked_are_those_without_text_not_asked_in_the_last_week(monkeypatch):

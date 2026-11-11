@@ -100,6 +100,10 @@ def _detail_endpoint(doc_type: str) -> str:
     return "documents" if doc_type == "AM" else "committee-documents"
 
 
+# How the text of a PDF edition starts: the file stamp ("AM\\1297712EN.docx PE758.950").
+_PDF_STAMPS = ("AM\\", "PR\\", "PA\\", "AD\\", "RD\\")
+
+
 def _pdf_address(doceo_url: str) -> str:
     """The doceo address of a document's PDF edition, from its .docx address."""
     return doceo_url[:-len(".docx")] + ".pdf" if doceo_url.endswith(".docx") else doceo_url
@@ -485,7 +489,41 @@ class BulkAmendmentSyncService:
                      .scalar() or 0)
         logger.info(f"[INFO] Document texts: {filled} read, {unread} not readable, "
                     f"{remaining} still without text")
+        self.fill_missing_procedures()
         return {"filled": filled, "unread": unread, "remaining": remaining}
+
+    def fill_missing_procedures(self) -> int:
+        """Give a document held WITH its text and WITHOUT a procedure the one its cover names.
+
+        No download: the text is already here. These are rows whose text was read by hand
+        before the sync read covers (33 on 11 Nov 2026), and any row a later run leaves so.
+        A text that came from a PDF is left alone: its cover cannot be trusted.
+        """
+        rows = (
+            self.db.query(AmendmentDocument)
+            .filter(func.coalesce(AmendmentDocument.text_body, "") != "",
+                    func.coalesce(AmendmentDocument.procedure_reference, "") == "",
+                    AmendmentDocument.status == "parsed")
+            .all()
+        )
+        named = 0
+        for row in rows:
+            head = (row.text_body or "").lstrip()
+            if head.startswith(_PDF_STAMPS):
+                continue
+            cover = procedure_from_cover(head)
+            if not cover or cover.startswith("0000/"):
+                continue
+            row.procedure_reference = cover
+            (self.db.query(MEPAmendment)
+             .filter(MEPAmendment.pe_reference == row.pe_reference,
+                     func.coalesce(MEPAmendment.procedure_reference, "") == "")
+             .update({"procedure_reference": cover}, synchronize_session=False))
+            named += 1
+        if named:
+            self.db.commit()
+        logger.info(f"[INFO] Procedures read from the cover of held documents: {named} of {len(rows)}")
+        return named
 
     def get_sync_status(self) -> Dict[str, Any]:
         """
