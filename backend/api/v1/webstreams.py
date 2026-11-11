@@ -6,7 +6,9 @@ sync_committee_transcripts.py scraper. Each row carries:
 - multimedia_url: the multimedia.europarl.europa.eu landing page
 - video_url: direct stream URL when extracted
 - meeting_date + committee_code
-- transcript_text (if Whisper has run)
+- the transcript where one exists (none since June 2026: Parliament's video service
+  does not allow its recordings to be downloaded), and otherwise the reason in words
+  and the sitting's agenda
 
 Partners can use this to build per-committee streaming dashboards.
 """
@@ -49,6 +51,13 @@ class WebstreamItem(BaseModel):
     word_count: Optional[int] = None
     status: Optional[str] = None  # PENDING | DOWNLOADING | TRANSCRIBING | PROCESSING | COMPLETED | FAILED
     related_procedure_refs: list = Field(default_factory=list)
+    transcript_available: bool = Field(
+        False, description="True when the item's body carries the meeting's transcript.")
+    transcript_note: Optional[str] = Field(
+        None, description="Why there is no transcript, in words (not held yet; recording not downloadable; not transcribed). Null when there is one.")
+    agenda_items: list = Field(
+        default_factory=list,
+        description="The agenda of the sitting this webstream shows, from Parliament's eMeeting: number, title, procedure_refs. Empty when Brubru could not tie one sitting to it.")
     transcribed_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
     # 5 mandatory Brubru v1 datapoints.
@@ -58,7 +67,7 @@ class WebstreamItem(BaseModel):
     )
     body_txt: Optional[str] = Field(
         None,
-        description="Plain-text composition: title + committee + meeting date + duration + speaker count + status + related procedures.",
+        description="The meeting's transcript where there is one. Otherwise: title, committee, meeting date, status, why there is no transcript, and the sitting's agenda.",
     )
     body_html: Optional[str] = Field(
         None,
@@ -79,8 +88,14 @@ class WebstreamItem(BaseModel):
     )
 
 
-def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
+def _row_to_item(r: CommitteeMeetingTranscript, today: Optional[date] = None) -> WebstreamItem:
     import html as _html
+    from services.committee_meeting_agenda import transcript_note
+    has_transcript = bool((r.transcript_text or "").strip())
+    meeting_day = r.meeting_date.date() if hasattr(r.meeting_date, "date") and r.meeting_date else None
+    note = transcript_note(has_transcript, getattr(r, "institution", None), meeting_day,
+                           today or datetime.utcnow().date())
+    agenda = [a for a in (getattr(r, "agenda_items", None) or []) if isinstance(a, dict) and (a.get("title") or "").strip()]
     title = r.title or f"{r.committee_code or 'Committee'} meeting"
     lines = [title]
     parts_html = [f"<h2>{_html.escape(title)}</h2>"]
@@ -102,6 +117,21 @@ def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
         parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
     # The transcript IS the body of a meeting. 208 stored transcripts were never served:
     # every body was the metadata above alone (7 Oct 2026).
+    # A meeting with no transcript says so, and why: until 11 Nov 2026 it read
+    # "Status: PENDING" for ever, as if a transcript were on its way.
+    if note:
+        lines.append(note)
+        parts_html.append(f"<p>{_html.escape(note)}</p>")
+    if agenda:
+        lines += ["", "Agenda of this sitting:"]
+        parts_html.append("<h3>Agenda of this sitting</h3><ol>")
+        for a in agenda:
+            refs = ", ".join(x for x in (a.get("procedure_refs") or []) if x)
+            entry = a["title"].strip() + (f" ({refs})" if refs else "")
+            number = a.get("number")
+            lines.append(f"{number}. {entry}" if number is not None else f"- {entry}")
+            parts_html.append(f"<li>{_html.escape(entry)}</li>")
+        parts_html.append("</ol>")
     transcript = (r.transcript_text or "").strip()
     if transcript:
         lines += ["", "Transcript:", transcript]
@@ -121,6 +151,10 @@ def _row_to_item(r: CommitteeMeetingTranscript) -> WebstreamItem:
         word_count=r.word_count,
         status=r.status,
         related_procedure_refs=list(r.related_procedure_refs or []),
+        transcript_available=has_transcript,
+        transcript_note=note,
+        agenda_items=[{"number": a.get("number"), "title": a["title"].strip(),
+                       "procedure_refs": list(a.get("procedure_refs") or [])} for a in agenda],
         transcribed_at=r.transcribed_at,
         last_updated=r.last_updated,
         # 5 mandatory datapoints
@@ -168,7 +202,7 @@ GET /api/v1/webstreams?updated_from=2026-05-01
 Paginated `WebstreamItem` envelope. `public_url` is the meeting's `multimedia.europarl.europa.eu` landing page (real, specific). `meeting_start_date` carries the meeting timestamp. All 5 mandatory v1 datapoints present per row.
 
 **Data freshness**
-Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). No committee meeting has been transcribed since June 2026: the European Parliament's video service does not allow its recordings to be downloaded. `transcript_available` says whether an item has a transcript and `transcript_note` says why not; the sitting's agenda is in `agenda_items` and in the body where Brubru holds it.
 """,
 )
 async def list_webstreams(
@@ -270,7 +304,7 @@ GET /api/v1/webstreams/{stream_id}
 A `WebstreamItem` with all 5 mandatory v1 datapoints. Follow `public_url` to view/replay the meeting on multimedia.europarl.europa.eu.
 
 **Data freshness**
-Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). No committee meeting has been transcribed since June 2026: the European Parliament's video service does not allow its recordings to be downloaded. `transcript_available` says whether an item has a transcript and `transcript_note` says why not; the sitting's agenda is in `agenda_items` and in the body where Brubru holds it.
 """,
 )
 async def get_webstream_detail(
@@ -312,7 +346,7 @@ GET /api/v1/webstreams/by-procedure/2024%2F0123(COD)/transcript
 Paginated `WebstreamItem` envelope ordered by meeting_date desc. Each row's `public_url` resolves to the specific multimedia.europarl.europa.eu meeting page. All 5 mandatory v1 datapoints present per row.
 
 **Data freshness**
-Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). No committee meeting has been transcribed since June 2026: the European Parliament's video service does not allow its recordings to be downloaded. `transcript_available` says whether an item has a transcript and `transcript_note` says why not; the sitting's agenda is in `agenda_items` and in the body where Brubru holds it.
 """,
 )
 async def get_webstreams_for_procedure(

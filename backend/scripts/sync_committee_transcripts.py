@@ -192,7 +192,9 @@ async def discover_meetings(
     except Exception as exc:
         session.rollback()
         logger.error("[discover] Failed: %s", exc)
-        return 1
+        # -1, not 1: main() exits 0 for any count >= 0, so a failed discovery used to
+        # read as "one meeting registered" and the run as a success.
+        return -1
     finally:
         session.close()
 
@@ -229,7 +231,40 @@ def main():
         only_date=args.only_date,
         use_day_feed=use_day_feed,
     ))
-    sys.exit(0 if rc >= 0 else 1)
+    if rc < 0:
+        sys.exit(1)
+    sys.exit(report_what_is_missing())
+
+
+def report_what_is_missing() -> int:
+    """Attach the agendas Brubru holds, then say how many meetings have no transcript.
+
+    This job registers meetings; it has never transcribed one. Its `success` was read as
+    "transcripts are up to date" for five months while none was made (11 Nov 2026): the
+    video service has refused downloads of its recordings since June. The run now carries
+    that number and the reason, as `degraded`, until a meeting is transcribed again.
+    """
+    from services.committee_meeting_agenda import attach_agendas, transcript_gap
+    session = SessionLocal()
+    try:
+        try:
+            attached = attach_agendas(session)
+        except Exception as exc:  # noqa: BLE001
+            session.rollback()
+            logger.error("[agenda] attaching agendas failed: %s", exc)
+            print(f"[ERROR] agendas could not be attached: {type(exc).__name__}: {exc}", flush=True)
+            return 1
+        gap = transcript_gap(session)
+    finally:
+        session.close()
+    logger.info("[agenda] %d meeting(s) given their sitting's agenda", attached)
+    if gap["held_without"]:
+        last = f"{gap['last_transcribed']:%d %b %Y}" if gap["last_transcribed"] else "never"
+        print(f"[SYNC_STATUS] degraded: {gap['held_without']} committee meeting(s) held without a "
+              f"transcript (last meeting transcribed: {last}); the European Parliament's video "
+              f"service does not allow its recordings to be downloaded; {attached} agenda(s) "
+              f"attached this run", flush=True)
+    return 0
 
 
 if __name__ == "__main__":

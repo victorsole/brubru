@@ -61,7 +61,7 @@ GET /api/v2/parliament/webstreams?updated_from=2026-05-01
 Paginated `WebstreamItem` envelope. `public_url` is the meeting's `multimedia.europarl.europa.eu` landing page (real, specific). `meeting_start_date` carries the meeting timestamp. All 5 mandatory v1 datapoints present per row.
 
 **Data freshness**
-Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). No committee meeting has been transcribed since June 2026: the European Parliament's video service does not allow its recordings to be downloaded. `transcript_available` says whether an item has a transcript and `transcript_note` says why not; the sitting's agenda is in `agenda_items` and in the body where Brubru holds it.
 """,
 )
 async def list_webstreams(
@@ -107,7 +107,7 @@ GET /api/v2/parliament/webstreams/{stream_id}
 A `WebstreamItem` with all 5 mandatory v1 datapoints. Follow `public_url` to view/replay the meeting on multimedia.europarl.europa.eu.
 
 **Data freshness**
-Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). No committee meeting has been transcribed since June 2026: the European Parliament's video service does not allow its recordings to be downloaded. `transcript_available` says whether an item has a transcript and `transcript_note` says why not; the sitting's agenda is in `agenda_items` and in the body where Brubru holds it.
 """,
 )
 async def get_webstream_detail(
@@ -141,7 +141,7 @@ GET /api/v2/parliament/webstreams/by-procedure/2024%2F0123(COD)/transcript
 Paginated `WebstreamItem` envelope ordered by meeting_date desc. Each row's `public_url` resolves to the specific multimedia.europarl.europa.eu meeting page. All 5 mandatory v1 datapoints present per row.
 
 **Data freshness**
-Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). Transcription fires on-demand when chatbot query hits transcript intent.
+Synced every 12 hours (02:00 / 14:00 UTC) from EP committee + plenary webstreams (europarl.europa.eu/committees/.../webstreaming). No committee meeting has been transcribed since June 2026: the European Parliament's video service does not allow its recordings to be downloaded. `transcript_available` says whether an item has a transcript and `transcript_note` says why not; the sitting's agenda is in `agenda_items` and in the body where Brubru holds it.
 """,
 )
 async def get_webstreams_for_procedure(
