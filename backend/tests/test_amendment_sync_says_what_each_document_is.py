@@ -90,6 +90,7 @@ def test_a_page_that_keeps_failing_still_fails_the_listing_and_says_how_often():
 def _service(facts=None, cache=None):
     s = svc.BulkAmendmentSyncService.__new__(svc.BulkAmendmentSyncService)
     s._docx_cache, s._fetch_facts = dict(cache or {}), dict(facts or {})
+    s._details, s._pdf_urls = {}, {}          # no open data record in these cases
     return s
 
 

@@ -145,6 +145,11 @@ def test_the_detail_of_an_amendment_document_gives_its_date_title_and_parent():
 def _service(documents, settled=()):
     s = svc.BulkAmendmentSyncService.__new__(svc.BulkAmendmentSyncService)
     s._docx_cache, s._fetch_facts, read, warmed = {}, {}, [], []
+    s._details, s._pdf_urls = {}, {}
+
+    async def _open_data(docs):          # the portal supplies nothing here: the browser is asked
+        return None
+    s._prefetch_from_open_data = _open_data
 
     async def _enum(**k):
         return list(documents)
@@ -192,7 +197,16 @@ def test_the_scheduled_run_is_limited_and_asks_for_amendment_documents():
         seen.update(k)
         return svc.BulkSyncResult()
     s.sync_all = _sync_all
+
+    async def _fill(limit):
+        seen["text_limit"] = limit
+        return {"filled": 0, "unread": 0, "remaining": 0}
+
+    async def _close():
+        return None
+    s.fill_missing_text, s.client = _fill, SimpleNamespace(close=_close)
     asyncio.run(s.sync_incremental())
+    assert seen["text_limit"] == svc.NIGHTLY_TEXT_LIMIT
     assert seen["max_documents"] == svc.NIGHTLY_DOCUMENT_LIMIT == 60 and seen["force_refetch"] is False
     assert seen["work_types"] == [WORK_TYPE_AMENDMENTS, WORK_TYPE_DRAFT_REPORTS] and seen["years"] == [dt.datetime.now().year]
 
@@ -201,6 +215,7 @@ def test_an_amendment_document_takes_its_date_from_documents_and_its_procedure_f
     s = svc.BulkAmendmentSyncService.__new__(svc.BulkAmendmentSyncService)
     url = "https://www.europarl.europa.eu/doceo/document/EMPL-AM-788901_EN.docx"
     s._docx_cache, s._fetch_facts, asked, parsed, recorded = {url: b"PK-docx"}, {}, [], {}, {}
+    s._details, s._pdf_urls = {}, {}
 
     async def _detail(ep_id, endpoint="documents"):
         asked.append((ep_id, endpoint))
@@ -222,6 +237,7 @@ def test_a_draft_report_still_takes_its_date_from_committee_documents():
     s = svc.BulkAmendmentSyncService.__new__(svc.BulkAmendmentSyncService)
     url = "https://www.europarl.europa.eu/doceo/document/ECON-PR-700001_EN.docx"
     s._docx_cache, s._fetch_facts, asked = {url: b"PK-docx"}, {}, []
+    s._details, s._pdf_urls = {}, {}
 
     async def _detail(ep_id, endpoint="documents"):
         asked.append(endpoint)

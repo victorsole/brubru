@@ -19,7 +19,7 @@ file metadata (dcterms:created was eight days off on the one document checked).
 """
 from __future__ import annotations
 
-import argparse, datetime as dt, html, importlib.util, io, pathlib, re, sys, time, zipfile
+import argparse, importlib.util, pathlib, re, sys, time
 from collections import Counter
 
 BACKEND = pathlib.Path(__file__).resolve().parents[1]
@@ -41,8 +41,6 @@ STORE = text("""UPDATE amendment_documents
 GAP = text("SELECT count(*) FROM amendment_documents WHERE coalesce(text_body,'')=''")
 UNDATED = text("SELECT count(*) FROM amendment_documents WHERE document_date IS NULL")
 
-_BRACED = re.compile(r"Date&gt;.{0,160}?\{(\d{2})/(\d{2})/(\d{4})\}", re.S)
-_PLAIN = re.compile(r"Date&gt;.{0,240}?\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b", re.S)
 
 
 def _browser():
@@ -60,54 +58,9 @@ def _db() -> str:
     return m.group(1).strip()
 
 
-def _parse(docx: bytes):
-    """(text, html, stated_date) from a .docx, or None when it is not one."""
-    if not docx or docx[:2] != b"PK":
-        return None
-    try:
-        xml = zipfile.ZipFile(io.BytesIO(docx)).read("word/document.xml").decode("utf-8", "ignore")
-    except Exception:
-        return None
-    flat = re.sub(r"<[^>]+>", "", xml)
-    stated = None
-    for pat in (_BRACED, _PLAIN):
-        m = pat.search(flat)
-        if m:
-            d, mo, y = (int(x) for x in m.groups())
-            try:
-                stated = dt.date(y, mo, d); break
-            except ValueError:
-                pass
-    paras = []
-    for chunk in re.split(r"</w:p>", xml):
-        t = html.unescape(re.sub(r"<[^>]+>", "", chunk)).strip()
-        # drop the EP template markers (<Commission>, <RefProc>, <Date> ...) and braces tags
-        t = re.sub(r"</?[A-Za-z][A-Za-z0-9]*>", "", t).strip()
-        if t:
-            paras.append(t)
-    body = "\n\n".join(paras)
-    return body, "".join(f"<p>{html.escape(p)}</p>" for p in paras), stated
-
-
-def _parse_pdf(data: bytes):
-    """(text, html, stated_date) from the PDF edition; the date is read off its cover."""
-    if not data or data[:4] != b"%PDF":
-        return None
-    from pypdf import PdfReader
-    try:
-        pages = [(pg.extract_text() or "") for pg in PdfReader(io.BytesIO(data)).pages]
-    except Exception:
-        return None
-    paras = [re.sub(r"\s+", " ", x).strip() for x in "\n".join(pages).split("\n")]
-    paras = [x for x in paras if x]
-    stated = None
-    m = re.search(r"\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b", "\n".join(pages)[:3000])
-    if m:
-        try:
-            stated = dt.date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
-        except ValueError:
-            pass
-    return "\n\n".join(paras), "".join(f"<p>{html.escape(x)}</p>" for x in paras), stated
+from services.scrapers.amendment_document_text import (  # noqa: E402
+    text_from_docx as _parse, text_from_pdf as _parse_pdf,
+)
 
 
 def main() -> int:

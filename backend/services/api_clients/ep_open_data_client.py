@@ -69,7 +69,10 @@ API_WORK_TYPE_MAP = {
 }
 
 # Regex patterns
-RE_PROCEDURE_REF = re.compile(r'(\d{4}/\d{4}\([A-Z]{3}\))')
+# 2025/0045(COD), and the repeated-consent form 2018/0902R(NLE) (missed until 11 Nov 2026).
+RE_PROCEDURE_REF = re.compile(r'(\d{4}/\d{4}[A-Z]?\([A-Z]{3}\))')
+# Where the portal serves the files its records list (`is_exemplified_by`).
+DISTRIBUTION_BASE = "https://data.europarl.europa.eu"
 RE_PE_NUMBER = re.compile(r'PE[\s_-]?(\d{3})[.\s_-]?(\d{3})')
 # Four characters: a committee (ECON) or a joint committee (CJ13).
 RE_COMMITTEE_CODE = re.compile(r'^([A-Z][A-Z0-9]{3})-')
@@ -258,6 +261,8 @@ class EPOpenDataClient:
             "document_type": "",
             "doceo_url": "",
             "date": "",
+            # The English files the record lists, by format: {"docx": url, "pdf": url}.
+            "files": {},
         }
 
         # Unwrap data array
@@ -302,6 +307,17 @@ class EPOpenDataClient:
                 break
             if any_expr is None:
                 any_expr = expr
+
+        # The files of the English edition, as the portal itself serves them. They are the
+        # same documents doceo publishes, without doceo's browser challenge, and the list
+        # says which formats exist: a document published as PDF only has no .docx to ask for.
+        for manifestation in (en_expr or {}).get("is_embodied_by", []) or []:
+            if not isinstance(manifestation, dict):
+                continue
+            path = manifestation.get("is_exemplified_by") or ""
+            fmt = str(manifestation.get("format") or "").rsplit("/", 1)[-1].lower()
+            if path and fmt in ("docx", "pdf") and fmt not in result["files"]:
+                result["files"][fmt] = f"{DISTRIBUTION_BASE}/{path.lstrip('/')}"
 
         expr = en_expr or any_expr
         if expr:

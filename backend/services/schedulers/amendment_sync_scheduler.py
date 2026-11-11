@@ -50,6 +50,8 @@ async def _daily_amendment_sync():
             f"{result.documents_unsupported} unsupported format, "
             f"{result.documents_not_found} not found, "
             f"{result.documents_deferred} left for the next run; "
+            f"texts read {result.texts_filled}, not readable {result.texts_unread}, "
+            f"still without text {result.texts_remaining}; "
             f"listed {result.documents_listed_by_type} "
             f"({result.duration_seconds}s)"
         )
@@ -78,6 +80,12 @@ async def _daily_amendment_sync():
         # was also a run error, so `degraded` could never be reached and 41 documents kept
         # the job red for two weeks while it stored amendments normally.
         notes = list(result.errors) + list(result.document_errors)
+        # Documents held without their own text are a backlog the run works through, and
+        # a number on the run row: before 11 Nov 2026 nothing counted them, and 541 were
+        # served with a line of metadata for a body.
+        if result.texts_remaining or result.texts_unread:
+            notes.insert(0, f"{result.texts_remaining} document(s) held without their text "
+                            f"({result.texts_filled} read this run, {result.texts_unread} not readable)")
         if result.documents_deferred:
             notes.insert(0, f"{result.documents_deferred} listed document(s) not read yet "
                             f"(limit a run); listed {result.documents_listed_by_type}")
