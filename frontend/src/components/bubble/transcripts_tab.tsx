@@ -11,16 +11,17 @@ import { ListSkeleton } from '../shared/skeleton';
 import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { uiDateLocale } from '../../i18n/config';
 import Hls from 'hls.js';
 import Icon from '@mdi/react';
 import {
   mdiMicrophoneMessage, mdiMagnify, mdiClose, mdiFileDownloadOutline,
   mdiPlayCircleOutline, mdiLoading, mdiCheckCircle, mdiAlertCircleOutline,
   mdiViewListOutline, mdiClockOutline, mdiAccountVoice, mdiOpenInNew, mdiPlaylistPlus,
-  mdiTextBoxOutline, mdiFormatListBulleted, mdiCreation, mdiFilePdfBox,
+  mdiTextBoxOutline, mdiFormatListBulleted, mdiCreation, mdiFilePdfBox, mdiInformationOutline,
 } from '@mdi/js';
 import { transcriptsService } from '../../services/transcripts_service';
-import type { TranscriptSummary, TranscriptDetail, AgendaItem } from '../../services/transcripts_service';
+import type { TranscriptSummary, TranscriptDetail, AgendaItem, ParliamentRecordings } from '../../services/transcripts_service';
 import './transcripts_tab.css';
 import { MeubHeader } from './meub_header';
 
@@ -74,11 +75,13 @@ export function TranscriptsTab() {
   const [items, setItems] = useState<TranscriptSummary[]>([]);
   const [suggestions, setSuggestions] = useState<TranscriptSummary[]>([]);
   const [canTranscribe, setCanTranscribe] = useState(false);
+  const [recordings, setRecordings] = useState<ParliamentRecordings | null>(null);
   const [loading, setLoading] = useState(true);
   const [detail, setDetail] = useState<TranscriptDetail | null>(null);
   const [busy, setBusy] = useState<Record<string, string>>({}); // id -> status
   const [prog, setProg] = useState<Record<string, { stage: string | null; pct: number | null }>>({});
   const [savedMsg, setSavedMsg] = useState<string | null>(null);
+  const [transcribeErr, setTranscribeErr] = useState<string | null>(null);
   const [institution, setInstitution] = useState('');
   const [body, setBody] = useState('');
   const [facets, setFacets] = useState<{ institutions: string[]; bodies: Record<string, string[]> }>({ institutions: [], bodies: {} });
@@ -97,6 +100,7 @@ export function TranscriptsTab() {
       setItems(cat.items);
       setSuggestions(sug.items);
       setCanTranscribe(sug.can_transcribe);
+      setRecordings(sug.parliament_recordings ?? null);
     } catch { /* tier or network */ }
     setLoading(false);
   }, [myInterests, search, institution, body]);
@@ -128,12 +132,18 @@ export function TranscriptsTab() {
 
   const onTranscribe = async (id: string) => {
     setBusy((b) => ({ ...b, [id]: 'transcribing' }));
+    setTranscribeErr(null);
     try {
       const r = await transcriptsService.transcribe(id);
       if (r.status === 'completed') { setBusy((b) => { const n = { ...b }; delete n[id]; return n; }); loadCatalog(); }
       else poll(id);
-    } catch {
+    } catch (e) {
       setBusy((b) => { const n = { ...b }; delete n[id]; return n; });
+      // 409 is the server saying the recording cannot be downloaded: said in the reader's language.
+      const code = (e as { response?: { status?: number } })?.response?.status;
+      setTranscribeErr((code === 409
+        ? t('bubble.transcripts.closedNoticeNoDate', 'European Parliament committee meetings cannot be transcribed at present: Parliament\'s video service does not allow its recordings to be downloaded. You can still watch them on Parliament\'s website.')
+        : t('bubble.transcripts.transcribeFailed', 'This recording could not be transcribed.')) as string);
     }
   };
 
@@ -156,6 +166,13 @@ export function TranscriptsTab() {
     institution === 'EP' ? committee : t(`bubble.transcripts.inst.${institution}`, institution);
   const instClass = (institution: string) => `transcript-card__cm inst-${institution.toLowerCase()}`;
 
+  // A date inside a sentence is written in the sentence's language ("8 de juny de 2026"),
+  // not the browser's: the cards' short dates follow the browser, a notice does not.
+  const longDate = (iso: string) => {
+    try { return new Date(iso + 'T00:00:00').toLocaleDateString(uiDateLocale(), { day: 'numeric', month: 'long', year: 'numeric' }); }
+    catch { return iso; }
+  };
+
   const fmtDate = (iso: string | null) => {
     if (!iso) return '';
     try { return new Date(iso + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }); }
@@ -167,8 +184,23 @@ export function TranscriptsTab() {
       <MeubHeader
         icon={mdiMicrophoneMessage}
         title={t('bubble.transcripts.title', 'Transcripts')}
-        subtitle={t('bubble.transcripts.subtitle', 'AI transcripts of European Parliament committee debates. Open one, or transcribe a recording on demand.')}
+        subtitle={t('bubble.transcripts.subtitle', 'AI transcripts of European Parliament committee debates. Open one to read it, with its summary and agenda.')}
       />
+
+      {/* Said once, plainly: why nothing is newer than the last transcript. */}
+      {recordings && !recordings.downloadable && (
+        <div className="transcripts-tab__notice" role="status">
+          <Icon path={mdiInformationOutline} size={0.8} />
+          <p>
+            {recordings.last_transcribed
+              ? t('bubble.transcripts.closedNotice', {
+                  date: longDate(recordings.last_transcribed),
+                  defaultValue: 'No European Parliament committee meeting has been transcribed since {{date}}. Parliament\'s video service no longer allows its recordings to be downloaded, so new meetings cannot be transcribed. You can still watch them on Parliament\'s website.',
+                })
+              : t('bubble.transcripts.closedNoticeNoDate', 'European Parliament committee meetings cannot be transcribed at present: Parliament\'s video service does not allow its recordings to be downloaded. You can still watch them on Parliament\'s website.')}
+          </p>
+        </div>
+      )}
 
       {/* Filters - apply to both Suggested and the catalog below */}
       <div className="transcripts-tab__controls">
@@ -216,6 +248,9 @@ export function TranscriptsTab() {
           {!canTranscribe && (
             <p className="transcripts-tab__hint">{t('bubble.transcripts.blueHint', 'On-demand transcription is a Professional feature.')}</p>
           )}
+          {transcribeErr && (
+            <p className="transcripts-tab__hint" role="alert"><Icon path={mdiAlertCircleOutline} size={0.7} /> {transcribeErr}</p>
+          )}
           <div className="transcripts-grid">
             {suggestions.map((s) => {
               const state = busy[s.id];
@@ -262,7 +297,7 @@ export function TranscriptsTab() {
       {loading ? (
         <ListSkeleton count={4} lines={3} />
       ) : items.length === 0 ? (
-        <div className="transcripts-tab__empty">{t('bubble.transcripts.empty', 'No transcripts yet. Transcribe a suggested recording above.')}</div>
+        <div className="transcripts-tab__empty">{t('bubble.transcripts.empty', 'No transcripts match these filters.')}</div>
       ) : (
         <div className="transcripts-grid">
           {items.map((it) => (

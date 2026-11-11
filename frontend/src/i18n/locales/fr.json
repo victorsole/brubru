@@ -212,7 +212,7 @@
     },
     "transcripts": {
       "title": "Transcriptions",
-      "subtitle": "Transcriptions par IA des débats des commissions du Parlement européen. Ouvrez-en une ou transcrivez un enregistrement à la demande.",
+      "subtitle": "Transcriptions par IA des débats des commissions du Parlement européen. Ouvrez-en une pour la lire, avec son résumé et son ordre du jour.",
       "suggested": "Suggéré pour vous",
       "blueHint": "La transcription à la demande est une fonction Professionnel.",
       "transcribing": "Transcription en cours…",
@@ -221,7 +221,7 @@
       "mine": "Mes intérêts",
       "all": "Tout",
       "searchPlaceholder": "Rechercher des transcriptions",
-      "empty": "Pas encore de transcriptions. Transcrivez un enregistrement suggéré ci-dessus.",
+      "empty": "Aucune transcription ne correspond à ces filtres.",
       "words": "mots",
       "min": "min",
       "refs": "réf.",
@@ -254,7 +254,10 @@
       "summarise": "Résumer (IA)",
       "summarising": "Résumé en cours...",
       "showSummary": "Voir le résumé IA",
-      "hideSummary": "Masquer le résumé IA"
+      "hideSummary": "Masquer le résumé IA",
+      "closedNotice": "Aucune réunion de commission du Parlement européen n'a été transcrite depuis le {{date}}. Le service vidéo du Parlement ne permet plus de télécharger ses enregistrements : les nouvelles réunions ne peuvent donc pas être transcrites. Vous pouvez toujours les regarder sur le site du Parlement.",
+      "closedNoticeNoDate": "Les réunions de commission du Parlement européen ne peuvent pas être transcrites pour le moment : le service vidéo du Parlement ne permet pas de télécharger ses enregistrements. Vous pouvez toujours les regarder sur le site du Parlement.",
+      "transcribeFailed": "Cet enregistrement n'a pas pu être transcrit."
     },
     "consultations": {
       "title": "Consultations Publiques de l'UE",

@@ -298,3 +298,84 @@ def test_a_failed_discovery_returns_minus_one(monkeypatch):
     script = importlib.import_module("scripts.sync_committee_transcripts")
     source = inspect.getsource(script.discover_meetings)
     assert "return -1" in source and "return 1\n" not in source
+
+
+# ---- the Transcripts tab's own routes ---------------------------------------------------
+
+def test_a_recording_on_parliaments_video_service_is_closed_and_any_other_is_not():
+    closed = agenda.recording_is_closed
+    assert closed("https://vod-pckgr.media.eup.glcloud.eu/i/,/2026/10/12/x/x_,360p,.mp4/master.m3u8")
+    assert closed("https://live.media.eup.glcloud.eu/hls/live/1/channel/index-archive.m3u8?startTime=1&endTime=2")
+    assert not closed("https://vod.prd.commavservices.eu/11/123/LIBE_20260601.mp4")
+    assert not closed("https://example.org/media.eup.glcloud.eu/video.mp4")            # the host, not the text
+    assert not closed("https://notmedia.eup.glcloud.eu.example.org/v.m3u8")
+    assert not closed(None) and not closed("")
+
+
+class _Rows:
+    """A query that returns the same rows whatever is asked of it."""
+
+    def __init__(self, rows):
+        self.rows = rows
+
+    def filter(self, *a, **k):
+        return self
+
+    order_by = limit = filter
+
+    def all(self):
+        return list(self.rows)
+
+    def first(self):
+        return self.rows[0] if self.rows else None
+
+
+def _recording(i, url, status="PENDING"):
+    return SimpleNamespace(id=i, committee_code="TEST", meeting_date=dt.datetime(2026, 10, 12), video_url=url,
+                           status=SimpleNamespace(value=status.lower()), error_message=None)
+
+
+@pytest.fixture
+def tab(monkeypatch):
+    api = importlib.import_module("api.transcripts")
+    monkeypatch.setattr(api, "_require_yellow", lambda user: None)
+    monkeypatch.setattr(api, "_is_blue_or_admin", lambda user: True)
+    monkeypatch.setattr(api, "_not_seed", lambda q: q)
+    monkeypatch.setattr(api, "_summary", lambda r, *a: {"id": r.id})
+    monkeypatch.setattr(api, "transcript_gap", lambda db: {"held_without": 460, "last_transcribed": dt.date(2026, 6, 8)})
+    return api
+
+
+def test_the_tab_is_told_parliaments_recordings_are_closed_and_is_not_offered_them(tab):
+    rows = [_recording("closed", "https://vod-pckgr.media.eup.glcloud.eu/i/x/master.m3u8"),
+            _recording("open", "https://audiovisual.ec.europa.eu/video.mp4")]
+    db = SimpleNamespace(query=lambda *a: _Rows(rows if len(a) == 1 else []))
+    out = tab.suggestions(my_interests=False, institution=None, body=None, db=db, user=object())
+    assert [i["id"] for i in out["items"]] == ["open"] and out["can_transcribe"] is True
+    assert out["parliament_recordings"] == {"downloadable": False, "held_without_transcript": 460,
+                                            "last_transcribed": "2026-06-08"}
+
+
+def test_the_day_the_recordings_open_the_tab_is_told_so(tab, monkeypatch):
+    monkeypatch.setattr(tab, "CLOSED_RECORDING_HOSTS", ())
+    db = SimpleNamespace(query=lambda *a: _Rows([]))
+    out = tab.suggestions(my_interests=False, institution=None, body=None, db=db, user=object())
+    assert out["parliament_recordings"]["downloadable"] is True
+
+
+def test_asking_to_transcribe_a_closed_recording_is_refused_at_once_with_the_reason(tab):
+    from fastapi import HTTPException
+    row, started, commits = _recording("closed", "https://vod-pckgr.media.eup.glcloud.eu/i/x/master.m3u8"), [], []
+    db = SimpleNamespace(query=lambda *a: _Rows([row]), commit=lambda: commits.append(1))
+    bg = SimpleNamespace(add_task=lambda *a: started.append(a))
+    with pytest.raises(HTTPException) as refused:
+        tab.transcribe("closed", bg, db=db, user=object())
+    assert refused.value.status_code == 409 and refused.value.detail == agenda.NOTE_CLOSED
+    assert started == [] and commits == [] and row.status.value == "pending"           # nothing started, nothing written
+
+
+def test_a_recording_that_can_be_downloaded_is_still_transcribed(tab):
+    row, started = _recording("open", "https://audiovisual.ec.europa.eu/video.mp4"), []
+    db = SimpleNamespace(query=lambda *a: _Rows([row]), commit=lambda: None)
+    out = tab.transcribe("open", SimpleNamespace(add_task=lambda *a: started.append(a)), db=db, user=object())
+    assert out["status"] == "transcribing" and len(started) == 1

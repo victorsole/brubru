@@ -212,7 +212,7 @@
     },
     "transcripts": {
       "title": "Transcripts",
-      "subtitle": "AI transcripts of European Parliament committee debates. Open one, or transcribe a recording on demand.",
+      "subtitle": "AI transcripts of European Parliament committee debates. Open one to read it, with its summary and agenda.",
       "suggested": "Suggested for you",
       "blueHint": "On-demand transcription is a Professional feature.",
       "transcribing": "Transcribing…",
@@ -221,7 +221,7 @@
       "mine": "My interests",
       "all": "All",
       "searchPlaceholder": "Search transcripts",
-      "empty": "No transcripts yet. Transcribe a suggested recording above.",
+      "empty": "No transcripts match these filters.",
       "words": "words",
       "min": "min",
       "refs": "refs",
@@ -254,7 +254,10 @@
       "summarise": "Summarise (AI)",
       "summarising": "Summarising...",
       "showSummary": "Show AI summary",
-      "hideSummary": "Hide AI summary"
+      "hideSummary": "Hide AI summary",
+      "closedNotice": "No European Parliament committee meeting has been transcribed since {{date}}. Parliament's video service no longer allows its recordings to be downloaded, so new meetings cannot be transcribed. You can still watch them on Parliament's website.",
+      "closedNoticeNoDate": "European Parliament committee meetings cannot be transcribed at present: Parliament's video service does not allow its recordings to be downloaded. You can still watch them on Parliament's website.",
+      "transcribeFailed": "This recording could not be transcribed."
     },
     "consultations": {
       "title": "EU Public Consultations",

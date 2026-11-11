@@ -76,6 +76,13 @@ export interface SummaryResult {
   can_generate: boolean;
 }
 
+/** Whether the European Parliament's committee recordings can be downloaded for transcription. */
+export interface ParliamentRecordings {
+  downloadable: boolean;
+  held_without_transcript: number;
+  last_transcribed: string | null;
+}
+
 export const transcriptsService = {
   facets: async (): Promise<{ institutions: string[]; bodies: Record<string, string[]> }> => {
     const r = await axios.get(`${API_BASE}/facets`, { headers: authHeaders() });
@@ -92,7 +99,7 @@ export const transcriptsService = {
     return r.data;
   },
 
-  suggestions: async (myInterests: boolean, institution?: string, body?: string): Promise<{ items: TranscriptSummary[]; can_transcribe: boolean }> => {
+  suggestions: async (myInterests: boolean, institution?: string, body?: string): Promise<{ items: TranscriptSummary[]; can_transcribe: boolean; parliament_recordings?: ParliamentRecordings }> => {
     const p = new URLSearchParams({ my_interests: String(myInterests) });
     if (institution) p.append('institution', institution);
     if (body) p.append('body', body);

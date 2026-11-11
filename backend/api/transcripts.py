@@ -39,6 +39,10 @@ from api.v1._pagination import stable
 
 logger = logging.getLogger(__name__)
 
+from services.committee_meeting_agenda import (  # noqa: E402
+    CLOSED_RECORDING_HOSTS, NOTE_CLOSED, recording_is_closed, transcript_gap,
+)
+
 router = APIRouter(prefix="/api/transcripts", tags=["Transcripts"])
 
 _MAX_DOC_CHARS = 90_000
@@ -242,8 +246,23 @@ def suggestions(
         (c, d.date()) for (c, d) in db.query(CMT.committee_code, CMT.meeting_date)
         .filter(CMT.status == TranscriptStatusEnum.COMPLETED).all()
     }
-    rows = [r for r in rows if (r.committee_code, r.meeting_date.date()) not in done][:40]
-    return {"items": [_summary(r) for r in rows], "can_transcribe": _is_blue_or_admin(user)}
+    rows = [r for r in rows if (r.committee_code, r.meeting_date.date()) not in done]
+    # A recording on a host that refuses downloads cannot be transcribed: it is not a
+    # suggestion. Until 11 Nov 2026 the tab offered "Transcribe" as a Professional
+    # feature for recordings that could only fail.
+    rows = [r for r in rows if not recording_is_closed(r.video_url)][:40]
+    gap = transcript_gap(db)
+    return {
+        "items": [_summary(r) for r in rows],
+        "can_transcribe": _is_blue_or_admin(user),
+        # What the tab must say while Parliament's recordings cannot be downloaded:
+        # nothing new since `last_transcribed`, for `held_without` meetings held.
+        "parliament_recordings": {
+            "downloadable": not CLOSED_RECORDING_HOSTS,
+            "held_without_transcript": gap["held_without"],
+            "last_transcribed": gap["last_transcribed"].isoformat() if gap["last_transcribed"] else None,
+        },
+    }
 
 
 # Official minutes summary (on-demand, HF Qwen, cached per PDF). Defined BEFORE
@@ -472,6 +491,9 @@ def transcribe(
         return {"id": str(r.id), "status": cur, "message": "Transcription already in progress."}
     if not r.video_url:
         raise HTTPException(status_code=400, detail="No recording available for this meeting.")
+    if recording_is_closed(r.video_url):
+        # Said at once, instead of starting a job that fails ten minutes later on a 403.
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=NOTE_CLOSED)
     r.status = TranscriptStatusEnum.TRANSCRIBING
     r.error_message = None
     db.commit()

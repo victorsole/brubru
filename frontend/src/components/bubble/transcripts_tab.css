@@ -64,6 +64,18 @@
 }
 
 .transcripts-tab__empty { text-align: center; color: #94a3b8; padding: 3rem 1rem; }
+/* Why there is nothing newer: one calm line, not an error. */
+.transcripts-tab__notice {
+  display: flex; gap: 0.6rem; align-items: flex-start;
+  background: #f1f5f9; border: 1px solid #e2e8f0; border-left: 4px solid #1e3a8a;
+  border-radius: 8px; padding: 0.75rem 1rem; margin: 0 0 1rem; color: #334155;
+}
+.transcripts-tab__notice svg { flex: 0 0 auto; color: #1e3a8a; margin-top: 0.1rem; }
+.transcripts-tab__notice p { margin: 0; font-size: 0.88rem; line-height: 1.5; }
+@media (max-width: 767px) {
+  .transcripts-tab__notice { padding: 0.65rem 0.8rem; }
+  .transcripts-tab__notice p { font-size: 0.84rem; }
+}
 .transcripts-tab__saved {
   position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
   background: #065f46; color: #fff; padding: 0.6rem 1rem; border-radius: 10px;

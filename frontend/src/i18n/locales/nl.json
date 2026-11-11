@@ -212,7 +212,7 @@
     },
     "transcripts": {
       "title": "Transcripties",
-      "subtitle": "AI-transcripties van debatten in commissies van het Europees Parlement. Open er een of transcribeer een opname op aanvraag.",
+      "subtitle": "AI-transcripties van debatten in commissies van het Europees Parlement. Open er een om die te lezen, met samenvatting en agenda.",
       "suggested": "Aanbevolen voor jou",
       "blueHint": "Transcriptie op aanvraag is een Professional-functie.",
       "transcribing": "Bezig met transcriberen…",
@@ -221,7 +221,7 @@
       "mine": "Mijn interesses",
       "all": "Alles",
       "searchPlaceholder": "Transcripties zoeken",
-      "empty": "Nog geen transcripties. Transcribeer hierboven een aanbevolen opname.",
+      "empty": "Geen transcripties voor deze filters.",
       "words": "woorden",
       "min": "min",
       "refs": "ref.",
@@ -254,7 +254,10 @@
       "summarise": "Samenvatten (AI)",
       "summarising": "Samenvatten...",
       "showSummary": "AI-samenvatting tonen",
-      "hideSummary": "AI-samenvatting verbergen"
+      "hideSummary": "AI-samenvatting verbergen",
+      "closedNotice": "Sinds {{date}} is geen enkele commissievergadering van het Europees Parlement meer getranscribeerd. De videodienst van het Parlement staat het downloaden van opnamen niet meer toe, waardoor nieuwe vergaderingen niet kunnen worden getranscribeerd. Je kunt ze nog wel bekijken op de website van het Parlement.",
+      "closedNoticeNoDate": "Commissievergaderingen van het Europees Parlement kunnen momenteel niet worden getranscribeerd: de videodienst van het Parlement staat het downloaden van opnamen niet toe. Je kunt ze nog wel bekijken op de website van het Parlement.",
+      "transcribeFailed": "Deze opname kon niet worden getranscribeerd."
     },
     "consultations": {
       "title": "EU Openbare Raadplegingen",

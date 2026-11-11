@@ -212,7 +212,7 @@
     },
     "transcripts": {
       "title": "Transcripcions",
-      "subtitle": "Transcripcions amb IA dels debats de les comissions del Parlament Europeu. Obre'n una o transcriu un enregistrament a demanda.",
+      "subtitle": "Transcripcions amb IA dels debats de les comissions del Parlament Europeu. Obre'n una per llegir-la, amb el resum i l'ordre del dia.",
       "suggested": "Suggerit per a tu",
       "blueHint": "La transcripció a demanda és una funció Professional.",
       "transcribing": "Transcrivint…",
@@ -221,7 +221,7 @@
       "mine": "Els meus interessos",
       "all": "Tot",
       "searchPlaceholder": "Cerca transcripcions",
-      "empty": "Encara no hi ha transcripcions. Transcriu un enregistrament suggerit a dalt.",
+      "empty": "Cap transcripció coincideix amb aquests filtres.",
       "words": "paraules",
       "min": "min",
       "refs": "refs",
@@ -254,7 +254,10 @@
       "summarise": "Resumeix (IA)",
       "summarising": "Resumint...",
       "showSummary": "Mostra el resum IA",
-      "hideSummary": "Amaga el resum IA"
+      "hideSummary": "Amaga el resum IA",
+      "closedNotice": "No s'ha transcrit cap reunió de comissió del Parlament Europeu des del {{date}}. El servei de vídeo del Parlament ja no permet descarregar els enregistraments, de manera que les reunions noves no es poden transcriure. Les pots continuar veient al lloc web del Parlament.",
+      "closedNoticeNoDate": "Ara mateix no es poden transcriure les reunions de comissió del Parlament Europeu: el servei de vídeo del Parlament no permet descarregar els enregistraments. Les pots continuar veient al lloc web del Parlament.",
+      "transcribeFailed": "No s'ha pogut transcriure aquest enregistrament."
     },
     "consultations": {
       "title": "Consultes Públiques de la UE",

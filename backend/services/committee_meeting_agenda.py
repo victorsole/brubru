@@ -21,6 +21,19 @@ RECORDINGS_CLOSED_FROM = date(2026, 6, 9)
 # A meeting of several days is one agenda, dated on its first day.
 AGENDA_LOOKBACK_DAYS = 4
 
+# The hosts of Parliament's recordings that answer 403 to anything but their own player.
+# One place: the day Parliament opens a permitted route, this tuple empties and every
+# surface (the API note, the Transcripts tab, the transcribe route) follows.
+CLOSED_RECORDING_HOSTS = ("media.eup.glcloud.eu",)
+
+
+def recording_is_closed(video_url: Optional[str]) -> bool:
+    """True when a recording sits on a host that does not allow it to be downloaded."""
+    from urllib.parse import urlsplit
+    host = (urlsplit(video_url or "").hostname or "").lower()
+    return any(host == h or host.endswith("." + h) for h in CLOSED_RECORDING_HOSTS)
+
+
 _EVENT_START = re.compile(r"_(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})-")
 _SITTING = re.compile(
     r"^\s*(\d{1,2}) ([A-Za-z]+) (\d{4}),\s*(\d{1,2})\.(\d{2})(?:\s*-\s*(\d{1,2})\.(\d{2}))?")

@@ -212,7 +212,7 @@
     },
     "transcripts": {
       "title": "Trascrizioni",
-      "subtitle": "Trascrizioni con IA dei dibattiti delle commissioni del Parlamento europeo. Aprine una o trascrivi una registrazione su richiesta.",
+      "subtitle": "Trascrizioni con IA dei dibattiti delle commissioni del Parlamento europeo. Aprine una per leggerla, con il riassunto e l'ordine del giorno.",
       "suggested": "Suggerito per te",
       "blueHint": "La trascrizione su richiesta è una funzione Professional.",
       "transcribing": "Trascrizione in corso…",
@@ -221,7 +221,7 @@
       "mine": "I miei interessi",
       "all": "Tutto",
       "searchPlaceholder": "Cerca trascrizioni",
-      "empty": "Ancora nessuna trascrizione. Trascrivi una registrazione suggerita sopra.",
+      "empty": "Nessuna trascrizione corrisponde a questi filtri.",
       "words": "parole",
       "min": "min",
       "refs": "rif.",
@@ -254,7 +254,10 @@
       "summarise": "Riassumi (IA)",
       "summarising": "Riassunto in corso...",
       "showSummary": "Mostra il riassunto IA",
-      "hideSummary": "Nascondi il riassunto IA"
+      "hideSummary": "Nascondi il riassunto IA",
+      "closedNotice": "Ultima riunione di commissione del Parlamento europeo trascritta: {{date}}. Il servizio video del Parlamento non consente più di scaricare le registrazioni, quindi le nuove riunioni non possono essere trascritte. Puoi comunque guardarle sul sito del Parlamento.",
+      "closedNoticeNoDate": "Al momento le riunioni di commissione del Parlamento europeo non possono essere trascritte: il servizio video del Parlamento non consente di scaricare le registrazioni. Puoi comunque guardarle sul sito del Parlamento.",
+      "transcribeFailed": "Non è stato possibile trascrivere questa registrazione."
     },
     "consultations": {
       "title": "Consultazioni Pubbliche dell'UE",
