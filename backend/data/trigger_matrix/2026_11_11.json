@@ -1,0 +1,151 @@
+{
+ "_about": "11 Nov 2026 /news + /social-eu + /emeetings round: one natural question per language per topic; negatives must reach none of the six new guides.",
+ "languages": [
+  "en",
+  "fr",
+  "nl",
+  "es",
+  "ca",
+  "it"
+ ],
+ "topics": {
+  "digital_fairness_act_proposal_2026#proposal": [
+   "What does the Digital Fairness Act proposal ban?",
+   "Qu'interdit la proposition de législation sur l'équité numérique ?",
+   "Wat verbiedt het voorstel voor de wet inzake digitale eerlijkheid?",
+   "¿Qué prohíbe la propuesta de Ley de Equidad Digital?",
+   "Què prohibeix la proposta de Llei d'equitat digital?",
+   "Cosa vieta la proposta di legge sull'equità digitale?"
+  ],
+  "digital_fairness_act_proposal_2026#darkpatterns": [
+   "Are dark patterns and loot boxes going to be banned in the EU?",
+   "Les interfaces trompeuses seront-elles interdites dans l'UE ?",
+   "Wordt verslavend ontwerp in apps verboden in de EU?",
+   "¿Se van a prohibir los patrones oscuros en la UE?",
+   "Es prohibiran els patrons foscos a la UE?",
+   "Le pratiche commerciali sleali online saranno vietate nell'UE?"
+  ],
+  "ecb_presidency_succession_2027#who": [
+   "Who will succeed Lagarde as ECB president?",
+   "Qui va succéder à Lagarde à la présidence de la BCE ?",
+   "Wie wordt de opvolger van Lagarde als voorzitter van de ECB?",
+   "¿Quién será el sucesor de Lagarde en la presidencia del BCE?",
+   "Qui serà el successor de Lagarde a la presidència del BCE?",
+   "Chi sarà il successore di Lagarde alla presidenza della BCE?"
+  ],
+  "ai_regulatory_sandboxes_implementing_regulation_2026_2487#rules": [
+   "Are AI regulatory sandboxes free for start-ups?",
+   "Les bacs à sable réglementaires de l'IA sont-ils gratuits pour les start-up ?",
+   "Zijn de testomgevingen voor AI gratis voor start-ups?",
+   "¿Son gratuitos los espacios controlados de pruebas de IA para las pymes?",
+   "Són gratuïts els espais controlats de proves d'IA per a les pimes?",
+   "Gli spazi di sperimentazione normativa per l'IA sono gratuiti per le PMI?"
+  ],
+  "mff_2028_2034_parliament_committee_positions_november_2026#ecf": [
+   "How much does Parliament want for the European Competitiveness Fund?",
+   "Quel budget le Parlement veut-il pour le Fonds européen pour la compétitivité ?",
+   "Hoeveel wil het Parlement voor het Europees Fonds voor concurrentievermogen?",
+   "¿Cuánto pide el Parlamento para el Fondo Europeo de Competitividad?",
+   "Quant demana el Parlament per al Fons Europeu de Competitivitat?",
+   "Quanto chiede il Parlamento per il Fondo europeo per la competitività?"
+  ],
+  "mff_2028_2034_parliament_committee_positions_november_2026#esf": [
+   "What did MEPs vote on the European Social Fund after 2027?",
+   "Qu'ont voté les députés sur le Fonds social européen après 2027 ?",
+   "Wat hebben de Europarlementariërs gestemd over het Europees Sociaal Fonds na 2027?",
+   "¿Qué han votado los eurodiputados sobre el Fondo Social Europeo después de 2027?",
+   "Què han votat els eurodiputats sobre el Fons Social Europeu després del 2027?",
+   "Cosa hanno votato gli eurodeputati sul Fondo sociale europeo dopo il 2027?"
+  ],
+  "climate_action_progress_report_2026#nine": [
+   "Which Member States must submit a corrective action plan on climate?",
+   "Quels États membres doivent présenter un plan de mesures correctives pour le climat ?",
+   "Welke lidstaten moeten een corrigerend actieplan voor het klimaat indienen?",
+   "¿Qué Estados miembros deben presentar un plan de medidas correctoras sobre el clima?",
+   "Quins estats membres han de presentar plans de mesures correctores pel clima?",
+   "Quali Stati membri devono presentare un piano di azioni correttive per il clima?"
+  ],
+  "cjeu_t_521_26_meta_v_commission_whatsapp_ai_interim_measures#case": [
+   "Why is Meta suing the Commission over WhatsApp and AI?",
+   "Pourquoi Meta attaque-t-elle la Commission au sujet de WhatsApp et de l'IA ?",
+   "Waarom daagt Meta de Commissie voor de rechter over WhatsApp en AI?",
+   "¿Por qué Meta ha demandado a la Comisión por WhatsApp y la IA?",
+   "Per què Meta ha demandat la Comissió per WhatsApp i la IA?",
+   "Perché Meta ha fatto causa alla Commissione su WhatsApp e l'IA?"
+  ],
+  "vat_in_the_digital_age_2026#ioss": [
+   "When does the 150 euro IOSS threshold disappear?",
+   "Quand le seuil de 150 euros du guichet unique à l'importation disparaît-il ?",
+   "Wanneer verdwijnt de drempel van 150 euro voor de invoerregeling?",
+   "¿Cuándo desaparece el umbral de 150 euros de la ventanilla única de importación?",
+   "Quan desapareix el llindar de 150 euros de la finestreta única d'importació?",
+   "Quando scompare la soglia di 150 euro dello sportello unico per le importazioni?"
+  ],
+  "eu_annual_budgetary_procedure_314#2027": [
+   "How big is the EU budget for 2027?",
+   "Quel est le montant du budget 2027 de l'UE ?",
+   "Hoe groot is de EU-begroting voor 2027?",
+   "¿De cuánto es el presupuesto de la UE para 2027?",
+   "De quant és el pressupost de la UE per al 2027?",
+   "A quanto ammonta il bilancio UE 2027?"
+  ],
+  "eu_annual_migration_management_cycle_2026#pressure": [
+   "Which Member States are under migratory pressure for 2027?",
+   "Quels États membres sont sous pression migratoire pour 2027 ?",
+   "Welke lidstaten staan onder migratiedruk voor 2027?",
+   "¿Qué Estados miembros están bajo presión migratoria para 2027?",
+   "Quins estats membres estan sota pressió migratòria per al 2027?",
+   "Quali Stati membri sono sotto pressione migratoria per il 2027?"
+  ],
+  "eu_enlargement_package_2026#montenegro": [
+   "How many chapters has Montenegro closed?",
+   "Combien de chapitres le Monténégro a-t-il clôturés pour son adhésion ?",
+   "Hoeveel hoofdstukken heeft Montenegro gesloten voor de toetreding?",
+   "¿Cuántos capítulos ha cerrado Montenegro en su adhesión?",
+   "Quants capítols ha tancat Montenegro en la seva adhesió?",
+   "Quanti capitoli ha chiuso il Montenegro per l'adesione?"
+  ],
+  "eu_trade_defence#copper": [
+   "What is the anti-dumping duty on copper tubes from China?",
+   "Quel est le droit antidumping sur les tubes de cuivre chinois ?",
+   "Wat is het antidumpingrecht op koperen buizen uit China?",
+   "¿Cuál es el derecho antidumping sobre los tubos de cobre de China?",
+   "Quin és el dret antidúmping sobre els tubs de coure de la Xina?",
+   "Qual è il dazio antidumping sui tubi di rame dalla Cina?"
+  ],
+  "black_sea_shipping_attacks_october_2026#hub": [
+   "What did von der Leyen announce for the Black Sea maritime security hub?",
+   "Qu'a annoncé von der Leyen pour la mer Noire ?",
+   "Wat heeft von der Leyen aangekondigd voor de Zwarte Zee?",
+   "¿Qué ha anunciado von der Leyen para el mar Negro?",
+   "Què ha anunciat von der Leyen per a la mar Negra?",
+   "Cosa ha annunciato von der Leyen per il Mar Nero?"
+  ],
+  "eu_sanctions_implementation_framework#eca": [
+   "What did the auditors find on trade sanctions against Russia?",
+   "Qu'ont constaté les auditeurs sur les sanctions commerciales contre la Russie ?",
+   "Wat vonden de auditors over de handelssancties tegen Rusland?",
+   "¿Qué han concluido los auditores sobre las sanciones comerciales contra Rusia?",
+   "Què han conclòs els auditors sobre les sancions comercials contra Rússia?",
+   "Cosa hanno concluso i revisori sulle sanzioni commerciali contro la Russia?"
+  ],
+  "ep_plenary_march_2026#mini": [
+   "What is on the agenda of this week's mini-plenary?",
+   "Qu'y a-t-il à l'ordre du jour de la mini-plénière de cette semaine ?",
+   "Wat staat er op de agenda van de miniplenaire van deze week?",
+   "¿Qué hay en el orden del día del minipleno de esta semana?",
+   "Què hi ha a l'ordre del dia del minipleno d'aquesta setmana?",
+   "Cosa c'è all'ordine del giorno della miniplenaria di questa settimana?"
+  ]
+ },
+ "negatives": [
+  "What is the VAT rate on books in Spain?",
+  "Who is the rapporteur of the Chips Act 2?",
+  "How do I apply for an Erasmus+ grant?",
+  "Wat zijn de regels voor drones?",
+  "Quali sono le regole sul roaming?",
+  "Com funciona el Mecanisme d'ajust de carboni?",
+  "Does the AI Act apply to my chatbot?",
+  "What is the GDPR right to erasure?"
+ ]
+}

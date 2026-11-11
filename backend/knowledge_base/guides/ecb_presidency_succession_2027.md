@@ -1,0 +1,18 @@
+# ECB Presidency: Christine Lagarde's Succession (2026-2027)
+
+## QUICK FACTS
+- **Christine Lagarde is still President of the European Central Bank as of 11 November 2026. She will resign by 7 February 2027.** On 29 October 2026 she informed the President of the European Council that she would resign from her position by that date (statement by the Eurogroup President, 6 November 2026).
+- **Two candidates were nominated by the deadline of Friday 6 November 2026: Pablo Hernández de Cos (Spain) and Klaas Knot (the Netherlands).** Exactly two, both named in the Eurogroup President's statement. NO successor has been chosen as of 11 November 2026.
+- **Who runs the selection:** the President of the Eurogroup, Kyriakos Pierrakakis, opened the procedure and asked Member States for nominations. The Eurogroup took stock of the two candidacies at its meeting of Monday 9 November 2026.
+- **How the ECB President is appointed (Article 283(2) of the Treaty on the Functioning of the European Union):** the **European Council appoints**, on a **recommendation from the Council**, after **consulting the European Parliament and the ECB's Governing Council**. Parliament is consulted: it gives an opinion and does NOT have a veto. The term is eight years and is NOT renewable.
+- **The majority needed in the Council (the Eurogroup President's statement):** a reinforced qualified majority of the euro area Member States: at least **72% of euro area Member States, that is at least 16 of the 21 euro area countries**, representing at least **65% of the euro area's population**. Only euro area Member States vote.
+- **Three vacancies on the ECB Executive Board are in the nomination process** (the Council's summary of the Eurogroup President's remarks of 9 November 2026). The summary does NOT list the three posts. Known from other sources: the President's post (above) and Isabel Schnabel's seat, which she leaves on 3 January 2027 for the International Monetary Fund. The Executive Board has six members: the President, the Vice-President and four others.
+- **In Parliament the file goes to the Committee on Economic and Monetary Affairs (ECON)**, which hears the Council's candidate before the plenary gives its opinion. No hearing date is published as of 11 November 2026.
+- **What was NOT read:** the full remarks of the Eurogroup President of 9 November (only the Council's summary line), any Council recommendation (none exists yet), the candidates' own statements. The dates of the Council recommendation and of the European Council decision are not public.
+- **Background on the two candidates (general knowledge, not from the statement):** Pablo Hernández de Cos was Governor of the Banco de España from 2018 to 2024 and became General Manager of the Bank for International Settlements in 2025; Klaas Knot was President of De Nederlandsche Bank from 2011 to 2025 and chaired the Financial Stability Board.
+- Search words (other languages): presidencia del BCE, sucesor de Lagarde, sucesión de Lagarde, présidence de la BCE, successeur de Lagarde, presidenza della BCE, successore di Lagarde, voorzitterschap van de ECB, opvolger van Lagarde, presidència del BCE, successor de Lagarde, candidatos a presidir el BCE, dimisión de Lagarde, démission de Lagarde.
+
+## Source
+Statement by the Eurogroup President on the nominations for the post of ECB President, 6 November 2026 (Council press release, text read from Brubru's store); Council summary of the Eurogroup President's remarks, 9 November 2026; Article 283(2) TFEU.
+
+**Related guides:** `ecb_monetary_policy`, `eurogroup_eurozone_finance_ministers`.

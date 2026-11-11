@@ -12,6 +12,7 @@
 - **Commissioner**: Apostolos Tzitzikostas (Sustainable Transport and Tourism)
 - **CINEA Director**: cross-check current organigramme
 - **CEF Energy €600M call (29 April 2026)**: CINEA launched a €600 million CEF Energy call for energy infrastructure projects. NOTE — CEF Energy is the second envelope of the same regulation (Reg (EU) 2021/1153) but distinct from CEF Transport. CEF Energy is led by **DG ENER** (not DG MOVE) and supports cross-border electricity, hydrogen, smart grids, and offshore renewable infrastructure. Brubru tracking should treat CEF Transport and CEF Energy as separate guides — split planned. Source: cinea.ec.europa.eu 29 April 2026.
+- EPRS Briefing (10 November 2026): "Regulation (EU) 2023/1804 on the deployment of alternative fuels infrastructure: Implementation takeaways": implementation review of the alternative fuels infrastructure rules. Ref: EPRS_BRI(2026)788154
 
 ## Three envelopes
 

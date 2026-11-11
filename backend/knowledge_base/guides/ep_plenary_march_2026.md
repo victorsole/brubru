@@ -1,6 +1,11 @@
 # EP Plenary Sessions: 2026
 
 ## QUICK FACTS
+**LATEST (Wednesday 11 November 2026): BRUSSELS MINI-PLENARY, 11-12 NOVEMBER 2026.**
+Primary source: EP final draft agenda, last updated 10 November 2026. Votes are SCHEDULED for Thursday 12 November, 11:00-13:00; no result is known as of 11 November.
+- **Wednesday 11 Nov (from 15:00)**: Ukrainian children forcibly deported to Russia; Commission Work Programme 2027; Union Civil Protection Mechanism and health emergency preparedness (A10-0271/2026); Europe's Beating Cancer Plan (A10-0261/2026); resilience against cyber and hybrid attacks; media freedom and rule of law in the Czech Republic.
+- **Thursday 12 Nov**: 09:00 debate on further sanctions against Russia. Votes: election of a Vice-President; two immunity waivers (A10-0283/2026, A10-0284/2026); proxy voting in the Members' Statute (A10-0270/2026); Union Civil Protection Mechanism, first reading; retail investment package, first reading (A9-0160/2024 and A9-0162/2024); European Chemicals Agency regulation, first reading (A10-0093/2026); geographical indications and the Lisbon Agreement (A10-0211/2026); overseas countries and territories including Greenland (A10-0275/2026); Beating Cancer Plan; agri-food promotion policy (A10-0269/2026); institutional aspects of artificial intelligence (A10-0280/2026); new defence actors (A10-0268/2026); resolution on Ukrainian children.
+
 **LATEST (Monday 5 October 2026): THE 5-8 OCTOBER STRASBOURG PART-SESSION OPENS TODAY.**
 Primary source: EP final draft agenda, last updated 2 Oct 2026
 https://www.europarl.europa.eu/doceo/document/OJ-10-2026-10-05-SYN_EN.html

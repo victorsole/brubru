@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **LATEST (Tuesday 10 November 2026), the NEXT programme, 2028-2034:** Parliament's joint Industry and Transport committees adopted their position on the third Connecting Europe Facility by 101 votes to 1 with 17 abstentions. The COMMITTEES want **EUR 91.28 billion** (Commission: EUR 81.42 billion): transport EUR 37.96 billion, military mobility EUR 19.78 billion, energy EUR 33.53 billion. NOT Parliament's final position, NOT agreed with the Council. The rest of this guide describes the 2021-2027 programme in force.
 - **Full name**: Regulation (EU) 2021/1153 of the European Parliament and of the Council of 7 July 2021 establishing the Connecting Europe Facility and repealing Regulations (EU) No 1316/2013 and (EU) No 283/2014
 - **CELEX**: 32021R1153
 - **EUR-Lex**: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R1153

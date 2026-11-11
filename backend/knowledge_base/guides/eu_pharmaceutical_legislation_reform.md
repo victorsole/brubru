@@ -1,6 +1,7 @@
 # EU Pharmaceutical Legislation Reform
 
 ## QUICK FACTS
+- **LATEST (11 November 2026): the Public Health Committee (SANT) held its SECOND-READING vote on the pharmaceutical package on Monday 9 November 2026**, on the Council's first-reading positions (Council documents 07105/2/26 for the Regulation and 07106/2/26 for the Directive; agreed texts PE792.227 and PE792.228). **The RESULT is not in any source Brubru holds as of 11 November 2026** (no committee minutes, no press release). The package is NOT yet adopted: Parliament's plenary must still vote at second reading.
 - **LATEST (eMeeting, 6 November 2026): SANT votes on Monday 9 November 2026 at SECOND READING on the pharmaceutical package** (voting lists titled '2nd Reading'): draft recommendations **PE796.377 (Regulation 2023/0131(COD), rapporteur Tiemo Wölken, S&D)** and **PE796.189 (Directive 2023/0132(COD), rapporteur Dolors Montserrat, EPP)**, on the Council documents 07105/2/26 and 07106/2/26, with the agreed texts PE792.227 and PE792.228 and the Council's letter GEDA/A/(2026)201324. Parliament's first reading was April 2024 (T9-0220/2024, T9-0221/2024). **Status: NOT adopted until Parliament's plenary approves at second reading;** result of the 9 November vote not known before it happens.
 - Two files: Directive 2023/0132(COD) + Regulation 2023/0131(COD)
 - Commission proposals: COM(2023)192 (Directive) + COM(2023)193 (Regulation), 26 April 2023

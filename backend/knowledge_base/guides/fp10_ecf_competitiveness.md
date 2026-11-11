@@ -1,6 +1,7 @@
 # 10th Framework Programme (FP10) and European Competitiveness Fund (ECF)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 10 November 2026): Parliament's Industry, Research and Energy Committee voted its positions on Horizon Europe 2028-2034 and on the Competitiveness Fund.** Horizon Europe: the COMMITTEE wants **EUR 200 billion in current prices** (Commission: EUR 175 billion), budget guarantees for the European Research Council and the European Innovation Council, transfers within pillars capped at 10% and a council of at least 30 independent experts. Competitiveness Fund: EUR 264.35 billion (Commission: EUR 234.3 billion), adopted 61 to 13 with 12 abstentions. Committee positions, NOT final. Detail: guide `mff_2028_2034_parliament_committee_positions_november_2026`.
 - **ERC reaction, 14 October 2026:** ERC President **Maria Leptin**: "The proposed cuts to the next Horizon Europe FP10 budget send the wrong signal ... It's not too late to change course!" (ERC's official account). The post does not say whose proposed cuts or how much: give no amount.
 Companion guide: `european_competitiveness_fund` is the dedicated deep-dive on the ECF itself (COM(2025)555, EUR 234 billion, four policy windows, the ~13-14 instruments it consolidates). This guide covers the FP10 research-and-innovation angle plus the FP10+ECF relationship; use the two together and treat both as proposal-stage until the co-legislators agree.
 FP10 proposal: EUR 175 billion standalone programme for research and innovation (2028-2034)

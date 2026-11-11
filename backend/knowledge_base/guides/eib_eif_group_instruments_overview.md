@@ -1,6 +1,7 @@
 # EIB Group Instruments: EIB, EIF, Advisory Services, ELENA
 
 ## QUICK FACTS
+- **LATEST (9 November 2026, EIB press release): the Commission committed EUR 100 million to the EIB Group's Defence Equity Facility 2.0**, alongside the EIB Group and several Member States including Lithuania and Bulgaria; the facility is expected to double the size of the first one (EUR 175 million, launched in 2024 under InvestEU); first closing expected soon. The same day the EIB Group, fourteen institutional investors and seven Member States announced over EUR 10 billion of new equity for European scale-ups, building on the European Tech Champions Initiative.
 - **EIB Group = two legal entities**: the **European Investment Bank (EIB)**, the lending arm, plus the **European Investment Fund (EIF)**, the EIB Group subsidiary specialising in SME/mid-cap **equity investment and guarantees**. The EIF is not a separate bank -- it is part of the EIB Group and reports through the same governance chain.
 - **Scale (2025 results)**: EIB own lending signatures **EUR 86 billion**; **EIB Group total financing (EIB + EIF, own resources + third-party resources) EUR 100 billion** -- a record year. The Group's 2025-2027 Operational Plan target is EUR 95 billion/year, exceeded in 2025.
 - **Legal basis**: Articles 308-309 TFEU + the **Statute of the EIB (Protocol No. 5** annexed to the Treaties). The EIB is owned by the **27 EU Member States** (shareholders in proportion to GDP at accession), not by the European Commission -- it is a distinct legal person under EU primary law.

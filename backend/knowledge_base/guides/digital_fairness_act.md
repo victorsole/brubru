@@ -1,8 +1,9 @@
 # Digital Fairness Act (DFA)
 
 ## QUICK FACTS
+- **LATEST (Wednesday 11 November 2026): the Digital Fairness Act HAS BEEN PROPOSED.** The Commission tabled **COM(2026) 1100 final, procedure 2026/0356(COD)**, a Regulation replacing the Unfair Commercial Practices Directive 2005/29/EC, with two companion proposals (consumer enforcement cooperation; Consumer Rights Directive). It is a proposal: NOT adopted, NOT in force. Content, penalties and dates: guide `digital_fairness_act_proposal_2026`. Everything below this line was written BEFORE the proposal and describes expectations.
 - **LATEST (Wednesday 16 September 2026, State of the Union address)**: President von der Leyen said addictive design "is harming everyone. This is why we need a wider framework, the Digital Fairness Act. We will propose it in autumn." That matches the Commission's 2026 work programme (fourth quarter). **Still not proposed: no text yet.** She presented it as the wider framework beyond the EU Kids Act for minors, due 17 September 2026. Source: published speech text, SPEECH/26/1868 ("check against delivery"). See `soteu_2026_address`.
-- Status: Commission proposal expected Q4 2026
+- Status: proposed by the Commission on 11 November 2026 (COM(2026) 1100 final); Parliament and Council have not yet taken positions
 - Commission Work Programme: 2026, priority "Protecting our democracy, upholding our values"
 - Commissioner: Michael McGrath (Democracy, Justice, Consumer Rights and Equality)
 - Public consultation: 17 July - 24 October 2025

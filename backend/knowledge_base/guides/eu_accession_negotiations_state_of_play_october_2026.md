@@ -12,7 +12,7 @@
 - **Partner association (Commission news, 13 October):** Albania, Bosnia and Herzegovina, Moldova, Montenegro, North Macedonia, Serbia and Ukraine, with Kosovo (status-neutral designation), are associated with the **European Centre for Democratic Resilience** (`european_democracy_shield`): cooperation, not accession progress.
 
 ## How to answer
-Montenegro: 21 of 33 chapters provisionally closed, all 33 opened, last closures 12 October (17, 18, 19). 13 October: Albania chapter 20 provisionally closed (4 closed in all); Ukraine and Moldova opened the internal market, competitiveness and inclusive growth negotiations. Accession needs unanimity (Article 49 TEU); the 6 October pre-enlargement reviews fix no dates.
+Montenegro: 23 of 33 chapters provisionally closed since 6 November 2026 (chapters 1 and 12 closed that day); it was 21 of 33 after 12 October. All 33 opened, closures of 12 October (17, 18, 19). 13 October: Albania chapter 20 provisionally closed (4 closed in all); Ukraine and Moldova opened the internal market, competitiveness and inclusive growth negotiations. Accession needs unanimity (Article 49 TEU); the 6 October pre-enlargement reviews fix no dates.
 
 ## Related guides
 `pre_enlargement_policy_reviews_2026`, `european_council_15_16_october_2026`, `serbia_eu_accession_and_conditionality`, `reform_and_growth_facility_western_balkans_moldova`, `european_democracy_shield`.

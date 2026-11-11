@@ -19,6 +19,7 @@
 - Small Member State carve-out: jurisdictions with a market capitalisation of listed shares below a set threshold and no central securities depository may request a temporary derogation from parts of the fast-track obligations
 
 FASTER modernises how cross-border portfolio investors reclaim tax withheld in excess of the applicable double-taxation-treaty rate on dividends from EU-listed shares (and, in participating Member States, interest from EU-listed bonds). It replaces slow, paper-heavy national refund procedures that could take months or years with a digital residence certificate and two harmonised fast-track relief options, while tightening anti-fraud controls through a certified-intermediary chain of custody.
+- European Parliament study (10 November 2026): "Implementation of the FASTER Directive: Interoperability and Governance Challenges": finds that interoperability between national systems, rather than harmonisation, is the principal challenge; divergent documentation, digital procedures and enforcement risk keeping the system fragmented. Ref: ECTI_STU(2026)772664
 
 ## Why FASTER exists
 

@@ -2,6 +2,268 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_trade_defence",
+      "title": "EU Trade Defence Instruments",
+      "summary": "Provisional anti-dumping duties on copper tubes and acrylic esters, in force 12 November.",
+      "refs": [
+        "32026R2497"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "european_peace_facility",
+      "title": "European Peace Facility",
+      "summary": "EUMAM Ukraine extended to 15 November 2028.",
+      "refs": [
+        "32026D2508"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_annual_migration_management_cycle_2026",
+      "title": "Second Annual Migration Management Cycle",
+      "summary": "Decision (EU) 2026/2522 published: in force 1 December 2026, applies 1 January 2027.",
+      "refs": [
+        "32026D2522"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "digital_fairness_act",
+      "title": "Digital Fairness Act (DFA)",
+      "summary": "Now proposed (11 November 2026); pointer to the proposal guide.",
+      "refs": [
+        "COM(2026)1100"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "action": "added",
+      "guide": "climate_action_progress_report_2026",
+      "title": "EU Climate Action Progress Report 2026",
+      "summary": "Emissions down 1.6% in 2025; nine Member States to be asked for corrective action plans; carbon market revenues.",
+      "refs": [
+        "COM(2026)601"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "action": "added",
+      "guide": "ai_regulatory_sandboxes_implementing_regulation_2026_2487",
+      "title": "AI Regulatory Sandboxes: Implementing Regulation (EU) 2026/2487",
+      "summary": "Rules for AI Act sandboxes: free access for SMEs, three-month answer, written proof and exit report; in force 1 December 2026.",
+      "refs": [
+        "32026R2487"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "action": "added",
+      "guide": "digital_fairness_act_proposal_2026",
+      "title": "Digital Fairness Act: the proposal of 11 November 2026",
+      "summary": "The Commission's proposal as tabled: what it bans, penalties, dates, and the two companion proposals.",
+      "refs": [
+        "COM(2026)1100"
+      ]
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_funding_third_country_participation",
+      "title": "Third-country participation in Horizon Europe",
+      "summary": "India association: date of the announcement corrected to 6 November 2026.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "cop31_antalya_eu_position_2026",
+      "title": "COP31 in Antalya",
+      "summary": "Parliament study on the key Parties.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "faster_directive_withholding_tax",
+      "title": "FASTER Directive",
+      "summary": "Parliament study on implementation challenges.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "cef_transport_funding",
+      "title": "CEF Transport funding",
+      "summary": "Parliament briefing on alternative fuels infrastructure implementation.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "ep_plenary_march_2026",
+      "title": "EP Plenary Sessions: 2026",
+      "summary": "Mini-plenary of 11-12 November: agenda and Thursday's voting list.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eib_eif_group_instruments_overview",
+      "title": "EIB and EIF instruments",
+      "summary": "Commission commits EUR 100 million to the Defence Equity Facility 2.0.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_pharmaceutical_legislation_reform",
+      "title": "EU Pharmaceutical Legislation Reform",
+      "summary": "SANT second-reading vote held 9 November; result not yet published.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "black_sea_shipping_attacks_october_2026",
+      "title": "Black Sea shipping attacks",
+      "summary": "Maritime Security Hub fast-tracked with EUR 50 million; EUR 10 million each to Romania and Bulgaria.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "Court of Auditors special report 30/2026 on trade sanctions against Russia.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_civil_protection_mechanism_resceu",
+      "title": "EU Civil Protection Mechanism",
+      "summary": "Plenary first reading 12 November; Population Preparedness Guidelines published.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "savings_and_investment_union",
+      "title": "Savings and Investment Union",
+      "summary": "Retail investment package on the plenary voting list of 12 November.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_accession_negotiations_state_of_play_october_2026",
+      "title": "Accession negotiations: state of play",
+      "summary": "Montenegro: 23 of 33 chapters closed since 6 November.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_enlargement_package_2026",
+      "title": "2026 Enlargement Package",
+      "summary": "Montenegro: 23 of 33 chapters provisionally closed since 6 November.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "vat_in_the_digital_age_2026",
+      "title": "VAT in the Digital Age",
+      "summary": "Council general approach of 9 November: EUR 150 import one-stop shop threshold removed from 1 July 2028.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "ecb_monetary_policy",
+      "title": "ECB Monetary Policy",
+      "summary": "Lagarde resigns by 7 February 2027; two candidates nominated.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_child_guarantee_strengthened_2026",
+      "title": "EU Child Guarantee",
+      "summary": "EMPL position on the Social Fund 2028-2034: at least 5% for the Child Guarantee.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "connecting_europe_facility",
+      "title": "Connecting Europe Facility",
+      "summary": "Committee position on the 2028-2034 programme: EUR 91.28 billion.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "fp10_ecf_competitiveness",
+      "title": "FP10 and the Competitiveness Fund",
+      "summary": "ITRE position of 10 November: Horizon Europe EUR 200 billion.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "european_competitiveness_fund",
+      "title": "European Competitiveness Fund",
+      "summary": "ITRE position of 10 November: EUR 264.35 billion, 61-13-12.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "Multiannual Financial Framework 2028-2034",
+      "summary": "Committee positions of 10 November on four programmes.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "updated",
+      "guide": "eu_annual_budgetary_procedure_314",
+      "title": "EU Annual Budgetary Procedure",
+      "summary": "2027 budget agreed on 10 November 2026: EUR 199.7 billion commitments, EUR 211.5 billion payments; plenary vote 24 November.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "added",
+      "guide": "cjeu_t_521_26_meta_v_commission_whatsapp_ai_interim_measures",
+      "title": "Meta v Commission (T-521/26)",
+      "summary": "Meta's action against the interim measures on the WhatsApp Business API and AI competitors: pending, eight pleas.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "added",
+      "guide": "mff_2028_2034_parliament_committee_positions_november_2026",
+      "title": "2028-2034 Programmes: Parliament's Committee Positions",
+      "summary": "Committee figures for the Competitiveness Fund, Horizon Europe, Connecting Europe Facility and Social Fund, each beside the Commission's.",
+      "refs": []
+    },
+    {
+      "date": "2026-11-11",
+      "action": "added",
+      "guide": "ecb_presidency_succession_2027",
+      "title": "ECB Presidency: Lagarde's Succession",
+      "summary": "Lagarde resigns by 7 February 2027; the two candidates; how the President is appointed and the majority needed.",
+      "refs": []
+    },
+    {
       "date": "2026-11-06",
       "action": "updated",
       "guide": "aviation_transport_policy",

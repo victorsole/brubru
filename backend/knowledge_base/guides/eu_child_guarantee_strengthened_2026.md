@@ -1,6 +1,7 @@
 # EU Strengthened Child Guarantee 2026
 
 ## QUICK FACTS
+- **LATEST (Tuesday 10 November 2026): Parliament's Employment and Social Affairs Committee voted (40 to 6, 10 abstentions) to keep the European Social Fund 2028-2034 as a stand-alone programme of EUR 124.19 billion with at least 5% ring-fenced for the Child Guarantee.** A committee position, NOT final. The press release gives the 5% share and no euro amount for the Child Guarantee.
 - Topic: Strengthening of the European Child Guarantee, adopted as part of the **Social Package** by the College of Commissioners on **Wednesday 6 May 2026** (Brussels)
 - Responsible EVP: Roxana Mînzatu (EVP for People, Skills and Preparedness, Romania)
 - Responsible Commissioner: Glenn Micallef (Intergenerational Fairness, Youth, Culture and Sport, Malta) — child-poverty cross-portfolio
