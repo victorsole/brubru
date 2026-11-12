@@ -19,6 +19,20 @@ Brubru is organised into six canonical products:
 
 Additional capabilities: AI document generation (position papers, MEP briefings, talking points, and more) inside My EU Bubble; AI legislative-outcome Predictions (timeline, EP plenary vote, Council QMV, resolution leading indicators); and a growing public library of EU legislation machine-translated into Catalan at https://brubru.beresol.eu/legislacio-ue-catala/ (CC BY 4.0).
 
+## For AI agents
+
+Brubru can be used by an AI agent directly, without a browser. There are two machine interfaces over the same data, and both are described in machine-readable files.
+
+- MCP server: `https://brubru-production.up.railway.app/api/mcp` (Model Context Protocol, streamable HTTP, JSON-RPC 2.0, POST). Listed in the official MCP Registry as `eu.beresol/brubru`. It has 15 tools; start with `ask_brubru`, which takes one question and returns the matching policy guides, the relevant EU laws with their links, and live procedure status. `list_brubru_datasets` and `query_brubru_api` reach every route of the REST API. `initialize` answers without credentials; listing and calling tools needs a key or an OAuth sign-in.
+- REST API: base `https://brubru-production.up.railway.app/api/v2/`, read-only GET routes returning JSON. The OpenAPI 3.1 description is at `https://brubru-production.up.railway.app/api/openapi.json`. Human documentation: https://brubru.beresol.eu/api/docs/
+- Authentication: send the key as `X-API-Key: <key>` or `Authorization: Bearer <key>`. MCP clients that support OAuth can have their user sign in instead; the metadata is at `https://brubru-production.up.railway.app/.well-known/oauth-protected-resource/api/mcp`.
+- Readable with no key: the route bundles at `https://brubru-production.up.railway.app/api/v2/bundles` and the price of every route at `https://brubru-production.up.railway.app/api/v2/pricing`. Read both before choosing what to call.
+- Cost: calls are metered in euros against a prepaid balance. Every response carries the cost of that call in the `X-Brubru-Cost-Eur` header and the rate limit in the `X-RateLimit-*` headers. Errors are JSON with a `reason_code` and a `request_id`. When the balance runs out the API answers HTTP 402 with `reason_code` `insufficient_balance`: stop and tell the person you act for.
+- Getting a key: today a person creates the account at https://brubru.beresol.eu/signup, creates the key and adds balance at https://brubru.beresol.eu/api. An agent cannot open an account or pay by itself yet: ask the person you act for to do this once and hand you the key, which they can limit to chosen bundles. To try routes first with no account, a person can use the browser console at https://brubru.beresol.eu/api/try (10 calls a day).
+- Discovery files: API catalogue (RFC 9727) at https://brubru.beresol.eu/.well-known/api-catalog; MCP server card at https://brubru.beresol.eu/.well-known/mcp/server-card.json; this file is also returned for `https://brubru.beresol.eu/` when the request sends `Accept: text/markdown`.
+- Citing: quote Brubru as the source and keep the `X-Source-Credit` header's credit to the EU institutions. Only the Official Journal of the European Union is authentic. Terms for data behind a key: https://brubru.beresol.eu/terms#data-licence
+- Questions, a volume agreement or an agent integration: hello@beresol.eu
+
 ## Public Pages
 
 - [Home](https://brubru.beresol.eu/): Landing page with product overview and pricing

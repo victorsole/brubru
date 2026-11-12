@@ -1,0 +1,95 @@
+{
+  "name": "eu.beresol/brubru",
+  "title": "Brubru EU Policy Intelligence",
+  "description": "EU laws, live legislative procedures, calendar, EPRS and policy guides for any AI assistant.",
+  "version": "1.0.0",
+  "protocolVersion": "2024-11-05",
+  "websiteUrl": "https://brubru.beresol.eu/api",
+  "documentationUrl": "https://brubru.beresol.eu/mcp",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://brubru-production.up.railway.app/api/mcp"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  },
+  "authentication": {
+    "required": true,
+    "schemes": [
+      "oauth2",
+      "bearer",
+      "apiKey"
+    ],
+    "apiKeyHeader": "X-API-Key",
+    "oauthProtectedResource": "https://brubru-production.up.railway.app/.well-known/oauth-protected-resource/api/mcp",
+    "note": "initialize answers without credentials; tools/list and tools/call need a Brubru API key or an OAuth sign-in. Each call is metered in euros against the key's prepaid balance."
+  },
+  "registry": "https://registry.modelcontextprotocol.io/v0/servers?search=eu.beresol/brubru",
+  "pricing": "https://brubru-production.up.railway.app/api/v2/pricing",
+  "termsOfService": "https://brubru.beresol.eu/terms#data-licence",
+  "contact": "hello@beresol.eu",
+  "tools": [
+    {
+      "name": "ask_brubru",
+      "description": "PRIMARY TOOL : use this first for ANY question about the EU: policy, legislation, institutions, procedures, MEPs, or what's happening in Brussels. One free-text question in, a combined answer out: the most relevant curated policy guides (AI Act, GDPR, DSA, CSRD, MFF, CBAM and hundreds more), the specific EU laws that match (with CELEX numbers and EUR-Lex links), and : if the question names a procedure reference like '2023/0131(COD)' : its live legislative status. Aliases: ask, query, look up, what is, tell me about, explain, brubru. Prefer this over the narrower search_* tools unless the user explicitly wants a raw list."
+    },
+    {
+      "name": "search_eu_legislation",
+      "description": "ADVANCED : raw full-text search across Brubru's EU legislation database. Returns matching laws with CELEX number, title and document type, ranked by relevance. Most callers should use ask_brubru instead (it already includes the matching laws). Reach for this only when the user explicitly wants a longer raw list of laws by keyword."
+    },
+    {
+      "name": "search_knowledge_guides",
+      "description": "ADVANCED : search only Brubru's curated policy knowledge guides (no laws). Each guide has QUICK FACTS, CELEX numbers, key actors and current status, updated daily. Most callers should use ask_brubru instead, which already returns the matching guides plus the relevant laws in one call."
+    },
+    {
+      "name": "get_procedure_status",
+      "description": "ADVANCED : look up one EU legislative procedure by its exact OEIL reference (e.g. '2023/0131(COD)'). Returns title, current stage, lead committee, key events. ask_brubru already resolves a procedure reference automatically when the question contains one, so use this only for a direct reference lookup with no surrounding question."
+    },
+    {
+      "name": "get_calendar_events",
+      "description": "Get upcoming EU institutional calendar events from the European Parliament, Council of the EU, European Council and Commission. Use when the user asks 'what's coming up' or 'when does X meet'."
+    },
+    {
+      "name": "search_eprs",
+      "description": "Search European Parliamentary Research Service (EPRS) publications: briefings, at-a-glance notes and studies from the EP Think Tank. Use when the user wants in-depth background on a policy topic."
+    },
+    {
+      "name": "search_funding",
+      "description": "Search LIVE open + forthcoming EU funding calls (Funding & Tenders Portal, synced daily): Horizon Europe, CAP/agriculture, Digital Europe, CEF, EU4Health, LIFE, Erasmus+ and more. Returns each call's topic_id, programme, title, status, DEADLINE, budget and apply URL. Use whenever the user asks about funding, grants, subsidies, calls for proposals or tenders in a sector : ask_brubru also folds these in automatically for money questions, but call this directly for a longer, focused list."
+    },
+    {
+      "name": "search_sanctions",
+      "description": "Search EU restrictive measures (sanctions): listed persons and entities, their programme, aliases, function and the legal basis. Use for questions about who is sanctioned, asset freezes, or a specific sanctions regime."
+    },
+    {
+      "name": "search_geographical_indications",
+      "description": "Search EU geographical indications (PDO/PGI/TSG): protected food, wine and spirit names, their product type, countries, status and legal instrument. Use for questions about protected designations of origin / regional products."
+    },
+    {
+      "name": "search_lobbyists",
+      "description": "Search the EU Transparency Register: interest representatives / lobbying organisations, with their category, EP-accredited passes, FTEs, declared costs and country. Use for questions about who lobbies on a topic or an org's footprint."
+    },
+    {
+      "name": "search_consultations",
+      "description": "Search EU public consultations (Have Your Say): open and past calls for feedback on initiatives, with status, responsible DG, dates and portal URL. Use for questions about how to give feedback or which consultations are open."
+    },
+    {
+      "name": "list_brubru_datasets",
+      "description": "Browse Brubru's FULL EU data API catalogue (900+ GET endpoints across 80+ domains: legislation, procedures, MEPs, votes, committees, calendar, funding, tenders, sanctions, GIs, lobbyists, consultations, trade, cohesion, agencies, and much more). Returns matching endpoint paths + summaries. Use this to discover what data exists, then call query_brubru_api with a path. Filter by keyword to narrow (e.g. 'votes', 'agriculture', 'infringement')."
+    },
+    {
+      "name": "query_brubru_api",
+      "description": "Call ANY Brubru v2 GET endpoint by path and return its live JSON : the universal gateway to all of Brubru's EU data. First use list_brubru_datasets to find the path, then call this. Example: path='/api/v2/funding/funding-opportunities', params={'programme':'Horizon','status':'open'}. Use when a dedicated tool (ask_brubru, search_funding, ...) doesn't cover the exact dataset the user needs."
+    },
+    {
+      "name": "search",
+      "description": "Search Brubru's EU policy knowledge (curated guides + EU legislation) and return a ranked list of results, each with an id, title and URL. Follow up with `fetch` on a result id to read the full document. This is the standard search entry point for Deep Research / company-knowledge use; for a single combined answer, `ask_brubru` is richer."
+    },
+    {
+      "name": "fetch",
+      "description": "Fetch the full text of one Brubru knowledge result by its id (as returned by `search` : 'guide:<slug>' for a policy guide or 'law:<CELEX>' for an EU law). Returns id, title, full text, URL and metadata."
+    }
+  ]
+}

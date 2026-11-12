@@ -1,0 +1,66 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://brubru-production.up.railway.app/api/v2/",
+      "service-desc": [
+        {
+          "href": "https://brubru-production.up.railway.app/api/openapi.json",
+          "type": "application/vnd.oai.openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://brubru.beresol.eu/api/docs/",
+          "type": "text/html"
+        },
+        {
+          "href": "https://brubru.beresol.eu/llms.txt",
+          "type": "text/plain"
+        }
+      ],
+      "service-meta": [
+        {
+          "href": "https://brubru-production.up.railway.app/api/v2/bundles",
+          "type": "application/json"
+        },
+        {
+          "href": "https://brubru-production.up.railway.app/api/v2/pricing",
+          "type": "application/json"
+        }
+      ],
+      "terms-of-service": [
+        {
+          "href": "https://brubru.beresol.eu/terms#data-licence",
+          "type": "text/html"
+        }
+      ]
+    },
+    {
+      "anchor": "https://brubru-production.up.railway.app/api/mcp",
+      "service-desc": [
+        {
+          "href": "https://brubru.beresol.eu/.well-known/mcp/server-card.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://brubru.beresol.eu/mcp",
+          "type": "text/html"
+        }
+      ],
+      "service-meta": [
+        {
+          "href": "https://brubru-production.up.railway.app/.well-known/oauth-protected-resource/api/mcp",
+          "type": "application/json"
+        }
+      ],
+      "terms-of-service": [
+        {
+          "href": "https://brubru.beresol.eu/terms#data-licence",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

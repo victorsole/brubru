@@ -10,6 +10,11 @@
   RewriteRule ^late-payments/ - [L]
   RewriteRule ^guides/ - [L]
 
+  # An agent that asks for the home page as Markdown gets llms.txt, which is
+  # the site's Markdown description. Browsers never send this Accept value.
+  RewriteCond %{HTTP_ACCEPT} text/markdown [NC]
+  RewriteRule ^$ llms.txt [L,E=BRUBRU_MD:1]
+
   # Client-only app routes (/main, /my-eu-bubble, /amendator, ...) fall through
   # to app.html, the CLEAN SPA shell (empty #root). Serving the prerendered
   # homepage (index.html) here makes React hydrate homepage markup onto a
@@ -51,4 +56,19 @@
     Header set Pragma "no-cache"
     Header set Expires "0"
   </FilesMatch>
+</IfModule>
+
+# Agent discovery: point at the API catalogue (RFC 9727) from every HTML page,
+# and tell caches that the home page varies by Accept (Markdown for agents).
+<IfModule mod_headers.c>
+  <FilesMatch "^index\.html$">
+    Header add Link "</.well-known/api-catalog>; rel=\"api-catalog\""
+  </FilesMatch>
+  <FilesMatch "^(index\.html|llms\.txt)$">
+    Header merge Vary "Accept"
+  </FilesMatch>
+  Header set Content-Type "text/markdown; charset=utf-8" env=REDIRECT_BRUBRU_MD
+  <Files "api-catalog">
+    ForceType application/linkset+json
+  </Files>
 </IfModule>
