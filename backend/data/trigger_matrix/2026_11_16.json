@@ -1,0 +1,35 @@
+{
+ "_about": "16 Nov 2026: Foreign Affairs Council sanctions listings (five regimes). One natural question per language per topic; negatives must not reach the new guide.",
+ "languages": ["en","fr","nl","es","ca","it"],
+ "topics": {
+  "eu_sanctions_listings_16_november_2026#russia": [
+   "What new sanctions against Russia did the EU adopt on 16 November?",
+   "Quelles nouvelles sanctions contre la Russie l'UE a-t-elle adoptées le 16 novembre ?",
+   "Welke nieuwe sancties tegen Rusland heeft de EU op 16 november aangenomen?",
+   "¿Qué nuevas sanciones contra Rusia adoptó la UE el 16 de noviembre?",
+   "Quines noves sancions contra Rússia va adoptar la UE el 16 de novembre?",
+   "Quali nuove sanzioni contro la Russia ha adottato l'UE il 16 novembre?"
+  ],
+  "eu_sanctions_listings_16_november_2026#haiti": [
+   "Which Haitian gangs did the EU put under sanctions?",
+   "Quelles sont les sanctions contre Haïti décidées par le Conseil ?",
+   "Welke sancties tegen Haïti heeft de Raad opgelegd?",
+   "¿Qué sanciones a Haití ha aprobado el Consejo?",
+   "Quines sancions a Haití ha aprovat el Consell?",
+   "Quali sanzioni contro Haiti ha deciso il Consiglio?"
+  ],
+  "eu_sanctions_listings_16_november_2026#banks": [
+   "Which Russian banks sanctioned by the EU this week?",
+   "Quelles banques russes viennent d'être sanctionnées par l'UE ?",
+   "Welke Russische banken zijn door de EU gesanctioneerd?",
+   "¿Qué bancos rusos ha sancionado la UE?",
+   "Quins bancs russos ha sancionat la UE?",
+   "Quali banche russe sono state sanzionate dall'UE?"
+  ]
+ },
+ "negatives": [
+  "What is the Digital Fairness Act?",
+  "How do I apply for an AI regulatory sandbox?",
+  "When is the next plenary session in Strasbourg?"
+ ]
+}

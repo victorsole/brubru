@@ -2,6 +2,62 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-11-16",
+      "action": "updated",
+      "guide": "eu_ets_review_2026",
+      "title": "EU ETS Review",
+      "summary": "Provisional agreement on free allowances (12 November); Court dismisses Poland's Fit for 55 actions",
+      "refs": []
+    },
+    {
+      "date": "2026-11-16",
+      "action": "updated",
+      "guide": "european_peace_facility",
+      "title": "European Peace Facility",
+      "summary": "Gulf of Guinea support raised to EUR 31 million",
+      "refs": []
+    },
+    {
+      "date": "2026-11-16",
+      "action": "updated",
+      "guide": "ukraine_support_loan_recovery_2026",
+      "title": "Ukraine Support Loan",
+      "summary": "EUR 1.71 billion defence payment and EUR 8 billion Ukraine Facility payment approved, 16 November",
+      "refs": []
+    },
+    {
+      "date": "2026-11-16",
+      "action": "updated",
+      "guide": "eu_russia_hybrid_destabilisation_sanctions_regime",
+      "title": "Russia destabilising activities regime",
+      "summary": "30 persons and 1 entity added 16 November; cyber regime: NoName057(16)",
+      "refs": []
+    },
+    {
+      "date": "2026-11-16",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "16 November listings under five regimes",
+      "refs": []
+    },
+    {
+      "date": "2026-11-16",
+      "action": "added",
+      "guide": "eu_sanctions_listings_16_november_2026",
+      "title": "EU sanctions listings of 16 November 2026",
+      "summary": "Foreign Affairs Council: names added under five regimes (Ukraine 12 + 101, destabilisation 30 + 1, cyber 1, Hamas 1 + 1, human rights 4), all in force 16 November",
+      "refs": [
+        "32026R2574",
+        "32026D2575",
+        "32026R2558",
+        "32026D2556",
+        "32026R2550",
+        "32026R2568",
+        "32026R2569"
+      ]
+    },
+    {
       "date": "2026-11-11",
       "action": "updated",
       "guide": "eu_trade_defence",
