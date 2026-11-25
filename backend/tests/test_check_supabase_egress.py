@@ -98,7 +98,7 @@ def test_a_heavy_day_warns():
     assert "warn-day" in [reason for reason, _ in egress.alerts(state, now)]
 
 
-@pytest.mark.parametrize("gb,reason", [(130, "warn-cycle"), (210, "urgent-cycle")])
+@pytest.mark.parametrize("gb,reason", [(130, "warn-cycle"), (210, "high-cycle")])
 def test_the_cycle_total_warns_then_turns_urgent(gb, reason):
     state, now = _reads()
     state["cycle_bytes"] = gb * GB
@@ -202,3 +202,84 @@ def test_the_state_holds_no_secret(sends, tmp_path):
 def test_the_readings_do_not_grow_for_ever():
     state, now = _reads(*[0.05] * 80)
     assert len(state["readings"]) <= egress.KEEP_READINGS_HOURS + 1
+
+
+# --- 25 Nov 2026: disk, the upper-bound label, the spend cap off -------------------------------------------------
+
+_FEED = (
+    'node_network_transmit_bytes_total{device="ens5"} 9.08e10\n'
+    'node_filesystem_size_bytes{device="/dev/nvme0n1p2",fstype="ext4",mountpoint="/"} 1.036e10\n'
+    'node_filesystem_avail_bytes{device="/dev/nvme0n1p2",fstype="ext4",mountpoint="/"} 2.86e9\n'
+    'node_filesystem_size_bytes{device="/dev/nvme1n1",fstype="ext4",mountpoint="/data"} 2.842e10\n'
+    'node_filesystem_avail_bytes{device="/dev/nvme1n1",fstype="ext4",mountpoint="/data"} 7.08e9\n'
+)
+
+
+def test_the_disk_is_the_data_filesystem_not_the_root_one():
+    assert egress.parse_disk(_FEED) == (2.842e10, 7.08e9)
+
+
+def test_a_feed_without_the_disk_is_a_failure_not_a_zero():
+    with pytest.raises(ValueError):
+        egress.parse_disk('node_network_transmit_bytes_total{device="ens5"} 3\n')
+
+
+def test_the_provisioned_size_matches_the_dashboard():
+    # 25 Nov 2026: the dashboard said 27 GB provisioned; the filesystem was 28.42e9 bytes (26.5 GiB).
+    assert egress.provisioned_gb(2.842e10) == 27
+    assert egress.disk_cost_a_month(27) == pytest.approx(2.375)
+    assert egress.disk_cost_a_month(8) == 0
+
+
+def test_one_fetch_feeds_both_the_counter_and_the_disk(sends, tmp_path, monkeypatch):
+    calls = []
+    monkeypatch.setattr(egress, "read_feed", lambda env: calls.append(1) or _FEED)
+    path = tmp_path / "state.json"
+    assert egress.run({}, path, T0) == 0
+    assert len(calls) == 1
+    line = egress.status_line(json.loads(path.read_text()), T0)
+    assert "about 27 GB provisioned" in line and "$2.38 a month over" in line and "upper bound" in line
+
+
+def test_a_disk_growth_is_reported_once_with_its_cost(sends, tmp_path):
+    path = tmp_path / "state.json"
+    size = [2.842e10]
+    egress.run({}, path, T0, reader=lambda env: 1000 * GB, disk_reader=lambda env: (size[0], 7e9))
+    size[0] = 3.4e10    # 32 GiB filesystem: 32 GB provisioned
+    assert egress.run({}, path, T0 + timedelta(hours=1), reader=lambda env: 1000 * GB, disk_reader=lambda env: (size[0], 1.2e10)) == 1
+    egress.run({}, path, T0 + timedelta(hours=2), reader=lambda env: 1000 * GB, disk_reader=lambda env: (size[0], 1.2e10))
+    grew = [b for s, b in sends["mail"] if "grew from 27 to 32 GB" in s]
+    assert len(grew) == 1 and "$3.00 a month" in grew[0]
+
+
+def test_a_nearly_full_disk_is_urgent():
+    state, now = _reads()
+    state = egress.note_disk(state, 30e9, 2e9, now)
+    assert "urgent-disk" in [r for r, _ in egress.alerts(state, now)]
+    state = egress.note_disk(state, 30e9, 10e9, now)
+    assert "urgent-disk" not in [r for r, _ in egress.alerts(state, now)]
+
+
+def test_a_disk_that_cannot_be_read_does_not_fail_the_egress_reading(sends, tmp_path):
+    path = tmp_path / "state.json"
+
+    def broken(env):
+        raise ValueError("no disk")
+    assert egress.run({}, path, T0, reader=lambda env: 1000 * GB, disk_reader=broken) == 0
+    assert "Disk: not read" in egress.status_line(json.loads(path.read_text()), T0)
+
+
+def test_a_cycle_total_mail_goes_once_a_cycle_not_every_day(sends, tmp_path):
+    state, now = _reads()
+    state["cycle_bytes"] = 130 * GB
+    for day in range(3):
+        for reason, sentence in egress.alerts(state, now + timedelta(days=day)):
+            egress.raise_alert({}, state, reason, sentence, now + timedelta(days=day))
+    assert len([s for s, _ in sends["mail"] if "upper bound 130 GB" in s]) == 1
+
+
+def test_the_mail_says_the_spend_cap_is_off_and_the_figure_is_an_upper_bound(sends):
+    state, now = _reads(150)
+    egress.raise_alert({}, state, "urgent-spike", "x", now)
+    body = sends["mail"][0][1]
+    assert "spend cap is off" in body and "UPPER BOUND" in body and "402" not in body

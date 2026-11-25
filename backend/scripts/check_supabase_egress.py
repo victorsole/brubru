@@ -1,11 +1,18 @@
-"""Warn before Supabase's egress quota runs out (Victor, 3 Nov 2026).
+"""Watch Supabase's egress and disk (Victor, 3 Nov 2026; disk and the spend-cap change, 25 Nov 2026).
 
-Going over the quota again means restriction, not a bill: the spend cap stays on and there is no second grace
-period, so the next excess can answer 402 on every request. The dashboard's figure has no public route, so this reads
-the network counter in Supabase's metrics feed: `node_network_transmit_bytes_total`, what the database machine has
-sent. It ran at about 1.1 GB a day against the dashboard's 1.1 over a short sample on 3 Nov: compare a full day
-with the dashboard before trusting the absolute figure. It sees one project; brubru is 610.8 of the organisation's
-611 GB.
+The spend cap is OFF since 25 Nov 2026 (Victor): going over a quota is billed, not restricted. Egress over 250 GB
+costs $0.09 a GB; disk over the included 8 GB costs $0.125 a GB a month on the PROVISIONED size.
+
+EGRESS IS AN UPPER BOUND. The dashboard's billed figure has no public route, so this reads the machine's network
+counter in Supabase's metrics feed (`node_network_transmit_bytes_total`). It counts everything the database machine
+sends, backups included: on 25 Nov it read 215 GB this cycle while the dashboard billed 28.9 GB. It still catches a
+spike like 15 Oct's, which was real client traffic. Supavisor's client counter was tried as a closer figure and
+rejected: 50 MB sent through the pooler moved it by 0, and it stayed frozen for minutes. The billed figure is on
+the usage page (USAGE_PAGE).
+
+DISK is the quota that actually bit (25 Nov: 27 GB provisioned, spend cap on, grace period over, and no alert).
+It is read from the same feed: the `/data` filesystem's size and free space. Supabase grows the disk by itself and
+bills the provisioned size, so a growth is reported with its cost, and a nearly full disk is urgent.
 
 It runs hourly because the spike of 15 Oct 2026 spent about 300 GB in two hours. It runs on the Mac because mail
 cannot leave Railway (Hobby plan). An alert is a Mac notification and one mail to the address below, at most once a
@@ -53,6 +60,14 @@ KEEP_READINGS_HOURS = 49
 COUNTER = "node_network_transmit_bytes_total"
 DEFAULT_TO = "hello@beresol.eu"
 USAGE_PAGE = "https://supabase.com/dashboard/org/_/usage"
+EGRESS_PRICE_PER_GB = 0.09
+DISK_MOUNT = "/data"
+DISK_INCLUDED_GB = 8
+DISK_PRICE_PER_GB_MONTH = 0.125
+DISK_URGENT_USED = 0.90
+GIB = 2 ** 30
+# The cycle total only grows, and it is an upper bound: one mail for each of these a cycle is enough.
+ONCE_A_CYCLE = {"warn-cycle", "high-cycle", "warn-projected"}
 
 
 def state_path() -> pathlib.Path:
@@ -85,7 +100,32 @@ def parse_counter(text: str) -> float:
     return total
 
 
+def parse_disk(text: str) -> Tuple[float, float]:
+    """(size, free) in bytes of the database's data filesystem. A feed without it is a failure, not a zero."""
+    found: Dict[str, float] = {}
+    for line in text.splitlines():
+        for name in ("node_filesystem_size_bytes", "node_filesystem_avail_bytes"):
+            if line.startswith(name + "{") and f'mountpoint="{DISK_MOUNT}"' in line:
+                found[name] = float(line.rsplit(" ", 1)[1])
+    if len(found) < 2:
+        raise ValueError(f"the metrics feed has no size or free space for {DISK_MOUNT}")
+    return found["node_filesystem_size_bytes"], found["node_filesystem_avail_bytes"]
+
+
+def provisioned_gb(size_bytes: float) -> int:
+    """The provisioned size as the dashboard states it: 27 GB showed as a 26.5 GiB filesystem on 25 Nov 2026."""
+    return int(-(-size_bytes // GIB))
+
+
+def disk_cost_a_month(provisioned: int) -> float:
+    return max(provisioned - DISK_INCLUDED_GB, 0) * DISK_PRICE_PER_GB_MONTH
+
+
 def read_counter(env: Dict[str, str]) -> float:
+    return parse_counter(read_feed(env))
+
+
+def read_feed(env: Dict[str, str]) -> str:
     url = env.get("SUPABASE_URL", "").rstrip("/")
     key = env.get("SUPABASE_SERVICE_KEY", "")
     if not url or not key:
@@ -98,7 +138,7 @@ def read_counter(env: Dict[str, str]) -> float:
     except ImportError:
         context = ssl.create_default_context()
     with urllib.request.urlopen(request, context=context, timeout=60) as response:
-        return parse_counter(response.read().decode("utf-8", "replace"))
+        return response.read().decode("utf-8", "replace")
 
 
 def cycle_start(now: datetime) -> date:
@@ -158,9 +198,9 @@ def alerts(state: dict, now: datetime) -> List[Tuple[str, str]]:
         found.append(("urgent-spike", f"URGENT: {gb:.1f} GB in the last reading, {rate:.1f} GB an hour. On 15 Oct a spike like this spent about 300 GB in two hours."))
     cycle_gb = state.get("cycle_bytes", 0.0) / GB
     if cycle_gb >= CYCLE_URGENT_GB:
-        found.append(("urgent-cycle", f"URGENT: {cycle_gb:.0f} GB of {QUOTA_GB:.0f} GB used this cycle."))
+        found.append(("high-cycle", f"Egress upper bound {cycle_gb:.0f} GB of {QUOTA_GB:.0f} GB this cycle: check the billed figure (it was 7x lower on 25 Nov)."))
     elif cycle_gb >= CYCLE_WARN_GB:
-        found.append(("warn-cycle", f"{cycle_gb:.0f} GB of {QUOTA_GB:.0f} GB used this cycle."))
+        found.append(("warn-cycle", f"Egress upper bound {cycle_gb:.0f} GB of {QUOTA_GB:.0f} GB this cycle: check the billed figure (it was 7x lower on 25 Nov)."))
     day_gb = last_hours_gb(state, now, 24)
     if day_gb >= EVEN_PACE_GB_A_DAY:
         found.append(("warn-day", f"{day_gb:.1f} GB in the last 24 hours; {EVEN_PACE_GB_A_DAY:.0f} GB a day would use up the quota."))
@@ -169,8 +209,26 @@ def alerts(state: dict, now: datetime) -> List[Tuple[str, str]]:
     if elapsed >= PROJECT_AFTER_DAYS:
         projected = cycle_gb / elapsed * cycle_days(start)
         if projected >= QUOTA_GB and cycle_gb < CYCLE_URGENT_GB:
-            found.append(("warn-projected", f"At this pace the cycle ends near {projected:.0f} GB, over the {QUOTA_GB:.0f} GB quota."))
+            found.append(("warn-projected", f"At this pace the egress upper bound ends the cycle near {projected:.0f} GB, over the {QUOTA_GB:.0f} GB quota: check the billed figure."))
+    disk = state.get("disk") or {}
+    if disk.get("size"):
+        used = 1 - disk["avail"] / disk["size"]
+        if used >= DISK_URGENT_USED:
+            found.append(("urgent-disk", f"URGENT: the database disk is {used:.0%} full ({(disk['size'] - disk['avail']) / GB:.1f} of {disk['size'] / GB:.1f} GB). Check Database > Disk in the dashboard."))
+    grew = state.get("disk_grew")
+    if grew and now - datetime.fromisoformat(grew["at"]) <= timedelta(hours=24):
+        found.append(("disk-grew", f"The database disk grew from {grew['from']} to {grew['to']} GB provisioned: about ${disk_cost_a_month(grew['to']):.2f} a month over the included {DISK_INCLUDED_GB} GB (was ${disk_cost_a_month(grew['from']):.2f})."))
     return found
+
+
+def disk_line(state: dict) -> str:
+    disk = state.get("disk") or {}
+    if not disk.get("size"):
+        return f" Disk: not read{' (' + state['disk_error'] + ')' if state.get('disk_error') else ''}."
+    gb = disk["provisioned_gb"]
+    used = disk["size"] - disk["avail"]
+    return (f" Disk: about {gb} GB provisioned ({DISK_INCLUDED_GB} included, about ${disk_cost_a_month(gb):.2f} a month over), "
+            f"{used / GB:.1f} GB used ({used / disk['size']:.0%}).")
 
 
 def status_line(state: dict, now: datetime) -> str:
@@ -180,8 +238,9 @@ def status_line(state: dict, now: datetime) -> str:
         return "Egress: no reading yet. The alert has never run."
     age =(now - datetime.fromisoformat(state["last_read"])).total_seconds() / 3600
     start = state.get("cycle_from") or state.get("cycle")
-    line = (f"Egress: {last_hours_gb(state, now, 24):.2f} GB in the last 24 h, {state.get('cycle_bytes', 0.0) / GB:.1f} of "
-            f"{QUOTA_GB:.0f} GB this cycle (counted from {str(start)[:10]}). Last read {age:.1f} h ago.")
+    line = (f"Egress (upper bound, the machine's whole traffic): {last_hours_gb(state, now, 24):.2f} GB in the last 24 h, "
+            f"{state.get('cycle_bytes', 0.0) / GB:.1f} of {QUOTA_GB:.0f} GB this cycle (counted from {str(start)[:10]}). "
+            f"Last read {age:.1f} h ago.") + disk_line(state)
     if age > STALE_AFTER_HOURS:
         line += " STALE: the alert has not run for over a day, so no alert does not mean all is fine."
     if state.get("last_error"):
@@ -208,6 +267,8 @@ def send_mail(env: Dict[str, str], subject: str, body: str) -> None:
 
 
 def not_sent_today(state: dict, reason: str, now: datetime) -> bool:
+    if reason in ONCE_A_CYCLE:
+        return reason not in state.get("sent_cycle", {}).get(state.get("cycle", ""), [])
     today = now.date().isoformat()
     sent = state.setdefault("sent", {})
     for day in [d for d in sent if d != today]:
@@ -216,6 +277,10 @@ def not_sent_today(state: dict, reason: str, now: datetime) -> bool:
 
 
 def mark_sent(state: dict, reason: str, now: datetime) -> None:
+    if reason in ONCE_A_CYCLE:
+        cycle = state.get("cycle", "")
+        state["sent_cycle"] = {cycle: state.get("sent_cycle", {}).get(cycle, []) + [reason]}
+        return
     state.setdefault("sent", {}).setdefault(now.date().isoformat(), []).append(reason)
 
 
@@ -223,10 +288,13 @@ def raise_alert(env: Dict[str, str], state: dict, reason: str, sentence: str, no
     """Notification and mail, once a day for each reason. False when the mail did not go, which is kept and retried."""
     if not not_sent_today(state, reason, now):
         return True
-    notify_mac("Brubru: Supabase egress", sentence)
-    body = (f"{sentence}\n\n{status_line(state, now)}\n\nThe quota is {QUOTA_GB:.0f} GB a cycle and the spend cap is on, so going over "
-            f"can restrict the projects, with a 402 on every request, until the next cycle.\n\nThe real figure: {USAGE_PAGE}\n"
-            "The figure here is what the database machine sent, read from Supabase's metrics feed.\n"
+    notify_mac("Brubru: Supabase", sentence)
+    body = (f"{sentence}\n\n{status_line(state, now)}\n\nThe spend cap is off (since 25 Nov 2026): nothing is restricted, usage over "
+            f"a quota is billed. Egress over {QUOTA_GB:.0f} GB a cycle costs ${EGRESS_PRICE_PER_GB} a GB; disk over "
+            f"{DISK_INCLUDED_GB} GB costs ${DISK_PRICE_PER_GB_MONTH} a GB a month on the provisioned size.\n\n"
+            f"The billed figures: {USAGE_PAGE}\n"
+            "The egress figure here is an UPPER BOUND: everything the database machine sent, backups included "
+            "(25 Nov: 215 GB counted, 28.9 GB billed). The disk figures are the data filesystem's.\n"
             "Who is calling: api_usage_events by key, and Railway's logs by address.\n")
     try:
         send_mail(env, f"Brubru: {sentence[:90]}", body)
@@ -250,10 +318,27 @@ def save_state(path: pathlib.Path, state: dict) -> None:
     temporary.replace(path)
 
 
-def run(env: Dict[str, str], path: pathlib.Path, now: datetime, dry_run: bool = False, reader=read_counter) -> int:
+def note_disk(state: dict, size: float, avail: float, now: datetime) -> dict:
+    """Keep the latest disk reading; a larger provisioned size than last time is a growth, which costs money."""
+    gb = provisioned_gb(size)
+    before = (state.get("disk") or {}).get("provisioned_gb")
+    if before and gb > before:
+        state["disk_grew"] = {"from": before, "to": gb, "at": now.isoformat()}
+    state["disk"] = {"size": size, "avail": avail, "provisioned_gb": gb, "read": now.isoformat()}
+    state.pop("disk_error", None)
+    return state
+
+
+def run(env: Dict[str, str], path: pathlib.Path, now: datetime, dry_run: bool = False, reader=None, disk_reader=None) -> int:
+    """`reader` gives the egress counter and `disk_reader` (size, free); both default to one read of the feed."""
     state = load_state(path)
     try:
-        counter = reader(env)
+        if reader is None:
+            feed = read_feed(env)
+            counter = parse_counter(feed)
+            disk_reader = disk_reader or (lambda _env: parse_disk(feed))
+        else:
+            counter = reader(env)
     except (urllib.error.URLError, OSError, ValueError, KeyError) as error:
         detail = f"HTTP {error.code}" if isinstance(error, urllib.error.HTTPError) else type(error).__name__
         state["last_error"] = f"{now.isoformat()} {detail}"
@@ -263,6 +348,12 @@ def run(env: Dict[str, str], path: pathlib.Path, now: datetime, dry_run: bool = 
             save_state(path, state)
         return 2
     state = advance(state, counter, now)
+    if disk_reader is not None:
+        try:
+            state = note_disk(state, *disk_reader(env), now)
+        except (ValueError, OSError, KeyError) as error:
+            # A disk that cannot be read is said in the status line; the egress reading still stands.
+            state["disk_error"] = f"{now.isoformat()[:16]} {type(error).__name__}"
     standing = alerts(state, now)
     print(f"[OK] {status_line(state, now)}" if not standing else f"[ALERT] {status_line(state, now)}")
     for _, sentence in standing:
