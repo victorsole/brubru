@@ -27,3 +27,18 @@ UNCHANGED = [
 @pytest.mark.parametrize("lang,question", FIXED + UNCHANGED)
 def test_detected_language(lang, question):
     assert _detect_query_language(question) == lang
+
+
+CA_COM = [
+    ("CA", "Com finançarà la UE Ucraïna el 2027?"),
+    ("CA", "Com funciona el mecanisme d'ajust en frontera?"),
+    ("ES", "¿Cómo financiará la UE a Ucrania en 2027?"),
+    ("ES", "Como financiará la UE a Ucrania en 2027?"),
+    ("IT", "Come finanzierà l'UE l'Ucraina nel 2027?"),
+    ("EN", "COM(2026) 965: what does the Quantum Act propose?"),
+]
+
+
+@pytest.mark.parametrize("lang,question", CA_COM)
+def test_catalan_com_opening(lang, question):
+    assert _detect_query_language(question) == lang

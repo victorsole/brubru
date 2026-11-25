@@ -1171,6 +1171,13 @@ def _detect_query_language(text: str) -> str:
     # language at all and fell to the EN default (production probe, 15 Oct 2026).
     if re.search(r"\bhi\s+(?:ha|han|havia|havien|haurà|haurá|hauria)\b", text, re.IGNORECASE):
         return "CA"
+    # A question opening with "Com" + a lower-case word is Catalan ("Com funciona...",
+    # "Com finançarà la UE Ucraïna el 2027?"): Spanish writes "Cómo"/"Como", Italian
+    # "Come", French "Comment", Dutch "Hoe". The Ukraine question scored ES on "la" and
+    # "el" alone and was answered in Spanish (production probe, 25 Nov 2026). Case-
+    # sensitive on purpose: Commission document codes ("COM(2026) 965") never match.
+    if re.match(r"\s*Com\s+[a-zà-ÿ]", text):
+        return "CA"
 
     # Fold diacritics once, so the marker sets below stay pure ASCII and the
     # detector is not defeated by a user typing "perque" for "perqu<e-grave>".
