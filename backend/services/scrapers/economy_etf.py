@@ -24,8 +24,13 @@ from services.scrapers.economy_common import Item, clean, norm_url, http_get, fe
 
 _BASE = "https://www.etf.europa.eu"
 
-NEWS_PAGES = [(f"{_BASE}/en/news-and-events/news", "/news-and-events/news/")]
-EVENT_PAGES = [(f"{_BASE}/en/news-and-events/events", "/news-and-events/events/")]
+# ETF moved its newsroom and events under /en/media-centre/ around 20 Nov 2026: the old
+# news listing still renders but its cards link to /media-centre/newsroom/, the old
+# events listing no longer answers, and every old item address 301-redirects to the
+# same slug under the new path (checked 25 Nov 2026). The scraper read 0 items for three
+# runs ("parses 0 but has 29/33 rows").
+NEWS_PAGES = [(f"{_BASE}/en/media-centre/newsroom", "/media-centre/newsroom/")]
+EVENT_PAGES = [(f"{_BASE}/en/media-centre/events", "/media-centre/events/")]
 
 _TOPIC_PATHS = [
     "/en/what-we-do/career-guidance",

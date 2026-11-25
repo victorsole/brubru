@@ -189,6 +189,12 @@ THINKTANK_BASE = "https://www.europarl.europa.eu"
 THINKTANK_LISTING_URL = f"{THINKTANK_BASE}/thinktank/en/research/advanced-search"
 THINKTANK_RSS_URL = f"{THINKTANK_LISTING_URL}/rss"
 THINKTANK_DOC_URL = f"{THINKTANK_BASE}/thinktank/en/document/"
+# The listing's results container. The Parliament renamed it from
+# "publicationSearchResults" to "documentsSearchResults" around 17 Nov 2026 (same
+# items and classes inside); every run failed with "no container" from then until
+# 25 Nov 2026. Both are accepted, newest first, so a rename back does not break it.
+THINKTANK_RESULTS_IDS = ("documentsSearchResults", "publicationSearchResults")
+THINKTANK_RESULTS_SELECTOR = ", ".join(f"#{i}" for i in THINKTANK_RESULTS_IDS)
 
 # The four types the table holds. Fact sheets / documentation re-date old
 # documents (e.g. 04A_FT(2017)...) and are deliberately excluded.
@@ -350,9 +356,9 @@ def parse_thinktank_listing(page_html: str) -> Tuple[List[Dict[str, Any]], Optio
     if not (page_html or "").strip():
         raise UnparseableSourceError("empty body")
     soup = BeautifulSoup(page_html, "html.parser")
-    container = soup.find(id="publicationSearchResults")
+    container = next((c for c in (soup.find(id=i) for i in THINKTANK_RESULTS_IDS) if c is not None), None)
     if container is None:
-        raise UnparseableSourceError("no #publicationSearchResults container")
+        raise UnparseableSourceError(f"no results container ({THINKTANK_RESULTS_SELECTOR})")
 
     total = None
     label_node = container.find(id="indexDisplayedResultsLabel")
@@ -528,7 +534,7 @@ class ThinkTankPortalSource:
             while pages is None or page < pages:
                 url = f"{THINKTANK_LISTING_URL}?{urlencode(build_thinktank_params(start, end, page))}"
                 result = fetcher.fetch(url, expand_accordions=False, strip_chrome=False,
-                                       wait_for_selector="#publicationSearchResults")
+                                       wait_for_selector=THINKTANK_RESULTS_SELECTOR)
                 if result.error or not result.html:
                     errors.append(f"Think Tank listing page {page} (Playwright): "
                                   f"{result.error or 'empty render'} (status={result.nav_status})")

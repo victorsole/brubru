@@ -57,6 +57,21 @@ def test_listing_parser_on_saved_fixture():
     assert all(i["publication_date"] is not None for i in items)
 
 
+def test_listing_parser_on_the_renamed_container_25_nov_2026():
+    """The Parliament renamed #publicationSearchResults to #documentsSearchResults around
+    17 Nov 2026; every sync failed with "no container" until 25 Nov 2026."""
+    html = (FIXTURES / "thinktank_listing_2026_11_25.html").read_text(encoding="utf-8")
+    assert 'id="publicationSearchResults"' not in html
+    items, total = svc.parse_thinktank_listing(html)
+    assert total == 41
+    assert len(items) == 10           # the rendered container holds 10 blocks, as on 15 Sep
+    first = items[0]
+    assert first["reference"] == "ECTI_BRI(2026)795836"
+    assert first["publication_type"] is EPRSPublicationTypeEnum.BRIEFING
+    assert first["publication_date"] == datetime(2026, 11, 23)
+    assert all(i["publication_date"] is not None for i in items)
+
+
 def test_rss_parser_strips_type_prefix_date_suffix_and_source_trailer():
     items = svc.parse_thinktank_rss(RSS_XML)
     assert len(items) == 25
@@ -237,3 +252,32 @@ def test_sync_all_with_every_source_walled_reports_errors_and_exits_non_zero():
     assert script.exit_code_for(stats) == script.EXIT_NOTHING_FETCHED != 0
     assert script.exit_code_for({"errors": 1, "nothing_fetched": False}) == 1
     assert script.exit_code_for({"errors": 0, "nothing_fetched": False, "skipped": 34}) == 0
+
+
+# ------------------------------------------------- exit decision (25 Nov 2026)
+
+def _script():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "sync_eprs_publications", BACKEND / "scripts" / "sync_eprs_publications.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_refused_rungs_with_a_delivering_browser_rung_are_degraded_not_failed():
+    mod = _script()
+    stats = {"errors": 2, "refused": 2,
+             "sources": {"thinktank_portal": {"status": "ok", "via": "playwright", "fetched": 45}}}
+    assert mod.exit_code_for(stats) == mod.EXIT_UNREACHABLE
+    assert mod.delivered_despite_refusals(stats) is True
+
+
+def test_refusals_without_delivery_stay_an_outage():
+    mod = _script()
+    stats = {"errors": 3, "refused": 3, "nothing_fetched": True,
+             "sources": {"thinktank_portal": {"status": "failed", "via": None, "fetched": 0}}}
+    assert mod.delivered_despite_refusals(stats) is False
+    parse_error = {"errors": 2, "refused": 1,
+                   "sources": {"thinktank_portal": {"status": "ok", "via": "playwright", "fetched": 5}}}
+    assert mod.delivered_despite_refusals(parse_error) is False   # a non-refusal error is a real error

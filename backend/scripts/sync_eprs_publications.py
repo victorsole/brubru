@@ -73,6 +73,20 @@ def exit_code_for(stats: dict) -> int:
     return EXIT_OK
 
 
+def delivered_despite_refusals(stats: dict) -> bool:
+    """Every error was a refusal, but a later rung of the same source delivered items.
+
+    The Think Tank RSS and plain listing answer the WAF signature while the browser rung
+    delivers (25 Nov 2026). The refusals stay counted (the run is degraded, never
+    'success'), but they are not an outage: the table was filled. Without this, a source
+    that came back after an outage longer than the 72 h grace stayed 'failed' for ever,
+    because no run without a refusal could ever restore a 'success'."""
+    if not stats.get('errors') or stats.get('refused', 0) != stats['errors']:
+        return False
+    return any(s.get('status') == 'ok' and s.get('fetched', 0) > 0
+               for s in (stats.get('sources') or {}).values())
+
+
 def _date_arg(value: str) -> datetime:
     try:
         return datetime.strptime(value, '%Y-%m-%d')
@@ -174,7 +188,12 @@ async def main():
                 until=args.until,
             )
         code = exit_code_for(result)
-        if code == EXIT_UNREACHABLE:
+        if code == EXIT_UNREACHABLE and delivered_despite_refusals(result):
+            vias = ", ".join(f"{n} via {s.get('via')}" for n, s in result['sources'].items() if s.get('status') == 'ok')
+            print(f"[SYNC_STATUS] degraded: delivered ({vias}); earlier routes refused: "
+                  f"{'; '.join(result['refused_details'])[:400]}", flush=True)
+            code = EXIT_OK
+        elif code == EXIT_UNREACHABLE:
             from core.database import SessionLocal
             from services.sync.freshness import last_success_at, unreachable_exit
             db = SessionLocal()
