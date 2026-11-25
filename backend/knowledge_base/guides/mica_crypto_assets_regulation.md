@@ -1,6 +1,7 @@
 # MiCA (Regulation (EU) 2023/1114, Markets in Crypto-Assets)
 
 ## QUICK FACTS
+- **RELATED, NOT MiCA (23 November 2026): the ECB accepts DLT-based assets as Eurosystem collateral.** The Governing Council approved accepting marketable assets issued on DLT platforms licensed under the **DLT Pilot Regime Regulation (EU) 2022/858** and made available on TARGET2-Securities as eligible collateral for Eurosystem credit operations, subject to Eurosystem requirements: a step in its roadmap towards on-chain collateral. Source: ECB press release, 23 November 2026.
 - **LATEST (EBA, 14 October 2026, first recorded by Brubru 5 November): the EBA classified USDC as the FIRST significant e-money token in the EU** under MiCA. Consequence under MiCA: additional obligations and EBA involvement, including a consultative supervisory college for the issuer **Circle Internet Financial Europe SAS** (MiCA Article 119); EBA Decision EBA/DC/683 of 21 October 2026 names Ruta Merkeviciute (Head of the EBA Digital Finance Unit) as Chair of that college.
 
 - **LATEST (30 Sep 2026): MiCA review answers, no proposal yet.** ESMA: curb influencer marketing, block fraud sites, freeze assets, DeFi criteria. ESRB: bar third-country multi-issuer stablecoins.

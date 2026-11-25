@@ -856,6 +856,14 @@ _IT_DECISIVE = frozenset({
     # 16 Oct 2026, detector run over the trigger matrices: "sugli" ("Cosa dice
     # l'EDPB sugli occhiali intelligenti?" scored EN).
     "sugli",
+    # 25 Nov 2026, local probe: "L'UE ha firmato l'accordo con l'Indonesia?" scored ES
+    # and was answered in Spanish: its only marker was "con", shared with Spanish, and
+    # the IT/ES tie-break counts "con" for Spanish. Italian-only after folding (ES
+    # firmado/acuerdo/aprobado/adoptado/publicado, CA signat/acord/aprovat/adoptat/
+    # publicat, FR signe/accord/approuve/adopte/publie); checked against every other
+    # table and the trigger matrices.
+    "accordo", "accordi", "firmato", "firmata", "approvato", "approvata",
+    "adottato", "adottata", "pubblicato", "pubblicata",
 })
 
 # Italian "-zione"/"-zioni" nouns: Spanish writes "-cion(es)", Catalan "-cio(ns)",

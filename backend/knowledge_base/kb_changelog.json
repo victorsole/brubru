@@ -2,6 +2,224 @@
   "_comment": "Durable, git-tracked changelog of Brubru knowledge-base activity. Powers the 'What's new' feed in MEUB > Brubru Databases > Knowledge Guides. Append via scripts/kb_changelog.py (never hand-edit unless fixing). Newest entries FIRST. action: 'added' | 'updated' | 'canon' | 'deep_dive'.",
   "entries": [
     {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_pharmaceutical_legislation_reform",
+      "title": "EU Pharmaceutical Legislation Reform",
+      "summary": "SANT second-reading votes of 9-10 November: results",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "mica_crypto_assets_regulation",
+      "title": "MiCA (Regulation (EU) 2023/1114, Markets in Crypto-Assets)",
+      "summary": "ECB accepts DLT-based assets as collateral (related, not MiCA)",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "cop31_antalya_eu_position_2026",
+      "title": "COP31 in Antalya (9-20 November 2026): arrangements and the EU's stated position",
+      "summary": "COP31 outcome and the EU's position",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_waste_shipment_regulation_diwass",
+      "title": "EU Waste Shipment Regulation (WSR) and DIWASS Digital System",
+      "summary": "Plastic waste export ban to non-OECD countries from 21 November",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "cyber_resilience_act",
+      "title": "Cyber Resilience Act (Regulation (EU) 2024/2847)",
+      "summary": "First European standard supporting the CRA",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_accession_negotiations_state_of_play_october_2026",
+      "title": "EU accession negotiations, October 2026: Montenegro closes chapters 17 to 19, accession conferences of 13 October",
+      "summary": "Montenegro closes taxation and regional policy chapters (25 closed)",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "competition_law_enforcement",
+      "title": "EU Competition Law Enforcement",
+      "summary": "Coca-Cola Europacific Partners investigation",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "reach_chemicals_regulation",
+      "title": "REACH and EU Chemicals Regulation",
+      "summary": "Lead gunshot (2026/2530) and fishing tackle (2026/2501) restrictions",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "pfas_universal_restriction",
+      "title": "The Universal PFAS Restriction Proposal (REACH \"Forever Chemicals\" Restriction)",
+      "summary": "SEAC final opinion and Court of Auditors special report 31/2026",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_recovery_resilience_facility",
+      "title": "EU Recovery and Resilience Facility (RRF) and National Recovery Plans (NRRPs)",
+      "summary": "Final payment request verdicts for 11 Member States",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "dsa_enforcement",
+      "title": "Digital Services Act: Enforcement and Cases",
+      "summary": "Temu preliminary findings under Article 35",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_indonesia_cepa",
+      "title": "EU-Indonesia Comprehensive Economic Partnership Agreement (CEPA) and Investment Protection Agreement (IPA)",
+      "summary": "CEPA and investment agreement signed 21 November",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "sfdr_review_2025_0361",
+      "title": "SFDR Review (\"SFDR 2.0\"), procedure 2025/0361(COD): state of play",
+      "summary": "Political agreement on SFDR: three product categories",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "methane_regulation_amendment_com_2026_569",
+      "title": "Methane Regulation: Commission proposes a one-year delay of the importer rules (COM(2026) 569, 14 October 2026)",
+      "summary": "Two-year delay agreed 19 November; committee vote 23 November",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "energy_grids_package",
+      "title": "European Grids Package",
+      "summary": "Provisional agreement on grids permitting (2025/0400)",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_annual_budgetary_procedure_314",
+      "title": "EU Annual Budgetary Procedure (Article 314 TFEU)",
+      "summary": "2027 budget: Council final approval, Parliament vote",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "mff_2028_2034",
+      "title": "Multiannual Financial Framework 2028-2034",
+      "summary": "Costa negotiating box and the Special European Council of 26-27 November",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "ukraine_support_loan_recovery_2026",
+      "title": "Ukraine Support Loan (USL) and EU Recovery Financing 2026-2027",
+      "summary": "EUR 45 billion for 2027 (2026/0363(COD)), EUR 7.9 billion paid, EPF EUR 1 billion",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_sanctions_implementation_framework",
+      "title": "EU Sanctions Implementation Framework",
+      "summary": "EU Sanctions Office and new Envoy Lars Danielsson",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "updated",
+      "guide": "eu_sanctions_listings_16_november_2026",
+      "title": "EU sanctions listings of 16 November 2026 (Foreign Affairs Council): five regimes, who was added",
+      "summary": "16 Nov sanctions listings: the 22nd package is now proposed",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "added",
+      "guide": "cjeu_c_643_25_free_social_network_paid_with_data_ag_opinion",
+      "title": "AG Medina, C-643/25: a social network paid with data is not free",
+      "summary": "Opinion: personal data and consent are payment under the Unfair Commercial Practices Directive",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "added",
+      "guide": "cjeu_t_151_24_end_the_cage_age_failure_to_act",
+      "title": "End the Cage Age v Commission (T-151/24)",
+      "summary": "General Court: the Commission failed to act by not setting a new timeline for its citizens' initiative follow-up",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "added",
+      "guide": "eu_uk_summit_2026_ets_sps_youth",
+      "title": "EU-UK summit of 20 November 2026",
+      "summary": "Negotiations concluded on ETS linking, SPS agreement and Youth Experience Scheme; not signed; CBAM exemption route",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "added",
+      "guide": "hybrid_vehicles_safeguard_quotas_2026",
+      "title": "Safeguard quotas on hybrid car imports from 1 December 2026",
+      "summary": "Implementing Regulation 2026/2614: country quotas per period until 18 June 2027, export certificate for China",
+      "refs": [
+        "32026R2614"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "action": "added",
+      "guide": "european_semester_2027_autumn_package",
+      "title": "European Semester 2027 Autumn Package (24 Nov 2026)",
+      "summary": "Draft budgetary plan verdicts, excessive deficit procedures (Bulgaria, Hungary no effective action), Alert Mechanism Report, Mind the Gap tax gaps",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "added",
+      "guide": "quantum_act_2026",
+      "title": "Quantum Act and Sovereign Tech Equity Fund (proposed 25 Nov 2026)",
+      "summary": "COM(2026) 965: three pillars, Quantum Europe Framework Initiative, Strategy Board, Sovereign Tech Equity Fund; no procedure number yet",
+      "refs": []
+    },
+    {
+      "date": "2026-11-25",
+      "action": "added",
+      "guide": "eu_russia_22nd_sanctions_package_proposal_2026",
+      "title": "EU 22nd sanctions package against Russia (proposed 23 Nov 2026)",
+      "summary": "What the Commission and the High Representative proposed on 23 November: banks and SWIFT, crypto, energy services, shadow fleet, visa ban on combatants, sport; not adopted",
+      "refs": []
+    },
+    {
       "date": "2026-11-16",
       "action": "updated",
       "guide": "eu_minors_social_media_age_limits",
