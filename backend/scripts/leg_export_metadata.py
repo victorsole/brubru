@@ -207,7 +207,8 @@ def _control_ok(group: str, g: Optional[dict]) -> bool:
     return ("2016-05-24", "EV") in g["pairs"]
 
 
-def _ask(group: str, batch: list, budget: Budget) -> dict:
+def _call(group: str, batch: list, budget: Budget) -> tuple:
+    """One query for `batch` plus the control law: (the control came back as expected, what Cellar returned)."""
     budget.check()
     sel, pattern = GROUPS[group]
     values = " ".join(f'"{c}"^^<http://www.w3.org/2001/XMLSchema#string>' for c in batch + [CONTROL])
@@ -222,6 +223,19 @@ def _ask(group: str, batch: list, budget: Budget) -> dict:
         got = {}
     ok = _control_ok(group, got.get(CONTROL))
     budget.result(ok)
+    return ok, got
+
+
+def _cellar_answers(group: str, budget: Budget) -> bool:
+    """The control law asked alone. It tells a Cellar that is down from a batch Cellar cannot answer in time: rows
+    6720-6799 of eu_laws timed out at 60 s every night from 24 Nov 2026 while the control alone answered in under a
+    second, and the retry plus the first halving made four failures in a row, so the in-force refresh stopped at 19%
+    for four nights calling Cellar unreachable. A control that answers resets the count of failures in a row."""
+    return _call(group, [], budget)[0]
+
+
+def _ask(group: str, batch: list, budget: Budget) -> dict:
+    ok, got = _call(group, batch, budget)
     if not ok:
         return {}
     # "seen": Cellar returned the law at all (an unknown CELEX gives no row); its facts may still be empty
@@ -230,12 +244,17 @@ def _ask(group: str, batch: list, budget: Budget) -> dict:
 
 
 def _ask_or_split(group: str, batch: list, budget: Budget) -> dict:
-    """Retry once, then split in halves: Cellar times out on some batches of 80 that answer at once in tens
-    (16 Oct 2026). A law that fails alone is left out: unknown, never "none". Raises CellarDown via the budget."""
+    """Split in halves a batch Cellar does not answer: Cellar times out on some batches of 80 that answer at once in
+    tens (16 Oct 2026). After a failed batch the control is asked alone: if it answers, Cellar is up and the batch is
+    the problem, so it is split at once (asking it again would cost another 60 s timeout); if it does not, the batch
+    is asked once more, and four failed calls in a row raise CellarDown via the budget. A law that fails alone is
+    left out: unknown, never "none"."""
     for attempt in range(2):
         got = _ask(group, batch, budget)
         if got:
             return got
+        if _cellar_answers(group, budget):
+            break
         time.sleep(3 * (attempt + 1))
     if len(batch) == 1:
         return {}

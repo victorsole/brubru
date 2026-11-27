@@ -195,3 +195,80 @@ def test_a_spent_time_budget_stops_the_run(monkeypatch):
     b.deadline -= 5
     with pytest.raises(lem.CellarDown):
         lem.cellar_facts(["32016R0679"], groups=("dossier",), budget=b)
+
+
+def _fake_cellar(monkeypatch, lem, slow=(), down=False):
+    """Cellar as the refresher meets it: a query naming a law in `slow` times out, every other answers each law it
+    names (in force) and the control law with its procedure. Returns the list of batches asked."""
+    import io
+    import json as _json
+    import re as _re
+    import urllib.parse
+    import urllib.request
+    asked = []
+
+    def urlopen(req, timeout=None):
+        q = urllib.parse.parse_qs(urllib.parse.urlsplit(req.full_url).query)["query"][0]
+        celexes = _re.findall(r'"([^"]+)"\^\^', q)
+        asked.append(celexes)
+        if down or any(c in slow for c in celexes):
+            raise TimeoutError("The read operation timed out")
+        rows = [{"c": {"value": c}, "f": {"value": "1"}} for c in celexes if c != lem.CONTROL]
+        rows.append({"c": {"value": lem.CONTROL}, "f": {"value": "1"},
+                     "s": {"value": "http://publications.europa.eu/resource/procedure/2012_11"}})
+        return io.BytesIO(_json.dumps({"results": {"bindings": rows}}).encode())
+
+    monkeypatch.setattr(urllib.request, "urlopen", urlopen)
+    monkeypatch.setattr(lem.time, "sleep", lambda s: None)
+    return asked
+
+
+def test_one_batch_cellar_cannot_answer_does_not_stop_the_run(monkeypatch):
+    # 24-27 Nov 2026: rows 6720-6799 timed out every night while Cellar was up; the retry and the first halving made
+    # four failures in a row, the run stopped at 19% as "Cellar unreachable" and the cron job went red four nights
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts import leg_export_metadata as lem
+    laws = [f"3201{i % 10}R{i:04d}" for i in range(400)]
+    slow = laws[130]
+    asked = _fake_cellar(monkeypatch, lem, slow={slow})
+    budget = lem.Budget()
+    got = lem.cellar_facts(laws, groups=("dossier",), budget=budget, log=lambda m: None)
+    assert slow not in got                                     # the law Cellar cannot answer stays unknown
+    assert set(got) == set(laws) - {slow}                      # every other law of every batch is read
+    assert all(v["in_force"] is True and v["seen"] for v in got.values())
+    assert budget.failed == 0
+    timed_out = [b for b in asked if slow in b]
+    sizes = [len(b) - 1 for b in timed_out]
+    assert sizes == [80, 40, 20, 10, 5, 2, 1]                  # halved down to the law itself, no size asked twice
+    assert sum(1 for b in asked if b == [lem.CONTROL]) == len(timed_out)      # the control alone after each
+
+
+def test_a_cellar_that_is_down_still_stops_after_four_calls(monkeypatch):
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts import leg_export_metadata as lem
+    asked = _fake_cellar(monkeypatch, lem, down=True)
+    budget = lem.Budget()
+    with pytest.raises(lem.CellarDown):
+        lem.cellar_facts([f"3201{i % 10}R{i:04d}" for i in range(400)], groups=("dossier",), budget=budget)
+    assert len(asked) == lem.Budget.FAILS_IN_A_ROW == budget.failed
+    assert [len(b) - 1 for b in asked] == [80, 0, 80, 0]       # the batch, the control alone, and both once more
+
+
+def test_a_cellar_that_goes_down_during_a_split_stops_the_run(monkeypatch):
+    sys.path.insert(0, str(_BACKEND.parent))
+    from backend.scripts import leg_export_metadata as lem
+    laws = [f"3201{i % 10}R{i:04d}" for i in range(160)]
+    asked = _fake_cellar(monkeypatch, lem, slow={laws[10]})
+    import urllib.request
+    up = urllib.request.urlopen
+
+    def goes_down(req, timeout=None):
+        if len(asked) >= 4:                                    # after the first halving
+            asked.append(["down"])
+            raise OSError("connection refused")
+        return up(req, timeout=timeout)
+
+    monkeypatch.setattr(urllib.request, "urlopen", goes_down)
+    with pytest.raises(lem.CellarDown):
+        lem.cellar_facts(laws, groups=("dossier",), log=lambda m: None)
+    assert asked.count(["down"]) == lem.Budget.FAILS_IN_A_ROW
