@@ -65,15 +65,32 @@ SEVERITY = {"BROKEN": 0, "ERROR": 0, "STALE-MARKER": 1, "CRON-GAP": 1, "STALE": 
 
 
 def _db_state(db):
-    # The last READ of each feed: the later of its newest row's fetched_at and the feed's own
-    # row in economy_feed_reads (O237, 9 Nov 2026). sync_economy no longer rewrites items that
-    # did not change, so fetched_at alone would make a working scraper on a quiet feed look stale.
-    rows = db.execute(text(
-        "SELECT e.body_code, e.item_type, e.n, greatest(e.f, r.scraped_at) AS f "
-        "FROM (SELECT body_code, item_type, count(*) n, max(fetched_at) f "
-        "      FROM economy_items GROUP BY body_code, item_type) e "
-        "LEFT JOIN economy_feed_reads r USING (body_code, item_type)")).fetchall()
-    return {(r.body_code, r.item_type): (r.n, r.f) for r in rows}
+    """{(body, type): (rows held, last read)} for every feed that holds rows.
+
+    The last READ of a feed is its row in economy_feed_reads (O237, 9 Nov 2026: sync_economy no
+    longer rewrites items that did not change, so the rows' fetched_at alone would make a working
+    scraper on a quiet feed look stale).
+
+    Three small reads instead of one large one (O245, 27 Nov 2026). The single statement
+    `count(*), max(fetched_at) ... GROUP BY` read all 730,000 rows from disk once a day, 1.2 GB
+    a call, because fetched_at is in no index. The count alone can be answered from an index;
+    the feed's own read row gives the date; and only a feed that has rows but no read row (one
+    not read since 9 Nov, the kind this script exists to find) has its newest fetched_at looked
+    up, for that feed alone.
+    """
+    counts = {(r[0], r[1]): r[2] for r in db.execute(text(
+        "SELECT body_code, item_type, count(*) FROM economy_items GROUP BY body_code, item_type"))}
+    reads = {(r[0], r[1]): r[2] for r in db.execute(text(
+        "SELECT body_code, item_type, scraped_at FROM economy_feed_reads"))}
+    state = {}
+    for key, n in counts.items():
+        last = reads.get(key)
+        if last is None:
+            last = db.execute(text(
+                "SELECT max(fetched_at) FROM economy_items WHERE body_code = :b AND item_type = :t"),
+                {"b": key[0], "t": key[1]}).scalar()
+        state[key] = (n, last)
+    return state
 
 
 def _classify(n_rows, last_sync, days, parse_count, err, disabled_reason=None):

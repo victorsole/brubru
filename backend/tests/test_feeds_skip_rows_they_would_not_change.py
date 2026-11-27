@@ -62,7 +62,9 @@ def test_each_guard_compares_every_column_its_update_writes_except_the_stamps(na
 @pytest.mark.parametrize("name", GUARDED)
 def test_every_statement_carries_its_guard_between_set_and_the_end(name):
     set_sql, table, skip, statements = GUARDED[name]
-    guard = only_if_changed(set_sql, table, skip=skip)
+    # The economy guard does not compare the two bodies by value (O245): see
+    # test_feeds_decide_without_reading_the_stored_text.py.
+    guard = eco._GUARD if name == "economy" else only_if_changed(set_sql, table, skip=skip)
     for sql in statements:
         assert set_sql in sql and guard in sql
         assert sql.index("DO UPDATE SET") < sql.index(guard)
@@ -129,8 +131,10 @@ def test_both_freshness_readers_take_the_later_of_the_item_stamp_and_the_feed_re
     flat = re.sub(r'"\s*\n\s*"', "", re.sub(r"[ \t]+", " ", news))
     assert "greatest(max(fetched_at), (SELECT max(r.scraped_at) FROM economy_feed_reads r" in flat
     assert "brubru_news_kind_of('economy_items', r.item_type) IS NOT NULL" in flat
+    # The health script reads the feed's own read row, and the newest item stamp only for a
+    # feed that has none (O245): see test_feeds_decide_without_reading_the_stored_text.py.
     health = (BACKEND / "scripts" / "scraper_health.py").read_text(encoding="utf-8")
-    assert "greatest(e.f, r.scraped_at)" in health and "LEFT JOIN economy_feed_reads r USING (body_code, item_type)" in health
+    assert "FROM economy_feed_reads" in health and "SELECT max(fetched_at) FROM economy_items WHERE body_code = :b" in health
 
 
 def test_the_feed_reads_table_ships_with_rls_policies_and_grants():

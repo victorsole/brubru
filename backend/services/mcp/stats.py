@@ -3,7 +3,7 @@ Brubru MCP corpus stats — computed at runtime, never hardcoded.
 
 Every number the MCP surface states to a caller (laws, guides, procedures,
 calendar events, EPRS publications) is read live from the database + the
-KnowledgeLoader here, then cached for an hour. This kills the recurring
+KnowledgeLoader here, then cached for a day. This kills the recurring
 "the server advertises 26,834 laws but the DB has 16,998" drift: there is
 one function, it reads the source of truth, and the descriptions/instructions
 call it instead of embedding a literal.
@@ -25,7 +25,9 @@ from typing import Dict
 
 logger = logging.getLogger(__name__)
 
-TTL_SECONDS = 3600
+# A day, not an hour (O245, 27 Nov 2026): the distinct-law count reads the whole laws table from
+# disk, and hourly that was 347 calls and 11.6 GB in two weeks for numbers that move once a day.
+TTL_SECONDS = 24 * 3600
 
 # Last-resort values if the DB has never been reachable in this process.
 # Deliberately close to reality (July 2026) so a cold-start caller is not

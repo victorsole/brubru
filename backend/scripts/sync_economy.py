@@ -483,6 +483,20 @@ INGESTORS.update({("ema", _c["item_type"]): ema.EMA_DATASET_INGESTORS[_c["item_t
 INGESTORS.update({("efsa", _c["item_type"]): efsa.EFSA_DATASET_INGESTORS[_c["item_type"]]
                   for _c in efsa.EFSA_DATASETS})
 
+def _longer(col: str) -> str:
+    """SQL test: the incoming text of `col` is non-empty and longer than the stored one.
+
+    Sizes in BYTES, read from the row without opening the text (O245, 27 Nov 2026). The test
+    used `length(...)`, which fetches and decompresses the whole stored article to count its
+    characters: on every run, for every item, about 40% of the database's disk reads. The CASE
+    also keeps an empty incoming text from touching the stored one at all. "Longer" in bytes
+    and in characters agree whenever the same text comes back, which is the case that matters
+    (a feed teaser must not displace the article; the article sent again changes nothing).
+    """
+    return (f"CASE WHEN NULLIF(btrim(EXCLUDED.{col}), '') IS NULL THEN false "
+            f"ELSE octet_length(btrim(EXCLUDED.{col})) > COALESCE(octet_length(economy_items.{col}), 0) END")
+
+
 _SET_CLAUSE = """
   -- Content columns NEVER regress to empty. A scrape that comes back without a
   -- body or a date is almost always a transient fetch failure, a PDF we cannot
@@ -504,18 +518,15 @@ _SET_CLAUSE = """
   -- article it summarises. The cost of this rule is a genuinely SHORTENED article keeping
   -- its longer previous text; that is rare, visible in the next fetch, and far cheaper
   -- than silently undoing every backfill each night.
-  body_txt      = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
-                          > length(COALESCE(economy_items.body_txt, ''))
+  body_txt      = CASE WHEN """ + _longer("body_txt") + """
                        THEN btrim(EXCLUDED.body_txt) ELSE economy_items.body_txt END,
-  body_html     = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_html), ''), ''))
-                          > length(COALESCE(economy_items.body_html, ''))
+  body_html     = CASE WHEN """ + _longer("body_html") + """
                        THEN btrim(EXCLUDED.body_html) ELSE economy_items.body_html END,
   document_date = COALESCE(EXCLUDED.document_date, economy_items.document_date),
   -- Keep source_kind describing the body we actually hold: if we retained the
   -- stored body, relabelling it with this run's kind would misreport provenance.
   -- source_kind must describe the body we actually KEPT, so it follows the same test.
-  source_kind   = CASE WHEN length(COALESCE(NULLIF(btrim(EXCLUDED.body_txt), ''), ''))
-                          > length(COALESCE(economy_items.body_txt, ''))
+  source_kind   = CASE WHEN """ + _longer("body_txt") + """
                        THEN EXCLUDED.source_kind ELSE economy_items.source_kind END,
   guid          = COALESCE(NULLIF(btrim(EXCLUDED.guid), ''), economy_items.guid),
   -- Procurement fields (migration 256). Never regress to empty, like the content
@@ -536,7 +547,10 @@ _SET_CLAUSE = """
 # of the database's WAL over a weekend (1,079 batches, ~16.7 GB). Built from _SET_CLAUSE itself
 # (services/sql_upsert_guard.py), so a column added to the SET is compared without anyone
 # remembering to. fetched_at is left out on purpose: it always differs.
-_GUARD = only_if_changed(_SET_CLAUSE, "economy_items", skip=("fetched_at",))
+# The two bodies are not compared by value: comparing reads the whole stored text (O245). Each
+# changes exactly when its "longer wins" test is true, so that test stands in for it.
+_GUARD = only_if_changed(_SET_CLAUSE, "economy_items", skip=("fetched_at",),
+                         changed_when={"body_txt": _longer("body_txt"), "body_html": _longer("body_html")})
 
 
 _UPSERT = """
@@ -643,10 +657,15 @@ def _existing_urls(keys) -> set:
     from sqlalchemy import text as _text
     from core.database import SessionLocal
     urls = sorted({k[2] for k in keys})
+    # With the body and the type, so the table's own unique index answers. By address alone
+    # there is no index: each call read all 730,000 rows from disk (about 100 calls and 17 GB
+    # in two weeks, O245, 27 Nov 2026).
+    bodies, types = sorted({k[0] for k in keys}), sorted({k[1] for k in keys})
     s = SessionLocal()
     try:
         rows = s.execute(_text("SELECT body_code, item_type, public_url FROM economy_items "
-                               "WHERE public_url = ANY(:u)"), {"u": urls}).all()
+                               "WHERE body_code = ANY(:b) AND item_type = ANY(:t) AND public_url = ANY(:u)"),
+                         {"b": bodies, "t": types, "u": urls}).all()
     finally:
         s.close()
     return {(r[0], r[1], r[2]) for r in rows}
@@ -799,9 +818,19 @@ _USES_KNOWN = {
 }
 
 
+# The stored length is only ever asked "is it under 200 characters?" (economy_common.needs_fetch).
+# A text of 800 bytes or more has at least 200 characters whatever its alphabet, and its size is
+# read from the row; only a short text, which is stored in the row itself, is counted exactly.
+# `length()` on every row opened every stored article: 4,085 calls in two weeks (O245).
+_KNOWN_ROWS_SQL = (
+    "SELECT public_url, title, document_date, "
+    "CASE WHEN octet_length(body_txt) >= 800 THEN octet_length(body_txt) "
+    "ELSE coalesce(length(body_txt), 0) END, guid "
+    "FROM economy_items WHERE body_code = %s AND item_type = %s")
+
+
 def _known_rows(db: ChunkedDb, body: str, itype: str) -> list:
-    db.execute("SELECT public_url, title, document_date, coalesce(length(body_txt), 0), guid "
-               "FROM economy_items WHERE body_code = %s AND item_type = %s", (body, itype))
+    db.execute(_KNOWN_ROWS_SQL, (body, itype))
     rows = db.fetchall()
     db.rollback()  # read-only: never hold a transaction open while the ingestor scrapes
     return rows
